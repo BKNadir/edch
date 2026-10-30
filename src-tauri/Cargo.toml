@@ -1,5 +1,5 @@
 [package]
-name = "ed-companion"
+name = "edch"
 version = "0.1.0"
 description = "Elite Dangerous companion: materials, engineering and where to find them"
 authors = ["BKNadir"]
@@ -7,7 +7,7 @@ edition = "2021"
 license = "MIT"
 
 [lib]
-name = "ed_companion_lib"
+name = "edch_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

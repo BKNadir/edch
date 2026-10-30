@@ -107,7 +107,7 @@ export class SettingsView implements View {
           "section.card",
           null,
           h("h3", null, "À propos"),
-          h("p", null, "ED Companion lit le journal local d'Elite Dangerous en temps réel. Les systèmes proposés viennent de ", h("button.inline-link", { onclick: () => openUrl("https://spansh.co.uk") }, "Spansh"), " (données EDDN, mises à jour par les joueurs)."),
+          h("p", null, "EDCH lit le journal local d'Elite Dangerous en temps réel. Les systèmes proposés viennent de ", h("button.inline-link", { onclick: () => openUrl("https://spansh.co.uk") }, "Spansh"), " (données EDDN, mises à jour par les joueurs)."),
           h("p.sub", null, this.ctx.game.data.credits),
           h("p.sub", null, "Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel, non commercial."),
         ),

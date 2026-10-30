@@ -1,4 +1,4 @@
-# ED Companion
+# EDCH — Elite Dangerous Companion Helper
 
 Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en temps réel et, pour chaque matériau d'ingénierie, te dit **où le trouver avec de vrais systèmes cliquables autour de toi**.
 
@@ -20,7 +20,7 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 
 ## Installer
 
-Télécharge l'installateur (`.exe` ou `.msi`) dans les [Releases](../../releases), ou la version portable `ed-companion.exe` dans les artefacts du dernier build (onglet *Actions*). Windows 10/11 a déjà WebView2.
+Télécharge l'installateur (`.exe` ou `.msi`) dans les [Releases](../../releases), ou la version portable `edch.exe` dans les artefacts du dernier build (onglet *Actions*). Windows 10/11 a déjà WebView2.
 
 Au premier lancement, le dossier du journal est détecté tout seul (`%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous`). Tu peux le changer dans **Paramètres**.
 

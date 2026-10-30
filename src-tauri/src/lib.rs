@@ -1,4 +1,4 @@
-//! ED Companion backend.
+//! EDCH backend.
 //!
 //! Deliberately small: it tails the Elite Dangerous journal folder and streams raw
 //! lines to the UI (which owns all game logic), reads the companion JSON files the
@@ -282,7 +282,7 @@ async fn spansh_post(endpoint: String, body: String) -> Result<String, String> {
     tauri::async_runtime::spawn_blocking(move || {
         let agent = ureq::AgentBuilder::new()
             .timeout(Duration::from_secs(25))
-            .user_agent(concat!("EDCompanion/", env!("CARGO_PKG_VERSION")))
+            .user_agent(concat!("EDCH/", env!("CARGO_PKG_VERSION")))
             .build();
         match agent
             .post(&url)
@@ -341,5 +341,5 @@ pub fn run() {
             open_url
         ])
         .run(tauri::generate_context!())
-        .expect("error while running ED Companion");
+        .expect("error while running EDCH");
 }

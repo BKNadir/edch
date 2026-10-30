@@ -188,7 +188,7 @@ function renderHeader(el: HTMLElement, ctx: Ctx) {
   }
   replace(
     el,
-    h("div.brand", null, h("img", { src: "favicon.png", alt: "" }), h("span", null, "ED Companion")),
+    h("div.brand", null, h("img", { src: "favicon.png", alt: "" }), h("span", null, "EDCH")),
     h(
       "div.cmdr",
       null,

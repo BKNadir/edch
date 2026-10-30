@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "ED Companion",
+  "productName": "EDCH",
   "version": "0.1.0",
-  "identifier": "be.bknadir.edcompanion",
+  "identifier": "be.bknadir.edch",
   "build": {
     "frontendDist": "../dist",
     "beforeBuildCommand": "npm run build",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "ED Companion",
+        "title": "EDCH — Elite Dangerous Companion Helper",
         "width": 1320,
         "height": 860,
         "minWidth": 960,
