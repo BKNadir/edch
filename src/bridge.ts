@@ -58,20 +58,55 @@ export async function onJournal(handlers: {
   await ev.listen<AuxFile>("aux-file", (e) => handlers.aux(e.payload));
 }
 
-/** POST a Spansh search. In the app it goes through Rust (no CORS); in a browser, direct. */
-export async function spanshPost(endpoint: string, body: unknown): Promise<any> {
-  const text = JSON.stringify(body);
+export interface HttpReply {
+  status: number;
+  body: string;
+}
+
+/** HTTP through Rust in the app (no CORS); plain fetch in a browser. Never throws on HTTP status. */
+export async function httpFetch(method: string, url: string, body?: string, contentType = "application/json"): Promise<HttpReply> {
   if (isTauri()) {
-    const raw = await window.__TAURI__!.core.invoke<string>("spansh_post", { endpoint, body: text });
-    return JSON.parse(raw);
+    return window.__TAURI__!.core.invoke<HttpReply>("http_fetch", { method, url, body: body ?? null, contentType });
   }
-  const response = await fetch(`https://spansh.co.uk/api/${endpoint}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: text,
-  });
-  if (!response.ok) throw new Error(`Spansh a répondu ${response.status}`);
-  return response.json();
+  const response = await fetch(url, { method, headers: body ? { "Content-Type": contentType } : undefined, body });
+  return { status: response.status, body: await response.text() };
+}
+
+function parse(reply: HttpReply, what: string): any {
+  if (reply.status === 429) throw new Error(`${what} : trop de requêtes, réessaie dans un instant`);
+  if (reply.status < 200 || reply.status >= 300) throw new Error(`${what} a répondu ${reply.status}`);
+  try {
+    return JSON.parse(reply.body);
+  } catch {
+    throw new Error(`${what} : réponse illisible`);
+  }
+}
+
+/** POST a Spansh JSON search (systems/bodies/stations). */
+export async function spanshPost(endpoint: string, body: unknown): Promise<any> {
+  return parse(await httpFetch("POST", `https://spansh.co.uk/api/${endpoint}`, JSON.stringify(body)), "Spansh");
+}
+
+export async function spanshGet(path: string): Promise<any> {
+  return parse(await httpFetch("GET", `https://spansh.co.uk/api/${path}`), "Spansh");
+}
+
+/** Spansh route plotters: submit a form, then poll the job until it is done. */
+export async function spanshJob(endpoint: string, form: [string, string][], onWait?: (n: number) => void): Promise<any> {
+  const encoded = form.map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join("&");
+  const submitted = parse(await httpFetch("POST", `https://spansh.co.uk/api/${endpoint}`, encoded, "application/x-www-form-urlencoded"), "Spansh");
+  if (submitted.error) throw new Error(String(submitted.error));
+  const job = submitted.job;
+  if (!job) throw new Error("Spansh n'a pas donné de numéro de calcul");
+  for (let i = 0; i < 120; i++) {
+    await new Promise((r) => setTimeout(r, 1500));
+    onWait?.(i);
+    const res = parse(await httpFetch("GET", `https://spansh.co.uk/api/results/${job}`), "Spansh");
+    if (res.status === "queued") continue;
+    if (res.status === "ok" && res.result) return res.result;
+    throw new Error(String(res.error ?? `calcul ${res.status ?? "échoué"}`));
+  }
+  throw new Error("Spansh calcule encore après 3 minutes, réessaie plus tard");
 }
 
 export async function openUrl(url: string): Promise<void> {

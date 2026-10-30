@@ -1,10 +1,12 @@
 import type { Game } from "./data.js";
 import type { Reference } from "./spansh.js";
 import { totalNeeds, type Store } from "./store.js";
+import type { Uploaders } from "./uploaders.js";
 
 export interface Ctx {
   game: Game;
   store: Store;
+  sync?: Uploaders;
 }
 
 export interface View {

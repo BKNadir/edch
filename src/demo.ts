@@ -72,6 +72,25 @@ export const DEMO_EVENTS: Record<string, unknown>[] = [
     Data: [{ Name: "weaponinventory", Count: 6, OwnerID: 0 }, { Name: "topographicalsurveys", Count: 3, OwnerID: 0 }, { Name: "manufacturinginstructions", Count: 2, OwnerID: 0 }],
   },
   { timestamp: t(7), event: "MaterialCollected", Category: "Raw", Name: "polonium", Count: 2 },
+  {
+    timestamp: t(8),
+    event: "Loadout",
+    Ship: "krait_mkii",
+    ShipID: 7,
+    ShipName: "Nightjar",
+    ShipIdent: "BK-01",
+    UnladenMass: 548.6,
+    CargoCapacity: 64,
+    MaxJumpRange: 46.2,
+    FuelCapacity: { Main: 32, Reserve: 0.63 },
+    Modules: [
+      { Slot: "FrameShiftDrive", Item: "int_hyperdrive_size5_class5", Engineering: { BlueprintName: "FSD_LongRange", Level: 5, Quality: 1, Engineer: "Felicity Farseer", ExperimentalEffect: "special_fsd_heavy", Modifiers: [{ Label: "FSDOptimalMass", Value: 1692.6, OriginalValue: 1050 }] } },
+      { Slot: "TinyHardpoint1", Item: "hpt_shieldbooster_size0_class5", Engineering: { BlueprintName: "ShieldBooster_HeavyDuty", Level: 3, Quality: 0.4 } },
+      { Slot: "Slot03_Size5", Item: "int_guardianfsdbooster_size5" },
+    ],
+  },
+  { timestamp: t(9), event: "Cargo", Vessel: "Ship", Count: 12, Inventory: [{ Name: "bromellite", Count: 12 }] },
+  { timestamp: t(10), event: "EngineerProgress", Engineer: "Bill Turner", EngineerID: 300010, Progress: "Invited" },
 ];
 
 export const demoLines = (): string[] => DEMO_EVENTS.map((e) => JSON.stringify(e));

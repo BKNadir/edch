@@ -43,6 +43,8 @@ export interface Blueprint {
   engineers?: string[];
   ingredients: Record<string, number>;
   effects?: Effect[];
+  /** Journal BlueprintName / ExperimentalEffect symbols, lowercase. */
+  symbols?: string[];
 }
 
 export interface Engineer {
@@ -58,6 +60,18 @@ export interface Engineer {
   meeting: string;
   unlock: string;
   referredBy: string;
+  referralGrade: number | null;
+  tribute: string;
+  /** Machine-readable conditions, e.g. "locker factionassociates 10", "contribution Commodity bromellite 50". */
+  meetingTest: string;
+  unlockTest: string;
+}
+
+export interface Commodity {
+  id: string;
+  name: string;
+  category: string;
+  rare: boolean;
 }
 
 export interface FixedSite {
@@ -71,6 +85,10 @@ export interface FixedSite {
 }
 
 export interface GameData {
+  commodities: Commodity[];
+  ships: string[];
+  modules: string[];
+  moduleAliases: Record<string, string[]>;
   materials: Material[];
   lines: Record<string, string>;
   blueprints: Blueprint[];

@@ -1,7 +1,11 @@
 import { isTauri, onJournal, readAuxFile, startJournal, defaultJournalDir, type WatchStatus } from "./bridge.js";
 import { loadGame } from "./data.js";
 import { h, icon, replace } from "./dom.js";
-import { applyLines, applyLocker, emptyState } from "./journal.js";
+import { applyLines, applyLocker, applyStatus, emptyState } from "./journal.js";
+import { Uploaders } from "./uploaders.js";
+import { SearchView } from "./views/search.js";
+import { NavigationView } from "./views/navigation.js";
+import { SyncView } from "./views/sync.js";
 import { Store } from "./store.js";
 import type { Ctx, View } from "./context.js";
 import { demoLines } from "./demo.js";
@@ -20,6 +24,9 @@ const NAV: { id: string; label: string; icon: string }[] = [
   { id: "engineering", label: "Ingénierie", icon: "M14 6l4 4-9 9H5v-4zM16 4l4 4" },
   { id: "wishlist", label: "Wishlist", icon: "M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z" },
   { id: "engineers", label: "Ingénieurs", icon: "M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6" },
+  { id: "search", label: "Recherche", icon: "M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM15.5 15.5L20 20" },
+  { id: "navigation", label: "Navigation", icon: "M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" },
+  { id: "sync", label: "Synchro", icon: "M4 12a8 8 0 0 1 14-5.3M20 4v4h-4M20 12a8 8 0 0 1-14 5.3M4 20v-4h4" },
   { id: "settings", label: "Paramètres", icon: "M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM19 12l2-1-1-3-2 .2-1.5-1.5L16.7 4 13.8 3 13 5h-2l-.8-2-2.9 1 .2 2.7L6 8.2 4 8 3 11l2 1v0l-2 1 1 3 2-.2 1.5 1.5L7.3 20l2.9 1 .8-2h2l.8 2 2.9-1-.2-2.7 1.5-1.5 2 .2 1-3z" },
 ];
 
@@ -45,6 +52,14 @@ async function boot() {
   const store = new Store();
   const ctx: Ctx = { game, store };
   const cap = (id: string) => game.capacityOf(id);
+  const sync = new Uploaders(
+    () => store.state.settings.sync,
+    () => store.state.settings.journalDir,
+    () => store.state.cmdr.materials,
+    () => store.notify(),
+    () => store.state.cmdr.fid,
+  );
+  ctx.sync = sync;
 
   // ----- layout -----
   const header = h("header.topbar");
@@ -59,6 +74,9 @@ async function boot() {
     engineering: new EngineeringView(ctx),
     wishlist: new WishlistView(ctx),
     engineers: new EngineersView(ctx),
+    search: new SearchView(ctx),
+    navigation: new NavigationView(ctx),
+    sync: new SyncView(ctx),
     settings: new SettingsView(ctx, () => resetForReplay()),
   };
   const detail = new DetailPanel(ctx);
@@ -131,9 +149,15 @@ async function boot() {
   }
 
   let saveTimer: number | undefined;
+  let uploads = Promise.resolve();
+  sync.start();
   await onJournal({
     batch: (b) => {
       const { changed, events } = applyLines(store.state.cmdr, b.lines, cap);
+      // Uploads run in order; nothing from the startup replay is ever sent.
+      uploads = uploads.then(async () => {
+        for (const ev of events) await sync.handle(ev, !b.replay);
+      });
       // ShipLocker events often only say "look at ShipLocker.json".
       if (events.some((e) => e.event === "ShipLocker" && !e.Items) && store.state.settings.journalDir) {
         readAuxFile(store.state.settings.journalDir, "ShipLocker.json")
@@ -152,8 +176,12 @@ async function boot() {
     },
     status: setWatch,
     aux: (a) => {
-      if (a.name !== "ShipLocker.json") return;
       try {
+        if (a.name === "Status.json") {
+          if (applyStatus(store.state.cmdr, JSON.parse(a.content))) store.notify();
+          return;
+        }
+        if (a.name !== "ShipLocker.json") return;
         if (applyLocker(store.state.cmdr, JSON.parse(a.content))) store.notify();
       } catch {
         /* half-written file: the next change will fix it */

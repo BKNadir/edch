@@ -106,6 +106,8 @@ def blueprints(known: set[str]) -> list[dict]:
             bp["grade"] = int(r["grade"])
         if r["engineers"]:
             bp["engineers"] = split(r["engineers"], ",")
+        if r.get("symbol"):
+            bp["symbols"] = [x.lower() for x in split(r["symbol"], ",")]
         if effects:
             bp["effects"] = effects
         out.append(bp)
@@ -134,6 +136,10 @@ def engineers() -> list[dict]:
             "meeting": r.get("meeting", ""),
             "unlock": r.get("unlock", ""),
             "referredBy": r.get("referred_by", ""),
+            "referralGrade": int(r["referral_grade"]) if r.get("referral_grade", "").isdigit() else None,
+            "tribute": r.get("tribute", ""),
+            "meetingTest": r.get("meeting_test", ""),
+            "unlockTest": r.get("unlock_test", ""),
         })
     out.sort(key=lambda e: e["name"])
     return out
@@ -161,6 +167,31 @@ FIXED_SITES = [
 ]
 
 
+def commodities() -> list[dict]:
+    out = []
+    for r in read_tsv("Materials.tsv"):
+        if r["ledger"] in ("cargo", "rare-cargo"):
+            out.append({"id": r["symbol"].lower(), "name": r["name"], "category": r["category"], "rare": r["ledger"] == "rare-cargo"})
+    out.sort(key=lambda c: c["name"])
+    return out
+
+
+def outfitting_lists() -> tuple[list[str], list[str], dict]:
+    import re
+    text = (SRC / "OutfittingCatalogue.cs").read_text(encoding="utf-8")
+    def block(name: str) -> str:
+        m = re.search(name + r" \{ get; \} =\s*\[(.*?)\];", text, re.S)
+        return m.group(1) if m else ""
+    ships = re.findall(r'"([^"]+)"', block("Ships"))
+    modules = re.findall(r'"([^"]+)"', block("Modules"))
+    others = {}
+    m = re.search(r"OtherNames \{ get; \} =.*?\{(.*?)\};", text, re.S)
+    if m:
+        for key, vals in re.findall(r'\["([^"]+)"\] = \[([^\]]*)\]', m.group(1)):
+            others[key] = re.findall(r'"([^"]+)"', vals)
+    return ships, modules, others
+
+
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     mats = materials()
@@ -169,7 +200,12 @@ def main() -> None:
     engs = engineers()
     for site in FIXED_SITES:
         site["materials"] = [m for m in site["materials"] if m in known]
+    ships, modules, other_names = outfitting_lists()
     payload = {
+        "commodities": commodities(),
+        "ships": ships,
+        "modules": modules,
+        "moduleAliases": other_names,
         "materials": mats,
         "lines": LINE_NAMES,
         "blueprints": bps,
@@ -178,7 +214,8 @@ def main() -> None:
         "credits": "Data: EDCD/FDevIDs, msarilar/EDEngineer (MIT) via dseelinger/d47 (MIT). Game data © Frontier Developments plc.",
     }
     (OUT / "game.json").write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    print(f"materials={len(mats)} blueprints={len(bps)} engineers={len(engs)} sites={len(FIXED_SITES)}")
+    print(f"materials={len(mats)} blueprints={len(bps)} engineers={len(engs)} sites={len(FIXED_SITES)} "
+          f"commodities={len(payload['commodities'])} ships={len(ships)} modules={len(modules)}")
 
 
 if __name__ == "__main__":

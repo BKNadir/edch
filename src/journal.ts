@@ -43,6 +43,32 @@ export interface ModuleEngineering {
   experimental?: string;
 }
 
+export interface ShipLoadout {
+  ship: string; // journal symbol, e.g. krait_mkii
+  shipId?: number;
+  unladenMass?: number;
+  fuelMain?: number;
+  fuelReserve?: number;
+  cargoCapacity?: number;
+  maxJumpRange?: number;
+  /** e.g. int_hyperdrive_size5_class5 or int_hyperdrive_overcharge_size5_class5 */
+  fsd?: string;
+  fsdOptimalMass?: number;
+  fsdMaxFuelPerJump?: number;
+  /** Guardian FSD booster module symbol, if fitted. */
+  booster?: string;
+  modules: { slot: string; item: string; engineering?: { blueprint: string; level: number; experimental?: string } }[];
+}
+
+export interface CarrierInfo {
+  callsign?: string;
+  name?: string;
+  fuel?: number;
+  capacity?: number;
+  used?: number;
+  tritiumInCargo?: number;
+}
+
 export interface CommanderState {
   commander?: string;
   fid?: string;
@@ -54,13 +80,20 @@ export interface CommanderState {
   locker: Record<string, number>;
   engineers: Record<string, EngineerStatus>;
   engineering: ModuleEngineering[];
+  loadout?: ShipLoadout;
+  /** Ship cargo hold, by lowercase commodity symbol. */
+  cargo: Record<string, number>;
+  /** From Status.json. */
+  fuel?: { main: number; reserve: number };
+  cargoMass?: number;
+  carrier?: CarrierInfo;
   lastEvent?: string;
   materialsSeenAt?: string;
   lockerSeenAt?: string;
 }
 
 export function emptyState(): CommanderState {
-  return { materials: {}, locker: {}, engineers: {}, engineering: [] };
+  return { materials: {}, locker: {}, engineers: {}, engineering: [], cargo: {} };
 }
 
 type Json = Record<string, any>;
@@ -154,6 +187,26 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
           engineer: m.Engineering.Engineer,
           experimental: m.Engineering.ExperimentalEffect_Localised ?? m.Engineering.ExperimentalEffect,
         }));
+      state.loadout = readLoadout(ev);
+      return true;
+
+    case "Cargo":
+      if (Array.isArray(ev.Inventory) && (ev.Vessel ?? "Ship") === "Ship") {
+        state.cargo = {};
+        for (const c of ev.Inventory) state.cargo[key(c.Name)] = Number(c.Count ?? 0);
+        return true;
+      }
+      return false;
+
+    case "CarrierStats":
+      state.carrier = {
+        callsign: ev.Callsign,
+        name: ev.Name,
+        fuel: ev.FuelLevel,
+        capacity: ev.SpaceUsage?.TotalCapacity,
+        used: ev.SpaceUsage ? ev.SpaceUsage.TotalCapacity - ev.SpaceUsage.FreeSpace : undefined,
+        tritiumInCargo: state.carrier?.tritiumInCargo,
+      };
       return true;
 
     case "Location":
@@ -276,6 +329,48 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
     default:
       return false;
   }
+}
+
+function readLoadout(ev: Json): ShipLoadout {
+  const modules: Json[] = Array.isArray(ev.Modules) ? ev.Modules : [];
+  const fsd = modules.find((m) => m.Slot === "FrameShiftDrive");
+  const mod = (label: string) => fsd?.Engineering?.Modifiers?.find((x: Json) => x.Label === label)?.Value;
+  return {
+    ship: ev.Ship,
+    shipId: ev.ShipID,
+    unladenMass: ev.UnladenMass,
+    fuelMain: ev.FuelCapacity?.Main,
+    fuelReserve: ev.FuelCapacity?.Reserve,
+    cargoCapacity: ev.CargoCapacity,
+    maxJumpRange: ev.MaxJumpRange,
+    fsd: fsd?.Item ? String(fsd.Item).toLowerCase() : undefined,
+    fsdOptimalMass: mod("FSDOptimalMass"),
+    fsdMaxFuelPerJump: mod("MaxFuelPerJump"),
+    booster: modules.map((m) => String(m.Item ?? "").toLowerCase()).find((i) => i.startsWith("int_guardianfsdbooster")),
+    modules: modules.map((m) => ({
+      slot: m.Slot,
+      item: String(m.Item ?? "").toLowerCase(),
+      engineering: m.Engineering
+        ? { blueprint: m.Engineering.BlueprintName, level: m.Engineering.Level, experimental: m.Engineering.ExperimentalEffect }
+        : undefined,
+    })),
+  };
+}
+
+/** Applies Status.json (fuel, cargo mass). */
+export function applyStatus(state: CommanderState, status: Json): boolean {
+  if (!status || typeof status !== "object") return false;
+  let changed = false;
+  if (status.Fuel && typeof status.Fuel.FuelMain === "number") {
+    const fuel = { main: status.Fuel.FuelMain, reserve: status.Fuel.FuelReservoir ?? 0 };
+    if (state.fuel?.main !== fuel.main) changed = true;
+    state.fuel = fuel;
+  }
+  if (typeof status.Cargo === "number" && state.cargoMass !== status.Cargo) {
+    state.cargoMass = status.Cargo;
+    changed = true;
+  }
+  return changed;
 }
 
 /** Parses and applies raw journal lines; tolerant of junk lines. */

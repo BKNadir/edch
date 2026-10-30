@@ -4,6 +4,7 @@ import { blueprintGrades, bpKey, defaultRolls, wishNeeds, type WishItem } from "
 import { suggestTrades } from "../trade.js";
 import type { Blueprint } from "../types.js";
 import { kindFr } from "./detail.js";
+import { extractLoadout, importLoadout } from "../importer.js";
 
 export function addToWishlist(ctx: Ctx, bp: Blueprint, from?: number, to?: number) {
   const grades = blueprintGrades(ctx.game, bpKey(bp));
@@ -22,7 +23,88 @@ export function addToWishlist(ctx: Ctx, bp: Blueprint, from?: number, to?: numbe
 
 export class WishlistView implements View {
   private root?: HTMLElement;
-  constructor(private ctx: Ctx) {}
+  /** Kept across re-renders so a pasted build is not lost. */
+  private importPanel: HTMLElement;
+  private importOpen = false;
+  private toolbar = h("div.toolbar");
+
+  constructor(private ctx: Ctx) {
+    this.importPanel = this.buildImport();
+  }
+
+  private buildImport(): HTMLElement {
+    const area = h("textarea", { rows: 6, spellcheck: false, placeholder: "Colle ici l'export EDSY ou Coriolis (format SLEF ou Loadout JSON)…" });
+    const report = h("div.import-report");
+    const run = (text: string, source: string) => {
+      const loadout = extractLoadout(text);
+      if (!loadout) {
+        replace(report, h("p.error", null, icon("warn"), " Format non reconnu. Dans EDSY : Ship → Export → SLEF. Dans Coriolis : Export → SLEF (ou JSON du Loadout)."));
+        return;
+      }
+      const res = importLoadout(this.ctx.game, loadout);
+      if (!res.items.length) {
+        replace(report, h("p.error", null, icon("warn"), ` Aucun module ingénié trouvé dans ${source}.`));
+        return;
+      }
+      this.ctx.store.setWishlist([...this.ctx.store.state.wishlist, ...res.items]);
+      area.value = "";
+      replace(
+        report,
+        h("p", null, icon("check"), ` ${res.items.length} ligne(s) ajoutée(s) depuis ${source}${res.ship ? ` (${res.ship})` : ""}.`),
+        res.skipped.length ? h("p.sub", null, `Non reconnu : ${res.skipped.join(", ")}`) : null,
+      );
+      toast(`Build importé : ${res.items.length} ligne(s)`);
+    };
+    const file = h("input", {
+      type: "file",
+      accept: ".json,.txt,application/json",
+      onchange: async (e: Event) => {
+        const f = (e.target as HTMLInputElement).files?.[0];
+        if (f) run(await f.text(), f.name);
+        (e.target as HTMLInputElement).value = "";
+      },
+    });
+    return h(
+      "section.card.import",
+      null,
+      h("h3", null, "Importer un build"),
+      h("p.sub", null, "Chaque module ingénié devient une ligne « blueprint G1 → grade du build », plus son effet expérimental. Les modules identiques sont regroupés."),
+      area,
+      h(
+        "div.row",
+        null,
+        h("button.primary", { onclick: () => run(area.value, "le texte collé") }, "Importer le texte"),
+        h("label.ghost.file-btn", null, "Choisir un fichier…", file),
+        h(
+          "button.ghost",
+          {
+            title: "Recrée la wishlist d'ingénierie de ton vaisseau actuel (utile pour un 2e vaisseau identique)",
+            onclick: () => {
+              const l = this.ctx.store.state.cmdr.loadout;
+              if (!l) return toast("Pas encore de vaisseau lu dans le journal");
+              const modules = l.modules
+                .filter((m) => m.engineering)
+                .map((m) => ({ Slot: m.slot, Item: m.item, Engineering: { BlueprintName: m.engineering!.blueprint, Level: m.engineering!.level, ExperimentalEffect: m.engineering!.experimental } }));
+              run(JSON.stringify({ event: "Loadout", Ship: l.ship, ShipName: this.ctx.store.state.cmdr.ship?.name, Modules: modules }), "ton vaisseau actuel");
+            },
+          },
+          "Depuis mon vaisseau actuel",
+        ),
+      ),
+      report,
+    );
+  }
+
+  private renderToolbar() {
+    const store = this.ctx.store;
+    replace(
+      this.toolbar,
+      h("button.ghost", { onclick: () => ((this.importOpen = !this.importOpen), this.update()) }, icon("plus"), this.importOpen ? " Fermer l'import" : " Importer EDSY / Coriolis"),
+      store.state.wishlist.length
+        ? h("button.ghost", { onclick: () => { if (confirmClear()) store.setWishlist([]); } }, icon("close"), " Vider")
+        : null,
+    );
+  }
 
   mount(root: HTMLElement) {
     this.root = root;
@@ -38,15 +120,18 @@ export class WishlistView implements View {
     if (!this.root) return;
     const { game, store } = this.ctx;
     const items = store.state.wishlist;
+    this.renderToolbar();
+    const importer = this.importOpen ? this.importPanel : null;
     if (!items.length) {
       replace(
         this.root,
-        h("header.view-head", null, h("h1", null, "Wishlist")),
+        h("header.view-head", null, h("h1", null, "Wishlist"), this.toolbar),
+        this.importPanel,
         h(
           "div.empty-state",
           null,
           h("p", null, "Ta wishlist est vide."),
-          h("p.sub", null, "Ajoute des modifications depuis l'onglet Ingénierie, ou depuis la fiche d'un matériau (section « Utilisé dans »)."),
+          h("p.sub", null, "Importe un build EDSY / Coriolis ci-dessus, ou ajoute des modifications depuis l'onglet Ingénierie ou la fiche d'un matériau."),
           h("button.primary", { onclick: () => store.setView("engineering") }, "Ouvrir l'ingénierie"),
         ),
       );
@@ -75,7 +160,7 @@ export class WishlistView implements View {
         h(
           "div.wish-head",
           null,
-          h("div", null, h("strong", null, `${any.module} — ${any.name}`), h("p.sub", null, kindFr(any.kind), any.engineers?.length ? ` · ${any.engineers.join(", ")}` : "")),
+          h("div", null, h("strong", null, `${any.module} — ${any.name}`), h("p.sub", null, item.note ? h("span.badge.muted", null, item.note) : null, item.note ? " " : "", kindFr(any.kind), any.engineers?.length ? ` · ${any.engineers.join(", ")}` : "")),
           ready ? h("span.badge.hit", null, icon("check"), " Prêt") : null,
           h("button.icon-btn", { title: "Retirer", onclick: () => store.setWishlist(items.filter((w) => w.id !== item.id)) }, icon("close")),
         ),
@@ -135,7 +220,8 @@ export class WishlistView implements View {
 
     replace(
       this.root,
-      h("header.view-head", null, h("h1", null, "Wishlist"), h("p.sub", null, `${items.length} recettes · ${done}/${rows.length} matériaux complets`)),
+      h("header.view-head", null, h("div", null, h("h1", null, "Wishlist"), h("p.sub", null, `${items.length} recettes · ${done}/${rows.length} matériaux complets`)), this.toolbar),
+      importer,
       h(
         "div.wish-layout",
         null,
@@ -149,6 +235,15 @@ export class WishlistView implements View {
       ),
     );
   }
+}
+
+// A single "are you sure" without a blocking browser dialog: second click within 3 s confirms.
+let clearArmed = 0;
+function confirmClear(): boolean {
+  if (Date.now() - clearArmed < 3000) return true;
+  clearArmed = Date.now();
+  toast("Clique encore sur « Vider » pour confirmer");
+  return false;
 }
 
 function select(options: number[], value: number, onChange: (v: number) => void): HTMLSelectElement {

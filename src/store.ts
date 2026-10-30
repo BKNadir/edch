@@ -2,6 +2,7 @@ import type { Game } from "./data.js";
 import { emptyState, type CommanderState } from "./journal.js";
 import type { Blueprint } from "./types.js";
 import type { WatchStatus } from "./bridge.js";
+import { DEFAULT_SYNC, type SyncSettings } from "./uploaders.js";
 
 export interface Settings {
   journalDir: string;
@@ -14,6 +15,7 @@ export interface Settings {
   /** Used when the game hasn't told us where we are yet. */
   fallbackSystem: string;
   largePadOnly: boolean;
+  sync: SyncSettings;
 }
 
 export interface WishItem {
@@ -45,6 +47,7 @@ const DEFAULT_SETTINGS: Settings = {
   maxAgeDays: 3,
   fallbackSystem: "Sol",
   largePadOnly: false,
+  sync: DEFAULT_SYNC,
 };
 
 function load<T>(key: string, fallback: T): T {
@@ -84,9 +87,12 @@ export class Store {
   constructor() {
     this.state = {
       // Last known state is shown instantly at startup, then the journal replay overwrites it.
-      cmdr: load<CommanderState>("edc.cmdr", emptyState()),
+      cmdr: { ...emptyState(), ...load<CommanderState>("edc.cmdr", emptyState()) },
       watch: { state: "idle" },
-      settings: load<Settings>("edc.settings", DEFAULT_SETTINGS),
+      settings: (() => {
+        const loaded = load<Settings>("edc.settings", DEFAULT_SETTINGS);
+        return { ...loaded, sync: { ...DEFAULT_SYNC, ...(loaded.sync ?? {}) } };
+      })(),
       wishlist: loadArray<WishItem>("edc.wishlist"),
       view: (() => {
         try {

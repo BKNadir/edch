@@ -42,7 +42,7 @@ struct AuxFile {
 }
 
 /// Companion files the game rewrites in place; the UI gets them whenever they change.
-const AUX_FILES: [&str; 3] = ["ShipLocker.json", "Backpack.json", "Cargo.json"];
+const AUX_FILES: [&str; 4] = ["ShipLocker.json", "Backpack.json", "Cargo.json", "Status.json"];
 const BATCH: usize = 2000;
 const MAX_REPLAY_FILES: usize = 40;
 
@@ -135,7 +135,7 @@ fn read_from(path: &Path, offset: &mut u64) -> std::io::Result<Vec<u8>> {
     Ok(buffer)
 }
 
-fn check_aux(app: &AppHandle, dir: &Path, seen: &mut [Option<SystemTime>; 3]) {
+fn check_aux(app: &AppHandle, dir: &Path, seen: &mut [Option<SystemTime>; 4]) {
     for (index, name) in AUX_FILES.iter().enumerate() {
         let path = dir.join(name);
         let modified = match fs::metadata(&path).and_then(|m| m.modified()) {
@@ -193,7 +193,7 @@ fn watch_loop(app: AppHandle, dir: PathBuf, generation: u64) {
         offset = len as u64;
     }
 
-    let mut aux_seen: [Option<SystemTime>; 3] = [None, None, None];
+    let mut aux_seen: [Option<SystemTime>; 4] = [None, None, None, None];
     check_aux(&app, &dir, &mut aux_seen);
 
     if files.is_empty() {
@@ -269,37 +269,60 @@ fn read_aux_file(dir: String, name: String) -> Result<String, String> {
     fs::read_to_string(Path::new(&dir).join(&name)).map_err(|e| e.to_string())
 }
 
-/// POST to one of Spansh's search endpoints. Only these three are allowed.
+#[derive(Serialize)]
+struct HttpReply {
+    status: u16,
+    body: String,
+}
+
+/// Hosts the UI may talk to. Everything else is refused.
+const ALLOWED_HOSTS: [&str; 6] = [
+    "https://spansh.co.uk/",
+    "https://www.spansh.co.uk/",
+    "https://eddn.edcd.io:4430/",
+    "https://www.edsm.net/",
+    "https://inara.cz/",
+    "https://edsm.net/",
+];
+
+/// Generic HTTP for the UI (no CORS from Rust). Non-2xx answers are returned, not errors,
+/// so the caller can apply each service's retry rules (EDDN forbids retrying a 400).
 #[tauri::command]
-async fn spansh_post(endpoint: String, body: String) -> Result<String, String> {
-    if !matches!(
-        endpoint.as_str(),
-        "systems/search" | "bodies/search" | "stations/search"
-    ) {
-        return Err("Endpoint Spansh refusé".into());
+async fn http_fetch(
+    method: String,
+    url: String,
+    body: Option<String>,
+    content_type: Option<String>,
+) -> Result<HttpReply, String> {
+    if !ALLOWED_HOSTS.iter().any(|h| url.starts_with(h)) {
+        return Err(format!("Adresse refusée : {url}"));
     }
-    let url = format!("https://spansh.co.uk/api/{endpoint}");
     tauri::async_runtime::spawn_blocking(move || {
         let agent = ureq::AgentBuilder::new()
-            .timeout(Duration::from_secs(25))
+            .timeout(Duration::from_secs(30))
             .user_agent(concat!("EDCH/", env!("CARGO_PKG_VERSION")))
             .build();
-        match agent
-            .post(&url)
-            .set("Content-Type", "application/json")
-            .send_string(&body)
-        {
-            Ok(response) => response.into_string().map_err(|e| e.to_string()),
-            Err(ureq::Error::Status(code, response)) => {
-                let text: String = response
-                    .into_string()
-                    .unwrap_or_default()
-                    .chars()
-                    .take(300)
-                    .collect();
-                Err(format!("Spansh a répondu {code} : {text}"))
+        let request = agent.request(&method.to_uppercase(), &url);
+        let result = match body {
+            Some(text) => request
+                .set(
+                    "Content-Type",
+                    content_type.as_deref().unwrap_or("application/json"),
+                )
+                .send_string(&text),
+            None => request.call(),
+        };
+        match result {
+            Ok(response) => {
+                let status = response.status();
+                let body = response.into_string().map_err(|e| e.to_string())?;
+                Ok(HttpReply { status, body })
             }
-            Err(error) => Err(format!("Spansh injoignable : {error}")),
+            Err(ureq::Error::Status(status, response)) => Ok(HttpReply {
+                status,
+                body: response.into_string().unwrap_or_default(),
+            }),
+            Err(error) => Err(format!("Réseau : {error}")),
         }
     })
     .await
@@ -337,7 +360,7 @@ pub fn run() {
             default_journal_dir,
             start_journal,
             read_aux_file,
-            spansh_post,
+            http_fetch,
             open_url
         ])
         .run(tauri::generate_context!())
