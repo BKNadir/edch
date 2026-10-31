@@ -67,7 +67,7 @@ Layout:
   - `i18n.ts`: translation layer.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.6.0`: the Release is published and installed copies offer the update.
+A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.6.0` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update.
 
 ## Roadmap
 
