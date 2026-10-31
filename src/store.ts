@@ -17,6 +17,10 @@ export interface Settings {
   largePadOnly: boolean;
   sync: SyncSettings;
   remote: RemoteSettings;
+  /** Look for a new release on GitHub at start-up and every few hours. */
+  autoUpdate: boolean;
+  /** A version the user chose to skip ("Plus tard" hides it until the next one). */
+  skippedVersion: string;
 }
 
 export interface RemoteSettings {
@@ -67,6 +71,8 @@ const DEFAULT_SETTINGS: Settings = {
   largePadOnly: false,
   sync: DEFAULT_SYNC,
   remote: DEFAULT_REMOTE,
+  autoUpdate: true,
+  skippedVersion: "",
 };
 
 function load<T>(key: string, fallback: T): T {

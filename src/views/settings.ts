@@ -1,5 +1,7 @@
 import { defaultJournalDir, isRemote, isTauri, openUrl, startJournal } from "../bridge.js";
 import { h, replace, toast } from "../dom.js";
+import { checkForUpdate } from "../updater.js";
+import { SOFTWARE_VERSION as APP_VERSION } from "../eddn.js";
 import { LANGS, lang, saveLang } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
 import type { Settings } from "../store.js";
@@ -128,6 +130,21 @@ export class SettingsView implements View {
           ),
           h("label.check", null, h("input", { type: "checkbox", checked: s.largePadOnly, onchange: (e: Event) => set({ largePadOnly: (e.target as HTMLInputElement).checked }) }), " Traders avec pad L seulement"),
         ),
+        isTauri()
+          ? h(
+              "section.card",
+              null,
+              h("h3", null, "Mises à jour"),
+              h("p.sub", null, `Version installée : ${APP_VERSION}`),
+              h(
+                "label.check",
+                null,
+                h("input", { type: "checkbox", checked: s.autoUpdate, onchange: (e: Event) => set({ autoUpdate: (e.target as HTMLInputElement).checked }) }),
+                " Vérifier automatiquement les nouvelles versions sur GitHub",
+              ),
+              h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, "Vérifier maintenant")),
+            )
+          : null,
         h(
           "section.card",
           null,

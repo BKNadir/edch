@@ -6,6 +6,7 @@ import { applyLines, applyLocker, applyStatus, emptyState } from "./journal.js";
 import { Uploaders } from "./uploaders.js";
 import { detectRemote, remoteLanguage, runRemoteClient, setupRemoteHost } from "./remote.js";
 import { MobileView } from "./views/mobile.js";
+import { startUpdateChecks } from "./updater.js";
 import { SearchView } from "./views/search.js";
 import { NavigationView } from "./views/navigation.js";
 import { SyncView } from "./views/sync.js";
@@ -180,6 +181,7 @@ async function boot() {
   }
 
   await setupRemoteHost(store);
+  startUpdateChecks(store);
 
   let saveTimer: number | undefined;
   let uploads = Promise.resolve();

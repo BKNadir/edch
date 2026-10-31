@@ -16,6 +16,7 @@ use std::time::{Duration, Instant, SystemTime};
 use tauri::{AppHandle, Emitter, Manager};
 
 mod remote;
+mod update;
 
 /// Bumped every time a new watch starts, so an older watcher thread stops by itself.
 #[derive(Default)]
@@ -654,7 +655,10 @@ pub fn run() {
             remote::remote_stop,
             remote::remote_publish,
             remote::remote_qr,
-            remote::remote_addresses
+            remote::remote_addresses,
+            update::update_check,
+            update::update_download,
+            update::update_install
         ])
         .run(tauri::generate_context!())
         .expect("error while running EDCH");

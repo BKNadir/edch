@@ -256,3 +256,23 @@ export async function copyText(text: string): Promise<boolean> {
     return ok;
   }
 }
+
+// ----- updates (GitHub releases) -----
+export interface UpdateInfo {
+  version: string;
+  current: string;
+  notes: string;
+  page: string;
+  asset: string;
+  url: string;
+  size: number;
+  digest: string | null;
+}
+
+export const updateCheck = () => invoke<UpdateInfo | null>("update_check");
+export const updateDownload = (info: UpdateInfo) => invoke<string>("update_download", { info });
+export const updateInstall = (path: string) => invoke<void>("update_install", { path });
+export async function onUpdateProgress(cb: (done: number, total: number) => void): Promise<() => void> {
+  if (!isTauri()) return () => undefined;
+  return window.__TAURI__!.event.listen<{ done: number; total: number }>("update-progress", (e) => cb(e.payload.done, e.payload.total));
+}

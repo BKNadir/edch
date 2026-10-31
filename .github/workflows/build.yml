@@ -34,15 +34,16 @@ jobs:
           workspaces: "./src-tauri -> target"
       - run: npm install
 
-      # Builds the installers; on a v* tag it also drafts a GitHub release with them.
+      # Builds the installers; on a v* tag it also publishes a GitHub release with them,
+      # which installed copies of EDCH pick up as an update.
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
           releaseName: "EDCH ${{ github.ref_name }}"
-          releaseBody: "Installe le .exe (NSIS) ou le .msi. Version portable : edch.exe dans les artefacts du build."
-          releaseDraft: true
+          releaseBody: "Install the .exe (NSIS) or the .msi. Installed copies of EDCH offer this update by themselves. · Installe le .exe (NSIS) ou le .msi. EDCH déjà installé propose cette mise à jour tout seul."
+          releaseDraft: false
 
       - uses: actions/upload-artifact@v4
         with:
