@@ -6,3 +6,4 @@ package-lock.json
 *.log
 !tools/**/*.log
 .DS_Store
+shots/
