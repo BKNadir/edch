@@ -31,6 +31,8 @@ const exact = new Map<string, string>();
 /** The game's own names (English in the data) as the localized game shows them. */
 const game = new Map<string, string>();
 const gameLower = new Map<string, string>();
+/** Translated game name (lower case) → English, for searches typed in the app's language. */
+const gameBack = new Map<string, string>();
 const patterns: { re: RegExp; out: string }[] = [];
 
 export const lang = () => current;
@@ -80,6 +82,7 @@ export async function initI18n(code: string) {
   exact.clear();
   game.clear();
   gameLower.clear();
+  gameBack.clear();
   patterns.length = 0;
   if (current.code !== "en") {
     try {
@@ -88,6 +91,7 @@ export async function initI18n(code: string) {
       for (const [en, out] of Object.entries(dict)) {
         game.set(en, out);
         gameLower.set(en.toLowerCase(), out);
+        if (!gameBack.has(out.toLowerCase())) gameBack.set(out.toLowerCase(), en);
       }
     } catch {
       /* game names stay in English */
@@ -117,6 +121,11 @@ export async function initI18n(code: string) {
 /** A game name (material, module, blueprint, effect…) as the localized game shows it. */
 export function gameName(name: string): string {
   return game.get(name) ?? gameLower.get(name.toLowerCase()) ?? name;
+}
+
+/** The English game name behind a name typed in the app's language (unchanged if unknown). */
+export function gameEnglish(text: string): string {
+  return gameBack.get(text.trim().toLowerCase()) ?? text;
 }
 
 /** Does a game name match a search, in English or in the current language? */

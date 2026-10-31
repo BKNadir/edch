@@ -1,0 +1,254 @@
+/*
+ * Localized display names for the engineer-applied personal-equipment modifications.
+ *
+ * Source: the in-game modification localisation tables.
+ *
+ * Credit and licence terms: ATTRIBUTIONS.md. Acquisition, revisions, derivation and
+ * known gaps: data/i18n/SOURCES.md.
+ *
+ * `nameKeys` maps every recipe symbol data/equipment/modifications.jsonc carries to a
+ * shared localized-name record. A record key is the modification entry the game
+ * publishes, which is the recipe symbol with any technology suffix dropped: the game
+ * offers Greater Range, Headshot Damage and Improved Hip Fire Accuracy as one option
+ * each, so the nine Kinetic, Laser and Plasma recipes this repository keys separately
+ * resolve to three records rather than nine. Each record carries the canonical English
+ * display name, which the owning modifications catalogue remains authoritative for, and
+ * the five other locales the source publishes.
+ */
+{
+  "nameKeys": {
+    "suit_increasedmeleedamage": "suit_increasedmeleedamage",
+    "suit_adsmovementspeed": "suit_adsmovementspeed",
+    "suit_improvedarmourrating": "suit_improvedarmourrating",
+    "suit_improvedradar": "suit_improvedradar",
+    "suit_increasedammoreserves": "suit_increasedammoreserves",
+    "suit_backpackcapacity": "suit_backpackcapacity",
+    "suit_increasedshieldregen": "suit_increasedshieldregen",
+    "suit_increasedbatterycapacity": "suit_increasedbatterycapacity",
+    "suit_improvedjumpassist": "suit_improvedjumpassist",
+    "suit_increasedo2capacity": "suit_increasedo2capacity",
+    "suit_increasedsprintduration": "suit_increasedsprintduration",
+    "suit_nightvision": "suit_nightvision",
+    "suit_quieterfootsteps": "suit_quieterfootsteps",
+    "suit_reducedtoolbatteryconsumption": "suit_reducedtoolbatteryconsumption",
+    "weapon_suppression_unpressurised": "weapon_suppression_unpressurised",
+    "weapon_handling": "weapon_handling",
+    "weapon_range_kinetic": "weapon_range",
+    "weapon_range_laser": "weapon_range",
+    "weapon_range_plasma": "weapon_range",
+    "weapon_headshotdamage_kinetic": "weapon_headshotdamage",
+    "weapon_headshotdamage_laser": "weapon_headshotdamage",
+    "weapon_headshotdamage_plasma": "weapon_headshotdamage",
+    "weapon_accuracy_kinetic": "weapon_accuracy",
+    "weapon_accuracy_laser": "weapon_accuracy",
+    "weapon_accuracy_plasma": "weapon_accuracy",
+    "weapon_clipsize": "weapon_clipsize",
+    "weapon_suppression_pressurised": "weapon_suppression_pressurised",
+    "weapon_reloadspeed": "weapon_reloadspeed",
+    "weapon_scope": "weapon_scope",
+    "weapon_stability": "weapon_stability",
+    "weapon_backpackreloading": "weapon_backpackreloading"
+  },
+  "names": {
+    "suit_increasedmeleedamage": {
+      "en": "Added Melee Damage",
+      "de": "Zusätzlicher Nahkampfschaden",
+      "es": "Daño cuerpo a cuerpo aumentado",
+      "fr": "Dégâts au corps à corps supplémentaires",
+      "pt": "Dano corpo a corpo adicional",
+      "ru": "Дополнительный урон в ближнем бою"
+    },
+    "suit_adsmovementspeed": {
+      "en": "Combat Movement Speed",
+      "de": "Kampfbewegungsgeschwindigkeit",
+      "es": "Velocidad de movimiento en combate",
+      "fr": "Vitesse de déplacement au combat",
+      "pt": "Velocidade do movimento em combate",
+      "ru": "Скорость передвижения в бою"
+    },
+    "suit_improvedarmourrating": {
+      "en": "Damage Resistance",
+      "de": "Schadenswiderstand",
+      "es": "Resistencia al daño",
+      "fr": "Résistance aux dégâts",
+      "pt": "Resistência a danos",
+      "ru": "Сопротивление урону"
+    },
+    "suit_improvedradar": {
+      "en": "Enhanced Tracking",
+      "de": "Verbessertes Tracking",
+      "es": "Seguimiento mejorado",
+      "fr": "Suivi amélioré",
+      "pt": "Rastreamento melhorado",
+      "ru": "Улучшенное отслеживание"
+    },
+    "suit_increasedammoreserves": {
+      "en": "Extra Ammo Capacity",
+      "de": "Zusätzliche Munitionskapazität",
+      "es": "Capacidad de munición adicional",
+      "fr": "Capacité de chargeur accrue",
+      "pt": "Capacidade extra de munição",
+      "ru": "Дополнительные боеприпасы"
+    },
+    "suit_backpackcapacity": {
+      "en": "Extra Backpack Capacity",
+      "de": "Zusätzliche Rucksackkapazität",
+      "es": "Capacidad de mochila adicional",
+      "fr": "Capacité de sac à dos accrue",
+      "pt": "Capacidade extra da mochila",
+      "ru": "Повышенная вместимость рюкзака"
+    },
+    "suit_increasedshieldregen": {
+      "en": "Faster Shield Regen",
+      "de": "Schnellere Schildregeneration",
+      "es": "Regeneración de escudo más rápida",
+      "fr": "Régénération des boucliers accélérée",
+      "pt": "Regeneração do escudo acelerada",
+      "ru": "Быстрое восстановление щита"
+    },
+    "suit_increasedbatterycapacity": {
+      "en": "Improved Battery Capacity",
+      "de": "Verbesserte Batteriekapazität",
+      "es": "Capacidad de batería mejorada",
+      "fr": "Capacité de batterie accrue",
+      "pt": "Capacidade de bateria melhorada",
+      "ru": "Улучшенная батарея"
+    },
+    "suit_improvedjumpassist": {
+      "en": "Improved Jump Assist",
+      "de": "Verbesserter Sprung-Assist",
+      "es": "Asistencia de salto mejorada",
+      "fr": "Assistance de saut améliorée",
+      "pt": "Assistência de salto melhorada",
+      "ru": "Улучшенная помощь при прыжке"
+    },
+    "suit_increasedo2capacity": {
+      "en": "Increased Air Reserves",
+      "de": "Erhöhte Luftreserven",
+      "es": "Reservas de oxígeno aumentadas",
+      "fr": "Réserves d'oxygène augmentées",
+      "pt": "Reservas de ar aumentadas",
+      "ru": "Увеличенный запас воздуха"
+    },
+    "suit_increasedsprintduration": {
+      "en": "Increased Sprint Duration",
+      "de": "Erhöhte Sprintdauer",
+      "es": "Duración de esprint aumentada",
+      "fr": "Durée de course améliorée",
+      "pt": "Duração da corrida aumentada",
+      "ru": "Повышенная длительность бега"
+    },
+    "suit_nightvision": {
+      "en": "Night Vision",
+      "de": "Nachtsicht",
+      "es": "Visión nocturna",
+      "fr": "Vision nocturne",
+      "pt": "Visão noturna",
+      "ru": "Ночное видение"
+    },
+    "suit_quieterfootsteps": {
+      "en": "Quieter Footsteps",
+      "de": "Leises Auftreten",
+      "es": "Pasos silenciosos",
+      "fr": "Déplacement furtif",
+      "pt": "Passos mais silenciosos",
+      "ru": "Приглушенные шаги"
+    },
+    "suit_reducedtoolbatteryconsumption": {
+      "en": "Reduced Tool Battery Consumption",
+      "de": "Verringerter Werkzeug-Batterieverbrauch",
+      "es": "Consumo de batería reducido",
+      "fr": "Consommation des outils réduite",
+      "pt": "Consumo de bateria por ferramentas reduzido",
+      "ru": "Сниженный расход батареи инструмента"
+    },
+    "weapon_suppression_unpressurised": {
+      "en": "Audio Masking",
+      "de": "Audiomaskierung",
+      "es": "Enmascaramiento sonoro",
+      "fr": "Camouflage sonore",
+      "pt": "Mascaramento de áudio",
+      "ru": "Аудиомаскировка"
+    },
+    "weapon_handling": {
+      "en": "Faster Handling",
+      "de": "Schnellere Handhabung",
+      "es": "Manejo más rápido",
+      "fr": "Maniabilité améliorée",
+      "pt": "Manuseio acelerado",
+      "ru": "Улучшенное обращение с оружием"
+    },
+    "weapon_range": {
+      "en": "Greater Range",
+      "de": "Größere Reichweite",
+      "es": "Mayor alcance",
+      "fr": "Portée améliorée",
+      "pt": "Alcance aumentado",
+      "ru": "Улучшенная дальность"
+    },
+    "weapon_headshotdamage": {
+      "en": "Headshot Damage",
+      "de": "Kopfschussschaden",
+      "es": "Daño de disparo a la cabeza",
+      "fr": "Dégâts à la tête",
+      "pt": "Dano de tiros na cabeça",
+      "ru": "Урон от выстрела в голову"
+    },
+    "weapon_accuracy": {
+      "en": "Improved Hip Fire Accuracy",
+      "de": "Verbesserte Draufhalten-Präzision",
+      "es": "Precisión disparo cadera mejorada",
+      "fr": "Précision sans visée améliorée",
+      "pt": "Precisão de tiro sem mirar melhorada",
+      "ru": "Повышенная точность стрельбы от бедра"
+    },
+    "weapon_clipsize": {
+      "en": "Magazine Size",
+      "de": "Magazingröße",
+      "es": "Tamaño de cargador",
+      "fr": "Taille du chargeur",
+      "pt": "Tamanho do pente",
+      "ru": "Размер обоймы"
+    },
+    "weapon_suppression_pressurised": {
+      "en": "Noise Suppressor",
+      "de": "Geräuschunterdrückung",
+      "es": "Silenciador",
+      "fr": "Silencieux",
+      "pt": "Silenciador",
+      "ru": "Глушитель"
+    },
+    "weapon_reloadspeed": {
+      "en": "Reload Speed",
+      "de": "Nachlade-Geschwindigkeit",
+      "es": "Velocidad de recarga",
+      "fr": "Vitesse de rechargement",
+      "pt": "Velocidade de recarga",
+      "ru": "Скорость перезарядки"
+    },
+    "weapon_scope": {
+      "en": "Scope",
+      "de": "Visier",
+      "es": "Visor",
+      "fr": "Lunette",
+      "pt": "Mira telescópica",
+      "ru": "Прицел"
+    },
+    "weapon_stability": {
+      "en": "Stability",
+      "de": "Stabilität",
+      "es": "Estabilidad",
+      "fr": "Stabilité",
+      "pt": "Estabilidade",
+      "ru": "Устойчивость"
+    },
+    "weapon_backpackreloading": {
+      "en": "Stowed reloading",
+      "de": "Nachladen bei verwahrter Waffe",
+      "es": "Recargar al guardar",
+      "fr": "Rechargement rengainé",
+      "pt": "Recarga guardada",
+      "ru": "Перезарядка в кобуре"
+    }
+  }
+}

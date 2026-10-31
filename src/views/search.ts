@@ -1,3 +1,4 @@
+import { gameEnglish, gameName } from "../i18n.js";
 import { locale } from "../i18n.js";
 import { spanshPost } from "../bridge.js";
 import { h, icon, fmt, replace } from "../dom.js";
@@ -55,9 +56,9 @@ export class SearchView implements View {
     const lists = h(
       "div",
       { style: { display: "none" } },
-      h("datalist#dl-commodities", null, g.commodities.map((c) => h("option", { value: c.name }, c.category))),
+      h("datalist#dl-commodities", null, g.commodities.map((c) => h("option", { value: gameName(c.name) }, gameName(c.category)))),
       h("datalist#dl-ships", null, g.ships.map((s) => h("option", { value: s }))),
-      h("datalist#dl-modules", null, g.modules.map((s) => h("option", { value: s }))),
+      h("datalist#dl-modules", null, g.modules.map((s) => h("option", { value: gameName(s) }))),
     );
     replace(root, h("header.view-head", null, h("h1", null, "Recherche"), this.tabs), lists, h("section.card", null, this.form), this.out);
     this.renderTabs();
@@ -101,13 +102,13 @@ export class SearchView implements View {
       h("label.check", null, h("input", { type: "checkbox", checked: this.opts[key], onchange: (e: Event) => (this.opts[key] = (e.target as HTMLInputElement).checked) }), ` ${label}`);
 
     let main: HTMLElement;
-    if (t === "buy" || t === "sell") main = input("dl-commodities", "Marchandise (ex. Tritium, Gold, Low Temperature Diamonds)");
+    if (t === "buy" || t === "sell") main = input("dl-commodities", "Marchandise (ex. Tritium, Or, Diamants basse température)");
     else if (t === "ship") main = input("dl-ships", "Vaisseau (ex. Krait MkII, Anaconda)");
     else if (t === "module")
       main = h(
         "div.row",
         null,
-        input("dl-modules", "Module (ex. Frame Shift Drive, Shield Booster)"),
+        input("dl-modules", "Module (ex. Réacteur FSD, Survolteur de bouclier)"),
         h("select", { title: "Classe", onchange: (e: Event) => (this.cls = (e.target as HTMLSelectElement).value) }, CLASSES.map((c) => h("option", { value: c, selected: c === this.cls }, c ? `Classe ${c}` : "Toute classe"))),
         h("select", { title: "Classe", onchange: (e: Event) => (this.rating = (e.target as HTMLSelectElement).value) }, RATINGS.map((r) => h("option", { value: r, selected: r === this.rating }, r ? `Note ${r}` : "Toute note"))),
       );
@@ -147,20 +148,23 @@ export class SearchView implements View {
 
   private async run() {
     const t = this.tab;
-    const value = this.values[t].trim();
-    if (!value) return;
+    const typed = this.values[t].trim();
+    if (!typed) return;
+    // Names can be typed in the app's language or in English; Spansh only knows English.
+    const value = gameEnglish(typed);
     const g = this.ctx.game.data;
     const f = this.filters();
     let name = value;
     if (t === "buy" || t === "sell") {
-      const c = g.commodities.find((x) => x.name.toLowerCase() === value.toLowerCase());
+      const lower = value.toLowerCase();
+      const c = g.commodities.find((x) => x.name.toLowerCase() === lower) ?? g.commodities.find((x) => gameName(x.name).toLowerCase() === typed.toLowerCase());
       name = c?.name ?? value;
       f.market = [{ name, [t === "buy" ? "supply" : "demand"]: { value: [String(this.opts.minQty), "1000000000"], comparison: "<=>" } }];
     } else if (t === "ship") {
       name = g.ships.find((x) => x.toLowerCase() === value.toLowerCase()) ?? value;
       f.ships = { value: [name] };
     } else if (t === "module") {
-      name = g.modules.find((x) => x.toLowerCase() === value.toLowerCase()) ?? value;
+      name = g.modules.find((x) => x.toLowerCase() === value.toLowerCase()) ?? g.modules.find((x) => gameName(x).toLowerCase() === typed.toLowerCase()) ?? value;
       const group: Json = { name: { value: [name, ...(g.moduleAliases[name] ?? [])] } };
       if (this.cls) group.class = { value: [this.cls] };
       if (this.rating) group.rating = { value: [this.rating] };

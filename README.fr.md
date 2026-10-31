@@ -66,7 +66,7 @@ Structure :
   - `i18n.ts` : couche de traduction.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.5.3` : un brouillon de Release est créé.
+Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.5.4` : un brouillon de Release est créé.
 
 ## Feuille de route
 
@@ -76,4 +76,4 @@ Un build Windows se lance à chaque push sur `main`. Pour publier une version, p
 
 ## Crédits
 
-Données : EDCD/FDevIDs et msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Noms des commandes et gabarits des périphériques : EDRefCard (Richard Buckle, MIT). Recherches : Spansh (EDDN). Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel et non commercial. Détails dans [NOTICE](NOTICE).
+Données : EDCD/FDevIDs et msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Noms du jeu traduits : Elite Dangerous Almanac (MIT) et EDEngineer. Noms des commandes et gabarits des périphériques : EDRefCard (Richard Buckle, MIT). Recherches : Spansh (EDDN). Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel et non commercial. Détails dans [NOTICE](NOTICE).

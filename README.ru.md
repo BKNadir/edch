@@ -66,7 +66,7 @@ npm run demo        # только интерфейс в браузере, с п
   - `i18n.ts`: слой перевода.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: заново создают данные в `public/` (см. NOTICE).
 
-Сборка для Windows запускается при каждом push в `main`. Чтобы выпустить версию, отправьте тег, например `v0.5.3`: будет создан черновик Release.
+Сборка для Windows запускается при каждом push в `main`. Чтобы выпустить версию, отправьте тег, например `v0.5.4`: будет создан черновик Release.
 
 ## Планы
 
@@ -76,4 +76,4 @@ npm run demo        # только интерфейс в браузере, с п
 
 ## Благодарности
 
-Данные: EDCD/FDevIDs и msarilar/EDEngineer (MIT) через dseelinger/d47 (MIT). Названия команд и шаблоны устройств: EDRefCard (Richard Buckle, MIT). Поиск: Spansh (EDDN). Elite Dangerous — товарный знак Frontier Developments plc. Неофициальный некоммерческий инструмент сообщества. Подробности в [NOTICE](NOTICE).
+Данные: EDCD/FDevIDs и msarilar/EDEngineer (MIT) через dseelinger/d47 (MIT). Переведённые названия из игры: Elite Dangerous Almanac (MIT) и EDEngineer. Названия команд и шаблоны устройств: EDRefCard (Richard Buckle, MIT). Поиск: Spansh (EDDN). Elite Dangerous — товарный знак Frontier Developments plc. Неофициальный некоммерческий инструмент сообщества. Подробности в [NOTICE](NOTICE).

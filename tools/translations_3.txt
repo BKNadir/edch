@@ -57,9 +57,9 @@ Acheter une marchandise ¦ Buy a commodity ¦ Ware kaufen ¦ Comprar una mercanc
 Vendre une marchandise ¦ Sell a commodity ¦ Ware verkaufen ¦ Vender una mercancía ¦ Vender uma mercadoria ¦ Продать товар
 Vaisseaux ¦ Ships ¦ Schiffe ¦ Naves ¦ Naves ¦ Корабли
 Services ¦ Services ¦ Dienste ¦ Servicios ¦ Serviços ¦ Услуги
-Marchandise (ex. Tritium, Gold, Low Temperature Diamonds) ¦ Commodity (e.g. Tritium, Gold, Low Temperature Diamonds) ¦ Ware (z. B. Tritium, Gold, Low Temperature Diamonds) ¦ Mercancía (p. ej. Tritium, Gold, Low Temperature Diamonds) ¦ Mercadoria (ex. Tritium, Gold, Low Temperature Diamonds) ¦ Товар (например, Tritium, Gold, Low Temperature Diamonds)
+Marchandise (ex. Tritium, Or, Diamants basse température) ¦ Commodity (e.g. Tritium, Gold, Low Temperature Diamonds) ¦ Ware (z. B. Tritium, Gold, Tieftemperaturdiamanten) ¦ Mercancía (p. ej. Tritio, Oro, Diamantes de baja temperatura) ¦ Mercadoria (ex. Trítio, Ouro, Diamantes de baixa temperatura) ¦ Товар (например, Тритий, Золото, Низкотемпературные алмазы)
 Vaisseau (ex. Krait MkII, Anaconda) ¦ Ship (e.g. Krait MkII, Anaconda) ¦ Schiff (z. B. Krait MkII, Anaconda) ¦ Nave (p. ej. Krait MkII, Anaconda) ¦ Nave (ex. Krait MkII, Anaconda) ¦ Корабль (например, Krait MkII, Anaconda)
-Module (ex. Frame Shift Drive, Shield Booster) ¦ Module (e.g. Frame Shift Drive, Shield Booster) ¦ Modul (z. B. Frame Shift Drive, Shield Booster) ¦ Módulo (p. ej. Frame Shift Drive, Shield Booster) ¦ Módulo (ex. Frame Shift Drive, Shield Booster) ¦ Модуль (например, Frame Shift Drive, Shield Booster)
+Module (ex. Réacteur FSD, Survolteur de bouclier) ¦ Module (e.g. Frame Shift Drive, Shield Booster) ¦ Modul (z. B. Frameshiftantrieb, Schild-Booster) ¦ Módulo (p. ej. Motor de distorsión, Potenciador de escudos) ¦ Módulo (ex. Motor de distorção de fase, Potenciador de escudo) ¦ Модуль (например, FSD, Усилитель щита)
 Chercher ¦ Search ¦ Suchen ¦ Buscar ¦ Buscar ¦ Найти
 Toute classe ¦ Any class ¦ Jede Klasse ¦ Cualquier clase ¦ Qualquer classe ¦ Любой класс
 Toute note ¦ Any rating ¦ Jede Bewertung ¦ Cualquier categoría ¦ Qualquer classificação ¦ Любой рейтинг

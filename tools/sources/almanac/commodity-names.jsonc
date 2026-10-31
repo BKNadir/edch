@@ -1,0 +1,3311 @@
+/*
+ * Localized display names for market commodities.
+ *
+ * Source: Frontier's in-game commodity localisation, observed in the running game.
+ *
+ * Credit and licence terms: ATTRIBUTIONS.md. Acquisition, revision, derivation and
+ * known gaps: data/i18n/SOURCES.md.
+ *
+ * Each Frontier symbol maps directly to the owning catalogue's canonical English name
+ * and the five translations the game publishes beside it. Brazilian Portuguese is
+ * stored under the bare `pt` tag, as SOURCES.md documents. Every commodity the
+ * catalogues hold carries all six locales.
+ */
+{
+  "Platinum": {
+    "en": "Platinum",
+    "de": "Platin",
+    "es": "Platino",
+    "fr": "Platine",
+    "pt": "Platina",
+    "ru": "Платина"
+  },
+  "Palladium": {
+    "en": "Palladium",
+    "de": "Palladium",
+    "es": "Paladio",
+    "fr": "Palladium",
+    "pt": "Paládio",
+    "ru": "Палладий"
+  },
+  "Gold": {
+    "en": "Gold",
+    "de": "Gold",
+    "es": "Oro",
+    "fr": "Or",
+    "pt": "Ouro",
+    "ru": "Золото"
+  },
+  "Silver": {
+    "en": "Silver",
+    "de": "Silber",
+    "es": "Plata",
+    "fr": "Argent",
+    "pt": "Prata",
+    "ru": "Серебро"
+  },
+  "Bertrandite": {
+    "en": "Bertrandite",
+    "de": "Bertrandit",
+    "es": "Bertrandita",
+    "fr": "Bertrandite",
+    "pt": "Bertrandita",
+    "ru": "Бертрандит"
+  },
+  "Indite": {
+    "en": "Indite",
+    "de": "Indit",
+    "es": "Indita",
+    "fr": "Indite",
+    "pt": "Indita",
+    "ru": "Индит"
+  },
+  "Gallite": {
+    "en": "Gallite",
+    "de": "Gallit",
+    "es": "Galita",
+    "fr": "Gallite",
+    "pt": "Galita",
+    "ru": "Галлит"
+  },
+  "Coltan": {
+    "en": "Coltan",
+    "de": "Coltan",
+    "es": "Coltán",
+    "fr": "Coltan",
+    "pt": "Coltano",
+    "ru": "Колтан"
+  },
+  "Uraninite": {
+    "en": "Uraninite",
+    "de": "Uraninit",
+    "es": "Uraninita",
+    "fr": "Uraninite",
+    "pt": "Uraninita",
+    "ru": "Уранинит"
+  },
+  "Lepidolite": {
+    "en": "Lepidolite",
+    "de": "Lepidolith",
+    "es": "Lepidolita",
+    "fr": "Lépidolite",
+    "pt": "Lepidolita",
+    "ru": "Лепидолит"
+  },
+  "Cobalt": {
+    "en": "Cobalt",
+    "de": "Cobalt",
+    "es": "Cobalto",
+    "fr": "Cobalt",
+    "pt": "Cobalto",
+    "ru": "Кобальт"
+  },
+  "Rutile": {
+    "en": "Rutile",
+    "de": "Rutil",
+    "es": "Rutilo",
+    "fr": "Rutile",
+    "pt": "Rutilo",
+    "ru": "Рутил"
+  },
+  "Bauxite": {
+    "en": "Bauxite",
+    "de": "Bauxit",
+    "es": "Bauxita",
+    "fr": "Bauxite",
+    "pt": "Bauxita",
+    "ru": "Боксит"
+  },
+  "Water": {
+    "en": "Water",
+    "de": "Wasser",
+    "es": "Agua",
+    "fr": "Eau",
+    "pt": "Água",
+    "ru": "Вода"
+  },
+  "Beryllium": {
+    "en": "Beryllium",
+    "de": "Beryllium",
+    "es": "Berilio",
+    "fr": "Béryllium",
+    "pt": "Berílio",
+    "ru": "Бериллий"
+  },
+  "Indium": {
+    "en": "Indium",
+    "de": "Indium",
+    "es": "Indio",
+    "fr": "Indium",
+    "pt": "Indio",
+    "ru": "Индий"
+  },
+  "Gallium": {
+    "en": "Gallium",
+    "de": "Gallium",
+    "es": "Galio",
+    "fr": "Gallium",
+    "pt": "Gálio",
+    "ru": "Галлий"
+  },
+  "Tantalum": {
+    "en": "Tantalum",
+    "de": "Tantal",
+    "es": "Tantalio",
+    "fr": "Tantale",
+    "pt": "Tântalo",
+    "ru": "Тантал"
+  },
+  "Uranium": {
+    "en": "Uranium",
+    "de": "Uran",
+    "es": "Uranio",
+    "fr": "Uranium",
+    "pt": "Urânio",
+    "ru": "Уран"
+  },
+  "Lithium": {
+    "en": "Lithium",
+    "de": "Lithium",
+    "es": "Litio",
+    "fr": "Lithium",
+    "pt": "Lítio",
+    "ru": "Литий"
+  },
+  "Titanium": {
+    "en": "Titanium",
+    "de": "Titan",
+    "es": "Titanio",
+    "fr": "Titane",
+    "pt": "Titânio",
+    "ru": "Титан"
+  },
+  "Copper": {
+    "en": "Copper",
+    "de": "Kupfer",
+    "es": "Cobre",
+    "fr": "Cuivre",
+    "pt": "Cobre",
+    "ru": "Медь"
+  },
+  "Aluminium": {
+    "en": "Aluminium",
+    "de": "Aluminium",
+    "es": "Aluminio",
+    "fr": "Aluminium",
+    "pt": "Alumínio",
+    "ru": "Алюминий"
+  },
+  "Algae": {
+    "en": "Algae",
+    "de": "Algen",
+    "es": "Algas",
+    "fr": "Algue(s)",
+    "pt": "Algas",
+    "ru": "Водоросли"
+  },
+  "FruitAndVegetables": {
+    "en": "Fruit and Vegetables",
+    "de": "Obst und Gemüse",
+    "es": "Frutas y verduras",
+    "fr": "Fruits et légumes",
+    "pt": "Frutas e verduras",
+    "ru": "Фрукты и овощи"
+  },
+  "Grain": {
+    "en": "Grain",
+    "de": "Getreide",
+    "es": "Grano",
+    "fr": "Céréales",
+    "pt": "Cereal",
+    "ru": "Зерно"
+  },
+  "Animalmeat": {
+    "en": "Animal Meat",
+    "de": "Tierfleisch",
+    "es": "Carne de animales",
+    "fr": "Viande",
+    "pt": "Carne animal",
+    "ru": "Мясо животных"
+  },
+  "Fish": {
+    "en": "Fish",
+    "de": "Fisch",
+    "es": "Pescado",
+    "fr": "Poisson(s)",
+    "pt": "Peixe",
+    "ru": "Рыба"
+  },
+  "FoodCartridges": {
+    "en": "Food Cartridges",
+    "de": "Nahrungskartuschen",
+    "es": "Cartuchos de alimentos",
+    "fr": "Cartouche(s) alimentaire(s)",
+    "pt": "Cartuchos de alimentos",
+    "ru": "Пищевые брикеты"
+  },
+  "SyntheticMeat": {
+    "en": "Synthetic Meat",
+    "de": "Künstliches Fleisch",
+    "es": "Carne sintética",
+    "fr": "Viande synthétique",
+    "pt": "Carne sintética",
+    "ru": "Синтетическое мясо"
+  },
+  "Tea": {
+    "en": "Tea",
+    "de": "Tee",
+    "es": "Té",
+    "fr": "Thé(s)",
+    "pt": "Chá",
+    "ru": "Чай"
+  },
+  "Coffee": {
+    "en": "Coffee",
+    "de": "Kaffee",
+    "es": "Café",
+    "fr": "Café(s)",
+    "pt": "Café",
+    "ru": "Кофе"
+  },
+  "Leather": {
+    "en": "Leather",
+    "de": "Leder",
+    "es": "Cuero",
+    "fr": "Cuir",
+    "pt": "Couro",
+    "ru": "Кожа"
+  },
+  "NaturalFabrics": {
+    "en": "Natural Fabrics",
+    "de": "Naturfasern",
+    "es": "Tejidos naturales",
+    "fr": "Fibre(s) textile(s) naturelle(s)",
+    "pt": "Tecidos naturais",
+    "ru": "Натуральная ткань"
+  },
+  "SyntheticFabrics": {
+    "en": "Synthetic Fabrics",
+    "de": "Chemiefasern",
+    "es": "Tejidos sintéticos",
+    "fr": "Tissu(s) synthétique(s)",
+    "pt": "Tecidos sintéticos",
+    "ru": "Синтетическая ткань"
+  },
+  "Polymers": {
+    "en": "Polymers",
+    "de": "Polymere",
+    "es": "Polímeros",
+    "fr": "Polymère(s)",
+    "pt": "Polímeros",
+    "ru": "Полимеры"
+  },
+  "Semiconductors": {
+    "en": "Semiconductors",
+    "de": "Halbleiter",
+    "es": "Semiconductores",
+    "fr": "Semi-conducteur(s)",
+    "pt": "Semicondutores",
+    "ru": "Полупроводники"
+  },
+  "Superconductors": {
+    "en": "Superconductors",
+    "de": "Supraleiter",
+    "es": "Superconductores",
+    "fr": "Supraconducteur(s)",
+    "pt": "Supercondutores",
+    "ru": "Сверхпроводники"
+  },
+  "HydrogenFuel": {
+    "en": "Hydrogen Fuel",
+    "de": "Wasserstoff-Treibstoff",
+    "es": "Combustible de hidrógeno",
+    "fr": "Carburant à base d'hydrogène",
+    "pt": "Combustível de hidrogênio",
+    "ru": "Водородное топливо"
+  },
+  "MineralOil": {
+    "en": "Mineral Oil",
+    "de": "Mineralöl",
+    "es": "Aceite mineral",
+    "fr": "Huile(s) minérale(s)",
+    "pt": "Óleo Mineral",
+    "ru": "Нефтепродукты"
+  },
+  "Explosives": {
+    "en": "Explosives",
+    "de": "Sprengstoffe",
+    "es": "Explosivos",
+    "fr": "Explosif(s)",
+    "pt": "Explosivos",
+    "ru": "Взрывчатка"
+  },
+  "Pesticides": {
+    "en": "Pesticides",
+    "de": "Pestizide",
+    "es": "Pesticidas",
+    "fr": "Pesticide(s)",
+    "pt": "Pesticidas",
+    "ru": "Пестициды"
+  },
+  "AgriculturalMedicines": {
+    "en": "Agri-Medicines",
+    "de": "Agrar-Medikamente",
+    "es": "Medicinas agrícolas",
+    "fr": "Agri-médicament(s)",
+    "pt": "Remédios agrícolas",
+    "ru": "Ветмедикаменты"
+  },
+  "PerformanceEnhancers": {
+    "en": "Performance Enhancers",
+    "de": "Leistungssteigerer",
+    "es": "Potenciadores de rendimiento",
+    "fr": "Produit(s) dopant(s)",
+    "pt": "Potenciadores de desempenho",
+    "ru": "Стимуляторы"
+  },
+  "BasicMedicines": {
+    "en": "Basic Medicines",
+    "de": "Allgemeine Medikamente",
+    "es": "Medicinas básicas",
+    "fr": "Médicament(s) simple(s)",
+    "pt": "Remédios básicos",
+    "ru": "Основные лекарства"
+  },
+  "BasicNarcotics": {
+    "en": "Narcotics",
+    "de": "Drogen",
+    "es": "Narcóticos",
+    "fr": "Narcotique(s)",
+    "pt": "Narcóticos",
+    "ru": "Наркотики"
+  },
+  "Tobacco": {
+    "en": "Tobacco",
+    "de": "Tabak",
+    "es": "Tabaco",
+    "fr": "Tabac",
+    "pt": "Tabaco",
+    "ru": "Табак"
+  },
+  "Beer": {
+    "en": "Beer",
+    "de": "Bier",
+    "es": "Cerveza",
+    "fr": "Bière",
+    "pt": "Cerveja",
+    "ru": "Пиво"
+  },
+  "Wine": {
+    "en": "Wine",
+    "de": "Wein",
+    "es": "Vino",
+    "fr": "Vin",
+    "pt": "Vinho",
+    "ru": "Вино"
+  },
+  "Liquor": {
+    "en": "Liquor",
+    "de": "Spirituosen",
+    "es": "Licores",
+    "fr": "Spiritueux",
+    "pt": "Bebida alcoólica",
+    "ru": "Спиртное"
+  },
+  "PowerGenerators": {
+    "en": "Power Generators",
+    "de": "Stromerzeuger",
+    "es": "Generadores de energía",
+    "fr": "Générateurs",
+    "pt": "Geradores de energia",
+    "ru": "Электрогенераторы"
+  },
+  "WaterPurifiers": {
+    "en": "Water Purifiers",
+    "de": "Wasserreiniger",
+    "es": "Purificadores de agua",
+    "fr": "Purificateurs d'eau",
+    "pt": "Purificadores de água",
+    "ru": "Водоочистители"
+  },
+  "HeliostaticFurnaces": {
+    "en": "Microbial Furnaces",
+    "de": "Mikrobielle Öfen",
+    "es": "Hornos microbianos",
+    "fr": "Hauts fourneaux microbiens",
+    "pt": "Fornalhas microbianas",
+    "ru": "Микробные печи"
+  },
+  "MineralExtractors": {
+    "en": "Mineral Extractors",
+    "de": "Mineralextraktoren",
+    "es": "Extractores de minerales",
+    "fr": "Extracteurs de minerai",
+    "pt": "Extratores minerais",
+    "ru": "Экстракторы минералов"
+  },
+  "CropHarvesters": {
+    "en": "Crop Harvesters",
+    "de": "Erntemaschinen",
+    "es": "Segadoras de cultivos",
+    "fr": "Moissonneuses",
+    "pt": "Colheitadeiras",
+    "ru": "Уборочный комбайн"
+  },
+  "MarineSupplies": {
+    "en": "Marine Equipment",
+    "de": "Maritimausstattung",
+    "es": "Equipamiento marino",
+    "fr": "Équipement aquamarin",
+    "pt": "Equipamento marítimo",
+    "ru": "Морское оборудование"
+  },
+  "ComputerComponents": {
+    "en": "Computer Components",
+    "de": "Computerteile",
+    "es": "Componentes informáticos",
+    "fr": "Composants d'ordinateur",
+    "pt": "Componentes informáticos",
+    "ru": "Компьютерные компоненты"
+  },
+  "HazardousEnvironmentSuits": {
+    "en": "H.E. Suits",
+    "de": "Schutzanzüge",
+    "es": "Trajes de protección",
+    "fr": "Combinaisons de protection",
+    "pt": "Traje espacial",
+    "ru": "Защитные костюмы"
+  },
+  "Robotics": {
+    "en": "Robotics",
+    "de": "Roboter",
+    "es": "Robótica",
+    "fr": "Robots",
+    "pt": "Robótica",
+    "ru": "Роботы"
+  },
+  "AutoFabricators": {
+    "en": "Auto-Fabricators",
+    "de": "Fabrikatoren",
+    "es": "Autofabricantes",
+    "fr": "Dispositifs d'autofabrication",
+    "pt": "Auto-fabricantes",
+    "ru": "Автосинтезаторы"
+  },
+  "AnimalMonitors": {
+    "en": "Animal Monitors",
+    "de": "Tierüberwachung",
+    "es": "Monitores de animales",
+    "fr": "Sys. surveillance animale",
+    "pt": "Monitores animais",
+    "ru": "Мониторы фауны"
+  },
+  "AquaponicSystems": {
+    "en": "Aquaponic Systems",
+    "de": "Aquaponiksysteme",
+    "es": "Sistemas de hidroponía",
+    "fr": "Systèmes aquaponiques",
+    "pt": "Sistemas aquapônicos",
+    "ru": "Аквапонные системы"
+  },
+  "AdvancedCatalysers": {
+    "en": "Advanced Catalysers",
+    "de": "Fortschr. Katalysatoren",
+    "es": "Catalizadores avanzados",
+    "fr": "Catalyseurs complexes",
+    "pt": "Catalizadores avançados",
+    "ru": "Улучшенные катализаторы"
+  },
+  "TerrainEnrichmentSystems": {
+    "en": "Land Enrichment Systems",
+    "de": "Landanreicherungssysteme",
+    "es": "Enriquecimiento terrestre",
+    "fr": "Sys. enrichissement sols",
+    "pt": "Enriquecedor de solo",
+    "ru": "Системы обогащения почвы"
+  },
+  "PersonalWeapons": {
+    "en": "Personal Weapons",
+    "de": "Persönliche Waffen",
+    "es": "Armas personales",
+    "fr": "Armes de poing",
+    "pt": "Armas pessoais",
+    "ru": "Личное оружие"
+  },
+  "BattleWeapons": {
+    "en": "Battle Weapons",
+    "de": "Kriegswaffen",
+    "es": "Armas de batalla",
+    "fr": "Armes militaires",
+    "pt": "Armas de batalha",
+    "ru": "Военное оружие"
+  },
+  "ReactiveArmour": {
+    "en": "Reactive Armour",
+    "de": "Reaktivrüstung",
+    "es": "Blindaje reactivo",
+    "fr": "Protection réactive",
+    "pt": "Blindagem reativa",
+    "ru": "Реактивная защита"
+  },
+  "NonLethalWeapons": {
+    "en": "Non-Lethal Weapons",
+    "de": "Nichttödliche Waffen",
+    "es": "Armas no letales",
+    "fr": "Armes incapacitantes",
+    "pt": "Armas não letais",
+    "ru": "Нелетальное оружие"
+  },
+  "DomesticAppliances": {
+    "en": "Domestic Appliances",
+    "de": "Haushaltsgeräte",
+    "es": "Electrodomésticos",
+    "fr": "Équipement ménager",
+    "pt": "Eletrodomésticos",
+    "ru": "Бытовая техника"
+  },
+  "ConsumerTechnology": {
+    "en": "Consumer Technology",
+    "de": "Unterhaltungselektronik",
+    "es": "Tecnología de consumo",
+    "fr": "Électronique grand public",
+    "pt": "Tecnologia de consumo",
+    "ru": "Потребительские товары"
+  },
+  "Clothing": {
+    "en": "Clothing",
+    "de": "Kleidung",
+    "es": "Ropa",
+    "fr": "Vêtements",
+    "pt": "Vestuário",
+    "ru": "Одежда"
+  },
+  "Slaves": {
+    "en": "Slaves",
+    "de": "Sklaven",
+    "es": "Esclavos",
+    "fr": "Esclaves",
+    "pt": "Escravos",
+    "ru": "Рабы"
+  },
+  "Biowaste": {
+    "en": "Biowaste",
+    "de": "Biomüll",
+    "es": "Residuos biológicos",
+    "fr": "Biodéchets",
+    "pt": "Resíduo biológico",
+    "ru": "Биоотходы"
+  },
+  "ToxicWaste": {
+    "en": "Toxic Waste",
+    "de": "Giftmüll",
+    "es": "Residuos tóxicos",
+    "fr": "Déchets toxiques",
+    "pt": "Resíduo tóxico",
+    "ru": "Токсичные отходы"
+  },
+  "ChemicalWaste": {
+    "en": "Chemical Waste",
+    "de": "Chemiemüll",
+    "es": "Residuos químicos",
+    "fr": "Déchets chimiques",
+    "pt": "Resíduo químico",
+    "ru": "Радиоактивные материалы"
+  },
+  "Scrap": {
+    "en": "Scrap",
+    "de": "Schrott",
+    "es": "Chatarra",
+    "fr": "Ferraille",
+    "pt": "Sucata",
+    "ru": "Утильсырье"
+  },
+  "ProgenitorCells": {
+    "en": "Progenitor Cells",
+    "de": "Vorläuferzellen",
+    "es": "Células madre",
+    "fr": "Cellules souches",
+    "pt": "Células progenitoras",
+    "ru": "Прогениторные клетки"
+  },
+  "CombatStabilisers": {
+    "en": "Combat Stabilisers",
+    "de": "Kampfstabilisatoren",
+    "es": "Estabilizadores de combate",
+    "fr": "Stabilisateurs de combat",
+    "pt": "Estabilizadores de combate",
+    "ru": "Боевые стабилизаторы"
+  },
+  "ResonatingSeparators": {
+    "en": "Resonating Separators",
+    "de": "Resonanzabgrenzer",
+    "es": "Separadores resonantes",
+    "fr": "Séparateurs à résonance",
+    "pt": "Separadores ressonantes",
+    "ru": "Резонансные сепараторы"
+  },
+  "BioReducingLichen": {
+    "en": "Bioreducing Lichen",
+    "de": "Bioreduzierende Flechten",
+    "es": "Líquenes biorreductores",
+    "fr": "Lichen bioréducteur",
+    "pt": "Líquens biorredutores",
+    "ru": "Лишайник-биоредуктор"
+  },
+  "AtmosphericExtractors": {
+    "en": "Atmospheric Processors",
+    "de": "Atmosphärenprozessoren",
+    "es": "Procesadores atmosféricos",
+    "fr": "Processeurs atmosphériques",
+    "pt": "Processadores atmosféricos",
+    "ru": "Атмосферный процессор"
+  },
+  "Drones": {
+    "en": "Limpets",
+    "de": "Drohne",
+    "es": "Dron",
+    "fr": "Drone",
+    "pt": "Drone",
+    "ru": "Дрон"
+  },
+  "USSCargoBlackBox": {
+    "en": "Black Box",
+    "de": "Black Box",
+    "es": "Cajas negras",
+    "fr": "Boîte noire",
+    "pt": "Caixa preta",
+    "ru": "Черный ящик"
+  },
+  "USSCargoTradeData": {
+    "en": "Trade Data",
+    "de": "Handelsdaten",
+    "es": "Datos comerciales",
+    "fr": "Données commerciales",
+    "pt": "Dados comerciais",
+    "ru": "Торговая информация"
+  },
+  "USSCargoMilitaryPlans": {
+    "en": "Military Plans",
+    "de": "Militärpläne",
+    "es": "Planes militares",
+    "fr": "Plans militaires",
+    "pt": "Planos militares",
+    "ru": "Военные планы"
+  },
+  "USSCargoAncientArtefact": {
+    "en": "Ancient Artefact",
+    "de": "Uraltes Artefakt",
+    "es": "Artefactos antiguos",
+    "fr": "Relique antique",
+    "pt": "Artefatos anciões",
+    "ru": "Древний артефакт"
+  },
+  "USSCargoRareArtwork": {
+    "en": "Rare Artwork",
+    "de": "Seltene Kunstgegenstände",
+    "es": "Arte poco común",
+    "fr": "Œuvre d'art",
+    "pt": "Arte rara",
+    "ru": "Редкие произведения искусства"
+  },
+  "USSCargoExperimentalChemicals": {
+    "en": "Experimental Chemicals",
+    "de": "Experimentelle Chemikalien",
+    "es": "Químicos experimentales",
+    "fr": "Produits chimiques expérimentaux",
+    "pt": "Químicos experimentais",
+    "ru": "Экспериментальные химикаты"
+  },
+  "USSCargoRebelTransmissions": {
+    "en": "Rebel Transmissions",
+    "de": "Rebellenübertragungen",
+    "es": "Transmisiones rebeldes",
+    "fr": "Transmissions rebelles",
+    "pt": "Transmissões rebeldes",
+    "ru": "Переговоры повстанцев"
+  },
+  "USSCargoPrototypeTech": {
+    "en": "Prototype Tech",
+    "de": "Prototyp-Technologien",
+    "es": "Prototipos tecnológicos",
+    "fr": "Prototype technologique",
+    "pt": "Protótipo tecnológico",
+    "ru": "Экспериментальная техника"
+  },
+  "USSCargoTechnicalBlueprints": {
+    "en": "Technical Blueprints",
+    "de": "Technische Baupläne",
+    "es": "Planos técnicos",
+    "fr": "Plans industriels",
+    "pt": "Diagramas técnicos",
+    "ru": "Промышленные чертежи"
+  },
+  "ImperialSlaves": {
+    "en": "Imperial Slaves",
+    "de": "Imperiale Sklaven",
+    "es": "Esclavos imperiales",
+    "fr": "Esclaves impériaux",
+    "pt": "Escravos imperiais",
+    "ru": "Имперские рабы"
+  },
+  "UnknownArtifact": {
+    "en": "Thargoid Sensor",
+    "de": "Thargoidensensor",
+    "es": "Sensor Thargoide",
+    "fr": "Capteur thargoid",
+    "pt": "Sensor Thargoid",
+    "ru": "Таргоидский сенсор"
+  },
+  "AiRelics": {
+    "en": "AI Relics",
+    "de": "KI-Relikte",
+    "es": "Reliquias de IA",
+    "fr": "Reliquats d'IA",
+    "pt": "Relíquias de IA",
+    "ru": "Фрагменты ИИ"
+  },
+  "Hafnium178": {
+    "en": "Hafnium 178",
+    "de": "Hafnium 178",
+    "es": "Hafnio 178",
+    "fr": "Hafnium 178",
+    "pt": "Háfnio 178",
+    "ru": "Гафний-178"
+  },
+  "Painite": {
+    "en": "Painite",
+    "de": "Painit",
+    "es": "Painita",
+    "fr": "Painite",
+    "pt": "Painita",
+    "ru": "Пейнит"
+  },
+  "Antiquities": {
+    "en": "Antiquities",
+    "de": "Antiquitäten",
+    "es": "Antigüedades",
+    "fr": "Antiquités",
+    "pt": "Antiguidades",
+    "ru": "Древние реликвии"
+  },
+  "MilitaryIntelligence": {
+    "en": "Military Intelligence",
+    "de": "Militärische Geheimdokumente",
+    "es": "Inteligencia militar",
+    "fr": "Renseignements militaires",
+    "pt": "Inteligência militar",
+    "ru": "Разведданные"
+  },
+  "Osmium": {
+    "en": "Osmium",
+    "de": "Osmium",
+    "es": "Osmio",
+    "fr": "Osmium",
+    "pt": "Ósmio",
+    "ru": "Осмий"
+  },
+  "SAP8CoreContainer": {
+    "en": "SAP 8 Core Container",
+    "de": "Container mit SAP 8-Kern",
+    "es": "Núcleos SAP-8",
+    "fr": "Conteneur fusion SAP 8",
+    "pt": "Recipiente de núcleo SAP 8",
+    "ru": "Контейнер SAP 8 Core"
+  },
+  "TrinketsOfFortune": {
+    "en": "Trinkets of Hidden Fortune",
+    "de": "Schmuckstücke von unschätzbarem Wert",
+    "es": "Baratijas de fortuna oculta",
+    "fr": "Amulettes porte-bonheur",
+    "pt": "Bugigangas da sorte oculta",
+    "ru": "Безделушки таинственной Фортуны"
+  },
+  "WreckageComponents": {
+    "en": "Wreckage Components",
+    "de": "Wrackteilkomponenten",
+    "es": "Restos de accidentes",
+    "fr": "Débris d'épave",
+    "pt": "Restos de componentes",
+    "ru": "Обломки кораблекрушений"
+  },
+  "EncriptedDataStorage": {
+    "en": "Encrypted Data Storage",
+    "de": "Verschlüsselter Datenträger",
+    "es": "Datos encriptados",
+    "fr": "Périphérique de stockage crypté",
+    "pt": "Depósito de dados criptografados",
+    "ru": "Зашифрованный носитель данных"
+  },
+  "OccupiedCryoPod": {
+    "en": "Occupied Escape Pod",
+    "de": "Besetzte Rettungskapsel",
+    "es": "Cápsula de escape ocupada",
+    "fr": "Nacelle d'évacuation occupée",
+    "pt": "Cápsula de fuga ocupada",
+    "ru": "Спасательная капсула с пассажиром"
+  },
+  "PersonalEffects": {
+    "en": "Personal Effects",
+    "de": "Persönliches",
+    "es": "Efectos personales",
+    "fr": "Effets personnels",
+    "pt": "Itens pessoais",
+    "ru": "Личные вещи"
+  },
+  "ComercialSamples": {
+    "en": "Commercial Samples",
+    "de": "Werbeproben",
+    "es": "Muestras comerciales",
+    "fr": "Échantillons commerciaux",
+    "pt": "Amostras comerciais",
+    "ru": "Рекламные образцы"
+  },
+  "TacticalData": {
+    "en": "Tactical Data",
+    "de": "Aufklärungsdaten",
+    "es": "Datos tácticos",
+    "fr": "Données tactiques",
+    "pt": "Dados táticos",
+    "ru": "Тактические данные"
+  },
+  "AssaultPlans": {
+    "en": "Assault Plans",
+    "de": "Angriffspläne",
+    "es": "Planes de asalto",
+    "fr": "Plans d'assaut",
+    "pt": "Planos de assalto",
+    "ru": "Планы атак"
+  },
+  "EncryptedCorrespondence": {
+    "en": "Encrypted Correspondence",
+    "de": "Verschlüsselte Korrespondenz",
+    "es": "Correspondencia encriptada",
+    "fr": "Correspondance cryptée",
+    "pt": "Correspondência criptografada",
+    "ru": "Шифрованная переписка"
+  },
+  "DiplomaticBag": {
+    "en": "Diplomatic Bag",
+    "de": "Diplomatentasche",
+    "es": "Valija diplomática",
+    "fr": "Mallette(s) diplomatique(s)",
+    "pt": "Maleta diplomática",
+    "ru": "Дипломатическая сумка"
+  },
+  "ScientificResearch": {
+    "en": "Scientific Research",
+    "de": "Wissenschaftliche Forschung",
+    "es": "Investigaciones científicas",
+    "fr": "Recherches scientifiques",
+    "pt": "Pesquisa científica",
+    "ru": "Материалы исследования"
+  },
+  "ScientificSamples": {
+    "en": "Scientific Samples",
+    "de": "Wissenschaftliche Proben",
+    "es": "Muestras científicas",
+    "fr": "Échantillons scientifiques",
+    "pt": "Amostras científicas",
+    "ru": "Научные образцы"
+  },
+  "PoliticalPrisoner": {
+    "en": "Political Prisoners",
+    "de": "Politische Gefangene",
+    "es": "Prisioneros políticos",
+    "fr": "Prisonniers politiques",
+    "pt": "Prisioneiros políticos",
+    "ru": "Политзаключенные"
+  },
+  "Hostage": {
+    "en": "Hostages",
+    "de": "Geiseln",
+    "es": "Rehenes",
+    "fr": "Otages",
+    "pt": "Reféns",
+    "ru": "Заложники"
+  },
+  "LargeExplorationDataCash": {
+    "en": "Large Survey Data Cache",
+    "de": "Großer Erkundungsdatenspeicher",
+    "es": "Memorias de reconocimiento grandes",
+    "fr": "Important lot de données d'explorations",
+    "pt": "Grande memória de dados de exploração",
+    "ru": "Большой пакет с данными исследования"
+  },
+  "SmallExplorationDataCash": {
+    "en": "Small Survey Data Cache",
+    "de": "Kleiner Erkundungsdatenspeicher",
+    "es": "Memorias de reconocimiento pequeñas",
+    "fr": "Petit lot de données d'explorations",
+    "pt": "Pequena memória de dados de exploração",
+    "ru": "Малый пакет с данными исследования"
+  },
+  "AntiqueJewellery": {
+    "en": "Antique Jewellery",
+    "de": "Antiker Schmuck",
+    "es": "Joyería antigua",
+    "fr": "Bijoux antiques",
+    "pt": "Joias antigas",
+    "ru": "Древние ювелирные украшения"
+  },
+  "PreciousGems": {
+    "en": "Precious Gems",
+    "de": "Edelsteine",
+    "es": "Piedras preciosas",
+    "fr": "Pierres précieuses",
+    "pt": "Pedras preciosas",
+    "ru": "Драгоценные камни"
+  },
+  "EarthRelics": {
+    "en": "Earth Relics",
+    "de": "Erdrelikte",
+    "es": "Reliquias de la vieja Tierra",
+    "fr": "Reliques de la Terre",
+    "pt": "Relíquias terrestres",
+    "ru": "Реликвии с Земли"
+  },
+  "GeneBank": {
+    "en": "Gene Bank",
+    "de": "Gen-Datenbank",
+    "es": "Bancos de genes",
+    "fr": "Banque de gènes",
+    "pt": "Banco de genes",
+    "ru": "Генотека"
+  },
+  "TimeCapsule": {
+    "en": "Time Capsule",
+    "de": "Zeitkapsel",
+    "es": "Capsulas del tiempo",
+    "fr": "Capsule temporelle",
+    "pt": "Cápsula do tempo",
+    "ru": "Капсула времени"
+  },
+  "Cryolite": {
+    "en": "Cryolite",
+    "de": "Kriolyth",
+    "es": "Criolita",
+    "fr": "Cryolite",
+    "pt": "Criolita",
+    "ru": "Криолит"
+  },
+  "Goslarite": {
+    "en": "Goslarite",
+    "de": "Goslarit",
+    "es": "Goslarita",
+    "fr": "Goslarite",
+    "pt": "Goslarita",
+    "ru": "Госларит"
+  },
+  "Moissanite": {
+    "en": "Moissanite",
+    "de": "Moissanit",
+    "es": "Moissanita",
+    "fr": "Carbure de silicium",
+    "pt": "Moissanita",
+    "ru": "Муассанит"
+  },
+  "Pyrophyllite": {
+    "en": "Pyrophyllite",
+    "de": "Pyrophyllit",
+    "es": "Pirofilita",
+    "fr": "Pyrophyllite",
+    "pt": "Pirofilita",
+    "ru": "Пирофиллит"
+  },
+  "Lanthanum": {
+    "en": "Lanthanum",
+    "de": "Lanthan",
+    "es": "Lantano",
+    "fr": "Lanthane",
+    "pt": "Lantânio",
+    "ru": "Лантан"
+  },
+  "Thallium": {
+    "en": "Thallium",
+    "de": "Thallium",
+    "es": "Talio",
+    "fr": "Thallium",
+    "pt": "Tálio",
+    "ru": "Таллий"
+  },
+  "Bismuth": {
+    "en": "Bismuth",
+    "de": "Bismut",
+    "es": "Bismuto",
+    "fr": "Bismuth",
+    "pt": "Bismuto",
+    "ru": "Висмут"
+  },
+  "Thorium": {
+    "en": "Thorium",
+    "de": "Thorium",
+    "es": "Torio",
+    "fr": "Thorium",
+    "pt": "Tório",
+    "ru": "Торий"
+  },
+  "CeramicComposites": {
+    "en": "Ceramic Composites",
+    "de": "Keramik-Verbundwerkstoffe",
+    "es": "Compuestos cerámicos",
+    "fr": "Composés en céramique",
+    "pt": "Compostos cerâmicos",
+    "ru": "Керамокомпозиты"
+  },
+  "SyntheticReagents": {
+    "en": "Synthetic Reagents",
+    "de": "Synthetische Reagenzstoffe",
+    "es": "Reagentes sintéticos",
+    "fr": "Réactifs synthétiques",
+    "pt": "Reagentes sintéticos",
+    "ru": "Синтетические реагенты"
+  },
+  "NerveAgents": {
+    "en": "Nerve Agents",
+    "de": "Nervengas",
+    "es": "Agentes nerviosos",
+    "fr": "Agents neurotoxiques",
+    "pt": "Agentes neurais",
+    "ru": "Агенты нервно-паралит. действия"
+  },
+  "SurfaceStabilisers": {
+    "en": "Surface Stabilisers",
+    "de": "Oberflächenstabilisierer",
+    "es": "Estabilizadores de superficie",
+    "fr": "Stabilisateurs de surface",
+    "pt": "Estabilizadores de superfície",
+    "ru": "Стабилизаторы поверхности"
+  },
+  "BootlegLiquor": {
+    "en": "Bootleg Liquor",
+    "de": "Schmuggelschnaps",
+    "es": "Licor de caña",
+    "fr": "Liqueur de contrebande",
+    "pt": "Bebida alcoólica ilícita",
+    "ru": "Самогон"
+  },
+  "GeologicalEquipment": {
+    "en": "Geological Equipment",
+    "de": "Geologie-Ausrüstung",
+    "es": "Equipamiento geológico",
+    "fr": "Équipement géologique",
+    "pt": "Equipamento geológico",
+    "ru": "Геологическое оборудование"
+  },
+  "ThermalCoolingUnits": {
+    "en": "Thermal Cooling Units",
+    "de": "Thermal-Kühleinheiten",
+    "es": "Unidades de enfriamiento térmico",
+    "fr": "Unités de refroidissement",
+    "pt": "Unidades de resfriamento térmico",
+    "ru": "Термальные охладители"
+  },
+  "BuildingFabricators": {
+    "en": "Building Fabricators",
+    "de": "Baufabrikatoren",
+    "es": "Constructores",
+    "fr": "Auto-bâtisseurs",
+    "pt": "Fabricantes de construções",
+    "ru": "Строительные синтезаторы"
+  },
+  "MuTomImager": {
+    "en": "Muon Imager",
+    "de": "Myon-Bildgeber",
+    "es": "Escáner muónico",
+    "fr": "Dispositif d'imagerie muonique",
+    "pt": "Escâner de múon",
+    "ru": "Мюонное видеоустройство"
+  },
+  "StructuralRegulators": {
+    "en": "Structural Regulators",
+    "de": "Strukturregulatoren",
+    "es": "Reguladores estructurales",
+    "fr": "Régulateur(s) structurel(s)",
+    "pt": "Registradores estruturais",
+    "ru": "Конструкционные регуляторы"
+  },
+  "Landmines": {
+    "en": "Landmines",
+    "de": "Landminen",
+    "es": "Minas terrestres",
+    "fr": "Mines terrestres",
+    "pt": "Minas terrestres",
+    "ru": "Мины"
+  },
+  "SkimerComponents": {
+    "en": "Skimmer Components",
+    "de": "OF-Drohnen-Komponenten",
+    "es": "Componentes de deslizador",
+    "fr": "Composants de protecteurs",
+    "pt": "Componentes de escumador",
+    "ru": "Детали оборон. беспилотников"
+  },
+  "EvacuationShelter": {
+    "en": "Evacuation Shelter",
+    "de": "Evakuierungsschutz",
+    "es": "Refugio de evacuación",
+    "fr": "Abri d'urgence",
+    "pt": "Abrigo de evacuação",
+    "ru": "Эвакуационное убежище"
+  },
+  "GeologicalSamples": {
+    "en": "Geological Samples",
+    "de": "Geologische Proben",
+    "es": "Muestras geológicas",
+    "fr": "Échantillons géologiques",
+    "pt": "Amostras geológicas",
+    "ru": "Образцы породы"
+  },
+  "MetaAlloys": {
+    "en": "Meta-Alloys",
+    "de": "Meta-Legierungen",
+    "es": "Metaaleaciones",
+    "fr": "Méta-alliages",
+    "pt": "Meta-ligas",
+    "ru": "Метасплавы"
+  },
+  "Taaffeite": {
+    "en": "Taaffeite",
+    "de": "Taaffeit",
+    "es": "Taaffeíta",
+    "fr": "Taafféite",
+    "pt": "Taaffeita",
+    "ru": "Тааффеит"
+  },
+  "Jadeite": {
+    "en": "Jadeite",
+    "de": "Jadeit",
+    "es": "Jadeíta",
+    "fr": "Jadéite",
+    "pt": "Jadeíta",
+    "ru": "Жадеит"
+  },
+  "UnstableDataCore": {
+    "en": "Unstable Data Core",
+    "de": "Instabiler Datenkern",
+    "es": "Unidad de datos inestable",
+    "fr": "Centre de données instable",
+    "pt": "Núcleo de dados instável",
+    "ru": "Нестабильное ядро данных"
+  },
+  "DamagedEscapePod": {
+    "en": "Damaged Escape Pod",
+    "de": "Beschädigte Rettungskapsel",
+    "es": "Cápsula de escape dañada",
+    "fr": "Nacelle d'évacuation endommagée",
+    "pt": "Cápsula de fuga danificada",
+    "ru": "Поврежденная спасательная капсула"
+  },
+  "Praseodymium": {
+    "en": "Praseodymium",
+    "de": "Praseodym",
+    "es": "Praseodimio",
+    "fr": "Praséodyme",
+    "pt": "Praseodímio",
+    "ru": "Празеодим"
+  },
+  "Bromellite": {
+    "en": "Bromellite",
+    "de": "Bromellit",
+    "es": "Bromellita",
+    "fr": "Bromellite",
+    "pt": "Bromelito",
+    "ru": "Бромеллит"
+  },
+  "Samarium": {
+    "en": "Samarium",
+    "de": "Samarium",
+    "es": "Samario",
+    "fr": "Samarium",
+    "pt": "Samário",
+    "ru": "Самарий"
+  },
+  "LowTemperatureDiamond": {
+    "en": "Low Temperature Diamonds",
+    "de": "Tieftemperaturdiamanten",
+    "es": "Diamantes de baja temperatura",
+    "fr": "Diamants basse température",
+    "pt": "Diamantes de baixa temperatura",
+    "ru": "Низкотемпературные алмазы"
+  },
+  "HydrogenPeroxide": {
+    "en": "Hydrogen Peroxide",
+    "de": "Wasserstoffperoxid",
+    "es": "Peróxido de hidrógeno",
+    "fr": "Peroxyde d'hydrogène",
+    "pt": "Peróxido de hidrogênio",
+    "ru": "Пероксид водорода"
+  },
+  "LiquidOxygen": {
+    "en": "Liquid oxygen",
+    "de": "Flüssiger Sauerstoff",
+    "es": "Oxígeno líquido",
+    "fr": "Oxygène liquide",
+    "pt": "Oxigênio liquido",
+    "ru": "Жидкий кислород"
+  },
+  "MethanolMonohydrateCrystals": {
+    "en": "Methanol Monohydrate Crystals",
+    "de": "Methanol-Monohydrat-Kristalle",
+    "es": "Cristales de monohidrato de metanol",
+    "fr": "Cristaux de méthanol monohydraté",
+    "pt": "Cristais de metanol monohidratado",
+    "ru": "Кристаллы моногидрата метанола"
+  },
+  "LithiumHydroxide": {
+    "en": "Lithium Hydroxide",
+    "de": "Lithiumhydroxid",
+    "es": "Hidróxido de litio",
+    "fr": "Hydroxyde de lithium",
+    "pt": "Hidróxido de Lítio",
+    "ru": "Гидроксид лития"
+  },
+  "MethaneClathrate": {
+    "en": "Methane Clathrate",
+    "de": "Methanklathrat",
+    "es": "Hidrato de metano",
+    "fr": "Hydrate de méthane",
+    "pt": "Metano em clatrato",
+    "ru": "Клатрат метана"
+  },
+  "InsulatingMembrane": {
+    "en": "Insulating Membrane",
+    "de": "Isoliermembran",
+    "es": "Membrana aislante",
+    "fr": "Membrane isolante",
+    "pt": "Membrana de isolamento",
+    "ru": "Изолирующая мембрана"
+  },
+  "CMMComposite": {
+    "en": "CMM Composite",
+    "de": "CMM-Komposit",
+    "es": "Compuestos CMM",
+    "fr": "Composite MMC",
+    "pt": "Compostos CMM",
+    "ru": "CMM-композит"
+  },
+  "CoolingHoses": {
+    "en": "Micro-weave Cooling Hoses",
+    "de": "Mikroflecht-Kühlschläuche",
+    "es": "Mangueras de microtejidos",
+    "fr": "Tuyaux de refroidissement",
+    "pt": "Mangueiras de resfriamento por micro-ondas",
+    "ru": "Шланги системы охлаждения малых диаметров"
+  },
+  "NeofabricInsulation": {
+    "en": "Neofabric Insulation",
+    "de": "Neogewebe-Isolierung",
+    "es": "Neotejido aislante",
+    "fr": "Isolant en néotextile",
+    "pt": "Neotecido de isolamento",
+    "ru": "Высокотехнологичная изоляция"
+  },
+  "ArticulationMotors": {
+    "en": "Articulation Motors",
+    "de": "Gelenkmotoren",
+    "es": "Motores de articulación",
+    "fr": "Moteurs à articulation",
+    "pt": "Motores de articulações",
+    "ru": "Шарнирные моторы"
+  },
+  "HNShockMount": {
+    "en": "HN Shock Mount",
+    "de": "HN-Dämpferaufhängung",
+    "es": "Suspensión HN",
+    "fr": "Protection antichocs HP",
+    "pt": "Montagem de choque HN",
+    "ru": "Разрядная установка HN"
+  },
+  "EmergencyPowerCells": {
+    "en": "Emergency Power Cells",
+    "de": "Notfall-Energiezellen",
+    "es": "Células energía auxiliar",
+    "fr": "Cellules d'énergie de secours",
+    "pt": "Baterias de emergência",
+    "ru": "Аварийные энергоячейки"
+  },
+  "PowerConverter": {
+    "en": "Power Converter",
+    "de": "Energiekonverter",
+    "es": "Convertidor de energía",
+    "fr": "Convertisseur d'énergie",
+    "pt": "Conversor de energia",
+    "ru": "Преобразователь энергии"
+  },
+  "PowerGridAssembly": {
+    "en": "Energy Grid Assembly",
+    "de": "Energienetz-Gruppe",
+    "es": "Red de energía",
+    "fr": "Système de réseau d'alimentation",
+    "pt": "Montagem de rede de energia",
+    "ru": "Электросеть в сборе"
+  },
+  "PowerTransferConduits": {
+    "en": "Power Transfer Bus",
+    "de": "Energietransferbus",
+    "es": "Conductos de transf. de energía",
+    "fr": "Conduits de transfert d'énergie",
+    "pt": "Dutos de transferência de energia",
+    "ru": "Энергообменная шина"
+  },
+  "RadiationBaffle": {
+    "en": "Radiation Baffle",
+    "de": "Strahlungsabweiser",
+    "es": "Deflector de radiación",
+    "fr": "Écran antiradiation",
+    "pt": "Defletor de radiação",
+    "ru": "Отражатель излучения"
+  },
+  "ExhaustManifold": {
+    "en": "Exhaust Manifold",
+    "de": "Krümmer",
+    "es": "Colector de escape",
+    "fr": "Collecteur d'échappement",
+    "pt": "Tubo exaustor",
+    "ru": "Выпускной коллектор"
+  },
+  "ReinforcedMountingPlate": {
+    "en": "Reinforced Mounting Plate",
+    "de": "Verstärkte Trägerplatte",
+    "es": "Placa de anclaje reforzada",
+    "fr": "Plaque de montage renforcée",
+    "pt": "Placa de montagem reforçada",
+    "ru": "Усиленная монтажная плита"
+  },
+  "HeatsinkInterlink": {
+    "en": "Heatsink Interlink",
+    "de": "Kühlkörperverbinder",
+    "es": "Interconect. de eyector térmico",
+    "fr": "Interconnexion dissipateur therm.",
+    "pt": "Dissipador térmico entrelaçado",
+    "ru": "Радиаторный соединитель"
+  },
+  "MagneticEmitterCoil": {
+    "en": "Magnetic Emitter Coil",
+    "de": "Magnetische Emitterspule",
+    "es": "Bobina de emisión magnética",
+    "fr": "Bobine d'émission magnétique",
+    "pt": "Bobina de emissão magnética",
+    "ru": "Спираль магнитного излучателя"
+  },
+  "ModularTerminals": {
+    "en": "Modular Terminals",
+    "de": "Modulterminals",
+    "es": "Terminales modulares",
+    "fr": "Terminaux modulaires",
+    "pt": "Terminais modulares",
+    "ru": "Модульные терминалы"
+  },
+  "Nanobreakers": {
+    "en": "Nanobreakers",
+    "de": "Nanozertrümmerer",
+    "es": "Nanorrompedores",
+    "fr": "Nanodestructeurs",
+    "pt": "Nanodisjuntores",
+    "ru": "Нанопрерыватели"
+  },
+  "TelemetrySuite": {
+    "en": "Telemetry Suite",
+    "de": "Telemetrie-Paket",
+    "es": "Paquete de telemetría",
+    "fr": "Système de télémétrie",
+    "pt": "Conjunto de telemetria",
+    "ru": "Телеметрический комплект"
+  },
+  "MicroControllers": {
+    "en": "Micro Controllers",
+    "de": "Mikrocontroller",
+    "es": "Microcontroladores",
+    "fr": "Microcontrôleurs",
+    "pt": "Microcontroladores",
+    "ru": "Микроконтроллеры"
+  },
+  "IonDistributor": {
+    "en": "Ion Distributor",
+    "de": "Ionenverteiler",
+    "es": "Distribuidor de iones",
+    "fr": "Distributeurs d'ions",
+    "pt": "Distribuidor de íon",
+    "ru": "Ионный распределитель"
+  },
+  "DiagnosticSensor": {
+    "en": "Hardware Diagnostic Sensor",
+    "de": "Hardware-Diagnostiksensor",
+    "es": "Sensor diagnóstico de hardware",
+    "fr": "Capteur diagnostic d'équipement",
+    "pt": "Sensor de diagnóstico de equipamentos",
+    "ru": "Сенсор диагностики оборудования"
+  },
+  "UnknownArtifact2": {
+    "en": "Thargoid Probe",
+    "de": "Thargoidensonde",
+    "es": "Sonda Thargoide",
+    "fr": "Sonde thargoid",
+    "pt": "Sonda Thargoid",
+    "ru": "Таргоидский зонд"
+  },
+  "ConductiveFabrics": {
+    "en": "Conductive Fabrics",
+    "de": "Leitfähige Stoffe",
+    "es": "Tejidos conductivos",
+    "fr": "Tissus conducteurs",
+    "pt": "Tecidos condutores",
+    "ru": "Проводящая ткань"
+  },
+  "MilitaryGradeFabrics": {
+    "en": "Military Grade Fabrics",
+    "de": "Militärische Stoffe",
+    "es": "Tejido de categoría militar",
+    "fr": "Tissus militaires",
+    "pt": "Tecidos de nível militar",
+    "ru": "Ткани военного класса"
+  },
+  "AdvancedMedicines": {
+    "en": "Advanced Medicines",
+    "de": "Fortschrittliche Medikamente",
+    "es": "Medicinas avanzadas",
+    "fr": "Médicaments complexes",
+    "pt": "Remédios avançados",
+    "ru": "Новейшие лекарства"
+  },
+  "MedicalDiagnosticEquipment": {
+    "en": "Medical Diagnostic Equipment",
+    "de": "Medizinische Diagnostikausrüstung",
+    "es": "Equipo de diagnóstico médico",
+    "fr": "Équipement de diagnostic médical",
+    "pt": "Equipamento de diagnóstico médico",
+    "ru": "Диагностическое медоборудование"
+  },
+  "SurvivalEquipment": {
+    "en": "Survival Equipment",
+    "de": "Überlebensausrüstung",
+    "es": "Equipamiento de supervivencia",
+    "fr": "Équipement de survie",
+    "pt": "Equipamento de sobrevivência",
+    "ru": "Снаряжение для выживания"
+  },
+  "DataCore": {
+    "en": "Data Core",
+    "de": "Datenkern",
+    "es": "Núcleo de datos",
+    "fr": "Centre de données",
+    "pt": "Núcleo de dados",
+    "ru": "Ядро данных"
+  },
+  "MysteriousIdol": {
+    "en": "Mysterious Idol",
+    "de": "Mysteriöses Idol",
+    "es": "Ídolo misterioso",
+    "fr": "Idole mystérieuse",
+    "pt": "Ídolo misterioso",
+    "ru": "Таинственный идол"
+  },
+  "ProhibitedResearchMaterials": {
+    "en": "Prohibited Research Materials",
+    "de": "Verbotene Forschungsmaterialien",
+    "es": "Materiales de investigación prohibida",
+    "fr": "Matériaux de recherches interdits",
+    "pt": "Materiais de pesquisa proibidos",
+    "ru": "Запретные материалы исследований"
+  },
+  "AntimatterContainmentUnit": {
+    "en": "Antimatter Containment Unit",
+    "de": "Antimaterie-Transporteinheit",
+    "es": "Unidad de confinamiento de antimateria",
+    "fr": "Unité de confinement d'antimatière",
+    "pt": "Unidade de contenção de antimatéria",
+    "ru": "Контейнер с антиматерией"
+  },
+  "SpacePioneerRelics": {
+    "en": "Space Pioneer Relics",
+    "de": "Weltraumpionier-Relikte",
+    "es": "Reliquias de pioneros espaciales",
+    "fr": "Reliques des pionniers de l'espace",
+    "pt": "Relíquias de pioneiros espaciais",
+    "ru": "Следы первопроходцев космоса"
+  },
+  "FossilRemnants": {
+    "en": "Fossil Remnants",
+    "de": "Fossile Überreste",
+    "es": "Restos de fósiles",
+    "fr": "Fossiles",
+    "pt": "Vestígios de fósseis",
+    "ru": "Ископаемые останки"
+  },
+  "AncientRelic": {
+    "en": "Guardian Relic",
+    "de": "Guardian-Relikt",
+    "es": "Reliquia guardián",
+    "fr": "Relique des Guardians",
+    "pt": "Relíquia Guardian",
+    "ru": "Реликвия Стражей"
+  },
+  "AncientOrb": {
+    "en": "Guardian Orb",
+    "de": "Guardiankugel",
+    "es": "Orbe guardián",
+    "fr": "Orbe des Guardians",
+    "pt": "Orbe Guardian",
+    "ru": "Сфера Стражей"
+  },
+  "AncientCasket": {
+    "en": "Guardian Casket",
+    "de": "Guardianschatulle",
+    "es": "Cofre guardián",
+    "fr": "Coffret des Guardians",
+    "pt": "Caixa Guardian",
+    "ru": "Шкатулка Стражей"
+  },
+  "AncientTablet": {
+    "en": "Guardian Tablet",
+    "de": "Guardiantafel",
+    "es": "Tablilla guardián",
+    "fr": "Tablette des Guardians",
+    "pt": "Tábua Guardian",
+    "ru": "Табличка Стражей"
+  },
+  "AncientUrn": {
+    "en": "Guardian Urn",
+    "de": "Guardian-Urne",
+    "es": "Urna guardián",
+    "fr": "Urne des Guardians",
+    "pt": "Urna Guardian",
+    "ru": "Урна Стражей"
+  },
+  "AncientTotem": {
+    "en": "Guardian Totem",
+    "de": "Guardian-Totem",
+    "es": "Tótem guardián",
+    "fr": "Totem des Guardians",
+    "pt": "Totem Guardian",
+    "ru": "Тотем Стражей"
+  },
+  "UnknownResin": {
+    "en": "Thargoid Resin",
+    "de": "Thargoidenharz",
+    "es": "Resina Thargoide",
+    "fr": "Résine thargoid",
+    "pt": "Resina Thargoid",
+    "ru": "Таргоидская смола"
+  },
+  "UnknownBiologicalMatter": {
+    "en": "Thargoid Biological Matter",
+    "de": "Biologische Materie der Thargoiden",
+    "es": "Materia biológica Thargoide",
+    "fr": "Matière biologique thargoid",
+    "pt": "Matéria Biológica Thargoid",
+    "ru": "Таргоидская биомасса"
+  },
+  "UnknownTechnologySamples": {
+    "en": "Thargoid Technology Samples",
+    "de": "Technologieproben der Thargoiden",
+    "es": "Muestras de tecnología Thargoide",
+    "fr": "Échantillons de technologie thargoid",
+    "pt": "Amostras de Tecnologia Thargoid",
+    "ru": "Образцы таргоидских технологий"
+  },
+  "UnknownArtifact3": {
+    "en": "Thargoid Link",
+    "de": "Thargoidenlink",
+    "es": "Enlace Thargoide",
+    "fr": "Liaison thargoid",
+    "pt": "Link Thargoid",
+    "ru": "Таргоидское звено"
+  },
+  "ThargoidHeart": {
+    "en": "Thargoid Heart",
+    "de": "Thargoidenherz",
+    "es": "Corazón Thargoide",
+    "fr": "Cœur thargoid",
+    "pt": "Coração Thargoid",
+    "ru": "Таргоидское «сердце»"
+  },
+  "ThargoidTissueSampleType1": {
+    "en": "Thargoid Cyclops Tissue Sample",
+    "de": "Gewebeprobe von Thargoidenschiffstyp Cyclops",
+    "es": "Muestra de tejido de Cyclops Thargoide",
+    "fr": "Échantillon de tissu d'un Cyclops thargoid",
+    "pt": "Amostra de Tecido Thargoid Cyclops",
+    "ru": "Образец ткани таргоидского корабля «Циклоп»"
+  },
+  "ThargoidTissueSampleType2": {
+    "en": "Thargoid Basilisk Tissue Sample",
+    "de": "Gewebeprobe von Thargoidenschiffstyp Basilisk",
+    "es": "Muestra de tejido de Basilisk Thargoide",
+    "fr": "Échantillon de tissu d'un Basilisk thargoid",
+    "pt": "Amostra de Tecido Thargoid Basilisk",
+    "ru": "Образец ткани таргоидского корабля «Василиск»"
+  },
+  "ThargoidTissueSampleType3": {
+    "en": "Thargoid Medusa Tissue Sample",
+    "de": "Gewebeprobe von Thargoidenschiffstyp Medusa",
+    "es": "Muestra de tejido de medusa Thargoide",
+    "fr": "Échantillon de tissu d'un Medusa thargoid",
+    "pt": "Amostra de Tecido Thargoid Medusa",
+    "ru": "Образец ткани таргоидского корабля «Медуза»"
+  },
+  "ThargoidScoutTissueSample": {
+    "en": "Thargoid Scout Tissue Sample",
+    "de": "Gewebeprobe von Thargoiden-Späher",
+    "es": "Muestra de tejido de explorador Thargoide",
+    "fr": "Échantillon de tissu d'un éclaireur thargoid",
+    "pt": "Amostra de tecido de Batedor Thargoid",
+    "ru": "Образец тканей таргоида-разведчика"
+  },
+  "AncientKey": {
+    "en": "Ancient Key",
+    "de": "Uralter Schlüssel",
+    "es": "Llave antigua",
+    "fr": "Clé antique",
+    "pt": "Chave Antiga",
+    "ru": "Древний ключ"
+  },
+  "ThargoidTissueSampleType4": {
+    "en": "Thargoid Hydra Tissue Sample",
+    "de": "Gewebeprobe von Thargoidenschiffstyp Hydra",
+    "es": "Muestra de tejido de Hydra Thargoide",
+    "fr": "Échantillon de tissu d'un Hydra thargoid",
+    "pt": "Amostra de tecido da Thargoid Hydra",
+    "ru": "Образец ткани таргоидского корабля «Гидра»"
+  },
+  "M_TissueSample_Fluid": {
+    "en": "Mollusc Fluid",
+    "de": "Molluskenflüssigkeit",
+    "es": "Fluido de molusco",
+    "fr": "Fluides de mollusque",
+    "pt": "Fluido de molusco",
+    "ru": "Жидкость моллюска"
+  },
+  "M_TissueSample_Soft": {
+    "en": "Mollusc Soft Tissue",
+    "de": "Mollusken-Weichgewebe",
+    "es": "Tejido suave de molusco",
+    "fr": "Tissu mou de mollusque",
+    "pt": "Amostra de tecido mole de molusco",
+    "ru": "Мягкие ткани моллюска"
+  },
+  "M_TissueSample_Nerves": {
+    "en": "Mollusc Brain Tissue",
+    "de": "Mollusken-Hirnmasse",
+    "es": "Tejido de cerebro de molusco",
+    "fr": "Matière cérébrale de mollusque",
+    "pt": "Amostra de tecido cerebral de molusco",
+    "ru": "Мозговое вещество моллюска"
+  },
+  "S_TissueSample_Cells": {
+    "en": "Pod Core Tissue",
+    "de": "Hülsenkerngewebe",
+    "es": "Tejido de núcleo de cápsula",
+    "fr": "Tissu de noyau de cosse",
+    "pt": "Amostra de tecido nucleico de vagem",
+    "ru": "Ткань ядра семянки"
+  },
+  "S_TissueSample_Surface": {
+    "en": "Pod Dead Tissue",
+    "de": "Hülsentotgewebe",
+    "es": "Tejido muerto de cápsula",
+    "fr": "Tissu mort de cosse",
+    "pt": "Amostra de tecido morto de vagem",
+    "ru": "Мертвая ткань семянки"
+  },
+  "S_TissueSample_Core": {
+    "en": "Pod Surface Tissue",
+    "de": "Hülsenoberflächegewebe",
+    "es": "Tejido de superficie de cápsula",
+    "fr": "Tissu de surface de cosse",
+    "pt": "Amostra de tecido superficial de vagem",
+    "ru": "Поверхностная ткань семянки"
+  },
+  "P_ParticulateSample": {
+    "en": "Anomaly Particles",
+    "de": "Anomalie-Partikel",
+    "es": "Partículas de anomalía",
+    "fr": "Particules d'anomalie",
+    "pt": "Partículas de anomalia",
+    "ru": "Аномальные частицы"
+  },
+  "S9_TissueSample_Shell": {
+    "en": "Pod Tissue",
+    "de": "Hülsengewebe",
+    "es": "Tejido de la vaina",
+    "fr": "Tissu de cosse",
+    "pt": "Tecido de vagem",
+    "ru": "Ткань семянки"
+  },
+  "M3_TissueSample_Membrane": {
+    "en": "Mollusc Membrane",
+    "de": "Molluskenmembran",
+    "es": "Membrana de molusco",
+    "fr": "Membrane de mollusque",
+    "pt": "Membrana de molusco",
+    "ru": "Мембрана моллюска"
+  },
+  "M3_TissueSample_Mycelium": {
+    "en": "Mollusc Mycelium",
+    "de": "Molluskenmyzel",
+    "es": "Mycelium de molusco",
+    "fr": "Mycélium de mollusque",
+    "pt": "Micélio de molusco",
+    "ru": "Мицелий моллюска"
+  },
+  "M3_TissueSample_Spores": {
+    "en": "Mollusc Spores",
+    "de": "Molluskensporen",
+    "es": "Esporas de molusco",
+    "fr": "Spores de mollusque",
+    "pt": "Esporas de molusco",
+    "ru": "Споры моллюска"
+  },
+  "S6_TissueSample_Mesoglea": {
+    "en": "Pod Mesoglea",
+    "de": "Hülsen-Mesoglea",
+    "es": "Vaina de mesoglea",
+    "fr": "Mésoglée de cosse",
+    "pt": "Mesogleia de vagem",
+    "ru": "Мезоглея семянки"
+  },
+  "S6_TissueSample_Cells": {
+    "en": "Pod Outer Tissue",
+    "de": "Hülsen-Außengewebe",
+    "es": "Tejido exterior de cápsula",
+    "fr": "Tissu extérieur de cosse",
+    "pt": "Amostra de tecido externo de vagem",
+    "ru": "Внешняя ткань семянки"
+  },
+  "S6_TissueSample_Coenosarc": {
+    "en": "Pod Shell Tissue",
+    "de": "Hülsen-Schalengewebe",
+    "es": "Tejido de cáscara de cápsula",
+    "fr": "Tissu de coque de cosse",
+    "pt": "Amostra de tecido da couraça de vagem",
+    "ru": "Ткань оболочки семянки"
+  },
+  "Rhodplumsite": {
+    "en": "Rhodplumsite",
+    "de": "Rhodplumsit",
+    "es": "Rhodplumsita",
+    "fr": "Rhodplumsite",
+    "pt": "Rhodplumsita",
+    "ru": "Родплумсайт"
+  },
+  "Serendibite": {
+    "en": "Serendibite",
+    "de": "Serendibit",
+    "es": "Serendibita",
+    "fr": "Serendibite",
+    "pt": "Serendibita",
+    "ru": "Серендибит"
+  },
+  "Monazite": {
+    "en": "Monazite",
+    "de": "Monazit",
+    "es": "Monacita",
+    "fr": "Monazite",
+    "pt": "Monazita",
+    "ru": "Монацит"
+  },
+  "Musgravite": {
+    "en": "Musgravite",
+    "de": "Musgravit",
+    "es": "Musgravita",
+    "fr": "Musgravite",
+    "pt": "Musgravita",
+    "ru": "Мусгравит"
+  },
+  "Benitoite": {
+    "en": "Benitoite",
+    "de": "Benitoit",
+    "es": "Benitoíta",
+    "fr": "Bénitoïte",
+    "pt": "Benitoíta",
+    "ru": "Бенитоит"
+  },
+  "Grandidierite": {
+    "en": "Grandidierite",
+    "de": "Grandidierit",
+    "es": "Grandidierita",
+    "fr": "Grandidiérite",
+    "pt": "Grandidierita",
+    "ru": "Грандидьерит"
+  },
+  "Alexandrite": {
+    "en": "Alexandrite",
+    "de": "Alexandrit",
+    "es": "Alejandrita",
+    "fr": "Alexandrite",
+    "pt": "Alexandrita",
+    "ru": "Александрит"
+  },
+  "Opal": {
+    "en": "Void Opal",
+    "de": "Leerenopal",
+    "es": "Ópalo de vacío",
+    "fr": "Opale du vide",
+    "pt": "Opala do Vazio",
+    "ru": "Опал бездны"
+  },
+  "RockforthFertiliser": {
+    "en": "Rockforth Fertiliser",
+    "de": "Rockforth-Dünger",
+    "es": "Fertilizante Rockforth",
+    "fr": "Engrais Rockforth",
+    "pt": "Fertilizante Rockforth",
+    "ru": "Удобрение Rockforth"
+  },
+  "AgronomicTreatment": {
+    "en": "Agronomic Treatment",
+    "de": "Agronomisches Mittel",
+    "es": "Tratamiento agronómico",
+    "fr": "Traitement agronomique",
+    "pt": "Tratamento Agronômico",
+    "ru": "Средство очистки почвы"
+  },
+  "Tritium": {
+    "en": "Tritium",
+    "de": "Tritium",
+    "es": "Tritio",
+    "fr": "Tritium",
+    "pt": "Trítio",
+    "ru": "Тритий"
+  },
+  "OnionHeadC": {
+    "en": "Onionhead Gamma Strain",
+    "de": "Onionhead (Gamma)",
+    "es": "Cepa gamma de cebollazo",
+    "fr": "Variété gamma de tête d'oignon",
+    "pt": "Cepa gama de Onionhead",
+    "ru": "Луковая головка, сорт гамма"
+  },
+  "AncientRelicTG": {
+    "en": "Unclassified Relic",
+    "de": "Nicht klassifiziertes Relikt",
+    "es": "Reliquia no clasificada",
+    "fr": "Relique non classée",
+    "pt": "Relíquia não classificada",
+    "ru": "Неопознанная реликвия"
+  },
+  "ThargoidTissueSampleType5": {
+    "en": "Thargoid Orthrus Tissue Sample",
+    "de": "Gewebeprobe von Thargoidenschiffstyp Orthrus",
+    "es": "Muestra de tejido de Orthrus Thargoide",
+    "fr": "Échantillon de tissu d'un Orthrus thargoid",
+    "pt": "Amostra de Tecido Thargoid Orthrus",
+    "ru": "Образец ткани таргоидского корабля «Орф»"
+  },
+  "ThargoidGeneratorTissueSample": {
+    "en": "Caustic Tissue Sample",
+    "de": "Proben von kaustischem Gewebe",
+    "es": "Muestra de tejido cáustico",
+    "fr": "Échantillon de tissu caustique",
+    "pt": "Amostra de tecido cáustico",
+    "ru": "Образец едких тканей"
+  },
+  "UnocuppiedEscapePod": {
+    "en": "Unoccupied Escape Pod",
+    "de": "Nicht besetzte Rettungskapsel",
+    "es": "Cápsula de escape vacía",
+    "fr": "Nacelle d'évacuation inoccupée",
+    "pt": "Cápsula de fuga desocupada",
+    "ru": "Пустая спасательная капсула"
+  },
+  "ThargoidTissueSampleType6": {
+    "en": "Thargoid Glaive Tissue Sample",
+    "de": "Gewebeprobe von Thargoidenschiffstyp Glaive",
+    "es": "Muestra de tejido de Glaive Thargoide",
+    "fr": "Échantillon de tissu thargoid - Glaive",
+    "pt": "Amostra de Tecido de Glaive Thargoid",
+    "ru": "Образец ткани таргоидского корабля «Глефа»"
+  },
+  "ThargoidTissueSampleType7": {
+    "en": "Thargoid Scythe Tissue Sample",
+    "de": "Gewebeprobe von Thargoidenschiffstyp Scythe",
+    "es": "Muestra de tejido de Scythe Thargoide",
+    "fr": "Échantillon de tissu thargoid - Scythe",
+    "pt": "Amostra de tecido de Scythe Thargoid",
+    "ru": "Образец ткани таргоидского корабля «Коса»"
+  },
+  "ThargoidTissueSampleType9a": {
+    "en": "Titan Deep Tissue Sample",
+    "de": "Tiefengewebeprobe von Thargoidenschiffstyp Titan",
+    "es": "Muestra de tejido profundo de Titan",
+    "fr": "Échantillon de tissu profond - Titan",
+    "pt": "Amostra de tecido profundo de Titan",
+    "ru": "Образец глубокой ткани титана"
+  },
+  "ThargoidTissueSampleType9b": {
+    "en": "Titan Tissue Sample",
+    "de": "Gewebeprobe von Thargoidenschiffstyp Titan",
+    "es": "Muestra de tejido de Titan",
+    "fr": "Échantillon de tissu - Titan",
+    "pt": "Amostras de tecido de Titan",
+    "ru": "Образец ткани титана"
+  },
+  "ThargoidTissueSampleType9c": {
+    "en": "Titan Partial Tissue Sample",
+    "de": "Teilgewebeprobe einer Titan",
+    "es": "Muestra de tejido parcial de Titan",
+    "fr": "Échantillon de tissu partiel - Titan",
+    "pt": "Amostra parcial de tecido de uma Titan",
+    "ru": "Неполный образец ткани титана"
+  },
+  "ThargoidTissueSampleType10a": {
+    "en": "Titan Maw Deep Tissue Sample",
+    "de": "Gewebeprobe aus dem Schlund einer Titan",
+    "es": "Muestra de tejido profundo de fauces de Titan",
+    "fr": "Échantillon de tissu profond de gueule - Titan",
+    "pt": "Amostra de tecido profundo da garganta de uma Titan",
+    "ru": "Образец глубокой ткани пасти титана"
+  },
+  "ThargoidTissueSampleType10b": {
+    "en": "Titan Maw Tissue Sample",
+    "de": "Gewebeprobe aus dem Schlund einer Titan",
+    "es": "Muestra de tejido de fauces de Titan",
+    "fr": "Échantillon de tissu de gueule - Titan",
+    "pt": "Amostra de tecido da garganta de uma Titan",
+    "ru": "Образец ткани пасти титана"
+  },
+  "ThargoidTissueSampleType10c": {
+    "en": "Titan Maw Partial Tissue Sample",
+    "de": "Teilgewebeprobe aus dem Schlund einer Titan",
+    "es": "Muestra de tejido parcial de fauces de Titan",
+    "fr": "Échantillon de tissu de gueule partiel - Titan",
+    "pt": "Amostra parcial de tecido da garganta de uma Titan",
+    "ru": "Неполный образец ткани пасти титана"
+  },
+  "UnknownSack": {
+    "en": "Protective Membrane Scrap",
+    "de": "Unbrauchbare Schutzmembran",
+    "es": "Fragmento de membrana protectora",
+    "fr": "Morceau de membrane protectrice",
+    "pt": "Pedaço de membrana protetora",
+    "ru": "Остатки защитной мембраны"
+  },
+  "ThargoidPod": {
+    "en": "Xenobiological Prison Pod",
+    "de": "Thargoiden-Biospeicherkapsel",
+    "es": "Cápsula de bioconservación Thargoide",
+    "fr": "Capsule de bioconfinement thargoid",
+    "pt": "Cápsula de bioarmazenamento Thargoid",
+    "ru": "Таргоидская капсула для биоматериалов"
+  },
+  "CoralSap": {
+    "en": "Coral Sap",
+    "de": "Korallensaft",
+    "es": "Savia de coral",
+    "fr": "Sève corallienne",
+    "pt": "Seiva de coral",
+    "ru": "Коралловая смола"
+  },
+  "UnknownMineral": {
+    "en": "Impure Spire Mineral",
+    "de": "Unreines Turmmineral",
+    "es": "Mineral de aguja impuro",
+    "fr": "Minerai de flèche impur",
+    "pt": "Mineral de pináculo impuro",
+    "ru": "Неочищенный минерал со шпилей"
+  },
+  "UnknownRefinedMineral": {
+    "en": "Semi-Refined Spire Mineral",
+    "de": "Halbraffiniertes Turmmineral",
+    "es": "Mineral de aguja semirrefinado",
+    "fr": "Minerai de flèche à moitié raffiné",
+    "pt": "Mineral de pináculo semirrefinado",
+    "ru": "Полуочищенный минерал со шпилей"
+  },
+  "ThargoidTitanDriveComponent": {
+    "en": "Titan Drive Component",
+    "de": "Titan-Antriebskomponente",
+    "es": "Componente de motor de Titan",
+    "fr": "Composant de réacteur de Titan",
+    "pt": "Componente de propulsão da Titan",
+    "ru": "Компонент двигателя титана"
+  },
+  "ThargoidCystSpecimen": {
+    "en": "Cyst Specimen",
+    "de": "Zysten-Probe",
+    "es": "Espécimen de quiste",
+    "fr": "Spécimen de kyste",
+    "pt": "Espécime de cisto",
+    "ru": "Образец кисты"
+  },
+  "ThargoidBoneFragments": {
+    "en": "Bone Fragments",
+    "de": "Knochenfragmente",
+    "es": "Fragmentos de hueso",
+    "fr": "Fragments d'os",
+    "pt": "Fragmentos de osso",
+    "ru": "Фрагменты кости"
+  },
+  "ThargoidOrganSample": {
+    "en": "Organ Sample",
+    "de": "Organprobe",
+    "es": "Muestra de órgano",
+    "fr": "Échantillon d'organe",
+    "pt": "Amostra de órgão",
+    "ru": "Образец органа"
+  },
+  "Steel": {
+    "en": "Steel",
+    "de": "Stahl",
+    "es": "Acero",
+    "fr": "Acier",
+    "pt": "Aço",
+    "ru": "Сталь"
+  },
+  "Haematite": {
+    "en": "Haematite",
+    "de": "Hämatit",
+    "es": "Hematita",
+    "fr": "Hématite",
+    "pt": "Hematita",
+    "ru": "Гематит"
+  },
+  "curatedcommodity": {
+    "en": "Curated Commodity Package",
+    "de": "Ausgewähltes Warenpaket",
+    "es": "Paquete de mercancías seleccionadas",
+    "fr": "Sélection de marchandises",
+    "pt": "Pacote de mercadorias selecionadas",
+    "ru": "Подборка предметов потребления"
+  },
+  "Bastnasite": {
+    "en": "Bastnasite",
+    "de": "Bastnäsit",
+    "es": "Bastnasita",
+    "fr": "Bastanäsite",
+    "pt": "Bastnasita",
+    "ru": "Бастнезит"
+  },
+  "Deuterium": {
+    "en": "Deuterium",
+    "de": "Deuterium",
+    "es": "Deuterio",
+    "fr": "Deutérium",
+    "pt": "Deutério",
+    "ru": "Дейтерий"
+  },
+  "Diamond": {
+    "en": "Diamond",
+    "de": "Diamant",
+    "es": "Diamante",
+    "fr": "Diamant",
+    "pt": "Diamante",
+    "ru": "Алмаз"
+  },
+  "Helium": {
+    "en": "Helium",
+    "de": "Helium",
+    "es": "Helio",
+    "fr": "Hélium",
+    "pt": "Hélio",
+    "ru": "Гелий"
+  },
+  "Helium3": {
+    "en": "Helium-3",
+    "de": "Helium-3",
+    "es": "Helio-3",
+    "fr": "Hélium 3",
+    "pt": "Hélio-3",
+    "ru": "Гелий-3"
+  },
+  "Iridium": {
+    "en": "Iridium",
+    "de": "Iridium",
+    "es": "Iridio",
+    "fr": "Iridium",
+    "pt": "Irídio",
+    "ru": "Иридий"
+  },
+  "Magnesite": {
+    "en": "Magnesite",
+    "de": "Magnesit",
+    "es": "Magnesita",
+    "fr": "Magnésite",
+    "pt": "Magnésita",
+    "ru": "Магнезит"
+  },
+  "Olivine": {
+    "en": "Olivine",
+    "de": "Olivin",
+    "es": "Olivino",
+    "fr": "Olivine",
+    "pt": "Olivina",
+    "ru": "Оливин"
+  },
+  "PericlaseDunite": {
+    "en": "Periclase Dunite",
+    "de": "Periklas-Dunit",
+    "es": "Dunita de periclasa",
+    "fr": "Dunite de périclase",
+    "pt": "Dunito de periclásio",
+    "ru": "Периклазовый дунит"
+  },
+  "QuartzPyroxenite": {
+    "en": "Quartz Pyroxenite",
+    "de": "Quarzpyroxenit",
+    "es": "Piroxenita de cuarzo",
+    "fr": "Pyroxénite de quartz",
+    "pt": "Piroxenito de quartzo",
+    "ru": "Кварцевый пироксенит"
+  },
+  "Ruby": {
+    "en": "Ruby",
+    "de": "Rubin",
+    "es": "Rubí",
+    "fr": "Rubis",
+    "pt": "Rubi",
+    "ru": "Рубин"
+  },
+  "Sapphire": {
+    "en": "Sapphire",
+    "de": "Saphir",
+    "es": "Zafiro",
+    "fr": "Saphir",
+    "pt": "Safira",
+    "ru": "Сапфир"
+  },
+  "Thortveitite": {
+    "en": "Thortveitite",
+    "de": "Thortveitit",
+    "es": "Thortveitita",
+    "fr": "Thortveitite",
+    "pt": "Thortveitita",
+    "ru": "Тортвейтит"
+  },
+  "EraninPearlWhisky": {
+    "en": "Eranin Pearl Whisky",
+    "de": "Eranin Pearl Whisky",
+    "es": "Whisky perlado de Eranin",
+    "fr": "Whisky Eranin Pearl",
+    "pt": "Whisky perolado de Eranin",
+    "ru": "Эранинское жемчужное виски"
+  },
+  "LavianBrandy": {
+    "en": "Lavian Brandy",
+    "de": "Lave-Brandy",
+    "es": "Brandy laviano",
+    "fr": "Brandy lavien",
+    "pt": "Brandy laviano",
+    "ru": "Лавианский бренди"
+  },
+  "HIP10175BushMeat": {
+    "en": "HIP 10175 Bush Meat",
+    "de": "Wildfleisch von HIP 10175",
+    "es": "Carne herbácea de HIP 10175",
+    "fr": "Viande de gibier de HIP 10175",
+    "pt": "Carne de caça de HIP 10175",
+    "ru": "Мясо лесной дичи с HIP 10175"
+  },
+  "AlbinoQuechuaMammoth": {
+    "en": "Albino Quechua Mammoth Meat",
+    "de": "Albinomammut-Fleisch",
+    "es": "Carne mamut albino Quechua",
+    "fr": "Viande de mammouth albino quechuan",
+    "pt": "Carne de mamute albino de Quechua",
+    "ru": "Мясо белого кечуанского мамонта"
+  },
+  "UtgaroarMillenialEggs": {
+    "en": "Utgaroar Millennial Eggs",
+    "de": "Utgaroar-Milleniumeier",
+    "es": "Huevos milenarios de Utgaroar",
+    "fr": "Œufs millénaires d'Utgaroar",
+    "pt": "Ovos milenares de Utgaroar",
+    "ru": "Миллениальные яйца с Utgaroar"
+  },
+  "WitchhaulKobeBeef": {
+    "en": "Witchhaul Kobe Beef",
+    "de": "Witchhaul Kobe-Rindfleisch",
+    "es": "Carne de buey kobe de Witchhaul",
+    "fr": "Bœuf de Kobe de Witchhaul",
+    "pt": "Carne Kobe de Witchhaul",
+    "ru": "Мясо кобе с Witchhaul"
+  },
+  "KarsukiLocusts": {
+    "en": "Karsuki Locusts",
+    "de": "Karsuki-Heuschrecke",
+    "es": "Langostas de Karsuki Ti",
+    "fr": "Sauterelles de Karsuki",
+    "pt": "Lagostas de Karsuki Ti",
+    "ru": "Саранча с Karsuki"
+  },
+  "GiantIrukamaSnails": {
+    "en": "Giant Irukama Snails",
+    "de": "Irukama-Riesenschnecken",
+    "es": "Caracoles gigantes de Irukama",
+    "fr": "Escargots géants d'Irukama",
+    "pt": "Caramujos gigantes de Irukama",
+    "ru": "Огромные улитки с Irukama"
+  },
+  "BaltahSineVacuumKrill": {
+    "en": "Baltah'sine Vacuum Krill",
+    "de": "Vakuumkrill von Baltah'sine",
+    "es": "Krill del vacío de Baltah'Sine",
+    "fr": "Crevettes stellaires de Baltah'sine",
+    "pt": "Krill-do-vácuo de Baltah'sine",
+    "ru": "Вакуумный криль с Baltah'sine"
+  },
+  "CetiRabbits": {
+    "en": "Ceti Rabbits",
+    "de": "Ceti-Kaninchen",
+    "es": "Conejos de 47 Ceti",
+    "fr": "Lapins de Ceti",
+    "pt": "Coelhos de Ceti",
+    "ru": "Кролики с Ceti"
+  },
+  "KachiriginLeaches": {
+    "en": "Kachirigin Filter Leeches",
+    "de": "Kachirigin-Filter-Egel",
+    "es": "Sanguijuelas filtradoras de Kachigirin",
+    "fr": "Sangsues de Kachirigin",
+    "pt": "Sanguessugas filtradoras de Kachirigin",
+    "ru": "Очищающие пиявки с Kachirigin"
+  },
+  "LyraeWeed": {
+    "en": "Lyrae Weed",
+    "de": "Lyrae Weed",
+    "es": "Mala hierba de Lyrae",
+    "fr": "Herbe lyrane",
+    "pt": "Erva de Lyrae",
+    "ru": "Трава лираи"
+  },
+  "OnionHead": {
+    "en": "Onionhead",
+    "de": "Onionhead",
+    "es": "Cebollazo",
+    "fr": "Tête d'oignon",
+    "pt": "Onionhead",
+    "ru": "Луковая головка"
+  },
+  "TarachTorSpice": {
+    "en": "Tarach Spice",
+    "de": "Tarach Spice",
+    "es": "Especia de Tarach Tor",
+    "fr": "Épice de Tarash",
+    "pt": "Especiaria de Tarach",
+    "ru": "Таракская пряность"
+  },
+  "Wolf1301Fesh": {
+    "en": "Wolf Fesh",
+    "de": "Wolf Fesh",
+    "es": "Jadeo del Lobo",
+    "fr": "Wolf fesh",
+    "pt": "Fôlego de lobo",
+    "ru": "Волчья дурь"
+  },
+  "BorasetaniPathogenetics": {
+    "en": "Borasetani Pathogenetics",
+    "de": "Borasetani-Pathogenetika",
+    "es": "Patógenos de Borasetani",
+    "fr": "Fléau de Borasetani",
+    "pt": "Patógenos de Borasetani",
+    "ru": "Боразетанские патогены"
+  },
+  "HIP118311Swarm": {
+    "en": "HIP 118311 Swarm",
+    "de": "HIP 118311 Swarm",
+    "es": "SWARM de HIP 118311",
+    "fr": "Essaim de HIP 118311",
+    "pt": "Enxame de HIP 118311",
+    "ru": "Рой HIP 118311"
+  },
+  "KonggaAle": {
+    "en": "Kongga Ale",
+    "de": "Kongga Ale",
+    "es": "Cerveza de Kongga",
+    "fr": "Bière de Kongga",
+    "pt": "Cerveja de Kongga",
+    "ru": "Эль с Kongga"
+  },
+  "WuthieloKuFroth": {
+    "en": "Wuthielo Ku Froth",
+    "de": "Wuthielo Ku Froth",
+    "es": "Espuma de Wuthielo Ku",
+    "fr": "Mousse de Wuthielo Ku",
+    "pt": "Espuma de Wuthielo Ku",
+    "ru": "Пиво Ку с Wuthielo"
+  },
+  "AlacarakmoSkinArt": {
+    "en": "Alacarakmo Skin Art",
+    "de": "Alacarakmo-Hautinlays",
+    "es": "Tatuajes de Alacarakmo",
+    "fr": "Art épidermique d'Alacarakmo",
+    "pt": "Tatuagens de Alacarakmo",
+    "ru": "Алакаракмовские татуировки"
+  },
+  "EleuThermals": {
+    "en": "Eleu Thermals",
+    "de": "Eleu-Thermotextilien",
+    "es": "Tejidos térmicos de eleu",
+    "fr": "Sous-vêtements thermiques d'Eleu",
+    "pt": "Tecidos térmicos de Eleu",
+    "ru": "Элеусская теплая одежда"
+  },
+  "EshuUmbrellas": {
+    "en": "Eshu Umbrellas",
+    "de": "Eshu-Regenschirme",
+    "es": "Paraguas de Eshu",
+    "fr": "Ombrelles eshu",
+    "pt": "Guarda-chuvas de Eshu",
+    "ru": "Зонтики Эшу"
+  },
+  "KaretiiCouture": {
+    "en": "Karetii Couture",
+    "de": "Karetii Couture",
+    "es": "Alta costura de Karetii",
+    "fr": "Haute couture karetii",
+    "pt": "Alfaiataria de Karetii",
+    "ru": "Модные вещи от Karetii"
+  },
+  "NjangariSaddles": {
+    "en": "Njangari Saddles",
+    "de": "Njangari-Sättel",
+    "es": "Sillas de montar de Njangari",
+    "fr": "Selles de Njangari",
+    "pt": "Selas de Njangari",
+    "ru": "Седла Njangari"
+  },
+  "AnyNaCoffee": {
+    "en": "Any Na Coffee",
+    "de": "Any Na Coffee",
+    "es": "Café de Any Na",
+    "fr": "Café Any Na",
+    "pt": "Café de Any Na",
+    "ru": "Кофе Any Na"
+  },
+  "CD75CatCoffee": {
+    "en": "CD-75 Kitten Brand Coffee",
+    "de": "CD-75 Kitten Brand Coffee",
+    "es": "Café marca Kitten de CD-75",
+    "fr": "Café Kitten CD-75",
+    "pt": "Café da marca CD-75 Kitten",
+    "ru": "Кошачий кофе CD-75"
+  },
+  "GomanYauponCoffee": {
+    "en": "Goman Yaupon Coffee",
+    "de": "Goman Yaupon Coffee",
+    "es": "Café Yaupon de Goman",
+    "fr": "Café Goman Yaupon",
+    "pt": "Café Yaupon de Goman",
+    "ru": "Кофе Goman Yaupon"
+  },
+  "VolkhabBeeDrones": {
+    "en": "Volkhab Bee Drones",
+    "de": "Volkhab-Bienendrohnen",
+    "es": "Abejas mecánicas de Volkhab",
+    "fr": "Drones butineurs Volkhab",
+    "pt": "Abelhas drones de Volkhab",
+    "ru": "Дроны Volkhab Bee"
+  },
+  "KinagoInstruments": {
+    "en": "Kinago Violins",
+    "de": "Kinago-Geigen",
+    "es": "Violines de Kinago",
+    "fr": "Violons de Kinago",
+    "pt": "Violinos de Kinago",
+    "ru": "Скрипки Kinago"
+  },
+  "NgunaModernAntiques": {
+    "en": "Nguna Modern Antiques",
+    "de": "Nguna Moderne Antiquitäten",
+    "es": "Antigüedades modernas de Nguna",
+    "fr": "Antiquités modernes de Nguna",
+    "pt": "Antiguidades modernas de Nguna",
+    "ru": "Современные древности с Nguna"
+  },
+  "RajukruStoves": {
+    "en": "Rajukru Multi-Stoves",
+    "de": "Rajukru-Universalöfen",
+    "es": "Multiestufas de Rajukru",
+    "fr": "Réchaud universel de Rajukru",
+    "pt": "Multifornos de Rajukru",
+    "ru": "Мультипечи Rajukru"
+  },
+  "TiolceWaste2PasteUnits": {
+    "en": "Tiolce Waste2Paste Units",
+    "de": "Müll-zu-Paste-Einheiten",
+    "es": "Pastaplasta de Tiolce",
+    "fr": "Pâte 2 Déchets de Tiolce",
+    "pt": "Unidades Waste2Paste de Tiolce",
+    "ru": "Устройства «Отход-в-приход» Tiolce"
+  },
+  "ChiEridaniMarinePaste": {
+    "en": "Chi Eridani Marine Paste",
+    "de": "Chi-Eridani-Meerespaste",
+    "es": "Pasta marina de Chi Eridani",
+    "fr": "Pâte marine de Chi Eridani",
+    "pt": "Pasta marinha de Chi Eridani",
+    "ru": "Морская паста с Chi Eridani"
+  },
+  "EsusekuCaviar": {
+    "en": "Esuseku Caviar",
+    "de": "Esuseku-Kaviar",
+    "es": "Caviar de Esuseku",
+    "fr": "Caviar d'Esuseku",
+    "pt": "Caviar de Esuseku",
+    "ru": "Эсусекусская осетровая икра"
+  },
+  "LiveHecateSeaWorms": {
+    "en": "Live Hecate Sea Worms",
+    "de": "Live-Hecate-Seewürmer",
+    "es": "Gusanos marinos de Hecate",
+    "fr": "Vers marins vivants d'Hecate",
+    "pt": "Vermes marinhos vivos de Hecate",
+    "ru": "Живые морские черви с Hecate"
+  },
+  "HelvetitjPearls": {
+    "en": "Helvetitj Pearls",
+    "de": "Helvetitj-Perlen",
+    "es": "Perlas de Helvetitj",
+    "fr": "Perles de Helvetitj",
+    "pt": "Pérolas de Helvetitj",
+    "ru": "Жемчуг с Helvetitj"
+  },
+  "HIP41181Squid": {
+    "en": "HIP Proto-Squid",
+    "de": "HIP-Proto-Kalmar",
+    "es": "Protocalamar de HIP 41181",
+    "fr": "Proto-calamar de HIP",
+    "pt": "Proto-lula de HIP",
+    "ru": "Протокальмар с HIP"
+  },
+  "CoquimSpongiformVictuals": {
+    "en": "Coquim Spongiform Victuals",
+    "de": "Coquim Schwammkost",
+    "es": "Víveres espongiformes de Coquim",
+    "fr": "Rations spongiformes de Coquim",
+    "pt": "Provisões espongiformes de Coquim",
+    "ru": "Губковые продукты с Coquim"
+  },
+  "AerialEdenApple": {
+    "en": "Eden Apples of Aerial",
+    "de": "Eden-Luftäpfel",
+    "es": "Manzanas del Edén de Aerial",
+    "fr": "Pommes d'eden d'Aerial",
+    "pt": "Maçãs do Éden de Aerial",
+    "ru": "Райские яблоки с Aerial"
+  },
+  "NeritusBerries": {
+    "en": "Neritus Berries",
+    "de": "Neritus-Beeren",
+    "es": "Bayas de Neritus",
+    "fr": "Baies de Neritus",
+    "pt": "Frutos de Neritus",
+    "ru": "Нерутские ягоды"
+  },
+  "OchoengChillies": {
+    "en": "Ochoeng Chillies",
+    "de": "Ochoeng-Chili",
+    "es": "Chiles de Ochoeng",
+    "fr": "Piments d'Ochoeng",
+    "pt": "Pimentas de Ochoeng",
+    "ru": "Перчик чили с Ochoeng"
+  },
+  "DeuringasTruffles": {
+    "en": "Deuringas Truffles",
+    "de": "Deuringas-Trüffel",
+    "es": "Trufas de Deuringas",
+    "fr": "Truffes de Deuringas",
+    "pt": "Trufas de Deuringas",
+    "ru": "Трюфели с Deuringas"
+  },
+  "HR7221Wheat": {
+    "en": "HR 7221 Wheat",
+    "de": "\"HR 7221\"-Weizen",
+    "es": "Trigo de HR 7221",
+    "fr": "Blé de HR 7221",
+    "pt": "Trigo de HR 7221",
+    "ru": "Пшеница HR 7221"
+  },
+  "JarouaRice": {
+    "en": "Jaroua Rice",
+    "de": "Jaroua-Reis",
+    "es": "Arroz de Jaroua",
+    "fr": "Riz jarouan",
+    "pt": "Arroz de Jaroua",
+    "ru": "Жаруйский рис"
+  },
+  "BelalansRayLeather": {
+    "en": "Belalans Ray Leather",
+    "de": "Belalans-Rochenleder",
+    "es": "Cuero de raya de Belalans",
+    "fr": "Cuir de raie de Belalans",
+    "pt": "Couro de arraia de Belalans",
+    "ru": "Кожа белаланских скатов"
+  },
+  "DamnaCarapaces": {
+    "en": "Damna Carapaces",
+    "de": "Damna-Schildpanzer",
+    "es": "Caparazones de Damna",
+    "fr": "Carapaces de Damna",
+    "pt": "Carapaças de Damna",
+    "ru": "Панцири с Damna"
+  },
+  "RapaBaoSnakeSkins": {
+    "en": "Rapa Bao Snake Skins",
+    "de": "Rapa-Bao-Schlangenhäute",
+    "es": "Pieles de serpiente de Rapa Bao",
+    "fr": "Peau de serpent Rapa Bao",
+    "pt": "Peles de cobra de Rapa Bao",
+    "ru": "Змеиные шкуры с Rapa Bao"
+  },
+  "VanayequiRhinoFur": {
+    "en": "Vanayequi Ceratomorpha Fur",
+    "de": "Vanayequi-Ceratomorpha-Fell",
+    "es": "Piel de ceratomorfo de Vanayequi",
+    "fr": "Fourrure de cératomorphe de Vanayequi",
+    "pt": "Pele de ceratomorfo de Vanayequi",
+    "ru": "Мех носорогов с Vanayequi"
+  },
+  "BastSnakeGin": {
+    "en": "Bast Snake Gin",
+    "de": "Bast Snake Gin",
+    "es": "Elixir de serpiente de Bast",
+    "fr": "Gin de serpent Bast",
+    "pt": "Gin de serpente de Bast",
+    "ru": "Настойка из бастетовых змей"
+  },
+  "ThrutisCream": {
+    "en": "Thrutis Cream",
+    "de": "Thrutis Cream",
+    "es": "Crema de Thrutis",
+    "fr": "Crème de Thrutis",
+    "pt": "Creme de Thrutis",
+    "ru": "Трутисские сливки"
+  },
+  "WulpaHyperboreSystems": {
+    "en": "Wulpa Hyperbore Systems",
+    "de": "Wulpa-Superbohrer-Systeme",
+    "es": "Sistemas de hipertaladros de Wulpa",
+    "fr": "Système hyperbore Wulpa",
+    "pt": "Sistemas hiperbóreos de Wulpa",
+    "ru": "Гипербурильные системы Wulpa"
+  },
+  "AganippeRush": {
+    "en": "Aganippe Rush",
+    "de": "Aganippe-Hirnhetzer",
+    "es": "Incrementador de Aganippe",
+    "fr": "Rush d'Aganippe",
+    "pt": "Estimulante de Aganippe",
+    "ru": "Аганиппийский кайф"
+  },
+  "TerraMaterBloodBores": {
+    "en": "Terra Mater Blood Bores",
+    "de": "Terra-Mater-Berserker",
+    "es": "Potenciadores sanguíneos de Terra Mater",
+    "fr": "Plasma sanguin de Terra Mater",
+    "pt": "Potenciadores sanguíneos de Terra Mater",
+    "ru": "Кровяные усилители с Terra Mater"
+  },
+  "HolvaDuellingBlades": {
+    "en": "Holva Duelling Blades",
+    "de": "Holva-Duellschwerter",
+    "es": "Espadas de duelo de Holva",
+    "fr": "Lame de duel de Holva",
+    "pt": "Espadas de duelo de Holva",
+    "ru": "Хольванские дуэльные клинки"
+  },
+  "KamorinHistoricWeapons": {
+    "en": "Kamorin Historic Weapons",
+    "de": "Histor. Kamorin-Waffen",
+    "es": "Armas históricas de Kamorin",
+    "fr": "Armes historiques de Kamorin",
+    "pt": "Armas históricas de Kamorin",
+    "ru": "Каморинское историческое оружие"
+  },
+  "GilyaSignatureWeapons": {
+    "en": "Gilya Signature Weapons",
+    "de": "Gilya-Signaturwaffen",
+    "es": "Armas personalizables de Gilya",
+    "fr": "Armes personnalisées Gilyanes",
+    "pt": "Armas personalizadas de Gilya",
+    "ru": "Именное оружие из системы Gilya"
+  },
+  "DeltaPhoenicisPalms": {
+    "en": "Delta Phoenicis Palms",
+    "de": "Delta-Phönix-Palmen",
+    "es": "Palmeras de Delta Phoenicis",
+    "fr": "Palmiers de Delta Phoenicis",
+    "pt": "Palmeiras de Delta Phoenicis",
+    "ru": "Фениксовые пальмы с Delta"
+  },
+  "ToxandjiVirocide": {
+    "en": "Toxandji Virocide",
+    "de": "Toxandji Virocide",
+    "es": "Virocida de Toxandji",
+    "fr": "Virocide Toxandji",
+    "pt": "Virocida de Toxandji",
+    "ru": "Токсанджийские вирициды"
+  },
+  "XiheCompanions": {
+    "en": "Xihe Biomorphic Companions",
+    "de": "Xihe Biomorphic Companions",
+    "es": "Mascotas biomórficas de Xihe",
+    "fr": "Compagnons biomorphiques de Xihe",
+    "pt": "Mascotes biomórficos de Xihe",
+    "ru": "Биоморфные спутники Xihe"
+  },
+  "SanumaMEAT": {
+    "en": "Sanuma Decorative Meat",
+    "de": "Sanuma-Dekorfleisch",
+    "es": "Carne artística de Sanuma",
+    "fr": "Viande ornementale de Sanuma",
+    "pt": "Carne decorativa de Sanuma",
+    "ru": "Декоративное мясо с Sanuma"
+  },
+  "EthgrezeTeaBuds": {
+    "en": "Ethgreze Tea Buds",
+    "de": "Ethgreze-Teeknospen",
+    "es": "Brotes de té de Ethgreze",
+    "fr": "Bourgeons de thé d'Ethgreze",
+    "pt": "Broto de chá de Ethgreze",
+    "ru": "Чайные бутоны с Ethgreze"
+  },
+  "CeremonialHeikeTea": {
+    "en": "Ceremonial Heike Tea",
+    "de": "Heike-Zeremonientee",
+    "es": "Té ceremonial de Heike",
+    "fr": "Thé de cérémonie de Heike",
+    "pt": "Chá cerimonial de Heike",
+    "ru": "Церемониальный чай Heike"
+  },
+  "TanmarkTranquilTea": {
+    "en": "Tanmark Tranquil Tea",
+    "de": "Tanmark-Besänftigungstee",
+    "es": "Té relajante de Tanmark",
+    "fr": "Thé de la tranquillité de Tanmark",
+    "pt": "Chá calmante de Tanmark",
+    "ru": "Успокаивающий чай Tanmark"
+  },
+  "AZCancriFormula42": {
+    "en": "AZ Cancri Formula 42",
+    "de": "AZ Cancri Formel 42",
+    "es": "Fórmula 42 de AZ Cancri",
+    "fr": "Formule 42 d'AZ Cancri",
+    "pt": "Fórmula 42 de AZ Cancri",
+    "ru": "Формула 42 AZ Cancri"
+  },
+  "KamitraCigars": {
+    "en": "Kamitra Cigars",
+    "de": "Kamitra-Zigarren",
+    "es": "Puros de Kamitra",
+    "fr": "Cigares de Kamitra",
+    "pt": "Charutos de Kamitra",
+    "ru": "Сигара Kamitra"
+  },
+  "RusaniOldSmokey": {
+    "en": "Rusani Old Smokey",
+    "de": "Rusani Old Smokey",
+    "es": "Old Smokey de Rusani",
+    "fr": "Rusani Old Smokey",
+    "pt": "Velho fumo de Rusani",
+    "ru": "Старые папиросы Rusani"
+  },
+  "YasoKondiLeaf": {
+    "en": "Yaso Kondi Leaf",
+    "de": "Yaso-Kondi-Blätter",
+    "es": "Hojas de Yaso Kondi",
+    "fr": "Feuille de Yaso Kondi",
+    "pt": "Folhas de Yaso Kondi",
+    "ru": "Лист ясо Конди"
+  },
+  "ChateauDeAegaeon": {
+    "en": "Chateau De Aegaeon",
+    "de": "Chateau De Aegaeon",
+    "es": "Cheateau de Aegaeon",
+    "fr": "Château Aegaeon",
+    "pt": "Chateau de Aegaeon",
+    "ru": "Шато де Эгеон"
+  },
+  "WatersOfShintara": {
+    "en": "The Waters of Shintara",
+    "de": "Shintara-Wasser",
+    "es": "Aguas de Shintara",
+    "fr": "Eau de Shintara",
+    "pt": "Águas de Shintara",
+    "ru": "Воды с Shintara"
+  },
+  "OphiuchiExinoArtefacts": {
+    "en": "Ophiuch Exino Artefacts",
+    "de": "Ophiuch-Exino-Artefakte",
+    "es": "Artefactos de los Ophiuch Exino",
+    "fr": "Artefacts Ophiuch Exino",
+    "pt": "Artefatos de Ophiuch Exino",
+    "ru": "Артефакты офиух экзино"
+  },
+  "BakedGreebles": {
+    "en": "Baked Greebles",
+    "de": "Gebackene Greebles",
+    "es": "Cocido de greebles",
+    "fr": "Greebles cuites",
+    "pt": "Cozido de greebles",
+    "ru": "Печеные гриблы"
+  },
+  "CetiAepyornisEgg": {
+    "en": "Aepyornis Egg",
+    "de": "Aepyornis-Eier",
+    "es": "Huevo de aepyornis",
+    "fr": "Œuf d'Aepyornis",
+    "pt": "Ovos de Aepyornis",
+    "ru": "Яйцо эпиорниса"
+  },
+  "SaxonWine": {
+    "en": "Saxon Wine",
+    "de": "Sachsenwein",
+    "es": "Vino sajón",
+    "fr": "Vin saxon",
+    "pt": "Vinho saxão",
+    "ru": "Саксонское вино"
+  },
+  "CentauriMegaGin": {
+    "en": "Centauri Mega Gin",
+    "de": "Centauri Mega Gin",
+    "es": "Ginebra Mega de Alpha Centauri",
+    "fr": "Gin Centauri Mega",
+    "pt": "Mega Gin de Centauri",
+    "ru": "Кентаврский мега-джин"
+  },
+  "AnduligaFireWorks": {
+    "en": "Anduliga Fire Works",
+    "de": "Anduliga-Feuerwerk",
+    "es": "Fuegos artificiales de Anduliga",
+    "fr": "Feux d'artifice d'Anduliga",
+    "pt": "Fogos de artifício de Anduliga",
+    "ru": "Андулигские фейерверки"
+  },
+  "BankiAmphibiousLeather": {
+    "en": "Banki Amphibious Leather",
+    "de": "Banki-Amphibienleder",
+    "es": "Cuero anfibio de Banki",
+    "fr": "Cuir d'amphibien de Banki",
+    "pt": "Couro anfíbio de Banki",
+    "ru": "Кожа банкийских амфибий"
+  },
+  "CherbonesBloodCrystals": {
+    "en": "Cherbones Blood Crystals",
+    "de": "Cherbones-Blutkristalle",
+    "es": "Cristales sangre de Cherbones",
+    "fr": "Cristaux de sang de Cherbones",
+    "pt": "Cristais de sangue de Cherbones",
+    "ru": "Чербонские кровавые кристаллы"
+  },
+  "MotronaExperienceJelly": {
+    "en": "Motrona Experience Jelly",
+    "de": "Motrona-Erfahrungsgel",
+    "es": "Gelatina de la Experiencia de Dea Motrona",
+    "fr": "Gelée d'expérience de Motrona",
+    "pt": "Gelatina da experiência de Motrona",
+    "ru": "Мотронское желе"
+  },
+  "GeawenDanceDust": {
+    "en": "Geawen Dance Dust",
+    "de": "Geawen-Tanzstaub",
+    "es": "Polvo de baile de Geawen",
+    "fr": "Poussière de danse Geawen",
+    "pt": "Pó de dança de Geawen",
+    "ru": "Геавенская танцевальная пыль"
+  },
+  "GerasianGueuzeBeer": {
+    "en": "Gerasian Gueuze Beer",
+    "de": "Gersianisches Gueuze-Bier",
+    "es": "Cerveza gerasiana Gueuze",
+    "fr": "Gueuze gerasianne",
+    "pt": "Cerveja gerasiana de Gueuze",
+    "ru": "Герасианское пиво гез"
+  },
+  "HaidneBlackBrew": {
+    "en": "Haiden Black Brew",
+    "de": "Haiden-Schwarzbier",
+    "es": "Infusión negra de Haiden",
+    "fr": "Tisane noire de Haiden",
+    "pt": "Infusão negra de Haiden",
+    "ru": "Гайденовский черный напиток"
+  },
+  "HavasupaiDreamCatcher": {
+    "en": "Havasupai Dream Catcher",
+    "de": "Havasupai-Traumfänger",
+    "es": "Atrapasueños de Havasupai",
+    "fr": "Attrape-rêves Havasupai",
+    "pt": "Apanhadores de sonhos de Havasupai",
+    "ru": "Хавасупайский ловец снов"
+  },
+  "BurnhamBileDistillate": {
+    "en": "Burnham Bile Distillate",
+    "de": "Burnham-Körpersaftdestillat",
+    "es": "Licor bilioso de Burnham",
+    "fr": "Distillé bileux de Burnham",
+    "pt": "Bile destilada de Burnham",
+    "ru": "Бернхемский желчный дистиллят"
+  },
+  "HIPOrganophosphates": {
+    "en": "HIP Organophosphates",
+    "de": "HIP-Organophosphate",
+    "es": "Organofosfatos de HIP 80364",
+    "fr": "Organophosphates de Hip",
+    "pt": "Organofosfatos de HIP 80364",
+    "ru": "Мощные органофосфаты"
+  },
+  "JaradharrePuzzlebox": {
+    "en": "Jaradharre Puzzle Box",
+    "de": "Jaradharre Puzzle-Box",
+    "es": "Rompecabezas de Jaradharre",
+    "fr": "Boîte de jeux de Jaradharre",
+    "pt": "Caixa de quebra-cabeças de Jaradharre",
+    "ru": "Джарадхаррская головоломка"
+  },
+  "KorroKungPellets": {
+    "en": "Koro Kung Pellets",
+    "de": "Korro-Kung-Pellets",
+    "es": "Gránulos de Korro Kung",
+    "fr": "Boulettes Korro Kung",
+    "pt": "Pastilhas de Korro Kung",
+    "ru": "Корокунгские катышки"
+  },
+  "LFTVoidExtractCoffee": {
+    "en": "Void Extract Coffee",
+    "de": "Weltraumvakuum-Kaffee",
+    "es": "Extracto de café al vacío",
+    "fr": "Café du néant",
+    "pt": "Extrato de café do vácuo",
+    "ru": "Кофе «Экстракт пустоты»"
+  },
+  "HonestyPills": {
+    "en": "Honesty Pills",
+    "de": "Ehrlichkeitspillen",
+    "es": "Píldoras de la Honestidad",
+    "fr": "Pilules d'honnêteté",
+    "pt": "Pílulas da honestidade",
+    "ru": "Пилюли честности"
+  },
+  "NonEuclidianExotanks": {
+    "en": "Non Euclidian Exotanks",
+    "de": "Nichteuklidische Exotanks",
+    "es": "Exotanques no euclídeos",
+    "fr": "Vivariums non euclidiens",
+    "pt": "Exotanques não euclidianos",
+    "ru": "Неевклидовы экзобаки"
+  },
+  "LTTHyperSweet": {
+    "en": "LTT Hyper Sweet",
+    "de": "LTT-Hypersüße",
+    "es": "Hiperdulce LTT",
+    "fr": "Hyper sucre LTT",
+    "pt": "Hiperdoce de LTT",
+    "ru": "Гиперсладости LTT"
+  },
+  "MechucosHighTea": {
+    "en": "Mechucos High Tea",
+    "de": "Mechucos-High-Tee",
+    "es": "Alto té de Mechucos",
+    "fr": "Haut thé de Mechucos",
+    "pt": "Chá de jantar de Mechucos",
+    "ru": "Мечукосский кайфочай"
+  },
+  "MedbStarlube": {
+    "en": "Medb Starlube",
+    "de": "Medb-Sternschmiere",
+    "es": "Lubricante de Medb",
+    "fr": "Lubrifiant stellaire Medb",
+    "pt": "Lubrificante de Medb",
+    "ru": "Звездная смазка с Medb"
+  },
+  "MokojingBeastFeast": {
+    "en": "Mokojing Beast Feast",
+    "de": "Mokojing Monstermüsli",
+    "es": "Banquete Bestial de Mokojin",
+    "fr": "Céréanimales de Mokojing",
+    "pt": "Banquete bestial de Mokojing",
+    "ru": "Мокоджингское зверское яство"
+  },
+  "MukusubiiChitinOs": {
+    "en": "Mukusubii Chitin-os",
+    "de": "Mukusubii Chitin-os",
+    "es": "Quitiaros de Mukusubii",
+    "fr": "Os chitineux de Mukusubii",
+    "pt": "Quitinaros de Mukusubii",
+    "ru": "Мукусубские хитинос"
+  },
+  "MulachiGiantFungus": {
+    "en": "Mulachi Giant Fungus",
+    "de": "Mulachi-Riesenpilz",
+    "es": "Hongo gigante de Mulachi",
+    "fr": "Champignons géants de Mulachi",
+    "pt": "Fungo gigante de Mulachi",
+    "ru": "Гигатские грибы с Mulachi"
+  },
+  "NgadandariFireOpals": {
+    "en": "Ngadandari Fire Opals",
+    "de": "Ngadandari-Feueropale",
+    "es": "Ópalos ígneos de Ngandari",
+    "fr": "Opales de feu de Ngadandari",
+    "pt": "Opalas de fogo de Ngadandari",
+    "ru": "Нгадандарийские огненные опалы"
+  },
+  "TiegfriesSynthSilk": {
+    "en": "Tiegfries Synth Silk",
+    "de": "Tiegfries-Synthetikseide",
+    "es": "Seda sintética de Tiegfries",
+    "fr": "Soie synthétique de Tiegfries",
+    "pt": "Seda sintética de Tiegfries",
+    "ru": "Тигфрайский синтешелк"
+  },
+  "UzumokuLowGWings": {
+    "en": "Uzumoku Low-G Wings",
+    "de": "Uzumoku Leichtkraftflügel",
+    "es": "Alas de baja gravedad de Uzumoku",
+    "fr": "Ailes à faible gravité Uzumoku",
+    "pt": "Asas de baixa gravidade de Uzumoku",
+    "ru": "Узумокские крылья для малой гравитации"
+  },
+  "VHerculisBodyRub": {
+    "en": "V Herculis Body Rub",
+    "de": "V Herculis Körperschrubber",
+    "es": "Exfoliantes de V1090 Herculis",
+    "fr": "Lotion de soin V Herculis",
+    "pt": "Esfoliante corporal de V Herculis",
+    "ru": "Скраб с V Herculis"
+  },
+  "WheemeteWheatCakes": {
+    "en": "Wheemete Wheat Cakes",
+    "de": "Wheemete Weizenküchlein",
+    "es": "Pasteles de trigo de Wheemete",
+    "fr": "Gâteaux de blé Wheemete",
+    "pt": "Pastilhas de trigo de Wheemete",
+    "ru": "Уимитские пшеничные галеты"
+  },
+  "VegaSlimWeed": {
+    "en": "Vega Slimweed",
+    "de": "Vega-Schlankkraut",
+    "es": "Planta parásita de Vega",
+    "fr": "Algues amincissantes de Vega",
+    "pt": "Erva daninha de Vega",
+    "ru": "Водоросли для похудения с Vega"
+  },
+  "AltairianSkin": {
+    "en": "Altairian Skin",
+    "de": "Altair-Haut",
+    "es": "Piel altairiana",
+    "fr": "Peau d'Altaïr",
+    "pt": "Pele Altairiana",
+    "ru": "Альтаирская кожа"
+  },
+  "PavonisEarGrubs": {
+    "en": "Pavonis Ear Grubs",
+    "de": "Pavonis-Ohrenlarven",
+    "es": "Larvorejas de Pavonis",
+    "fr": "Larves Oreilles de Pavonis",
+    "pt": "Larvas auriculares de Pavonis",
+    "ru": "Павлинские ухочерви"
+  },
+  "JotunMookah": {
+    "en": "Jotun Mookah",
+    "de": "Jotun Mookah",
+    "es": "Mookah de Jotun",
+    "fr": "Mookah de Jotun",
+    "pt": "Mookah de Jotun",
+    "ru": "Йотунская моока"
+  },
+  "GiantVerrix": {
+    "en": "Giant Verrix",
+    "de": "Riesen-Verrix",
+    "es": "Verrix gigante",
+    "fr": "Verrix géant",
+    "pt": "Verrix gigante",
+    "ru": "Гигант Веррикс"
+  },
+  "IndiBourbon": {
+    "en": "Indi Bourbon",
+    "de": "Indi Bourbon",
+    "es": "Bourbon de Epsilon Indi",
+    "fr": "Bourbon Indi",
+    "pt": "Bourbon de Epsilon Indi",
+    "ru": "Инди-бурбон"
+  },
+  "AroucaConventualSweets": {
+    "en": "Arouca Conventual Sweets",
+    "de": "Arouca-Klosterbonbons",
+    "es": "Dulces conventuales de Arouca",
+    "fr": "Bonbons monastiques d'Arouca",
+    "pt": "Doces monásticos de Arouca",
+    "ru": "Монастырские сладости с Arouca"
+  },
+  "TauriChimes": {
+    "en": "Tauri Chimes",
+    "de": "Tauri-Glockenspiel",
+    "es": "Carillones de 39 Tauri",
+    "fr": "Carillons taurins",
+    "pt": "Sinos de vento de Tauri",
+    "ru": "Колокольчики с Tauri"
+  },
+  "ZeesszeAntGlue": {
+    "en": "Zeessze Ant Grub Glue",
+    "de": "Zeessze-Ameisenkleber",
+    "es": "Pegamento de larvas de hormiga de Zeessze",
+    "fr": "Colle de larve de fourmi de Zeessze",
+    "pt": "Cola de larva de formiga de Zeessze",
+    "ru": "Зесский муравьиный клей"
+  },
+  "PantaaPrayerSticks": {
+    "en": "Pantaa Prayer Sticks",
+    "de": "Pantaa-Weihrauchstöcke",
+    "es": "Palos ceremoniales de los Pantaa",
+    "fr": "Bâtonnets d'encens de Panta",
+    "pt": "Incensos para orações de Pantaa",
+    "ru": "Пантаские молитвенные палочки"
+  },
+  "FujinTea": {
+    "en": "Fujin Tea",
+    "de": "Fujin-Tee",
+    "es": "Té de Fujin",
+    "fr": "Thé de Fujin",
+    "pt": "Chá de Fujin",
+    "ru": "Фудзинский чай"
+  },
+  "ChameleonCloth": {
+    "en": "Chameleon Cloth",
+    "de": "Chamäleon-Kleidung",
+    "es": "Ropa mimética",
+    "fr": "Tissu caméléon",
+    "pt": "Tecido camaleônico",
+    "ru": "Ткань-хамелеон"
+  },
+  "OrrerianViciousBrew": {
+    "en": "Orrerian Vicious Brew",
+    "de": "Orrerianisches Immerwach",
+    "es": "Fermento vicioso orreriano",
+    "fr": "Vicieuse d'Orrere",
+    "pt": "Fermentado perverso de Orrere",
+    "ru": "Оррерское жуткое пойло"
+  },
+  "UszaianTreeGrub": {
+    "en": "Uszaian Tree Grub",
+    "de": "Uszaian-Baumlarven",
+    "es": "Larva de árbol uszaiana",
+    "fr": "Larve uszaienne",
+    "pt": "Lagarta arbórea de Uszaian",
+    "ru": "Ушжаанский росток дерева"
+  },
+  "MomusBogSpaniel": {
+    "en": "Momus Bog Spaniel",
+    "de": "Momus-Sumpfspaniel",
+    "es": "Spaniel de pantano de Momus Reach",
+    "fr": "Épagneul fangeux de Momus",
+    "pt": "Cão do pântano de Momus",
+    "ru": "Момусовский болотный спаниель"
+  },
+  "DisoMaCorn": {
+    "en": "Diso Ma Corn",
+    "de": "Diso-Ma-Mais",
+    "es": "Maíz ma de Diso",
+    "fr": "Ma Corn de Diso",
+    "pt": "Milho Ma de Diso",
+    "ru": "Зерна дисо ма"
+  },
+  "LeestianEvilJuice": {
+    "en": "Leestian Evil Juice",
+    "de": "Leesti-Teufelssaft",
+    "es": "Zumo diabólico leestiano",
+    "fr": "Leestian Evil Juice",
+    "pt": "Suco do mal leestiano",
+    "ru": "Леестийский сок зла"
+  },
+  "BlueMilk": {
+    "en": "Azure Milk",
+    "de": "Azurmilch",
+    "es": "Leche de azure",
+    "fr": "Lait d'Azure",
+    "pt": "Leite de Azure",
+    "ru": "Лазурное молоко"
+  },
+  "AlienEggs": {
+    "en": "Leathery Eggs",
+    "de": "Ledrige Eier",
+    "es": "Huevos ornamentales",
+    "fr": "Œufs antiques",
+    "pt": "Ovos coriáceos",
+    "ru": "Кожистые яйца"
+  },
+  "AlyaBodilySoap": {
+    "en": "Alya Body Soap",
+    "de": "Alya-Körperseife",
+    "es": "Jabón corporal de Alya",
+    "fr": "Savon corporel d'Alya",
+    "pt": "Sabão corporal de Alya",
+    "ru": "Алийское мыло для тела"
+  },
+  "VidavantianLace": {
+    "en": "Vidavantian Lace",
+    "de": "Vidava-Spitze",
+    "es": "Cordón vidavantino",
+    "fr": "Dentelle vidavantienne",
+    "pt": "Renda vidavantiana",
+    "ru": "Видавантийский шнурок"
+  },
+  "TransgenicOnionHead": {
+    "en": "Lucan Onionhead",
+    "de": "Lucan Onionhead",
+    "es": "Cebollazo de Lucan",
+    "fr": "Tête d'oignon lucane",
+    "pt": "Onionhead lucana",
+    "ru": "Луканская луковая головка"
+  },
+  "JaquesQuinentianStill": {
+    "en": "Jaques Quinentian Still",
+    "de": "Jaques Quinent-Destille",
+    "es": "Alambique Jaques Quinentian",
+    "fr": "Brûlerie quinentienne de Jaques",
+    "pt": "Alambique de Jaques Quinentian",
+    "ru": "Дистиллятор Жака Квиненциана"
+  },
+  "SoontillRelics": {
+    "en": "Soontill Relics",
+    "de": "Soontill-Relikte",
+    "es": "Reliquias de Soontill",
+    "fr": "Reliques de Soontill",
+    "pt": "Relíquias de Soontill",
+    "ru": "Реликвии Сунтилла"
+  },
+  "Advert1": {
+    "en": "Ultra-Compact Processor Prototypes",
+    "de": "Ultrakompakte Prozessorprototypen",
+    "es": "Prototipos de procesador ultracompactos",
+    "fr": "Prototypes de processeurs ultra-compacts",
+    "pt": "Protótipos de processadores ultracompactos",
+    "ru": "Экспериментальные ультракомпактные процессоры"
+  },
+  "TheHuttonMug": {
+    "en": "The Hutton Mug",
+    "de": "Hutton-Becher",
+    "es": "Taza de Hutton",
+    "fr": "La tasse Hutton",
+    "pt": "A caneca de Hutton",
+    "ru": "Кружка Hutton"
+  },
+  "SothisCrystallineGold": {
+    "en": "Sothis Crystalline Gold",
+    "de": "Sothis-Kristallingold",
+    "es": "Oro cristalino de Sothis",
+    "fr": "Or cristallin de Sothis",
+    "pt": "Ouro cristalino de Sothis",
+    "ru": "Кристаллическое золото системы Sothis"
+  },
+  "MasterChefs": {
+    "en": "Master Chefs",
+    "de": "Master Chefs",
+    "es": "Maestros de cocina",
+    "fr": "Spartan-chefs",
+    "pt": "Mestres Chefes",
+    "ru": "Мастер-шефы"
+  },
+  "PersonalGifts": {
+    "en": "Festive Gifts",
+    "de": "Festliche Geschenke",
+    "es": "Regalos festivos",
+    "fr": "Cadeaux festifs",
+    "pt": "Presentes natalinos",
+    "ru": "Праздничные подарки"
+  },
+  "CrystallineSpheres": {
+    "en": "Crystalline Spheres",
+    "de": "Kristallkugeln",
+    "es": "Esferas cristalinas",
+    "fr": "Sphères cristallines",
+    "pt": "Esferas cristalinas",
+    "ru": "Прозрачные сферы"
+  },
+  "OnionHeadA": {
+    "en": "Onionhead Alpha Strain",
+    "de": "Onionhead (Alpha)",
+    "es": "Cepa alfa de cebollazo",
+    "fr": "Variété alpha de tête d'oignon",
+    "pt": "Cepa alfa de Onionhead",
+    "ru": "Луковая головка, сорт альфа"
+  },
+  "OnionHeadB": {
+    "en": "Onionhead Beta Strain",
+    "de": "Onionhead (Beta)",
+    "es": "Cepa beta de cebollazo",
+    "fr": "Variété bêta de tête d'oignon",
+    "pt": "Cepa beta de Onionhead",
+    "ru": "Луковая головка, сорт бета"
+  },
+  "GalacticTravelGuide": {
+    "en": "Galactic Travel Guide",
+    "de": "Galaktischer Reiseführer",
+    "es": "Guía de viaje galáctico",
+    "fr": "Guide de voyage galactique",
+    "pt": "Guia de viagens da galáxia",
+    "ru": "Путеводитель галактического путешественника"
+  },
+  "AnimalEffigies": {
+    "en": "Crom Silver Fesh",
+    "de": "Crom Silver Fesh",
+    "es": "Aliento de plata de Crom",
+    "fr": "Fesh argenté de Crom",
+    "pt": "Fôlego prata de Crom",
+    "ru": "Кромская серебряная дурь"
+  },
+  "ShansCharisOrchid": {
+    "en": "Shan's Charis Orchid",
+    "de": "Shans Charis-Orchidee",
+    "es": "Orquídea Charis de Shan",
+    "fr": "Orchidée Shan Charis",
+    "pt": "Orquídea de Shan Charis",
+    "ru": "Орхидея Shan Charis"
+  },
+  "BuckyballBeerMats": {
+    "en": "Buckyball Beer Mats",
+    "de": "Buckyball-Bierdeckel",
+    "es": "Posavasos Buckyball",
+    "fr": "Sous-bocks Buckyball",
+    "pt": "Porta Copos Buckyball",
+    "ru": "Подставка под пиво Buckyball"
+  },
+  "HarmaSilverSeaRum": {
+    "en": "Harma Silver Sea Rum",
+    "de": "Harma Silberseerum",
+    "es": "Ron Harma Silver Sea",
+    "fr": "Rhum marin Harma Silver",
+    "pt": "Rum Mar Prata de Harma",
+    "ru": "Ром «Серебряное море Harma»"
+  },
+  "PlatinumAloy": {
+    "en": "Platinum Alloy",
+    "de": "Platinlegierung",
+    "es": "Aleación de platino",
+    "fr": "Alliage de platine",
+    "pt": "Liga de platina",
+    "ru": "Платиновый сплав"
+  },
+  "Nanomedicines": {
+    "en": "Nanomedicines",
+    "de": "Nanomedikamente",
+    "es": "Nanomedicinas",
+    "fr": "Nanomédicaments",
+    "pt": "Nanomedicamentos",
+    "ru": "Нанолекарства"
+  },
+  "Duradrives": {
+    "en": "Duradrives",
+    "de": "Duradrives",
+    "es": "Duradrives",
+    "fr": "Duradrives",
+    "pt": "Duradrives",
+    "ru": "Дюрадрайвы"
+  },
+  "ApaVietii": {
+    "en": "Apa Vietii",
+    "de": "Apa Vietii",
+    "es": "Apa Vietii",
+    "fr": "Apa Vietii",
+    "pt": "Água da Vida",
+    "ru": "Apa Vietii"
+  },
+  "ClassifiedExperimentalEquipment": {
+    "en": "Classified Experimental Equipment",
+    "de": "Geheime experimentelle Ausrüstung",
+    "es": "Equipamiento experimental clasificado",
+    "fr": "Équipement expérimental top secret",
+    "pt": "Equipamento Experimental Secreto",
+    "ru": "Засекреченное экспериментальное оборудование"
+  }
+}

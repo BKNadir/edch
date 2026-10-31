@@ -1,0 +1,74 @@
+/*
+ * Localized display names for the Odyssey personal suits.
+ *
+ * Source: the in-game suit localisation tables.
+ *
+ * Credit and licence terms: ATTRIBUTIONS.md. Acquisition, revisions, derivation and
+ * known gaps: data/i18n/SOURCES.md.
+ *
+ * `nameKeys` maps every identifier a consumer holds — the grade-independent family and
+ * each grade's Frontier symbol — to a shared localized-name record, because the game
+ * names a suit per family and not per grade. A record key is the family it names. Each
+ * record carries the canonical English display name, which data/equipment/suits.jsonc
+ * remains authoritative for, and the five other locales the source publishes.
+ *
+ * The brand is not part of the name stored here: the outfitting list prefixes a suit
+ * with its manufacturer, which names one shop listing rather than the suit.
+ */
+{
+  "nameKeys": {
+    "utilitysuit": "utilitysuit",
+    "utilitysuit_class1": "utilitysuit",
+    "utilitysuit_class2": "utilitysuit",
+    "utilitysuit_class3": "utilitysuit",
+    "utilitysuit_class4": "utilitysuit",
+    "utilitysuit_class5": "utilitysuit",
+    "tacticalsuit": "tacticalsuit",
+    "tacticalsuit_class1": "tacticalsuit",
+    "tacticalsuit_class2": "tacticalsuit",
+    "tacticalsuit_class3": "tacticalsuit",
+    "tacticalsuit_class4": "tacticalsuit",
+    "tacticalsuit_class5": "tacticalsuit",
+    "explorationsuit": "explorationsuit",
+    "explorationsuit_class1": "explorationsuit",
+    "explorationsuit_class2": "explorationsuit",
+    "explorationsuit_class3": "explorationsuit",
+    "explorationsuit_class4": "explorationsuit",
+    "explorationsuit_class5": "explorationsuit",
+    "flightsuit": "flightsuit"
+  },
+  "names": {
+    "utilitysuit": {
+      "en": "Maverick Suit",
+      "de": "Maverick-Anzug",
+      "es": "Traje Maverick",
+      "fr": "Combinaison Maverick",
+      "pt": "Traje Maverick",
+      "ru": "Комбинезон Maverick"
+    },
+    "tacticalsuit": {
+      "en": "Dominator Suit",
+      "de": "Dominator-Anzug",
+      "es": "Traje Dominator",
+      "fr": "Combinaison Dominator",
+      "pt": "Traje Dominator",
+      "ru": "Комбинезон Dominator"
+    },
+    "explorationsuit": {
+      "en": "Artemis Suit",
+      "de": "Artemis-Anzug",
+      "es": "Traje Artemis",
+      "fr": "Combinaison Artemis",
+      "pt": "Traje Artemis",
+      "ru": "Комбинезон Artemis"
+    },
+    "flightsuit": {
+      "en": "Flight Suit",
+      "de": "Flug-Anzug",
+      "es": "Traje de vuelo",
+      "fr": "Combinaison de vol",
+      "pt": "Traje voador",
+      "ru": "Летный комбинезон"
+    }
+  }
+}

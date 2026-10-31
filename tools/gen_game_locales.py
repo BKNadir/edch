@@ -3,8 +3,10 @@
 effects, trader lines…) as they appear in the localized game.
 
 Sources, in order of priority:
-  1. tools/game_terms_*.txt — "en ¦ fr ¦ de ¦ es ¦ pt ¦ ru", an empty cell defers to the next source
-  2. tools/sources/edengineer/localization.json — EDEngineer's translations (MIT, see NOTICE)
+  1. tools/sources/almanac/*.jsonc — Elite Dangerous Almanac's catalogues (MIT, see NOTICE), taken
+     from the game's own localisation tables
+  2. tools/game_terms_*.txt — "en ¦ fr ¦ de ¦ es ¦ pt ¦ ru", an empty cell defers to the next source
+  3. tools/sources/edengineer/localization.json — EDEngineer's translations (MIT, see NOTICE)
 
 Pass --refresh <path to EDEngineer's Resources/Data/localization.json> to re-import that file;
 it is not strict JSON, so it is read line by line and only the terms EDCH uses are kept.
@@ -19,6 +21,30 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 LANGS = ["fr", "de", "es", "pt", "ru"]
 EDE = ROOT / "tools" / "sources" / "edengineer" / "localization.json"
+ALMANAC = ROOT / "tools" / "sources" / "almanac"
+
+
+def read_jsonc(path: Path):
+    s = path.read_text(encoding="utf-8")
+    s = re.sub(r"/\*.*?\*/", "", s, flags=re.S)
+    s = re.sub(r"^\s*//.*$", "", s, flags=re.M)
+    s = re.sub(r",(\s*[}\]])", r"\1", s)
+    return json.loads(s)
+
+
+def almanac() -> dict[str, dict[str, str]]:
+    """English name (lower case) → {lang: text}, from every record that carries an "en" name."""
+    out: dict[str, dict[str, str]] = {}
+    for path in sorted(ALMANAC.glob("*.jsonc")):
+        data = read_jsonc(path)
+        records = data["names"].values() if "names" in data else data.values()
+        for r in records:
+            if isinstance(r, dict) and r.get("en"):
+                entry = out.setdefault(r["en"].lower(), {})
+                for lang in LANGS:
+                    if r.get(lang) and lang not in entry:
+                        entry[lang] = r[lang]
+    return out
 
 
 def game_terms() -> set[str]:
@@ -36,6 +62,7 @@ def game_terms() -> set[str]:
         for e in b.get("effects") or []:
             names.add(e["label"])
     names.update(g["lines"].values())
+    names.update(c["name"] for c in g["commodities"])
     for e in g["engineers"]:
         names.update(s["name"] for s in e["specialities"])
     return {n for n in names if n and n not in engineers}
@@ -70,6 +97,7 @@ def main() -> int:
         EDE.write_text(json.dumps(kept, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
         print(f"kept {len(kept)} EDEngineer entries")
 
+    official = almanac()
     ede = {k.lower(): v for k, v in json.loads(EDE.read_text(encoding="utf-8")).items()}
     ours: dict[str, dict[str, str]] = {}
     errors = 0
@@ -91,7 +119,7 @@ def main() -> int:
         out = {}
         for term in sorted(terms):
             k = term.lower()
-            text = ours.get(k, {}).get(lang) or ede.get(k, {}).get(lang)
+            text = official.get(k, {}).get(lang) or ours.get(k, {}).get(lang) or ede.get(k, {}).get(lang)
             if text:
                 text = re.sub(r"\s+", " ", text).strip()
                 if text != term:
@@ -99,7 +127,8 @@ def main() -> int:
             else:
                 missing[lang].append(term)
         (target / f"game.{lang}.json").write_text(json.dumps(out, ensure_ascii=False, indent=0, sort_keys=True) + "\n", encoding="utf-8")
-        print(f"game.{lang}.json: {len(out)} names, {len(missing[lang])} left in English")
+        n_official = sum(1 for t in terms if official.get(t.lower(), {}).get(lang))
+        print(f"game.{lang}.json: {len(out)} names ({n_official} from the game's localisation), {len(missing[lang])} left in English")
     if "-v" in sys.argv:
         for lang, ms in missing.items():
             print(lang, ms)

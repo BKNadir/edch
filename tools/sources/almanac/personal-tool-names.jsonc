@@ -1,0 +1,47 @@
+/*
+ * Localized display names for the Odyssey suit tools.
+ *
+ * Source: the in-game tool localisation tables.
+ *
+ * Credit and licence terms: ATTRIBUTIONS.md. Acquisition, revisions, derivation and
+ * known gaps: data/i18n/SOURCES.md.
+ *
+ * Keyed by the library id data/equipment/tools.jsonc carries, which stays authoritative
+ * for the canonical English name. Frontier publishes no item symbol for a tool, so the
+ * id is the one identifier a consumer holds. SOURCES.md records the join and which
+ * values the game leaves in English.
+ */
+{
+  "energylink": {
+    "en": "Energylink",
+    "de": "Energie-Link",
+    "es": "Enlace energético",
+    "fr": "Énergiseur",
+    "pt": "Link de energia",
+    "ru": "Энерголинк"
+  },
+  "profile-analyser": {
+    "en": "Profile Analyser",
+    "de": "Profil-Analysator",
+    "es": "Analizador de perfiles",
+    "fr": "Analyseur de profil",
+    "pt": "Analisador de perfil",
+    "ru": "Анализатор профиля"
+  },
+  "arc-cutter": {
+    "en": "Arc Cutter",
+    "de": "Arc Cutter",
+    "es": "Arc Cutter",
+    "fr": "Arc Cutter",
+    "pt": "Arc Cutter",
+    "ru": "Плазменный резак"
+  },
+  "genetic-sampler": {
+    "en": "Genetic Sampler",
+    "de": "Genetic Sampler",
+    "es": "Muestreador genético",
+    "fr": "Échantillonneur génétique",
+    "pt": "Amostrador genético",
+    "ru": "Сборщик генетических образцов"
+  }
+}

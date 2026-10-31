@@ -1,0 +1,535 @@
+/*
+ * Localized display names for outfitting module families.
+ *
+ * Sources: the Elite Dangerous Almanac ships catalogue (canonical English) and
+ * Frontier's in-game outfitting category labels (localized values).
+ *
+ * Credit and licence terms: ATTRIBUTIONS.md. Acquisition, revisions, derivation and
+ * known gaps: data/i18n/SOURCES.md.
+ *
+ * English covers every family. A locale is present only where the source carries a
+ * category label for that family; a missing locale makes the public lookup return null.
+ */
+{
+  "armour": {
+    "en": "Armour",
+    "de": "Panzerung",
+    "es": "Blindaje",
+    "fr": "Blindage",
+    "pt": "Blindagem",
+    "ru": "Броня"
+  },
+  "powerPlants": {
+    "en": "Power Plants",
+    "de": "Kraftwerke",
+    "es": "Núcleos de energía",
+    "fr": "Générateurs",
+    "pt": "Gerador de energia",
+    "ru": "Силовые установки"
+  },
+  "engines": {
+    "en": "Engines",
+    "de": "Antriebe",
+    "es": "Motores",
+    "fr": "Moteurs",
+    "pt": "Motores",
+    "ru": "Двигатели"
+  },
+  "fsd": {
+    "en": "FSD",
+    "de": "FSA",
+    "es": "MDD",
+    "fr": "FSD",
+    "pt": "MDD",
+    "ru": "FSD"
+  },
+  "lifeSupport": {
+    "en": "Life Support",
+    "de": "Lebenserhaltung",
+    "es": "Soporte vital",
+    "fr": "Systèmes de survie",
+    "pt": "Suporte de vida",
+    "ru": "Сист. жизнеобеспеч."
+  },
+  "powerDistributors": {
+    "en": "Power Distributors",
+    "de": "Energieverteiler",
+    "es": "Distribuidores de energía",
+    "fr": "Répartiteurs de puissance",
+    "pt": "Distribuidor de energia",
+    "ru": "Распределители питания"
+  },
+  "sensors": {
+    "en": "Sensors",
+    "de": "Sensoren",
+    "es": "Sensores",
+    "fr": "Capteurs",
+    "pt": "Sensores",
+    "ru": "Сенсоры"
+  },
+  "fuelTanks": {
+    "en": "Fuel Tanks",
+    "de": "Treibstofftanks",
+    "es": "Tanques de combustible",
+    "fr": "Réservoirs",
+    "pt": "Tanques de Combustível",
+    "ru": "Топливные баки"
+  },
+  "dockingComputers": {
+    "en": "Docking Computers",
+    "de": "Andockcomputer",
+    "es": "Computadoras de aterrizaje",
+    "fr": "Ordinateurs d'appontage",
+    "pt": "Computador de docagem",
+    "ru": "Стыковочные компьютеры"
+  },
+  "shieldGenerators": {
+    "en": "Shield Generators",
+    "de": "Schildgeneratoren",
+    "es": "Generadores de escudos",
+    "fr": "Générateurs de bouclier",
+    "pt": "Geradores de Escudo",
+    "ru": "Щитогенераторы"
+  },
+  "shieldCellBanks": {
+    "en": "Shield Cell Banks",
+    "de": "Schildzellenbänke",
+    "es": "Acum. escudos",
+    "fr": "Réserves de cellules d'énergie",
+    "pt": "Bancos de célula de escudo",
+    "ru": "Щитонакопители"
+  },
+  "cargoRacks": {
+    "en": "Cargo Racks",
+    "de": "Frachtgestelle",
+    "es": "Bodegas de carga",
+    "fr": "Compartiments de soute",
+    "pt": "Estantes de Carga",
+    "ru": "Грузовые стеллажи"
+  },
+  "hatchBreakerLimpets": {
+    "en": "Hatch Breaker Limpets",
+    "de": "Ladelukenöffner",
+    "es": "Drones extractores",
+    "fr": "Drones perce-soute",
+    "pt": "Drones quebra-escotilha",
+    "ru": "Дроны-взломщики трюмов"
+  },
+  "surfaceScanners": {
+    "en": "Surface Scanners",
+    "de": "Oberflächenscanner",
+    "es": "Escáneres de superficie",
+    "fr": "Détecteurs de surface",
+    "pt": "Scanners de superfície",
+    "ru": "Сканеры поверхностей"
+  },
+  "fuelScoops": {
+    "en": "Fuel Scoops",
+    "de": "Treibstoffsammler",
+    "es": "Colectores de combustible",
+    "fr": "Récupérateurs de carburant",
+    "pt": "Coletores de Combustível",
+    "ru": "Топливозаборники"
+  },
+  "refineries": {
+    "en": "Refineries",
+    "de": "Raffinerien",
+    "es": "Refinerías",
+    "fr": "Raffineries",
+    "pt": "Refinarias",
+    "ru": "Очистители"
+  },
+  "fsdInterdictors": {
+    "en": "FSD Interdictors",
+    "de": "FSA-Unterbrecher",
+    "es": "Interdictores",
+    "fr": "Intercepteurs FSD",
+    "pt": "Interditores de MDD",
+    "ru": "Перехватчики FSD"
+  },
+  "afms": {
+    "en": "AFMs",
+    "de": "AFW",
+    "es": "Unidades de automantenimiento",
+    "fr": "MAE",
+    "pt": "UMTs",
+    "ru": "АПР"
+  },
+  "hullReinforcements": {
+    "en": "Hull Reinforcements",
+    "de": "Rumpfverstärkungen",
+    "es": "Refuerzos estructurales",
+    "fr": "Renforcements de coque",
+    "pt": "Reforços de Casco",
+    "ru": "Усилители корпуса"
+  },
+  "collectorLimpets": {
+    "en": "Collector Limpets",
+    "de": "Sammeldrohnen",
+    "es": "Drones colectores",
+    "fr": "Drones collecteurs",
+    "pt": "Drones Coletores",
+    "ru": "Дроны-сборщики"
+  },
+  "fuelTransferLimpets": {
+    "en": "Fuel Transfer Limpets",
+    "de": "Treibstofftransfer-Drohnen",
+    "es": "Drones de combustible",
+    "fr": "Drones ravitailleurs",
+    "pt": "Drones de combustível",
+    "ru": "Дроны-заправщики"
+  },
+  "prospectingLimpets": {
+    "en": "Prospecting Limpets",
+    "de": "Abbaudrohnen",
+    "es": "Drones de prospección",
+    "fr": "Drones de prospection",
+    "pt": "Drones Prospectores",
+    "ru": "Дроны-геологоразведчики"
+  },
+  "planetaryVehicleHangars": {
+    "en": "Planetary Vehicle Hangars",
+    "de": "Planetenfahrzeug-Hangars",
+    "es": "Hangares de vehículos planetarios",
+    "fr": "Hangars des véhicules planétaires",
+    "pt": "Hangar de veículo planetário",
+    "ru": "Гаражи планет. транспорта"
+  },
+  "planetaryApproachSuites": {
+    "en": "Planetary Approach Suites",
+    "de": "Planetenanflug-Suiten",
+    "es": "Equipos de aproximación planetaria",
+    "fr": "Inst. approche planétaire",
+    "pt": "Instrumentos de aproximação planetária",
+    "ru": "Комплекты для сближения с планетой"
+  },
+  "cargoHatches": {
+    "en": "Cargo Hatches"
+  },
+  "passengerCabins": {
+    "en": "Passenger Cabins",
+    "de": "Passagierkabinen",
+    "es": "Cabinas de pasajeros",
+    "fr": "Cabine de passagers",
+    "pt": "Cabine de Passageiro",
+    "ru": "Пассажирские каюты"
+  },
+  "vesselHangars": {
+    "en": "Vessel Hangars",
+    "de": "Schiff-Hangars",
+    "es": "Hangares de naves",
+    "fr": "Hangars à vaisseaux",
+    "pt": "Hangares de naves",
+    "ru": "Ангары для ЛА"
+  },
+  "moduleReinforcements": {
+    "en": "Module Reinforcements",
+    "de": "Modulverstärkungen",
+    "es": "Refuerzos de módulo",
+    "fr": "Renforcements de modules",
+    "pt": "Reforços de módulo",
+    "ru": "Усилители для модулей"
+  },
+  "repairLimpets": {
+    "en": "Repair Limpets",
+    "de": "Reparaturdrohnen",
+    "es": "Drones de reparaciones",
+    "fr": "Drones réparateurs",
+    "pt": "Drone de Reparo",
+    "ru": "Дроны-ремонтники"
+  },
+  "researchLimpets": {
+    "en": "Research Limpets",
+    "de": "Forschungsdrohnen",
+    "es": "Drones de investigación",
+    "fr": "Drones de recherche",
+    "pt": "Drones de Pesquisa",
+    "ru": "Дроны-исследователи"
+  },
+  "decontaminationLimpets": {
+    "en": "Decontamination Limpets",
+    "de": "Dekontaminations-drohnen",
+    "es": "Drones de descontaminación",
+    "fr": "Drones de décontamination",
+    "pt": "Drones de Descontaminação",
+    "ru": "Дроны-очистители"
+  },
+  "guardianShieldReinforcementPackages": {
+    "en": "Guardian Shield Reinforcement Packages"
+  },
+  "fsdBoosters": {
+    "en": "FSD Boosters",
+    "de": "FSA-Booster",
+    "es": "Potenciadores de MDD",
+    "fr": "Survolteurs FSD",
+    "pt": "Potenciadores de MDD",
+    "ru": "Ускорители FSD"
+  },
+  "guardianHybridPowerDistributors": {
+    "en": "Guardian Hybrid Power Distributors"
+  },
+  "guardianHybridPowerPlants": {
+    "en": "Guardian Hybrid Power Plants"
+  },
+  "reconLimpets": {
+    "en": "Recon Limpets",
+    "de": "Aufklärungsdrohnen",
+    "es": "Drones de reconocimiento",
+    "fr": "Drones de reconnaissance",
+    "pt": "Drones de reconhecimento",
+    "ru": "Дроны-разведчики"
+  },
+  "flightAssists": {
+    "en": "Flight Assists",
+    "de": "Flughilfen",
+    "es": "Asistentes de vuelo",
+    "fr": "Assistance de vol",
+    "pt": "Assistências de voo",
+    "ru": "Автопилот"
+  },
+  "miningMultiLimpetControllers": {
+    "en": "Mining Multi-Limpet Controllers"
+  },
+  "multiLimpetControllers": {
+    "en": "Multi-Limpet Controllers",
+    "de": "Multi-Drohnensteuerungen",
+    "es": "Multilanzadores dron",
+    "fr": "Contrôleurs multi-drones",
+    "pt": "Controladores multidrones",
+    "ru": "Мультиконтроллеры дронов"
+  },
+  "experimentalWeaponStabilisers": {
+    "en": "Experimental Weapon Stabilisers",
+    "de": "Experimentelle Waffenstabilisatoren",
+    "es": "Estabilizadores de armas experimentales",
+    "fr": "Stabilisateurs d'armes expérimentales",
+    "pt": "Estabilizadores de arma experimental",
+    "ru": "Стабилизаторы экспериментального оружия"
+  },
+  "pulseLasers": {
+    "en": "Pulse Lasers",
+    "de": "Impulslaser",
+    "es": "Láseres de pulso",
+    "fr": "Lasers à impulsion",
+    "pt": "Lasers de Pulso",
+    "ru": "Импульсные лазеры"
+  },
+  "burstLasers": {
+    "en": "Burst Lasers",
+    "de": "Salvenlaser",
+    "es": "Láseres de ráfaga",
+    "fr": "Lasers à rafale",
+    "pt": "Lasers de Rajada",
+    "ru": "Пульсирующие лазеры"
+  },
+  "beamLasers": {
+    "en": "Beam Lasers",
+    "de": "Strahlenlaser",
+    "es": "Láseres de rayo",
+    "fr": "Rayons laser",
+    "pt": "Lasers Contínuo",
+    "ru": "Пучковые лазеры"
+  },
+  "cannons": {
+    "en": "Cannons",
+    "de": "Kanonen",
+    "es": "Cañones",
+    "fr": "Canons",
+    "pt": "Canhões",
+    "ru": "Орудия"
+  },
+  "fragmentCannons": {
+    "en": "Fragment Cannons",
+    "de": "Splitterkanonen",
+    "es": "Cañones de fragmentación",
+    "fr": "Canons à fragmentation",
+    "pt": "Canhões de Fragmentos",
+    "ru": "Залповые орудия"
+  },
+  "multiCannons": {
+    "en": "Multi-cannons",
+    "de": "Multikanonen",
+    "es": "Multicañones",
+    "fr": "Multi-canons",
+    "pt": "Canhões de repetição",
+    "ru": "Многоствольные орудия"
+  },
+  "plasmaAccelerators": {
+    "en": "Plasma Accelerators",
+    "de": "Plasmabeschleuniger",
+    "es": "Aceleradores de plasma",
+    "fr": "Accélérateurs à plasma",
+    "pt": "Aceleradores de Plasma",
+    "ru": "Ускорители плазмы"
+  },
+  "railGuns": {
+    "en": "Rail Guns",
+    "de": "Schienenkanonen",
+    "es": "Cañones de riel",
+    "fr": "Canons électriques",
+    "pt": "Canhões Elétricos",
+    "ru": "Рельсотрон"
+  },
+  "missiles": {
+    "en": "Missiles",
+    "de": "Raketen",
+    "es": "Misiles",
+    "fr": "Missiles",
+    "pt": "Mísseis",
+    "ru": "Ракеты"
+  },
+  "mines": {
+    "en": "Mines",
+    "de": "Minen",
+    "es": "Minas",
+    "fr": "Mines",
+    "pt": "Minas",
+    "ru": "Мины"
+  },
+  "torpedoes": {
+    "en": "Torpedoes",
+    "de": "Torpedos",
+    "es": "Torpedos",
+    "fr": "Torpilles",
+    "pt": "Torpedos",
+    "ru": "Торпеды"
+  },
+  "miningLasers": {
+    "en": "Mining Lasers",
+    "de": "Abbaulaser",
+    "es": "Láseres de minería",
+    "fr": "Lasers miniers",
+    "pt": "Lasers de mineração",
+    "ru": "Проходочные лазеры"
+  },
+  "remoteReleaseFlakLaunchers": {
+    "en": "Remote Release Flak Launchers"
+  },
+  "axMissileRacks": {
+    "en": "AX Missile Racks"
+  },
+  "axMultiCannons": {
+    "en": "AX Multi-Cannons"
+  },
+  "guardianGaussCannons": {
+    "en": "Guardian Gauss Cannons"
+  },
+  "remoteReleaseFlechetteLaunchers": {
+    "en": "Remote Release Flechette Launchers"
+  },
+  "guardianPlasmaChargers": {
+    "en": "Guardian Plasma Chargers"
+  },
+  "guardianShardCannons": {
+    "en": "Guardian Shard Cannons"
+  },
+  "shockCannons": {
+    "en": "Shock Cannons"
+  },
+  "subSurfaceDisplacementMissiles": {
+    "en": "Sub-Surface Displacement Missiles"
+  },
+  "abrasionBlasters": {
+    "en": "Abrasion Blasters",
+    "de": "Abrasionsblaster",
+    "es": "Destructores de abrasión",
+    "fr": "Surfaceurs abrasifs",
+    "pt": "Detonadores de abrasão",
+    "ru": "Абразивные бластеры"
+  },
+  "miningTools": {
+    "en": "Mining Tools",
+    "de": "Abbauwerkzeuge",
+    "es": "Herramientas de minería",
+    "fr": "Outils miniers",
+    "pt": "Ferramentas de mineração",
+    "ru": "Инструменты для добычи ресурсов"
+  },
+  "subSurfaceExtractionMissiles": {
+    "en": "Sub-Surface Extraction Missiles"
+  },
+  "guardianNaniteTorpedoPylons": {
+    "en": "Guardian Nanite Torpedo Pylons"
+  },
+  "chaffLaunchers": {
+    "en": "Chaff Launchers",
+    "de": "Düppel-Werfer",
+    "es": "Señuelos",
+    "fr": "Lanceurs de paillettes",
+    "pt": "Lançadores de Chaff",
+    "ru": "Разбрас-ли дип. отражателей"
+  },
+  "ecms": {
+    "en": "ECMs",
+    "de": "EGM",
+    "es": "Contramedidas electrónicas",
+    "fr": "CMÉ",
+    "pt": "CMEs",
+    "ru": "ЭПД"
+  },
+  "heatsinkLaunchers": {
+    "en": "Heatsink Launchers",
+    "de": "Kühlkörperwerfer",
+    "es": "Eyectores térmicos",
+    "fr": "Éjecteurs de dissipateur thermique",
+    "pt": "Lançadores de dissipador térmico",
+    "ru": "Теплоотводные катапульты"
+  },
+  "pointDefence": {
+    "en": "Point Defence",
+    "de": "Punktverteidigung",
+    "es": "Defensas de punto",
+    "fr": "Défense ponctuelle",
+    "pt": "Defesa de Ponto",
+    "ru": "Точечная оборона"
+  },
+  "manifestScanners": {
+    "en": "Manifest Scanners",
+    "de": "Verzeichnisscanner",
+    "es": "Escáneres de manifiesto",
+    "fr": "Détecteurs de manifeste",
+    "pt": "Scanners de Manifesto",
+    "ru": "Сканеры содержимого"
+  },
+  "wakeScanners": {
+    "en": "Wake Scanners",
+    "de": "Sogwolkenscanner",
+    "es": "Escáneres de estela",
+    "fr": "Détecteurs de sillage",
+    "pt": "Scanners de Rastro",
+    "ru": "Следовые сканеры"
+  },
+  "killWarrantScanners": {
+    "en": "Kill Warrant Scanners",
+    "de": "Tötungsbefehl-Scanner",
+    "es": "Escáneres de registro criminal",
+    "fr": "Détecteurs d'avis de rech.",
+    "pt": "Scanners de Registro Criminal",
+    "ru": "Сканеры преступников"
+  },
+  "shieldBoosters": {
+    "en": "Shield Boosters",
+    "de": "Schild-Booster",
+    "es": "Potenciadores de escudos",
+    "fr": "Survolteurs de bouclier",
+    "pt": "Potenciadores de Escudo",
+    "ru": "Усилители щита"
+  },
+  "shutdownFieldNeutralisers": {
+    "en": "Shutdown Field Neutralisers"
+  },
+  "xenoScanners": {
+    "en": "Xeno Scanners"
+  },
+  "pulseWaveAnalyser": {
+    "en": "Pulse Wave Analyser",
+    "de": "Impulswellen-Analysator",
+    "es": "Analizador de onda de pulsos",
+    "fr": "Analyseur à onde pulsée",
+    "pt": "Analisador de onda de pulso",
+    "ru": "Анализатор импульсных волн"
+  },
+  "causticSinkLaunchers": {
+    "en": "Caustic Sink Launchers"
+  }
+}
