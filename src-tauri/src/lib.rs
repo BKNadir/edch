@@ -15,6 +15,8 @@ use std::thread;
 use std::time::{Duration, Instant, SystemTime};
 use tauri::{AppHandle, Emitter, Manager};
 
+mod remote;
+
 /// Bumped every time a new watch starts, so an older watcher thread stops by itself.
 #[derive(Default)]
 struct WatchState {
@@ -285,8 +287,43 @@ const ALLOWED_HOSTS: [&str; 6] = [
     "https://edsm.net/",
 ];
 
-/// Generic HTTP for the UI (no CORS from Rust). Non-2xx answers are returned, not errors,
+/// One HTTP request to an allowed host. Non-2xx answers are returned, not errors,
 /// so the caller can apply each service's retry rules (EDDN forbids retrying a 400).
+fn blocking_http(
+    method: &str,
+    url: &str,
+    body: Option<&str>,
+    content_type: Option<&str>,
+) -> Result<HttpReply, String> {
+    if !ALLOWED_HOSTS.iter().any(|h| url.starts_with(h)) {
+        return Err(format!("Adresse refusée : {url}"));
+    }
+    let agent = ureq::AgentBuilder::new()
+        .timeout(Duration::from_secs(30))
+        .user_agent(concat!("EDCH/", env!("CARGO_PKG_VERSION")))
+        .build();
+    let request = agent.request(&method.to_uppercase(), url);
+    let result = match body {
+        Some(text) => request
+            .set("Content-Type", content_type.unwrap_or("application/json"))
+            .send_string(text),
+        None => request.call(),
+    };
+    match result {
+        Ok(response) => {
+            let status = response.status();
+            let body = response.into_string().map_err(|e| e.to_string())?;
+            Ok(HttpReply { status, body })
+        }
+        Err(ureq::Error::Status(status, response)) => Ok(HttpReply {
+            status,
+            body: response.into_string().unwrap_or_default(),
+        }),
+        Err(error) => Err(format!("Réseau : {error}")),
+    }
+}
+
+/// Generic HTTP for the UI (no CORS from Rust).
 #[tauri::command]
 async fn http_fetch(
     method: String,
@@ -294,36 +331,8 @@ async fn http_fetch(
     body: Option<String>,
     content_type: Option<String>,
 ) -> Result<HttpReply, String> {
-    if !ALLOWED_HOSTS.iter().any(|h| url.starts_with(h)) {
-        return Err(format!("Adresse refusée : {url}"));
-    }
     tauri::async_runtime::spawn_blocking(move || {
-        let agent = ureq::AgentBuilder::new()
-            .timeout(Duration::from_secs(30))
-            .user_agent(concat!("EDCH/", env!("CARGO_PKG_VERSION")))
-            .build();
-        let request = agent.request(&method.to_uppercase(), &url);
-        let result = match body {
-            Some(text) => request
-                .set(
-                    "Content-Type",
-                    content_type.as_deref().unwrap_or("application/json"),
-                )
-                .send_string(&text),
-            None => request.call(),
-        };
-        match result {
-            Ok(response) => {
-                let status = response.status();
-                let body = response.into_string().map_err(|e| e.to_string())?;
-                Ok(HttpReply { status, body })
-            }
-            Err(ureq::Error::Status(status, response)) => Ok(HttpReply {
-                status,
-                body: response.into_string().unwrap_or_default(),
-            }),
-            Err(error) => Err(format!("Réseau : {error}")),
-        }
+        blocking_http(&method, &url, body.as_deref(), content_type.as_deref())
     })
     .await
     .map_err(|e| e.to_string())?
@@ -613,6 +622,7 @@ fn installer_language() -> Option<u32> {
 pub fn run() {
     tauri::Builder::default()
         .manage(Arc::new(WatchState::default()))
+        .manage(remote::RemoteState::default())
         .invoke_handler(tauri::generate_handler![
             default_journal_dir,
             start_journal,
@@ -625,7 +635,12 @@ pub fn run() {
             export_config,
             import_config,
             reveal_path,
-            installer_language
+            installer_language,
+            remote::remote_start,
+            remote::remote_stop,
+            remote::remote_publish,
+            remote::remote_qr,
+            remote::remote_addresses
         ])
         .run(tauri::generate_context!())
         .expect("error while running EDCH");
