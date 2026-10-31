@@ -94,3 +94,73 @@ export const DEMO_EVENTS: Record<string, unknown>[] = [
 ];
 
 export const demoLines = (): string[] => DEMO_EVENTS.map((e) => JSON.stringify(e));
+
+// Small hand-written .binds sample for the browser demo of the Controls page.
+const kb = (action: string, key: string, mod?: string) =>
+  `<${action}><Primary Device="Keyboard" Key="${key}">${mod ? `<Modifier Device="Keyboard" Key="${mod}" />` : ""}</Primary><Secondary Device="{NoDevice}" Key="" /></${action}>`;
+const dev = (action: string, device: string, key: string, secondary?: [string, string]) =>
+  `<${action}><Primary Device="${device}" Key="${key}" /><Secondary Device="${secondary?.[0] ?? "{NoDevice}"}" Key="${secondary?.[1] ?? ""}" /></${action}>`;
+const axis = (action: string, device: string, key: string, inverted = false) =>
+  `<${action}><Binding Device="${device}" Key="${key}" /><Inverted Value="${inverted ? 1 : 0}" /><Deadzone Value="0.00000000" /></${action}>`;
+
+export const DEMO_BINDS = `﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Root PresetName="Custom" MajorVersion="4" MinorVersion="2">
+  <KeyboardLayout>fr-FR</KeyboardLayout>
+  ${axis("RollAxisRaw", "231D0200", "Joy_XAxis")}
+  ${axis("PitchAxisRaw", "231D0200", "Joy_YAxis", true)}
+  ${axis("YawAxisRaw", "231D0200", "Joy_RZAxis")}
+  ${axis("ThrottleAxis", "231D3201", "Joy_ZAxis")}
+  ${dev("PrimaryFire", "231D0200", "Joy_1", ["Mouse", "Mouse_1"])}
+  ${dev("SecondaryFire", "231D0200", "Joy_2", ["Mouse", "Mouse_2"])}
+  ${dev("CycleNextTarget", "231D0200", "Joy_3")}
+  ${dev("SelectHighestThreat", "231D0200", "Joy_4")}
+  ${dev("CycleFireGroupNext", "231D0200", "Joy_5")}
+  ${dev("DeployHardpointToggle", "231D0200", "Joy_6")}
+  ${dev("UseBoostJuice", "231D3201", "Joy_7")}
+  ${dev("HyperSuperCombination", "231D3201", "Joy_8")}
+  ${dev("IncreaseEnginesPower", "231D0200", "Joy_POV1Up")}
+  ${dev("IncreaseWeaponsPower", "231D0200", "Joy_POV1Right")}
+  ${dev("IncreaseSystemsPower", "231D0200", "Joy_POV1Left")}
+  ${dev("ResetPowerDistribution", "231D0200", "Joy_POV1Down")}
+  ${dev("FireChaffLauncher", "231D3201", "Joy_12")}
+  ${dev("DeployHeatSink", "231D3201", "Joy_13")}
+  ${dev("LandingGearToggle", "231D3201", "Joy_20")}
+  ${kb("ForwardKey", "Key_Z")}
+  ${kb("BackwardKey", "Key_S")}
+  ${kb("LeftThrustButton", "Key_Q")}
+  ${kb("RightThrustButton", "Key_D")}
+  ${kb("UpThrustButton", "Key_R")}
+  ${kb("DownThrustButton", "Key_F")}
+  ${kb("UseBoostJuice", "Key_Tab")}
+  ${kb("GalaxyMapOpen", "Key_M", "Key_LeftShift")}
+  ${kb("SystemMapOpen", "Key_M")}
+  ${kb("FocusLeftPanel", "Key_1")}
+  ${kb("FocusCommsPanel", "Key_2")}
+  ${kb("FocusRadarPanel", "Key_3")}
+  ${kb("FocusRightPanel", "Key_4")}
+  ${kb("PlayerHUDModeToggle", "Key_Comma")}
+  ${kb("ToggleCargoScoop", "Key_Home")}
+  ${kb("ShipSpotLightToggle", "Key_L")}
+  ${kb("NightVisionToggle", "Key_N")}
+  ${kb("HumanoidForwardButton", "Key_Z")}
+  ${kb("HumanoidBackwardButton", "Key_S")}
+  ${kb("HumanoidSprintButton", "Key_LeftShift")}
+  ${kb("HumanoidJumpButton", "Key_Space")}
+  ${kb("HumanoidCrouchButton", "Key_C")}
+  ${kb("HumanoidSelectPrimaryWeaponButton", "Key_1")}
+  ${kb("ToggleDriveAssist", "Key_I")}
+  ${dev("BuggyPrimaryFireButton", "Mouse", "Mouse_1")}
+  ${axis("MouseReset", "{NoDevice}", "")}
+  ${dev("PitchUpButton", "GamePad", "Pad_DPadUp")}
+  ${dev("PitchDownButton", "GamePad", "Pad_DPadDown")}
+  ${dev("UI_Select", "GamePad", "Pad_A")}
+  ${dev("UI_Back", "GamePad", "Pad_B")}
+  ${dev("CycleNextSubsystem", "GamePad", "Pad_X")}
+  ${dev("TargetWingman0", "GamePad", "Pad_Y")}
+  ${dev("UseBoostJuice_Buggy", "GamePad", "Pad_RBumper")}
+  ${dev("PrimaryFire_Buggy", "GamePad", "Pos_Pad_RTrigger")}
+  ${axis("SteeringAxis", "GamePad", "Pad_LStickX")}
+  ${axis("BuggyPitchAxis", "GamePad", "Pad_RStickY")}
+  ${dev("HeadLookToggle", "GamePad", "Pad_RThumb")}
+  ${dev("FocusLeftPanel_Buggy", "GamePad", "Pad_Back")}
+</Root>`;

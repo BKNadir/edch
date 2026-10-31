@@ -6,6 +6,7 @@ import { Uploaders } from "./uploaders.js";
 import { SearchView } from "./views/search.js";
 import { NavigationView } from "./views/navigation.js";
 import { SyncView } from "./views/sync.js";
+import { ControlsView } from "./views/controls.js";
 import { Store } from "./store.js";
 import type { Ctx, View } from "./context.js";
 import { demoLines } from "./demo.js";
@@ -26,6 +27,7 @@ const NAV: { id: string; label: string; icon: string }[] = [
   { id: "engineers", label: "Ingénieurs", icon: "M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6" },
   { id: "search", label: "Recherche", icon: "M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM15.5 15.5L20 20" },
   { id: "navigation", label: "Navigation", icon: "M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" },
+  { id: "controls", label: "Commandes", icon: "M6 9h12a4 4 0 0 1 4 4v2a3 3 0 0 1-5.4 1.8L15 15H9l-1.6 1.8A3 3 0 0 1 2 15v-2a4 4 0 0 1 4-4zM7 11v3M5.5 12.5h3M15.5 12h.01M17.5 13.5h.01" },
   { id: "sync", label: "Synchro", icon: "M4 12a8 8 0 0 1 14-5.3M20 4v4h-4M20 12a8 8 0 0 1-14 5.3M4 20v-4h4" },
   { id: "settings", label: "Paramètres", icon: "M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM19 12l2-1-1-3-2 .2-1.5-1.5L16.7 4 13.8 3 13 5h-2l-.8-2-2.9 1 .2 2.7L6 8.2 4 8 3 11l2 1v0l-2 1 1 3 2-.2 1.5 1.5L7.3 20l2.9 1 .8-2h2l.8 2 2.9-1-.2-2.7 1.5-1.5 2 .2 1-3z" },
 ];
@@ -77,6 +79,7 @@ async function boot() {
     search: new SearchView(ctx),
     navigation: new NavigationView(ctx),
     sync: new SyncView(ctx),
+    controls: new ControlsView(ctx),
     settings: new SettingsView(ctx, () => resetForReplay()),
   };
   const detail = new DetailPanel(ctx);

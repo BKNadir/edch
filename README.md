@@ -20,6 +20,8 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 - **Import de build** : colle ou choisis un export **EDSY** ou **Coriolis** (SLEF ou Loadout JSON). Chaque module ingénié et son effet expérimental vont dans la wishlist. Tu peux aussi repartir de ton vaisseau actuel.
 - **Recherche façon Inara** : où acheter ou vendre une marchandise (par prix ou par distance), un vaisseau, un module (classe et note) ou un service (Interstellar Factors, courtier, trader…) autour de toi.
 - **Navigation** : portée de saut de ton vaisseau (vide, plein, chargé, maintenant, cargaison simulée), itinéraire avec boost neutron via Spansh, et Fleet Carrier (sauts, tritium et durée, en estimation rapide ou en plan Spansh détaillé avec ravitaillements).
+- **Commandes & contrôleurs** : lit tes raccourcis (préréglage actif, y compris des préréglages différents pour vaisseau, SRV et à pied) et dessine chaque périphérique. Le clavier est dessiné touche par touche (AZERTY, QWERTY ou QWERTZ) et la manette Xbox ou PlayStation avec des repères numérotés. Les HOTAS et joysticks (VKB, Virpil, Thrustmaster…) sont présentés en axes, chapeaux et boutons. Chaque commande a sa légende et une couleur par mode, avec filtres Vaisseau, SRV ou À pied, une recherche et l'impression de la fiche.
+- **Sauvegarde de la configuration** : exporte tes raccourcis (et tes réglages graphiques) en zip dans Documents\EDCH, et restaure-les en un clic. La configuration actuelle est sauvegardée automatiquement avant chaque import.
 - **Synchro façon EDMC** : envoi en direct vers **EDDN** (marchés, équipements, chantiers, sauts, scans, routes), **EDSM** et **Inara** (avec ta clé API). Les règles d'EDDN sont respectées : données personnelles retirées, position recoupée, aucun renvoi d'un message refusé, rien de l'historique.
 
 ## Installer
@@ -61,4 +63,4 @@ Un build Windows se lance à chaque push sur `main`. Pour publier une version, p
 
 ## Crédits
 
-Données : EDCD/FDevIDs et msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Recherches : Spansh (EDDN). Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel et non commercial. Détails dans [NOTICE](NOTICE).
+Données : EDCD/FDevIDs et msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Noms des commandes : EDRefCard (Richard Buckle, MIT). Recherches : Spansh (EDDN). Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel et non commercial. Détails dans [NOTICE](NOTICE).

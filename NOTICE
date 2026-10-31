@@ -17,6 +17,11 @@ Community data used to build public/data/game.json (tools/gen_data.py)
 - EDCD/FDevIDs — journal symbols and grades, via d47.
 - EDCD/coriolis-data — cross-check of recipes, via d47.
 
+Key bindings
+------------
+- richardbuckle/EDRefCard (MIT) — control names and groups (bindingsData.py) and the
+  game's DeviceMappings.xml, vendored in tools/sources/edrefcard (tools/gen_binds.py).
+
 Live data
 ---------
 - Spansh (spansh.co.uk) — galaxy, body and station searches, built from EDDN.

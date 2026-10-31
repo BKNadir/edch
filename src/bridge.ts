@@ -109,6 +109,31 @@ export async function spanshJob(endpoint: string, form: [string, string][], onWa
   throw new Error("Spansh calcule encore après 3 minutes, réessaie plus tard");
 }
 
+export interface OptionFile {
+  folder: "Bindings" | "Graphics";
+  name: string;
+  size: number;
+  modified: number;
+}
+
+export interface ImportReport {
+  written: string[];
+  skipped: string[];
+  backup: string;
+}
+
+const invoke = <T>(cmd: string, args?: Record<string, unknown>) => {
+  if (!isTauri()) return Promise.reject(new Error("Disponible dans l'application (pas en mode démo)"));
+  return window.__TAURI__!.core.invoke<T>(cmd, args);
+};
+
+export const optionsDir = () => invoke<string>("options_dir");
+export const listOptionFiles = () => invoke<OptionFile[]>("list_option_files");
+export const readOptionFile = (folder: string, name: string) => invoke<string>("read_option_file", { folder, name });
+export const exportConfig = (includeGraphics: boolean) => invoke<string>("export_config", { includeGraphics });
+export const importConfig = (bytes: Uint8Array) => invoke<ImportReport>("import_config", { data: Array.from(bytes) });
+export const revealPath = (path: string) => invoke<void>("reveal_path", { path });
+
 export async function openUrl(url: string): Promise<void> {
   if (isTauri()) {
     await window.__TAURI__!.core.invoke("open_url", { url });

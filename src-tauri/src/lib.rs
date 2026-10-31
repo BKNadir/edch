@@ -352,6 +352,232 @@ fn open_url(url: String) -> Result<(), String> {
     result.map(|_| ()).map_err(|e| e.to_string())
 }
 
+// ---------------------------------------------------------------------------
+// Game options (key bindings, graphics): list, read, export to a zip, import.
+
+#[derive(Serialize)]
+struct OptionFile {
+    folder: String,
+    name: String,
+    size: u64,
+    modified: u64,
+}
+
+#[derive(Serialize)]
+struct ImportReport {
+    written: Vec<String>,
+    skipped: Vec<String>,
+    backup: String,
+}
+
+/// The two option folders EDCH manages, under %LOCALAPPDATA%.
+const OPTION_FOLDERS: [&str; 2] = ["Bindings", "Graphics"];
+
+fn options_root() -> Result<PathBuf, String> {
+    let base = std::env::var("LOCALAPPDATA")
+        .map(PathBuf::from)
+        .or_else(|_| std::env::var("HOME").map(|h| Path::new(&h).join(".local/share")))
+        .map_err(|_| "Dossier LOCALAPPDATA introuvable".to_string())?;
+    Ok(base
+        .join("Frontier Developments")
+        .join("Elite Dangerous")
+        .join("Options"))
+}
+
+fn documents_dir() -> PathBuf {
+    let home = std::env::var("USERPROFILE")
+        .or_else(|_| std::env::var("HOME"))
+        .unwrap_or_else(|_| ".".into());
+    Path::new(&home).join("Documents").join("EDCH")
+}
+
+/// Only plain file names with the extensions the game uses; no paths, no tricks.
+fn allowed_option_file(folder: &str, name: &str) -> bool {
+    if name.is_empty() || name.contains('/') || name.contains('\\') || name.contains("..") {
+        return false;
+    }
+    let lower = name.to_lowercase();
+    match folder {
+        "Bindings" => lower.ends_with(".binds") || lower.ends_with(".start"),
+        "Graphics" => lower.ends_with(".xml"),
+        _ => false,
+    }
+}
+
+fn unix_secs(t: SystemTime) -> u64 {
+    t.duration_since(SystemTime::UNIX_EPOCH)
+        .map(|d| d.as_secs())
+        .unwrap_or(0)
+}
+
+#[tauri::command]
+fn options_dir() -> Result<String, String> {
+    Ok(options_root()?.to_string_lossy().to_string())
+}
+
+#[tauri::command]
+fn list_option_files() -> Result<Vec<OptionFile>, String> {
+    let root = options_root()?;
+    let mut out = Vec::new();
+    for folder in OPTION_FOLDERS {
+        let Ok(entries) = fs::read_dir(root.join(folder)) else {
+            continue;
+        };
+        for entry in entries.filter_map(|e| e.ok()) {
+            let name = entry.file_name().to_string_lossy().to_string();
+            if !allowed_option_file(folder, &name) {
+                continue;
+            }
+            let meta = match entry.metadata() {
+                Ok(m) if m.is_file() => m,
+                _ => continue,
+            };
+            out.push(OptionFile {
+                folder: folder.to_string(),
+                name,
+                size: meta.len(),
+                modified: meta.modified().map(unix_secs).unwrap_or(0),
+            });
+        }
+    }
+    Ok(out)
+}
+
+#[tauri::command]
+fn read_option_file(folder: String, name: String) -> Result<String, String> {
+    if !OPTION_FOLDERS.contains(&folder.as_str()) || !allowed_option_file(&folder, &name) {
+        return Err("Fichier refusé".into());
+    }
+    let bytes = fs::read(options_root()?.join(&folder).join(&name)).map_err(|e| e.to_string())?;
+    // .binds files start with a UTF-8 BOM.
+    let text = String::from_utf8_lossy(&bytes).to_string();
+    Ok(text.trim_start_matches('\u{feff}').to_string())
+}
+
+fn write_zip(target: &Path, folders: &[&str]) -> Result<usize, String> {
+    use std::io::Write;
+    let root = options_root()?;
+    if let Some(parent) = target.parent() {
+        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    }
+    let file = File::create(target).map_err(|e| e.to_string())?;
+    let mut zip = zip::ZipWriter::new(file);
+    let options = zip::write::SimpleFileOptions::default()
+        .compression_method(zip::CompressionMethod::Deflated);
+    let mut count = 0;
+    for folder in folders {
+        let Ok(entries) = fs::read_dir(root.join(folder)) else {
+            continue;
+        };
+        for entry in entries.filter_map(|e| e.ok()) {
+            let name = entry.file_name().to_string_lossy().to_string();
+            if !allowed_option_file(folder, &name) || !entry.path().is_file() {
+                continue;
+            }
+            let bytes = fs::read(entry.path()).map_err(|e| e.to_string())?;
+            zip.start_file(format!("{folder}/{name}"), options.clone())
+                .map_err(|e| e.to_string())?;
+            zip.write_all(&bytes).map_err(|e| e.to_string())?;
+            count += 1;
+        }
+    }
+    zip.finish().map_err(|e| e.to_string())?;
+    Ok(count)
+}
+
+/// Zips the Bindings (and optionally Graphics) folders into Documents\EDCH. Returns the file path.
+#[tauri::command]
+fn export_config(include_graphics: bool) -> Result<String, String> {
+    let folders: Vec<&str> = if include_graphics {
+        vec!["Bindings", "Graphics"]
+    } else {
+        vec!["Bindings"]
+    };
+    let target = documents_dir().join(format!(
+        "EDCH-config-{}.zip",
+        unix_secs(SystemTime::now())
+    ));
+    let count = write_zip(&target, &folders)?;
+    if count == 0 {
+        let _ = fs::remove_file(&target);
+        return Err("Aucun fichier de configuration trouvé à exporter".into());
+    }
+    Ok(target.to_string_lossy().to_string())
+}
+
+/// Restores a zip made by export_config (or any zip with Bindings/ and Graphics/ entries).
+/// The current configuration is always backed up first.
+#[tauri::command]
+fn import_config(data: Vec<u8>) -> Result<ImportReport, String> {
+    use std::io::Read as _;
+    let mut archive =
+        zip::ZipArchive::new(std::io::Cursor::new(data)).map_err(|e| format!("Zip illisible : {e}"))?;
+    // Validate everything before touching the game's files.
+    let mut files: Vec<(String, String, Vec<u8>)> = Vec::new();
+    let mut skipped = Vec::new();
+    for i in 0..archive.len() {
+        let mut entry = archive.by_index(i).map_err(|e| e.to_string())?;
+        if entry.is_dir() {
+            continue;
+        }
+        let full = entry.name().replace('\\', "/");
+        let parts: Vec<&str> = full.split('/').filter(|p| !p.is_empty()).collect();
+        // Accept "Bindings/x.binds" anywhere in the archive (e.g. "Options/Bindings/x.binds").
+        let pair = parts
+            .windows(2)
+            .rev()
+            .find(|w| OPTION_FOLDERS.contains(&w[0]))
+            .map(|w| (w[0].to_string(), w[1].to_string()));
+        match pair {
+            Some((folder, name)) if parts.last() == Some(&name.as_str()) && allowed_option_file(&folder, &name) => {
+                let mut bytes = Vec::new();
+                entry.read_to_end(&mut bytes).map_err(|e| e.to_string())?;
+                files.push((folder, name, bytes));
+            }
+            _ => skipped.push(full),
+        }
+    }
+    if files.is_empty() {
+        return Err("Ce zip ne contient aucun fichier Bindings/*.binds ni Graphics/*.xml".into());
+    }
+    let backup = documents_dir()
+        .join("sauvegardes")
+        .join(format!("avant-import-{}.zip", unix_secs(SystemTime::now())));
+    write_zip(&backup, &OPTION_FOLDERS)?;
+
+    let root = options_root()?;
+    let mut written = Vec::new();
+    for (folder, name, bytes) in files {
+        let dir = root.join(&folder);
+        fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+        fs::write(dir.join(&name), bytes).map_err(|e| e.to_string())?;
+        written.push(format!("{folder}/{name}"));
+    }
+    Ok(ImportReport {
+        written,
+        skipped,
+        backup: backup.to_string_lossy().to_string(),
+    })
+}
+
+/// Shows a file in Explorer (or opens its folder elsewhere).
+#[tauri::command]
+fn reveal_path(path: String) -> Result<(), String> {
+    let p = PathBuf::from(&path);
+    if !p.exists() {
+        return Err("Fichier introuvable".into());
+    }
+    #[cfg(target_os = "windows")]
+    let result = std::process::Command::new("explorer")
+        .arg(format!("/select,{}", p.display()))
+        .spawn();
+    #[cfg(not(target_os = "windows"))]
+    let result = std::process::Command::new(if cfg!(target_os = "macos") { "open" } else { "xdg-open" })
+        .arg(p.parent().unwrap_or(&p))
+        .spawn();
+    result.map(|_| ()).map_err(|e| e.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -361,7 +587,13 @@ pub fn run() {
             start_journal,
             read_aux_file,
             http_fetch,
-            open_url
+            open_url,
+            options_dir,
+            list_option_files,
+            read_option_file,
+            export_config,
+            import_config,
+            reveal_path
         ])
         .run(tauri::generate_context!())
         .expect("error while running EDCH");
