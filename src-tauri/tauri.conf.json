@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "EDCH",
-  "version": "0.5.2",
-  "identifier": "be.bknadir.edch",
+  "version": "0.5.3",
+  "identifier": "EDCompanionHelper",
   "build": {
     "frontendDist": "../dist",
     "beforeBuildCommand": "npm run build",

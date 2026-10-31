@@ -618,8 +618,22 @@ fn installer_language() -> Option<u32> {
     }
 }
 
+/// Up to v0.5.2 the app's data (settings, API keys, language, wishlist) lived under the
+/// identifier "be.bknadir.edch". Move it to the new folder before the webview opens it.
+fn migrate_data_folder() {
+    for var in ["LOCALAPPDATA", "APPDATA"] {
+        let Ok(base) = std::env::var(var) else { continue };
+        let old = PathBuf::from(&base).join("be.bknadir.edch");
+        let new = PathBuf::from(&base).join("EDCompanionHelper");
+        if old.is_dir() && !new.exists() {
+            let _ = std::fs::rename(&old, &new);
+        }
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    migrate_data_folder();
     tauri::Builder::default()
         .manage(Arc::new(WatchState::default()))
         .manage(remote::RemoteState::default())

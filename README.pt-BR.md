@@ -66,7 +66,7 @@ Estrutura:
   - `i18n.ts`: camada de tradução.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneram os dados de `public/` (veja NOTICE).
 
-Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.5.2`: um rascunho de Release é criado.
+Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.5.3`: um rascunho de Release é criado.
 
 ## Roteiro
 
