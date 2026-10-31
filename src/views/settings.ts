@@ -1,4 +1,4 @@
-import { defaultJournalDir, isTauri, openUrl, startJournal } from "../bridge.js";
+import { defaultJournalDir, isRemote, isTauri, openUrl, startJournal } from "../bridge.js";
 import { h, replace, toast } from "../dom.js";
 import { LANGS, lang, saveLang } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
@@ -49,7 +49,9 @@ export class SettingsView implements View {
       h(
         "div.settings",
         null,
-        h(
+        isRemote()
+          ? null
+          : h(
           "section.card",
           null,
           h("h3", null, "Langue"),
@@ -68,7 +70,7 @@ export class SettingsView implements View {
               },
               LANGS.map((l) => h("option", { value: l.code, selected: l.code === lang().code }, l.label)),
             ),
-            h("small", null, "Les noms des matériaux, modules et commandes restent ceux du jeu en anglais."),
+            h("small", null, "Les noms des matériaux, modules et effets suivent la traduction du jeu ; les noms des commandes restent ceux du jeu en anglais."),
           ),
         ),
         h(

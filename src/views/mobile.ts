@@ -1,4 +1,4 @@
-import { copyText, isRemote, isTauri, remoteQr } from "../bridge.js";
+import { isRemote, isTauri, remoteQr } from "../bridge.js";
 import { h, icon, replace, toast } from "../dom.js";
 import type { Ctx, View } from "../context.js";
 import { pairingUrl, remoteRunning, rotateToken, startRemote, stopRemote } from "../remote.js";
@@ -129,7 +129,6 @@ export class MobileView implements View {
             h(
               "div.row",
               null,
-              h("button.ghost", { onclick: async () => toast((await copyText(url)) ? "Lien copié (il contient le code secret)" : "Copie impossible") }, icon("copy"), " Copier le lien"),
               h(
                 "button.ghost",
                 {

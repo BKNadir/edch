@@ -128,6 +128,11 @@ export async function runRemoteClient(store: Store) {
       if (r.state && r.version !== version) {
         version = r.version;
         const s = r.state;
+        // The PC switched language: follow it.
+        if (typeof s.lang === "string" && s.lang !== lang().code) {
+          location.reload();
+          return;
+        }
         store.state.cmdr = { ...emptyState(), ...s.cmdr };
         store.setWishlist(Array.isArray(s.wishlist) ? s.wishlist : [], true);
         store.state.settings = { ...store.state.settings, ...s.settings };

@@ -66,7 +66,7 @@ Structure :
   - `i18n.ts` : couche de traduction.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.5.1` : un brouillon de Release est créé.
+Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.5.2` : un brouillon de Release est créé.
 
 ## Feuille de route
 

@@ -518,5 +518,6 @@
 "Ce QR code n'est plus valable : un nouveau code a été créé sur le PC. Scanne celui qui est affiché maintenant.": "This QR code is no longer valid: a new code was created on the PC. Scan the one shown now.",
 "Scanne le QR code affiché dans EDCH sur ton PC (page Mobile) pour connecter cet appareil.": "Scan the QR code shown in EDCH on your PC (Mobile page) to connect this device.",
 "La connexion est enregistrée dans le navigateur qui ouvre le lien. Si ton lecteur de QR code l'ouvre dans sa propre fenêtre, ouvre-le plutôt dans Chrome ou Safari, ou copie le lien dans ton navigateur.": "The connection is saved in the browser that opens the link. If your QR scanner opens it in its own window, open it in Chrome or Safari instead, or copy the link into your browser.",
-"{0} est momentanément indisponible (erreur {1}), réessaie dans un instant": "{0} is temporarily unavailable (error {1}), try again in a moment"
+"{0} est momentanément indisponible (erreur {1}), réessaie dans un instant": "{0} is temporarily unavailable (error {1}), try again in a moment",
+"Les noms des matériaux, modules et effets suivent la traduction du jeu ; les noms des commandes restent ceux du jeu en anglais.": "Material, module and effect names follow the game's translation; control names stay as in the English game."
 }

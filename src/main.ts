@@ -59,12 +59,12 @@ async function boot() {
   // A phone served by EDCH's local server follows the PC's language until it picks its own.
   const remoteMode = isTauri() ? null : await detectRemote();
   let code = savedLang();
-  if (!code || !LANGS.some((l) => l.code === code)) {
-    if (remoteMode) code = (remoteMode === "paired" ? await remoteLanguage() : null) ?? browserLang();
-    else {
-      code = await pickLanguage(app, guessLang(await installerLanguage()));
-      saveLang(code);
-    }
+  if (remoteMode) {
+    // A phone is the PC's screen elsewhere: same language, no language screen.
+    code = (remoteMode === "paired" ? await remoteLanguage() : null) ?? code ?? browserLang();
+  } else if (!code || !LANGS.some((l) => l.code === code)) {
+    code = await pickLanguage(app, guessLang(await installerLanguage()));
+    saveLang(code);
   }
   await initI18n(code);
   watchTranslations(document.body);
@@ -114,7 +114,7 @@ async function boot() {
     renderHeader(header, ctx);
     replace(
       nav,
-      NAV.map((n) =>
+      NAV.filter((n) => !(remoteMode && n.id === "mobile")).map((n) =>
         h(
           "button",
           { class: s.view === n.id ? "active" : "", title: n.label, onclick: () => store.setView(n.id) },
@@ -124,7 +124,7 @@ async function boot() {
         ),
       ),
     );
-    const view = views[s.view] ?? views.materials;
+    const view = (remoteMode && s.view === "mobile" ? null : views[s.view]) ?? views.materials;
     if (mounted !== s.view) {
       mounted = s.view;
       view.mount(main);
