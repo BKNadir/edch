@@ -24,6 +24,7 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 - **Navigation** : portée de saut de ton vaisseau (vide, plein, chargé, maintenant, cargaison simulée), itinéraire avec boost neutron via Spansh, et Fleet Carrier (sauts, tritium et durée, en estimation rapide ou en plan Spansh détaillé avec ravitaillements).
 - **Commandes & contrôleurs** : lit tes raccourcis (préréglage actif, y compris des préréglages différents pour le vaisseau, le SRV et à pied) et dessine chaque périphérique. Le clavier est dessiné touche par touche (QWERTY, AZERTY ou QWERTZ) et la manette Xbox ou PlayStation avec des repères numérotés. Les HOTAS, joysticks et manettes reconnus (environ 45 modèles : VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) sont affichés sur la photo du modèle, avec l'action écrite dans la case de chaque bouton. Les gabarits viennent d'EDRefCard et sont chargés depuis son dépôt GitHub. Pour un modèle non reconnu, tu choisis le gabarit le plus proche ; sinon, un schéma simple en axes, chapeaux et boutons s'affiche. Chaque commande a sa légende et une couleur par mode, avec des filtres Vaisseau / SRV / À pied, une recherche et une fiche imprimable.
 - **Sauvegarde de la configuration** : exporte tes raccourcis (et tes réglages graphiques) en zip dans Documents\EDCH, et les restaure en un clic. Ta configuration actuelle est sauvegardée automatiquement avant chaque import.
+- **Accès mobile** : ouvre EDCH sur ton téléphone ou ta tablette en scannant un QR code. Un serveur local (désactivé par défaut) sert l'appli sur ton réseau. Seuls les appareils qui ont scanné le QR code y accèdent : l'IP du PC ne suffit pas. « Nouveau code » déconnecte tous les appareils. L'interface s'adapte au téléphone (navigation en bas, panneaux plein écran), et les modifications de la wishlist faites sur le téléphone reviennent sur le PC.
 - **Synchro façon EDMC** : envoi en direct vers **EDDN** (marchés, équipements, chantiers navals, sauts, scans, routes), **EDSM** et **Inara** (avec ta clé API). Les règles d'EDDN sont respectées : données personnelles retirées, position recoupée, aucun renvoi d'un message refusé, rien de l'historique.
 
 ![Un VKB Gladiator avec ses raccourcis (raccourcis de démo)](docs/controls.png)
@@ -65,7 +66,7 @@ Structure :
   - `i18n.ts` : couche de traduction.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.4.0` : un brouillon de Release est créé.
+Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.5.0` : un brouillon de Release est créé.
 
 ## Feuille de route
 

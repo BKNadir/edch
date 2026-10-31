@@ -19,7 +19,7 @@ export interface JournalBatch {
 }
 
 export interface WatchStatus {
-  state: "live" | "waiting" | "error" | "demo" | "idle";
+  state: "live" | "waiting" | "error" | "demo" | "idle" | "remote" | "offline";
   file?: string | null;
   message?: string | null;
 }
@@ -30,6 +30,19 @@ export interface AuxFile {
 }
 
 export const isTauri = (): boolean => typeof window !== "undefined" && Boolean(window.__TAURI__?.core);
+
+/** True when this page is served by EDCH's local server to another device (phone, tablet). */
+let remote = false;
+export const isRemote = () => remote;
+export const setRemote = (on: boolean) => {
+  remote = on;
+};
+
+async function remoteJson(path: string, init?: RequestInit): Promise<any> {
+  const res = await fetch(path, { credentials: "same-origin", ...init });
+  if (!res.ok) throw new Error(`EDCH (PC) a répondu ${res.status}`);
+  return res.status === 204 ? null : res.json();
+}
 
 export async function defaultJournalDir(): Promise<string | null> {
   if (!isTauri()) return null;
@@ -65,6 +78,9 @@ export interface HttpReply {
 
 /** HTTP through Rust in the app (no CORS); plain fetch in a browser. Never throws on HTTP status. */
 export async function httpFetch(method: string, url: string, body?: string, contentType = "application/json"): Promise<HttpReply> {
+  if (remote) {
+    return remoteJson("/api/http", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ method, url, body: body ?? null, contentType }) });
+  }
   if (isTauri()) {
     return window.__TAURI__!.core.invoke<HttpReply>("http_fetch", { method, url, body: body ?? null, contentType });
   }
@@ -123,21 +139,50 @@ export interface ImportReport {
 }
 
 const invoke = <T>(cmd: string, args?: Record<string, unknown>) => {
+  if (remote) return Promise.reject(new Error("Disponible seulement sur le PC"));
   if (!isTauri()) return Promise.reject(new Error("Disponible dans l'application (pas en mode démo)"));
   return window.__TAURI__!.core.invoke<T>(cmd, args);
 };
 
 export const optionsDir = () => invoke<string>("options_dir");
-export const listOptionFiles = () => invoke<OptionFile[]>("list_option_files");
-export const readOptionFile = (folder: string, name: string) => invoke<string>("read_option_file", { folder, name });
+export const listOptionFiles = (): Promise<OptionFile[]> => (remote ? remoteJson("/api/options") : invoke<OptionFile[]>("list_option_files"));
+export const readOptionFile = async (folder: string, name: string): Promise<string> => {
+  if (!remote) return invoke<string>("read_option_file", { folder, name });
+  const res = await fetch(`/api/option?folder=${encodeURIComponent(folder)}&name=${encodeURIComponent(name)}`, { credentials: "same-origin" });
+  if (!res.ok) throw new Error(await res.text());
+  return res.text();
+};
 export const exportConfig = (includeGraphics: boolean) => invoke<string>("export_config", { includeGraphics });
 export const importConfig = (bytes: Uint8Array) => invoke<ImportReport>("import_config", { data: Array.from(bytes) });
 export const revealPath = (path: string) => invoke<void>("reveal_path", { path });
 
+// ----- mobile access (local server) -----
+export interface RemoteInfo {
+  port: number;
+  addresses: string[];
+}
+export const remoteStart = (token: string, port: number) => invoke<RemoteInfo>("remote_start", { token, port });
+export const remoteStop = () => invoke<void>("remote_stop");
+export const remotePublish = (state: string) => invoke<void>("remote_publish", { state });
+export const remoteQr = (text: string) => invoke<string>("remote_qr", { text });
+export const remoteAddresses = () => invoke<string[]>("remote_addresses");
+export async function onRemoteAction(cb: (action: any) => void): Promise<void> {
+  if (!isTauri()) return;
+  await window.__TAURI__!.event.listen<any>("remote-action", (e) => cb(e.payload));
+}
+
+/** Phone side: wait for the next state published by the PC (long poll). */
+export async function remoteState(since: number): Promise<{ version: number; state: any }> {
+  return remoteJson(`/api/state?since=${since}`);
+}
+export async function remoteAction(action: unknown): Promise<void> {
+  await remoteJson("/api/action", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(action) });
+}
+
 export const installerLanguage = () => (isTauri() ? invoke<number | null>("installer_language").catch(() => null) : Promise.resolve(null));
 
 export async function openUrl(url: string): Promise<void> {
-  if (isTauri()) {
+  if (isTauri() && !remote) {
     await window.__TAURI__!.core.invoke("open_url", { url });
   } else {
     window.open(url, "_blank", "noopener");

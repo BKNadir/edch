@@ -24,6 +24,7 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
 - **Navigation**: your ship's jump range (empty, full, laden, right now, simulated cargo), neutron-boosted route via Spansh, and fleet carrier (jumps, tritium and time, as a quick estimate or a detailed Spansh plan with restock stops).
 - **Controls & devices**: reads your bindings (active preset, including different presets for ship, SRV and on foot) and draws each device. The keyboard is drawn key by key (QWERTY, AZERTY or QWERTZ) and the Xbox or PlayStation pad with numbered markers. Recognised HOTAS, joysticks and pads (about 45 models: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) are shown on the model's picture, with the action written in each button's box. Templates come from EDRefCard and are loaded from its GitHub repository. For an unrecognised model you pick the closest template; otherwise a simple axes / hats / buttons diagram is shown. Every control has its legend and a colour per mode, with Ship / SRV / On foot filters, a search and a printable sheet.
 - **Configuration backup**: exports your bindings (and graphics settings) to a zip in Documents\EDCH and restores them in one click. Your current configuration is backed up automatically before every import.
+- **Mobile access**: open EDCH on your phone or tablet by scanning a QR code. A local server (off by default) serves the app on your network; only devices that scanned the QR code are let in, because the PC's IP alone isn't enough. "New code" disconnects every device. The interface adapts to phones (bottom navigation, full-screen panels), and wishlist edits on the phone sync back to the PC.
 - **EDMC-style sync**: live uploads to **EDDN** (markets, outfitting, shipyards, jumps, scans, routes), **EDSM** and **Inara** (with your API key). EDDN's rules are followed: personal data removed, location cross-checked, a rejected message is never resent, nothing from your history.
 
 ![A VKB Gladiator with its bindings (demo bindings)](docs/controls.png)
@@ -65,7 +66,7 @@ Layout:
   - `i18n.ts`: translation layer.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.4.0`: a draft Release is created.
+A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.5.0`: a draft Release is created.
 
 ## Roadmap
 

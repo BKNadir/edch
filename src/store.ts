@@ -16,6 +16,24 @@ export interface Settings {
   fallbackSystem: string;
   largePadOnly: boolean;
   sync: SyncSettings;
+  remote: RemoteSettings;
+}
+
+export interface RemoteSettings {
+  enabled: boolean;
+  port: number;
+  /** Secret carried by the QR code; replacing it disconnects every paired device. */
+  token: string;
+  /** Address put in the QR code; "" = first detected LAN address. */
+  host: string;
+}
+
+export const DEFAULT_REMOTE: RemoteSettings = { enabled: false, port: 47800, token: "", host: "" };
+
+export function newRemoteToken(): string {
+  const bytes = new Uint8Array(24);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export interface WishItem {
@@ -48,6 +66,7 @@ const DEFAULT_SETTINGS: Settings = {
   fallbackSystem: "Sol",
   largePadOnly: false,
   sync: DEFAULT_SYNC,
+  remote: DEFAULT_REMOTE,
 };
 
 function load<T>(key: string, fallback: T): T {
@@ -91,7 +110,7 @@ export class Store {
       watch: { state: "idle" },
       settings: (() => {
         const loaded = load<Settings>("edc.settings", DEFAULT_SETTINGS);
-        return { ...loaded, sync: { ...DEFAULT_SYNC, ...(loaded.sync ?? {}) } };
+        return { ...loaded, sync: { ...DEFAULT_SYNC, ...(loaded.sync ?? {}) }, remote: { ...DEFAULT_REMOTE, ...(loaded.remote ?? {}) } };
       })(),
       wishlist: loadArray<WishItem>("edc.wishlist"),
       view: (() => {
@@ -140,10 +159,14 @@ export class Store {
     this.notify();
   }
 
-  setWishlist(items: WishItem[]) {
+  /** Called after a local wishlist change (the phone forwards it to the PC). */
+  onWishlistChange?: (items: WishItem[]) => void;
+
+  setWishlist(items: WishItem[], fromRemote = false) {
     this.state.wishlist = items;
     save("edc.wishlist", items);
     this.notify();
+    if (!fromRemote) this.onWishlistChange?.(items);
   }
 }
 

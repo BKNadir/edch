@@ -24,6 +24,7 @@ Um companheiro leve para **Elite Dangerous** (Windows). Ele lê o diário do jog
 - **Navegação**: alcance de salto da sua nave (vazia, cheia, carregada, agora, carga simulada), rota com impulso de estrelas de nêutrons via Spansh e Fleet Carrier (saltos, trítio e duração, como estimativa rápida ou plano detalhado do Spansh com paradas de reabastecimento).
 - **Controles e dispositivos**: lê seus atalhos (predefinição ativa, inclusive predefinições diferentes para nave, SRV e a pé) e desenha cada dispositivo. O teclado é desenhado tecla por tecla (QWERTY, AZERTY ou QWERTZ) e o controle de Xbox ou PlayStation com marcadores numerados. HOTAS, joysticks e controles reconhecidos (cerca de 45 modelos: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) aparecem sobre a imagem do modelo, com a ação escrita na caixa de cada botão. Os modelos vêm do EDRefCard e são carregados do repositório dele no GitHub. Para um modelo não reconhecido, você escolhe o mais parecido; senão, aparece um esquema simples de eixos, chapéus e botões. Cada controle tem sua legenda e uma cor por modo, com filtros Nave / SRV / A pé, busca e ficha para imprimir.
 - **Backup da configuração**: exporta seus atalhos (e configurações gráficas) para um zip em Documentos\EDCH e os restaura com um clique. Sua configuração atual é salva automaticamente antes de cada importação.
+- **Acesso pelo celular**: abra o EDCH no celular ou tablet escaneando um QR code. Um servidor local (desligado por padrão) serve o app na sua rede. Só entram os aparelhos que escanearam o QR code: o IP do PC não basta. "Novo código" desconecta todos os aparelhos. A interface se adapta ao celular (navegação embaixo, painéis em tela cheia) e as alterações na lista de desejos feitas no celular voltam para o PC.
 - **Sincronização no estilo EDMC**: envio ao vivo para o **EDDN** (mercados, equipamentos, estaleiros, saltos, escaneamentos, rotas), o **EDSM** e o **Inara** (com sua chave API). As regras do EDDN são respeitadas: dados pessoais removidos, posição conferida, uma mensagem recusada nunca é reenviada, nada do seu histórico.
 
 ![Um VKB Gladiator com seus atalhos (atalhos de demonstração)](docs/controls.png)
@@ -65,7 +66,7 @@ Estrutura:
   - `i18n.ts`: camada de tradução.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneram os dados de `public/` (veja NOTICE).
 
-Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.4.0`: um rascunho de Release é criado.
+Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.5.0`: um rascunho de Release é criado.
 
 ## Roteiro
 
