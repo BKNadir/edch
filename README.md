@@ -1,72 +1,78 @@
 # EDCH — Elite Dangerous Companion Helper
 
-Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en temps réel et, pour chaque matériau d'ingénierie, te dit **où le trouver avec de vrais systèmes cliquables autour de toi**.
+**English** · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [Русский](README.ru.md)
 
-![Fiche d'un matériau : échanges et systèmes en Boom/Expansion (données de démo)](docs/materiaux.png)
+A lightweight companion for **Elite Dangerous** (Windows). It reads the game journal in real time and, for every engineering material, tells you **where to find it, with real clickable systems around you**.
 
-## Ce qu'il fait
+![A material's page: trades and systems in Boom/Expansion (demo data)](docs/materials.png)
 
-- **Inventaire en direct** : matériaux bruts, manufacturés et encodés, rangés comme chez le trader (une ligne par famille, grades 1 à 5) avec la jauge de stockage. Le casier Odyssey (données, composants, objets, consommables) est lu depuis `ShipLocker.json`.
-- **Où le trouver, avec des systèmes réels** : chaque condition de spawn devient une recherche [Spansh](https://spansh.co.uk) autour de ta position.
-  - HGE : systèmes peuplés en Boom/Expansion, Guerre, Troubles civils, Épidémie, Fédération ou Empire. Les états de faction trop vieux sont ignorés.
-  - Émissions encodées selon la sécurité, zones de conflit, sillages haute énergie.
-  - Planètes atterrissables classées par % du matériau brut, anneaux glacés ou vierges, sites Gardiens et Thargoid.
-  - Installations Odyssey et sites de farm connus (Jameson, Dav's Hope, brain trees, cristaux…).
-  - Clic sur un système : il est copié, prêt à coller dans la carte galactique. Liens Spansh et Inara à côté.
-- **Trader le plus proche** du bon type, avec des **suggestions d'échange** calculées sur ton stock (taux du jeu, en tenant compte de ce que ta wishlist réserve).
-- **Ingénierie** : toutes les modifications, effets expérimentaux, synthèses, courtiers technologiques et améliorations Odyssey, avec ce que tu possèdes déjà.
-- **Wishlist** : ajoute des modifications (grades, nombre de jets, quantité). Elle calcule ce qu'il manque et le meilleur échange pour le combler.
-- **Ingénieurs** : statut et rang lus dans le journal, système copiable, distance, et conditions de déblocage cochées automatiquement quand le journal permet de les vérifier (casier Odyssey, soute, matériaux).
-- **Import de build** : colle ou choisis un export **EDSY** ou **Coriolis** (SLEF ou Loadout JSON). Chaque module ingénié et son effet expérimental vont dans la wishlist. Tu peux aussi repartir de ton vaisseau actuel.
-- **Recherche façon Inara** : où acheter ou vendre une marchandise (par prix ou par distance), un vaisseau, un module (classe et note) ou un service (Interstellar Factors, courtier, trader…) autour de toi.
-- **Navigation** : portée de saut de ton vaisseau (vide, plein, chargé, maintenant, cargaison simulée), itinéraire avec boost neutron via Spansh, et Fleet Carrier (sauts, tritium et durée, en estimation rapide ou en plan Spansh détaillé avec ravitaillements).
-- **Commandes & contrôleurs** : lit tes raccourcis (préréglage actif, y compris des préréglages différents pour vaisseau, SRV et à pied) et dessine chaque périphérique. Le clavier est dessiné touche par touche (AZERTY, QWERTY ou QWERTZ) et la manette Xbox ou PlayStation avec des repères numérotés. Les HOTAS, joysticks et manettes reconnus (environ 45 modèles VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) sont affichés sur la photo du modèle, avec l'action écrite dans la case de chaque bouton. Les gabarits viennent d'EDRefCard et sont chargés depuis son dépôt GitHub. Pour un modèle non reconnu, tu choisis le gabarit le plus proche ; sinon, l'appli affiche un schéma simple en axes, chapeaux et boutons. Chaque commande a sa légende et une couleur par mode, avec filtres Vaisseau, SRV ou À pied, une recherche et l'impression de la fiche.
-- **Sauvegarde de la configuration** : exporte tes raccourcis (et tes réglages graphiques) en zip dans Documents\EDCH, et restaure-les en un clic. La configuration actuelle est sauvegardée automatiquement avant chaque import.
-- **Synchro façon EDMC** : envoi en direct vers **EDDN** (marchés, équipements, chantiers, sauts, scans, routes), **EDSM** et **Inara** (avec ta clé API). Les règles d'EDDN sont respectées : données personnelles retirées, position recoupée, aucun renvoi d'un message refusé, rien de l'historique.
+## What it does
 
-## Langues
+- **Live inventory**: raw, manufactured and encoded materials, laid out like the material trader (one row per family, grades 1 to 5) with storage gauges. The Odyssey ship locker (data, components, items, consumables) is read from `ShipLocker.json`.
+- **Where to find it, with real systems**: every spawn condition becomes a [Spansh](https://spansh.co.uk) search around your position.
+  - HGE: populated systems in Boom/Expansion, War, Civil Unrest, Outbreak, Federation or Empire. Faction states that are too old are ignored.
+  - Encoded emissions by security level, conflict zones, high energy wakes.
+  - Landable planets ranked by raw material %, icy or pristine rings, Guardian and Thargoid sites.
+  - Odyssey settlements and known farming sites (Jameson, Dav's Hope, brain trees, crystals…).
+  - Click a system: it is copied, ready to paste into the galaxy map. Spansh and Inara links next to it.
+- **Nearest material trader** of the right type, with **trade suggestions** computed from your stock (game rates, taking into account what your wishlist reserves).
+- **Engineering**: every modification, experimental effect, synthesis, technology broker unlock and Odyssey upgrade, with what you already own.
+- **Wishlist**: add modifications (grades, number of rolls, quantity). It works out what is missing and the best trade to cover it.
+- **Engineers**: status and rank read from the journal, copyable system, distance, and unlock conditions ticked automatically when the journal can check them (Odyssey locker, cargo, materials).
+- **Build import**: paste or pick an **EDSY** or **Coriolis** export (SLEF or Loadout JSON). Every engineered module and its experimental effect goes into the wishlist. You can also start from your current ship.
+- **Inara-style search**: where to buy or sell a commodity (by price or distance), a ship, a module (class and rating) or a service (Interstellar Factors, technology broker, material trader…) around you.
+- **Navigation**: your ship's jump range (empty, full, laden, right now, simulated cargo), neutron-boosted route via Spansh, and fleet carrier (jumps, tritium and time, as a quick estimate or a detailed Spansh plan with restock stops).
+- **Controls & devices**: reads your bindings (active preset, including different presets for ship, SRV and on foot) and draws each device. The keyboard is drawn key by key (QWERTY, AZERTY or QWERTZ) and the Xbox or PlayStation pad with numbered markers. Recognised HOTAS, joysticks and pads (about 45 models: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) are shown on the model's picture, with the action written in each button's box. Templates come from EDRefCard and are loaded from its GitHub repository. For an unrecognised model you pick the closest template; otherwise a simple axes / hats / buttons diagram is shown. Every control has its legend and a colour per mode, with Ship / SRV / On foot filters, a search and a printable sheet.
+- **Configuration backup**: exports your bindings (and graphics settings) to a zip in Documents\EDCH and restores them in one click. Your current configuration is backed up automatically before every import.
+- **EDMC-style sync**: live uploads to **EDDN** (markets, outfitting, shipyards, jumps, scans, routes), **EDSM** and **Inara** (with your API key). EDDN's rules are followed: personal data removed, location cross-checked, a rejected message is never resent, nothing from your history.
 
-EDCH est disponible dans les six langues du jeu : français, anglais, allemand, espagnol, portugais (Brésil) et russe. L'installateur propose de choisir la langue, et l'appli la reprend au premier lancement. Tu peux la changer à tout moment dans **Paramètres → Langue**. Les noms des matériaux, modules et commandes restent ceux du jeu en anglais.
+![A VKB Gladiator with its bindings (demo bindings)](docs/controls.png)
 
-Pour ajouter ou corriger une traduction, modifie `tools/translations_*.txt` (une ligne par texte : `fr ¦ en ¦ de ¦ es ¦ pt ¦ ru`), puis lance `python3 tools/gen_locales.py`.
+## Languages
 
-## Installer
+EDCH is available in the game's six languages: English (default), French, German, Spanish, Portuguese (Brazil) and Russian. The installer asks for the language and the app picks it up on first launch. You can change it at any time in **Settings → Language**. Material, module and control names stay as in the English game.
 
-Télécharge l'installateur (`.exe` ou `.msi`) dans les [Releases](../../releases), ou la version portable `edch.exe` dans les artefacts du dernier build (onglet *Actions*). Windows 10/11 a déjà WebView2.
+To add or fix a translation, edit `tools/translations_*.txt` (one line per text: `fr ¦ en ¦ de ¦ es ¦ pt ¦ ru`), then run `python3 tools/gen_locales.py`.
 
-Au premier lancement, le dossier du journal est détecté tout seul (`%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous`). Tu peux le changer dans **Paramètres**.
+## Install
 
-## Développer
+Download the installer (`.exe` or `.msi`) from [Releases](../../releases), or the portable `edch.exe` from the latest build's artifacts (*Actions* tab). Windows 10/11 already has WebView2.
 
-Prérequis : Node 20+, Rust stable, et les [prérequis Tauri](https://tauri.app/start/prerequisites/) pour Windows.
+On first launch the journal folder is detected automatically (`%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous`). You can change it in **Settings**.
+
+## Development
+
+Requirements: Node 20+, stable Rust, and the [Tauri prerequisites](https://tauri.app/start/prerequisites/) for Windows.
 
 ```bash
 npm install
-npm test            # compile l'interface et lance les tests (journal, échanges, requêtes Spansh)
-npm run app:dev     # lance l'appli
-npm run app:build   # installateurs Windows dans src-tauri/target/release/bundle
-npm run demo        # interface seule dans un navigateur, avec un journal d'exemple
+npm test            # builds the UI and runs the tests (journal, trades, Spansh queries, EDDN, bindings)
+npm run app:dev     # runs the app
+npm run app:build   # Windows installers in src-tauri/target/release/bundle
+npm run demo        # UI only, in a browser, with a sample journal
 ```
 
-Structure :
+Layout:
 
-- `src-tauri/` : backend Rust (lecture du journal, fichiers JSON du jeu, appels Spansh, ouverture de liens). Il ne contient aucune logique de jeu.
-- `src/` : interface en TypeScript sans framework.
-  - `journal.ts` : état du commandant à partir des événements.
-  - `sources.ts` : conditions de spawn transformées en recherches.
-  - `spansh.ts` : appels et mise en forme des résultats.
-  - `trade.ts` : taux du trader.
-- `tools/gen_data.py` : régénère `public/data/game.json` à partir des tables communautaires (voir NOTICE).
+- `src-tauri/`: Rust backend (journal reading, game JSON files, HTTP calls, option files and zips, opening links). It contains no game logic.
+- `src/`: framework-free TypeScript UI.
+  - `journal.ts`: commander state from journal events.
+  - `sources.ts`: spawn conditions turned into searches.
+  - `spansh.ts`: calls and result formatting.
+  - `trade.ts`: material trader rates.
+  - `eddn.ts`, `uploaders.ts`: EDDN messages, EDSM and Inara.
+  - `binds.ts`: `.binds` files and device names.
+  - `i18n.ts`: translation layer.
+- `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag `v0.1.0` : un brouillon de Release est créé.
+A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.4.0`: a draft Release is created.
 
-## Feuille de route
+## Roadmap
 
-- Connexion Frontier (cAPI, OAuth) pour la flotte, le stock et le Fleet Carrier : il faut un Client ID Frontier.
-- EDDN : schémas restants (codexentry, approachsettlement, fssbodysignals, fsssignaldiscovered…).
-- Itinéraire de farm optimisé pour la wishlist.
-- Interface en anglais.
+- Frontier login (cAPI, OAuth) for fleet, stock and fleet carrier: needs a Frontier Client ID.
+- EDDN: remaining schemas (codexentry, approachsettlement, fssbodysignals, fsssignaldiscovered…).
+- Optimised farming route for the wishlist.
 
-## Crédits
+## Credits
 
-Données : EDCD/FDevIDs et msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Noms des commandes : EDRefCard (Richard Buckle, MIT). Recherches : Spansh (EDDN). Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel et non commercial. Détails dans [NOTICE](NOTICE).
+Data: EDCD/FDevIDs and msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Control names and device templates: EDRefCard (Richard Buckle, MIT). Searches: Spansh (EDDN). Elite Dangerous is a trademark of Frontier Developments plc. Unofficial, non-commercial community tool. Details in [NOTICE](NOTICE).
