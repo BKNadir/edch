@@ -68,6 +68,8 @@ input[type="number"] { font-variant-numeric: tabular-nums; }
 .sidebar button .icon { width: 18px; height: 18px; }
 .sidebar .count { margin-left: auto; background: var(--accent); color: #111; border-radius: 10px; padding: 0 7px; font-weight: 700; font-size: 11px; }
 .sidebar button:last-child { margin-top: auto; }
+.sidebar button[data-nav="about"] { margin-top: auto; }
+.sidebar button[data-nav="about"] + button:last-child { margin-top: 0; }
 
 .content { overflow: auto; padding: 18px 22px 40px; min-width: 0; }
 .view-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
@@ -522,7 +524,7 @@ kbd.num b { display: inline-grid; place-items: center; width: 18px; height: 18px
   .sidebar button { flex: 0 0 auto; flex-direction: column; gap: 2px; padding: 6px 10px; font-size: 10.5px; min-width: 64px; }
   .sidebar span { display: inline !important; }
   .sidebar .count { display: none; }
-  .sidebar button:last-child { margin-top: 0; }
+  .sidebar button:last-child, .sidebar button[data-nav="about"] { margin-top: 0; }
   .detail.open { position: fixed; inset: 0; width: 100%; z-index: 40; border-left: 0; padding-bottom: 20px; }
   .detail-head { padding: 12px 14px; }
   .detail-trades, .detail-body { padding: 12px 14px; }
@@ -566,4 +568,17 @@ kbd.num b { display: inline-grid; place-items: center; width: 18px; height: 18px
   .counters { flex-wrap: wrap; }
   #toast { bottom: 84px; max-width: calc(100vw - 32px); text-align: center; }
   .result-meta .links { margin-left: 0; }
+}
+
+/* ---------- about page ---------- */
+.about { display: grid; gap: 14px; max-width: 980px; }
+.about .card { display: grid; gap: 10px; }
+.about-links { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.about-links .sub { margin: 4px 0 0 26px; }
+.thanks { display: grid; gap: 0; }
+.thanks-row { display: grid; grid-template-columns: 230px 1fr auto; gap: 12px; align-items: baseline; padding: 9px 0; border-top: 1px solid var(--line); }
+.thanks-links { text-align: right; white-space: nowrap; }
+@media (max-width: 900px) {
+  .thanks-row { grid-template-columns: 1fr; gap: 3px; }
+  .thanks-links { text-align: left; white-space: normal; }
 }

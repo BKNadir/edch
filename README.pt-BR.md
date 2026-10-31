@@ -4,6 +4,14 @@
 
 Um companheiro leve para **Elite Dangerous** (Windows). Ele lê o diário do jogo em tempo real e, para cada material de engenharia, mostra **onde encontrá-lo, com sistemas reais e clicáveis ao seu redor**.
 
+## ⚠️ Leia antes de usar o EDCH
+
+**O EDCH não substitui as outras ferramentas da comunidade.** É um projeto independente, sem ligação com [EDMarketConnector](https://github.com/EDCD/EDMarketConnector), [Odyssey Materials Helper](https://github.com/jixxed/ed-odyssey-materials-helper), [EDEngineer](https://github.com/msarilar/EDEngineer), Inara, Spansh ou qualquer outro projeto, e não é afiliado à Frontier Developments. Se alguma dessas ferramentas atende você, continue usando: elas são mais antigas, mais completas e testadas por milhares de jogadores.
+
+**O EDCH foi escrito em grande parte por uma IA (Claude, da Anthropic), com o acompanhamento de um desenvolvedor** que define as funções, testa e aprova cada versão. Por isso a ferramenta pode estar incompleta ou ter bugs ou dados imprecisos. Se encontrar algum, abra uma [issue](../../issues).
+
+**O EDCH não funcionaria sem o trabalho de outras pessoas.** Os dados, as traduções e as buscas vêm de projetos criados e mantidos voluntariamente por membros da comunidade: Spansh, EDDN e EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDSY, Coriolis… Se o EDCH for útil para você, agradeça, apoie ou contribua com esses projetos. Detalhes em [Créditos](#créditos) e em [NOTICE](NOTICE).
+
 ![Ficha de um material: trocas e sistemas em Prosperidade/Expansão (dados de demonstração)](docs/materials.png)
 
 ## O que ele faz
@@ -30,6 +38,18 @@ Um companheiro leve para **Elite Dangerous** (Windows). Ele lê o diário do jog
 
 ![Um VKB Gladiator com seus atalhos (atalhos de demonstração)](docs/controls.png)
 
+## Dados e privacidade
+
+O EDCH lê o diário do jogo no seu PC. Isto é tudo o que sai dele, e para onde:
+
+- **Spansh**: suas buscas (sistema, material, mercadoria…) e sua posição como ponto de partida.
+- **EDDN** (ligado por padrão, como no EDMC; pode ser desligado em Sincronização): dados de mercados, equipamentos, estaleiros, saltos e escaneamentos, sem seus dados pessoais, como o EDDN exige.
+- **EDSM e Inara**: nada enquanto você não informar sua própria chave API em Sincronização. Suas chaves ficam no seu PC.
+- **GitHub**: só para verificar se existe uma versão nova (pode ser desligado nas Configurações).
+- **Acesso pelo celular**: fica na sua rede local; desligado por padrão e protegido pelo QR code.
+
+Nada mais é coletado ou enviado. Suas configurações, chaves e lista de desejos ficam em `%LOCALAPPDATA%\EDCompanionHelper`.
+
 ## Idiomas
 
 O EDCH está disponível nos seis idiomas do jogo: inglês (padrão), francês, alemão, espanhol, português (Brasil) e russo. O instalador pergunta o idioma e o app o adota no primeiro uso. Você pode mudá-lo a qualquer momento em **Configurações → Idioma**. Os nomes de materiais, módulos, projetos e efeitos seguem a tradução do jogo; os nomes dos controles ficam como no jogo em inglês.
@@ -39,6 +59,8 @@ Para adicionar ou corrigir uma tradução, edite `tools/translations_*.txt` (uma
 ## Instalação
 
 Baixe o instalador (`.exe` ou `.msi`) em [Releases](../../releases), ou o `edch.exe` portátil nos artefatos do último build (aba *Actions*). O Windows 10/11 já vem com o WebView2.
+
+O instalador não tem assinatura digital (um certificado é caro para uma ferramenta gratuita), então o Windows SmartScreen pode mostrar "O Windows protegeu o computador" na primeira vez. Clique em **Mais informações** e depois em **Executar assim mesmo**. As próximas atualizações são oferecidas dentro do EDCH.
 
 No primeiro uso, a pasta do diário é detectada automaticamente (`%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous`). Você pode mudá-la em **Configurações**.
 
@@ -67,7 +89,7 @@ Estrutura:
   - `i18n.ts`: camada de tradução.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneram os dados de `public/` (veja NOTICE).
 
-Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.6.0`: a Release é publicada e as cópias instaladas oferecem a atualização.
+Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.6.1`: a Release é publicada e as cópias instaladas oferecem a atualização.
 
 ## Roteiro
 

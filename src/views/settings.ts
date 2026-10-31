@@ -1,4 +1,4 @@
-import { defaultJournalDir, isRemote, isTauri, openUrl, startJournal } from "../bridge.js";
+import { defaultJournalDir, isRemote, isTauri, startJournal } from "../bridge.js";
 import { h, replace, toast } from "../dom.js";
 import { checkForUpdate } from "../updater.js";
 import { SOFTWARE_VERSION as APP_VERSION } from "../eddn.js";
@@ -145,14 +145,6 @@ export class SettingsView implements View {
               h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, "Vérifier maintenant")),
             )
           : null,
-        h(
-          "section.card",
-          null,
-          h("h3", null, "À propos"),
-          h("p", null, "EDCH lit le journal local d'Elite Dangerous en temps réel. Les systèmes proposés viennent de ", h("button.inline-link", { onclick: () => openUrl("https://spansh.co.uk") }, "Spansh"), " (données EDDN, mises à jour par les joueurs)."),
-          h("p.sub", null, this.ctx.game.data.credits),
-          h("p.sub", null, "Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel, non commercial."),
-        ),
       ),
     );
   }

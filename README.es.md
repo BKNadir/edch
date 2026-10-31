@@ -4,6 +4,14 @@
 
 Un compañero ligero para **Elite Dangerous** (Windows). Lee el diario del juego en tiempo real y, para cada material de ingeniería, te dice **dónde encontrarlo, con sistemas reales y clicables a tu alrededor**.
 
+## ⚠️ Léelo antes de usar EDCH
+
+**EDCH no sustituye a las demás herramientas de la comunidad.** Es un proyecto independiente, sin relación con [EDMarketConnector](https://github.com/EDCD/EDMarketConnector), [Odyssey Materials Helper](https://github.com/jixxed/ed-odyssey-materials-helper), [EDEngineer](https://github.com/msarilar/EDEngineer), Inara, Spansh ni ningún otro proyecto, y no está afiliado a Frontier Developments. Si alguna de esas herramientas te sirve, sigue usándola: son más antiguas, más completas y probadas por miles de jugadores.
+
+**EDCH ha sido escrito en gran parte por una IA (Claude, de Anthropic), con la supervisión de un desarrollador** que define las funciones y prueba y aprueba cada versión. Por eso la herramienta puede estar incompleta o contener errores o datos inexactos. Si encuentras alguno, abre una [issue](../../issues).
+
+**EDCH no funcionaría sin el trabajo de otros.** Los datos, las traducciones y las búsquedas vienen de proyectos creados y mantenidos de forma voluntaria por miembros de la comunidad: Spansh, EDDN y EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDSY, Coriolis… Si EDCH te resulta útil, dales las gracias, apóyalos o contribuye a sus proyectos. Más detalles en [Créditos](#créditos) y en [NOTICE](NOTICE).
+
 ![Ficha de un material: intercambios y sistemas en Auge/Expansión (datos de demostración)](docs/materials.png)
 
 ## Qué hace
@@ -30,6 +38,18 @@ Un compañero ligero para **Elite Dangerous** (Windows). Lee el diario del juego
 
 ![Un VKB Gladiator con sus asignaciones (asignaciones de demostración)](docs/controls.png)
 
+## Datos y privacidad
+
+EDCH lee el diario del juego en tu PC. Esto es todo lo que sale de él, y hacia dónde:
+
+- **Spansh**: tus búsquedas (sistema, material, mercancía…) y tu posición como punto de partida.
+- **EDDN** (activado por defecto, como en EDMC; se puede desactivar en Sincronización): datos de mercados, equipamiento, astilleros, saltos y escaneos, sin tus datos personales, como exige EDDN.
+- **EDSM e Inara**: nada mientras no introduzcas tu propia clave API en Sincronización. Tus claves se quedan en tu PC.
+- **GitHub**: solo para comprobar si hay una versión nueva (se puede desactivar en Ajustes).
+- **Acceso móvil**: se queda en tu red local; desactivado por defecto y protegido por el código QR.
+
+No se recoge ni se envía nada más. Tus ajustes, claves y lista de deseos se guardan en `%LOCALAPPDATA%\EDCompanionHelper`.
+
 ## Idiomas
 
 EDCH está disponible en los seis idiomas del juego: inglés (predeterminado), francés, alemán, español, portugués (Brasil) y ruso. El instalador pregunta el idioma y la aplicación lo usa en el primer inicio. Puedes cambiarlo cuando quieras en **Ajustes → Idioma**. Los nombres de materiales, módulos, planos y efectos siguen la traducción del juego; los nombres de los controles se mantienen como en el juego en inglés.
@@ -39,6 +59,8 @@ Para añadir o corregir una traducción, edita `tools/translations_*.txt` (una l
 ## Instalación
 
 Descarga el instalador (`.exe` o `.msi`) desde [Releases](../../releases), o el `edch.exe` portátil desde los artefactos de la última compilación (pestaña *Actions*). Windows 10/11 ya incluye WebView2.
+
+El instalador no está firmado digitalmente (un certificado es caro para una herramienta gratuita), así que Windows SmartScreen puede mostrar «Windows protegió su PC» la primera vez. Pulsa **Más información** y luego **Ejecutar de todas formas**. Las siguientes actualizaciones se ofrecen dentro de EDCH.
 
 En el primer inicio, la carpeta del diario se detecta automáticamente (`%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous`). Puedes cambiarla en **Ajustes**.
 
@@ -67,7 +89,7 @@ Estructura:
   - `i18n.ts`: capa de traducción.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneran los datos de `public/` (ver NOTICE).
 
-Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.6.0`: se publica la Release y las copias instaladas ofrecen la actualización.
+Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.6.1`: se publica la Release y las copias instaladas ofrecen la actualización.
 
 ## Hoja de ruta
 

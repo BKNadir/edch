@@ -4,6 +4,14 @@
 
 Ein schlanker Begleiter für **Elite Dangerous** (Windows). Er liest das Spiel-Journal in Echtzeit und zeigt dir für jedes Ingenieursmaterial, **wo du es findest – mit echten, anklickbaren Systemen in deiner Nähe**.
 
+## ⚠️ Bitte zuerst lesen
+
+**EDCH ist kein Ersatz für die anderen Tools der Community.** Es ist ein unabhängiges Projekt ohne Verbindung zu [EDMarketConnector](https://github.com/EDCD/EDMarketConnector), [Odyssey Materials Helper](https://github.com/jixxed/ed-odyssey-materials-helper), [EDEngineer](https://github.com/msarilar/EDEngineer), Inara, Spansh oder anderen Projekten und nicht mit Frontier Developments verbunden. Wenn dir eines dieser Tools gefällt, nutze es weiter: Sie sind älter, vollständiger und von Tausenden Spielern erprobt.
+
+**EDCH wurde größtenteils von einer KI (Claude von Anthropic) geschrieben, begleitet von einem Entwickler**, der die Funktionen festlegt und jede Version testet und freigibt. Das Tool kann daher unvollständig sein, Fehler oder ungenaue Daten enthalten. Wenn du welche findest, eröffne bitte ein [Issue](../../issues).
+
+**Ohne die Arbeit anderer würde EDCH nicht funktionieren.** Daten, Übersetzungen und Suchen stammen aus Projekten, die ehrenamtlich von Mitgliedern der Community aufgebaut und gepflegt werden: Spansh, EDDN und EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDSY, Coriolis… Wenn dir EDCH nützt, bedanke dich bei ihnen, unterstütze sie oder trage zu ihren Projekten bei. Details unter [Danksagungen](#danksagungen) und in [NOTICE](NOTICE).
+
 ![Seite eines Materials: Tauschvorschläge und Systeme im Boom/in Expansion (Demodaten)](docs/materials.png)
 
 ## Was es kann
@@ -30,6 +38,18 @@ Ein schlanker Begleiter für **Elite Dangerous** (Windows). Er liest das Spiel-J
 
 ![Ein VKB Gladiator mit seiner Belegung (Demo-Belegung)](docs/controls.png)
 
+## Daten und Privatsphäre
+
+EDCH liest das Spiel-Journal auf deinem PC. Das ist alles, was ihn verlässt, und wohin:
+
+- **Spansh**: deine Suchen (System, Material, Ware…) und deine Position als Ausgangspunkt.
+- **EDDN** (standardmäßig an, wie bei EDMC; unter Synchronisierung abschaltbar): Markt-, Ausrüstungs-, Werft-, Sprung- und Scandaten, ohne persönliche Daten, wie EDDN es verlangt.
+- **EDSM und Inara**: nichts, solange du nicht unter Synchronisierung deinen eigenen API-Schlüssel einträgst. Deine Schlüssel bleiben auf deinem PC.
+- **GitHub**: nur um zu prüfen, ob es eine neue Version gibt (in den Einstellungen abschaltbar).
+- **Mobiler Zugriff**: bleibt in deinem lokalen Netzwerk; standardmäßig aus und durch den QR-Code geschützt.
+
+Sonst wird nichts gesammelt oder gesendet. Einstellungen, Schlüssel und Wunschliste liegen in `%LOCALAPPDATA%\EDCompanionHelper`.
+
 ## Sprachen
 
 EDCH gibt es in den sechs Sprachen des Spiels: Englisch (Standard), Französisch, Deutsch, Spanisch, Portugiesisch (Brasilien) und Russisch. Das Installationsprogramm fragt nach der Sprache, und die App übernimmt sie beim ersten Start. Du kannst sie jederzeit unter **Einstellungen → Sprache** ändern. Namen von Materialien, Modulen, Bauplänen und Effekten folgen der Übersetzung des Spiels; Befehlsnamen bleiben wie im englischen Spiel.
@@ -39,6 +59,8 @@ Um eine Übersetzung hinzuzufügen oder zu korrigieren, bearbeite `tools/transla
 ## Installation
 
 Lade das Installationsprogramm (`.exe` oder `.msi`) unter [Releases](../../releases) herunter oder die portable `edch.exe` aus den Artefakten des letzten Builds (Reiter *Actions*). Windows 10/11 bringt WebView2 bereits mit.
+
+Das Installationsprogramm ist nicht digital signiert (ein Zertifikat ist für ein kostenloses Tool teuer), daher kann Windows SmartScreen beim ersten Mal „Der Computer wurde durch Windows geschützt“ anzeigen. Klicke auf **Weitere Informationen** und dann auf **Trotzdem ausführen**. Spätere Updates bietet EDCH selbst an.
 
 Beim ersten Start wird der Journal-Ordner automatisch erkannt (`%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous`). Du kannst ihn in den **Einstellungen** ändern.
 
@@ -67,7 +89,7 @@ Aufbau:
   - `i18n.ts`: Übersetzungsschicht.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: erzeugen die Daten in `public/` neu (siehe NOTICE).
 
-Bei jedem Push auf `main` läuft ein Windows-Build. Um eine Version zu veröffentlichen, pushe einen Tag wie `v0.6.0`: Das Release wird veröffentlicht und installierte Kopien bieten das Update an.
+Bei jedem Push auf `main` läuft ein Windows-Build. Um eine Version zu veröffentlichen, pushe einen Tag wie `v0.6.1`: Das Release wird veröffentlicht und installierte Kopien bieten das Update an.
 
 ## Roadmap
 

@@ -4,6 +4,14 @@
 
 A lightweight companion for **Elite Dangerous** (Windows). It reads the game journal in real time and, for every engineering material, tells you **where to find it, with real clickable systems around you**.
 
+## ⚠️ Read this first
+
+**EDCH is not a replacement for the community's other tools.** It is an independent project, unrelated to [EDMarketConnector](https://github.com/EDCD/EDMarketConnector), [Odyssey Materials Helper](https://github.com/jixxed/ed-odyssey-materials-helper), [EDEngineer](https://github.com/msarilar/EDEngineer), Inara, Spansh or any other project, and not affiliated with Frontier Developments. If one of those tools works for you, keep using it: they are older, more complete and proven by thousands of players.
+
+**EDCH was largely written by an AI (Claude, by Anthropic), overseen by a developer** who decides the features, tests and approves every release. The tool may be incomplete or contain bugs or inaccurate data. If you find any, please open an [issue](../../issues).
+
+**EDCH would not work without other people's work.** Its data, translations and searches come from projects built and maintained by volunteers in the community: Spansh, EDDN and EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDSY, Coriolis… If EDCH is useful to you, please thank them, support them or contribute to their projects. Details are in [Credits](#credits) and in [NOTICE](NOTICE).
+
 ![A material's page: trades and systems in Boom/Expansion (demo data)](docs/materials.png)
 
 ## What it does
@@ -30,6 +38,18 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
 
 ![A VKB Gladiator with its bindings (demo bindings)](docs/controls.png)
 
+## Data and privacy
+
+EDCH reads your game journal on your PC. Here is everything that leaves it, and where to:
+
+- **Spansh**: your searches (system, material, commodity…) and your position as their starting point.
+- **EDDN** (on by default, like EDMC; can be turned off in Sync): market, outfitting, shipyard, jump and scan data, with your personal details removed, as EDDN requires.
+- **EDSM and Inara**: nothing unless you enter your own API key in Sync. Your keys stay on your PC.
+- **GitHub**: only to check whether a new version exists (can be turned off in Settings).
+- **Mobile access**: stays on your local network; off by default and protected by the QR code.
+
+Nothing else is collected or sent. Your settings, keys and wishlist are stored in `%LOCALAPPDATA%\EDCompanionHelper`.
+
 ## Languages
 
 EDCH is available in the game's six languages: English (default), French, German, Spanish, Portuguese (Brazil) and Russian. The installer asks for the language and the app picks it up on first launch. You can change it at any time in **Settings → Language**. Material, module, blueprint and effect names follow the game's own translation; control names stay as in the English game.
@@ -39,6 +59,8 @@ To add or fix a translation, edit `tools/translations_*.txt` (one line per text:
 ## Install
 
 Download the installer (`.exe` or `.msi`) from [Releases](../../releases), or the portable `edch.exe` from the latest build's artifacts (*Actions* tab). Windows 10/11 already has WebView2.
+
+The installer isn't digitally signed (a certificate is expensive for a free tool), so Windows SmartScreen may show "Windows protected your PC" the first time. Click **More info**, then **Run anyway**. Later updates are offered inside EDCH.
 
 On first launch the journal folder is detected automatically (`%USERPROFILE%\Saved Games\Frontier Developments\Elite Dangerous`). You can change it in **Settings**.
 
@@ -67,7 +89,7 @@ Layout:
   - `i18n.ts`: translation layer.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.6.0` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update.
+A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.6.1` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update.
 
 ## Roadmap
 
