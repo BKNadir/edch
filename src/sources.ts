@@ -53,8 +53,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
           type: "systems",
           title: `Émissions de haute qualité (HGE) — systèmes peuplés ${rule.fr}`,
           hint:
-            "Sources de signal « High Grade Emissions » en supercroisière. Plus fréquentes dans les systèmes très peuplés, " +
-            "surtout Alliance et Indépendants. Les HGE disparaissent après quelques minutes : reste en supercroisière et surveille le radar.",
+            "Sources de signal « High Grade Emissions » en supercroisière. Plus fréquentes dans les systèmes très peuplés, surtout Alliance et Indépendants. Les HGE disparaissent après quelques minutes : reste en supercroisière et surveille le radar.",
           filters,
           states: rule.states,
           fresh: Boolean(rule.states),
@@ -99,8 +98,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
         type: "systems",
         title: "Scanner les sillages haute énergie — systèmes très fréquentés",
         hint:
-          "Installe un scanner de sillage (Frame Shift Wake Scanner) et scanne les sillages haute énergie près des stations. " +
-          "Les systèmes très peuplés (et ceux en Famine) ont beaucoup de trafic.",
+          "Installe un scanner de sillage (Frame Shift Wake Scanner) et scanne les sillages haute énergie près des stations. Les systèmes très peuplés (et ceux en Famine) ont beaucoup de trafic.",
         filters: { population: atLeast(1_000_000_000) },
       },
     ];

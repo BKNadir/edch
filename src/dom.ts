@@ -1,3 +1,4 @@
+import { locale } from "./i18n.js";
 // Tiny DOM helper: h("div.card", { onclick }, child, "text").
 
 type Child = Node | string | number | null | undefined | false | Child[];
@@ -51,7 +52,7 @@ export function toast(message: string) {
   toastTimer = window.setTimeout(() => el!.classList.remove("show"), 2600);
 }
 
-export const fmt = (n: number) => n.toLocaleString("fr-BE");
+export const fmt = (n: number) => n.toLocaleString(locale());
 
 /** Small inline SVG icons. */
 export function icon(name: "copy" | "link" | "search" | "star" | "close" | "plus" | "check" | "warn" | "pin"): SVGSVGElement {

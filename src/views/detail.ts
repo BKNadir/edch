@@ -72,7 +72,7 @@ export class DetailPanel {
       h(
         "div.detail-title",
         null,
-        h("div", null, h("h2", null, m.name), h("p.sub", null, [CATEGORY_FR[m.category] ?? m.category, m.grade ? `Grade ${m.grade}` : null, this.ctx.game.lineName(m.line)].filter(Boolean).join(" · "))),
+        h("div", null, h("h2", null, m.name), h("p.sub", null, [CATEGORY_FR[m.category] ?? m.category, m.grade ? `Grade ${m.grade}` : null, this.ctx.game.lineName(m.line)].filter(Boolean).flatMap((x, i) => (i ? [" · ", x as string] : [x as string])))),
         h("button.icon-btn", { title: "Fermer", onclick: () => this.ctx.store.select(undefined) }, icon("close")),
       ),
       h(

@@ -1,4 +1,5 @@
-import { isTauri, onJournal, readAuxFile, startJournal, defaultJournalDir, type WatchStatus } from "./bridge.js";
+import { LANGS, guessLang, initI18n, saveLang, savedLang, watchTranslations } from "./i18n.js";
+import { installerLanguage, isTauri, onJournal, readAuxFile, startJournal, defaultJournalDir, type WatchStatus } from "./bridge.js";
 import { loadGame } from "./data.js";
 import { h, icon, replace } from "./dom.js";
 import { applyLines, applyLocker, applyStatus, emptyState } from "./journal.js";
@@ -51,6 +52,15 @@ async function boot() {
     replace(app, h("p.error", null, `Impossible de charger les données du jeu : ${e}`));
     return;
   }
+  // Language: chosen once (pre-selected from the installer / Windows language), changeable in Settings.
+  let code = savedLang();
+  if (!code || !LANGS.some((l) => l.code === code)) {
+    code = await pickLanguage(app, guessLang(await installerLanguage()));
+    saveLang(code);
+  }
+  await initI18n(code);
+  watchTranslations(document.body);
+
   const store = new Store();
   const ctx: Ctx = { game, store };
   const cap = (id: string) => game.capacityOf(id);
@@ -205,6 +215,32 @@ async function boot() {
   }
 }
 
+/** First-run language screen. Labels are in each language, so it needs no translation. */
+function pickLanguage(app: HTMLElement, preselected: string): Promise<string> {
+  return new Promise((resolve) => {
+    let chosen = preselected;
+    const buttons = LANGS.map((l) =>
+      h("button.lang-choice", { class: l.code === chosen ? "active" : "", "data-code": l.code, onclick: () => select(l.code) }, l.label),
+    );
+    const select = (c: string) => {
+      chosen = c;
+      for (const b of buttons) b.classList.toggle("active", b.dataset.code === c);
+    };
+    replace(
+      app,
+      h(
+        "div.lang-screen",
+        null,
+        h("img", { src: "favicon.png", alt: "" }),
+        h("h1", null, "EDCH"),
+        h("p.sub", null, "Choisis ta langue · Choose your language · Sprache wählen · Elige tu idioma · Escolha o idioma · Выберите язык"),
+        h("div.lang-grid", null, buttons),
+        h("button.primary", { onclick: () => resolve(chosen) }, "OK"),
+      ),
+    );
+  });
+}
+
 const SECURITY_FR: Record<string, string> = { High: "Sécurité haute", Medium: "Sécurité moyenne", Low: "Sécurité basse", Anarchy: "Anarchie" };
 const ALLEGIANCE_FR: Record<string, string> = { Independent: "Indépendant", Federation: "Fédération", Empire: "Empire", Alliance: "Alliance", Thargoid: "Thargoid", Guardian: "Gardien", PilotsFederation: "Pilots Federation" };
 
@@ -224,7 +260,7 @@ function renderHeader(el: HTMLElement, ctx: Ctx) {
       "div.cmdr",
       null,
       h("strong", null, cmdr.commander ? `CMDR ${cmdr.commander}` : "CMDR —"),
-      cmdr.ship ? h("span.sub", null, `${cmdr.ship.type}${cmdr.ship.name ? ` « ${cmdr.ship.name} »` : ""}`) : null,
+      cmdr.ship ? h("span.sub", null, `${cmdr.ship.type}${cmdr.ship.name ? ` · ${cmdr.ship.name}` : ""}`) : null,
     ),
     loc
       ? h(

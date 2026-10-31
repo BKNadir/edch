@@ -24,6 +24,12 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 - **Sauvegarde de la configuration** : exporte tes raccourcis (et tes réglages graphiques) en zip dans Documents\EDCH, et restaure-les en un clic. La configuration actuelle est sauvegardée automatiquement avant chaque import.
 - **Synchro façon EDMC** : envoi en direct vers **EDDN** (marchés, équipements, chantiers, sauts, scans, routes), **EDSM** et **Inara** (avec ta clé API). Les règles d'EDDN sont respectées : données personnelles retirées, position recoupée, aucun renvoi d'un message refusé, rien de l'historique.
 
+## Langues
+
+EDCH est disponible dans les six langues du jeu : français, anglais, allemand, espagnol, portugais (Brésil) et russe. L'installateur propose de choisir la langue, et l'appli la reprend au premier lancement. Tu peux la changer à tout moment dans **Paramètres → Langue**. Les noms des matériaux, modules et commandes restent ceux du jeu en anglais.
+
+Pour ajouter ou corriger une traduction, modifie `tools/translations_*.txt` (une ligne par texte : `fr ¦ en ¦ de ¦ es ¦ pt ¦ ru`), puis lance `python3 tools/gen_locales.py`.
+
 ## Installer
 
 Télécharge l'installateur (`.exe` ou `.msi`) dans les [Releases](../../releases), ou la version portable `edch.exe` dans les artefacts du dernier build (onglet *Actions*). Windows 10/11 a déjà WebView2.

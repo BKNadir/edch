@@ -1,0 +1,126 @@
+# --- sync
+Synchronisation ¦ Synchronisation ¦ Synchronisierung ¦ Sincronización ¦ Sincronização ¦ Синхронизация
+Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services. ¦ What EDMC does: share what you see in game with the community and your services. ¦ Was EDMC macht: Teile, was du im Spiel siehst, mit der Community und deinen Diensten. ¦ Lo que hace EDMC: compartir lo que ves en el juego con la comunidad y tus servicios. ¦ O que o EDMC faz: compartilhar o que você vê no jogo com a comunidade e seus serviços. ¦ То, что делает EDMC: делиться увиденным в игре с сообществом и вашими сервисами.
+EDDN — réseau de données communautaire ¦ EDDN — community data network ¦ EDDN — Community-Datennetz ¦ EDDN — red de datos de la comunidad ¦ EDDN — rede de dados da comunidade ¦ EDDN — сеть данных сообщества
+Envoie marchés, équipements, chantiers navals, systèmes et scans visités. C'est ce qui alimente Spansh, Inara et EDSM pour tout le monde (et les recherches de cette appli). ¦ Sends markets, outfitting, shipyards, systems and scans you visit. It feeds Spansh, Inara and EDSM for everyone (and this app's searches). ¦ Sendet Märkte, Ausrüstung, Werften, besuchte Systeme und Scans. Das speist Spansh, Inara und EDSM für alle (und die Suchen dieser App). ¦ Envía mercados, equipamiento, astilleros, sistemas y escaneos visitados. Es lo que alimenta Spansh, Inara y EDSM para todos (y las búsquedas de esta app). ¦ Envia mercados, equipamentos, estaleiros, sistemas e escaneamentos visitados. É o que alimenta Spansh, Inara e EDSM para todos (e as buscas deste app). ¦ Отправляет рынки, снаряжение, верфи, посещённые системы и сканы. Это питает Spansh, Inara и EDSM для всех (и поиск в этом приложении).
+Aucun compte requis. Rien de personnel n'est envoyé : ton nom de CMDR est haché par EDDN, tes amendes, réputations et carburant sont retirés. Seuls les événements en direct sont envoyés, jamais l'historique. ¦ No account needed. Nothing personal is sent: EDDN hashes your CMDR name; fines, reputations and fuel are removed. Only live events are sent, never your history. ¦ Kein Konto nötig. Nichts Persönliches wird gesendet: EDDN hasht deinen CMDR-Namen, Strafen, Ansehen und Treibstoff werden entfernt. Nur Live-Ereignisse werden gesendet, nie der Verlauf. ¦ No hace falta cuenta. No se envía nada personal: EDDN cifra tu nombre de CMDR y se quitan multas, reputaciones y combustible. Solo se envían eventos en directo, nunca el historial. ¦ Nenhuma conta necessária. Nada pessoal é enviado: o EDDN embaralha seu nome de CMDR; multas, reputações e combustível são removidos. Só eventos ao vivo são enviados, nunca o histórico. ¦ Аккаунт не нужен. Ничего личного не отправляется: EDDN хеширует имя CMDR, штрафы, репутация и топливо удаляются. Отправляются только события в реальном времени, никогда история.
+EDSM — carnet de vol ¦ EDSM — flight log ¦ EDSM — Flugbuch ¦ EDSM — cuaderno de vuelo ¦ EDSM — diário de bordo ¦ EDSM — бортовой журнал
+Envoie ton journal à EDSM (trajets, découvertes, inventaire). ¦ Sends your journal to EDSM (travel, discoveries, inventory). ¦ Sendet dein Journal an EDSM (Reisen, Entdeckungen, Inventar). ¦ Envía tu diario a EDSM (viajes, descubrimientos, inventario). ¦ Envia seu diário ao EDSM (viagens, descobertas, inventário). ¦ Отправляет журнал в EDSM (перемещения, открытия, инвентарь).
+Nom de CMDR sur EDSM ¦ CMDR name on EDSM ¦ CMDR-Name auf EDSM ¦ Nombre de CMDR en EDSM ¦ Nome de CMDR no EDSM ¦ Имя CMDR на EDSM
+Clé API EDSM ¦ EDSM API key ¦ EDSM-API-Schlüssel ¦ Clave API de EDSM ¦ Chave API do EDSM ¦ API-ключ EDSM
+EDSM → ton profil → Paramètres → Clé API. ¦ EDSM → your profile → Settings → API key. ¦ EDSM → dein Profil → Einstellungen → API-Schlüssel. ¦ EDSM → tu perfil → Ajustes → Clave API. ¦ EDSM → seu perfil → Configurações → Chave API. ¦ EDSM → профиль → настройки → API-ключ.
+Ouvrir la page de clé API EDSM ¦ Open the EDSM API key page ¦ EDSM-API-Schlüsselseite öffnen ¦ Abrir la página de clave API de EDSM ¦ Abrir a página da chave API do EDSM ¦ Открыть страницу API-ключа EDSM
+Inara — profil de commandant ¦ Inara — commander profile ¦ Inara — Kommandantenprofil ¦ Inara — perfil de comandante ¦ Inara — perfil de comandante ¦ Inara — профиль командира
+Met à jour ta position, ton vaisseau, tes matériaux et tes ingénieurs sur Inara. ¦ Updates your location, ship, materials and engineers on Inara. ¦ Aktualisiert Position, Schiff, Materialien und Ingenieure auf Inara. ¦ Actualiza tu posición, nave, materiales e ingenieros en Inara. ¦ Atualiza sua posição, nave, materiais e engenheiros no Inara. ¦ Обновляет местоположение, корабль, материалы и инженеров на Inara.
+Clé API Inara personnelle ¦ Personal Inara API key ¦ Persönlicher Inara-API-Schlüssel ¦ Clave API personal de Inara ¦ Chave API pessoal do Inara ¦ Личный API-ключ Inara
+Inara → Paramètres → API key. Inara peut demander d'accepter une nouvelle appli avant d'enregistrer ses données : le journal ci-dessous affichera sa réponse. ¦ Inara → Settings → API key. Inara may need to accept a new app before it stores its data: the log below will show its answer. ¦ Inara → Einstellungen → API key. Inara muss eine neue App eventuell erst freigeben, bevor es ihre Daten speichert: Das Protokoll unten zeigt die Antwort. ¦ Inara → Ajustes → API key. Inara puede tener que aceptar una app nueva antes de guardar sus datos: el registro de abajo mostrará su respuesta. ¦ Inara → Configurações → API key. O Inara pode precisar aceitar um app novo antes de salvar seus dados: o registro abaixo mostrará a resposta. ¦ Inara → настройки → API key. Inara может сначала потребовать одобрить новое приложение, прежде чем сохранять данные: ответ будет в журнале ниже.
+Ouvrir la page de clé API Inara ¦ Open the Inara API key page ¦ Inara-API-Schlüsselseite öffnen ¦ Abrir la página de clave API de Inara ¦ Abrir a página da chave API do Inara ¦ Открыть страницу API-ключа Inara
+Activité ¦ Activity ¦ Aktivität ¦ Actividad ¦ Atividade ¦ Активность
+Disponible dans l'application (pas en mode démo). ¦ Available in the app (not in demo mode). ¦ In der App verfügbar (nicht im Demo-Modus). ¦ Disponible en la aplicación (no en modo demo). ¦ Disponível no app (não no modo demo). ¦ Доступно в приложении (не в демо-режиме).
+Disponible dans l'application (pas en mode démo) ¦ Available in the app (not in demo mode) ¦ In der App verfügbar (nicht im Demo-Modus) ¦ Disponible en la aplicación (no en modo demo) ¦ Disponível no app (não no modo demo) ¦ Доступно в приложении (не в демо-режиме)
+{0} échec(s) ¦ {0} failed ¦ {0} fehlgeschlagen ¦ {0} fallo(s) ¦ {0} falha(s) ¦ ошибок: {0}
+{0} événement(s) ¦ {0} event(s) ¦ {0} Ereignis(se) ¦ {0} evento(s) ¦ {0} evento(s) ¦ событий: {0}
+Rien envoyé pour l'instant : ça démarre avec les prochains événements du jeu (saut, amarrage, marché…). ¦ Nothing sent yet: it starts with the next game events (jump, docking, market…). ¦ Noch nichts gesendet: Es beginnt mit den nächsten Spielereignissen (Sprung, Andocken, Markt…). ¦ Nada enviado todavía: empieza con los próximos eventos del juego (salto, atraque, mercado…). ¦ Nada enviado ainda: começa com os próximos eventos do jogo (salto, atracação, mercado…). ¦ Пока ничего не отправлено: начнётся со следующих событий игры (прыжок, стыковка, рынок…).
+{0} : trop de requêtes, réessaie dans un instant ¦ {0}: too many requests, try again in a moment ¦ {0}: zu viele Anfragen, versuche es gleich noch einmal ¦ {0}: demasiadas solicitudes, reinténtalo en un momento ¦ {0}: muitas requisições, tente de novo em instantes ¦ {0}: слишком много запросов, повторите чуть позже
+{0} a répondu {1} ¦ {0} answered {1} ¦ {0} antwortete {1} ¦ {0} respondió {1} ¦ {0} respondeu {1} ¦ {0} ответил {1}
+{0} : réponse illisible ¦ {0}: unreadable answer ¦ {0}: unlesbare Antwort ¦ {0}: respuesta ilegible ¦ {0}: resposta ilegível ¦ {0}: нечитаемый ответ
+Spansh n'a pas donné de numéro de calcul ¦ Spansh returned no job number ¦ Spansh hat keine Auftragsnummer geliefert ¦ Spansh no devolvió número de cálculo ¦ O Spansh não retornou número de cálculo ¦ Spansh не вернул номер задания
+Spansh calcule encore après 3 minutes, réessaie plus tard ¦ Spansh is still plotting after 3 minutes, try again later ¦ Spansh rechnet nach 3 Minuten noch, versuche es später ¦ Spansh sigue calculando tras 3 minutos, reinténtalo más tarde ¦ O Spansh ainda calcula após 3 minutos, tente mais tarde ¦ Spansh всё ещё считает спустя 3 минуты, попробуйте позже
+# --- controls
+Commandes & contrôleurs ¦ Controls & devices ¦ Steuerung & Geräte ¦ Controles y dispositivos ¦ Controles e dispositivos ¦ Управление и устройства
+Lecture de tes raccourcis… ¦ Reading your bindings… ¦ Lese deine Tastenbelegung… ¦ Leyendo tus asignaciones… ¦ Lendo seus atalhos… ¦ Чтение назначений…
+Mode démo : raccourcis d'exemple. ¦ Demo mode: sample bindings. ¦ Demo-Modus: Beispielbelegung. ¦ Modo demo: asignaciones de ejemplo. ¦ Modo demo: atalhos de exemplo. ¦ Демо-режим: пример назначений.
+Préréglage(s) d'origine du jeu, non copiés dans ton dossier : {0}. Crée un préréglage personnalisé en jeu pour les voir ici. ¦ Built-in game preset(s), not copied to your folder: {0}. Create a custom preset in game to see them here. ¦ Integrierte Spielvorlage(n), nicht in deinen Ordner kopiert: {0}. Lege im Spiel eine eigene Vorlage an, um sie hier zu sehen. ¦ Preajuste(s) originales del juego, no copiados en tu carpeta: {0}. Crea un preajuste personalizado en el juego para verlos aquí. ¦ Predefinição(ões) original(is) do jogo, não copiada(s) para sua pasta: {0}. Crie uma predefinição personalizada no jogo para vê-las aqui. ¦ Встроенные пресеты игры, не скопированные в вашу папку: {0}. Создайте свой пресет в игре, чтобы увидеть их здесь.
+Aucun préréglage actif trouvé (StartPreset). Choisis un fichier ci-dessous. ¦ No active preset found (StartPreset). Pick a file below. ¦ Keine aktive Vorlage gefunden (StartPreset). Wähle unten eine Datei. ¦ No se encontró ningún preajuste activo (StartPreset). Elige un archivo abajo. ¦ Nenhuma predefinição ativa encontrada (StartPreset). Escolha um arquivo abaixo. ¦ Активный пресет не найден (StartPreset). Выберите файл ниже.
+Exporté : ¦ Exported: ¦ Exportiert: ¦ Exportado: ¦ Exportado: ¦ Экспортировано:
+Afficher dans l'explorateur ¦ Show in Explorer ¦ Im Explorer anzeigen ¦ Mostrar en el explorador ¦ Mostrar no Explorador ¦ Показать в проводнике
+Afficher ¦ Show ¦ Anzeigen ¦ Mostrar ¦ Mostrar ¦ Показать
+{0} fichier(s) restauré(s). Ancienne config sauvegardée : ¦ {0} file(s) restored. Previous config saved to: ¦ {0} Datei(en) wiederhergestellt. Alte Konfiguration gesichert unter: ¦ {0} archivo(s) restaurado(s). Configuración anterior guardada en: ¦ {0} arquivo(s) restaurado(s). Configuração anterior salva em: ¦ Восстановлено файлов: {0}. Прежняя конфигурация сохранена:
+Ignoré : {0} ¦ Skipped: {0} ¦ Übersprungen: {0} ¦ Ignorado: {0} ¦ Ignorado: {0} ¦ Пропущено: {0}
+Relance Elite Dangerous (ou va dans Options → Commandes) pour que le jeu relise les fichiers. ¦ Restart Elite Dangerous (or open Options → Controls) so the game rereads the files. ¦ Starte Elite Dangerous neu (oder öffne Optionen → Steuerung), damit das Spiel die Dateien neu liest. ¦ Reinicia Elite Dangerous (o ve a Opciones → Controles) para que el juego relea los archivos. ¦ Reinicie o Elite Dangerous (ou vá em Opções → Controles) para o jogo reler os arquivos. ¦ Перезапустите Elite Dangerous (или откройте Настройки → Управление), чтобы игра перечитала файлы.
+Configuration importée ¦ Configuration imported ¦ Konfiguration importiert ¦ Configuración importada ¦ Configuração importada ¦ Конфигурация импортирована
+Sauvegarder / restaurer ta configuration ¦ Back up / restore your configuration ¦ Konfiguration sichern / wiederherstellen ¦ Guardar / restaurar tu configuración ¦ Salvar / restaurar sua configuração ¦ Резервная копия / восстановление конфигурации
+Exporte tes raccourcis (et tes réglages graphiques) dans un zip, dans Documents\EDCH. L'import sauvegarde d'abord ta configuration actuelle. Ferme le jeu avant d'importer. ¦ Exports your bindings (and graphics settings) to a zip in Documents\EDCH. Importing first backs up your current configuration. Close the game before importing. ¦ Exportiert deine Tastenbelegung (und Grafikeinstellungen) als Zip nach Dokumente\EDCH. Beim Import wird zuerst die aktuelle Konfiguration gesichert. Schließe das Spiel vor dem Import. ¦ Exporta tus asignaciones (y ajustes gráficos) a un zip en Documentos\EDCH. Al importar, primero se guarda tu configuración actual. Cierra el juego antes de importar. ¦ Exporta seus atalhos (e configurações gráficas) para um zip em Documentos\EDCH. A importação primeiro salva sua configuração atual. Feche o jogo antes de importar. ¦ Экспортирует назначения (и настройки графики) в zip в Документы\EDCH. Перед импортом текущая конфигурация сохраняется. Закройте игру перед импортом.
+Exporter les raccourcis ¦ Export bindings ¦ Belegung exportieren ¦ Exportar asignaciones ¦ Exportar atalhos ¦ Экспорт назначений
+Raccourcis + graphismes ¦ Bindings + graphics ¦ Belegung + Grafik ¦ Asignaciones + gráficos ¦ Atalhos + gráficos ¦ Назначения + графика
+Importer un zip… ¦ Import a zip… ¦ Zip importieren… ¦ Importar un zip… ¦ Importar um zip… ¦ Импорт zip…
+Préréglage actif ¦ Active preset ¦ Aktive Vorlage ¦ Preajuste activo ¦ Predefinição ativa ¦ Активный пресет
+Tout ¦ All ¦ Alles ¦ Todo ¦ Tudo ¦ Всё
+Cartes & interface ¦ Maps & UI ¦ Karten & Oberfläche ¦ Mapas e interfaz ¦ Mapas e interface ¦ Карты и интерфейс
+Chercher une commande… ¦ Search a control… ¦ Befehl suchen… ¦ Buscar un control… ¦ Buscar um controle… ¦ Найти команду…
+Imprimer la fiche ¦ Print the sheet ¦ Blatt drucken ¦ Imprimir la ficha ¦ Imprimir a ficha ¦ Печать листа
+· {0} raccourcis · clavier {1} ¦ · {0} bindings · keyboard {1} ¦ · {0} Belegungen · Tastatur {1} ¦ · {0} asignaciones · teclado {1} ¦ · {0} atalhos · teclado {1} ¦ · назначений: {0} · клавиатура {1}
+Aucun raccourci trouvé. ¦ No bindings found. ¦ Keine Belegung gefunden. ¦ No se encontraron asignaciones. ¦ Nenhum atalho encontrado. ¦ Назначения не найдены.
+Gabarit ¦ Template ¦ Vorlage ¦ Plantilla ¦ Modelo ¦ Шаблон
+Ton modèle n'est pas reconnu ? Choisis le plus proche. ¦ Your model isn't recognised? Pick the closest one. ¦ Dein Modell wird nicht erkannt? Wähle das ähnlichste. ¦ ¿No se reconoce tu modelo? Elige el más parecido. ¦ Seu modelo não é reconhecido? Escolha o mais parecido. ¦ Модель не распознана? Выберите ближайшую.
+Schéma simple (sans image) ¦ Simple diagram (no picture) ¦ Einfaches Schema (ohne Bild) ¦ Esquema simple (sin imagen) ¦ Esquema simples (sem imagem) ¦ Простая схема (без картинки)
+Image du gabarit indisponible (hors ligne ?). Schéma simple affiché à la place. ¦ Template picture unavailable (offline?). Showing the simple diagram instead. ¦ Vorlagenbild nicht verfügbar (offline?). Stattdessen einfaches Schema. ¦ Imagen de la plantilla no disponible (¿sin conexión?). Se muestra el esquema simple. ¦ Imagem do modelo indisponível (offline?). Mostrando o esquema simples. ¦ Картинка шаблона недоступна (нет сети?). Показана простая схема.
+Agrandir / réduire ¦ Zoom in / out ¦ Vergrößern / verkleinern ¦ Ampliar / reducir ¦ Ampliar / reduzir ¦ Увеличить / уменьшить
+Gabarit EDRefCard (MIT), image chargée depuis le dépôt GitHub d'EDRefCard. ¦ EDRefCard template (MIT), picture loaded from EDRefCard's GitHub repository. ¦ EDRefCard-Vorlage (MIT), Bild aus dem GitHub-Repository von EDRefCard geladen. ¦ Plantilla de EDRefCard (MIT), imagen cargada desde el repositorio GitHub de EDRefCard. ¦ Modelo do EDRefCard (MIT), imagem carregada do repositório GitHub do EDRefCard. ¦ Шаблон EDRefCard (MIT), картинка загружается из репозитория EDRefCard на GitHub.
+Pas de case sur ce gabarit ¦ No box on this template ¦ Kein Feld auf dieser Vorlage ¦ Sin casilla en esta plantilla ¦ Sem caixa neste modelo ¦ Нет ячейки на этом шаблоне
+(inversé) ¦ (inverted) ¦ (invertiert) ¦ (invertido) ¦ (invertido) ¦ (инверсия)
+Noms des commandes : EDRefCard (Richard Buckle, MIT). Correspondance des périphériques : DeviceMappings.xml du jeu. ¦ Control names: EDRefCard (Richard Buckle, MIT). Device mapping: the game's DeviceMappings.xml. ¦ Befehlsnamen: EDRefCard (Richard Buckle, MIT). Gerätezuordnung: DeviceMappings.xml des Spiels. ¦ Nombres de controles: EDRefCard (Richard Buckle, MIT). Correspondencia de dispositivos: DeviceMappings.xml del juego. ¦ Nomes dos controles: EDRefCard (Richard Buckle, MIT). Mapeamento de dispositivos: DeviceMappings.xml do jogo. ¦ Названия команд: EDRefCard (Richard Buckle, MIT). Сопоставление устройств: DeviceMappings.xml игры.
+Multi-équipage ¦ Multicrew ¦ Multicrew ¦ Multitripulación ¦ Multitripulação ¦ Мультиэкипаж
+Chasseur ¦ Fighter ¦ Jäger ¦ Caza ¦ Caça ¦ Истребитель
+Scanners ¦ Scanners ¦ Scanner ¦ Escáneres ¦ Scanners ¦ Сканеры
+À pied ¦ On foot ¦ Zu Fuß ¦ A pie ¦ A pé ¦ Пешком
+Carte galactique ¦ Galaxy map ¦ Galaxiekarte ¦ Mapa galáctico ¦ Mapa da galáxia ¦ Карта галактики
+Interface ¦ Interface ¦ Oberfläche ¦ Interfaz ¦ Interface ¦ Интерфейс
+Caméra ¦ Camera ¦ Kamera ¦ Cámara ¦ Câmera ¦ Камера
+Regard libre ¦ Head look ¦ Freier Blick ¦ Mirada libre ¦ Olhar livre ¦ Обзор головой
+Divers ¦ Misc ¦ Sonstiges ¦ Varios ¦ Diversos ¦ Разное
+Clavier ¦ Keyboard ¦ Tastatur ¦ Teclado ¦ Teclado ¦ Клавиатура
+Souris ¦ Mouse ¦ Maus ¦ Ratón ¦ Mouse ¦ Мышь
+Manette (Xbox / XInput) ¦ Gamepad (Xbox / XInput) ¦ Gamepad (Xbox / XInput) ¦ Mando (Xbox / XInput) ¦ Controle (Xbox / XInput) ¦ Геймпад (Xbox / XInput)
+Manette Xbox 360 ¦ Xbox 360 controller ¦ Xbox-360-Controller ¦ Mando de Xbox 360 ¦ Controle Xbox 360 ¦ Геймпад Xbox 360
+Manette PlayStation 4 ¦ PlayStation 4 controller ¦ PlayStation-4-Controller ¦ Mando de PlayStation 4 ¦ Controle PlayStation 4 ¦ Геймпад PlayStation 4
+Manette PlayStation 3 ¦ PlayStation 3 controller ¦ PlayStation-3-Controller ¦ Mando de PlayStation 3 ¦ Controle PlayStation 3 ¦ Геймпад PlayStation 3
+{0} (manche) ¦ {0} (stick) ¦ {0} (Stick) ¦ {0} (palanca) ¦ {0} (manche) ¦ {0} (ручка)
+{0} (manette des gaz) ¦ {0} (throttle) ¦ {0} (Schubhebel) ¦ {0} (acelerador) ¦ {0} (acelerador) ¦ {0} (РУД)
+Périphérique {0} ¦ Device {0} ¦ Gerät {0} ¦ Dispositivo {0} ¦ Dispositivo {0} ¦ Устройство {0}
+Axes ¦ Axes ¦ Achsen ¦ Ejes ¦ Eixos ¦ Оси
+Axes et molette ¦ Axes and wheel ¦ Achsen und Mausrad ¦ Ejes y rueda ¦ Eixos e roda ¦ Оси и колесо
+Chapeaux (POV) ¦ Hats (POV) ¦ Coolie-Hats (POV) ¦ Setas (POV) ¦ Chapéus (POV) ¦ Хатки (POV)
+Chapeau {0} ¦ Hat {0} ¦ Coolie-Hat {0} ¦ Seta {0} ¦ Chapéu {0} ¦ Хатка {0}
+Chapeau {0} {1} ¦ Hat {0} {1} ¦ Coolie-Hat {0} {1} ¦ Seta {0} {1} ¦ Chapéu {0} {1} ¦ Хатка {0} {1}
+Boutons ¦ Buttons ¦ Tasten ¦ Botones ¦ Botões ¦ Кнопки
+Bouton {0} ¦ Button {0} ¦ Taste {0} ¦ Botón {0} ¦ Botão {0} ¦ Кнопка {0}
+Axe {0} ¦ Axis {0} ¦ Achse {0} ¦ Eje {0} ¦ Eixo {0} ¦ Ось {0}
+Clic gauche ¦ Left click ¦ Linksklick ¦ Clic izquierdo ¦ Clique esquerdo ¦ Левый клик
+Clic droit ¦ Right click ¦ Rechtsklick ¦ Clic derecho ¦ Clique direito ¦ Правый клик
+Clic molette ¦ Wheel click ¦ Mausradklick ¦ Clic de rueda ¦ Clique da roda ¦ Клик колесом
+Molette ¦ Wheel ¦ Mausrad ¦ Rueda ¦ Roda ¦ Колесо
+Molette ↑ ¦ Wheel ↑ ¦ Mausrad ↑ ¦ Rueda ↑ ¦ Roda ↑ ¦ Колесо ↑
+Molette ↓ ¦ Wheel ↓ ¦ Mausrad ↓ ¦ Rueda ↓ ¦ Roda ↓ ¦ Колесо ↓
+Autres ¦ Other ¦ Sonstige ¦ Otros ¦ Outros ¦ Прочее
+Touches hors schéma : {0} ¦ Keys not on the diagram: {0} ¦ Tasten außerhalb des Schemas: {0} ¦ Teclas fuera del esquema: {0} ¦ Teclas fora do esquema: {0} ¦ Клавиши вне схемы: {0}
+Schéma de la manette ¦ Gamepad diagram ¦ Gamepad-Schema ¦ Esquema del mando ¦ Esquema do controle ¦ Схема геймпада
+Échap ¦ Esc ¦ Esc ¦ Esc ¦ Esc ¦ Esc
+Verr. maj ¦ Caps Lock ¦ Feststell ¦ Bloq Mayús ¦ Caps Lock ¦ Caps Lock
+Entrée ¦ Enter ¦ Eingabe ¦ Intro ¦ Enter ¦ Enter
+Maj G ¦ L Shift ¦ Umschalt L ¦ Mayús izq. ¦ Shift esq. ¦ Л Shift
+Maj D ¦ R Shift ¦ Umschalt R ¦ Mayús der. ¦ Shift dir. ¦ П Shift
+Ctrl G ¦ L Ctrl ¦ Strg L ¦ Ctrl izq. ¦ Ctrl esq. ¦ Л Ctrl
+Ctrl D ¦ R Ctrl ¦ Strg R ¦ Ctrl der. ¦ Ctrl dir. ¦ П Ctrl
+Espace ¦ Space ¦ Leertaste ¦ Espacio ¦ Espaço ¦ Пробел
+Impr ¦ PrtSc ¦ Druck ¦ ImprPant ¦ PrtSc ¦ PrtSc
+Arrêt défil ¦ Scroll Lock ¦ Rollen ¦ Bloq Despl ¦ Scroll Lock ¦ Scroll Lock
+Inser ¦ Ins ¦ Einfg ¦ Insert ¦ Insert ¦ Ins
+Début ¦ Home ¦ Pos1 ¦ Inicio ¦ Home ¦ Home
+Suppr ¦ Del ¦ Entf ¦ Supr ¦ Del ¦ Del
+Fin ¦ End ¦ Ende ¦ Fin ¦ End ¦ End
+Verr num ¦ Num Lock ¦ Num ¦ Bloq Num ¦ Num Lock ¦ Num Lock
+Pavé tactile ¦ Touchpad ¦ Touchpad ¦ Panel táctil ¦ Touchpad ¦ Сенсорная панель
+Pavé ¦ Pad ¦ Pad ¦ Panel ¦ Painel ¦ Панель
+L3 (clic stick G) ¦ L3 (left stick click) ¦ L3 (linker Stick drücken) ¦ L3 (pulsar stick izq.) ¦ L3 (clique analógico esq.) ¦ L3 (нажатие левого стика)
+R3 (clic stick D) ¦ R3 (right stick click) ¦ R3 (rechter Stick drücken) ¦ R3 (pulsar stick der.) ¦ R3 (clique analógico dir.) ¦ R3 (нажатие правого стика)
+Croix ↑ ¦ D-pad ↑ ¦ Steuerkreuz ↑ ¦ Cruceta ↑ ¦ Direcional ↑ ¦ Крестовина ↑
+Croix ↓ ¦ D-pad ↓ ¦ Steuerkreuz ↓ ¦ Cruceta ↓ ¦ Direcional ↓ ¦ Крестовина ↓
+Croix ← ¦ D-pad ← ¦ Steuerkreuz ← ¦ Cruceta ← ¦ Direcional ← ¦ Крестовина ←
+Croix → ¦ D-pad → ¦ Steuerkreuz → ¦ Cruceta → ¦ Direcional → ¦ Крестовина →
+Stick G ↔ ¦ Left stick ↔ ¦ Linker Stick ↔ ¦ Stick izq. ↔ ¦ Analógico esq. ↔ ¦ Левый стик ↔
+Stick G ↕ ¦ Left stick ↕ ¦ Linker Stick ↕ ¦ Stick izq. ↕ ¦ Analógico esq. ↕ ¦ Левый стик ↕
+Stick D ↔ ¦ Right stick ↔ ¦ Rechter Stick ↔ ¦ Stick der. ↔ ¦ Analógico dir. ↔ ¦ Правый стик ↔
+Stick D ↕ ¦ Right stick ↕ ¦ Rechter Stick ↕ ¦ Stick der. ↕ ¦ Analógico dir. ↕ ¦ Правый стик ↕
+# --- language screen / misc
+Choisis ta langue ¦ Choose your language ¦ Sprache wählen ¦ Elige tu idioma ¦ Escolha o idioma ¦ Выберите язык

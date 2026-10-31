@@ -1,0 +1,109 @@
+# --- detail panel, materials, odyssey, engineering, wishlist, engineers
+Modifications ¦ Modifications ¦ Modifikationen ¦ Modificaciones ¦ Modificações ¦ Модификации
+Effets expérimentaux ¦ Experimental effects ¦ Experimentelle Effekte ¦ Efectos experimentales ¦ Efeitos experimentais ¦ Экспериментальные эффекты
+Synthèse ¦ Synthesis ¦ Synthese ¦ Síntesis ¦ Síntese ¦ Синтез
+Courtier technologique ¦ Technology broker ¦ Technologiemakler ¦ Intermediario tecnológico ¦ Corretor de tecnologia ¦ Технологический брокер
+Mods de combinaison ¦ Suit mods ¦ Anzugmods ¦ Mods de traje ¦ Mods de traje ¦ Моды костюма
+Mods d'arme ¦ Weapon mods ¦ Waffenmods ¦ Mods de arma ¦ Mods de arma ¦ Моды оружия
+Améliorations (grade) ¦ Upgrades (grade) ¦ Upgrades (Stufe) ¦ Mejoras (grado) ¦ Melhorias (grau) ¦ Улучшения (класс)
+Déblocage d'ingénieurs ¦ Engineer unlocks ¦ Ingenieur-Freischaltungen ¦ Desbloqueo de ingenieros ¦ Desbloqueio de engenheiros ¦ Открытие инженеров
+Barman ¦ Bartender ¦ Barkeeper ¦ Camarero ¦ Bartender ¦ Бармен
+Fermer ¦ Close ¦ Schließen ¦ Cerrar ¦ Fechar ¦ Закрыть
+Grade {0} ¦ Grade {0} ¦ Stufe {0} ¦ Grado {0} ¦ Grau {0} ¦ Класс {0}
+{0} requis par la wishlist ¦ {0} needed by the wishlist ¦ {0} für die Wunschliste nötig ¦ {0} requeridos por la lista ¦ {0} exigidos pela lista ¦ {0} нужно для списка желаний
+Recherches autour de {0} ¦ Searching around {0} ¦ Suche rund um {0} ¦ Búsquedas alrededor de {0} ¦ Buscas ao redor de {0} ¦ Поиск вокруг {0}
+Suggestions d'échange ¦ Trade suggestions ¦ Tauschvorschläge ¦ Sugerencias de intercambio ¦ Sugestões de troca ¦ Варианты обмена
+Recevoir ¦ Receive ¦ Erhalte ¦ Recibe ¦ Receba ¦ Получить
+contre ¦ for ¦ für ¦ a cambio de ¦ por ¦ за
+({0} possédés, {1} réservés, {2} % utilisé · taux {3}:{4}) ¦ ({0} owned, {1} reserved, {2}% used · rate {3}:{4}) ¦ ({0} vorhanden, {1} reserviert, {2} % belegt · Kurs {3}:{4}) ¦ ({0} en posesión, {1} reservados, {2} % usado · tasa {3}:{4}) ¦ ({0} possuídos, {1} reservados, {2}% usado · taxa {3}:{4}) ¦ ({0} есть, {1} в резерве, занято {2}% · курс {3}:{4})
+Rien d'échangeable en surplus pour l'instant. ¦ Nothing spare to trade right now. ¦ Momentan nichts Überschüssiges zum Tauschen. ¦ Nada sobrante para intercambiar por ahora. ¦ Nada sobrando para trocar por enquanto. ¦ Пока нечего обменять из излишков.
+Sites de farm connus ¦ Known farming sites ¦ Bekannte Farmstellen ¦ Lugares de farmeo conocidos ¦ Locais de farm conhecidos ¦ Известные места фарма
+Lat {0} / Lon {1} ¦ Lat {0} / Lon {1} ¦ Br. {0} / L. {1} ¦ Lat {0} / Lon {1} ¦ Lat {0} / Lon {1} ¦ Шир. {0} / Долг. {1}
+Où le trouver ¦ Where to find it ¦ Wo man es findet ¦ Dónde encontrarlo ¦ Onde encontrar ¦ Где найти
+Utilisé dans ¦ Used in ¦ Verwendet in ¦ Usado en ¦ Usado em ¦ Используется в
+Aucune recette connue. ¦ No known recipe. ¦ Kein bekanntes Rezept. ¦ Ninguna receta conocida. ¦ Nenhuma receita conhecida. ¦ Рецептов нет.
+Utilisé dans {0} recettes ¦ Used in {0} recipes ¦ In {0} Rezepten verwendet ¦ Usado en {0} recetas ¦ Usado em {0} receitas ¦ Используется в {0} рецептах
+Ajouter à la wishlist ({0} × {1}) ¦ Add to wishlist ({0} × {1}) ¦ Zur Wunschliste hinzufügen ({0} × {1}) ¦ Añadir a la lista ({0} × {1}) ¦ Adicionar à lista ({0} × {1}) ¦ Добавить в список ({0} × {1})
+Matériaux d'ingénierie ¦ Engineering materials ¦ Ingenieursmaterialien ¦ Materiales de ingeniería ¦ Materiais de engenharia ¦ Инженерные материалы
+Chercher un matériau…  (Ctrl+F) ¦ Search a material…  (Ctrl+F) ¦ Material suchen…  (Strg+F) ¦ Buscar un material…  (Ctrl+F) ¦ Buscar um material…  (Ctrl+F) ¦ Найти материал…  (Ctrl+F)
+Tous ¦ All ¦ Alle ¦ Todos ¦ Todos ¦ Все
+Possédés ¦ Owned ¦ Vorhanden ¦ En posesión ¦ Possuídos ¦ Есть в наличии
+{0} unités ¦ {0} units ¦ {0} Einheiten ¦ {0} unidades ¦ {0} unidades ¦ {0} ед.
+· {0} requis ¦ · {0} needed ¦ · {0} benötigt ¦ · {0} necesarios ¦ · {0} necessários ¦ · нужно {0}
+Données Gardiens / Thargoid ¦ Guardian / Thargoid data ¦ Guardian-/Thargoiden-Daten ¦ Datos guardianes / thargoid ¦ Dados Guardiões / Thargoid ¦ Данные Стражей / таргоидов
+Gardiens / Thargoid (non échangeables) ¦ Guardian / Thargoid (not tradeable) ¦ Guardian / Thargoiden (nicht tauschbar) ¦ Guardianes / thargoid (no intercambiables) ¦ Guardiões / Thargoid (não trocáveis) ¦ Стражи / таргоиды (не обмениваются)
+Aucun matériau ne correspond. ¦ No matching material. ¦ Kein passendes Material. ¦ Ningún material coincide. ¦ Nenhum material corresponde. ¦ Подходящих материалов нет.
+Pas encore d'inventaire : lance Elite Dangerous (ou vérifie le dossier du journal dans les Paramètres). L'inventaire arrive avec l'événement de connexion du jeu. ¦ No inventory yet: start Elite Dangerous (or check the journal folder in Settings). The inventory arrives with the game's login event. ¦ Noch kein Inventar: Starte Elite Dangerous (oder prüfe den Journal-Ordner in den Einstellungen). Das Inventar kommt mit dem Anmeldeereignis des Spiels. ¦ Aún no hay inventario: inicia Elite Dangerous (o revisa la carpeta del diario en Ajustes). El inventario llega con el evento de inicio de sesión del juego. ¦ Ainda sem inventário: abra o Elite Dangerous (ou confira a pasta do diário nas Configurações). O inventário chega com o evento de login do jogo. ¦ Инвентаря пока нет: запустите Elite Dangerous (или проверьте папку журнала в настройках). Инвентарь приходит с событием входа в игру.
+Odyssey — casier du vaisseau ¦ Odyssey — ship locker ¦ Odyssey — Schiffsspind ¦ Odyssey — taquilla de la nave ¦ Odyssey — armário da nave ¦ Odyssey — шкафчик корабля
+Chercher… ¦ Search… ¦ Suchen… ¦ Buscar… ¦ Buscar… ¦ Поиск…
+Possédés seulement ¦ Owned only ¦ Nur vorhandene ¦ Solo en posesión ¦ Só possuídos ¦ Только имеющиеся
+Casier vide ou pas encore lu : il se remplit quand le jeu écrit ShipLocker.json (en jeu, à bord ou à pied). ¦ Locker empty or not read yet: it fills when the game writes ShipLocker.json (in game, aboard or on foot). ¦ Spind leer oder noch nicht gelesen: Er füllt sich, wenn das Spiel ShipLocker.json schreibt (im Spiel, an Bord oder zu Fuß). ¦ Taquilla vacía o aún no leída: se llena cuando el juego escribe ShipLocker.json (en juego, a bordo o a pie). ¦ Armário vazio ou ainda não lido: ele enche quando o jogo grava ShipLocker.json (no jogo, a bordo ou a pé). ¦ Шкафчик пуст или ещё не прочитан: он заполнится, когда игра запишет ShipLocker.json (в игре, на борту или пешком).
+{0} recette ¦ {0} recipe ¦ {0} Rezept ¦ {0} receta ¦ {0} receita ¦ рецептов: {0}
+{0} recettes ¦ {0} recipes ¦ {0} Rezepte ¦ {0} recetas ¦ {0} receitas ¦ рецептов: {0}
+Aucune recette ¦ No recipe ¦ Kein Rezept ¦ Ninguna receta ¦ Nenhuma receita ¦ Нет рецептов
+· troc {0} ¦ · barter {0} ¦ · Tausch {0} ¦ · trueque {0} ¦ · troca {0} ¦ · обмен {0}
+Modules ¦ Modules ¦ Module ¦ Módulos ¦ Módulos ¦ Модули
+Expérimentaux ¦ Experimentals ¦ Experimentell ¦ Experimentales ¦ Experimentais ¦ Экспериментальные
+Courtier tech. ¦ Tech broker ¦ Tech-Makler ¦ Interm. tecnológico ¦ Corretor tec. ¦ Тех. брокер
+Déblocages ¦ Unlocks ¦ Freischaltungen ¦ Desbloqueos ¦ Desbloqueios ¦ Открытия
+Module ou modification… ¦ Module or modification… ¦ Modul oder Modifikation… ¦ Módulo o modificación… ¦ Módulo ou modificação… ¦ Модуль или модификация…
+{0} possédés ¦ {0} owned ¦ {0} vorhanden ¦ {0} en posesión ¦ {0} possuídos ¦ есть {0}
+Marchandise (soute) ¦ Commodity (cargo) ¦ Ware (Frachtraum) ¦ Mercancía (bodega) ¦ Mercadoria (porão) ¦ Товар (трюм)
+Ajouter seulement ce grade ¦ Add this grade only ¦ Nur diese Stufe hinzufügen ¦ Añadir solo este grado ¦ Adicionar só este grau ¦ Добавить только этот класс
+Ajouté à la wishlist : {0} — {1} ¦ Added to wishlist: {0} — {1} ¦ Zur Wunschliste hinzugefügt: {0} — {1} ¦ Añadido a la lista: {0} — {1} ¦ Adicionado à lista: {0} — {1} ¦ Добавлено в список: {0} — {1}
+Colle ici l'export EDSY ou Coriolis (format SLEF ou Loadout JSON)… ¦ Paste the EDSY or Coriolis export here (SLEF or Loadout JSON)… ¦ Füge hier den EDSY- oder Coriolis-Export ein (SLEF oder Loadout-JSON)… ¦ Pega aquí la exportación de EDSY o Coriolis (SLEF o Loadout JSON)… ¦ Cole aqui a exportação do EDSY ou Coriolis (SLEF ou Loadout JSON)… ¦ Вставьте сюда экспорт EDSY или Coriolis (SLEF или Loadout JSON)…
+Format non reconnu. Dans EDSY : Ship → Export → SLEF. Dans Coriolis : Export → SLEF (ou JSON du Loadout). ¦ Unrecognised format. In EDSY: Ship → Export → SLEF. In Coriolis: Export → SLEF (or Loadout JSON). ¦ Format nicht erkannt. In EDSY: Ship → Export → SLEF. In Coriolis: Export → SLEF (oder Loadout-JSON). ¦ Formato no reconocido. En EDSY: Ship → Export → SLEF. En Coriolis: Export → SLEF (o JSON del Loadout). ¦ Formato não reconhecido. No EDSY: Ship → Export → SLEF. No Coriolis: Export → SLEF (ou JSON do Loadout). ¦ Формат не распознан. В EDSY: Ship → Export → SLEF. В Coriolis: Export → SLEF (или Loadout JSON).
+Aucun module ingénié trouvé dans {0}. ¦ No engineered module found in {0}. ¦ Kein modifiziertes Modul in {0} gefunden. ¦ No se encontró ningún módulo modificado en {0}. ¦ Nenhum módulo modificado encontrado em {0}. ¦ В {0} нет модулей с инженерными модификациями.
+{0} ligne(s) ajoutée(s) depuis {1}{2}. ¦ {0} line(s) added from {1}{2}. ¦ {0} Zeile(n) aus {1}{2} hinzugefügt. ¦ {0} línea(s) añadida(s) desde {1}{2}. ¦ {0} linha(s) adicionada(s) de {1}{2}. ¦ Добавлено строк: {0} из {1}{2}.
+Non reconnu : {0} ¦ Not recognised: {0} ¦ Nicht erkannt: {0} ¦ No reconocido: {0} ¦ Não reconhecido: {0} ¦ Не распознано: {0}
+Build importé : {0} ligne(s) ¦ Build imported: {0} line(s) ¦ Build importiert: {0} Zeile(n) ¦ Build importado: {0} línea(s) ¦ Build importado: {0} linha(s) ¦ Сборка импортирована: строк {0}
+Importer un build ¦ Import a build ¦ Build importieren ¦ Importar un build ¦ Importar um build ¦ Импорт сборки
+Chaque module ingénié devient une ligne « blueprint G1 → grade du build », plus son effet expérimental. Les modules identiques sont regroupés. ¦ Each engineered module becomes a "blueprint G1 → build grade" line, plus its experimental effect. Identical modules are grouped. ¦ Jedes modifizierte Modul wird eine Zeile „Bauplan G1 → Stufe des Builds“, plus sein experimenteller Effekt. Gleiche Module werden zusammengefasst. ¦ Cada módulo modificado se convierte en una línea «plano G1 → grado del build», más su efecto experimental. Los módulos idénticos se agrupan. ¦ Cada módulo modificado vira uma linha "blueprint G1 → grau do build", mais seu efeito experimental. Módulos idênticos são agrupados. ¦ Каждый модифицированный модуль становится строкой «чертёж G1 → класс сборки» плюс его экспериментальный эффект. Одинаковые модули объединяются.
+le texte collé ¦ the pasted text ¦ dem eingefügten Text ¦ el texto pegado ¦ o texto colado ¦ вставленного текста
+Importer le texte ¦ Import text ¦ Text importieren ¦ Importar el texto ¦ Importar o texto ¦ Импортировать текст
+Choisir un fichier… ¦ Choose a file… ¦ Datei wählen… ¦ Elegir un archivo… ¦ Escolher um arquivo… ¦ Выбрать файл…
+Recrée la wishlist d'ingénierie de ton vaisseau actuel (utile pour un 2e vaisseau identique) ¦ Rebuilds the engineering wishlist of your current ship (handy for a second identical ship) ¦ Erstellt die Wunschliste deines aktuellen Schiffs neu (praktisch für ein zweites gleiches Schiff) ¦ Recrea la lista de ingeniería de tu nave actual (útil para una 2.ª nave idéntica) ¦ Recria a lista de engenharia da sua nave atual (útil para uma 2ª nave idêntica) ¦ Создаёт список инженерии текущего корабля (удобно для второго такого же корабля)
+Pas encore de vaisseau lu dans le journal ¦ No ship read from the journal yet ¦ Noch kein Schiff aus dem Journal gelesen ¦ Aún no se leyó ninguna nave del diario ¦ Nenhuma nave lida do diário ainda ¦ Корабль ещё не прочитан из журнала
+ton vaisseau actuel ¦ your current ship ¦ deinem aktuellen Schiff ¦ tu nave actual ¦ sua nave atual ¦ текущего корабля
+Depuis mon vaisseau actuel ¦ From my current ship ¦ Von meinem aktuellen Schiff ¦ Desde mi nave actual ¦ Da minha nave atual ¦ С текущего корабля
+Fermer l'import ¦ Close import ¦ Import schließen ¦ Cerrar importación ¦ Fechar importação ¦ Закрыть импорт
+Importer EDSY / Coriolis ¦ Import EDSY / Coriolis ¦ EDSY / Coriolis importieren ¦ Importar EDSY / Coriolis ¦ Importar EDSY / Coriolis ¦ Импорт EDSY / Coriolis
+Vider ¦ Clear ¦ Leeren ¦ Vaciar ¦ Limpar ¦ Очистить
+Ta wishlist est vide. ¦ Your wishlist is empty. ¦ Deine Wunschliste ist leer. ¦ Tu lista de deseos está vacía. ¦ Sua lista de desejos está vazia. ¦ Ваш список желаний пуст.
+Importe un build EDSY / Coriolis ci-dessus, ou ajoute des modifications depuis l'onglet Ingénierie ou la fiche d'un matériau. ¦ Import an EDSY / Coriolis build above, or add modifications from the Engineering tab or a material's page. ¦ Importiere oben einen EDSY-/Coriolis-Build oder füge Modifikationen über den Reiter Ingenieurwesen oder die Seite eines Materials hinzu. ¦ Importa arriba un build de EDSY / Coriolis, o añade modificaciones desde la pestaña Ingeniería o la ficha de un material. ¦ Importe um build do EDSY / Coriolis acima, ou adicione modificações pela aba Engenharia ou pela ficha de um material. ¦ Импортируйте сборку EDSY / Coriolis выше или добавьте модификации на вкладке «Инженерия» или на странице материала.
+Ouvrir l'ingénierie ¦ Open engineering ¦ Ingenieurwesen öffnen ¦ Abrir ingeniería ¦ Abrir engenharia ¦ Открыть инженерию
+Recette introuvable : {0} ¦ Recipe not found: {0} ¦ Rezept nicht gefunden: {0} ¦ Receta no encontrada: {0} ¦ Receita não encontrada: {0} ¦ Рецепт не найден: {0}
+Retirer ¦ Remove ¦ Entfernen ¦ Quitar ¦ Remover ¦ Удалить
+Prêt ¦ Ready ¦ Bereit ¦ Listo ¦ Pronto ¦ Готово
+Grades ¦ Grades ¦ Stufen ¦ Grados ¦ Graus ¦ Классы
+Jets : ¦ Rolls: ¦ Würfe: ¦ Tiradas: ¦ Rolagens: ¦ Броски:
+Nombre de jets au grade {0} ¦ Number of rolls at grade {0} ¦ Anzahl Würfe auf Stufe {0} ¦ Número de tiradas en grado {0} ¦ Número de rolagens no grau {0} ¦ Число бросков на классе {0}
+Quantité ¦ Quantity ¦ Anzahl ¦ Cantidad ¦ Quantidade ¦ Количество
+{0} recettes · {1}/{2} matériaux complets ¦ {0} recipes · {1}/{2} materials complete ¦ {0} Rezepte · {1}/{2} Materialien vollständig ¦ {0} recetas · {1}/{2} materiales completos ¦ {0} receitas · {1}/{2} materiais completos ¦ Рецептов: {0} · материалов собрано: {1}/{2}
+Matériaux nécessaires ¦ Materials needed ¦ Benötigte Materialien ¦ Materiales necesarios ¦ Materiais necessários ¦ Нужные материалы
+Matériau ¦ Material ¦ Material ¦ Material ¦ Material ¦ Материал
+Requis ¦ Needed ¦ Benötigt ¦ Requerido ¦ Necessário ¦ Нужно
+Possédé ¦ Owned ¦ Vorhanden ¦ En posesión ¦ Possuído ¦ Есть
+Manque ¦ Missing ¦ Fehlt ¦ Falta ¦ Falta ¦ Не хватает
+Progression / échange ¦ Progress / trade ¦ Fortschritt / Tausch ¦ Progreso / intercambio ¦ Progresso / troca ¦ Прогресс / обмен
+Clique encore sur « Vider » pour confirmer ¦ Click "Clear" again to confirm ¦ Klicke erneut auf „Leeren“ zum Bestätigen ¦ Pulsa otra vez «Vaciar» para confirmar ¦ Clique de novo em "Limpar" para confirmar ¦ Нажмите «Очистить» ещё раз для подтверждения
+Débloqué ¦ Unlocked ¦ Freigeschaltet ¦ Desbloqueado ¦ Desbloqueado ¦ Открыт
+Invité ¦ Invited ¦ Eingeladen ¦ Invitado ¦ Convidado ¦ Приглашение
+Rencontré ¦ Acquainted ¦ Bekannt ¦ Conocido ¦ Conhecido ¦ Знакомство
+Connu ¦ Known ¦ Bekannt ¦ Conocido ¦ Conhecido ¦ Известен
+Interdit ¦ Barred ¦ Gesperrt ¦ Vetado ¦ Banido ¦ Запрещён
+Pas encore rencontré ¦ Not met yet ¦ Noch nicht getroffen ¦ Aún no conocido ¦ Ainda não conhecido ¦ Ещё не встречен
+{0}/{1} débloqués · statut lu dans ton journal (EngineerProgress), triés par distance depuis {2} ¦ {0}/{1} unlocked · status read from your journal (EngineerProgress), sorted by distance from {2} ¦ {0}/{1} freigeschaltet · Status aus deinem Journal (EngineerProgress), nach Entfernung von {2} sortiert ¦ {0}/{1} desbloqueados · estado leído de tu diario (EngineerProgress), ordenados por distancia desde {2} ¦ {0}/{1} desbloqueados · status lido do seu diário (EngineerProgress), ordenados pela distância de {2} ¦ Открыто {0}/{1} · статус из журнала (EngineerProgress), по расстоянию от {2}
+Vaisseau ¦ Ship ¦ Schiff ¦ Nave ¦ Nave ¦ Корабль
+À pied (Odyssey) ¦ On foot (Odyssey) ¦ Zu Fuß (Odyssey) ¦ A pie (Odyssey) ¦ A pé (Odyssey) ¦ Пешком (Odyssey)
+Débloqués ¦ Unlocked ¦ Freigeschaltet ¦ Desbloqueados ¦ Desbloqueados ¦ Открытые
+À débloquer ¦ To unlock ¦ Freizuschalten ¦ Por desbloquear ¦ A desbloquear ¦ Не открытые
+Statuts inconnus : ils arrivent avec l'événement EngineerProgress écrit à chaque connexion au jeu. ¦ Statuses unknown: they come with the EngineerProgress event written at each game login. ¦ Status unbekannt: Sie kommen mit dem EngineerProgress-Ereignis bei jeder Anmeldung im Spiel. ¦ Estados desconocidos: llegan con el evento EngineerProgress escrito en cada inicio de sesión. ¦ Status desconhecidos: chegam com o evento EngineerProgress gravado a cada login no jogo. ¦ Статусы неизвестны: они приходят с событием EngineerProgress при каждом входе в игру.
+{0} · corps {1} ¦ {0} · body {1} ¦ {0} · Körper {1} ¦ {0} · cuerpo {1} ¦ {0} · corpo {1} ¦ {0} · тело {1}
+Voir le système sur Inara ¦ View the system on Inara ¦ System auf Inara ansehen ¦ Ver el sistema en Inara ¦ Ver o sistema no Inara ¦ Открыть систему на Inara
+Rang max ¦ Max rank ¦ Höchster Rang ¦ Rango máx. ¦ Nível máx. ¦ Макс. ранг
+Rang {0} ¦ Rank {0} ¦ Rang {0} ¦ Rango {0} ¦ Nível {0} ¦ Ранг {0}
+Rang {0} · {1} % vers {2} ¦ Rank {0} · {1}% to {2} ¦ Rang {0} · {1} % bis {2} ¦ Rango {0} · {1} % hacia {2} ¦ Nível {0} · {1}% até {2} ¦ Ранг {0} · {1}% до {2}
+Recommandé par {0}{1} ¦ Referred by {0}{1} ¦ Empfohlen von {0}{1} ¦ Recomendado por {0}{1} ¦ Recomendado por {0}{1} ¦ Рекомендация от {0}{1}
+(rang {0}) ¦ (rank {0}) ¦ (Rang {0}) ¦ (rango {0}) ¦ (nível {0}) ¦ (ранг {0})
+{0} ligne(s) ajoutée(s) depuis {1} ¦ {0} line(s) added from {1} ¦ {0} Zeile(n) hinzugefügt aus {1} ¦ {0} línea(s) añadida(s) desde {1} ¦ {0} linha(s) adicionada(s) de {1} ¦ Добавлено строк: {0} из {1}

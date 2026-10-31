@@ -1,0 +1,124 @@
+# --- navigation
+Itinéraire du vaisseau ¦ Ship route ¦ Schiffsroute ¦ Ruta de la nave ¦ Rota da nave ¦ Маршрут корабля
+Calcul Spansh avec boost des étoiles à neutrons (comme le Neutron Plotter). ¦ Spansh plot with neutron star boosts (like the Neutron Plotter). ¦ Spansh-Berechnung mit Neutronenstern-Boost (wie der Neutron Plotter). ¦ Cálculo de Spansh con impulso de estrellas de neutrones (como el Neutron Plotter). ¦ Cálculo do Spansh com impulso de estrelas de nêutrons (como o Neutron Plotter). ¦ Расчёт Spansh с ускорением от нейтронных звёзд (как Neutron Plotter).
+Départ ¦ From ¦ Start ¦ Origen ¦ Origem ¦ Откуда
+Destination ¦ To ¦ Ziel ¦ Destino ¦ Destino ¦ Куда
+Portée (al) ¦ Range (ly) ¦ Reichweite (Lj) ¦ Alcance (al) ¦ Alcance (al) ¦ Дальность (св. лет)
+Plus c'est haut, plus l'itinéraire colle à la ligne droite ¦ The higher, the closer the route sticks to a straight line ¦ Je höher, desto näher bleibt die Route an der Geraden ¦ Cuanto más alto, más se ciñe la ruta a la línea recta ¦ Quanto maior, mais a rota segue a linha reta ¦ Чем выше, тем ближе маршрут к прямой
+Efficacité (%) ¦ Efficiency (%) ¦ Effizienz (%) ¦ Eficiencia (%) ¦ Eficiência (%) ¦ Эффективность (%)
+Calculer l'itinéraire ¦ Plot route ¦ Route berechnen ¦ Calcular ruta ¦ Calcular rota ¦ Проложить маршрут
+Estimation rapide ¦ Quick estimate ¦ Schnellschätzung ¦ Estimación rápida ¦ Estimativa rápida ¦ Быстрая оценка
+Max {0} al par saut. Rempli depuis le journal quand tu as ouvert la gestion du carrier. ¦ Max {0} ly per jump. Filled from the journal once you've opened carrier management. ¦ Max. {0} Lj pro Sprung. Aus dem Journal ausgefüllt, sobald du die Carrier-Verwaltung geöffnet hast. ¦ Máx. {0} al por salto. Se rellena desde el diario cuando abres la gestión del carrier. ¦ Máx. {0} al por salto. Preenchido pelo diário quando você abre o gerenciamento do carrier. ¦ Макс. {0} св. лет за прыжок. Заполняется из журнала, когда вы открываете управление кораблём-носителем.
+Départ du carrier ¦ Carrier start ¦ Carrier-Start ¦ Origen del carrier ¦ Origem do carrier ¦ Откуда (носитель)
+Capacité utilisée (t) ¦ Used capacity (t) ¦ Belegte Kapazität (t) ¦ Capacidad usada (t) ¦ Capacidade usada (t) ¦ Занятый объём (т)
+Tritium dans le réservoir ¦ Tritium in the tank ¦ Tritium im Tank ¦ Tritio en el depósito ¦ Trítio no tanque ¦ Тритий в баке
+Tritium en soute ¦ Tritium in cargo ¦ Tritium im Frachtraum ¦ Tritio en la bodega ¦ Trítio no porão ¦ Тритий в трюме
+Calculer avec Spansh ¦ Plot with Spansh ¦ Mit Spansh berechnen ¦ Calcular con Spansh ¦ Calcular com Spansh ¦ Рассчитать в Spansh
+Portée de saut ¦ Jump range ¦ Sprungreichweite ¦ Alcance de salto ¦ Alcance de salto ¦ Дальность прыжка
+Le jeu n'a pas encore donné la configuration de ton vaisseau (événement Loadout). Lance le jeu ou change de vaisseau. ¦ The game hasn't sent your ship's loadout yet (Loadout event). Start the game or switch ships. ¦ Das Spiel hat die Ausstattung deines Schiffs noch nicht gemeldet (Loadout-Ereignis). Starte das Spiel oder wechsle das Schiff. ¦ El juego aún no ha enviado la configuración de tu nave (evento Loadout). Inicia el juego o cambia de nave. ¦ O jogo ainda não enviou a configuração da sua nave (evento Loadout). Abra o jogo ou troque de nave. ¦ Игра ещё не передала конфигурацию корабля (событие Loadout). Запустите игру или смените корабль.
+Maximale (vide, carburant pour 1 saut) ¦ Maximum (empty, fuel for 1 jump) ¦ Maximal (leer, Treibstoff für 1 Sprung) ¦ Máximo (vacía, combustible para 1 salto) ¦ Máximo (vazia, combustível para 1 salto) ¦ Максимальная (пусто, топливо на 1 прыжок)
+Valeur du jeu ¦ Game value ¦ Spielwert ¦ Valor del juego ¦ Valor do jogo ¦ Значение игры
+Réservoir plein, soute vide ¦ Full tank, empty hold ¦ Voller Tank, leerer Frachtraum ¦ Depósito lleno, bodega vacía ¦ Tanque cheio, porão vazio ¦ Полный бак, пустой трюм
+Réservoir plein, soute pleine ¦ Full tank, full hold ¦ Voller Tank, voller Frachtraum ¦ Depósito lleno, bodega llena ¦ Tanque cheio, porão cheio ¦ Полный бак, полный трюм
+Maintenant ¦ Now ¦ Jetzt ¦ Ahora ¦ Agora ¦ Сейчас
+{0} t de carburant ¦ {0} t of fuel ¦ {0} t Treibstoff ¦ {0} t de combustible ¦ {0} t de combustível ¦ {0} т топлива
+{0} t de cargaison ¦ {0} t of cargo ¦ {0} t Fracht ¦ {0} t de carga ¦ {0} t de carga ¦ {0} т груза
+{0} t de carburant, {1} t de cargaison ¦ {0} t of fuel, {1} t of cargo ¦ {0} t Treibstoff, {1} t Fracht ¦ {0} t de combustible, {1} t de carga ¦ {0} t de combustível, {1} t de carga ¦ {0} т топлива, {1} т груза
+booster Gardien +{0} al ¦ Guardian booster +{0} ly ¦ Guardian-Booster +{0} Lj ¦ impulsor guardián +{0} al ¦ impulsor Guardião +{0} al ¦ ускоритель Стражей +{0} св. лет
+{0} t à vide ¦ {0} t unladen ¦ {0} t leer ¦ {0} t en vacío ¦ {0} t vazia ¦ {0} т без груза
+Cargaison simulée : {0} t ¦ Simulated cargo: {0} t ¦ Simulierte Fracht: {0} t ¦ Carga simulada: {0} t ¦ Carga simulada: {0} t ¦ Моделируемый груз: {0} т
+Les portées intermédiaires sont calculées à partir de la valeur du jeu (formule officielle du FSD). ¦ Intermediate ranges are calculated from the game value (official FSD formula). ¦ Zwischenreichweiten werden aus dem Spielwert berechnet (offizielle FSD-Formel). ¦ Los alcances intermedios se calculan a partir del valor del juego (fórmula oficial del FSD). ¦ Os alcances intermediários são calculados a partir do valor do jogo (fórmula oficial do FSD). ¦ Промежуточные значения рассчитаны по значению игры (официальная формула FSD).
+Recherche des coordonnées… ¦ Looking up coordinates… ¦ Koordinaten werden gesucht… ¦ Buscando coordenadas… ¦ Buscando coordenadas… ¦ Поиск координат…
+Système introuvable sur Spansh ¦ System not found on Spansh ¦ System auf Spansh nicht gefunden ¦ Sistema no encontrado en Spansh ¦ Sistema não encontrado no Spansh ¦ Система не найдена в Spansh
+Indique un départ, une destination et une portée. ¦ Enter a start, a destination and a range. ¦ Gib Start, Ziel und Reichweite an. ¦ Indica un origen, un destino y un alcance. ¦ Informe origem, destino e alcance. ¦ Укажите откуда, куда и дальность.
+Indique le départ et la destination. ¦ Enter the start and the destination. ¦ Gib Start und Ziel an. ¦ Indica el origen y el destino. ¦ Informe a origem e o destino. ¦ Укажите откуда и куда.
+Distance ¦ Distance ¦ Entfernung ¦ Distancia ¦ Distância ¦ Расстояние
+Sauts (ligne droite) ¦ Jumps (straight line) ¦ Sprünge (Luftlinie) ¦ Saltos (línea recta) ¦ Saltos (linha reta) ¦ Прыжки (по прямой)
+Sauts ¦ Jumps ¦ Sprünge ¦ Saltos ¦ Saltos ¦ Прыжки
+Saut ¦ Jump ¦ Sprung ¦ Salto ¦ Salto ¦ Прыжок
+Étapes ¦ Waypoints ¦ Wegpunkte ¦ Etapas ¦ Etapas ¦ Точки
+Durée ¦ Duration ¦ Dauer ¦ Duración ¦ Duração ¦ Время
+Tritium ¦ Tritium ¦ Tritium ¦ Tritio ¦ Trítio ¦ Тритий
+Système ¦ System ¦ System ¦ Sistema ¦ Sistema ¦ Система
+Restant ¦ Remaining ¦ Verbleibend ¦ Restante ¦ Restante ¦ Осталось
+Réservoir ¦ Tank ¦ Tank ¦ Depósito ¦ Tanque ¦ Бак
+Minimum théorique sans boost neutron ; l'itinéraire réel demande un peu plus de sauts. ¦ Theoretical minimum without neutron boosts; the real route takes a few more jumps. ¦ Theoretisches Minimum ohne Neutronen-Boost; die echte Route braucht etwas mehr Sprünge. ¦ Mínimo teórico sin impulso de neutrones; la ruta real necesita algunos saltos más. ¦ Mínimo teórico sem impulso de nêutrons; a rota real precisa de alguns saltos a mais. ¦ Теоретический минимум без нейтронного ускорения; реальный маршрут потребует немного больше прыжков.
+Spansh calcule l'itinéraire… ¦ Spansh is plotting the route… ¦ Spansh berechnet die Route… ¦ Spansh está calculando la ruta… ¦ O Spansh está calculando a rota… ¦ Spansh прокладывает маршрут…
+Spansh calcule l'itinéraire du carrier… ¦ Spansh is plotting the carrier route… ¦ Spansh berechnet die Carrier-Route… ¦ Spansh está calculando la ruta del carrier… ¦ O Spansh está calculando a rota do carrier… ¦ Spansh прокладывает маршрут носителя…
+Il manque environ {0} t de tritium (réservoir + soute). ¦ You're about {0} t of tritium short (tank + hold). ¦ Es fehlen etwa {0} t Tritium (Tank + Frachtraum). ¦ Faltan unas {0} t de tritio (depósito + bodega). ¦ Faltam cerca de {0} t de trítio (tanque + porão). ¦ Не хватает примерно {0} т трития (бак + трюм).
+Le tritium du réservoir et de la soute suffit (estimation). ¦ The tritium in the tank and hold is enough (estimate). ¦ Das Tritium in Tank und Frachtraum reicht (Schätzung). ¦ El tritio del depósito y la bodega basta (estimación). ¦ O trítio do tanque e do porão é suficiente (estimativa). ¦ Трития в баке и трюме достаточно (оценка).
+Estimation communautaire : 5 + distance × (25 + capacité utilisée / 1000) / 200 t par saut, 20 min par saut (compte à rebours + recharge). Utilise « Calculer avec Spansh » pour le plan exact. ¦ Community estimate: 5 + distance × (25 + used capacity / 1000) / 200 t per jump, 20 min per jump (countdown + cooldown). Use "Plot with Spansh" for the exact plan. ¦ Community-Schätzung: 5 + Entfernung × (25 + belegte Kapazität / 1000) / 200 t pro Sprung, 20 Min. pro Sprung (Countdown + Abklingzeit). Nutze „Mit Spansh berechnen“ für den genauen Plan. ¦ Estimación de la comunidad: 5 + distancia × (25 + capacidad usada / 1000) / 200 t por salto, 20 min por salto (cuenta atrás + enfriamiento). Usa «Calcular con Spansh» para el plan exacto. ¦ Estimativa da comunidade: 5 + distância × (25 + capacidade usada / 1000) / 200 t por salto, 20 min por salto (contagem + recarga). Use "Calcular com Spansh" para o plano exato. ¦ Оценка сообщества: 5 + расстояние × (25 + занятый объём / 1000) / 200 т на прыжок, 20 мин на прыжок (отсчёт + перезарядка). Для точного плана используйте «Рассчитать в Spansh».
+Ravitaillement nécessaire à {0} étape(s). ¦ Refuelling needed at {0} waypoint(s). ¦ Nachtanken an {0} Wegpunkt(en) nötig. ¦ Hace falta repostar en {0} etapa(s). ¦ Reabastecimento necessário em {0} etapa(s). ¦ Нужна дозаправка в точках: {0}.
+Anneau glacé vierge ¦ Pristine icy ring ¦ Unberührter Eisring ¦ Anillo helado virgen ¦ Anel de gelo intocado ¦ Нетронутое ледяное кольцо
+Anneau glacé ¦ Icy ring ¦ Eisring ¦ Anillo helado ¦ Anel de gelo ¦ Ледяное кольцо
+Ravitailler {0} t ¦ Restock {0} t ¦ {0} t nachladen ¦ Reponer {0} t ¦ Reabastecer {0} t ¦ Пополнить {0} т
+# --- search
+Acheter une marchandise ¦ Buy a commodity ¦ Ware kaufen ¦ Comprar una mercancía ¦ Comprar uma mercadoria ¦ Купить товар
+Vendre une marchandise ¦ Sell a commodity ¦ Ware verkaufen ¦ Vender una mercancía ¦ Vender uma mercadoria ¦ Продать товар
+Vaisseaux ¦ Ships ¦ Schiffe ¦ Naves ¦ Naves ¦ Корабли
+Services ¦ Services ¦ Dienste ¦ Servicios ¦ Serviços ¦ Услуги
+Marchandise (ex. Tritium, Gold, Low Temperature Diamonds) ¦ Commodity (e.g. Tritium, Gold, Low Temperature Diamonds) ¦ Ware (z. B. Tritium, Gold, Low Temperature Diamonds) ¦ Mercancía (p. ej. Tritium, Gold, Low Temperature Diamonds) ¦ Mercadoria (ex. Tritium, Gold, Low Temperature Diamonds) ¦ Товар (например, Tritium, Gold, Low Temperature Diamonds)
+Vaisseau (ex. Krait MkII, Anaconda) ¦ Ship (e.g. Krait MkII, Anaconda) ¦ Schiff (z. B. Krait MkII, Anaconda) ¦ Nave (p. ej. Krait MkII, Anaconda) ¦ Nave (ex. Krait MkII, Anaconda) ¦ Корабль (например, Krait MkII, Anaconda)
+Module (ex. Frame Shift Drive, Shield Booster) ¦ Module (e.g. Frame Shift Drive, Shield Booster) ¦ Modul (z. B. Frame Shift Drive, Shield Booster) ¦ Módulo (p. ej. Frame Shift Drive, Shield Booster) ¦ Módulo (ex. Frame Shift Drive, Shield Booster) ¦ Модуль (например, Frame Shift Drive, Shield Booster)
+Chercher ¦ Search ¦ Suchen ¦ Buscar ¦ Buscar ¦ Найти
+Toute classe ¦ Any class ¦ Jede Klasse ¦ Cualquier clase ¦ Qualquer classe ¦ Любой класс
+Toute note ¦ Any rating ¦ Jede Bewertung ¦ Cualquier categoría ¦ Qualquer classificação ¦ Любой рейтинг
+Classe {0} ¦ Class {0} ¦ Klasse {0} ¦ Clase {0} ¦ Classe {0} ¦ Класс {0}
+Note {0} ¦ Rating {0} ¦ Bewertung {0} ¦ Categoría {0} ¦ Classificação {0} ¦ Рейтинг {0}
+Pad L seulement ¦ L pad only ¦ Nur L-Pad ¦ Solo plataforma L ¦ Só plataforma G ¦ Только площадка L
+Inclure les Fleet Carriers ¦ Include Fleet Carriers ¦ Fleet Carrier einbeziehen ¦ Incluir Fleet Carriers ¦ Incluir Fleet Carriers ¦ Включая корабли-носители
+Inclure les ports planétaires ¦ Include planetary ports ¦ Planetare Häfen einbeziehen ¦ Incluir puertos planetarios ¦ Incluir portos planetários ¦ Включая планетарные порты
+Trier par prix le plus bas ¦ Sort by lowest price ¦ Nach niedrigstem Preis sortieren ¦ Ordenar por precio más bajo ¦ Ordenar pelo menor preço ¦ Сначала дешёвые
+Trier par meilleur prix ¦ Sort by best price ¦ Nach bestem Preis sortieren ¦ Ordenar por mejor precio ¦ Ordenar pelo melhor preço ¦ Сначала лучшая цена
+Autour de {0}, {1} al max ¦ Around {0}, {1} ly max ¦ Rund um {0}, max. {1} Lj ¦ Alrededor de {0}, {1} al máx. ¦ Ao redor de {0}, {1} al máx. ¦ Вокруг {0}, макс. {1} св. лет
+Rien trouvé à moins de {0} al. Augmente la distance dans les Paramètres ou vérifie le nom. ¦ Nothing found within {0} ly. Increase the distance in Settings or check the name. ¦ Nichts im Umkreis von {0} Lj gefunden. Erhöhe die Entfernung in den Einstellungen oder prüfe den Namen. ¦ Nada encontrado a menos de {0} al. Aumenta la distancia en Ajustes o revisa el nombre. ¦ Nada encontrado a menos de {0} al. Aumente a distância nas Configurações ou confira o nome. ¦ Ничего в радиусе {0} св. лет. Увеличьте расстояние в настройках или проверьте название.
+{0} stations correspondent · {1} affichées ¦ {0} matching stations · {1} shown ¦ {0} passende Stationen · {1} angezeigt ¦ {0} estaciones coinciden · {1} mostradas ¦ {0} estações correspondem · {1} exibidas ¦ Подходящих станций: {0} · показано {1}
+Station ¦ Station ¦ Station ¦ Estación ¦ Estação ¦ Станция
+Prix d'achat · stock ¦ Buy price · stock ¦ Kaufpreis · Bestand ¦ Precio de compra · existencias ¦ Preço de compra · estoque ¦ Цена покупки · запас
+Prix de vente · demande ¦ Sell price · demand ¦ Verkaufspreis · Nachfrage ¦ Precio de venta · demanda ¦ Preço de venda · demanda ¦ Цена продажи · спрос
+Type ¦ Type ¦ Typ ¦ Tipo ¦ Tipo ¦ Тип
+Détail ¦ Details ¦ Details ¦ Detalle ¦ Detalhe ¦ Подробности
+Pad / arrivée ¦ Pad / arrival ¦ Pad / Ankunft ¦ Plataforma / llegada ¦ Plataforma / chegada ¦ Площадка / прибытие
+Màj ¦ Updated ¦ Aktualisiert ¦ Act. ¦ Atual. ¦ Обновлено
+{0} cr ¦ {0} cr ¦ {0} Cr ¦ {0} cr ¦ {0} cr ¦ {0} кр
+· {0} en stock ¦ · {0} in stock ¦ · {0} vorrätig ¦ · {0} en existencias ¦ · {0} em estoque ¦ · в наличии {0}
+· demande {0} ¦ · demand {0} ¦ · Nachfrage {0} ¦ · demanda {0} ¦ · demanda {0} ¦ · спрос {0}
+En vente ¦ For sale ¦ Im Angebot ¦ En venta ¦ À venda ¦ В продаже
+Disponible ¦ Available ¦ Verfügbar ¦ Disponible ¦ Disponível ¦ Доступно
+Ouvrir sur Inara ¦ Open on Inara ¦ Auf Inara öffnen ¦ Abrir en Inara ¦ Abrir no Inara ¦ Открыть на Inara
+Trader de matériaux ¦ Material trader ¦ Materialhändler ¦ Comerciante de materiales ¦ Comerciante de materiais ¦ Торговец материалами
+Marché noir ¦ Black market ¦ Schwarzmarkt ¦ Mercado negro ¦ Mercado negro ¦ Чёрный рынок
+Chantier naval ¦ Shipyard ¦ Werft ¦ Astillero ¦ Estaleiro ¦ Верфь
+Équipement ¦ Outfitting ¦ Ausrüstung ¦ Equipamiento ¦ Equipamento ¦ Снаряжение
+Ravitaillement ¦ Refuel ¦ Auftanken ¦ Repostar ¦ Reabastecer ¦ Заправка
+Réparation ¦ Repair ¦ Reparatur ¦ Reparación ¦ Reparo ¦ Ремонт
+Munitions ¦ Restock ¦ Munition ¦ Munición ¦ Munição ¦ Боеприпасы
+Recherche et sauvetage ¦ Search and rescue ¦ Suche und Rettung ¦ Búsqueda y rescate ¦ Busca e resgate ¦ Поиск и спасение
+# --- settings
+Langue ¦ Language ¦ Sprache ¦ Idioma ¦ Idioma ¦ Язык
+Langue de l'interface ¦ Interface language ¦ Sprache der Oberfläche ¦ Idioma de la interfaz ¦ Idioma da interface ¦ Язык интерфейса
+Les noms des matériaux, modules et commandes restent ceux du jeu en anglais. ¦ Material, module and control names stay as in the English game. ¦ Material-, Modul- und Steuerungsnamen bleiben wie im englischen Spiel. ¦ Los nombres de materiales, módulos y controles se mantienen como en el juego en inglés. ¦ Os nomes de materiais, módulos e controles ficam como no jogo em inglês. ¦ Названия материалов, модулей и команд остаются как в английской версии игры.
+Lecture en direct : {0} ¦ Reading live: {0} ¦ Live-Lesen: {0} ¦ Leyendo en directo: {0} ¦ Lendo ao vivo: {0} ¦ Чтение в реальном времени: {0}
+En attente du jeu… ¦ Waiting for the game… ¦ Warte auf das Spiel… ¦ Esperando al juego… ¦ Aguardando o jogo… ¦ Ожидание игры…
+Erreur : {0} ¦ Error: {0} ¦ Fehler: {0} ¦ Error: {0} ¦ Erro: {0} ¦ Ошибка: {0}
+Mode démo (navigateur) : journal d'exemple ¦ Demo mode (browser): sample journal ¦ Demo-Modus (Browser): Beispiel-Journal ¦ Modo demo (navegador): diario de ejemplo ¦ Modo demo (navegador): diário de exemplo ¦ Демо-режим (браузер): пример журнала
+Lecture arrêtée ¦ Reading stopped ¦ Lesen gestoppt ¦ Lectura detenida ¦ Leitura parada ¦ Чтение остановлено
+Journal du jeu ¦ Game journal ¦ Spiel-Journal ¦ Diario del juego ¦ Diário do jogo ¦ Журнал игры
+Dossier du journal ¦ Journal folder ¦ Journal-Ordner ¦ Carpeta del diario ¦ Pasta do diário ¦ Папка журнала
+Détecter ¦ Detect ¦ Erkennen ¦ Detectar ¦ Detectar ¦ Найти
+Lecture du journal démarrée ¦ Journal reading started ¦ Journal-Lesen gestartet ¦ Lectura del diario iniciada ¦ Leitura do diário iniciada ¦ Чтение журнала запущено
+Enregistrer et lire ¦ Save and read ¦ Speichern und lesen ¦ Guardar y leer ¦ Salvar e ler ¦ Сохранить и читать
+Recherche de systèmes (Spansh) ¦ System search (Spansh) ¦ Systemsuche (Spansh) ¦ Búsqueda de sistemas (Spansh) ¦ Busca de sistemas (Spansh) ¦ Поиск систем (Spansh)
+Distance max (al) ¦ Max distance (ly) ¦ Max. Entfernung (Lj) ¦ Distancia máx. (al) ¦ Distância máx. (al) ¦ Макс. расстояние (св. лет)
+Rayon de recherche autour de ta position. ¦ Search radius around your location. ¦ Suchradius um deine Position. ¦ Radio de búsqueda alrededor de tu posición. ¦ Raio de busca ao redor da sua posição. ¦ Радиус поиска вокруг вашего местоположения.
+Population min. pour les HGE ¦ Min. population for HGEs ¦ Min. Bevölkerung für HGE ¦ Población mín. para las HGE ¦ População mín. para HGE ¦ Мин. население для HGE
+« Haute population » : 1 000 000 par défaut. ¦ "High population": 1,000,000 by default. ¦ „Hohe Bevölkerung“: standardmäßig 1.000.000. ¦ «Población alta»: 1 000 000 por defecto. ¦ "População alta": 1.000.000 por padrão. ¦ «Высокое население»: по умолчанию 1 000 000.
+Données BGS max. (jours) ¦ Max BGS data age (days) ¦ Max. Alter der BGS-Daten (Tage) ¦ Antigüedad máx. de datos BGS (días) ¦ Idade máx. dos dados BGS (dias) ¦ Макс. возраст данных BGS (дни)
+Ignore les états de faction plus vieux (Boom, Guerre…). 0 = pas de limite. ¦ Ignores older faction states (Boom, War…). 0 = no limit. ¦ Ignoriert ältere Fraktionszustände (Boom, Krieg…). 0 = keine Grenze. ¦ Ignora estados de facción más antiguos (Auge, Guerra…). 0 = sin límite. ¦ Ignora estados de facção mais antigos (Prosperidade, Guerra…). 0 = sem limite. ¦ Игнорирует более старые состояния фракций (бум, война…). 0 = без ограничения.
+Système de repli ¦ Fallback system ¦ Ersatzsystem ¦ Sistema de respaldo ¦ Sistema reserva ¦ Запасная система
+Utilisé tant que le jeu n'a pas donné ta position. ¦ Used until the game reports your location. ¦ Wird verwendet, bis das Spiel deine Position meldet. ¦ Se usa mientras el juego no dé tu posición. ¦ Usado até o jogo informar sua posição. ¦ Используется, пока игра не сообщит ваше местоположение.
+Traders avec pad L seulement ¦ Traders with L pad only ¦ Nur Händler mit L-Pad ¦ Solo comerciantes con plataforma L ¦ Só comerciantes com plataforma G ¦ Только торговцы с площадкой L
+À propos ¦ About ¦ Über ¦ Acerca de ¦ Sobre ¦ О программе
+EDCH lit le journal local d'Elite Dangerous en temps réel. Les systèmes proposés viennent de ¦ EDCH reads Elite Dangerous' local journal in real time. Suggested systems come from ¦ EDCH liest das lokale Journal von Elite Dangerous in Echtzeit. Die vorgeschlagenen Systeme stammen von ¦ EDCH lee el diario local de Elite Dangerous en tiempo real. Los sistemas propuestos vienen de ¦ O EDCH lê o diário local do Elite Dangerous em tempo real. Os sistemas sugeridos vêm do ¦ EDCH читает локальный журнал Elite Dangerous в реальном времени. Предлагаемые системы берутся из
+(données EDDN, mises à jour par les joueurs). ¦ (EDDN data, updated by players). ¦ (EDDN-Daten, von Spielern aktualisiert). ¦ (datos de EDDN, actualizados por los jugadores). ¦ (dados do EDDN, atualizados pelos jogadores). ¦ (данные EDDN, обновляемые игроками).
+Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel, non commercial. ¦ Elite Dangerous is a trademark of Frontier Developments plc. Unofficial, non-commercial community tool. ¦ Elite Dangerous ist eine Marke von Frontier Developments plc. Inoffizielles, nicht kommerzielles Community-Tool. ¦ Elite Dangerous es una marca de Frontier Developments plc. Herramienta comunitaria no oficial y sin fines comerciales. ¦ Elite Dangerous é uma marca da Frontier Developments plc. Ferramenta comunitária não oficial e não comercial. ¦ Elite Dangerous — товарный знак Frontier Developments plc. Неофициальный некоммерческий инструмент сообщества.

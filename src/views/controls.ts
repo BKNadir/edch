@@ -16,6 +16,7 @@ import {
   type DeviceTemplate,
 } from "../binds.js";
 import { h, icon, replace, toast } from "../dom.js";
+import { tr } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
 import { DEMO_BINDS } from "../demo.js";
 
@@ -359,7 +360,7 @@ export class ControlsView implements View {
       const mod = b.modifiers.length ? `${b.modifiers.map((m) => keyLabel(meta, m.key)).join(" + ")} + ` : "";
       return h(
         `span.act.${groupClass(g)}`,
-        { title: `${GROUP_FR[g] ?? g} · ${b.action}${b.slot === "secondary" ? " (secondaire)" : ""}` },
+        { title: `${tr(GROUP_FR[g] ?? g)} · ${b.action}${b.slot === "secondary" ? ` (${tr("secondaire")})` : ""}` },
         mod ? h("em", null, mod) : null,
         actionName(meta, b.action),
         b.inverted ? h("small", null, " (inversé)") : null,

@@ -50,7 +50,7 @@ export class WishlistView implements View {
       area.value = "";
       replace(
         report,
-        h("p", null, icon("check"), ` ${res.items.length} ligne(s) ajoutée(s) depuis ${source}${res.ship ? ` (${res.ship})` : ""}.`),
+        h("p", null, icon("check"), ` ${res.items.length} ligne(s) ajoutée(s) depuis ${source}`, res.ship ? ` (${res.ship})` : "", "."),
         res.skipped.length ? h("p.sub", null, `Non reconnu : ${res.skipped.join(", ")}`) : null,
       );
       toast(`Build importé : ${res.items.length} ligne(s)`);

@@ -1,3 +1,4 @@
+import { locale } from "./i18n.js";
 import { spanshPost } from "./bridge.js";
 import type { Vec3 } from "./journal.js";
 import type { Finder } from "./sources.js";
@@ -101,7 +102,7 @@ function bodyRow(r: any, f: Finder): ResultRow & { share: number } {
   const share = hit ? num(hit.share) : 0;
   const sub: string[] = [];
   if (r.subtype) sub.push(r.subtype);
-  if (r.distance_to_arrival !== undefined) sub.push(`${Math.round(num(r.distance_to_arrival)).toLocaleString("fr-BE")} ls de l'arrivée`);
+  if (r.distance_to_arrival !== undefined) sub.push(`${Math.round(num(r.distance_to_arrival)).toLocaleString(locale())} ls de l'arrivée`);
   if (r.gravity !== undefined && r.is_landable) sub.push(`${num(r.gravity).toFixed(2)} g`);
   const badges: ResultRow["badges"] = [];
   if (hit) badges.push({ text: `${f.materialName} ${share.toFixed(1)} %`, tone: "hit" });
@@ -130,7 +131,7 @@ function bodyRow(r: any, f: Finder): ResultRow & { share: number } {
 function stationRow(r: any): ResultRow {
   const sub: string[] = [];
   if (r.type) sub.push(r.type);
-  if (r.distance_to_arrival !== undefined) sub.push(`${Math.round(num(r.distance_to_arrival)).toLocaleString("fr-BE")} ls`);
+  if (r.distance_to_arrival !== undefined) sub.push(`${Math.round(num(r.distance_to_arrival)).toLocaleString(locale())} ls`);
   const badges: ResultRow["badges"] = [];
   if (r.has_large_pad === true) badges.push({ text: "Pad L" });
   else if (r.medium_pads > 0) badges.push({ text: "Pad M", tone: "muted" });
@@ -180,4 +181,4 @@ export function distance(a?: Vec3, b?: Vec3 | null): number | undefined {
   return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 }
 
-export const fmtLy = (n?: number) => (n === undefined || Number.isNaN(n) ? "" : `${n.toLocaleString("fr-BE", { maximumFractionDigits: n < 100 ? 2 : 1 })} al`);
+export const fmtLy = (n?: number) => (n === undefined || Number.isNaN(n) ? "" : `${n.toLocaleString(locale(), { maximumFractionDigits: n < 100 ? 2 : 1 })} al`);

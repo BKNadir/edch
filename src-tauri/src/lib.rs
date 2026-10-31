@@ -578,6 +578,37 @@ fn reveal_path(path: String) -> Result<(), String> {
     result.map(|_| ()).map_err(|e| e.to_string())
 }
 
+/// Language picked in the NSIS installer (Windows LANGID), if any.
+#[tauri::command]
+fn installer_language() -> Option<u32> {
+    #[cfg(target_os = "windows")]
+    {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+        for key in [r"HKCU\Software\BKNadir\EDCH", r"HKLM\Software\BKNadir\EDCH"] {
+            let out = std::process::Command::new("reg")
+                .args(["query", key, "/v", "Installer Language"])
+                .creation_flags(CREATE_NO_WINDOW)
+                .output()
+                .ok()?;
+            let text = String::from_utf8_lossy(&out.stdout);
+            if let Some(id) = text
+                .lines()
+                .find(|l| l.contains("Installer Language"))
+                .and_then(|l| l.split_whitespace().last())
+                .and_then(|v| v.parse::<u32>().ok())
+            {
+                return Some(id);
+            }
+        }
+        None
+    }
+    #[cfg(not(target_os = "windows"))]
+    {
+        None
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -593,7 +624,8 @@ pub fn run() {
             read_option_file,
             export_config,
             import_config,
-            reveal_path
+            reveal_path,
+            installer_language
         ])
         .run(tauri::generate_context!())
         .expect("error while running EDCH");

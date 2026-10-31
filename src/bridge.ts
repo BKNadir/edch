@@ -134,6 +134,8 @@ export const exportConfig = (includeGraphics: boolean) => invoke<string>("export
 export const importConfig = (bytes: Uint8Array) => invoke<ImportReport>("import_config", { data: Array.from(bytes) });
 export const revealPath = (path: string) => invoke<void>("reveal_path", { path });
 
+export const installerLanguage = () => (isTauri() ? invoke<number | null>("installer_language").catch(() => null) : Promise.resolve(null));
+
 export async function openUrl(url: string): Promise<void> {
   if (isTauri()) {
     await window.__TAURI__!.core.invoke("open_url", { url });

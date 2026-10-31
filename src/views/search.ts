@@ -1,3 +1,4 @@
+import { locale } from "../i18n.js";
 import { spanshPost } from "../bridge.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import { referenceOf, type Ctx, type View } from "../context.js";
@@ -244,7 +245,7 @@ export class SearchView implements View {
       h("td.num", null, fmtLy(Number(r.distance))),
       h("td", null, detail),
       h("td", null, `${pad} · ${r.distance_to_arrival !== undefined ? `${fmt(Math.round(Number(r.distance_to_arrival)))} ls` : "?"}`),
-      h("td.sub", null, age ? new Date(age.endsWith("Z") || age.includes("+") ? age : `${age}Z`).toLocaleDateString("fr-BE") : ""),
+      h("td.sub", null, age ? new Date(age.endsWith("Z") || age.includes("+") ? age : `${age}Z`).toLocaleDateString(locale()) : ""),
     );
   }
 }

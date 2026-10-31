@@ -1,3 +1,4 @@
+import { locale } from "../i18n.js";
 import { spanshGet, spanshJob, spanshPost } from "../bridge.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import type { Ctx, View } from "../context.js";
@@ -7,7 +8,7 @@ import { copySystem } from "./results.js";
 
 type Json = Record<string, any>;
 
-const fmt1 = (n: number) => n.toLocaleString("fr-BE", { maximumFractionDigits: 2 });
+const fmt1 = (n: number) => n.toLocaleString(locale(), { maximumFractionDigits: 2 });
 const hours = (min: number) => (min >= 60 ? `${Math.floor(min / 60)} h ${String(Math.round(min % 60)).padStart(2, "0")}` : `${Math.round(min)} min`);
 
 /** Coordinates of a system by name (Spansh). */
@@ -176,7 +177,16 @@ export class NavigationView implements View {
     replace(
       this.rangeCard,
       h("h3", null, "Portée de saut"),
-      h("p.sub", null, `${cmdr.ship?.type ?? l.ship}${cmdr.ship?.name ? ` « ${cmdr.ship.name} »` : ""} · FSD ${fsd ? `${fsd.size}${fsd.rating}` : "?"}${l.fsd?.includes("overcharge") ? " SCO" : ""}${m.boost ? ` · booster Gardien +${m.boost} al` : ""} · ${fmt1(m.unladen)} t à vide`),
+      h(
+        "p.sub",
+        null,
+        `${cmdr.ship?.type ?? l.ship}${cmdr.ship?.name ? ` · ${cmdr.ship.name}` : ""}`,
+        ` · FSD ${fsd ? `${fsd.size}${fsd.rating}` : "?"}${l.fsd?.includes("overcharge") ? " SCO" : ""}`,
+        m.boost ? " · " : "",
+        m.boost ? `booster Gardien +${fmt1(m.boost)} al` : "",
+        " · ",
+        `${fmt1(m.unladen)} t à vide`,
+      ),
       h("table.table.range-table", null, h("tbody", null, rows.map(([label, value, note]) => h("tr", null, h("td", null, label, h("small.sub", null, ` ${note}`)), h("td.num", null, h("strong", null, fmtLy(value))))))),
       m.cargoCapacity
         ? h("label.cargo-slider", null, `Cargaison simulée : ${fmt(cargoNow)} t`, cargoInput, h("strong", null, fmtLy(m.rangeAt(m.unladen + m.fuel + m.reserve + cargoNow))))

@@ -1,0 +1,397 @@
+Matériaux
+Ingénierie
+Ingénieurs
+Paramètres
+Impossible de charger les données du jeu : {0}
+Indique le dossier du journal dans les Paramètres.
+Choisis ta langue · Choose your language · Sprache wählen · Elige tu idioma · Escolha o idioma · Выберите язык
+Sécurité haute
+Sécurité moyenne
+Sécurité basse
+Indépendant
+Fédération
+Pilots Federation
+En direct
+En attente du jeu
+Démo
+Arrêté
+CMDR —
+Copier le système
+Position inconnue
+Manufacturé
+Données encodées
+Données
+en Boom ou Expansion
+en Guerre ou Guerre civile
+Civil War
+Civil Unrest
+en Épidémie
+de la Fédération
+de l'Empire
+Émissions de haute qualité (HGE) — systèmes peuplés {0}
+Sources de signal « High Grade Emissions » en supercroisière. Plus fréquentes dans les systèmes très peuplés, surtout Alliance et Indépendants. Les HGE disparaissent après quelques minutes : reste en supercroisière et surveille le radar.
+Émissions encodées (USS) — systèmes à sécurité {0}
+Sources de signal « Encoded Emissions » : scanne les épaves et les balises dans le signal.
+Zones de conflit — systèmes en Guerre / Guerre civile
+Détruis des vaisseaux militaires ou d'autorité dans les zones de conflit et récupère leurs matériaux.
+Scanner les sillages d'intercepteurs Thargoid
+Utilise un scanner de sillage sur un intercepteur Thargoid qui saute.
+Scanner les sillages haute énergie — systèmes très fréquentés
+Installe un scanner de sillage (Frame Shift Wake Scanner) et scanne les sillages haute énergie près des stations. Les systèmes très peuplés (et ceux en Famine) ont beaucoup de trafic.
+Prospection en surface — planètes riches en {0}
+Pose-toi, prends le SRV et tire sur les roches/affleurements (« Material Deposit »). Plus le % est élevé, plus le matériau sort souvent.
+Minage — anneaux de glace
+Mine les astéroïdes des anneaux glacés : les matériaux bruts tombent avec les fragments.
+Minage — anneaux vierges (Pristine)
+Les anneaux « Pristine » donnent plus de fragments, donc plus de matériaux bruts.
+Sites Gardiens (ruines et structures)
+Scanne les obélisques et tire sur les panneaux/sentinelles. Les sites sont surtout dans les nébuleuses Gardiennes (Regor, Vela…).
+Sites Thargoid au sol
+Épaves, structures et barnacles Thargoid. Les intercepteurs et éclaireurs se rencontrent aussi autour des zones de guerre Thargoid.
+Scanner des vaisseaux de combat — systèmes à pirates (sécurité basse / anarchie)
+Débris de vaisseaux de combat — RES des systèmes à pirates
+Scanne les vaisseaux de combat (scanner de données / « Kill Warrant » non requis) dans les sites d'extraction de ressources (RES) des anneaux et en zones de conflit.
+Détruis des pirates dans les sites d'extraction de ressources (RES), autour des anneaux, puis ramasse les matériaux qu'ils lâchent.
+Scanner des cargos — systèmes très peuplés (beaucoup de trafic)
+Débris de cargos — systèmes très peuplés (beaucoup de trafic)
+Scanne les vaisseaux de transport près des stations et sur les routes commerciales.
+Les cargos détruits (missions, pirates, RES) lâchent ces matériaux.
+Installations planétaires — points de données à scanner
+Pose-toi près d'une installation et scanne ses points de données (scanner de données du SRV ou à pied).
+Surface Settlement
+Récompense de mission
+Choisis ce matériau comme récompense de mission (tableau des missions).
+Points d'intérêt au sol
+Épaves et sites d'intérêt en surface.
+Balises de données en espace profond
+Balises dans les sources de signal en espace profond.
+Sources de signal (USS)
+Sources de signal non identifiées en supercroisière.
+High Tech
+Médical
+Résidentiel
+Sécurité
+Entrepôt
+Installations au sol ({0})
+Fouille les casiers et terminaux des installations Odyssey de ce type.
+Installations au sol (Odyssey) les plus proches
+Fouille les terminaux et casiers des bâtiments indiqués ci-dessous. Les installations abandonnées et celles en conflit n'ont pas besoin de permis.
+Bâtiments : {0}
+Conteneurs : {0}
+Où chercher dans l'installation
+Proposé en récompense de missions Odyssey.
+Bar des stations (barman)
+Achetable chez le barman des stations Odyssey.
+Source non documentée
+La communauté n'a pas encore de source fiable pour ce matériau (souvent lié aux Thargoids).
+Trader de matériaux {0} le plus proche
+{0} ls de l'arrivée
+Pad L
+Pad M
+Pad S seulement
+Planétaire
+{0} événement(s)
+{0} : trop de requêtes, réessaie dans un instant
+{0} a répondu {1}
+{0} : réponse illisible
+Spansh n'a pas donné de numéro de calcul
+Spansh calcule encore après 3 minutes, réessaie plus tard
+Disponible dans l'application (pas en mode démo)
+Multi-équipage
+À pied
+Galaxy map
+Carte galactique
+Caméra
+Head look
+Regard libre
+Cartes & interface
+Commandes & contrôleurs
+ Lecture de tes raccourcis…
+Mode démo : raccourcis d'exemple.
+Préréglage(s) d'origine du jeu, non copiés dans ton dossier : {0}. Crée un préréglage personnalisé en jeu pour les voir ici.
+Aucun préréglage actif trouvé (StartPreset). Choisis un fichier ci-dessous.
+ Exporté : 
+Afficher dans l'explorateur
+ {0} fichier(s) restauré(s). Ancienne config sauvegardée : 
+Ignoré : {0}
+ Relance Elite Dangerous (ou va dans Options → Commandes) pour que le jeu relise les fichiers.
+Configuration importée
+Sauvegarder / restaurer ta configuration
+Exporte tes raccourcis (et tes réglages graphiques) dans un zip, dans Documents\EDCH. L'import sauvegarde d'abord ta configuration actuelle. Ferme le jeu avant d'importer.
+Exporter les raccourcis
+Raccourcis + graphismes
+Importer un zip…
+Préréglage actif
+Chercher une commande…
+Imprimer la fiche
+Aucun raccourci trouvé.
+Ton modèle n'est pas reconnu ? Choisis le plus proche.
+Schéma simple (sans image)
+ Image du gabarit indisponible (hors ligne ?). Schéma simple affiché à la place.
+ Agrandir / réduire
+Gabarit EDRefCard (MIT), image chargée depuis le dépôt GitHub d'EDRefCard.
+Pas de case sur ce gabarit
+ (inversé)
+Échap
+Verr. maj
+Entrée
+Ctrl G
+Alt Gr
+Ctrl D
+Arrêt défil
+Début
+Pg ↑
+Pg ↓
+Verr num
+Touches hors schéma : {0}
+Pavé tactile
+View / Back
+Menu / Start
+L3 (clic stick G)
+R3 (clic stick D)
+Pavé
+Croix ↑
+Croix ↓
+Croix ←
+Croix →
+Stick G ↔
+Stick G ↕
+Stick D ↔
+Stick D ↕
+Schéma de la manette
+Axes et molette
+Chapeaux (POV)
+Effets expérimentaux
+Synthèse
+Courtier technologique
+Mods d'arme
+Améliorations (grade)
+Déblocage d'ingénieurs
+{0} requis par la wishlist
+ Recherches autour de {0}
+Suggestions d'échange
+ ({0} possédés, {1} réservés, {2} % utilisé · taux {3}:{4})
+Rien d'échangeable en surplus pour l'instant.
+Sites de farm connus
+Copier « {0} »
+Lat {0} / Lon {1}
+Où le trouver
+Utilisé dans
+Aucune recette connue.
+Utilisé dans {0} recettes
+Ajouter à la wishlist ({0} × {1})
+Expérimentaux
+Courtier tech.
+Déblocages
+Module ou modification…
+{0} possédés
+Marchandise (soute)
+Ajouter seulement ce grade
+Débloqué
+Invité
+Rencontré
+{0}/{1} débloqués · statut lu dans ton journal (EngineerProgress), triés par distance depuis {2}
+À pied (Odyssey)
+Débloqués
+À débloquer
+ Statuts inconnus : ils arrivent avec l'événement EngineerProgress écrit à chaque connexion au jeu.
+Pas encore rencontré
+Voir le système sur Inara
+Rang max
+ Recommandé par {0}
+Chercher un matériau…  (Ctrl+F)
+Matériaux d'ingénierie
+Possédés
+ {0} unités
+Données Gardiens / Thargoid
+Gardiens / Thargoid (non échangeables)
+Aucun matériau ne correspond.
+ Pas encore d'inventaire : lance Elite Dangerous (ou vérifie le dossier du journal dans les Paramètres). L'inventaire arrive avec l'événement de connexion du jeu.
+Départ
+Indique un départ, une destination et une portée.
+Départ du carrier
+Itinéraire du vaisseau
+Calcul Spansh avec boost des étoiles à neutrons (comme le Neutron Plotter).
+Portée (al)
+Plus c'est haut, plus l'itinéraire colle à la ligne droite
+Efficacité (%)
+Calculer l'itinéraire
+Estimation rapide
+Fleet Carrier
+Capacité utilisée (t)
+Tritium dans le réservoir
+Tritium en soute
+Calculer avec Spansh
+Portée de saut
+Le jeu n'a pas encore donné la configuration de ton vaisseau (événement Loadout). Lance le jeu ou change de vaisseau.
+Maximale (vide, carburant pour 1 saut)
+Valeur du jeu
+Réservoir plein, soute vide
+{0} t de carburant
+Réservoir plein, soute pleine
+{0} t de cargaison
+{0} t de carburant, {1} t de cargaison
+booster Gardien +{0} al
+{0} t à vide
+Cargaison simulée : {0} t
+Les portées intermédiaires sont calculées à partir de la valeur du jeu (formule officielle du FSD).
+ Recherche des coordonnées…
+Système introuvable sur Spansh
+Sauts (ligne droite)
+Durée
+Minimum théorique sans boost neutron ; l'itinéraire réel demande un peu plus de sauts.
+ Spansh calcule l'itinéraire…
+Étapes
+Système
+Indique le départ et la destination.
+ Il manque environ {0} t de tritium (réservoir + soute).
+Le tritium du réservoir et de la soute suffit (estimation).
+Estimation communautaire : 5 + distance × (25 + capacité utilisée / 1000) / 200 t par saut, 20 min par saut (compte à rebours + recharge). Utilise « Calculer avec Spansh » pour le plan exact.
+ Spansh calcule l'itinéraire du carrier…
+ Ravitaillement nécessaire à {0} étape(s).
+Réservoir
+Anneau glacé vierge
+Anneau glacé
+Ravitailler {0} t
+Odyssey — casier du vaisseau
+ Possédés seulement
+ Casier vide ou pas encore lu : il se remplit quand le jeu écrit ShipLocker.json (en jeu, à bord ou à pied).
+Aucune recette
+« {0} » copié — colle-le dans la carte galactique
+Copie impossible
+màj < 1 h
+màj il y a {0} h
+màj il y a {0} j
+Ouvrir sur {0}
+Recherche Spansh…
+Aucun résultat à moins de {0} al.
+ Augmente la distance dans les Paramètres.
+{0} systèmes correspondent
+Réessayer
+Asteroid base
+Coriolis Starport
+Dodec Starport
+Ocellus Starport
+Orbis Starport
+Planetary Construction Depot
+Planetary Outpost
+Planetary Port
+Space Construction Depot
+Drake-Class Carrier
+Interstellar Factors Contact
+Interstellar Factors
+Trader de matériaux
+Technology Broker
+Universal Cartographics
+Vista Genomics
+Black Market
+Marché noir
+Chantier naval
+Équipement
+Réparation
+Search and Rescue
+Recherche et sauvetage
+Pioneer Supplies
+Apex Interstellar
+Frontline Solutions
+Autour de {0}, {1} al max
+Acheter une marchandise
+Vendre une marchandise
+Marchandise (ex. Tritium, Gold, Low Temperature Diamonds)
+Vaisseau (ex. Krait MkII, Anaconda)
+Module (ex. Frame Shift Drive, Shield Booster)
+Toute classe
+Toute note
+Pad L seulement
+Inclure les Fleet Carriers
+Inclure les ports planétaires
+Trier par prix le plus bas
+Trier par meilleur prix
+ Recherche Spansh…
+Rien trouvé à moins de {0} al. Augmente la distance dans les Paramètres ou vérifie le nom.
+{0} stations correspondent · {1} affichées
+Prix d'achat · stock
+Prix de vente · demande
+Détail
+Pad / arrivée
+Màj
+En vente
+Ouvrir sur Inara
+Lecture en direct : {0}
+En attente du jeu…
+Erreur : {0}
+Mode démo (navigateur) : journal d'exemple
+Lecture arrêtée
+C:\Users\…\Saved Games\Frontier Developments\Elite Dangerous
+Langue de l'interface
+Les noms des matériaux, modules et commandes restent ceux du jeu en anglais.
+Journal du jeu
+Dossier du journal
+Détecter
+Lecture du journal démarrée
+Enregistrer et lire
+Recherche de systèmes (Spansh)
+Distance max (al)
+Rayon de recherche autour de ta position.
+Population min. pour les HGE
+« Haute population » : 1 000 000 par défaut.
+Données BGS max. (jours)
+Ignore les états de faction plus vieux (Boom, Guerre…). 0 = pas de limite.
+Système de repli
+Utilisé tant que le jeu n'a pas donné ta position.
+ Traders avec pad L seulement
+À propos
+EDCH lit le journal local d'Elite Dangerous en temps réel. Les systèmes proposés viennent de 
+ (données EDDN, mises à jour par les joueurs).
+Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel, non commercial.
+Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services.
+EDDN — réseau de données communautaire
+Envoie marchés, équipements, chantiers navals, systèmes et scans visités. C'est ce qui alimente Spansh, Inara et EDSM pour tout le monde (et les recherches de cette appli).
+Aucun compte requis. Rien de personnel n'est envoyé : ton nom de CMDR est haché par EDDN, tes amendes, réputations et carburant sont retirés. Seuls les événements en direct sont envoyés, jamais l'historique.
+EDSM — carnet de vol
+Envoie ton journal à EDSM (trajets, découvertes, inventaire).
+Nom de CMDR sur EDSM
+Clé API EDSM
+EDSM → ton profil → Paramètres → Clé API.
+Ouvrir la page de clé API EDSM
+Inara — profil de commandant
+Met à jour ta position, ton vaisseau, tes matériaux et tes ingénieurs sur Inara.
+Clé API Inara personnelle
+Inara → Paramètres → API key. Inara peut demander d'accepter une nouvelle appli avant d'enregistrer ses données : le journal ci-dessous affichera sa réponse.
+Ouvrir la page de clé API Inara
+Activité
+Disponible dans l'application (pas en mode démo).
+{0} échec(s)
+Rien envoyé pour l'instant : ça démarre avec les prochains événements du jeu (saut, amarrage, marché…).
+Ajouté à la wishlist : {0} — {1}
+Colle ici l'export EDSY ou Coriolis (format SLEF ou Loadout JSON)…
+ Format non reconnu. Dans EDSY : Ship → Export → SLEF. Dans Coriolis : Export → SLEF (ou JSON du Loadout).
+ Aucun module ingénié trouvé dans {0}.
+ {0} ligne(s) ajoutée(s) depuis {1}
+Non reconnu : {0}
+Build importé : {0} ligne(s)
+Importer un build
+Chaque module ingénié devient une ligne « blueprint G1 → grade du build », plus son effet expérimental. Les modules identiques sont regroupés.
+le texte collé
+Importer le texte
+Choisir un fichier…
+Recrée la wishlist d'ingénierie de ton vaisseau actuel (utile pour un 2e vaisseau identique)
+Pas encore de vaisseau lu dans le journal
+ton vaisseau actuel
+Depuis mon vaisseau actuel
+ Fermer l'import
+ Importer EDSY / Coriolis
+Ta wishlist est vide.
+Importe un build EDSY / Coriolis ci-dessus, ou ajoute des modifications depuis l'onglet Ingénierie ou la fiche d'un matériau.
+Ouvrir l'ingénierie
+Recette introuvable : {0}
+ Prêt
+Jets : 
+Nombre de jets au grade {0}
+Quantité 
+{0} recettes · {1}/{2} matériaux complets
+Matériaux nécessaires
+Matériau
+Possédé
+Progression / échange
+Clique encore sur « Vider » pour confirmer

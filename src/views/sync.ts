@@ -1,3 +1,4 @@
+import { locale } from "../i18n.js";
 import { openUrl } from "../bridge.js";
 import { h, icon, replace } from "../dom.js";
 import type { Ctx, View } from "../context.js";
@@ -78,7 +79,7 @@ export class SyncView implements View {
                 "li",
                 { class: l.ok ? "ok" : "bad" },
                 l.ok ? icon("check") : icon("warn"),
-                h("span.when", null, new Date(l.at).toLocaleTimeString("fr-BE")),
+                h("span.when", null, new Date(l.at).toLocaleTimeString(locale())),
                 h("strong", null, l.service),
                 h("span", null, l.what),
                 l.detail ? h("span.sub", null, l.detail) : null,

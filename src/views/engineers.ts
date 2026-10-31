@@ -131,7 +131,8 @@ export class EngineersView implements View {
                   "p.check-line",
                   { class: refStatus?.progress === "Unlocked" && (refStatus.rank ?? 0) >= (e.referralGrade ?? 0) ? "ok" : "" },
                   refStatus?.progress === "Unlocked" && (refStatus.rank ?? 0) >= (e.referralGrade ?? 0) ? icon("check") : h("span.dot"),
-                  ` Recommandé par ${referrer.name}${e.referralGrade ? ` (rang ${e.referralGrade})` : ""}`,
+                  ` Recommandé par ${referrer.name}`,
+                  e.referralGrade ? ` (rang ${e.referralGrade})` : "",
                 )
               : e.discovery
                 ? h("p.check-line", null, h("span.dot"), ` ${e.discovery}`)

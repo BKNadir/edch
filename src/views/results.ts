@@ -1,3 +1,4 @@
+import { locale } from "../i18n.js";
 import { copyText, openUrl } from "../bridge.js";
 import { h, icon, toast } from "../dom.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../spansh.js";
@@ -38,7 +39,7 @@ export function resultRow(r: ResultRow): HTMLElement {
       "div.result-meta",
       null,
       r.badges.map((b) => h(`span.badge${b.tone ? `.${b.tone}` : ""}`, null, b.text)),
-      r.sub.length ? h("span.sub", null, r.sub.join(" · ")) : null,
+      r.sub.length ? h("span.sub", null, r.sub.flatMap((x, i) => (i ? [" · ", x] : [x]))) : null,
       r.updated ? h("span.sub.age", null, ago(r.updated)) : null,
       h(
         "span.links",
@@ -76,7 +77,7 @@ export function finderSection(f: Finder, ref: Reference, settings: Settings, opt
         }
         list.replaceChildren(...res.rows.map(resultRow));
         if (res.total > res.rows.length && f.type === "systems") {
-          status.replaceChildren(h("span.sub", null, `${res.total.toLocaleString("fr-BE")} systèmes correspondent`));
+          status.replaceChildren(h("span.sub", null, `${res.total.toLocaleString(locale())} systèmes correspondent`));
         }
       })
       .catch((err) => {
