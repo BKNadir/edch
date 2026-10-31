@@ -512,5 +512,11 @@
 "Windows peut demander d'autoriser EDCH sur le pare-feu : accepte pour les réseaux privés.": "Windows fragt eventuell, ob EDCH durch die Firewall darf: Erlaube es für private Netzwerke.",
 "« Nouveau code » déconnecte tous les appareils déjà autorisés.": "„Neuer Code“ trennt alle bereits autorisierten Geräte.",
 "La connexion locale n'est pas chiffrée (HTTP) : utilise-la sur ton réseau domestique, pas sur un Wi-Fi public.": "Die lokale Verbindung ist nicht verschlüsselt (HTTP): Nutze sie im Heimnetz, nicht im öffentlichen WLAN.",
-"Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC.": "Auf dem Handy lässt sich die Wunschliste bearbeiten und synchronisiert sich mit dem PC. Exporte, Importe und die EDDN-Synchronisierung bleiben am PC."
+"Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC.": "Auf dem Handy lässt sich die Wunschliste bearbeiten und synchronisiert sich mit dem PC. Exporte, Importe und die EDDN-Synchronisierung bleiben am PC.",
+"Utilisé dans 1 recette": "In 1 Rezept verwendet",
+"Cet appareil n'est pas connecté à EDCH": "Dieses Gerät ist nicht mit EDCH verbunden",
+"Ce QR code n'est plus valable : un nouveau code a été créé sur le PC. Scanne celui qui est affiché maintenant.": "Dieser QR-Code ist nicht mehr gültig: Auf dem PC wurde ein neuer Code erstellt. Scanne den jetzt angezeigten.",
+"Scanne le QR code affiché dans EDCH sur ton PC (page Mobile) pour connecter cet appareil.": "Scanne den QR-Code, den EDCH auf deinem PC anzeigt (Seite Mobil), um dieses Gerät zu verbinden.",
+"La connexion est enregistrée dans le navigateur qui ouvre le lien. Si ton lecteur de QR code l'ouvre dans sa propre fenêtre, ouvre-le plutôt dans Chrome ou Safari, ou copie le lien dans ton navigateur.": "Die Verbindung wird in dem Browser gespeichert, der den Link öffnet. Öffnet dein QR-Scanner ihn in einem eigenen Fenster, öffne ihn stattdessen in Chrome oder Safari oder kopiere den Link in deinen Browser.",
+"{0} est momentanément indisponible (erreur {1}), réessaie dans un instant": "{0} ist vorübergehend nicht erreichbar (Fehler {1}), versuch es gleich noch einmal"
 }

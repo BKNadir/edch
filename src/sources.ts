@@ -1,3 +1,4 @@
+import { gameName } from "./i18n.js";
 // "Where to find" rules: each origin string from the data becomes a readable French
 // hint and, when the condition can be searched, a Spansh query that lists real
 // systems / bodies / stations near you.
@@ -109,7 +110,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: `surface:${m.id}`,
         type: "bodies",
-        title: `Prospection en surface — planètes riches en ${m.name}`,
+        title: `Prospection en surface — planètes riches en ${gameName(m.name)}`,
         hint: "Pose-toi, prends le SRV et tire sur les roches/affleurements (« Material Deposit »). Plus le % est élevé, plus le matériau sort souvent.",
         filters: { materials: { name: choice(m.name) }, is_landable: choice("true") },
         materialName: m.name,

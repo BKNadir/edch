@@ -2,9 +2,11 @@
 // On the phone: follow the PC's state and send wishlist edits back.
 
 import {
+  forgetRemoteToken,
   onRemoteAction,
   remoteAction,
   remoteAddresses,
+  remoteFetch,
   remotePublish,
   remoteStart,
   remoteState,
@@ -13,6 +15,7 @@ import {
   type RemoteInfo,
 } from "./bridge.js";
 import { toast } from "./dom.js";
+import { lang } from "./i18n.js";
 import { emptyState } from "./journal.js";
 import { newRemoteToken, type Store } from "./store.js";
 
@@ -59,7 +62,7 @@ function snapshot(store: Store): string {
   const s = store.state;
   // Never share API keys, the secret itself or the PC's paths.
   const { sync: _sync, remote: _remote, journalDir: _dir, ...settings } = s.settings;
-  return JSON.stringify({ cmdr: s.cmdr, wishlist: s.wishlist, settings, watch: s.watch });
+  return JSON.stringify({ cmdr: s.cmdr, wishlist: s.wishlist, settings, watch: s.watch, lang: lang().code });
 }
 
 function publishNow(store: Store) {
@@ -88,14 +91,28 @@ export async function setupRemoteHost(store: Store) {
 
 // ---------------- phone side ----------------
 
-export async function detectRemote(): Promise<boolean> {
+/** Served by EDCH's local server? "paired" when this device holds the current secret. */
+export async function detectRemote(): Promise<"paired" | "unpaired" | null> {
   try {
-    const res = await fetch("/api/hello", { credentials: "same-origin" });
-    if (!res.ok) return false;
+    const res = await remoteFetch("/api/hello");
+    if (!res.ok) return null;
     const body = await res.json();
-    return body?.remote === true;
+    if (body?.remote !== true) return null;
+    if (body.paired) return "paired";
+    forgetRemoteToken(); // stale secret ("New code" on the PC)
+    return "unpaired";
   } catch {
-    return false;
+    return null;
+  }
+}
+
+/** The PC's language, so the phone shows the same one until the user picks another. */
+export async function remoteLanguage(): Promise<string | null> {
+  try {
+    const r = await Promise.race([remoteState(0), new Promise<null>((ok) => setTimeout(() => ok(null), 4000))]);
+    return typeof r?.state?.lang === "string" ? r.state.lang : null;
+  } catch {
+    return null;
   }
 }
 

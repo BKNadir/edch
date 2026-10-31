@@ -38,8 +38,35 @@ export const setRemote = (on: boolean) => {
   remote = on;
 };
 
+const TOKEN_KEY = "edch.remoteToken";
+
+/** The pairing secret kept by the phone (sent as a header too, for browsers that drop the cookie). */
+export function remoteToken(): string | null {
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function forgetRemoteToken() {
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+  } catch {
+    /* nothing stored */
+  }
+}
+
+/** fetch() to the PC with the pairing secret. */
+export function remoteFetch(path: string, init: RequestInit = {}): Promise<Response> {
+  const headers = new Headers(init.headers);
+  const token = remoteToken();
+  if (token) headers.set("X-EDCH-Token", token);
+  return fetch(path, { credentials: "same-origin", ...init, headers });
+}
+
 async function remoteJson(path: string, init?: RequestInit): Promise<any> {
-  const res = await fetch(path, { credentials: "same-origin", ...init });
+  const res = await remoteFetch(path, init);
   if (!res.ok) throw new Error(`EDCH (PC) a répondu ${res.status}`);
   return res.status === 204 ? null : res.json();
 }
@@ -88,8 +115,31 @@ export async function httpFetch(method: string, url: string, body?: string, cont
   return { status: response.status, body: await response.text() };
 }
 
+const TRANSIENT = new Set([500, 502, 503, 504, 520, 521, 522, 523, 524]);
+
+/** Spansh's servers sometimes answer 502/503 under load: retry twice before giving up. */
+async function spanshFetch(method: string, url: string, body?: string, contentType?: string): Promise<HttpReply> {
+  const waits = [1500, 4000];
+  for (let attempt = 0; ; attempt++) {
+    let reply: HttpReply | null = null;
+    let failure: unknown = null;
+    try {
+      reply = await httpFetch(method, url, body, contentType);
+    } catch (e) {
+      failure = e;
+    }
+    const retry = failure !== null || (reply !== null && TRANSIENT.has(reply.status));
+    if (!retry || attempt >= waits.length) {
+      if (failure !== null) throw failure;
+      return reply!;
+    }
+    await new Promise((ok) => setTimeout(ok, waits[attempt]));
+  }
+}
+
 function parse(reply: HttpReply, what: string): any {
   if (reply.status === 429) throw new Error(`${what} : trop de requêtes, réessaie dans un instant`);
+  if (TRANSIENT.has(reply.status)) throw new Error(`${what} est momentanément indisponible (erreur ${reply.status}), réessaie dans un instant`);
   if (reply.status < 200 || reply.status >= 300) throw new Error(`${what} a répondu ${reply.status}`);
   try {
     return JSON.parse(reply.body);
@@ -100,11 +150,11 @@ function parse(reply: HttpReply, what: string): any {
 
 /** POST a Spansh JSON search (systems/bodies/stations). */
 export async function spanshPost(endpoint: string, body: unknown): Promise<any> {
-  return parse(await httpFetch("POST", `https://spansh.co.uk/api/${endpoint}`, JSON.stringify(body)), "Spansh");
+  return parse(await spanshFetch("POST", `https://spansh.co.uk/api/${endpoint}`, JSON.stringify(body)), "Spansh");
 }
 
 export async function spanshGet(path: string): Promise<any> {
-  return parse(await httpFetch("GET", `https://spansh.co.uk/api/${path}`), "Spansh");
+  return parse(await spanshFetch("GET", `https://spansh.co.uk/api/${path}`), "Spansh");
 }
 
 /** Spansh route plotters: submit a form, then poll the job until it is done. */
@@ -117,7 +167,7 @@ export async function spanshJob(endpoint: string, form: [string, string][], onWa
   for (let i = 0; i < 120; i++) {
     await new Promise((r) => setTimeout(r, 1500));
     onWait?.(i);
-    const res = parse(await httpFetch("GET", `https://spansh.co.uk/api/results/${job}`), "Spansh");
+    const res = parse(await spanshFetch("GET", `https://spansh.co.uk/api/results/${job}`), "Spansh");
     if (res.status === "queued") continue;
     if (res.status === "ok" && res.result) return res.result;
     throw new Error(String(res.error ?? `calcul ${res.status ?? "échoué"}`));
@@ -148,7 +198,7 @@ export const optionsDir = () => invoke<string>("options_dir");
 export const listOptionFiles = (): Promise<OptionFile[]> => (remote ? remoteJson("/api/options") : invoke<OptionFile[]>("list_option_files"));
 export const readOptionFile = async (folder: string, name: string): Promise<string> => {
   if (!remote) return invoke<string>("read_option_file", { folder, name });
-  const res = await fetch(`/api/option?folder=${encodeURIComponent(folder)}&name=${encodeURIComponent(name)}`, { credentials: "same-origin" });
+  const res = await remoteFetch(`/api/option?folder=${encodeURIComponent(folder)}&name=${encodeURIComponent(name)}`);
   if (!res.ok) throw new Error(await res.text());
   return res.text();
 };

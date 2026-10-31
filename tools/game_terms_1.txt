@@ -1,0 +1,191 @@
+# Game terms missing from EDEngineer's localization: effects, trader lines, categories, sources.
+# Format: en ¦ fr ¦ de ¦ es ¦ pt ¦ ru   (an empty cell keeps EDEngineer's text, or the English name)
+# Keys are matched without regard to case.
+
+# Trader lines and categories
+Raw 1 (Carbon…) ¦ Brut 1 (Carbone…) ¦ Roh 1 (Kohlenstoff…) ¦ Bruto 1 (Carbono…) ¦ Bruto 1 (Carbono…) ¦ Сырьё 1 (углерод…)
+Raw 2 (Phosphorus…) ¦ Brut 2 (Phosphore…) ¦ Roh 2 (Phosphor…) ¦ Bruto 2 (Fósforo…) ¦ Bruto 2 (Fósforo…) ¦ Сырьё 2 (фосфор…)
+Raw 3 (Sulphur…) ¦ Brut 3 (Soufre…) ¦ Roh 3 (Schwefel…) ¦ Bruto 3 (Azufre…) ¦ Bruto 3 (Enxofre…) ¦ Сырьё 3 (сера…)
+Raw 4 (Iron…) ¦ Brut 4 (Fer…) ¦ Roh 4 (Eisen…) ¦ Bruto 4 (Hierro…) ¦ Bruto 4 (Ferro…) ¦ Сырьё 4 (железо…)
+Raw 5 (Nickel…) ¦ Brut 5 (Nickel…) ¦ Roh 5 (Nickel…) ¦ Bruto 5 (Níquel…) ¦ Bruto 5 (Níquel…) ¦ Сырьё 5 (никель…)
+Raw 6 (Rhenium…) ¦ Brut 6 (Rhénium…) ¦ Roh 6 (Rhenium…) ¦ Bruto 6 (Renio…) ¦ Bruto 6 (Rênio…) ¦ Сырьё 6 (рений…)
+Raw 7 (Lead…) ¦ Brut 7 (Plomb…) ¦ Roh 7 (Blei…) ¦ Bruto 7 (Plomo…) ¦ Bruto 7 (Chumbo…) ¦ Сырьё 7 (свинец…)
+Data archives ¦ Archives de données ¦ Datenarchive ¦ Archivos de datos ¦ Arquivos de dados ¦ Архивы данных
+Emission data ¦ Données d'émissions ¦ Emissionsdaten ¦ Datos de emisiones ¦ Dados de emissões ¦ Данные излучений
+Encryption files ¦ Fichiers de chiffrement ¦ Verschlüsselungsdateien ¦ Archivos de cifrado ¦ Arquivos de criptografia ¦ Файлы шифрования
+Firmware ¦ Micrologiciels ¦ Firmware ¦ Firmware ¦ Firmware ¦ Прошивки
+Shield data ¦ Données de bouclier ¦ Schilddaten ¦ Datos de escudo ¦ Dados de escudo ¦ Данные щитов
+Wake scans ¦ Scans de sillage ¦ Sogscans ¦ Escaneos de estela ¦ Escaneamentos de rastro ¦ Сканы следов
+Mechanical components ¦ Composants mécaniques ¦ Mechanische Komponenten ¦ Componentes mecánicos ¦ Componentes mecânicos ¦ Механические компоненты
+Encoded ¦ Encodé ¦ Kodiert ¦ Codificado ¦ Codificado ¦ Закодированные
+Component ¦ Composant ¦ Komponente ¦ Componente ¦ Componente ¦ Компонент
+Consumable ¦ Consommable ¦ Verbrauchsgut ¦ Consumible ¦ Consumível ¦ Расходник
+Item ¦ Objet ¦ Gegenstand ¦ Objeto ¦ Item ¦ Предмет
+Salvage ¦ Récupération ¦ Bergung ¦ Rescate ¦ Recuperação ¦ Утиль
+Scanning ¦ Scan ¦ Scannen ¦ Escaneo ¦ Escaneamento ¦ Сканирование
+Settlement ¦ Installation ¦ Siedlung ¦ Asentamiento ¦ Assentamento ¦ Поселение
+Crashed Satellite ¦ Satellite écrasé ¦ Abgestürzter Satellit ¦ Satélite estrellado ¦ Satélite caído ¦ Упавший спутник
+Surface Crash Site ¦ Site de crash en surface ¦ Absturzstelle auf der Oberfläche ¦ Lugar de accidente en superficie ¦ Local de queda na superfície ¦ Место крушения на поверхности
+Irregular Markers ¦ Marqueurs irréguliers ¦ Unregelmäßige Markierungen ¦ Marcadores irregulares ¦ Marcadores irregulares ¦ Нерегулярные маркеры
+Thargoid scavengers ¦ Charognards thargoïdes ¦ Thargoiden-Aasfresser ¦ Carroñeros thargoid ¦ Necrófagos thargoid ¦ Таргоидские падальщики
+Thargoid Scavengers, Destroyed Thargoid Sensor ¦ Charognards thargoïdes, capteur thargoïde détruit ¦ Thargoiden-Aasfresser, zerstörter Thargoiden-Sensor ¦ Carroñeros thargoid, sensor thargoid destruido ¦ Necrófagos thargoid, sensor thargoid destruído ¦ Таргоидские падальщики, уничтоженный таргоидский датчик
+Ship salvage (Thargoid ships) ¦ Récupération sur épaves (vaisseaux thargoïdes) ¦ Bergung (Thargoiden-Schiffe) ¦ Rescate de naves (naves thargoid) ¦ Recuperação de naves (naves thargoid) ¦ Утиль с кораблей (таргоидские корабли)
+Ship scanning (Thargoid interceptors) ¦ Scan de vaisseau (intercepteurs thargoïdes) ¦ Schiffsscan (Thargoiden-Abfangjäger) ¦ Escaneo de naves (interceptores thargoid) ¦ Escaneamento de naves (interceptores thargoid) ¦ Сканирование кораблей (таргоидские перехватчики)
+High wake scanning (Thargoid interceptors) ¦ Scan de sillage à haute énergie (intercepteurs thargoïdes) ¦ Hochenergie-Sogscan (Thargoiden-Abfangjäger) ¦ Escaneo de estela de alta energía (interceptores thargoid) ¦ Escaneamento de rastro de alta energia (interceptores thargoid) ¦ Сканирование высокоэнергетического следа (таргоидские перехватчики)
+Base scanning (Thargoid uplink devices) ¦ Scan de base (relais thargoïdes) ¦ Basisscan (Thargoiden-Uplink-Geräte) ¦ Escaneo de bases (dispositivos de enlace thargoid) ¦ Escaneamento de bases (dispositivos de enlace thargoid) ¦ Сканирование баз (таргоидские передатчики)
+Signal source (High grade emissions, Boom) ¦ Source de signal (émissions de haute qualité, essor) ¦ Signalquelle (hochwertige Emissionen, Aufschwung) ¦ Fuente de señal (emisiones de alto grado, auge) ¦ Fonte de sinal (emissões de alto grau, prosperidade) ¦ Источник сигнала (высококачественное излучение, бум)
+Signal source (High grade emissions, Civil unrest) ¦ Source de signal (émissions de haute qualité, troubles civils) ¦ Signalquelle (hochwertige Emissionen, Unruhen) ¦ Fuente de señal (emisiones de alto grado, disturbios civiles) ¦ Fonte de sinal (emissões de alto grau, agitação civil) ¦ Источник сигнала (высококачественное излучение, беспорядки)
+Signal source (High grade emissions, Empire systems) ¦ Source de signal (émissions de haute qualité, systèmes de l'Empire) ¦ Signalquelle (hochwertige Emissionen, Imperiumssysteme) ¦ Fuente de señal (emisiones de alto grado, sistemas del Imperio) ¦ Fonte de sinal (emissões de alto grau, sistemas do Império) ¦ Источник сигнала (высококачественное излучение, системы Империи)
+Signal source (High grade emissions, Federation systems) ¦ Source de signal (émissions de haute qualité, systèmes de la Fédération) ¦ Signalquelle (hochwertige Emissionen, Föderationssysteme) ¦ Fuente de señal (emisiones de alto grado, sistemas de la Federación) ¦ Fonte de sinal (emissões de alto grau, sistemas da Federação) ¦ Источник сигнала (высококачественное излучение, системы Федерации)
+Signal source (High grade emissions, Outbreak) ¦ Source de signal (émissions de haute qualité, épidémie) ¦ Signalquelle (hochwertige Emissionen, Ausbruch) ¦ Fuente de señal (emisiones de alto grado, epidemia) ¦ Fonte de sinal (emissões de alto grau, surto) ¦ Источник сигнала (высококачественное излучение, эпидемия)
+Signal source (High grade emissions, War/Civil war) ¦ Source de signal (émissions de haute qualité, guerre/guerre civile) ¦ Signalquelle (hochwertige Emissionen, Krieg/Bürgerkrieg) ¦ Fuente de señal (emisiones de alto grado, guerra/guerra civil) ¦ Fonte de sinal (emissões de alto grau, guerra/guerra civil) ¦ Источник сигнала (высококачественное излучение, война/гражданская война)
+
+# Materials and modules
+Abnormal Compact Emissions Data ¦ Données d'émissions compactes anormales ¦ Abnormale kompakte Emissionsdaten ¦ Datos anormales de emisiones compactas ¦ Dados anormais de emissões compactas ¦ Аномальные компактные данные излучений
+Ballistics Data ¦ Données balistiques ¦ Ballistikdaten ¦ Datos balísticos ¦ Dados balísticos ¦ Баллистические данные
+Caustic Crystal ¦ Cristal caustique ¦ Ätzender Kristall ¦ Cristal cáustico ¦ Cristal cáustico ¦ Едкий кристалл
+Hardened Surface Fragments ¦ Fragments de surface durcis ¦ Gehärtete Oberflächenfragmente ¦ Fragmentos de superficie endurecidos ¦ Fragmentos de superfície endurecidos ¦ Затвердевшие фрагменты поверхности
+Ship Systems Data ¦ Données des systèmes du vaisseau ¦ Schiffssystemdaten ¦ Datos de sistemas de nave ¦ Dados de sistemas da nave ¦ Данные корабельных систем
+Tactical Core Chip ¦ Puce de noyau tactique ¦ Taktischer Kernchip ¦ Chip de núcleo táctico ¦ Chip de núcleo tático ¦ Чип тактического ядра
+Shock Cannon Munitions ¦ Munitions de canon de choc ¦ Schockkanonen-Munition ¦ Munición de cañón de choque ¦ Munição de canhão de choque ¦ Боеприпасы шокового орудия
+Corrosion Resistant Cargo Rack (4E) ¦ Soute anticorrosion (4E) ¦ Korrosionsbeständiges Frachtgestell (4E) ¦ Compartimento de carga anticorrosión (4E) ¦ Compartimento de carga anticorrosão (4E) ¦ Коррозиестойкий грузовой отсек (4E)
+Sirius Modified AX Missile Rack (Large) ¦ Rack à missiles AX modifié Sirius (grand) ¦ Sirius-modifiziertes AX-Raketengestell (groß) ¦ Lanzamisiles AX modificado Sirius (grande) ¦ Lançador de mísseis AX modificado Sirius (grande) ¦ Модифицированная Sirius ракетная установка AX (большая)
+Sirius Modified AX Missile Rack (Medium) ¦ Rack à missiles AX modifié Sirius (moyen) ¦ Sirius-modifiziertes AX-Raketengestell (mittel) ¦ Lanzamisiles AX modificado Sirius (mediano) ¦ Lançador de mísseis AX modificado Sirius (médio) ¦ Модифицированная Sirius ракетная установка AX (средняя)
+Sirius Modified Heat Sink Launcher ¦ Lance-dissipateur thermique modifié Sirius ¦ Sirius-modifizierter Kühlkörperwerfer ¦ Lanzador de disipadores modificado Sirius ¦ Lançador de dissipador modificado Sirius ¦ Модифицированная Sirius пусковая установка теплоотводов
+Modified Heat Sink Launcher ¦ Lance-dissipateur thermique modifié ¦ Modifizierter Kühlkörperwerfer ¦ Lanzador de disipadores modificado ¦ Lançador de dissipador modificado ¦ Модифицированная пусковая установка теплоотводов
+
+# Effects
+All Resistances ¦ Toutes les résistances ¦ Alle Resistenzen ¦ Todas las resistencias ¦ Todas as resistências ¦ Все сопротивления
+Explosive Resistance ¦ Résistance aux explosions ¦ Explosivresistenz ¦ Resistencia explosiva ¦ Resistência explosiva ¦ Сопротивление взрывам
+Kinetic Resistance ¦ Résistance cinétique ¦ Kinetische Resistenz ¦ Resistencia cinética ¦ Resistência cinética ¦ Кинетическое сопротивление
+Thermal Resistance ¦ Résistance thermique ¦ Thermische Resistenz ¦ Resistencia térmica ¦ Resistência térmica ¦ Термическое сопротивление
+Hull Boost ¦ Renfort de coque ¦ Hüllenverstärkung ¦ Refuerzo de casco ¦ Reforço de casco ¦ Усиление корпуса
+Hull Reinforcement ¦ Renforcement de coque ¦ Hüllenverstärkung ¦ Refuerzo de casco ¦ Reforço de casco ¦ Укрепление корпуса
+Mass ¦ Masse ¦ Masse ¦ Masa ¦ Massa ¦ Масса
+Integrity ¦ Intégrité ¦ Integrität ¦ Integridad ¦ Integridade ¦ Прочность
+Power Draw ¦ Consommation d'énergie ¦ Energieverbrauch ¦ Consumo de energía ¦ Consumo de energia ¦ Энергопотребление
+Power Capacity ¦ Capacité énergétique ¦ Energiekapazität ¦ Capacidad de energía ¦ Capacidade de energia ¦ Энергоёмкость
+Power Generation ¦ Production d'énergie ¦ Energieerzeugung ¦ Generación de energía ¦ Geração de energia ¦ Выработка энергии
+Power Recharge ¦ Recharge d'énergie ¦ Energieaufladung ¦ Recarga de energía ¦ Recarga de energia ¦ Перезарядка энергии
+Boot Time ¦ Temps de démarrage ¦ Startzeit ¦ Tiempo de arranque ¦ Tempo de inicialização ¦ Время запуска
+Damage ¦ Dégâts ¦ Schaden ¦ Daño ¦ Dano ¦ Урон
+Damage Falloff Start ¦ Début de la baisse de dégâts ¦ Beginn des Schadensabfalls ¦ Inicio de la caída de daño ¦ Início da queda de dano ¦ Начало спада урона
+Distributor Draw ¦ Consommation du répartiteur ¦ Verteilerverbrauch ¦ Consumo del distribuidor ¦ Consumo do distribuidor ¦ Потребление распределителя
+Thermal Load ¦ Charge thermique ¦ Wärmelast ¦ Carga térmica ¦ Carga térmica ¦ Тепловая нагрузка
+Rate of Fire ¦ Cadence de tir ¦ Feuerrate ¦ Cadencia de disparo ¦ Cadência de tiro ¦ Скорострельность
+Burst Rate of Fire ¦ Cadence de tir en rafale ¦ Salvenfeuerrate ¦ Cadencia de ráfaga ¦ Cadência de rajada ¦ Скорострельность очереди
+Burst Size ¦ Taille de rafale ¦ Salvengröße ¦ Tamaño de ráfaga ¦ Tamanho da rajada ¦ Размер очереди
+Clip Size ¦ Taille du chargeur ¦ Magazingröße ¦ Tamaño del cargador ¦ Tamanho do pente ¦ Размер обоймы
+Magazine Size ¦ Taille du chargeur ¦ Magazingröße ¦ Tamaño del cargador ¦ Tamanho do pente ¦ Размер магазина
+Ammo Maximum ¦ Munitions maximum ¦ Maximale Munition ¦ Munición máxima ¦ Munição máxima ¦ Максимум боеприпасов
+Ammo capacity multiplier ¦ Multiplicateur de capacité de munitions ¦ Munitionskapazitäts-Multiplikator ¦ Multiplicador de capacidad de munición ¦ Multiplicador de capacidade de munição ¦ Множитель боезапаса
+Reload Time ¦ Temps de rechargement ¦ Nachladezeit ¦ Tiempo de recarga ¦ Tempo de recarga ¦ Время перезарядки
+Armour Piercing ¦ Pénétration d'armure ¦ Panzerbrechend ¦ Perforación de blindaje ¦ Perfuração de blindagem ¦ Бронебойность
+Range ¦ Portée ¦ Reichweite ¦ Alcance ¦ Alcance ¦ Дальность
+Maximum Range ¦ Portée maximale ¦ Maximale Reichweite ¦ Alcance máximo ¦ Alcance máximo ¦ Максимальная дальность
+Shot Speed ¦ Vitesse des projectiles ¦ Projektilgeschwindigkeit ¦ Velocidad del proyectil ¦ Velocidade do projétil ¦ Скорость снаряда
+Jitter ¦ Dispersion ¦ Streuung ¦ Dispersión ¦ Dispersão ¦ Разброс
+Spin Up Time ¦ Temps d'amorçage ¦ Anlaufzeit ¦ Tiempo de giro ¦ Tempo de aceleração ¦ Время раскрутки
+Facing Limit ¦ Limite d'orientation ¦ Ausrichtungsgrenze ¦ Límite de orientación ¦ Limite de orientação ¦ Предел наведения
+Duration ¦ Durée ¦ Dauer ¦ Duración ¦ Duração ¦ Длительность
+Capacity ¦ Capacité ¦ Kapazität ¦ Capacidad ¦ Capacidade ¦ Вместимость
+Regen Rate ¦ Taux de régénération ¦ Regenerationsrate ¦ Tasa de regeneración ¦ Taxa de regeneração ¦ Скорость восстановления
+Broken Regen Rate ¦ Taux de régénération après rupture ¦ Regenerationsrate nach Zusammenbruch ¦ Tasa de regeneración tras ruptura ¦ Taxa de regeneração após colapso ¦ Восстановление после пробития
+Shield Boost ¦ Bonus de bouclier ¦ Schildverstärkung ¦ Refuerzo de escudo ¦ Reforço de escudo ¦ Усиление щита
+Shield Reinforcement ¦ Renforcement de bouclier ¦ Schildverstärkung ¦ Refuerzo de escudo ¦ Reforço de escudo ¦ Укрепление щита
+Optimal Mass ¦ Masse optimale ¦ Optimale Masse ¦ Masa óptima ¦ Massa ideal ¦ Оптимальная масса
+Optimal Multiplier ¦ Multiplicateur optimal ¦ Optimaler Multiplikator ¦ Multiplicador óptimo ¦ Multiplicador ideal ¦ Оптимальный множитель
+Optimal Strength ¦ Puissance optimale ¦ Optimale Stärke ¦ Potencia óptima ¦ Potência ideal ¦ Оптимальная сила
+Maximum Fuel Per Jump ¦ Carburant max. par saut ¦ Max. Treibstoff pro Sprung ¦ Combustible máx. por salto ¦ Combustível máx. por salto ¦ Макс. топливо на прыжок
+Heat Efficiency ¦ Efficacité thermique ¦ Wärmeeffizienz ¦ Eficiencia térmica ¦ Eficiência térmica ¦ Тепловая эффективность
+Engines Capacity ¦ Capacité moteurs ¦ Triebwerkskapazität ¦ Capacidad de motores ¦ Capacidade dos motores ¦ Ёмкость двигателей
+Engines Recharge ¦ Recharge moteurs ¦ Triebwerksaufladung ¦ Recarga de motores ¦ Recarga dos motores ¦ Перезарядка двигателей
+Systems Capacity ¦ Capacité systèmes ¦ Systemkapazität ¦ Capacidad de sistemas ¦ Capacidade dos sistemas ¦ Ёмкость систем
+Systems Recharge ¦ Recharge systèmes ¦ Systemaufladung ¦ Recarga de sistemas ¦ Recarga dos sistemas ¦ Перезарядка систем
+Weapons Capacity ¦ Capacité armes ¦ Waffenkapazität ¦ Capacidad de armas ¦ Capacidade das armas ¦ Ёмкость оружия
+Weapons Recharge ¦ Recharge armes ¦ Waffenaufladung ¦ Recarga de armas ¦ Recarga das armas ¦ Перезарядка оружия
+Scan Angle ¦ Angle de scan ¦ Scanwinkel ¦ Ángulo de escaneo ¦ Ângulo de escaneamento ¦ Угол сканирования
+Scan Range ¦ Portée de scan ¦ Scanreichweite ¦ Alcance de escaneo ¦ Alcance de escaneamento ¦ Дальность сканирования
+Scan Time ¦ Durée de scan ¦ Scandauer ¦ Tiempo de escaneo ¦ Tempo de escaneamento ¦ Время сканирования
+Probe Radius ¦ Rayon des sondes ¦ Sondenradius ¦ Radio de sonda ¦ Raio da sonda ¦ Радиус зонда
+Analysis range ¦ Portée d'analyse ¦ Analysereichweite ¦ Alcance de análisis ¦ Alcance de análise ¦ Дальность анализа
+Analysis time ¦ Durée d'analyse ¦ Analysedauer ¦ Tiempo de análisis ¦ Tempo de análise ¦ Время анализа
+Reload Speed ¦ Vitesse de rechargement ¦ Nachladegeschwindigkeit ¦ Velocidad de recarga ¦ Velocidade de recarga ¦ Скорость перезарядки
+Engineer modification slots ¦ Emplacements de modification d'ingénieur ¦ Ingenieur-Modifikationsplätze ¦ Ranuras de modificación de ingeniero ¦ Espaços de modificação de engenheiro ¦ Слоты инженерных модификаций
+Shield health ¦ Santé du bouclier ¦ Schildstärke ¦ Salud del escudo ¦ Vida do escudo ¦ Прочность щита
+Shield regeneration rate ¦ Vitesse de régénération du bouclier ¦ Schildregenerationsrate ¦ Velocidad de regeneración del escudo ¦ Taxa de regeneração do escudo ¦ Скорость восстановления щита
+Backpack component capacity ¦ Capacité du sac à dos (composants) ¦ Rucksackkapazität (Komponenten) ¦ Capacidad de la mochila (componentes) ¦ Capacidade da mochila (componentes) ¦ Вместимость рюкзака (компоненты)
+Backpack data capacity ¦ Capacité du sac à dos (données) ¦ Rucksackkapazität (Daten) ¦ Capacidad de la mochila (datos) ¦ Capacidade da mochila (dados) ¦ Вместимость рюкзака (данные)
+Backpack item capacity ¦ Capacité du sac à dos (objets) ¦ Rucksackkapazität (Gegenstände) ¦ Capacidad de la mochila (objetos) ¦ Capacidade da mochila (itens) ¦ Вместимость рюкзака (предметы)
+Kinetic damage resistance ¦ Résistance aux dégâts cinétiques ¦ Resistenz gegen kinetischen Schaden ¦ Resistencia al daño cinético ¦ Resistência a dano cinético ¦ Сопротивление кинетическому урону
+Thermic damage resistance ¦ Résistance aux dégâts thermiques ¦ Resistenz gegen thermischen Schaden ¦ Resistencia al daño térmico ¦ Resistência a dano térmico ¦ Сопротивление термическому урону
+Plasma damage resistance ¦ Résistance aux dégâts plasma ¦ Resistenz gegen Plasmaschaden ¦ Resistencia al daño de plasma ¦ Resistência a dano de plasma ¦ Сопротивление плазменному урону
+Explosive damage resistance ¦ Résistance aux dégâts explosifs ¦ Resistenz gegen Explosivschaden ¦ Resistencia al daño explosivo ¦ Resistência a dano explosivo ¦ Сопротивление взрывному урону
+Kinetic damage multiplier ¦ Multiplicateur de dégâts cinétiques ¦ Kinetischer Schadensmultiplikator ¦ Multiplicador de daño cinético ¦ Multiplicador de dano cinético ¦ Множитель кинетического урона
+Thermic damage multiplier ¦ Multiplicateur de dégâts thermiques ¦ Thermischer Schadensmultiplikator ¦ Multiplicador de daño térmico ¦ Multiplicador de dano térmico ¦ Множитель термического урона
+Plasma damage multiplier ¦ Multiplicateur de dégâts plasma ¦ Plasma-Schadensmultiplikator ¦ Multiplicador de daño de plasma ¦ Multiplicador de dano de plasma ¦ Множитель плазменного урона
+Explosive damage multiplier ¦ Multiplicateur de dégâts explosifs ¦ Explosiv-Schadensmultiplikator ¦ Multiplicador de daño explosivo ¦ Multiplicador de dano explosivo ¦ Множитель взрывного урона
+Weapon melee damage multiplier ¦ Multiplicateur de dégâts de mêlée (arme) ¦ Nahkampfschadensmultiplikator (Waffe) ¦ Multiplicador de daño cuerpo a cuerpo (arma) ¦ Multiplicador de dano corpo a corpo (arma) ¦ Множитель урона в ближнем бою (оружие)
+Fists melee damage multiplier ¦ Multiplicateur de dégâts de mêlée (poings) ¦ Nahkampfschadensmultiplikator (Fäuste) ¦ Multiplicador de daño cuerpo a cuerpo (puños) ¦ Multiplicador de dano corpo a corpo (punhos) ¦ Множитель урона в ближнем бою (кулаки)
+Tool energy drain multiplier ¦ Multiplicateur de consommation des outils ¦ Energieverbrauchsmultiplikator der Werkzeuge ¦ Multiplicador de consumo de herramientas ¦ Multiplicador de consumo das ferramentas ¦ Множитель расхода энергии инструментов
+Damage increases with heat level ¦ Dégâts accrus avec la chaleur ¦ Schaden steigt mit der Hitze ¦ El daño aumenta con el calor ¦ Dano aumenta com o calor ¦ Урон растёт с нагревом
+Damage partially explosive ¦ Dégâts en partie explosifs ¦ Schaden teilweise explosiv ¦ Daño parcialmente explosivo ¦ Dano parcialmente explosivo ¦ Урон частично взрывной
+Damage partially kinetic ¦ Dégâts en partie cinétiques ¦ Schaden teilweise kinetisch ¦ Daño parcialmente cinético ¦ Dano parcialmente cinético ¦ Урон частично кинетический
+Damage partially thermal ¦ Dégâts en partie thermiques ¦ Schaden teilweise thermisch ¦ Daño parcialmente térmico ¦ Dano parcialmente térmico ¦ Урон частично термический
+Effectiveness increase against munitions ¦ Efficacité accrue contre les munitions ¦ Höhere Wirksamkeit gegen Munition ¦ Mayor eficacia contra munición ¦ Maior eficácia contra munição ¦ Выше эффективность против боеприпасов
+Heat reduced when striking a target ¦ Chaleur réduite en touchant une cible ¦ Weniger Hitze bei Treffern ¦ Calor reducido al impactar un objetivo ¦ Calor reduzido ao atingir um alvo ¦ Нагрев снижается при попадании
+No damage to untargeted ships ¦ Aucun dégât aux vaisseaux non ciblés ¦ Kein Schaden an nicht anvisierten Schiffen ¦ Sin daño a naves no seleccionadas ¦ Sem dano a naves não selecionadas ¦ Нет урона невыбранным кораблям
+Part of damage through shields ¦ Une partie des dégâts traverse les boucliers ¦ Ein Teil des Schadens durchdringt Schilde ¦ Parte del daño atraviesa escudos ¦ Parte do dano atravessa escudos ¦ Часть урона проходит сквозь щиты
+Reload from ship fuel ¦ Rechargement depuis le carburant du vaisseau ¦ Nachladen aus dem Schiffstreibstoff ¦ Recarga con combustible de la nave ¦ Recarga com combustível da nave ¦ Перезарядка из топлива корабля
+Auto reload while firing ¦ Rechargement automatique pendant le tir ¦ Automatisches Nachladen beim Feuern ¦ Recarga automática al disparar ¦ Recarga automática ao atirar ¦ Автоперезарядка при стрельбе
+Area FSDs reboot ¦ Redémarrage des FSD dans la zone ¦ FSDs im Umkreis starten neu ¦ Reinicio de MDD en el área ¦ Reinício dos FSD na área ¦ Перезагрузка FSD в области
+Area heat increased, sensors disrupted ¦ Chaleur accrue dans la zone, capteurs perturbés ¦ Hitze im Umkreis erhöht, Sensoren gestört ¦ Calor aumentado en el área, sensores alterados ¦ Calor aumentado na área, sensores afetados ¦ Нагрев в области, помехи датчикам
+Shielded target heat increased ¦ Chaleur accrue des cibles avec bouclier ¦ Hitze geschildeter Ziele erhöht ¦ Calor aumentado en objetivos con escudo ¦ Calor aumentado em alvos com escudo ¦ Нагрев целей со щитом
+Target FSD inhibited ¦ FSD de la cible inhibé ¦ FSD des Ziels gehemmt ¦ MDD del objetivo inhibido ¦ FSD do alvo inibido ¦ FSD цели заблокирован
+Target FSD reboots ¦ FSD de la cible redémarre ¦ FSD des Ziels startet neu ¦ MDD del objetivo se reinicia ¦ FSD do alvo reinicia ¦ FSD цели перезагружается
+Target armor hardness reduced ¦ Dureté d'armure de la cible réduite ¦ Panzerhärte des Ziels verringert ¦ Dureza de blindaje del objetivo reducida ¦ Dureza da blindagem do alvo reduzida ¦ Твёрдость брони цели снижена
+Target gimbal/turret tracking reduced ¦ Suivi des armes à cardan/tourelles de la cible réduit ¦ Kardan-/Geschützturm-Nachführung des Ziels verringert ¦ Seguimiento de armas de cardán/torretas del objetivo reducido ¦ Rastreamento de armas cardã/torretas do alvo reduzido ¦ Наведение карданов/турелей цели снижено
+Target heat increased ¦ Chaleur de la cible accrue ¦ Hitze des Ziels erhöht ¦ Calor del objetivo aumentado ¦ Calor do alvo aumentado ¦ Нагрев цели увеличен
+Target loses target lock ¦ La cible perd son verrouillage ¦ Ziel verliert Zielerfassung ¦ El objetivo pierde el fijado ¦ O alvo perde a mira ¦ Цель теряет захват
+Target module damage ¦ Dégâts aux modules de la cible ¦ Modulschaden am Ziel ¦ Daño a módulos del objetivo ¦ Dano aos módulos do alvo ¦ Урон модулям цели
+Target modules malfunctions ¦ Dysfonctionnements des modules de la cible ¦ Fehlfunktionen der Zielmodule ¦ Fallos en módulos del objetivo ¦ Falhas nos módulos do alvo ¦ Сбои модулей цели
+Target pushed off course ¦ Cible déviée de sa trajectoire ¦ Ziel vom Kurs abgebracht ¦ Objetivo desviado de su rumbo ¦ Alvo desviado da rota ¦ Цель сбита с курса
+Target sensor acuity reduced ¦ Acuité des capteurs de la cible réduite ¦ Sensorschärfe des Ziels verringert ¦ Agudeza de sensores del objetivo reducida ¦ Precisão dos sensores do alvo reduzida ¦ Чувствительность датчиков цели снижена
+Target shield cell disrupted ¦ Cellules de bouclier de la cible perturbées ¦ Schildzellen des Ziels gestört ¦ Celdas de escudo del objetivo alteradas ¦ Células de escudo do alvo afetadas ¦ Щитовые батареи цели нарушены
+Target shield generator damaged ¦ Générateur de bouclier de la cible endommagé ¦ Schildgenerator des Ziels beschädigt ¦ Generador de escudo del objetivo dañado ¦ Gerador de escudo do alvo danificado ¦ Генератор щита цели повреждён
+Target signature increased ¦ Signature de la cible accrue ¦ Signatur des Ziels erhöht ¦ Firma del objetivo aumentada ¦ Assinatura do alvo aumentada ¦ Сигнатура цели увеличена
+Target speed reduced ¦ Vitesse de la cible réduite ¦ Geschwindigkeit des Ziels verringert ¦ Velocidad del objetivo reducida ¦ Velocidade do alvo reduzida ¦ Скорость цели снижена
+Target thrusters reboot ¦ Propulseurs de la cible redémarrent ¦ Triebwerke des Ziels starten neu ¦ Impulsores del objetivo se reinician ¦ Propulsores do alvo reiniciam ¦ Двигатели цели перезагружаются
+Target wing shields regenerated ¦ Boucliers de l'escadrille régénérés ¦ Schilde des Geschwaders regeneriert ¦ Escudos del ala regenerados ¦ Escudos da ala regenerados ¦ Щиты звена восстановлены
+Wing shield regeneration increased ¦ Régénération des boucliers de l'escadrille accrue ¦ Schildregeneration des Geschwaders erhöht ¦ Regeneración de escudos del ala aumentada ¦ Regeneração de escudos da ala aumentada ¦ Восстановление щитов звена усилено
+Stability ¦ Stabilité ¦ Stabilität ¦ Estabilidad ¦ Estabilidade ¦ Стабильность
+
+# Odyssey upgrades (EDEngineer lacks the capitalised or weapon-specific forms)
+Greater Range ¦ Portée améliorée ¦ Größere Reichweite ¦ Mayor alcance ¦ Maior alcance ¦ Увеличенная дальность
+Greater range (Kinematic kinetic) ¦ Portée améliorée (Kinematic, cinétique) ¦ Größere Reichweite (Kinematic, kinetisch) ¦ Mayor alcance (Kinematic, cinética) ¦ Maior alcance (Kinematic, cinética) ¦ Увеличенная дальность (Kinematic, кинетическое)
+Greater range (Manticore plasma) ¦ Portée améliorée (Manticore, plasma) ¦ Größere Reichweite (Manticore, Plasma) ¦ Mayor alcance (Manticore, plasma) ¦ Maior alcance (Manticore, plasma) ¦ Увеличенная дальность (Manticore, плазма)
+Greater range (Takada laser) ¦ Portée améliorée (Takada, laser) ¦ Größere Reichweite (Takada, Laser) ¦ Mayor alcance (Takada, láser) ¦ Maior alcance (Takada, laser) ¦ Увеличенная дальность (Takada, лазер)
+Headshot Damage ¦ Dégâts de tirs à la tête ¦ Kopfschussschaden ¦ Daño por disparo en la cabeza ¦ Dano de tiro na cabeça ¦ Урон в голову
+Headshot damage (Kinematic kinetic) ¦ Dégâts de tirs à la tête (Kinematic, cinétique) ¦ Kopfschussschaden (Kinematic, kinetisch) ¦ Daño por disparo en la cabeza (Kinematic, cinética) ¦ Dano de tiro na cabeça (Kinematic, cinética) ¦ Урон в голову (Kinematic, кинетическое)
+Headshot damage (Manticore plasma) ¦ Dégâts de tirs à la tête (Manticore, plasma) ¦ Kopfschussschaden (Manticore, Plasma) ¦ Daño por disparo en la cabeza (Manticore, plasma) ¦ Dano de tiro na cabeça (Manticore, plasma) ¦ Урон в голову (Manticore, плазма)
+Headshot damage (Takada laser) ¦ Dégâts de tirs à la tête (Takada, laser) ¦ Kopfschussschaden (Takada, Laser) ¦ Daño por disparo en la cabeza (Takada, láser) ¦ Dano de tiro na cabeça (Takada, laser) ¦ Урон в голову (Takada, лазер)
+Improved Hip Fire Accuracy (Kinematic kinetic) ¦ Amélioration de la précision du tir au jugé (Kinematic, cinétique) ¦ Verbesserte Hüftfeuer-Präzision (Kinematic, kinetisch) ¦ Precisión de disparo de cadera mejorada (Kinematic, cinética) ¦ Precisão de tiro sem mira melhorada (Kinematic, cinética) ¦ Точность стрельбы от бедра (Kinematic, кинетическое)
+Improved Hip Fire Accuracy (Manticore plasma) ¦ Amélioration de la précision du tir au jugé (Manticore, plasma) ¦ Verbesserte Hüftfeuer-Präzision (Manticore, Plasma) ¦ Precisión de disparo de cadera mejorada (Manticore, plasma) ¦ Precisão de tiro sem mira melhorada (Manticore, plasma) ¦ Точность стрельбы от бедра (Manticore, плазма)
+Improved Hip Fire Accuracy (Takada laser) ¦ Amélioration de la précision du tir au jugé (Takada, laser) ¦ Verbesserte Hüftfeuer-Präzision (Takada, Laser) ¦ Precisión de disparo de cadera mejorada (Takada, láser) ¦ Precisão de tiro sem mira melhorada (Takada, laser) ¦ Точность стрельбы от бедра (Takada, лазер)
+Added Melee Damage ¦ Dégâts au corps à corps supplémentaires ¦ Zusätzlicher Nahkampfschaden ¦ Daño cuerpo a cuerpo añadido ¦ Dano corpo a corpo adicional ¦ Дополнительный урон в ближнем бою
+Extra Ammo Capacity ¦ Capacité de chargeur accrue ¦ Zusätzliche Munitionskapazität ¦ Capacidad adicional de munición ¦ Capacidade extra de munição ¦ Увеличенный боезапас
+Extra Backpack Capacity ¦ Capacité de sac à dos accrue ¦ Zusätzliche Rucksackkapazität ¦ Capacidad adicional de mochila ¦ Capacidade extra da mochila ¦ Увеличенная вместимость рюкзака
+Faster Handling ¦ Maniabilité améliorée ¦ Schnellere Handhabung ¦ Manejo más rápido ¦ Manuseio mais rápido ¦ Быстрое обращение
+Faster Shield Regen ¦ Régénération des boucliers accélérée ¦ Schnellere Schildregeneration ¦ Regeneración de escudo más rápida ¦ Regeneração de escudo mais rápida ¦ Быстрое восстановление щита
+Enhanced Tracking ¦ Suivi amélioré ¦ Verbesserte Verfolgung ¦ Seguimiento mejorado ¦ Rastreamento aprimorado ¦ Улучшенное отслеживание
+Improved Battery Capacity ¦ Capacité de batterie améliorée ¦ Verbesserte Batteriekapazität ¦ Capacidad de batería mejorada ¦ Capacidade de bateria melhorada ¦ Увеличенная ёмкость батареи
+Improved Jump Assist ¦ Assistance de saut améliorée ¦ Verbesserte Sprunghilfe ¦ Asistencia de salto mejorada ¦ Assistência de salto melhorada ¦ Улучшенный прыжковый ускоритель
+Increased Air Reserves ¦ Réserves d'oxygène augmentées ¦ Erhöhte Luftreserven ¦ Aumento de las reservas de aire ¦ Reservas de ar aumentadas ¦ Увеличенный запас воздуха
+Increased Sprint Duration ¦ Durée de course améliorée ¦ Längere Sprintdauer ¦ Mayor duración del sprint ¦ Duração de corrida aumentada ¦ Увеличенная длительность бега
+Night Vision ¦ Vision nocturne ¦ Nachtsicht ¦ Visión nocturna ¦ Visão noturna ¦ Ночное зрение
+Noise Suppressor ¦ Silencieux ¦ Schalldämpfer ¦ Supresor de ruido ¦ Supressor de ruído ¦ Глушитель
+Quieter Footsteps ¦ Réduction des bruits de pas ¦ Leisere Schritte ¦ Pasos más silenciosos ¦ Passos mais silenciosos ¦ Тихие шаги
+Reduced Tool Battery Consumption ¦ Consommation des outils réduite ¦ Geringerer Werkzeug-Batterieverbrauch ¦ Consumo reducido de batería de herramientas ¦ Consumo reduzido de bateria das ferramentas ¦ Сниженный расход батареи инструментов
+Stowed Reloading ¦ Rechargement rangé ¦ Nachladen im Holster ¦ Recarga enfundada ¦ Recarga guardada ¦ Перезарядка в кобуре
+Combat Movement Speed ¦ Vitesse de déplacement au combat ¦ Kampfbewegungstempo ¦ Velocidad de movimiento de combate ¦ Velocidade de movimento em combate ¦ Скорость передвижения в бою
+Improved Hip Fire Accuracy ¦ Amélioration de la précision du tir au jugé ¦ Verbesserte Hüftfeuer-Präzision ¦ Precisión de disparo de cadera mejorada ¦ Precisão de tiro sem mira melhorada ¦ Точность стрельбы от бедра

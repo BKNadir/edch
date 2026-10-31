@@ -1,3 +1,4 @@
+import { gameName, nameMatches } from "../i18n.js";
 import { CATEGORY_FR } from "../data.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import { reserved, type Ctx, type View } from "../context.js";
@@ -39,7 +40,7 @@ export class MaterialsView implements View {
     if (this.filter === "owned" && owned <= 0) return false;
     if (this.filter === "wish" && need <= 0) return false;
     if (!this.query) return true;
-    return m.name.toLowerCase().includes(this.query) || m.origins.some((o) => o.toLowerCase().includes(this.query));
+    return nameMatches(m.name, this.query) || m.origins.some((o) => nameMatches(o, this.query));
   }
 
   private cell(m: Material, owned: number, need: number): HTMLElement {
@@ -51,7 +52,7 @@ export class MaterialsView implements View {
       "button.mat",
       {
         class: [selected ? "selected" : "", short ? "short" : "", need > 0 && !short ? "covered" : "", owned === 0 ? "zero" : "", owned >= cap ? "full" : "", hidden ? "dim" : ""].filter(Boolean).join(" "),
-        title: m.origins.join("\n"),
+        title: m.origins.map(gameName).join("\n"),
         onclick: () => this.ctx.store.select(selected ? undefined : m.id),
       },
       h("span.mat-name", null, m.name),

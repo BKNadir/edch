@@ -512,5 +512,11 @@
 "Windows peut demander d'autoriser EDCH sur le pare-feu : accepte pour les réseaux privés.": "Windows may ask to allow EDCH through the firewall: accept for private networks.",
 "« Nouveau code » déconnecte tous les appareils déjà autorisés.": "\"New code\" disconnects every device already authorised.",
 "La connexion locale n'est pas chiffrée (HTTP) : utilise-la sur ton réseau domestique, pas sur un Wi-Fi public.": "The local connection isn't encrypted (HTTP): use it on your home network, not on public Wi-Fi.",
-"Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC.": "On the phone, the wishlist can be edited and syncs with the PC. Exports, imports and EDDN sync stay on the PC."
+"Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC.": "On the phone, the wishlist can be edited and syncs with the PC. Exports, imports and EDDN sync stay on the PC.",
+"Utilisé dans 1 recette": "Used in 1 recipe",
+"Cet appareil n'est pas connecté à EDCH": "This device isn't connected to EDCH",
+"Ce QR code n'est plus valable : un nouveau code a été créé sur le PC. Scanne celui qui est affiché maintenant.": "This QR code is no longer valid: a new code was created on the PC. Scan the one shown now.",
+"Scanne le QR code affiché dans EDCH sur ton PC (page Mobile) pour connecter cet appareil.": "Scan the QR code shown in EDCH on your PC (Mobile page) to connect this device.",
+"La connexion est enregistrée dans le navigateur qui ouvre le lien. Si ton lecteur de QR code l'ouvre dans sa propre fenêtre, ouvre-le plutôt dans Chrome ou Safari, ou copie le lien dans ton navigateur.": "The connection is saved in the browser that opens the link. If your QR scanner opens it in its own window, open it in Chrome or Safari instead, or copy the link into your browser.",
+"{0} est momentanément indisponible (erreur {1}), réessaie dans un instant": "{0} is temporarily unavailable (error {1}), try again in a moment"
 }

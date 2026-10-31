@@ -512,5 +512,11 @@
 "Windows peut demander d'autoriser EDCH sur le pare-feu : accepte pour les réseaux privés.": "O Windows pode pedir para liberar o EDCH no firewall: aceite para redes privadas.",
 "« Nouveau code » déconnecte tous les appareils déjà autorisés.": "\"Novo código\" desconecta todos os aparelhos já autorizados.",
 "La connexion locale n'est pas chiffrée (HTTP) : utilise-la sur ton réseau domestique, pas sur un Wi-Fi public.": "A conexão local não é criptografada (HTTP): use na rede de casa, não em Wi-Fi público.",
-"Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC.": "No celular, a lista de desejos pode ser editada e sincroniza com o PC. Exportações, importações e a sincronização com o EDDN ficam no PC."
+"Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC.": "No celular, a lista de desejos pode ser editada e sincroniza com o PC. Exportações, importações e a sincronização com o EDDN ficam no PC.",
+"Utilisé dans 1 recette": "Usado em 1 receita",
+"Cet appareil n'est pas connecté à EDCH": "Este aparelho não está conectado ao EDCH",
+"Ce QR code n'est plus valable : un nouveau code a été créé sur le PC. Scanne celui qui est affiché maintenant.": "Este QR code não é mais válido: um novo código foi criado no PC. Escaneie o que aparece agora.",
+"Scanne le QR code affiché dans EDCH sur ton PC (page Mobile) pour connecter cet appareil.": "Escaneie o QR code exibido no EDCH do seu PC (página Celular) para conectar este aparelho.",
+"La connexion est enregistrée dans le navigateur qui ouvre le lien. Si ton lecteur de QR code l'ouvre dans sa propre fenêtre, ouvre-le plutôt dans Chrome ou Safari, ou copie le lien dans ton navigateur.": "A conexão fica salva no navegador que abre o link. Se o leitor de QR code abrir em uma janela própria, abra no Chrome ou no Safari, ou copie o link no navegador.",
+"{0} est momentanément indisponible (erreur {1}), réessaie dans un instant": "{0} está indisponível no momento (erro {1}), tente de novo em instantes"
 }

@@ -1,3 +1,4 @@
+import { nameMatches } from "../i18n.js";
 import { CATEGORY_FR } from "../data.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import { reserved, type Ctx, type View } from "../context.js";
@@ -54,7 +55,7 @@ export class OdysseyView implements View {
     const mats = game.data.materials
       .filter((m) => m.ledger === "locker" && m.category === this.cat)
       .filter((m) => !this.ownedOnly || (locker[m.id] ?? 0) > 0)
-      .filter((m) => !this.query || m.name.toLowerCase().includes(this.query))
+      .filter((m) => !this.query || nameMatches(m.name, this.query))
       .sort((a, b) => (locker[b.id] ?? 0) - (locker[a.id] ?? 0) || a.name.localeCompare(b.name));
 
     const empty = !Object.keys(locker).length;

@@ -1,0 +1,4277 @@
+{
+ "+10% Damage Boost": {
+  "de": "Bonus Schaden: +10%",
+  "es": "Aumento de Daño +10%",
+  "fr": "+10% de boost de dommage",
+  "pt": "Aumento de Dano de +10%",
+  "ru": "+10% к урону"
+ },
+ "+100% Fuel Efficiency": {
+  "de": "+100% Bonus Treibstoffeffizienz",
+  "es": "+100% Eficiencia de Combustible",
+  "fr": "+100% Efficacité du carburant",
+  "pt": "+100% Eficiência do combustível",
+  "ru": "+100% к эффективности топлива"
+ },
+ "+100% Hull Strength": {
+  "de": "+100% Bonus Rumpfstärke",
+  "es": "+100% Resistencia de Casco",
+  "fr": "+100% bonus coque",
+  "pt": "+100% Força do casco",
+  "ru": "+100% к прочности корпуса"
+ },
+ "+100% Jump Range": {
+  "de": "+100% Bonus Entfernung",
+  "es": "+100% Distancia de Salto",
+  "fr": "+100% portée de saut",
+  "pt": "+100% Alcance do salto",
+  "ru": "+100% к дальности прыжка"
+ },
+ "+100% Repair Speed": {
+  "de": "+100% Bonus Reparaturgeschwindigkeit",
+  "es": "+100% Velocidad de Reparación",
+  "fr": "+100% vitesse de réparation",
+  "pt": "+100% Velocidade de reparo",
+  "ru": "+100% к скорости ремонта"
+ },
+ "+15% Damage Boost": {
+  "de": "+15% Bonus Schaden",
+  "es": "+15% Aumento de Daño",
+  "fr": "+15% dégâts",
+  "pt": "+15% Aumento de dano",
+  "ru": "+15% к урону"
+ },
+ "+200% Fuel Efficiency": {
+  "de": "+200% Bonus Treibstoffeffizienz",
+  "es": "+200% Eficiencia de Combustible",
+  "fr": "+200% Efficacité du carburant",
+  "pt": "+200% Eficiência do combustível",
+  "ru": "+200% к эффективности топлива"
+ },
+ "+25% Jump Range": {
+  "de": "+25% Bonus Entfernung",
+  "es": "+25% Distancia de Salto",
+  "fr": "+25% portée de saut",
+  "pt": "+25% Alcance do salto",
+  "ru": "+25% к дальности прыжка"
+ },
+ "+30% Damage Boost": {
+  "de": "+30% Bonus Schaden",
+  "es": "+30% Aumento de Daño",
+  "fr": "+30% dégâts",
+  "pt": "+30% Aumento de dano",
+  "ru": "+30% к урону"
+ },
+ "+5% Damage": {
+  "de": "Bonus Schaden: +5%",
+  "es": "+5% Daño",
+  "fr": "+5% de dommage",
+  "pt": "+5% de Dano",
+  "ru": "+5% к урону"
+ },
+ "+5% Damage Boost": {
+  "de": "Bonus Schaden: +5%",
+  "es": "Aumento de Daño +5%",
+  "fr": "+5% de boost de dommage",
+  "pt": "Aumento de Dano de +5%",
+  "ru": "+5% к урону"
+ },
+ "+50% Hull Strength": {
+  "de": "+50% Bonus Rumpfstärke",
+  "es": "+50% Resistencia de Casco",
+  "fr": "+50% bonus coque",
+  "pt": "+50% Força do casco",
+  "ru": "+50% к прочности корпуса"
+ },
+ "+50% Jump Range": {
+  "de": "+50% Bonus Entfernung",
+  "es": "+50% Distancia de Salto",
+  "fr": "+50% portée de saut",
+  "pt": "+50% Alcance do salto",
+  "ru": "+50% к дальности прыжка"
+ },
+ "+50% Repair Speed": {
+  "de": "+50% Bonus Reparaturgeschwindigkeit",
+  "es": "+50% Velocidad de Reparación",
+  "fr": "+50% vitesse de réparation",
+  "pt": "+50% Velocidade de reparo",
+  "ru": "+50% к скорости ремонта"
+ },
+ "100% Refill": {
+  "de": "100% Nachfüllung",
+  "es": "100% de Recarga",
+  "fr": "100% de Recharge",
+  "pt": "100% de Recarga",
+  "ru": "100% заправка"
+ },
+ "100% Refill, +15% Heat Dissipation": {
+  "de": "100% Nachfüllung, +15% Wärmeableitung",
+  "es": "100% de Recarga, +15% de Disipación de Calor",
+  "fr": "100% de Recharge, +15% de Dissipation de Chaleur",
+  "pt": "100% de Recarga, +15% de Dissipação de Calor",
+  "ru": "100% заправка, +15% рассеивание тепла"
+ },
+ "100% Refill, +2 Seconds Duration": {
+  "de": "100% Nachfüllung, +2 Sekunden Dauer",
+  "es": "100% de Recarga, +2 Segundos de Duración",
+  "fr": "100% de Recharge, +2 Secondes de Durée",
+  "pt": "100% de Recarga, +2 Segundos de Duração",
+  "ru": "100% заправка, +2 секунды действия"
+ },
+ "100% Refill, +30% Heat Dissipation": {
+  "de": "100% Nachfüllung, +30% Wärmeableitung",
+  "es": "100% de Recarga, +30% de Disipación de Calor",
+  "fr": "100% de Recharge, +30% de Dissipation de Chaleur",
+  "pt": "100% de Recarga, +30% de Dissipação de Calor",
+  "ru": "100% заправка, +30% рассеивание тепла"
+ },
+ "4 Limpets, Cargo Hold Required": {
+  "de": "für Drohnen, Laderaum erforderlich",
+  "es": "4 Drones, Espacio de Carga Necesario",
+  "fr": "4 Drones, Soute Requise",
+  "pt": "4 Drones, Porão de Carga Necessário ",
+  "ru": "4 беспилотника, необходим грузовой отсек"
+ },
+ "50% Refill": {
+  "de": "50% Nachfüllung",
+  "es": "50% de Recarga",
+  "fr": "50% de Recharge",
+  "pt": "50% de Recarga",
+  "ru": "50% заправка"
+ },
+ "AFM Refill": {
+  "de": "AFW wiederauffüllen",
+  "es": "Recarga de UAM",
+  "fr": "Unité de maintenance rechargée",
+  "pt": "Recarga de UMT",
+  "ru": "Снабжение АПР"
+ },
+ "AX Combat Logs": {
+  "de": "AX-Kampf-Logs",
+  "es": "Registros de combate AX",
+  "fr": "Jounaux de combat AX",
+  "ru": "Журналы боевых операций АИ"
+ },
+ "AX Explosive Munitions": {
+  "de": "Explosivmunition (AX)",
+  "es": "Munición AX Explosiva",
+  "fr": "Munitions Anti-Xeno Explosives",
+  "ru": "Взрывчатые боеприпасы АИ"
+ },
+ "AX Remote Flak Munitions": {
+  "de": "Munition für ferngezündete Flak (AX)",
+  "es": "Munición AX Antiaérea Remota",
+  "fr": "Munitions Anti-Xeno Flak à Distance",
+  "ru": "Зенитные снаряды с дистанционным подрывом АИ"
+ },
+ "AX Small Calibre Munitions": {
+  "de": "Kleinkalibrige Munition (AX)",
+  "es": "Munición AX de Calibre Pequeño",
+  "fr": "Munitions Anti-Xeno Petit Calibre",
+  "pt": "Munição AX de Baixo Calibre",
+  "ru": "Мелкокалиберные боеприпасы АИ"
+ },
+ "Aberrant Shield Pattern Analysis": {
+  "de": "Abweichende Schildeinsatz-Analysen",
+  "es": "Análisis de Patrón de Escudo Aberrantes",
+  "fr": "Analyse de modèle de bouclier aberrante",
+  "pt": "Análise de padrão de escudos Aberrante",
+  "ru": "Анализ аномального поведения щита"
+ },
+ "Accident Logs": {
+  "de": "Unfall-Logs",
+  "es": "Registros de accidentes",
+  "fr": "Journaux d'accidents",
+  "ru": "Журнал происшествий"
+ },
+ "Adaptive Encryptors Capture": {
+  "de": "Adaptive Verschlüsselungserfassung",
+  "es": "Captura de Encriptadores Adaptativos",
+  "fr": "Capture de cryptage évolutif",
+  "pt": "Encriptadores Adaptativos Capturados",
+  "ru": "Захват адаптивного шифровальщика"
+ },
+ "Added melee damage": {
+  "de": "Zusätzlicher Nahkampfschaden",
+  "es": "Daño cuerpo a cuerpo añadido",
+  "fr": "Dégats au corps à corps supplémentaires",
+  "ru": "Добавлен урон в рукопашном режиме"
+ },
+ "Aerogel": {
+  "de": "Aerogel",
+  "es": "Aerogel",
+  "fr": "Aérogel",
+  "ru": "Аэрогель"
+ },
+ "Agricultural Process Sample": {
+  "de": "Agrikulturverfahren-Probe",
+  "es": "Muestra de proceso agrícola",
+  "fr": "Échantillon de production agricole",
+  "ru": "Образец сельхозпроцесса"
+ },
+ "Air Quality Reports": {
+  "de": "Berichte zur Luftqualität",
+  "es": "Registros de calidad del aire",
+  "fr": "Rapports de qualité de l'air",
+  "ru": "Отчёты о качестве воздуха"
+ },
+ "Alloys": {
+  "de": "Legierungen",
+  "es": "Aleaciones",
+  "fr": "Alliages",
+  "pt": "Ligas",
+  "ru": "Сплавы"
+ },
+ "Ammo Capacity": {
+  "de": "Munitionskapazität",
+  "es": "Capacidad de Munición",
+  "fr": "capacité de munition",
+  "pt": "Capacidade de Munição",
+  "ru": "Боезапас"
+ },
+ "Ancient/Guardian ruins": {
+  "de": "Uralte/Guardian Ruinen",
+  "es": "Ruinas Antiguas/Guardianes",
+  "fr": "Ruines Guardians",
+  "pt": "Ruínas Antigas/Guardian",
+  "ru": "Руины Стражей"
+ },
+ "Angled Plating": {
+  "de": "Abgewinkelte Beschichtung",
+  "es": "Blindaje en Ángulo",
+  "fr": "Blindage Anguleux",
+  "pt": "Blindagem Angulada",
+  "ru": "Угловая броня"
+ },
+ "Anomalous Bulk Scan Data": {
+  "de": "Anormale Massen-Scan-Daten",
+  "es": "Datos de Escáner en Bruto Anómalos",
+  "fr": "Fichier volumineux d'analyse anormal",
+  "pt": "Dados Brutos de Escâner Anômalos",
+  "ru": "Аномальный массив данных сканирования"
+ },
+ "Anomalous FSD Telemetry": {
+  "de": "Anormale FSA-Telemetrie",
+  "es": "Telemetría de MDD Anómala",
+  "fr": "Télémétrie FSD anormale",
+  "pt": "Telemetria Anômala de MDD",
+  "ru": "Аномальная телеметрия FSD"
+ },
+ "Antimony": {
+  "de": "Antimon",
+  "es": "Antimonio",
+  "fr": "Antimoine",
+  "pt": "Antimônio",
+  "ru": "Сурьма"
+ },
+ "Armour": {
+  "de": "Panzerung",
+  "es": "Blindaje",
+  "fr": "Armure",
+  "pt": "Blindagem",
+  "ru": "Броня"
+ },
+ "Armoured": {
+  "de": "Gepanzert",
+  "es": "Blindado",
+  "fr": "Blindé",
+  "pt": "Blindado",
+  "ru": "Бронированный"
+ },
+ "Arsenic": {
+  "de": "Arsen",
+  "es": "Arsénico",
+  "fr": "Arsenic",
+  "pt": "Arsênico",
+  "ru": "Мышьяк"
+ },
+ "Artemis": {
+  "de": "Artemis",
+  "es": "Artemis",
+  "fr": "Artemis",
+  "ru": "Artemis"
+ },
+ "Atmospheric Data": {
+  "de": "Atmosphärische Daten",
+  "es": "Datos atmosféricos",
+  "fr": "Données athmosphériques",
+  "ru": "Атмосферные данные"
+ },
+ "Atypical Disrupted Wake Echoes": {
+  "de": "Atypische FSA-Stör-Aufzeichnungen",
+  "es": "Ecos de Estelas Interrumpidas Atípicos",
+  "fr": "Echos de sillages perturbés atypiques",
+  "pt": "Interferência Atípica no Eco de Rastros",
+  "ru": "Атипичное эхо поврежденного следа"
+ },
+ "Atypical Encryption Archives": {
+  "de": "Atypische Verschlüsselungsarchive",
+  "es": "Archivos Encriptados Atípicos",
+  "fr": "Archives cryptées atypiques",
+  "pt": "Arquivos De Encriptação Atípicos",
+  "ru": "Нетипичные архивы шифрования"
+ },
+ "Audio Logs": {
+  "de": "Audio-Logs",
+  "es": "Registros de audio",
+  "fr": "Journaux audio",
+  "ru": "Аудиозаписи"
+ },
+ "Audio Masking": {
+  "de": "Audiomaskierung",
+  "es": "Enmascaramiento de audio",
+  "fr": "Réduction du bruit de tir",
+  "ru": "Акустическая маскировка"
+ },
+ "Auto Field-Maintenance Unit": {
+  "de": "Automatische Feldwartungs-Einheit",
+  "es": "Unidad de Automantenimiento",
+  "fr": "MTA",
+  "pt": "Unidade de Manutenção",
+  "ru": "Блок автоматического полевого ремонта"
+ },
+ "Auto Loader": {
+  "de": "Autolader",
+  "es": "Autocargador",
+  "fr": "Rechargement Automatique",
+  "pt": "Carregador Automatico",
+  "ru": "Автоматическая система заряжания"
+ },
+ "Basic Conductors": {
+  "de": "Einfache Leiter",
+  "es": "Conductores Básicos",
+  "fr": "conducteurs simples",
+  "pt": "Condutores básicos",
+  "ru": "Простые проводники"
+ },
+ "Beam Laser": {
+  "de": "Strahlenlaser",
+  "es": "Láser de Rayo",
+  "fr": "Rayon Laser",
+  "pt": "Laser Contínuo",
+  "ru": "Пучковый лазер"
+ },
+ "Bio-Mechanical Conduits": {
+  "de": "Bio-mechanische Leitungen",
+  "es": "Conductos Bio-Mecánicos",
+  "fr": "Conducteurs Bio-Mécanique",
+  "pt": "Condutores Bio-mecânicos",
+  "ru": "Биомеханические энергопроводники"
+ },
+ "Biochemical Agent": {
+  "de": "Biochemischer Wirkstoff",
+  "es": "Agente bioquímico",
+  "fr": "Agent biochimique",
+  "ru": "Биохимический агент"
+ },
+ "Biological Sample": {
+  "de": "Biologische Probe",
+  "es": "Muestra biológica",
+  "fr": "Échantillons biologiques",
+  "ru": "Образец биометериала"
+ },
+ "Biological Weapon Data": {
+  "de": "Biowaffen-Daten",
+  "es": "Datos de armas biológicas",
+  "fr": "Données d'arme biologique",
+  "ru": "Сведения по биологическому оружию"
+ },
+ "Biometric Data": {
+  "de": "Biometrische Daten",
+  "es": "Datos biométricos",
+  "fr": "Données biométriques",
+  "ru": "Биометрические данные"
+ },
+ "Biotech Conductors": {
+  "de": "Biotech-Leiter",
+  "es": "Conductores Biotecnológicos",
+  "fr": "Conducteurs biotechniques",
+  "pt": "Condutores biotecnológicos",
+  "ru": "Биотехнические проводники"
+ },
+ "Blacklist Data": {
+  "de": "Daten der schwarzen Liste",
+  "es": "Datos de lista negra",
+  "fr": "Liste noire",
+  "ru": "Черный список"
+ },
+ "Blast Block": {
+  "de": "Explosionssperre",
+  "es": "Bloqueo de Explosivos",
+  "fr": "Blocage d'Explosion",
+  "ru": "Блокировка взрыва"
+ },
+ "Blast Resistant": {
+  "de": "Detonationsresistent",
+  "es": "Blindaje Resistente a Explosiones",
+  "fr": "Anti-explosion",
+  "pt": "Resistente à Explosão",
+  "ru": "Противовзрывное усиление"
+ },
+ "Blast Resistant Hull Reinforcement": {
+  "de": "Detonationsresistente Rumpfhüllenverstärkung",
+  "es": "Refuerzo Estructural de Resistencia Explosiva",
+  "fr": "Renforts de coque anti-explosion",
+  "pt": "Reforço de Casco Resistente à Explosão",
+  "ru": "Противовзрывное усиление корпуса"
+ },
+ "Blood Test Results": {
+  "de": "Bluttest-Ergebnisse",
+  "es": "Resultados de análisis de sangre",
+  "fr": "Résultats de tests sanguins",
+  "ru": "Результаты тестов крови"
+ },
+ "Boron": {
+  "de": "Bor",
+  "es": "Boro",
+  "fr": "Bore",
+  "pt": "Boro",
+  "ru": "Бор"
+ },
+ "Boss Cells": {
+  "de": "Boss-Zellen",
+  "es": "Celdas Excelentes",
+  "fr": "Cellules XXL",
+  "ru": "Босс-ячейки"
+ },
+ "Building Schematic": {
+  "de": "Gebäudeplan",
+  "es": "Esquema de edificio",
+  "fr": "Plan de bâtiment",
+  "ru": "Чертёж здания"
+ },
+ "Burst Laser": {
+  "de": "Salvenlaser",
+  "es": "Láser de Ráfagas",
+  "fr": "Laser à Rafale",
+  "pt": "Laser de Rajada",
+  "ru": "Пульсирующий лазер"
+ },
+ "Cadmium": {
+  "de": "Kadmium",
+  "es": "Cadmio",
+  "fr": "Cadmium",
+  "pt": "Cádmio",
+  "ru": "Кадмий"
+ },
+ "Californium": {
+  "de": "Californium",
+  "es": "Californio",
+  "fr": "Californium",
+  "ru": "Калифорний"
+ },
+ "Campaign Plans": {
+  "de": "Kampagnenpläne",
+  "es": "Planes de campaña",
+  "fr": "Plans de campagne",
+  "ru": "План кампании"
+ },
+ "Cannon": {
+  "de": "Kanone",
+  "es": "Cañón",
+  "fr": "Canon",
+  "pt": "Canhão",
+  "ru": "Орудие"
+ },
+ "Capacitors": {
+  "de": "Kondensatoren",
+  "es": "Condensadores",
+  "fr": "Condensateurs",
+  "pt": "Capacitores",
+  "ru": "Конденсаторы"
+ },
+ "Carbon": {
+  "de": "Kohlenstoff",
+  "es": "Carbono",
+  "fr": "Carbone",
+  "pt": "Carbono",
+  "ru": "Углерод"
+ },
+ "Carbon Fibre Plating": {
+  "de": "Carbonfaserplatten",
+  "es": "Placa de fibra de carbono",
+  "fr": "Plaques en fibres de carbone",
+  "ru": "Углеволоконная броня"
+ },
+ "Cast Fossil": {
+  "de": "Fossilienfund",
+  "es": "Molde de fósil",
+  "fr": "Moulage de fossile",
+  "ru": "Окаменелый отпечаток"
+ },
+ "Cat Media": {
+  "de": "Katzen-Medien",
+  "es": "Catálogo de medios",
+  "fr": "Médiathèque féline",
+  "ru": "Медиаконтент с котиками"
+ },
+ "Census Data": {
+  "de": "Zensusdaten",
+  "es": "Datos censales",
+  "fr": "Données de recensement",
+  "ru": "Данные переписи населения"
+ },
+ "Chaff Launcher": {
+  "de": "Düppel-Werfer",
+  "es": "Lanzador de Señuelos",
+  "fr": "Contre-Mesures",
+  "pt": "Lançador de Chaff",
+  "ru": "Разбрасыватель дип. отражателей"
+ },
+ "Charge Enhanced": {
+  "de": "Ladungsoptimiert",
+  "es": "Carga Mejorada",
+  "fr": "Répartiteur de puissance rapide",
+  "pt": "Recarga Melhorada",
+  "ru": "Быстрозарядный"
+ },
+ "Chemical": {
+  "de": "Chemikalien",
+  "es": "Químico",
+  "fr": "Produits chimiques",
+  "pt": "Químicos",
+  "ru": "Химикаты"
+ },
+ "Chemical Catalyst": {
+  "de": "Chemischer Katalysator",
+  "es": "Catalizador químico",
+  "fr": "Catalyseur chimique",
+  "ru": "Химический катализатор"
+ },
+ "Chemical Distillery": {
+  "de": "Chemiedestillerie",
+  "es": "Destilería Química",
+  "fr": "Distilerie chimique",
+  "pt": "Destilaria química",
+  "ru": "Оборудование для перегонки химикатов"
+ },
+ "Chemical Experiment Data": {
+  "de": "Chemieexperiment-Daten",
+  "es": "Datos de experimentos químicos",
+  "fr": "Données d'expériences chimiques",
+  "ru": "Записи о химических исследованиях"
+ },
+ "Chemical Formulae": {
+  "de": "Chemische Formeln",
+  "es": "Chemical Formulae",
+  "fr": "Formules chimiques",
+  "ru": "Химические формулы"
+ },
+ "Chemical Inventory": {
+  "de": "Chemische Betsandsliste",
+  "es": "Inventario químico",
+  "fr": "Inventaire chimique",
+  "ru": "Опись химикатов"
+ },
+ "Chemical Manipulators": {
+  "de": "Chemische Manipulatoren",
+  "es": "Manipuladores Químicos",
+  "fr": "Manipulateurs chimiques",
+  "pt": "Manipuladores químicos",
+  "ru": "Манипуляторы для работы с химикатами"
+ },
+ "Chemical Patents": {
+  "de": "Chemische Patente",
+  "es": "Patentes químicas",
+  "fr": "Brevets chimiques",
+  "ru": "Патенты на химические вещества"
+ },
+ "Chemical Process Sample": {
+  "de": "Chemieverfahren-Probe",
+  "es": "Muestra de proceso químico",
+  "fr": "Échantillon de production chimique",
+  "ru": "Образец химической реакции"
+ },
+ "Chemical Processors": {
+  "de": "Chemische Prozessoren",
+  "es": "Procesadores Químicos",
+  "fr": "Processeurs chimiques",
+  "pt": "Processadores químicos",
+  "ru": "Оборудование для химобработки"
+ },
+ "Chemical Sample": {
+  "de": "Chemieprobe",
+  "es": "Muestra química",
+  "fr": "Échantillon chimique",
+  "ru": "Образец химпроизводства"
+ },
+ "Chemical Storage Units": {
+  "de": "Lagerungseiten für Chemiestoffe",
+  "es": "Unidades de Almacenamiento Químico",
+  "fr": "Unités de stockage chimique",
+  "pt": "Unidades de armazenamento químico",
+  "ru": "Контейнеры для химикатов"
+ },
+ "Chemical Superbase": {
+  "de": "Chemische Superbase",
+  "es": "Superbase química",
+  "fr": "Superbase chimique",
+  "ru": "Химическое супероснование"
+ },
+ "Chemical Weapon Data": {
+  "de": "Chemiewaffen-Daten",
+  "es": "Datos de armas químicas",
+  "fr": "Données d'armes chimiques",
+  "ru": "Данные по химическому оружию"
+ },
+ "Chromium": {
+  "de": "Chrom",
+  "es": "Cromo",
+  "fr": "Chrome",
+  "pt": "Cromo",
+  "ru": "Хром"
+ },
+ "Circuit Board": {
+  "de": "Schaltplatte",
+  "es": "Placa base",
+  "fr": "Circuit imprimé",
+  "ru": "Электроплата"
+ },
+ "Circuit Switch": {
+  "de": "Elektroschalter",
+  "es": "Conmutador",
+  "fr": "Commutateur",
+  "ru": "Выключатель цепи"
+ },
+ "Classic Entertainment": {
+  "de": "Klassische Unterhaltung",
+  "es": "Entretenimiento clásico",
+  "fr": "Médiathèque classique",
+  "ru": "Классические развлечения"
+ },
+ "Classified Scan Databanks": {
+  "de": "Scan-Datenbanken unter Verschluss",
+  "es": "Datos de Escáner Clasificados",
+  "fr": "Banques de données d'analyse classifiées",
+  "pt": "Banco de Dados de Escaneamento Confidenciais",
+  "ru": "Засекреченные базы данных сканирования"
+ },
+ "Classified Scan Fragment": {
+  "de": "Geheimes Scan Fragment",
+  "es": "Fragmento de Escáner Clasificado",
+  "fr": "Données d'analyse classifiées parcellaires",
+  "pt": "Fragmento de Escaneamento Confidenciais",
+  "ru": "Засекреченные фрагменты данных сканирования"
+ },
+ "Clean Drive Tuning": {
+  "de": "Ausgewogenes Antriebstuning",
+  "es": "Modificación de Motor Limpio",
+  "fr": "Optimisation de réacteur propre",
+  "pt": "Ajuste de Motor Limpo",
+  "ru": "«Чистая» донастройка"
+ },
+ "Clinical Trial Records": {
+  "de": "Kinische Prüfberichte",
+  "es": "Registros de ensayos clínicos",
+  "fr": "Essais cliniques",
+  "ru": "Записи клинических испытаний"
+ },
+ "Cluster Capacitor": {
+  "de": "Bündelkondensator",
+  "es": "Condensador de Grupo",
+  "fr": "Batterie de Condensateurs",
+  "ru": "Кассетный конденсатор"
+ },
+ "Cocktail Recipes": {
+  "de": "Cocktail-Rezepte",
+  "es": "Recetas de cócteles",
+  "fr": "Recettes de cocktails",
+  "ru": "Рецепты коктейлей"
+ },
+ "Collector Limpet Controller": {
+  "de": "Steuerung Sammeldrohne",
+  "es": "Lanzador Dron Colector",
+  "fr": "Controleur de drône collecteur",
+  "pt": "Controlador de Drone Coletor",
+  "ru": "Контроллер дронов сборщиков"
+ },
+ "Combat Movement Speed": {
+  "de": "Kampfbewegungsgeschwindigkeit",
+  "es": "Velocidad de movimiento de combate",
+  "fr": "Vitesse de déplacement au combat",
+  "ru": "Скорость боевого передвижения"
+ },
+ "Combat Training Material": {
+  "de": "Kampftraining-Materialien",
+  "es": "Material de entrenamiento de combate",
+  "fr": "Méthodes d'entraînement au combat",
+  "ru": "Учебные материалы по боевой подготовке"
+ },
+ "Combatant Performance": {
+  "de": "Kampfleistung",
+  "es": "Rendimiento de combatiente",
+  "fr": "Performances de combat",
+  "ru": "Боевая эффективность"
+ },
+ "Compact Composites": {
+  "de": "Kompaktkmposite",
+  "es": "Compuestos Compactos",
+  "fr": "Composites compacts",
+  "pt": "Compostos compactos",
+  "ru": "Спрессованные композиты"
+ },
+ "Compact Library": {
+  "de": "Kompakt-Bibliothek",
+  "es": "Biblioteca compacta",
+  "fr": "Bibliothèque de poche",
+  "ru": "Компактная библиотека"
+ },
+ "Composite": {
+  "de": "Komposite",
+  "es": "Compuesto",
+  "fr": "Composites",
+  "pt": "Compostos",
+  "ru": "Композиты"
+ },
+ "Compound Shielding": {
+  "de": "Verbundschilde",
+  "es": "Escudos Compuestos",
+  "fr": "Protection Composite",
+  "pt": "Proteção Composta",
+  "ru": "Многоступенчатая защита"
+ },
+ "Compression-Liquefied Gas": {
+  "de": "Komprimiertes Flüssiggas",
+  "es": "Gas licuado comprimido",
+  "fr": "Gaz liquéfié",
+  "ru": "Сжиженный газ"
+ },
+ "Concordant Sequence": {
+  "de": "Gleichsinnige Sequenz",
+  "es": "Secuencia Concordante",
+  "fr": "Séquence concordante",
+  "pt": "Sequencia Concordante",
+  "ru": "Последовательность координации"
+ },
+ "Conductive": {
+  "de": "Leiter",
+  "es": "Conductivo",
+  "fr": "Conducteurs",
+  "pt": "Condutivos",
+  "ru": "Проводники"
+ },
+ "Conductive Ceramics": {
+  "de": "Elektrokeramiken",
+  "es": "Cerámicas Conductivas",
+  "fr": "Conducteurs en céramique",
+  "pt": "Condutoras Cerâmicas",
+  "ru": "Проводящая керамика"
+ },
+ "Conductive Components": {
+  "de": "Leitfähige Komponenten",
+  "es": "Componentes Conductivos",
+  "fr": "Composants conducteurs",
+  "pt": "Componentes Condutores",
+  "ru": "Проводящие компоненты"
+ },
+ "Conductive Polymers": {
+  "de": "Leitfähige Polymere",
+  "es": "Polímeros Conductivos",
+  "fr": "Conducteurs en polymères",
+  "pt": "Polímeros Condutores",
+  "ru": "Проводящие полимеры"
+ },
+ "Configurable Components": {
+  "de": "Konfigurierbare Komponenten",
+  "es": "Componentes Configurables",
+  "fr": "Composant paramétrables",
+  "pt": "Componentes Configuráveis",
+  "ru": "Настраиваемые компоненты"
+ },
+ "Conflict History": {
+  "de": "Konflikthistorie",
+  "es": "Historial de conflictos",
+  "fr": "Historique de conflit",
+  "ru": "История конфликта"
+ },
+ "Core Dynamics Composites": {
+  "de": "Core Dynamics Kompositwerkstoffe",
+  "es": "Compuestos de Core Dynamics",
+  "fr": "Composites Core Dynamics",
+  "pt": "Componentes da Core Dynamics",
+  "ru": "Композиты Core Dynamics"
+ },
+ "Corrosive Shell": {
+  "de": "Korrosionsgranate",
+  "es": "Proyectil Corrosivo",
+  "fr": "Obus Corrosifs",
+  "pt": "Projeticl Corrosivo",
+  "ru": "Разъедающие боеприпасы"
+ },
+ "Cracked Industrial Firmware": {
+  "de": "Gecrackte Industrie-Firmware",
+  "es": "Firmware Industrial Pirateado",
+  "fr": "Micrologiciel industriel piraté",
+  "pt": "Firmware Industrial Quebrado",
+  "ru": "Взломанные промышленные микропрограммы"
+ },
+ "Criminal Records": {
+  "de": "Strafakten",
+  "es": "Registros criminales",
+  "fr": "Casiers judiciaires",
+  "ru": "Криминальные сводки"
+ },
+ "Crop Yield Analysis": {
+  "de": "Ernteertrag-Analyse",
+  "es": "Análisis de producción agrícola",
+  "fr": "Analyse de rendement agricole",
+  "ru": "Анализ урожайности"
+ },
+ "Crystal Shards": {
+  "de": "Kristallscherben",
+  "es": "Piedras de Cristal",
+  "fr": "Eclat de cristal",
+  "pt": "Fragmentos de Cristais",
+  "ru": "Осколки кристаллов"
+ },
+ "Crystals": {
+  "de": "Kristalle",
+  "es": "Cristales",
+  "fr": "Cristaux",
+  "pt": "Cristais",
+  "ru": "Кристаллы"
+ },
+ "Culinary Recipes": {
+  "de": "Kulinarische Rezepte",
+  "es": "Recetas culinarias",
+  "fr": "Recettes culinaires",
+  "ru": "Кулинарные рецепты"
+ },
+ "Damage resistance": {
+  "de": "Schadenswiderstand",
+  "es": "Resistencia al daño",
+  "fr": "Résistance aux dégats",
+  "ru": "Поглощение урона"
+ },
+ "Data": {
+  "de": "Daten",
+  "es": "Datos",
+  "fr": "Données",
+  "pt": "Dados",
+  "ru": "Данные"
+ },
+ "Data Archives": {
+  "de": "Datenarchive",
+  "es": "Archivos de Datos",
+  "fr": "Archives de données",
+  "pt": "Arquivos de dados",
+  "ru": "Архивы данных"
+ },
+ "Datamined Wake Exceptions": {
+  "de": "FSA-Daten-Cache-Ausnahmen",
+  "es": "Excepciones en Análisis de Estelas",
+  "fr": "Exploration de données de sillage anormales",
+  "pt": "Exceções de Dados Processados de Rastros",
+  "ru": "Исключения из глубинного анализа данных следа"
+ },
+ "Dazzle Shell": {
+  "de": "Blendgranate",
+  "es": "Proyectil Deslumbrante",
+  "fr": "Obus Aveuglant",
+  "ru": "Ослепляющие снаряды"
+ },
+ "Decoded Emission Data": {
+  "de": "Entschlüsselte Emissionsdaten",
+  "es": "Datos de Emisión Descodificados",
+  "fr": "Données d'émissions décodées",
+  "pt": "Dados de Emissão Decodificados",
+  "ru": "Расшифрованные данные об излучении"
+ },
+ "Deep Charge": {
+  "de": "Tiefenladung",
+  "es": "Carga Intensa",
+  "fr": "Charge Profonde",
+  "pt": "Carga Profunda",
+  "ru": "Заряд повышенной мощности"
+ },
+ "Deep Mantle Sample": {
+  "de": "Innerer-Mantel-Probe ",
+  "es": "Muestra del manto profundo",
+  "fr": "Échantillon de manteau inférieur",
+  "ru": "Образец из глубинной мантии"
+ },
+ "Deep Plating": {
+  "de": "Tiefenüberzug",
+  "es": "Blindaje Profundo",
+  "fr": "Blindage Epais",
+  "ru": "Утолщенная броня"
+ },
+ "Deep space data beacon": {
+  "de": "Privatdaten-Signal (deep space)",
+  "es": "Baliza de datos en espacio profundo",
+  "fr": "Balise de donnée (espace)",
+  "pt": "Sinalizador de dados em espaço profundo",
+  "ru": "Данные маяка (дальний космос)"
+ },
+ "Degraded Power Regulator": {
+  "de": "Ausrangierter Energieregulator",
+  "es": "Regulador de potencia degradado",
+  "fr": "Régulateur de puissance endommagé",
+  "ru": "Выработанный регулятор мощности"
+ },
+ "Digital Designs": {
+  "de": "Digitale Konzepte",
+  "es": "Diseños digitales",
+  "fr": "Plans numériques",
+  "ru": "Дизайнерские проекты"
+ },
+ "Dirty Drive Tuning": {
+  "de": "Aggressives Antriebstuning",
+  "es": "Modificación de Motor Sucio",
+  "fr": "Optimisation de réacteur détériorante",
+  "pt": "Ajuste de Motor Sujo",
+  "ru": "«Грязная» донастройка"
+ },
+ "Dispersal Field": {
+  "de": "Streuungsfeld",
+  "es": "Campo de Dispersión",
+  "fr": "Champ de Dispersion",
+  "pt": "Campo de Dispersão",
+  "ru": "Рассеивающее поле"
+ },
+ "Distorted Shield Cycle Recordings": {
+  "de": "Gestörte Schildzyklus-Aufzeichnungen",
+  "es": "Registros de Ciclo de Escudo Distorsionados",
+  "fr": "Enregistrements de cycles de bouclier déformés",
+  "pt": "Registros Distorcidos de Ciclos de Escudo",
+  "ru": "Поврежденные цикличные записи щита"
+ },
+ "Divergent Scan Data": {
+  "de": "Divergente Scandaten",
+  "es": "Datos de Escáner Divergentes",
+  "fr": "Données d'analyse divergentes",
+  "pt": "Dados Escaneados Divergentes",
+  "ru": "Неформатные данные сканирования"
+ },
+ "Dominator": {
+  "de": "Dominator",
+  "es": "Dominator",
+  "fr": "Dominator",
+  "ru": "Dominator"
+ },
+ "Double Braced": {
+  "de": "Doppelt Versteift",
+  "es": "Doble Puntal",
+  "fr": "Armature Renforcée",
+  "pt": "Parrudo",
+  "ru": "Двойная прочность"
+ },
+ "Double Shot": {
+  "de": "Doppelschuss",
+  "es": "Doble Disparo",
+  "fr": "Double Tir",
+  "pt": "Tiro Duplo",
+  "ru": "Двойной выстрел"
+ },
+ "Drag Drives": {
+  "de": "Drag-Antriebe",
+  "es": "Impulsores de Arrastre",
+  "fr": "Débridage des réacteurs",
+  "pt": "Motores de Arrasto",
+  "ru": "Ускорители"
+ },
+ "Drag Munition": {
+  "de": "Ableitungsmunition",
+  "es": "Munición de Arrastre",
+  "fr": "Munitions à Inertie",
+  "ru": "Замедляющие боеприпасы"
+ },
+ "Drag Munition (Seeker only)": {
+  "de": "Ableitungsmunition (nur Suchraketen)",
+  "es": "Munición de Arrastre (Autoguiado)",
+  "fr": "Munitions à Inertie (Auto-Guidés)",
+  "ru": "Замедляющие боеприпасы (лоток с самонаведением)"
+ },
+ "Drive Distributors": {
+  "de": "Antriebsverteiler",
+  "es": "Distribuidores de Empuje",
+  "fr": "Répartiteurs de réacteurs",
+  "pt": "Distribuidores do Motor",
+  "ru": "Распределители тяги"
+ },
+ "Drive Strengthening": {
+  "de": "Antriebsstärkung",
+  "es": "Refuerzo de motor",
+  "fr": "Renforcement du réacteur",
+  "pt": "Reforçamento do Motor",
+  "ru": "Защищённый двигатель"
+ },
+ "Duty Rota": {
+  "de": "Dienstpläne",
+  "es": "Turnos de guardia",
+  "fr": "Planning professionnel",
+  "ru": "График дежурств"
+ },
+ "E-Breach": {
+  "de": "E-Breach",
+  "es": "E-Breach"
+ },
+ "Eccentric Hyperspace Trajectories": {
+  "de": "Exzentrische Hyperraum-Routen",
+  "es": "Trayectorias de Hiperespacio Excéntricas",
+  "fr": "Trajectoires hyperespace exentriques",
+  "pt": "Trajetórias Escêntricas de Hiperespaço",
+  "ru": "Аномальные траектории в гиперпространстве"
+ },
+ "Efficient Weapon": {
+  "de": "Waffeneffizienz",
+  "es": "Arma eficiente",
+  "fr": "Arme efficace",
+  "pt": "Arma Eficiente",
+  "ru": "Эффективное оружие"
+ },
+ "Electrical Fuse": {
+  "de": "Elektrosicherung",
+  "es": "Fusible",
+  "fr": "Fusible électrique",
+  "ru": "Предохранитель"
+ },
+ "Electrical Wiring": {
+  "de": "Elektroverkabelung",
+  "es": "Cables eléctricos",
+  "fr": "Câblage électrique",
+  "ru": "Электропроводка"
+ },
+ "Electrochemical Arrays": {
+  "de": "Elektrochemische Detektoren",
+  "es": "Matriz Electroquímica",
+  "fr": "Réseaux électrochimiques",
+  "pt": "Matrizes Eletroquímicas",
+  "ru": "Электрохимические массивы"
+ },
+ "Electromagnet": {
+  "de": "Elektromagnet",
+  "es": "Electroimán",
+  "fr": "Électroaimant",
+  "ru": "Электромагнит"
+ },
+ "Electronic Countermeasure": {
+  "de": "Elektronische Gegenmaßnahmen",
+  "es": "Contramedida Electrónica",
+  "fr": "CME",
+  "pt": "Contramedida Eletrônica",
+  "ru": "Электронное противодействие"
+ },
+ "Emission Data": {
+  "de": "Emissionsdaten",
+  "es": "Datos de Emisión",
+  "fr": "Données d'émission",
+  "pt": "Dados de emissão",
+  "ru": "Данные об излучениях"
+ },
+ "Emissive Munitions": {
+  "de": "Emissionsgranate",
+  "es": "Munición de Emisiones",
+  "fr": "Munitions à Emissions",
+  "pt": "Munições Emissivas",
+  "ru": "Эмиссионные припасы"
+ },
+ "Employee Directory": {
+  "de": "Mitarbeiterverzeichnis",
+  "es": "Directorio de empleados",
+  "fr": "Registre des employés",
+  "ru": "Досье работников"
+ },
+ "Employee Expenses": {
+  "de": "Aufwendungen für Mitarbeiter",
+  "es": "Gastos de personal",
+  "fr": "Notes de frais",
+  "ru": "Расходы на сотрудников"
+ },
+ "Employee Genetic Data": {
+  "de": "Gen-Daten von Mitarbeitern",
+  "es": "Datos genéticos de empleados",
+  "fr": "Données génétiques d'employés",
+  "ru": "Генетические данные работников"
+ },
+ "Employment History": {
+  "de": "Beschäftigungshistorie",
+  "es": "Historial de empleo",
+  "fr": "Expérience professionnelle",
+  "ru": "Трудовая книжка"
+ },
+ "Encrypted Memory Chip": {
+  "de": "Verschlüsselter Speicherchip",
+  "es": "Chip de memoria cifrado",
+  "fr": "Puce mémoire cryptée",
+  "ru": "Зашифрованная плата памяти"
+ },
+ "Encryption Files": {
+  "de": "Verschlüsselungsdaten",
+  "es": "Archivos de Encriptación",
+  "fr": "Fichiers cryptés",
+  "pt": "Arquivos de encriptação",
+  "ru": "Файлы шифрования"
+ },
+ "Energy Cell": {
+  "de": "Energie-Zelle",
+  "es": "Célula de energía",
+  "ru": "Энергоячейка"
+ },
+ "Engine Focused": {
+  "de": "Antriebsfokussiert",
+  "es": "Orientado a Motor",
+  "fr": "Optimisé moteur",
+  "pt": "Foco nos Motores",
+  "ru": "Двигатель-ориентированный"
+ },
+ "Engineered Detailed Surface Scanner V1": {
+  "de": "Überarbeiteter Detail-Oberflächenscanner V1",
+  "es": "Escáner de Análisi de Superficie Adaptado V1",
+  "ru": "Перепроектированный подробный сканер поверхности V1"
+ },
+ "Engineered FSD V1": {
+  "de": "Überarbeiteter FSD V1",
+  "es": "MDD Modificado V1",
+  "fr": "FSD Ingénieré V1",
+  "ru": "Перепроектированный пакет FSD V1"
+ },
+ "Engineered Missile Rack V1": {
+  "de": "Üüberarbeitetes Raketengestell V1",
+  "es": "Lanzamisiles Guiado Modificado V1",
+  "fr": "Rack à missiles Ingéniéré V1",
+  "ru": "Перепроектированная ракетная кассета V1"
+ },
+ "Enhanced Interrogation Recordings": {
+  "de": "Optimierte Vernehmungsaufzeichnungen",
+  "es": "Registros de interrogatorios mejorados",
+  "fr": "Enregistrements d'interrogatoire poussés",
+  "ru": "Подробные записи допросов"
+ },
+ "Enhanced tracking": {
+  "de": "Verbessertes Tracking",
+  "es": "Seguimiento mejorado",
+  "fr": "Suivi amélioré",
+  "ru": "Улучшенное слежение"
+ },
+ "Enhanced, Low Power Shields": {
+  "de": "Verbesserte Niedrigenergieschilde",
+  "es": "Escudos mejorados de baja energía",
+  "fr": "Boucliers amélioré à consommation réduite",
+  "pt": "Escudos de Baixo Consumo, Aprimorados",
+  "ru": "Энергосберегающий щит"
+ },
+ "Enzyme Missile Launcher Munitions": {
+  "de": "Enzymraketenwerfermunition",
+  "es": "Munición de Lanzamisiles de Enzimas",
+  "fr": "Munitions de Batterie de Missiles Enzymatiques",
+  "ru": "Боеприпасы для энзимных ракетных установок"
+ },
+ "Enzyme Missile Rack": {
+  "de": "Enzymraketenrampe",
+  "es": "Lanzamisiles de Enzimas",
+  "fr": "Batterie de Missiles Enzymatiques",
+  "pt": "Estante de Mísseis Enzimáticos",
+  "ru": "Блок энзимных ракет"
+ },
+ "Epinephrine": {
+  "de": "Epinephrin",
+  "es": "Epinefrina",
+  "fr": "Épinéphrine",
+  "ru": "Эпинефрин"
+ },
+ "Epoxy Adhesive": {
+  "de": "Epoxy-Klebstoff",
+  "es": "Resina epoxi",
+  "fr": "Colle époxy",
+  "ru": "Эпоксидный клей"
+ },
+ "Espionage Material": {
+  "de": "Spionagematerial",
+  "es": "Material de espionaje",
+  "fr": "Documents confidentiels",
+  "ru": "Шпионские отчёты"
+ },
+ "Evacuation Protocols": {
+  "de": "Evakuierungsprotokolle",
+  "es": "Protocolos de evacuación",
+  "fr": "Protocoles d'évacuation",
+  "ru": "Планы эвакуации"
+ },
+ "Exceptional Scrambled Emission Data": {
+  "de": "Außergewöhnliche verschlüsselte Emissionsdaten",
+  "es": "Datos de Transmisiones Codificadas Excepcionales",
+  "fr": "Données d'émissions brouillées exceptionnelles",
+  "pt": "Exceções nos Dados de Emissão Embaralhados",
+  "ru": "Исключительные зашифрованные данные об излучении"
+ },
+ "Expanded FSD Interdictor Capture Arc": {
+  "de": "Weitwinkel-FSA-Unterbrecher",
+  "es": "Arco de Captura de Interdictor de MDD Extendido",
+  "fr": "Intercepteur FSD à angle de capture augmenté",
+  "pt": "Arco de Captura do Interditor de MDD Expandido",
+  "ru": "Увеличение угла перехвата"
+ },
+ "Expanded Probe Scanning Radius": {
+  "de": "Erweiterter Sonden-Scanradius",
+  "es": "Radio de Escaneo de Sonda Ampliado",
+  "fr": "Rayon de scan de sonde étendu",
+  "ru": "Расширенный радиус действия зонда"
+ },
+ "Exploration Journals": {
+  "de": "Erkundungstagebücher",
+  "es": "Diarios de exploración",
+  "fr": "Journaux d'exploration",
+  "ru": "Исследовательские дневники"
+ },
+ "Explosive Munitions": {
+  "de": "Explosivmunition",
+  "es": "Munición Explosiva",
+  "fr": "Munitions Explosives",
+  "pt": "Munição explosiva",
+  "ru": "Взрывчатые боеприпасы"
+ },
+ "Exquisite Focus Crystals": {
+  "de": "Erlesene Laserkristalle",
+  "es": "Cristales de Enfoque Exquisitos",
+  "fr": "Cristaux de focalisation sans défaut",
+  "pt": "Cristais de Focalização Finos",
+  "ru": "Отборные фокусировочные кристаллы"
+ },
+ "Extra ammo capacity": {
+  "de": "Zusätzliche Munitionskapazität",
+  "es": "Capacidad adicional de munición",
+  "fr": "Capacité de chargeur accrue",
+  "ru": "Повышенный боезапас"
+ },
+ "Extra backpack capacity": {
+  "de": "Zusätzliche Rucksackkapazität",
+  "es": "Capacidad adicional de mochila",
+  "fr": "Capacité de sac à dos accrue",
+  "ru": "Повышенный объем рюкзака"
+ },
+ "Extraction Yield Data": {
+  "de": "Daten zur Förderungsausbeute",
+  "es": "Datos de producción minera",
+  "fr": "Données de rendement minier",
+  "ru": "Данные о доходности ресурсодобычи"
+ },
+ "FSD Injection": {
+  "de": "FSA-Einspeisung",
+  "es": "Inyección del MDD",
+  "fr": "Injection FSD",
+  "pt": "Interditores de MDD",
+  "ru": "Вброс в FSD"
+ },
+ "FSD Interrupt (Dumbfire only)": {
+  "de": "FSA-Unterbrechung (nur ungelenkt)",
+  "es": "Interrumpir MDD (sólo No Guiado)",
+  "fr": "Interruption FSD (Non Auto-Guidés)",
+  "ru": "Помеха для FSD"
+ },
+ "Faction Associates": {
+  "de": "Fraktionspartner",
+  "es": "Socios de facción",
+  "fr": "Affiliations d'une faction",
+  "ru": "Партнеры фракции"
+ },
+ "Faction Donator List": {
+  "de": "Spenderliste einer Fraktion",
+  "es": "Lista de donadores de facción",
+  "fr": "Liste de donateurs d'une faction",
+  "ru": "Список пожертвований для фракции"
+ },
+ "Faction News": {
+  "de": "Fraktionsnachrichten",
+  "es": "Noticias de facción",
+  "fr": "Actualité d'une faction",
+  "ru": "Новости фракции"
+ },
+ "Fast Charge": {
+  "de": "Schnelllader",
+  "es": "Carga Rápida",
+  "fr": "Chargement Rapide",
+  "ru": "Быстрый заряд"
+ },
+ "Fast Scanner": {
+  "de": "Schneller Scanner",
+  "es": "Escáner Rápido",
+  "fr": "Scanner Rapide",
+  "pt": "Scanner rápido",
+  "ru": "Быстрый сканер"
+ },
+ "Faster FSD Boot Sequence": {
+  "de": "Schnellere FSA-Ladesequenz",
+  "es": "Secuencia de Inicio de MDD Rápida",
+  "fr": "Chargement FSD acceleré",
+  "pt": "Sequência de Inicialização do MDD Mais Rápida",
+  "ru": "Ускорение перезапуска FSD"
+ },
+ "Faster handling": {
+  "de": "Schnellere Handhabung",
+  "es": "Manejo más rápido",
+  "fr": "Maniabilité améliorée",
+  "ru": "Ускоренная обработка"
+ },
+ "Faster shield regen": {
+  "de": "Schnellere Schildregenration",
+  "es": "Regeneración de escudo más rápido",
+  "fr": "Régénération des boucliers accélérée",
+  "ru": "Ускоренная регенерация щита"
+ },
+ "Feedback Cascade": {
+  "de": "Rückkopplungskaskade",
+  "es": "Retroalimentación en Cascada",
+  "fr": "Réverbérations énergétiques",
+  "ru": "Ответный залп"
+ },
+ "Filament Composites": {
+  "de": "Filament-Komposite",
+  "es": "Compuestos de Filamentos",
+  "fr": "Composites filamentaires",
+  "pt": "Compostos De Filamentos",
+  "ru": "Волокнистые композиты"
+ },
+ "Financial Projections": {
+  "de": "Finanzprognosen",
+  "es": "Previsiones financieras",
+  "fr": "Projections financières",
+  "ru": "Финансовые прогнозы"
+ },
+ "Flawed Focus Crystals": {
+  "de": "Fehlerhafte Fokuskristalle",
+  "es": "Cristales de Enfoque Defectuosos",
+  "fr": "Cristaux de focalisation imparfaits",
+  "pt": "Cristais de Focalização Falhos",
+  "ru": "Поврежденные фокусировочные кристаллы"
+ },
+ "Flechette Launcher Munitions": {
+  "de": "Flechettewerfermunition",
+  "es": "Munición de Lanzador de Flechettes",
+  "fr": "Munitions de Lanceur de Fléchettes",
+  "ru": "Стреловидные боеприпасы"
+ },
+ "Fleet Registry": {
+  "de": "Flottenliste",
+  "es": "Registro de flota",
+  "fr": "Registre de flotte",
+  "ru": "Реестр флота"
+ },
+ "Flow Control": {
+  "de": "Flusssteuerung",
+  "es": "Control de Flujo",
+  "fr": "Contrôle du Flux",
+  "ru": "Контроль интенсивности"
+ },
+ "Focus Crystals": {
+  "de": "Laserkristalle",
+  "es": "Cristales de Enfoque",
+  "fr": "Cristaux de focalisation",
+  "pt": "Cristais de Focalização",
+  "ru": "Фокусировочные кристаллы"
+ },
+ "Focused Weapon": {
+  "de": "Waffenfokus",
+  "es": "Arma Concentrada",
+  "fr": "Arme concentrée",
+  "pt": "Arma com Foco",
+  "ru": "Сфокусированное оружие"
+ },
+ "Force Block": {
+  "de": "Kraftsperre",
+  "es": "Bloqueo de Fuerza",
+  "fr": "Blocage de Force",
+  "ru": "Усиленная блокировка"
+ },
+ "Force Shell": {
+  "de": "Impulsgranate",
+  "es": "Escudo de Fuerza",
+  "fr": "Munitions Surpuissantes",
+  "ru": "Усиленные снаряды"
+ },
+ "Frag Grenade": {
+  "de": "Splitter-Granate",
+  "es": "Granada de fragmentación",
+  "ru": "Осколочная граната"
+ },
+ "Fragment Cannon": {
+  "de": "Splitterkanone",
+  "es": "Cañón de Fragmentación",
+  "fr": "Canon à fragmentation",
+  "pt": "Canhão de Fragmentos",
+  "ru": "Залповое орудие"
+ },
+ "Frame Shift Drive": {
+  "de": "Frameshiftantrieb",
+  "es": "Motor de Distorsión",
+  "fr": "FSD",
+  "pt": "Motor de Distorção de Fase",
+  "ru": "FSD"
+ },
+ "Frame Shift Drive Interdictor": {
+  "de": "FSA-Unterbrecher",
+  "es": "Interdictor de MDD",
+  "fr": "Interdicteur FSD",
+  "pt": "Interditor de Motor de Distorção",
+  "ru": "FSD перехватчик"
+ },
+ "Fuel Scoop": {
+  "de": "Treibstoffsammler",
+  "es": "Colector de Combustible",
+  "fr": "Récupérateur de carburant",
+  "pt": "Coletor de Combustível",
+  "ru": "Топливозаборник"
+ },
+ "Fuel Transfer Limpet Controller": {
+  "de": "Treibstofftransfer-Drohnensteuerung",
+  "es": "Lanzador Dron Combustible",
+  "fr": "Contrôleur de drone de ravitaillement",
+  "pt": "Controlador de Drone Transferidor de Combustível",
+  "ru": "Контроллер дронов заправщиков"
+ },
+ "G-Meds": {
+  "de": "G-Medizin",
+  "es": "Medicinas G",
+  "fr": "Traitement gravitationnel",
+  "ru": "G-медпрепараты"
+ },
+ "Galvanising Alloys": {
+  "de": "Galvanisierende Legierungen",
+  "es": "Aleaciones Galvanizadas",
+  "fr": "Alliage galvanique",
+  "pt": "Ligas Galvanizadas",
+  "ru": "Сплавы для гальванизации"
+ },
+ "Gene Sequencing Data": {
+  "de": "Gen-Sequenzierungsdaten",
+  "es": "Datos de secuenciación genética",
+  "fr": "Données de séquençage génétique",
+  "ru": "Данные о секвенировании генов"
+ },
+ "Genetic Repair Meds": {
+  "de": "Gen-Reparatursets",
+  "es": "Medicinas de reparación genética",
+  "fr": "Traitements génétiques",
+  "ru": "Препараты генетической коррекции"
+ },
+ "Genetic Research": {
+  "de": "Genforschung",
+  "es": "Estudio genético",
+  "fr": "Recherches génétiques",
+  "ru": "Генетические исследования"
+ },
+ "Geological Data": {
+  "de": "Geologische Daten",
+  "es": "Datos geológicos",
+  "fr": "Données géologiques",
+  "ru": "Геологические данные"
+ },
+ "Germanium": {
+  "de": "Germanium",
+  "es": "Germanio",
+  "fr": "Germanium",
+  "pt": "Germânio",
+  "ru": "Германий"
+ },
+ "Graphene": {
+  "de": "Graphen",
+  "es": "Grafeno",
+  "fr": "Graphène",
+  "ru": "Графен"
+ },
+ "Greater range": {
+  "de": "Größere Reichweite",
+  "es": "Mayor alcance",
+  "fr": "Portée améliorée",
+  "ru": "Бóльшая дальность"
+ },
+ "Greater range (Kinematic kinetic)": {
+  "de": "Erhöhte Reichweite (Kugeln von Kinematic)",
+  "es": "Mayor alcance (Kinematic kinetic)",
+  "ru": "Повышенная дальность (пулевое от Kinematic)"
+ },
+ "Greater range (Manticore plasma)": {
+  "de": "Erhöhte Reichweite (Plasma von Manticore)",
+  "es": "Mayor alcance (Manticore plasma)",
+  "ru": "Повышенная дальность (плазменное от Manticore)"
+ },
+ "Greater range (Takada laser)": {
+  "de": "Erhöhte Reichweite (Laser von Takada)",
+  "es": "Mayor alcance (Takada laser)",
+  "ru": "Повышенная дальность (лазерное от Takada)"
+ },
+ "Grid Resistors": {
+  "de": "Gitterwiderstände",
+  "es": "Red Resistiva",
+  "fr": "Résistance à grille",
+  "pt": "Resistores de Grade",
+  "ru": "Наборные резисторы"
+ },
+ "Guardian": {
+  "de": "Guardian",
+  "es": "Guardián",
+  "fr": "Guardians",
+  "pt": "Guardian",
+  "ru": "Стражи"
+ },
+ "Guardian FSD Booster": {
+  "de": "Guardian-Frameshiftantrieb-Booster",
+  "es": "Potenciador de Motor de Distorsión Guardián",
+  "fr": "Survolteur FSD - Guardians",
+  "pt": "Potenciador Do Motor de Distorção de Fase Guardian",
+  "ru": "Ускоритель FSD Стражей"
+ },
+ "Guardian Gauss Cannon (Fixed, Medium)": {
+  "de": "Guardian-Gaußkanone (fest) (Klasse: 2)",
+  "es": "Cañón Gauss Guardián (Fijo) (Clase 2)",
+  "fr": "Canon Gauss - Guardians (Fixe, Classe 2)",
+  "pt": "Canhão Gauss Guardian (Fixo) (Classe 2)",
+  "ru": "Пушка Гаусса Стражей (фиксированное, средний слот)"
+ },
+ "Guardian Gauss Cannon (Fixed, Small)": {
+  "de": "Guardian-Gaußkanone (fest) (Klasse: 1)",
+  "es": "Cañón Gauss Guardián (Fijo) (Clase 1)",
+  "fr": "Canon Gauss - Guardians (Fixe, Classe 1)",
+  "pt": "Canhão Gauss guardian (Fixo) (Classe 1)",
+  "ru": "Пушка Гаусса Стражей (фиксированное, малый слот)"
+ },
+ "Guardian Gauss Cannon Munitions": {
+  "de": "Guardian-Gaußkanonenmunition",
+  "es": "Munición de Cañón Gauss Guardián",
+  "fr": "Munitions de Canon Gauss Guardians",
+  "pt": "Munição de Canhão Gauss",
+  "ru": "Боеприпасы для пушек Гаусса Стражей"
+ },
+ "Guardian Hull Reinforcement": {
+  "de": "Guardian-Rumpfhüllenverstärkung",
+  "es": "Paquete de Refuerzo Estructural Guardián",
+  "fr": "Renforcement de Coque - Guardians",
+  "pt": "Reforço de Casco Guardian",
+  "ru": "Набор для усиления корпуса Стражей"
+ },
+ "Guardian Hybrid Power Plant": {
+  "de": "Guardian-Hybridkraftwerk",
+  "es": "Núcleo de Energía Híbrida Guardián",
+  "fr": "Générateur - Guardians",
+  "pt": "Gerador de Energia Guardian",
+  "ru": "Силовая установка Стражей"
+ },
+ "Guardian Module Blueprint Segment": {
+  "de": "Guardian-Modulbauplanfragmentardians",
+  "es": "Fragmento de Plano de Módulo Guardián",
+  "pt": "Segmento de Diagrama de Módulo Guardian",
+  "ru": "Фрагмент чертежа модуля Стражей"
+ },
+ "Guardian Module Reinforcement": {
+  "de": "Guardian-Modulverstärkung",
+  "es": "Paquete de Refuerzo de Módulo Guardián",
+  "fr": "Renforcement de Modules - Guardians",
+  "pt": "Reforço de Módulo Guardian",
+  "ru": "Набор для усиления модуля Стражей"
+ },
+ "Guardian Plasma Charger (Fixed, Large)": {
+  "de": "Guardian-Plasmalader (fest) (Klasse: 3)",
+  "es": "Cargador de Plasma Guardián (Fijo) (Clase 3)",
+  "fr": "Chargeur Plasma - Guardians (Fixe, Classe 3)",
+  "ru": "Плазменная пушка Стражей (фиксированное, большой слот)"
+ },
+ "Guardian Plasma Charger (Fixed, Medium)": {
+  "de": "Guardian-Plasmalader (fest) (Klasse: 2)",
+  "es": "Cargador de Plasma Guardián (Fijo) (Clase 2)",
+  "fr": "Chargeur Plasma - Guardians (Fixe, Classe 2)",
+  "ru": "Плазменная пушка Стражей (фиксированное, средний слот)"
+ },
+ "Guardian Plasma Charger (Fixed, Small)": {
+  "de": "Guardian-Plasmalader (fest) (Klasse: 1)",
+  "es": "Cargador de Plasma Guardián (Fijo) (Clase 1)",
+  "fr": "Chargeur Plasma - Guardians (Fixe, Classe 1)",
+  "ru": "Плазменная пушка Стражей (фиксированное, малый слот)"
+ },
+ "Guardian Plasma Charger (Turreted, Large)": {
+  "de": "Guardian-Plasmalader (Turm) (Klasse: 3)",
+  "es": "Cargador de Plasma Guardián (Torreta) (Clase 3)",
+  "fr": "Chargeur Plasma - Guardians (Tourelle, Classe 3)",
+  "ru": "Плазменная пушка Стражей (турель, большой слот)"
+ },
+ "Guardian Plasma Charger (Turreted, Medium)": {
+  "de": "Guardian-Plasmalader (Turm) (Klasse: 2)",
+  "es": "Cargador de Plasma Guardián (Torreta) (Clase 2)",
+  "fr": "Chargeur Plasma - Guardians (Tourelle, Classe 2)",
+  "ru": "Плазменная пушка Стражей (турель, средний слот)"
+ },
+ "Guardian Plasma Charger (Turreted, Small)": {
+  "de": "Guardian-Plasmalader (Turm) (Klasse: 1)",
+  "es": "Cargador de Plasma Guardián (Torreta) (Clase 1)",
+  "fr": "Chargeur Plasma - Guardians (Tourelle, Classe 1)",
+  "ru": "Плазменная пушка Стражей (турель, малый слот)"
+ },
+ "Guardian Plasma Charger Munitions": {
+  "de": "Guardian-Plasmaladermunition",
+  "es": "Munición de Cargador de Plasma Guardián",
+  "fr": "Munitions de Chargeur Plasma Guardians",
+  "ru": "Боеприпасы для плазменных пушек Стражей"
+ },
+ "Guardian Power Cell": {
+  "de": "Guardian-Energiezelle",
+  "es": "Célula de Energía Guardián",
+  "fr": "Cellule d'énergie Guardians",
+  "pt": "Bateria Guardian",
+  "ru": "Энергоячейка Стражей"
+ },
+ "Guardian Power Conduit": {
+  "de": "Guardian-Energieleiter",
+  "es": "Conducto de Energía Guardián",
+  "fr": "Conduits d'énergie Guardians",
+  "pt": "Condutores de Potência Guardian",
+  "ru": "Энергопроводники Стражей"
+ },
+ "Guardian Power Distributor": {
+  "de": "Guardian-Energieverteiler",
+  "es": "Distribuidor de Energía Híbrido Guardián",
+  "fr": "Répartiteur de Puissance - Guardians",
+  "pt": "Distribuidor de Energia Híbrido Guardian",
+  "ru": "Распределитель питания Стражей"
+ },
+ "Guardian Sentinel Weapon Parts": {
+  "de": "Guardian-Wache-Waffenteile",
+  "es": "Piezas de Armamento de Centinela Guardián",
+  "fr": "Pièces d'armement de sentinelle Guardians",
+  "pt": "Peças de Armas Sentinela Guardian",
+  "ru": "Детали вооружения часовых Стражей"
+ },
+ "Guardian Sentinel Wreckage Components": {
+  "de": "Guardian-Wache-Trümmerteile",
+  "es": "Restos de Accidente Guardián",
+  "fr": "Débris d'épave Guardians",
+  "pt": "Componentes de Destroços Sentinela Guardian",
+  "ru": "Обломки часовых Стражей"
+ },
+ "Guardian Shard Cannon (Fixed, Large)": {
+  "de": "Guardian-Fragmentkanone (fest) (Klasse: 3)",
+  "es": "Cañón de Esquirlas Guardián (Fijo) (Clase 3)",
+  "fr": "Canons à Eclats - Guardians (Fixe, Classe 3)",
+  "ru": "Осколочное орудие Стражей (фиксированное, большой слот)"
+ },
+ "Guardian Shard Cannon (Fixed, Medium)": {
+  "de": "Guardian-Fragmentkanone (fest) (Klasse: 2)",
+  "es": "Cañón de Esquirlas Guardián (Fijo) (Clase 2)",
+  "fr": "Canons à Eclats - Guardians (Fixe, Classe 2)",
+  "ru": "Осколочное орудие Стражей (фиксированное, средний слот)"
+ },
+ "Guardian Shard Cannon (Fixed, Small)": {
+  "de": "Guardian-Fragmentkanone (fest) (Klasse: 1)",
+  "es": "Cañón de Esquirlas Guardián (Fijo) (Clase 1)",
+  "fr": "Canons à Eclats - Guardians (Fixe, Classe 1)",
+  "ru": "Осколочное орудие Стражей (фиксированное, малый слот)"
+ },
+ "Guardian Shard Cannon (Turreted, Large)": {
+  "de": "Guardian-Fragmentkanone (Turm) (Klasse: 3)",
+  "es": "Cañón de Esquirlas Guardián (Torreta) (Clase 3)",
+  "fr": "Canons à Eclats - Guardians (Tourelle, Classe 3)",
+  "ru": "Осколочное орудие Стражей (турель, большой слот)"
+ },
+ "Guardian Shard Cannon (Turreted, Medium)": {
+  "de": "Guardian-Fragmentkanone (Turm) (Klasse: 2)",
+  "es": "Cañón de Esquirlas Guardián (Torreta) (Clase 2)",
+  "fr": "Canons à Eclats - Guardians (Tourelle, Classe 2)",
+  "ru": "Осколочное орудие Стражей (турель, средний слот)"
+ },
+ "Guardian Shard Cannon (Turreted, Small)": {
+  "de": "Guardian-Fragmentkanone (Turm) (Klasse: 1)",
+  "es": "Cañón de Esquirlas Guardián (Torreta) (Clase 1)",
+  "fr": "Canons à Eclats - Guardians (Tourelle, Classe 1)",
+  "ru": "Осколочное орудие Стражей (турель, малый слот)"
+ },
+ "Guardian Shard Cannon Munitions": {
+  "de": "Guardian-Fragmentkanonenmunition",
+  "es": "Munición Cañón de Esquirlas Guardián",
+  "fr": "Munitions Canon à Eclats - Guardians",
+  "ru": "Боеприпасы для осколочных орудий Стражей"
+ },
+ "Guardian Shield Reinforcement": {
+  "de": "Guardian-Schildverstärkung",
+  "es": "Paquete de Refuerzo de Escudo Guardián",
+  "fr": "Renforcement de Bouclier - Guardians",
+  "pt": "Reforço de Escudo Guardian",
+  "ru": "Набор для усиления щита Стражей"
+ },
+ "Guardian Technology Component": {
+  "de": "Guardian-Technologiekomponente",
+  "es": "Componente Tecnológico Guardián",
+  "fr": "Composants technologique Guardians",
+  "pt": "Componente de Tecnologia Guardian",
+  "ru": "Компоненты технологий Стражей"
+ },
+ "Guardian Vessel Blueprint Segment": {
+  "de": "Guardian-Schiffsbauplanfragment",
+  "es": "Fragmento de Plano de Nave Guardián",
+  "fr": "Morceau de plan de chasseur Guardians",
+  "pt": "Fragmento de Diagrama de nave Guardian",
+  "ru": "Фрагмент чертежа судна Стражей"
+ },
+ "Guardian Weapon Blueprint Segment": {
+  "de": "Guardian-Waffenbauplanfragment",
+  "es": "Fragmento de Plano de Armamento Guardián",
+  "fr": "Morceau de plan d'arme Guardians",
+  "pt": "Segmento de Diagrama de Arma Guardian",
+  "ru": "Фрагмент чертежа оружия Стражей"
+ },
+ "Hatch Breaker Limpet Controller": {
+  "de": "Steuereinheit Ladelukenöffner-Drohne",
+  "es": "Lanzador Dron Extractor",
+  "fr": "Perce-Soute",
+  "pt": "Controlador de Drone Quebra-Escotilha",
+  "ru": "Контроллер дронов взломщиков"
+ },
+ "Headshot damage": {
+  "de": "Kopfschussschaden",
+  "es": "Daño por disparo en la cabeza",
+  "fr": "Dégâts de tirs à la tête",
+  "ru": "Урон в голову"
+ },
+ "Headshot damage (Kinematic kinetic)": {
+  "de": "Kopfschussschaden (Kugeln von Kinematic)",
+  "es": "Daño de disparo en la cabeza (Kinematic kinetic)",
+  "ru": "Урон в голову (пулевое от Kinematic)"
+ },
+ "Headshot damage (Manticore plasma)": {
+  "de": "Kopfschussschaden (Plasma von Manticore)",
+  "es": "Daño de disparo en la cabeza (Manticore plasma)",
+  "ru": "Урон в голову (плазменное от Manticore)"
+ },
+ "Headshot damage (Takada laser)": {
+  "de": "Kopfschussschaden (Laser von Takada)",
+  "es": "Daño de disparo en la cabeza (Takada laser)",
+  "ru": "Урон в голову (лазерное от Takada)"
+ },
+ "Health Monitor": {
+  "de": "Gesundheitsmonitor",
+  "es": "Monitor de salud",
+  "fr": "Moniteur médical",
+  "ru": "Медицинский монитор"
+ },
+ "Heat": {
+  "de": "Hitze",
+  "es": "Calor",
+  "fr": "Chaleur",
+  "pt": "Calor",
+  "ru": "Теплообмен"
+ },
+ "Heat Conduction Wiring": {
+  "de": "Wärmeleitungsverdrahtung",
+  "es": "Cableado de Conducción Calorífica",
+  "fr": "Câblage de conduction thermique",
+  "pt": "Fiação De Condução Térmica",
+  "ru": "Теплопроводящие провода"
+ },
+ "Heat Dispersion Plate": {
+  "de": "Wärmeverteilungsplatte",
+  "es": "Placa de Dispersión de Calor",
+  "fr": "Plaque de dissipation thermique",
+  "pt": "Placa de Dispersão Térmica",
+  "ru": "Теплорассеивающая пластина"
+ },
+ "Heat Exchangers": {
+  "de": "Wärmeaustauscher",
+  "es": "Intercambiadores de Calor",
+  "fr": "Echangeurs de chaleur",
+  "pt": "Trocadores Térmicos",
+  "ru": "Теплообменные агрегаты"
+ },
+ "Heat Resistant Ceramics": {
+  "de": "Hitzefeste Keramik",
+  "es": "Cerámicas Resistentes al Calor",
+  "fr": "Céramiques résistantes à la chaleur",
+  "pt": "Cêramicas Termoresistentes",
+  "ru": "Жаропрочная керамика"
+ },
+ "Heat Sink Launcher": {
+  "de": "Kühlkörperwerfer",
+  "es": "Eyector Térmico",
+  "fr": "Dissipateur thermique",
+  "pt": "Lançador de Dissipador Térmico",
+  "ru": "Теплоотводная катапульта"
+ },
+ "Heat Vanes": {
+  "de": "Wärmeleitbleche",
+  "es": "Palas Térmicas",
+  "fr": "Vannes thermiques",
+  "pt": "Ventoinha Térmica",
+  "ru": "Тепловые заслонки"
+ },
+ "Heavy Duty": {
+  "de": "Schwer",
+  "es": "Alta Resistencia",
+  "fr": "Renforts de coque lourd",
+  "pt": "Alta Resistência",
+  "ru": "Усиленный"
+ },
+ "Heavy Duty Hull Reinforcement": {
+  "de": "Schwere Rumpfhüllenverstärkung",
+  "es": "Refuerzo estructural de alta resistencia",
+  "fr": "Renforts de coque lourd",
+  "pt": "Reforço de Casco Pesado",
+  "ru": "Утяжеление усилителя корпуса"
+ },
+ "Hi-cap": {
+  "de": "Hochkapazität",
+  "es": "Alta Capacidad",
+  "fr": "Puissance Renforcée",
+  "pt": "Alta Capacidade",
+  "ru": "Высокая емкость"
+ },
+ "High Capacity Magazine": {
+  "de": "Hochleistungsmagazin",
+  "es": "Cargador de Alta Capacidad",
+  "fr": "Chargeur grande capacité",
+  "pt": "Cartucho de Alta Capacidade",
+  "ru": "Вместительный магазин"
+ },
+ "High Charge Capacity": {
+  "de": "Hochleistungsfähig",
+  "es": "Alta Capacidad de Carga",
+  "fr": "Capacité Surchargée",
+  "pt": "Alta Capacidade de Carga",
+  "ru": "Высокоёмкий"
+ },
+ "High Density Composites": {
+  "de": "Komposite hoher Dichte",
+  "es": "Compuestos de Alta Densidad",
+  "fr": "Composites à haute densité",
+  "pt": "Compostos de alta densidade",
+  "ru": "Высокоплотностные композиты"
+ },
+ "High Velocity Munitions": {
+  "de": "Hochgeschwindigkeitsmunition",
+  "es": "Munición de Alta Velocidad",
+  "fr": "Munitions à Haute Vélocité",
+  "pt": "Munições de alta velocidade",
+  "ru": "Высокоскоростные боеприпасы"
+ },
+ "High Yield Shell": {
+  "de": "Hocheffizienzgranate",
+  "es": "Proyectil de Alto Rendimiento",
+  "fr": "Obus à Fragmentations",
+  "ru": "Снаряды большой мощности"
+ },
+ "High wake scanning": {
+  "de": "Sogwolkenscan (Hohe Energie)",
+  "es": "Escaneo de estelas de salto",
+  "fr": "scan de sillages à haute energie",
+  "pt": "Escaneamento de rastro alto",
+  "ru": "Сканирование высокочастотных следов FSD"
+ },
+ "Higher Accuracy (Kinetic Weapons)": {
+  "de": "Verbesserte Genauigkeit (Kinetikwaffen)",
+  "es": "Mayor precisión (armas cinéticas)",
+  "fr": "Précision Accrue (Armes Cinétiques)",
+  "ru": "Повышенная точность (Кинетическое оружие)"
+ },
+ "Higher Accuracy (Plasma Weapons)": {
+  "de": "Verbesserte Genauigkeit (Plasmawaffen)",
+  "es": "Mayor precisión (armas de plasma)",
+  "fr": "Précision Accrue (Armes Plasma)",
+  "ru": "Повышенная точность (Плазменное оружие)"
+ },
+ "Higher Accuracy (Thermal Weapons)": {
+  "de": "Verbesserte Genauigkeit (Laserwaffen)",
+  "es": "Mayor precisión (armas térmicas)",
+  "fr": "Précision Accrue (Armes Termiques)",
+  "ru": "Повышенная точность (Термическое оружие)"
+ },
+ "Hull Reinforcement Package": {
+  "de": "Rumpfhüllenverstärkung",
+  "es": "Paquete de Refuerzo Estructural",
+  "fr": "Renforts de coque",
+  "pt": "Pacote de Reforços de Casco de Meta Liga",
+  "ru": "Набор для усиления корпуса"
+ },
+ "Human": {
+  "de": "Menschlich",
+  "es": "Humano",
+  "fr": "Humain",
+  "pt": "Humano",
+  "ru": "Люди"
+ },
+ "Hush": {
+  "de": "Schnurr-Droge",
+  "es": "Hush",
+  "fr": "Chut",
+  "ru": "Тс-с"
+ },
+ "Hybrid Capacitors": {
+  "de": "Hybridkondensatoren",
+  "es": "Capacitadores Híbridos",
+  "fr": "Condensateurs hybrides",
+  "pt": "Capacitores Híbridos",
+  "ru": "Гибридные конденсаторы"
+ },
+ "Hydroponic Data": {
+  "de": "Hydrokultur-Daten",
+  "es": "Datos hidropónicos",
+  "fr": "Données hydroponiques",
+  "ru": "Данные по работе гидропоники"
+ },
+ "Imperial Shielding": {
+  "de": "Imperiale Schilde",
+  "es": "Escudos Imperiales",
+  "fr": "Protection impériale",
+  "pt": "Proteção Imperial",
+  "ru": "Имперская защита"
+ },
+ "Improved Hip Fire Accuracy": {
+  "de": "Verbesserte Hüftfeuergenauigkeit",
+  "es": "Precisión de disparo de cadera mejorada",
+  "fr": "Amélioration de la précision du tir au jugé",
+  "ru": "Повышенная точность стрельбы от бедра"
+ },
+ "Improved Hip Fire Accuracy (Kinematic kinetic)": {
+  "de": "Verbesserte Hüftfeuergenauigkeit (Kugeln von Kinematic)",
+  "es": "Precisión de disparo de cadera mejorada (Kinematic kinetic)",
+  "ru": "Улучшенная точность от бедра (пулевое от Kinematic)"
+ },
+ "Improved Hip Fire Accuracy (Manticore plasma)": {
+  "de": "Verbesserte Hüftfeuergenauigkeit (Plasma von Manticore)",
+  "es": "Precisión de disparo de cadera mejorada (Manticore plasma)",
+  "ru": "Улучшенная точность от бедра (плазменное от Manticore)"
+ },
+ "Improved Hip Fire Accuracy (Takada laser)": {
+  "de": "Verbesserte Hüftfeuergenauigkeit (Laser von Takada)",
+  "es": "Precisión de disparo de cadera mejorada Takada laser)",
+  "ru": "Улучшенная точность от бедра (лазерное от Takada)"
+ },
+ "Improved battery capacity": {
+  "de": "Verbesserte Batteriekapazität",
+  "es": "Capacidad de batería mejorada",
+  "fr": "Capacité de batterie améliorée",
+  "ru": "Увеличенная ёмкость батареи"
+ },
+ "Improved jump assist": {
+  "de": "Verbesserte Sprungunterstützung",
+  "es": "Asistencia de salto mejorada",
+  "fr": "Assistance de saut améliorée",
+  "ru": "Улучшенная помощь в прыжке"
+ },
+ "Improvised Components": {
+  "de": "Behelfskomponenten",
+  "es": "Componentes Improvisados",
+  "fr": "Composants improvisés",
+  "pt": "Componentes Improvisados",
+  "ru": "Кустарные компоненты"
+ },
+ "Incendiary Rounds": {
+  "de": "Hitzesalven",
+  "es": "Munición Incendiaria",
+  "fr": "Munitions Incendiaires",
+  "pt": "Projétil Incendiário",
+  "ru": "Зажигательные припасы"
+ },
+ "Incident Logs": {
+  "de": "Zwischenfall-Logs",
+  "es": "Registros de incidentes",
+  "fr": "Journaux d'incidents",
+  "ru": "Журнал происшествий"
+ },
+ "Inconsistent Shield Soak Analysis": {
+  "de": "Inkonsistente Schildleistungsanalyse",
+  "es": "Análisis de Absorción de Escudos Inconsistente",
+  "fr": "Analyse d'absorption de bouclier incohérente",
+  "pt": "Análise Inconsistente de Escudo Atingidos",
+  "ru": "Неполный анализ поглощения щита"
+ },
+ "Increased FSD Range": {
+  "de": "Erhöhte FSA-Reichweite",
+  "es": "Aumento de Alcance de MDD",
+  "fr": "Portée FSD améliorée",
+  "pt": "Alcance do MDD Aumentado",
+  "ru": "Увеличенная дальность FSD"
+ },
+ "Increased air reserves": {
+  "de": "Erhöhte Luftreserven",
+  "es": "Aumento de las reservas de aire",
+  "fr": "Réserves d'oxygène augmentées",
+  "ru": "Повышенная ёмкость воздушных баллонов"
+ },
+ "Increased sprint duration": {
+  "de": "Verbesserte Sprintdauer",
+  "es": "Mayor duración del sprint",
+  "fr": "Durée de course améliorée",
+  "ru": "Увеличенное время спринта"
+ },
+ "Inertia Canister": {
+  "de": "Trägheits-Container",
+  "es": "Contenedor de inercia",
+  "fr": "Conteneur inertiel",
+  "ru": "Инертный контейнер"
+ },
+ "Inertial Impact": {
+  "de": "Trägheitseinfluss",
+  "es": "Impacto Inercial",
+  "fr": "Impact d'Inertie",
+  "pt": "Impacto Inercial",
+  "ru": "Инерционный удар"
+ },
+ "Infinity": {
+  "de": "Unendlichkeit",
+  "es": "Infinity",
+  "fr": "Infini",
+  "ru": "Infinity"
+ },
+ "Influence Projections": {
+  "de": "Einfluss-Projektionen",
+  "es": "Previsiones de influencia",
+  "fr": "Perspectives",
+  "ru": "Прогноз влияния"
+ },
+ "Inorganic Contaminant": {
+  "de": "Anorganischer Schadstoff",
+  "es": "Contaminante inorgánico ",
+  "fr": "Contaminant inorganique",
+  "ru": "Неорганический загрязнитель"
+ },
+ "Insight": {
+  "de": "Insight",
+  "es": "Insight",
+  "fr": "Insight",
+  "ru": "Insight"
+ },
+ "Insight Data Bank": {
+  "de": "Insight-Datenbank",
+  "es": "Banco de datos de Insight",
+  "fr": "Banque de données d'Insight",
+  "ru": "Банк данных InSight"
+ },
+ "Insight Entertainment Suite": {
+  "de": "Insight-Entertainment-Bibliothek",
+  "es": "Paquete de entretenimiento de Insight",
+  "fr": "Divertissements Insight",
+  "ru": "Медиаустройство InSight"
+ },
+ "Internal Correspondence": {
+  "de": "Interne Korrespondenz",
+  "es": "Correspondencia interna",
+  "fr": "Mémo interne",
+  "ru": "Внутренняя корреспонденция"
+ },
+ "Interrogation Recordings": {
+  "de": "Vernehmungsaufzeichnungen",
+  "es": "Registros de interrogatorios",
+  "fr": "Enregistrements d'interrogatoires",
+  "ru": "Записи допросов"
+ },
+ "Interview Recordings": {
+  "de": "Aufzeichnungen von Vorstellungsgesprächen",
+  "es": "Registros de entrevista",
+  "fr": "Enregistrements d'entretiens",
+  "ru": "Записи интервью"
+ },
+ "Ion Battery": {
+  "de": "Ionen-Batterie",
+  "es": "Batería de iones",
+  "fr": "Batterie ionique",
+  "ru": "Ионная батарея"
+ },
+ "Ion Disruptor": {
+  "de": "Ionen-Disruptor",
+  "es": "Disrupción de Iones",
+  "fr": "Perturbation Ionique",
+  "pt": "Disruptor de Ions",
+  "ru": "Ионный дестабилизатор"
+ },
+ "Ionised Gas": {
+  "de": "Ionisiertes Gas",
+  "es": "Gas ionizado",
+  "fr": "Gaz ionisé",
+  "ru": "Ионизированный газ"
+ },
+ "Iron": {
+  "de": "Eisen",
+  "es": "Hierro",
+  "fr": "Fer",
+  "pt": "Ferro",
+  "ru": "Железо"
+ },
+ "Irregular Emission Data": {
+  "de": "Irreguläre Emissionsdaten",
+  "es": "Datos de Emisión Irregulares",
+  "fr": "Données d'émissions aberrantes",
+  "pt": "Dados de Emissão Irregulares",
+  "ru": "Нестандартные данные об излучении"
+ },
+ "Item": {
+  "de": "Gegenstand",
+  "es": "Objeto",
+  "fr": "Marchandises",
+  "ru": "Товары"
+ },
+ "Javelin (Fighter)": {
+  "de": "Javelin (Jäger)",
+  "es": "Javelin XG8 (Caza)",
+  "fr": "Javelin (Chasseur)",
+  "pt": "Javelin (Caça)",
+  "ru": "Javelin (Истребитель)"
+ },
+ "Job Applications": {
+  "de": "Bewerbungen",
+  "es": "Solicitudes de empleo",
+  "fr": "Candidatures professionnelles",
+  "ru": "Заявления о приёме на работу"
+ },
+ "Karma AR-50": {
+  "de": "Karma AR-50",
+  "es": "Karma AR-50",
+  "fr": "Karma AR-50",
+  "ru": "Karma AR-50"
+ },
+ "Karma C-44": {
+  "de": "Karma C-44",
+  "es": "Karma C-44",
+  "fr": "Karma C-44",
+  "ru": "Karma C-44"
+ },
+ "Karma L-6": {
+  "de": "Karma L-6",
+  "es": "Karma L-6",
+  "fr": "Karma L-6",
+  "ru": "Karma L-6"
+ },
+ "Karma P-15": {
+  "de": "Karma P-15",
+  "es": "Karma P-15",
+  "fr": "Karma P-15",
+  "ru": "Karma P-15"
+ },
+ "Kill Warrant Scanner": {
+  "de": "Tötungsbefehl-Scanner",
+  "es": "Escáner de Registro Criminal",
+  "fr": "Scanner d'avis de recherches",
+  "pt": "Scanner de Registro Criminal",
+  "ru": "Сканер преступников"
+ },
+ "Kinetic Resistant": {
+  "de": "Kinetikresistent",
+  "es": "Resistencia Cinética",
+  "fr": "Résistance cinétique",
+  "pt": "Resistência Cinética",
+  "ru": "Противокинетическое усиление"
+ },
+ "Kinetic Resistant Hull Reinforcement": {
+  "de": "Kinetikresistente Rumpfhüllenverstärkung",
+  "es": "Refuerzo Estructural de Resistencia Cinética",
+  "fr": "Renforts de coque anti-cinétique",
+  "pt": "Reforço de Casco Resistência Cinética",
+  "ru": "Противокинетическое усиление"
+ },
+ "Kinetic Resistant Shields": {
+  "de": "Kinetikresistente Schilde",
+  "es": "Escudos de Resistencia Cinética",
+  "fr": "Bouclier à résistance Cinétique",
+  "pt": "Escudos com Resistência Cinética",
+  "ru": "Противокинетический щит"
+ },
+ "Kompromat": {
+  "de": "Kompromittierendes Material",
+  "es": "Material comprometedor",
+  "fr": "Kompromat",
+  "ru": "Компрометирующие сведения"
+ },
+ "Lance (Fighter)": {
+  "de": "Lance (Jäger)",
+  "es": "Lance XG9 (Caza)",
+  "fr": "Lance (Chasseur)",
+  "pt": "Lance (Caça)",
+  "ru": "Lance (Истребитель)"
+ },
+ "Large Calibre Munitions": {
+  "de": "Großkalibrige Munition",
+  "es": "Munición de Gran Calibre",
+  "fr": "Munitions de gros Calibre",
+  "pt": "Munições de grande calibre",
+  "ru": "Крупнокалиберные боеприпасы"
+ },
+ "Layered Plating": {
+  "de": "Mehrschichtige Beschichtung",
+  "es": "Blindaje en Capas",
+  "fr": "Blindage à Couches",
+  "ru": "Многослойная броня"
+ },
+ "Lazarus": {
+  "de": "Lazarus-Droge",
+  "es": "Lazarus",
+  "fr": "Lazare",
+  "ru": "Лазарь"
+ },
+ "Lead": {
+  "de": "Blei",
+  "es": "Plomo",
+  "fr": "Plomb",
+  "pt": "Chumbo",
+  "ru": "Свинец"
+ },
+ "Life Support": {
+  "de": "Lebenserhaltung",
+  "es": "Soporte Vital",
+  "fr": "Systèmes de Survie",
+  "pt": "Suporte Vital",
+  "ru": "Система жизнеобеспечения"
+ },
+ "Light Weight Scanner": {
+  "de": "Leichter Scanner",
+  "es": "Escáner Aligerado",
+  "fr": "Scanner Léger",
+  "pt": "Scanner leve",
+  "ru": "Облегченный сканер"
+ },
+ "Lightweight": {
+  "de": "Leichtgewicht",
+  "es": "Ligero",
+  "fr": "Léger",
+  "pt": "Leve",
+  "ru": "Облегченный"
+ },
+ "Lightweight Hull Reinforcement": {
+  "de": "Leichte Rumpfhüllenverstärkung",
+  "es": "Refuerzo Estructural Aligerado",
+  "fr": "Renforcement de coque Léger",
+  "pt": "Reforço de Casco Leve",
+  "ru": "Облегчение усилителя корпуса"
+ },
+ "Lightweight Mount": {
+  "de": "Leichtgewichtgeschütz",
+  "es": "Anclaje ligero",
+  "fr": "Support léger",
+  "pt": "Encaixe Leve",
+  "ru": "Легкое крепление"
+ },
+ "Limpets": {
+  "de": "Drohnen",
+  "es": "Drones",
+  "fr": "Drones",
+  "pt": "Drones",
+  "ru": "Беспилотники"
+ },
+ "Literary Fiction": {
+  "de": "Belletristik",
+  "es": "Ficción literaria",
+  "ru": "Художественная литература"
+ },
+ "Lo-draw": {
+  "de": "Niedrigverbrauch",
+  "es": "Consumo Reducido",
+  "fr": "Consommation Réduite",
+  "ru": "Пониженное потребление"
+ },
+ "Long Range FSD Interdictor": {
+  "de": "Langstrecken-FSA-Unterbrecher",
+  "es": "Interdictor de MDD de largo alcance",
+  "fr": "Intercepteur FSD longue portée",
+  "pt": "Interditor de MDD de Longo Alcance",
+  "ru": "FSD-перехватчик большой дальности"
+ },
+ "Long Range Scanner": {
+  "de": "Langstrecken-Scanner",
+  "es": "Escáner de largo alcance",
+  "fr": "Scanner Longue Portée",
+  "pt": "Scanner de longo alcance",
+  "ru": "Сканер увеличенной дальности"
+ },
+ "Long Range Weapon": {
+  "de": "Langstreckenwaffe",
+  "es": "Arma de Largo Alcance",
+  "fr": "Armes à longue portée",
+  "pt": "Arma de Longo Alcance",
+  "ru": "Увеличенная дальность оружия"
+ },
+ "Low Emissions": {
+  "de": "Emissionsoptimiert",
+  "es": "Bajas Emisiones",
+  "fr": "Basse émission",
+  "pt": "Baixa Emissão",
+  "ru": "Снижение излучения"
+ },
+ "Magazine size": {
+  "de": "Magazingröße",
+  "fr": "Taille du chargeur",
+  "ru": "Ёмкость магазина"
+ },
+ "Maintenance Logs": {
+  "de": "Wartungs-Logs",
+  "es": "Registros de mantenimiento",
+  "fr": "Journaux de maintenance",
+  "ru": "Журнал обслуживания"
+ },
+ "Manganese": {
+  "de": "Mangan",
+  "es": "Manganeso",
+  "fr": "Manganese",
+  "pt": "Manganês",
+  "ru": "Марганец"
+ },
+ "Manifest Scanner": {
+  "de": "Verzeichnisscanner",
+  "es": "Escáner de Carga",
+  "fr": "Scanner de soute",
+  "pt": "Scanner de Manifesto",
+  "ru": "Сканер накладной"
+ },
+ "Manticore Executioner": {
+  "de": "Manticore Executioner",
+  "es": "Manticore Executioner",
+  "fr": "Manticore Executioner",
+  "ru": "Manticore Executioner"
+ },
+ "Manticore Intimidator": {
+  "de": "Manticore Intimidator",
+  "es": "Manticore Intimidator",
+  "fr": "Manticore Intimidator",
+  "ru": "Manticore Intimidator"
+ },
+ "Manticore Oppressor": {
+  "de": "Manticore Oppressor",
+  "es": "Manticore Oppressor",
+  "fr": "Manticore Oppressor",
+  "ru": "Manticore Oppressor"
+ },
+ "Manticore Tormentor": {
+  "de": "Manticore Tormentor",
+  "es": "Manticore Tormentor",
+  "fr": "Manticore Tormentor",
+  "ru": "Manticore Tormentor"
+ },
+ "Manufactured": {
+  "de": "Gefertigt",
+  "es": "Manufacturados",
+  "fr": "Manufacturé(s)",
+  "pt": "Fabricado",
+  "ru": "Компоненты"
+ },
+ "Manufacturing Instructions": {
+  "de": "Herstellungsanweisungen",
+  "es": "Instrucciones de fabricación",
+  "fr": "Guides industriels",
+  "ru": "Производственные инструкции"
+ },
+ "Mass Lock Munition": {
+  "de": "Massesperremunition",
+  "es": "Munición de Bloqueo de Masa",
+  "fr": "Munitions à Champ Gravitationnel",
+  "ru": "Боеприпасы с гравитационным захватом"
+ },
+ "Mass Manager": {
+  "de": "Massemanager",
+  "es": "Gestión de Masa",
+  "fr": "Gestionnaire de Masse",
+  "pt": "Gestor de Massa",
+  "ru": "Распределитель гравитации"
+ },
+ "Maverick": {
+  "de": "Maverick",
+  "es": "Maverick",
+  "fr": "Maverick",
+  "ru": "Maverick"
+ },
+ "Mechanical Components": {
+  "de": "Mechanische Komponenten",
+  "es": "Componentes Mecánicos",
+  "fr": "Composants mécaniques",
+  "pt": "Componentes Mecânicos",
+  "ru": "Механические компоненты"
+ },
+ "Mechanical Equipment": {
+  "de": "Mechanisches Equipment",
+  "es": "Equipamiento Mecánico",
+  "fr": "Equipement mécanique",
+  "pt": "Equipamento Mecânico",
+  "ru": "Механическое оборудование"
+ },
+ "Mechanical Scrap": {
+  "de": "Mechanischer Schrott",
+  "es": "Chatarra Mecánica",
+  "fr": "Ferraille mécanique",
+  "pt": "Sucata Mecânica",
+  "ru": "Механические отходы"
+ },
+ "Medical Records": {
+  "de": "Medizinische Daten",
+  "es": "Historiales médicos",
+  "fr": "Dossiers médicaux",
+  "ru": "Медицинские отчеты"
+ },
+ "Medkit": {
+  "de": "Medikit",
+  "es": "Botiquín",
+  "ru": "Аптечка"
+ },
+ "Meeting Minutes": {
+  "de": "Besprechungsprotokolle",
+  "es": "Actas de reuniones",
+  "fr": "Compte-rendu de réunion",
+  "ru": "Протоколы заседаний"
+ },
+ "Memory Chip": {
+  "de": "Speicherchip",
+  "es": "Chip de memoria",
+  "fr": "Puce mémoire",
+  "ru": "Плата памяти"
+ },
+ "Mercury": {
+  "de": "Quecksilber",
+  "es": "Mercurio",
+  "fr": "Mercure",
+  "pt": "Mercúrio",
+  "ru": "Ртуть"
+ },
+ "Meta Alloy Hull Reinforcement": {
+  "de": "Meta-Legierung-Hüllenverstärkung",
+  "es": "Refuerzo de Casco de Meta-Aleación",
+  "fr": "Renforcement de Coque en Méta-Alliage - Guardians",
+  "pt": "Conjunto de Reforço de Casco",
+  "ru": "Метасплавное усиление корпуса"
+ },
+ "Metal Coil": {
+  "de": "Metallspule",
+  "es": "Bobina de metal",
+  "fr": "Bobine métallique",
+  "ru": "Металлическая катушка"
+ },
+ "Micro Hydraulics": {
+  "de": "Mikrohydraulikgeräte",
+  "es": "Microhidráulica",
+  "fr": "Micro hydraulique",
+  "ru": "Микрогидравлика"
+ },
+ "Micro Supercapacitor": {
+  "de": "Mikro-Superkondensatoren",
+  "es": "Microsupercondensador",
+  "fr": "Microsupercondensateur",
+  "ru": "Микросуперконденсатор"
+ },
+ "Micro Thrusters": {
+  "de": "Mikro-Schubdüsen",
+  "es": "Microimpulsores",
+  "fr": "Micropropulseurs",
+  "ru": "Двигатели ориентирования"
+ },
+ "Micro Transformer": {
+  "de": "Mikro-Transformator",
+  "es": "Microtransformador",
+  "fr": "Microtransformateur",
+  "ru": "Микротрансформатор"
+ },
+ "Microbial Inhibitor": {
+  "de": "Mikrobieller Hemmstoff",
+  "es": "Inhibidor microbiano",
+  "fr": "Inhibiteur microbien",
+  "ru": "Микробный ингибитор"
+ },
+ "Microelectrode": {
+  "de": "Mikroelektrode",
+  "es": "Microelectrodo",
+  "fr": "Microélectrode",
+  "ru": "Микроэлектрод"
+ },
+ "Military Grade Alloys": {
+  "de": "Militärqualitätslegierungen",
+  "es": "Aleaciones de Grado Militar",
+  "fr": "Alliages militaires",
+  "pt": "Ligas nível militar",
+  "ru": "Сплавы военного назначения"
+ },
+ "Military Supercapacitors": {
+  "de": "Militärische Superkondensatoren",
+  "es": "Supercapacitadores Militares",
+  "fr": "Supercondensateurs militaires",
+  "pt": "Supercapacitores militares",
+  "ru": "Военные суперконденсаторы"
+ },
+ "Mine Launcher": {
+  "de": "Minenwerfer",
+  "es": "Lanzaminas",
+  "fr": "Lanceur de mines",
+  "pt": "Lança Minas",
+  "ru": "Минирующее устройство"
+ },
+ "Mineral Survey": {
+  "de": "Mineralienübersicht",
+  "es": "Estudio mineral",
+  "fr": "Rapport de prospection",
+  "ru": "Результаты геологической разведки"
+ },
+ "Mining": {
+  "de": "Abbau",
+  "es": "Minería",
+  "fr": "Minage",
+  "pt": "Mineração",
+  "ru": "Добыча"
+ },
+ "Mining (ice rings)": {
+  "de": "Abbau (Eis-Ringe)",
+  "es": "Minería (anillos helados)",
+  "fr": "Minage (anneaux glacés)",
+  "pt": "Mineração (anéis de gelo)",
+  "ru": "Добыча (ледяные кольца)"
+ },
+ "Mining Analytics": {
+  "de": "Abbau-Analytik",
+  "es": "Análisis de minería",
+  "fr": "Analyses minières",
+  "ru": "Анализ горнодобывающей промышленности"
+ },
+ "Missile Rack": {
+  "de": "Raketenrampe",
+  "es": "Batería de Misiles",
+  "fr": "Rack de Missiles",
+  "pt": "Estante de Mísseis",
+  "ru": "Блок ракет"
+ },
+ "Mission reward": {
+  "de": "Missions-Belohnung",
+  "es": "Recompensa de misión",
+  "fr": "Récompense de mission",
+  "pt": "Recompensa da missão",
+  "ru": "Награда за миссию"
+ },
+ "Modified Consumer Firmware": {
+  "de": "Modifizierte Consumer-Firmware",
+  "es": "Firmware de Consumo Modificado",
+  "fr": "Micrologiciel consommateur modifié",
+  "pt": "Firmware de Consumo Modificado",
+  "ru": "Измененное пользовательское ПО"
+ },
+ "Modified Embedded Firmware": {
+  "de": "Modifizierte integrierte Firmware",
+  "es": "Firmware Integrado Modificado",
+  "fr": "Micrologiciel intégré modifié",
+  "pt": "Firmware Embutido Modificado",
+  "ru": "Измененное встроенное ПО"
+ },
+ "Modified Gauss Cannon (Fixed, Medium)": {
+  "de": "Modifizierte Gauß-Kanone (fest, mittel)",
+  "es": "Cañón Gauss Guardián Modificado (Fijo) (Clase: 2)",
+  "ru": "Модифицированная гаусс-пушка (фиксированная, средний слот)"
+ },
+ "Modified Gauss Cannon (Fixed, Small)": {
+  "de": "Modifizierte Gauß-Kanone (fest, klein)",
+  "es": "Cañón Gauss Guardián Modificado (Fijo) (Clase: 1)",
+  "ru": "Модифицированная гаусс-пушка (фиксированная, малый слот)"
+ },
+ "Modified Heat Sink Launcher": {},
+ "Modified Mining Laser": {
+  "de": "Modifizierter Bergbaulaser",
+  "es": "Láser Minero Modificado",
+  "ru": "Модифицированный проходочный лазер"
+ },
+ "Modified Plasma Charger (Fixed, Medium)": {
+  "de": "Modifizierter Plasmalader (fest, mittel)",
+  "es": "Cargador de plasma modificado (Fijo, Medio)",
+  "ru": "Модифицированная плазменная пушка (фиксированная, средний слот)"
+ },
+ "Modified Plasma Charger (Fixed, Small)": {
+  "de": "Modifizierter Plasmalader (fest, klein)",
+  "es": "Cargador de plasma modificado (Fijo, pequeño)",
+  "ru": "Модифицированная плазменная пушка (фиксированная, малый слот)"
+ },
+ "Modified Shard Cannon (Fixed, Medium)": {
+  "de": "Modifizierte Splitterkanone (fest, mittel)",
+  "es": "Cañón de Esquirlas Guardián Modificado (Fijo) (Clase: 2)",
+  "ru": "Модифицированный «дробовик» (фиксированный, средний слот)"
+ },
+ "Modified Shard Cannon (Fixed, Small)": {
+  "de": "Modifizierte Splitterkanone (fest, klein)",
+  "es": "Cañón de Esquirlas Guardián Modificado (Fijo) (Clase: 1)",
+  "ru": "Модифицированный «дробовик» (фиксированный, малый слот)"
+ },
+ "Molybdenum": {
+  "de": "Molibdän",
+  "es": "Molibdeno",
+  "fr": "Molybdene",
+  "pt": "Molibdênio",
+  "ru": "Молибден"
+ },
+ "Monstered": {
+  "de": "Monströs",
+  "es": "A lo bestia",
+  "fr": "Modèle XXL",
+  "pt": "Parrudo",
+  "ru": "Монстрация"
+ },
+ "Motor": {
+  "de": "Motor",
+  "es": "Motor",
+  "fr": "Moteur",
+  "ru": "Мотор"
+ },
+ "Multi-Servos": {
+  "de": "Multi-Servos",
+  "es": "Multi-Servos",
+  "fr": "Servomécanismes Multiples",
+  "pt": "Multi-Servos",
+  "ru": "Сервосистема"
+ },
+ "Multi-cannon": {
+  "de": "Mehrfachgeschütz",
+  "es": "Multicañón",
+  "fr": "Multi-cannon",
+  "pt": "Canhão de Repetição",
+  "ru": "Многоствольное орудие"
+ },
+ "Multi-weave": {
+  "de": "Mehrfachgewebe",
+  "es": "Multientrelazado",
+  "fr": "Filaments Multiples",
+  "ru": "Мультипрошивка"
+ },
+ "Multimedia Entertainment": {
+  "de": "Multimedia-Unterhaltung",
+  "es": "Entretenimiento multimedia",
+  "fr": "Médiathèque",
+  "ru": "Мультимедийные развлечения"
+ },
+ "Mutagenic Catalyst": {
+  "de": "Mutatgen-Katalysator",
+  "es": "Catalizador mutagénico",
+  "fr": "Catalyseur mutagène",
+  "ru": "Катализатор мутаций ДНК"
+ },
+ "NOC Data": {
+  "de": "Geheimoperation-Daten",
+  "es": "Datos del AEE",
+  "fr": "Données d'agent clandestin",
+  "ru": "Данные тайного агента"
+ },
+ "Network Access History": {
+  "de": "Netzwerkzugriffshistorie",
+  "es": "Historial de acceso a la red",
+  "fr": "Historique réseau",
+  "ru": "История сетевой активности"
+ },
+ "Network Security Protocols": {
+  "de": "Netzwerksicherheitsprotokolle",
+  "es": "Protocolos de seguridad de red",
+  "fr": "Protocoles de sécurité réseau",
+  "ru": "Протоколы информационной безопасности"
+ },
+ "Next of Kin Records": {
+  "de": "Angehörigen-Aufzeichnungen",
+  "es": "Registros familiares",
+  "fr": "Liste de proches",
+  "ru": "Сведения о ближайших родственниках"
+ },
+ "Nickel": {
+  "de": "Nickel",
+  "es": "Níquel",
+  "fr": "Nickel",
+  "pt": "Níquel",
+  "ru": "Никель"
+ },
+ "Night vision": {
+  "de": "Nachtsicht",
+  "es": "Vision nocturna",
+  "fr": "Vision nocturne",
+  "ru": "ПНВ"
+ },
+ "Niobium": {
+  "de": "Niobium",
+  "es": "Niobio",
+  "fr": "Niobium",
+  "pt": "Nióbio",
+  "ru": "Ниобий"
+ },
+ "Noise suppressor": {
+  "de": "Geräusch-Unterdrückung",
+  "es": "Supresor de ruido",
+  "fr": "Silencieux",
+  "ru": "Глушитель"
+ },
+ "None": {
+  "de": "Kein Bonus",
+  "es": "Ninguna",
+  "fr": "aucun",
+  "pt": "Nenhum",
+  "ru": "Нет"
+ },
+ "Nutritional Concentrate": {
+  "de": "Nahrungskonzentrat",
+  "es": "Concentrado nutritivo",
+  "fr": "Concentré nutritif",
+  "ru": "Питательный концентрат"
+ },
+ "Open Symmetric Keys": {
+  "de": "Offene symmetrische Schlüssel",
+  "es": "Claves Simétricas Abiertas",
+  "fr": "clés symétriques ouvertes",
+  "pt": "Chaves Simétricas Abertas",
+  "ru": "Открытые симметричные ключи"
+ },
+ "Operational Manual": {
+  "de": "Bedienungsanleitung",
+  "es": "Manual de operaciones",
+  "fr": "Mode d'emploi",
+  "ru": "Руководство по эксплуатации"
+ },
+ "Opinion Polls": {
+  "de": "Unfrageergebnisse",
+  "es": "Sondeos de opinión",
+  "fr": "Sondages",
+  "ru": "Опросы общественного мнения"
+ },
+ "Optical Fibre": {
+  "de": "Glasfaser",
+  "es": "Fibra óptica",
+  "fr": "Fibre optique",
+  "ru": "Оптоволокно"
+ },
+ "Optical Lens": {
+  "de": "Optische Linse",
+  "es": "Lente óptica",
+  "fr": "Lentille optique",
+  "ru": "Оптические линзы"
+ },
+ "Overcharged": {
+  "de": "Überladungs",
+  "es": "Sobrecargado",
+  "fr": "Surchargé",
+  "pt": "Sobrecarregado",
+  "ru": "Усиленный"
+ },
+ "Overcharged Weapon": {
+  "de": "Überladungswaffe",
+  "es": "Arma Sobrecargada",
+  "fr": "Arme surchargée",
+  "pt": "Arma Sobrecarregada",
+  "ru": "Усиленное оружие"
+ },
+ "Overload Munitions": {
+  "de": "Überladungsmunition",
+  "es": "Munición Sobrecargada",
+  "fr": "Munitions à Surcharge",
+  "ru": "Вызывающие перегрузку боеприпасы"
+ },
+ "Oversized": {
+  "de": "Übergröße",
+  "es": "Sobredimensionado",
+  "fr": "Armes XXL",
+  "pt": "Reforçado",
+  "ru": "Сверхразмер"
+ },
+ "Oxygenic Bacteria": {
+  "de": "Sauerstoffbakterien",
+  "es": "Bacterias oxigénicas",
+  "fr": "Bactérie oxygénique",
+  "ru": "Кислородные бактерии"
+ },
+ "Patient History": {
+  "de": "Patientenhistorie",
+  "es": "Historial clínico",
+  "fr": "Antécédents médicaux",
+  "ru": "История болезни пациента"
+ },
+ "Patrol Routes": {
+  "de": "Patrouillenrouten",
+  "es": "Rutas de patrulla",
+  "fr": "Itinéraires de patrouille",
+  "ru": "Схемы патрулирования"
+ },
+ "Pattern Alpha Obelisk Data": {
+  "de": "Alpha-Muster-Obeliskendaten",
+  "es": "Datos de Obelisco de Patrón Alpha",
+  "fr": "Données d'obélisque de type alpha",
+  "pt": "Dados de Obelisco de Padrão Alfa",
+  "ru": "Данные с обелиска «Альфа»"
+ },
+ "Pattern Beta Obelisk Data": {
+  "de": "Beta-Muster-Obeliskendaten",
+  "es": "Datos de Obelisco de Patrón Beta",
+  "fr": "Données d'obélisque de type Beta",
+  "pt": "Dados de Obelisco de Padrão Beta",
+  "ru": "Данные с обелиска «Бета»"
+ },
+ "Pattern Delta Obelisk Data": {
+  "de": "Delta-Muster-Obeliskendaten",
+  "es": "Datos de Obelisco de Patrón Delta",
+  "fr": "Données d'obélisque de type Delta",
+  "pt": "Dados de Obelisco de Padrão Delta",
+  "ru": "Данные с обелиска «Дельта»"
+ },
+ "Pattern Epsilon Obelisk Data": {
+  "de": "Epsilon-Muster-Obeliskendaten",
+  "es": "Datos de Obelisco de Patrón Epsilon",
+  "fr": "Données d'obélisque de type Epsilon",
+  "pt": "Dados de Obelisco de Padrão Epsilon",
+  "ru": "Данные с обелиска «Эпсилон»"
+ },
+ "Pattern Gamma Obelisk Data": {
+  "de": "Gamma-Muster-Obeliskendaten",
+  "es": "Datos de Obelisco de Patrón Gamma",
+  "fr": "Données d'obélisque de type Gamma",
+  "pt": "Dados de Obelisco de Padrão Gama",
+  "ru": "Данные с обелиска «Гамма»"
+ },
+ "Payroll Information": {
+  "de": "Gehaltsinformationen",
+  "es": "Información salarial",
+  "fr": "Informations salariales",
+  "ru": "Платёжная ведомость"
+ },
+ "Peculiar Shield Frequency Data": {
+  "de": "Verdächtige Schildfrequenz-Daten",
+  "es": "Datos de Frecuencias de Escudo Peculiares",
+  "fr": "Données de Fréquences de bouclier Singulières",
+  "pt": "Dados da Frequência de Escudos Peculiares",
+  "ru": "Специфические данные о частоте щитов"
+ },
+ "Penetrator Munitions (Dumbfire only)": {
+  "de": "Penetrationsmunition",
+  "es": "Munición Penetrante (sólo No Guiado)",
+  "fr": "Munitions Perforantes (Non Auto-Guidés)",
+  "ru": "Бронебойные боеголовки"
+ },
+ "Penetrator Payload": {
+  "de": "Penetrationsmunition",
+  "es": "Carga Explosiva Penetrante",
+  "fr": "Charge explosive Perforante",
+  "ru": "Бронебойные снаряды"
+ },
+ "Personal Computer": {
+  "de": "Personal Computer",
+  "es": "Ordenador personal",
+  "fr": "Ordinateur personnel",
+  "ru": "Персональный компьютер"
+ },
+ "Personal Documents": {
+  "de": "Persönliche Dokumente",
+  "es": "Documentos personales",
+  "fr": "Documents personnels",
+  "ru": "Личные документы"
+ },
+ "Personal Logs": {
+  "de": "Persönliche Logs",
+  "es": "Registros personales",
+  "fr": "Journaux personnels",
+  "ru": "Личные журналы"
+ },
+ "Petrified Fossil": {
+  "de": "Versteinertes Fossil",
+  "es": "Fósil petrificado",
+  "fr": "Fossile pétrifié",
+  "ru": "Окаменелость"
+ },
+ "Pharmaceutical Isolators": {
+  "de": "Pharmazeutische Isolatoren",
+  "es": "Aislantes Farmacéuticos",
+  "fr": "Isolants pharmaceutiques",
+  "pt": "Isolantes farmacêuticos",
+  "ru": "Фармацевтические изоляционные материалы"
+ },
+ "Pharmaceutical Patents": {
+  "de": "Pharmazeutische Patente",
+  "es": "Patentes farmacéuticas",
+  "fr": "Brevets pharmaceutiques",
+  "ru": "Фармацевтические патенты"
+ },
+ "Phase Alloys": {
+  "de": "Phasenlegierungen",
+  "es": "Aleaciones de Fase",
+  "fr": "Alliages de phase",
+  "pt": "Ligas de Fase",
+  "ru": "Фазовые сплавы"
+ },
+ "Phasing Sequence": {
+  "de": "Phasensequenz",
+  "es": "Secuencia de Fase",
+  "fr": "Séquence de Phase",
+  "pt": "Sequencia Faseada",
+  "ru": "Последовательность фазирования"
+ },
+ "Phosphorus": {
+  "de": "Phosphor",
+  "es": "Fósforo",
+  "fr": "Phosphore",
+  "pt": "Fósforo",
+  "ru": "Фосфор"
+ },
+ "Photo Albums": {
+  "de": "Fotoalben",
+  "es": "Álbumes de fotos",
+  "fr": "Albums photo",
+  "ru": "Фотоальбомы"
+ },
+ "Planetary Settlement": {
+  "de": "Planetare Siedlung",
+  "es": "Asentamiento planetario",
+  "fr": "Base planétaire",
+  "ru": "Планетарное поселение"
+ },
+ "Plant Growth Charts": {
+  "de": "Diagramme zum Pflanzenwachstum",
+  "es": "Gráficos de crecimiento de plantas",
+  "fr": "Courbes de croissance végétale",
+  "ru": "Графики роста растений"
+ },
+ "Plasma Accelerator": {
+  "de": "Plasmabeschleuniger",
+  "es": "Acelerador de Plasma",
+  "fr": "Accelerateur à Plasma",
+  "pt": "Acelerador de Plasma",
+  "ru": "Ускоритель плазмы"
+ },
+ "Plasma Munitions": {
+  "de": "Plasmamunition",
+  "es": "Munición de Plasma",
+  "fr": "Munitions plasma",
+  "pt": "Munição de Plasma",
+  "ru": "Плазменные боеприпасы"
+ },
+ "Plasma Slug": {
+  "de": "Plasmaprojektil",
+  "es": "Proyectil de Plasma",
+  "fr": "Munitions à Plasma",
+  "pt": "Projetil de Plasma",
+  "ru": "Плазменный рельсовый заряд"
+ },
+ "Point Defence": {
+  "de": "Punktverteidigung",
+  "es": "Defensa de Punto",
+  "fr": "Défense ponctuelle",
+  "pt": "Defesa de Ponto",
+  "ru": "Точечная оборона"
+ },
+ "Political Affiliations": {
+  "de": "Politische Beziehungen",
+  "es": "Afiliaciones políticas",
+  "fr": "Affiliations politiques",
+  "ru": "Политическая принадлежность"
+ },
+ "Polonium": {
+  "de": "Polonium",
+  "es": "Polonio",
+  "fr": "Polonium",
+  "pt": "Polônio",
+  "ru": "Полоний"
+ },
+ "Polymer Capacitors": {
+  "de": "Polymerkondensatoren",
+  "es": "Capacitadores de Polímeros",
+  "fr": "Condensateurs en polymères",
+  "pt": "Capacitores de Polímeros",
+  "ru": "Полимерные конденсаторы"
+ },
+ "Power Distributor": {
+  "de": "Energieverteiler",
+  "es": "Distribuidor de Energía",
+  "fr": "Répartiteur de Puissance",
+  "pt": "Distribuidor de Energia",
+  "ru": "Распределитель питания"
+ },
+ "Power Plant": {
+  "de": "Kraftwerk",
+  "es": "Núcleo de Energía",
+  "fr": "Générateur",
+  "pt": "Gerador de Energia",
+  "ru": "Силовая установка"
+ },
+ "Power Regulator": {
+  "de": "Energieregulator",
+  "es": "Regulador de potencia",
+  "fr": "Régulateur de puissance",
+  "ru": "Регулятор мощности"
+ },
+ "Precipitated Alloys": {
+  "de": "Gehärtete Legierungen",
+  "es": "Aleaciones de Precipitación",
+  "fr": "Alliages précipités",
+  "pt": "Ligas Precipitadas",
+  "ru": "Осажденные сплавы"
+ },
+ "Prisoner Logs": {
+  "de": "Gefangenen-Logs",
+  "es": "Registros de prisioneros",
+  "fr": "Dossiers pénitentiaires",
+  "ru": "Досье на заключённых"
+ },
+ "Production Reports": {
+  "de": "Produktionsberichte",
+  "es": "Informes de producción",
+  "fr": "Rapports de production",
+  "ru": "Отчёты о производстве"
+ },
+ "Production Schedule": {
+  "de": "Produktionszeitplan",
+  "es": "Programa de producción",
+  "fr": "Planning de production",
+  "ru": "График выпуска продукции"
+ },
+ "Propaganda": {
+  "de": "Propaganda",
+  "es": "Propaganda",
+  "fr": "Propagande",
+  "ru": "Пропаганда"
+ },
+ "Proprietary Composites": {
+  "de": "Kompositwerkstoffe",
+  "es": "Compuestos con Patente",
+  "fr": "Composites brevetés",
+  "pt": "Compostos Propietários",
+  "ru": "Патентованные композиты"
+ },
+ "Propulsion Elements": {
+  "de": "Antriebselemente",
+  "es": "Elementos de Propulsión",
+  "fr": "Elements de Propulsion",
+  "pt": "Elementos de Propulsão",
+  "ru": "Реактивные элементы"
+ },
+ "Prospector Limpet Controller": {
+  "de": "Drohnensteuerung Erzsucher",
+  "es": "Lanzador Dron Prospector",
+  "fr": "Controleur de drônes de prospection",
+  "pt": "Controlador de Drone Prospector",
+  "ru": "Контроллер дронов геологов"
+ },
+ "Proto Heat Radiators": {
+  "de": "Proto-Wärmestrahler",
+  "es": "Protorradiadores Térmicos",
+  "fr": "Proto-radiateurs",
+  "pt": "Proto radiadores térmicos",
+  "ru": "Прототипы теплоизлучателей"
+ },
+ "Proto Light Alloys": {
+  "de": "Leichte Legierungen (Proto)",
+  "es": "Protoaleaciones Ligeras",
+  "fr": "Proto-alliages légers",
+  "pt": "Proto ligas leves",
+  "ru": "Опытные легкие сплавы"
+ },
+ "Proto Radiolic Alloys": {
+  "de": "Radiologische Legierungen (Proto)",
+  "es": "Aleaciones Protorradiadas",
+  "fr": "Proto-alliages radiologiques",
+  "pt": "Proto ligas radiólicas",
+  "ru": "Сплавы для изготовления зондов"
+ },
+ "Pulse Laser": {
+  "de": "Impulslaser",
+  "es": "Láser de Pulso",
+  "fr": "Laser à Impulsion",
+  "pt": "Laser de Pulso",
+  "ru": "Импульсный лазер"
+ },
+ "Purchase Records": {
+  "de": "Kaufaufzeichnungen",
+  "es": "Registros de compra",
+  "fr": "Registre d'acquisitions",
+  "ru": "Платежные ведомости"
+ },
+ "Purchase Requests": {
+  "de": "Kaufaufzeichnungen",
+  "es": "Solicitudes de compra",
+  "fr": "Demandes d'achats",
+  "ru": "Запросы на покупку"
+ },
+ "Push": {
+  "de": "Push-Droge",
+  "es": "Push",
+  "fr": "Boost",
+  "ru": "Рывок"
+ },
+ "Pyrolytic Catalyst": {
+  "de": "Pyrolytischer Katalysator",
+  "es": "Catalizador pirolítico",
+  "fr": "Catalyseur pyrolytique",
+  "ru": "Пиролитический катализатор"
+ },
+ "Quieter footsteps": {
+  "de": "Leises Auftreten",
+  "es": "Pasos más silenciosos",
+  "fr": "Réduction des bruits de pas",
+  "ru": "Приглушенные звуки шагов"
+ },
+ "RDX": {
+  "de": "Hexogen",
+  "es": "RDX",
+  "fr": "RDX",
+  "ru": "Гексоген"
+ },
+ "Radiant Canister": {
+  "de": "Strahlenbehältnis",
+  "es": "Cartucho Radiactivo",
+  "fr": "Cartouche Irradiante",
+  "ru": "Светящаяся кассета"
+ },
+ "Radioactivity Data": {
+  "de": "Daten zur Radioaktivität",
+  "es": "Datos de radioactividad",
+  "fr": "Relevés de radioactivité",
+  "ru": "Информация о радиоактивности"
+ },
+ "Rail Gun": {
+  "de": "Schienenkanone",
+  "es": "Cañón de Riel",
+  "fr": "Canon électrique",
+  "pt": "Canhão Elétrico",
+  "ru": "Электромагнитная пушка"
+ },
+ "Rapid Charge": {
+  "de": "Ladungsoptimiert",
+  "es": "Recarga Rápida",
+  "fr": "Chargement rapide",
+  "pt": "Carga Rápida",
+  "ru": "Быстрозаряжающийся"
+ },
+ "Rapid Fire Modification": {
+  "de": "Schnellfeuermodifikation",
+  "es": "Modificación de Tiro Rápido",
+  "fr": "Modification cadence rapide",
+  "pt": "Modificação de Disparo Rápido",
+  "ru": "Увеличение скорострельности"
+ },
+ "Raw": {
+  "de": "Elemente",
+  "es": "Materiales",
+  "fr": "À l'état brut",
+  "pt": "Bruto",
+  "ru": "Неочищенные минералы"
+ },
+ "Reactor Output Review": {
+  "de": "Evaluirung der Reaktorleistung",
+  "es": "Informe de capacidad del reactor",
+  "fr": "Évaluation énergétique",
+  "ru": "Оценка выходной мощности реактора"
+ },
+ "Recycling Cells": {
+  "de": "Recycling-Zellen",
+  "es": "Celdas de Reciclaje",
+  "fr": "Recyclage des Cellules",
+  "ru": "Рециркуляционные ячейки"
+ },
+ "Recycling Logs": {
+  "de": "Recycling-Logs",
+  "es": "Registros de reciclaje",
+  "fr": "Journaux de recyclage",
+  "ru": "Журнал утилизации отходов"
+ },
+ "Reduced tool battery consumption": {
+  "de": "Reduced tool battery consumption ",
+  "fr": "Consommation des outils réduite",
+  "ru": "Уменьшенный расход батареи инструмента"
+ },
+ "Refined Focus Crystals": {
+  "de": "Raffinierte Laserkristalle",
+  "es": "Cristales de Enfoque Refinados",
+  "fr": "Cristaux de focalisation raffinés",
+  "pt": "Cristais de focalização refinado",
+  "ru": "Обработанные фокусировочные кристаллы"
+ },
+ "Refinement Process Sample": {
+  "de": "Raffinerieverfahren-Probe",
+  "es": "Muestra de proceso refinado",
+  "fr": "Échantillon de production de raffinage",
+  "ru": "Образец с очистного производства"
+ },
+ "Refinery": {
+  "de": "Raffinerie",
+  "es": "Refinería",
+  "fr": "Raffinerie",
+  "pt": "Refinaria",
+  "ru": "Очиститель"
+ },
+ "Reflective Plating": {
+  "de": "Reflektierende Beschichtung",
+  "es": "Blindaje Reflectante",
+  "fr": "Blindage Réfléchissant",
+  "ru": "Отражающая броня"
+ },
+ "Regeneration Sequence": {
+  "de": "Regenerierende Sequenz",
+  "es": "Secuencia de Regeneración",
+  "fr": "Séquence de régénération",
+  "pt": "Sequencia de Regeneração",
+  "ru": "Последовательность восстановления"
+ },
+ "Reinforced": {
+  "de": "Verstärkt",
+  "es": "Reforzado",
+  "fr": "Renforcé",
+  "pt": "Reforçado",
+  "ru": "Усиленный"
+ },
+ "Reinforced Shields": {
+  "de": "Verstärkte Schilde",
+  "es": "Escudos reforzados",
+  "fr": "Bouclier renforcé",
+  "pt": "Escudos Reforçados",
+  "ru": "Усиленный щит"
+ },
+ "Reload speed": {
+  "de": "Nachlade-Ggeschwindigkeit",
+  "es": "Velocidad de recarga",
+  "fr": "Vitesse de rechargement",
+  "ru": "Скорость перезарядки"
+ },
+ "Remote Release Flechette Launcher (Fixed)": {
+  "de": "Ferngesteuerter Flechettenwerfer (Fest)",
+  "es": "Lanzador de Flechettes Remoto (Fijo)",
+  "fr": "Lanceurs de Fléchettes Déclenchées à Distance (Fixe)",
+  "pt": "Lançador de dardos de Liberação Remota (Fixa)",
+  "ru": "Зенитная установка с дистанционным подрывом (фиксированное)"
+ },
+ "Remote Release Flechette Launcher (Turreted)": {
+  "de": "Ferngesteuerter Flechettenwerfer (Turm)",
+  "es": "Lanzador de Flechettes Remoto (Torreta)",
+  "fr": "Lanceurs de Fléchettes Déclenchées à Distance (Tourelle)",
+  "pt": "Lançador de dardos de Liberação Remota (Torretada)",
+  "ru": "Зенитная установка с дистанционным подрывом (турель)"
+ },
+ "Residential Directory": {
+  "de": "Einwohnerverzeichnis",
+  "es": "Directorio residencial",
+  "fr": "Annuaire résidentiel",
+  "ru": "Адресная книга"
+ },
+ "Resistance Augmented": {
+  "de": "Widerstandsverstärkt",
+  "es": "Resistencia Aumentada",
+  "fr": "Résistances Augmentés",
+  "pt": "Resistência Aumentada",
+  "ru": "Сбалансированное усиление"
+ },
+ "Reverberating Cascade": {
+  "de": "Rückstrahlkaskade",
+  "es": "Reverberación en Cascada",
+  "fr": "Réverbérations en Série",
+  "pt": "Cascata de Reverberação",
+  "ru": "Отраженный залп"
+ },
+ "Rhenium": {
+  "de": "Rhenium",
+  "es": "Renio",
+  "fr": "Rhénium",
+  "pt": "Rênio",
+  "ru": "Рений"
+ },
+ "Risk Assessments": {
+  "de": "Gefährdungsbeurteilungen",
+  "es": "Valoración de riesgos",
+  "fr": "Evaluation des risques",
+  "ru": "Оценка рисков"
+ },
+ "Ruthenium": {
+  "de": "Ruthenium",
+  "es": "Rutenio",
+  "fr": "Ruthenium",
+  "pt": "Rutênio",
+  "ru": "Рутений"
+ },
+ "SRV Ammo Restock": {
+  "de": "SRV-Munitionsnachladung",
+  "es": "Suministro de Munición del VRS",
+  "fr": "Munitions SRV",
+  "pt": "Munição do VRS",
+  "ru": "Боеприпасы для ТРП"
+ },
+ "SRV Refuel": {
+  "de": "SRV-Auftankung",
+  "es": "Repostaje del VRS",
+  "fr": "Carburant SRV",
+  "pt": "Reabastecimento de VRS",
+  "ru": "Заправка ТРП"
+ },
+ "SRV Repair": {
+  "de": "SRV-Reparaturen",
+  "es": "Reparación del VRS",
+  "fr": "Réparation SRV",
+  "pt": "Reparo de VRS",
+  "ru": "Ремонт ТРП"
+ },
+ "Sales Records": {
+  "de": "Verkaufszahlen",
+  "es": "Registros de ventas",
+  "fr": "Historique des ventes",
+  "ru": "Отчёты о продажах"
+ },
+ "Salvaged Alloys": {
+  "de": "Geborgene Legierungen",
+  "es": "Aleaciones Recuperadas",
+  "fr": "Alliages récupérés",
+  "pt": "Ligas recuperadas",
+  "ru": "Захваченные сплавы"
+ },
+ "Scope": {
+  "de": "Visier",
+  "es": "Mirilla",
+  "fr": "Viseur",
+  "ru": "Прицел"
+ },
+ "Scramble Spectrum": {
+  "de": "Mischungsbandbreite",
+  "es": "Espectro de Interferencias",
+  "fr": "Spectre de Brouillage",
+  "ru": "Отключающая сетка"
+ },
+ "Scrambler": {
+  "de": "Störsender",
+  "es": "Desmodulador",
+  "fr": "Brouilleur",
+  "ru": "Шифратор"
+ },
+ "Screening Shell": {
+  "de": "Sperrgranate",
+  "es": "Proyectil de Pantalla",
+  "fr": "Obus de Criblage",
+  "ru": "Заслоняющие снаряды"
+ },
+ "Security Expenses": {
+  "de": "Aufwendungen für Sicherheit",
+  "es": "Gastos de seguridad",
+  "fr": "Dépenses de sécurité",
+  "ru": "Расходы на охрану"
+ },
+ "Security Firmware Patch": {
+  "de": "Sicherheits-Firmware-Patch",
+  "es": "Parche de Firmware de Seguridad",
+  "fr": "Mise à jour de micrologiciel de sécurité",
+  "pt": "Atualização de firmware de segurança",
+  "ru": "Обновление для ПО безопасности"
+ },
+ "Seed Geneaology": {
+  "de": "Saatgut-Genealogie",
+  "es": "Genealogía de simientes",
+  "fr": "Patrimoine génétique de semences"
+ },
+ "Selenium": {
+  "de": "Selen",
+  "es": "Selenio",
+  "fr": "Selenium",
+  "pt": "Selênio",
+  "ru": "Селен"
+ },
+ "Sensor Fragment": {
+  "de": "Sensorfragment",
+  "es": "Fragmento de Sensor",
+  "fr": "Fragment inconnu",
+  "pt": "Fragmento do sensor",
+  "ru": "Обломок сенсора"
+ },
+ "Sensors": {
+  "de": "Sensoren",
+  "es": "Sensores",
+  "fr": "Capteurs",
+  "pt": "Sensores",
+  "ru": "Сенсоры"
+ },
+ "Settlement Assault Plans": {
+  "de": "Siedlungsangriffspläne",
+  "es": "Planes de ataque del asentamiento",
+  "fr": "Plans d'assaut d'une installation",
+  "ru": "Планы штурма поселения"
+ },
+ "Settlement Defence Plans": {
+  "de": "Siedlungsverteidigungspläne",
+  "es": "Planes de defensa del asentamiento",
+  "fr": "Plans de défense d'une installation",
+  "ru": "Планы обороны поселения"
+ },
+ "Shareholder Information": {
+  "de": "Aktionärsinformationen",
+  "es": "Información de accionistas",
+  "fr": "Actionnariat",
+  "ru": "Сведения об акционерах"
+ },
+ "Shield Booster": {
+  "de": "Schild-Booster",
+  "es": "Potenciador de Escudos",
+  "fr": "Survolteur de Bouclier",
+  "pt": "Potenciador de Escudo",
+  "ru": "Усилитель щита"
+ },
+ "Shield Cell Bank": {
+  "de": "Schildzellenbank",
+  "es": "Células de Escudo",
+  "fr": "Cellules d'énergie",
+  "pt": "Banco de Célula de Escudo",
+  "ru": "Щитонакопитель"
+ },
+ "Shield Data": {
+  "de": "Schilddaten",
+  "es": "Datos de Escudo",
+  "fr": "Données de bouclier",
+  "pt": "Dados de escudo",
+  "ru": "Данные о щитах"
+ },
+ "Shield Disruptor": {
+  "de": "Schild-Unterbrecher",
+  "es": "Disruptor de escudo",
+  "ru": "Разрушитель щита"
+ },
+ "Shield Emitters": {
+  "de": "Schildemitter",
+  "es": "Emisores de Escudo",
+  "fr": "Emetteurs de bouclier",
+  "pt": "Emissores de escudo",
+  "ru": "Щитоизлучатели"
+ },
+ "Shield Generator": {
+  "de": "Schildgenerator",
+  "es": "Generador de Escudos",
+  "fr": "Générateur de Bouclier",
+  "pt": "Gerador de Escudo",
+  "ru": "Щитогенератор"
+ },
+ "Shield Projector": {
+  "de": "Schild-Generator",
+  "es": "Proyector de escudo",
+  "ru": "Излучатель щита"
+ },
+ "Shielded": {
+  "de": "Abgeschirmt",
+  "es": "Blindado",
+  "fr": "Renforcé",
+  "pt": "Blindado",
+  "ru": "Бронированный"
+ },
+ "Shielded FSD": {
+  "de": "Abgeschirmter FSA",
+  "es": "MDD Blindado",
+  "fr": "FSD Renforcé",
+  "pt": "MDD Protegido",
+  "ru": "Защищенный FSD"
+ },
+ "Shielding": {
+  "de": "Abschirmung",
+  "es": "Protección",
+  "fr": "Protection",
+  "pt": "Blindagem",
+  "ru": "Защита"
+ },
+ "Shielding Sensors": {
+  "de": "Schildsensoren",
+  "es": "Sensores de Escudo",
+  "fr": "Capteurs de bouclier",
+  "pt": "Sensores para proteção",
+  "ru": "Сенсоры системы экранирования"
+ },
+ "Shift-Lock Canister": {
+  "de": "Frameshift-Blocker",
+  "es": "Cartucho Bloqueo de Salto",
+  "fr": "Cartouche de Verrouillage FSD",
+  "ru": "Рамоблокирующая кассета"
+ },
+ "Ship Flight Data": {
+  "de": "Schiffs-Flugdaten",
+  "es": "Datos de Vuelos de Nave",
+  "fr": "Donnée de Vol",
+  "pt": "Dados de voo da nave",
+  "ru": "Полетные данные корабля"
+ },
+ "Ship Schematic": {
+  "de": "Schiffsplan",
+  "es": "Esquema de nave",
+  "fr": "Plan de vaisseau",
+  "ru": "План корабля"
+ },
+ "Ship salvage (combat ships)": {
+  "de": "Bergungsgut Schiffswrack (Kampfschiffe)",
+  "es": "Rescate de naves (naves de combate)",
+  "fr": "Restes de vaisseaux détruits (Type: Combat)",
+  "pt": "Destroços de nave (naves de combate)",
+  "ru": "Уничтожение корабля (боевые)"
+ },
+ "Ship salvage (military & authority ships)": {
+  "de": "Bergungsgut Schiffswrack (Militär und Sicherheitsdienst)",
+  "es": "Rescate de naves (naves militares y de la autoridad)",
+  "fr": "Restes de vaisseaux détruits (Type: Militaire & Autorité Système)",
+  "pt": "Destroços de naves (naves militades e de autoridades)",
+  "ru": "Уничтожение корабля (военные и силы правопорядка)"
+ },
+ "Ship salvage (transport ships)": {
+  "de": "Bergungsgut Schiffswrack (Transportschiffe)",
+  "es": "Rescate de naves (naves de transporte)",
+  "fr": "Restes de vaisseaux détruits (Type: Transport)",
+  "pt": "Destroços de naves (naves de transporte)",
+  "ru": "Уничтожение корабля (транспортные)"
+ },
+ "Ship scanning": {
+  "de": "Schiffs-Scan",
+  "es": "Escaneo de naves",
+  "fr": "Scan de vaisseaux",
+  "pt": "Escaneamento de naves",
+  "ru": "Сканирование корабля"
+ },
+ "Ship scanning (combat ships)": {
+  "de": "Schiffs-Scan (Kampfschiffe)",
+  "es": "Escaneo de naves (naves de combate)",
+  "fr": "Scan de vaisseaux de Combat",
+  "pt": "Escaneamento de naves (naves de combate)",
+  "ru": "Сканирование корабля (боевые)"
+ },
+ "Ship scanning (transport ships)": {
+  "de": "Schiffs-Scan (Transportschiffe)",
+  "es": "Escaneo de naves (naves de transporte)",
+  "fr": "Scan de vaisseaux (Type : Transport)",
+  "pt": "Escaneamento de naves (naves de transporte)",
+  "ru": "Сканирование корабля (транспортные)"
+ },
+ "Shock Cannon (Fixed, Large)": {
+  "de": "Schockkanone (fest) (Klasse: 3)",
+  "es": "Cañón de Choque (Fijo) (Clase 3)",
+  "fr": "Canon de Choc (Fixe, Classe 3)",
+  "ru": "Осколочное орудие Стражей (фиксированное, большой слот)"
+ },
+ "Shock Cannon (Fixed, Medium)": {
+  "de": "Schockkanone (fest) (Klasse: 2)",
+  "es": "Cañón de Choque (Fijo) (Clase 2)",
+  "fr": "Canon de Choc (Fixe, Classe 2)",
+  "ru": "Шоковое орудие (фиксированное, средний слот)"
+ },
+ "Shock Cannon (Fixed, Small)": {
+  "de": "Schockkanone (fest) (Klasse: 1)",
+  "es": "Cañón de Choque (Fijo) (Clase 1)",
+  "fr": "Canon de Choc (Fixe, Classe 1)",
+  "ru": "Шоковое орудие (фиксированное, малый слот)"
+ },
+ "Shock Cannon (Gimballed, Large)": {
+  "de": "Schockkanone (kardanisch) (Klasse: 3)",
+  "es": "Cañón de Choque (Autoguiado) (Clase 3)",
+  "fr": "Canon de Choc (PE Rotatif, Classe 3)",
+  "ru": "Шоковое орудие (на карданной подвеске, большой слот)"
+ },
+ "Shock Cannon (Gimballed, Medium)": {
+  "de": "Schockkanone (kardanisch) (Klasse: 2)",
+  "es": "Cañón de Choque (Autoguiado) (Clase 2)",
+  "fr": "Canon de Choc (PE Rotatif, Classe 2)",
+  "ru": "Шоковое орудие (на карданной подвеске, средний слот)"
+ },
+ "Shock Cannon (Gimballed, Small)": {
+  "de": "Schockkanone (kardanisch) (Klasse: 1)",
+  "es": "Cañón de Choque (Autoguiado) (Clase 1)",
+  "fr": "Canon de Choc (PE Rotatif, Classe 1)",
+  "ru": "Шоковое орудие (на карданной подвеске, малый слот)"
+ },
+ "Shock Cannon (Turreted, Large)": {
+  "de": "Schockkanone (Turm) (Klasse: 3)",
+  "es": "Cañón de Choque (Torreta) (Clase 3)",
+  "fr": "Canon de Choc (Tourelle, Classe 3)",
+  "ru": "Шоковое орудие (турель, большой слот)"
+ },
+ "Shock Cannon (Turreted, Medium)": {
+  "de": "Schockkanone (Turm) (Klasse: 2)",
+  "es": "Cañón de Choque (Torreta) (Clase 2)",
+  "fr": "Canon de Choc (Tourelle, Classe 2)",
+  "ru": "Шоковое орудие (турель, средний слот)"
+ },
+ "Shock Cannon (Turreted, Small)": {
+  "de": "Schockkanone (Turm) (Klasse: 1)",
+  "es": "Cañón de Choque (Torreta) (Clase 1)",
+  "fr": "Canon de Choc (Tourelle, Classe 1)",
+  "ru": "Шоковое орудие (турель, малый слот)"
+ },
+ "Short Range Blaster": {
+  "de": "Kurzdistanzblaster",
+  "es": "Destructor de corto alcance",
+  "fr": "Tir à Courte Portée",
+  "pt": "Disparo de Curto Alcance",
+  "ru": "Бластер малого радиуса"
+ },
+ "Signal source": {
+  "de": "Signalquelle",
+  "es": "Origen de señal",
+  "fr": "Source de Signal",
+  "pt": "Fonte de sinal",
+  "ru": "Источник сигнала"
+ },
+ "Signal source (anarchy)": {
+  "de": "Signalquelle (Anarchie)",
+  "es": "Origen de señal (anarquía)",
+  "fr": "Source de signal (Système : Anarchique)",
+  "pt": "Fonte de sinal (anarquia)",
+  "ru": "Источник сигнала (анархия)"
+ },
+ "Signal source (high security)": {
+  "de": "Signalquelle (Hohe Sicherheit)",
+  "es": "Origen de señal (seguridad alta)",
+  "fr": "Source de Signal (Système : Haute Sécurité)",
+  "pt": "Fonte de sinal (segurança alta)",
+  "ru": "Источник сигнала (высокий уровень безопасности)"
+ },
+ "Signal source (low security)": {
+  "de": "Signalquelle (Niedrige Sicherheit)",
+  "es": "Origen de señal (seguridad baja)",
+  "fr": "Source de signal (Système : Basse Sécuritée)",
+  "pt": "Fonte de sinal (baixa segurança)",
+  "ru": "Источник сигнала (низкий уровень безопасности)"
+ },
+ "Sirius Modified Heat Sink Launcher": {},
+ "Slush Fund Logs": {
+  "de": "Schmiergeld-Logs",
+  "es": "Registros de fondos de reptiles",
+  "fr": "Caisse noire",
+  "ru": "Журналы «грязного» финансирования"
+ },
+ "Small Calibre Munitions": {
+  "de": "Kleinkalibrige Munition",
+  "es": "Munición de Pequeño Calibre",
+  "fr": "Munitions de petit calibre",
+  "pt": "Munição de Pequeno Calibre",
+  "ru": "Мелкокалиберные боеприпасы"
+ },
+ "Smart Rounds": {
+  "de": "Intelligente Munition",
+  "es": "Munición Inteligente",
+  "fr": "Munitions Intelligentes",
+  "pt": "Projetil Inteligente",
+  "ru": "Умные боеприпасы"
+ },
+ "Smear Campaign Plans": {
+  "de": "Pläne für Verleumdungskampagne",
+  "es": "Planes de campañas de desprestigio",
+  "fr": "Campagne de calomnie",
+  "ru": "Планы кампании по дискредитации"
+ },
+ "Specialised": {
+  "de": "Spezialisiert",
+  "es": "Especializado",
+  "fr": "Specialisé",
+  "pt": "Especializado",
+  "ru": "Специализированный"
+ },
+ "Specialised Legacy Firmware": {
+  "de": "Spezial-Legacy-Firmware",
+  "es": "Firmware Heredado Especializado",
+  "fr": "Micrologiciel spécialisé périmé",
+  "pt": "Firmware especializado antigo",
+  "ru": "Специальное ПО предыдущего поколения"
+ },
+ "Spectral Analysis Data": {
+  "de": "Spektralanalyse-Daten",
+  "es": "Datos de análisis de espectro",
+  "fr": "Données d'analyse spectrale",
+  "ru": "Данные спектрального анализа"
+ },
+ "Spyware": {
+  "de": "Spyware",
+  "es": "Software espía",
+  "fr": "Programme-espion",
+  "ru": "Шпионские программы"
+ },
+ "Stability": {
+  "de": "Stabilität",
+  "es": "Estabilidad",
+  "fr": "Stabilité",
+  "ru": "Стабильность"
+ },
+ "Stellar Activity Logs": {
+  "de": "Sternenaktivitäts-Logs",
+  "es": "Registros de actividad estelar",
+  "fr": "Journaux d'activité stellaire",
+  "ru": "Журналы звёздной активности"
+ },
+ "Stowed reloading": {
+  "de": "Nachladen bei verwahrter Waffe",
+  "es": "Carga enfundada",
+  "fr": "Rechargement rangé",
+  "ru": "Перезарядка в походном положении"
+ },
+ "Strange Wake Solutions": {
+  "de": "Seltsame FSA-Zielorte",
+  "es": "Extrañas Soluciones de Estelas",
+  "fr": "Solutions de sillages anormales",
+  "pt": "Soluções de rastro estranhas",
+  "ru": "Странные расчеты следа"
+ },
+ "Stripped Down": {
+  "de": "Vereinfacht",
+  "es": "Reducido",
+  "fr": "Désossage",
+  "pt": "Reduzido",
+  "ru": "Урезанный вариант"
+ },
+ "Sturdy Mount": {
+  "de": "Robustes Gestell",
+  "es": "Anclaje robusto",
+  "fr": "Support robuste",
+  "pt": "Encaixe Robusto",
+  "ru": "Прочное крепление"
+ },
+ "Suit": {
+  "de": "Anzug",
+  "es": "Traje",
+  "fr": "Combinaison",
+  "ru": "Костюм"
+ },
+ "Suit Schematic": {
+  "de": "Anzugplan",
+  "es": "Esquema de traje",
+  "fr": "Plan de combinaison",
+  "ru": "Эскиз комбинезона"
+ },
+ "Sulphur": {
+  "de": "Schwefel",
+  "es": "Azufre",
+  "fr": "Souffre",
+  "pt": "Enxofre",
+  "ru": "Сера"
+ },
+ "Super Capacitor": {
+  "de": "Superkondensator",
+  "es": "Supercondensador",
+  "fr": "Super COndensateurs",
+  "pt": "Supercapacitor",
+  "ru": "Суперконденсатор"
+ },
+ "Super Conduits": {
+  "de": "Superleiter",
+  "es": "Superconductores",
+  "fr": "Super Conduits",
+  "pt": "SuperConduites",
+  "ru": "Сверхпроводники"
+ },
+ "Super Penetrator": {
+  "de": "Super-Penetrator",
+  "es": "Súper Penetrante",
+  "fr": "Munitions Ultra Perforantes",
+  "pt": "Super Penetrante",
+  "ru": "Модуль сверхпробития"
+ },
+ "Surface POI": {
+  "de": "Planetenoberfläche POI",
+  "es": "Puntos de interés de superficie",
+  "fr": "POI en Surface",
+  "pt": "Pontos de interesse de superfície",
+  "ru": "Точки интереса на планетах"
+ },
+ "Surface Scanner": {
+  "de": "Oberflächen-Scanner",
+  "es": "Escáner de superficie",
+  "fr": "Scanner de Surface",
+  "pt": "Scanners de superfície",
+  "ru": "Сканер поверхности"
+ },
+ "Surface data point": {
+  "de": "POI-Datenpunkt",
+  "es": "Punto de datos de superficie",
+  "fr": "POI",
+  "pt": "Ponto de dados de suferfície",
+  "ru": "Наземные точки данных"
+ },
+ "Surface prospecting": {
+  "de": "Oberflächenabbau (SRV)",
+  "es": "Prospección de superficie",
+  "fr": "Prospection de surface",
+  "pt": "Prospecção de superfície",
+  "ru": "Поверхность планет"
+ },
+ "Surveillance Equipment": {
+  "de": "Überwachungsausrüstung",
+  "es": "Equipo de supervivencia",
+  "fr": "Équipement de surveillance",
+  "ru": "Оборудование видеонаблюдения"
+ },
+ "Surveillance Logs": {
+  "de": "Überwachungs-Logs",
+  "es": "Registros de vigilancia",
+  "fr": "Journaux de surveillance",
+  "ru": "Журналы систем наблюдения"
+ },
+ "Synthetic Genome": {
+  "de": "Synthetisches Genom",
+  "es": "Genoma sintético",
+  "fr": "Génome de synthèse",
+  "ru": "Синтетический геном"
+ },
+ "Synthetic Pathogen": {
+  "de": "Synthetischer Erreger",
+  "es": "Patógeno sintético",
+  "fr": "Pathogène de synthèse",
+  "ru": "Синтетический патоген"
+ },
+ "System Focused": {
+  "de": "Systemfokussiert",
+  "es": "Orientado a Sistemas",
+  "fr": "Optimisé systèmes",
+  "pt": "Foco nos Sistemas",
+  "ru": "Системо-ориентированный"
+ },
+ "TK Aphelion": {
+  "de": "TK Aphelion",
+  "es": "TK Aphelion",
+  "fr": "TK Aphelion",
+  "ru": "TK Aphelion"
+ },
+ "TK Eclipse": {
+  "de": "TK Eclipse",
+  "es": "TK Eclipse",
+  "fr": "TK Eclipse",
+  "ru": "TK Eclipse"
+ },
+ "TK Zenith": {
+  "de": "TK Zenith",
+  "es": "TK Zenith",
+  "fr": "TK Zenith",
+  "ru": "TK Zenith"
+ },
+ "Tactical Plans": {
+  "de": "Taktikpläne",
+  "es": "Planes tácticos",
+  "fr": "Plans stratégiques",
+  "ru": "Тактические планы"
+ },
+ "Tagged Encryption Codes": {
+  "de": "Getaggte Verschlüsselungscodes",
+  "es": "Códigos de Encriptación Marcados",
+  "fr": "Clés de cryptage balisées",
+  "pt": "Código de encriptação rotulados",
+  "ru": "Меченые шифровальные коды"
+ },
+ "Target Lock Breaker": {
+  "de": "Zielaufschaltungsunterbrecher",
+  "es": "Interruptor de Selección",
+  "fr": "Interruption de verrouillage de la cible",
+  "ru": "Генератор помех для системы захвата цели"
+ },
+ "Tax Records": {
+  "de": "Steuerunterlagen",
+  "es": "Registros fiscales",
+  "fr": "Dossiers fiscaux",
+  "ru": "Налоговые отчёты"
+ },
+ "Technetium": {
+  "de": "Technetium",
+  "es": "Tecnecio",
+  "fr": "Technetium",
+  "pt": "Tecnécio",
+  "ru": "Технеций"
+ },
+ "Tellurium": {
+  "de": "Tellur",
+  "es": "Teluro",
+  "fr": "Tellure",
+  "pt": "Telúrio",
+  "ru": "Теллур"
+ },
+ "Tempered Alloys": {
+  "de": "Vergütete Legierungen",
+  "es": "Aleaciones Templadas",
+  "fr": "Alliages trempés",
+  "pt": "Ligas temperadas",
+  "ru": "Закаленные сплавы"
+ },
+ "Thargoid Carapace": {
+  "de": "Thargoid Panzerung",
+  "es": "Caparazón Thargoide",
+  "fr": "Carapace Thargoid",
+  "pt": "Carapaça Thargoid",
+  "ru": "Таргоидский панцирь"
+ },
+ "Thargoid Energy Cell": {
+  "de": "Thargoid Energiezelle",
+  "es": "Célula de Energía Thargoide",
+  "fr": "Cellule d'Énergie Thargoid",
+  "pt": "Célula de Energia Thargoid",
+  "ru": "Таргоидская энергоячейка"
+ },
+ "Thargoid Material Composition Data": {
+  "de": "Thargoid Materialzusammensetzung",
+  "es": "Datos de Composición de Material Thargoide",
+  "fr": "Donnée de Composition de Matérel Thargoid",
+  "pt": "Dados de composição de material Thargoid",
+  "ru": "Данные о составе таргоидских материалов"
+ },
+ "Thargoid Organic Circuitry": {
+  "de": "Thargoid organische Struktur",
+  "es": "Circuitería Orgánica Thargoide",
+  "fr": "Circuit Organique Thargoid",
+  "pt": "Circuito Orgânico Thargoid",
+  "ru": "Таргоидская органическая схема"
+ },
+ "Thargoid Residue Data": {
+  "de": "Thargoid Rückstandsdatenanalyse",
+  "es": "Datos de Residuo Thargoide",
+  "fr": "Résidus de Données Thargoid",
+  "pt": "Dados de resíduo Thargoid",
+  "ru": "Данные об осадке таргоидского происхождения"
+ },
+ "Thargoid Ship Signature": {
+  "de": "Thargoid Schiffssignatur",
+  "es": "Firma Térmica de Nave Thargoide",
+  "fr": "Signature de Vaisseau Thargoid",
+  "pt": "Assinatura de nave desconhecida",
+  "ru": "Сигнатура таргоидского корабля"
+ },
+ "Thargoid Structural Data": {
+  "de": "Thargoid Strukturdaten",
+  "es": "Datos Estructurales Thargoide",
+  "fr": "Données Structurelles Thargoid",
+  "pt": "Dados de Estrutura Thargoid",
+  "ru": "Данные о структуре таргоидского объекта"
+ },
+ "Thargoid Technological Components": {
+  "de": "Thargoid Technologie-Komponente",
+  "es": "Componentes Tecnológicos Thargoide",
+  "fr": "Composants Technologique Thargoid",
+  "pt": "Componente Tecnológico Thargoid",
+  "ru": "Компоненты таргоидской техники"
+ },
+ "Thargoid Wake Data": {
+  "de": "Thargoid Sogwolke",
+  "es": "Datos de Estela Thargoide",
+  "fr": "Donnée de Sillage Thargoid",
+  "pt": "Dados de Rastro Desconhecido",
+  "ru": "Данные следа таргоидского корабля"
+ },
+ "Thermal Cascade": {
+  "de": "Thermalkaskade",
+  "es": "Cascada Térmica",
+  "fr": "Réverbérations Thermiques",
+  "ru": "Термический залп"
+ },
+ "Thermal Conduit": {
+  "de": "Hitzerohr",
+  "es": "Conductor Térmico",
+  "fr": "Décupleur Thermique",
+  "pt": "Condutor Térmico",
+  "ru": "Проводник тепла"
+ },
+ "Thermal Resistant": {
+  "de": "Thermalresistent",
+  "es": "Resistencia térmica",
+  "fr": "Résistance thermique",
+  "pt": "Resistência Térmica",
+  "ru": "Противотепловое усиление"
+ },
+ "Thermal Resistant Hull Reinforcement": {
+  "de": "Thermalresistente Rumpfhüllenverstärkung",
+  "es": "Refuerzo Estructural de Resistencia Térmica",
+  "fr": "Renforts de coque antithermique",
+  "pt": "Reforço de Casco Resistência Térmica",
+  "ru": "Противотепловое усиление"
+ },
+ "Thermal Resistant Shields": {
+  "de": "Thermalresistente Schilde",
+  "es": "Escudos de Resistencia Térmica",
+  "fr": "Bouclier à résistance thermique",
+  "pt": "Escudos de Resistência Térmica",
+  "ru": "Противотепловой щит"
+ },
+ "Thermal Shock": {
+  "de": "Thermischer Schock",
+  "es": "Choque Térmico",
+  "fr": "Choc Thermique",
+  "pt": "Choque Térmico",
+  "ru": "Тепловой удар"
+ },
+ "Thermal Spread": {
+  "de": "Wärmeverteilung",
+  "es": "Difusión Térmica",
+  "fr": "Répartition thermique",
+  "pt": "Propagação Térmica",
+  "ru": "Рассеивание тепла"
+ },
+ "Thermal Vent": {
+  "de": "Thermische Entlastung",
+  "es": "Respiradero Térmico",
+  "fr": "Ventilation Thermique",
+  "pt": "Exaustor Térmico",
+  "ru": "Теплоотдача"
+ },
+ "Thermic": {
+  "de": "Thermisch",
+  "es": "Térmico",
+  "fr": "Thermiques",
+  "pt": "Térmicos",
+  "ru": "Термические сплавы"
+ },
+ "Thermic Alloys": {
+  "de": "Thermische Legierungen",
+  "es": "Aleaciones Térmicas",
+  "fr": "Alliages thermiques",
+  "pt": "Ligas térmicas",
+  "ru": "Термические сплавы"
+ },
+ "Thermo Block": {
+  "de": "Wärmesperre",
+  "es": "Bloqueo Térmico",
+  "fr": "Blocage Thermique",
+  "ru": "Блокировка тепла"
+ },
+ "Thrusters": {
+  "de": "Schubdüsen",
+  "es": "Impulsores",
+  "fr": "Moteurs",
+  "pt": "Propulsores",
+  "ru": "Маневровые двигатели"
+ },
+ "Tin": {
+  "de": "Zinn",
+  "es": "Estaño",
+  "fr": "Etain",
+  "pt": "Estanho",
+  "ru": "Олово"
+ },
+ "Titanium Plating": {
+  "de": "Titanplatten",
+  "es": "Placa de titanio",
+  "fr": "Plaques en titane",
+  "ru": "Титановая броня"
+ },
+ "Topographical Surveys": {
+  "de": "Topographische Erhebung",
+  "es": "Estudios topográficos",
+  "fr": "Levés topographiques",
+  "ru": "Топографические исследования"
+ },
+ "Torpedo Pylon": {
+  "de": "Torpedopylon",
+  "es": "Lanzatorpedos",
+  "fr": "Torpilles",
+  "pt": "Pilone de Torpedo",
+  "ru": "Торпедная стойка"
+ },
+ "Transmitter": {
+  "de": "Sender",
+  "es": "Transmisor",
+  "fr": "Transmetteur",
+  "ru": "Передатчик"
+ },
+ "Travel Permits": {
+  "de": "Reiseerlaubnisse",
+  "es": "Permisos de viaje",
+  "fr": "Autorisations de déplacement",
+  "ru": "Разрешение на поездки"
+ },
+ "Trident (Fighter)": {
+  "de": "Trident (Jäger)",
+  "es": "Trident XG7 (Caza)",
+  "fr": "Trident (Chasseur)",
+  "pt": "Trident (Caça)",
+  "ru": "Trident (Истребитель)"
+ },
+ "Troop Deployment Records": {
+  "de": "Truppeneinsatzprotokolle",
+  "es": "Registros de despliegue de tropas",
+  "fr": "Comptes-rendus opérationnels",
+  "ru": "Записи о десантных операциях"
+ },
+ "True Form Fossil": {
+  "de": "Makelloses Fossil",
+  "es": "Fósil puro",
+  "fr": "Fossile intact",
+  "ru": "Окаменелость истинной формы"
+ },
+ "Tungsten": {
+  "de": "Wolfram",
+  "es": "Tungsteno",
+  "fr": "Tungstène",
+  "pt": "Tungstênio",
+  "ru": "Вольфрам"
+ },
+ "Tungsten Carbide": {
+  "de": "Wolframcarbid",
+  "es": "Carburo de tungsteno",
+  "fr": "Carbure de tungstène",
+  "ru": "Карбид вольфрама"
+ },
+ "Unexpected Emission Data": {
+  "de": "Unerwartete Emissionsdaten",
+  "es": "Datos de Emisión Inesperados",
+  "fr": "Données d'émissions inattendues",
+  "pt": "Dados de emissão inesperados",
+  "ru": "Неожиданные данные об излучении"
+ },
+ "Unidentified Scan Archives": {
+  "de": "Unidentifizierte Scan-Archive",
+  "es": "Archivos de Escáner No Identificados",
+  "fr": "Données d'analyse archivées non identifiées",
+  "pt": "Arquivos de escaneamento não identificados",
+  "ru": "Неопознанные архивы сканирования"
+ },
+ "Union Membership": {
+  "de": "Gewerkschaftsmitgliedschaft",
+  "es": "Afiliación sindical",
+  "fr": "Liste d'adhérents",
+  "ru": "Список членов союза"
+ },
+ "Universal Translator": {
+  "de": "Universal-Übersetzer",
+  "es": "Traductor universal",
+  "fr": "Traducteur universel",
+  "ru": "Универсальный переводчик"
+ },
+ "Unlock": {
+  "de": "Freischalten",
+  "es": "Desbloquear",
+  "fr": "Déverrouiller",
+  "pt": "Desbloquear",
+  "ru": "Разблокировка"
+ },
+ "Untypical Shield Scans": {
+  "de": "Untypische Schildscans",
+  "es": "Escáner de Escudos Atípico",
+  "fr": "Analyses de bouclier atypiques",
+  "pt": "Escaneamento de escudos atípicos",
+  "ru": "Нетипичные данные сканирования щитов"
+ },
+ "Unusual Encrypted Files": {
+  "de": "Ungewöhnliche verschlüsselte Files",
+  "es": "Ficheros Encriptados Inusuales",
+  "fr": "Fichiers cryptés inhabituels",
+  "pt": "Arquivos criptografados incomuns",
+  "ru": "Особые зашифрованные файлы"
+ },
+ "VIP Security Detail": {
+  "de": "VIP-Sicherheitsdienst",
+  "es": "Información de seguridad VIP",
+  "fr": "Protection rapprochée de VIP",
+  "ru": "Подробности охраны важных персон"
+ },
+ "Vaccination Records": {
+  "de": "Aufzeichnungen zu Impfungen",
+  "es": "Registros de vacunación",
+  "fr": "Dossiers de vaccination",
+  "ru": "Журналы вакцинации"
+ },
+ "Vaccine Research": {
+  "de": "Impfstoffforschung",
+  "es": "Investigación sobre vacunas",
+  "fr": "Recherches vaccinales",
+  "ru": "Исследования в области вакцин"
+ },
+ "Vanadium": {
+  "de": "Vanadium",
+  "es": "Vanadio",
+  "fr": "Vanadium",
+  "pt": "Vanádio",
+  "ru": "Ванадий"
+ },
+ "Vehicle Schematic": {
+  "de": "Fahrzeugplan",
+  "es": "Esquema de vehículo",
+  "fr": "Plan de véhicule",
+  "ru": "Чертёж транспорта"
+ },
+ "Virology Data": {
+  "de": "Virologische Daten",
+  "es": "Datos virológicos",
+  "fr": "Données de virologie",
+  "ru": "Данные вирусологии"
+ },
+ "Virus": {
+  "de": "Virus",
+  "es": "Virus",
+  "fr": "Virus",
+  "ru": "ВИрус"
+ },
+ "Viscoelastic Polymer": {
+  "de": "Viskoelastisches Polymer",
+  "es": "Polímetro viscoelástico",
+  "fr": "Polymère viscoélastique",
+  "ru": "Вязкоэластичный полимер"
+ },
+ "Visitor Register": {
+  "de": "Besucherliste",
+  "es": "Registros de actividad estelar",
+  "fr": "Registre de visites",
+  "ru": "Реестр посетителей"
+ },
+ "Wake Scanner": {
+  "de": "Sogwolkenscanner",
+  "es": "Escáner de estela",
+  "fr": "Scanner de Sillage",
+  "pt": "Scanner de rastro",
+  "ru": "Сканер следа"
+ },
+ "Wake Scans": {
+  "de": "Sogwolken Scans",
+  "es": "Escaneos de Estela",
+  "fr": "Données de sillages",
+  "pt": "Escaneamento de Rastro",
+  "ru": "Сканирования следа FSD"
+ },
+ "Weapon": {
+  "de": "Waffe",
+  "es": "Arma",
+  "fr": "Arme",
+  "ru": "Оружие"
+ },
+ "Weapon Component": {
+  "de": "Waffenkomponente",
+  "es": "Componente de arma",
+  "fr": "Composant d'arme",
+  "ru": "Компонент оружия"
+ },
+ "Weapon Focused": {
+  "de": "Waffenfokussiert",
+  "es": "Orientado a armas",
+  "fr": "Optimisé armes",
+  "pt": "Foco nas Armas",
+  "ru": "Оружие-ориентированный"
+ },
+ "Weapon Inventory": {
+  "de": "Waffeninventarliste",
+  "es": "Inventario de armas",
+  "fr": "Inventaire d'armement",
+  "ru": "Опись вооружения"
+ },
+ "Weapon Parts": {
+  "de": "Waffenteile",
+  "es": "Piezas de Armamento",
+  "fr": "Éléments d'Arme",
+  "pt": "Partes de armas",
+  "ru": "Детали вооружения"
+ },
+ "Weapon Schematic": {
+  "de": "Waffenplan",
+  "es": "Esquema de arma",
+  "fr": "Plan d'arme",
+  "ru": "Чертёж оружия"
+ },
+ "Weapon Test Data": {
+  "de": "Waffentestdaten",
+  "es": "Datos de pruebas armamentísticas",
+  "fr": "Données de test d'armes",
+  "ru": "Сведения об испытаниях вооружения"
+ },
+ "Wide Angle Scanner": {
+  "de": "Weitwinkel-Scanner",
+  "es": "Escáner de ángulo amplio",
+  "fr": "Scanner à Angle Large",
+  "pt": "Scanner de ângulo amplo",
+  "ru": "Широкоугольный сканер"
+ },
+ "Worn Shield Emitters": {
+  "de": "Gebrauchte Schildemitter",
+  "es": "Emisor de Escudos Desgastado",
+  "fr": "Émetteurs de bouclier usé",
+  "pt": "Emissores de Escudo Usado",
+  "ru": "Изношенные щитоизлучатели"
+ },
+ "Wreckage Components": {
+  "de": "Wrackteile",
+  "es": "Restos de Accidentes",
+  "fr": "Composants d'Épave",
+  "pt": "Destroços de componentes",
+  "ru": "Обломки кораблекрушений"
+ },
+ "Xeno-Defence Protocols": {
+  "de": "Xeno-Abwehr-Protokolle",
+  "es": "Protocolos de xenodefensa",
+  "fr": "Protocoles anti-xénomorphes",
+  "ru": "Протоколы защиты от инопланетной угрозы"
+ },
+ "Yttrium": {
+  "de": "Yttrium",
+  "es": "Ytrio",
+  "fr": "Yttrium",
+  "pt": "Ítrio",
+  "ru": "Иттрий"
+ },
+ "Zinc": {
+  "de": "Zink",
+  "es": "Zinc",
+  "fr": "Zinc",
+  "pt": "Zinco",
+  "ru": "Цинк"
+ },
+ "Zirconium": {
+  "de": "Zirconium",
+  "es": "Circonio",
+  "fr": "Zirconium",
+  "pt": "Zircônio",
+  "ru": "Цирконий"
+ },
+ "pH Neutraliser": {
+  "de": "pH-Neutralisator",
+  "es": "Neutralizador de pH",
+  "fr": "Neutralisateur de pH",
+  "ru": "Нейтрализатор pH"
+ }
+}

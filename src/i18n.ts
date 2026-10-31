@@ -28,6 +28,9 @@ export const DEFAULT_LANG = "en";
 const KEY = "edch.lang";
 let current: Lang = LANGS.find((l) => l.code === SOURCE)!;
 const exact = new Map<string, string>();
+/** The game's own names (English in the data) as the localized game shows them. */
+const game = new Map<string, string>();
+const gameLower = new Map<string, string>();
 const patterns: { re: RegExp; out: string }[] = [];
 
 export const lang = () => current;
@@ -59,13 +62,37 @@ export function guessLang(installerLangId?: number | null): string {
   return DEFAULT_LANG;
 }
 
+/** The device's own language when it is one of ours (phones), else English. */
+export function browserLang(): string {
+  const wanted = typeof navigator !== "undefined" ? [...(navigator.languages ?? []), navigator.language] : [];
+  for (const w of wanted) {
+    const code = (w ?? "").toLowerCase().split("-")[0];
+    if (LANGS.some((l) => l.code === code)) return code;
+  }
+  return DEFAULT_LANG;
+}
+
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export async function initI18n(code: string) {
   current = LANGS.find((l) => l.code === code) ?? LANGS.find((l) => l.code === DEFAULT_LANG)!;
   document.documentElement.lang = current.code;
   exact.clear();
+  game.clear();
+  gameLower.clear();
   patterns.length = 0;
+  if (current.code !== "en") {
+    try {
+      const res = await fetch(`locales/game.${current.code}.json`);
+      const dict: Record<string, string> = await res.json();
+      for (const [en, out] of Object.entries(dict)) {
+        game.set(en, out);
+        gameLower.set(en.toLowerCase(), out);
+      }
+    } catch {
+      /* game names stay in English */
+    }
+  }
   if (current.code === SOURCE) return;
   try {
     const res = await fetch(`locales/${current.code}.json`);
@@ -87,13 +114,23 @@ export async function initI18n(code: string) {
   }
 }
 
+/** A game name (material, module, blueprint, effect…) as the localized game shows it. */
+export function gameName(name: string): string {
+  return game.get(name) ?? gameLower.get(name.toLowerCase()) ?? name;
+}
+
+/** Does a game name match a search, in English or in the current language? */
+export function nameMatches(name: string, query: string): boolean {
+  return name.toLowerCase().includes(query) || gameName(name).toLowerCase().includes(query);
+}
+
 /** Translates one string (trimmed match, surrounding whitespace kept). */
 export function tr(text: string): string {
-  if (current.code === SOURCE || !text) return text;
+  if (!text || (current.code === SOURCE && !game.size)) return text;
   const m = /^(\s*)([\s\S]*?)(\s*)$/.exec(text)!;
   const core = m[2];
   if (!core) return text;
-  const hit = exact.get(core);
+  const hit = exact.get(core) ?? game.get(core) ?? gameLower.get(core.toLowerCase());
   if (hit !== undefined) return m[1] + hit + m[3];
   for (const p of patterns) {
     const r = p.re.exec(core);
@@ -129,7 +166,7 @@ function translateNode(node: Node) {
 
 /** Translates everything under `root` now and whenever it changes. */
 export function watchTranslations(root: Node) {
-  if (current.code === SOURCE) return;
+  if (current.code === SOURCE && !game.size) return;
   translateNode(root);
   new MutationObserver((records) => {
     for (const r of records) {

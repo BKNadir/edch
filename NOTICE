@@ -14,6 +14,7 @@ Community data used to build public/data/game.json (tools/gen_data.py)
   Engineers.tsv and fixed farming site positions, vendored in tools/sources/d47
   with their LICENSE and the commit they come from.
 - msarilar/EDEngineer (MIT) — recipes and material origins, via d47.
+- msarilar/EDEngineer (MIT, Copyright (c) 2016 Max) — translations of the game's names (materials, modules, blueprints), kept in tools/sources/edengineer/ and completed in tools/game_terms_*.txt.
 - EDCD/FDevIDs — journal symbols and grades, via d47.
 - EDCD/coriolis-data — cross-check of recipes, via d47.
 

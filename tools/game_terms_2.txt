@@ -1,0 +1,280 @@
+# Fills the gaps left by EDEngineer's localization (mostly Portuguese) and fixes a few of its typos.
+# Format: en ¦ fr ¦ de ¦ es ¦ pt ¦ ru   (an empty cell keeps EDEngineer's text)
+
+# Fixes
+AX Combat Logs ¦ Journaux de combat AX ¦ ¦ ¦ Registros de combate AX ¦
+Atmospheric Data ¦ Données atmosphériques ¦ ¦ ¦ Dados atmosféricos ¦
+Damage Resistance ¦ Résistance aux dégâts ¦ ¦ ¦ Resistência a dano ¦
+Higher Accuracy (Thermal Weapons) ¦ Précision accrue (armes thermiques) ¦ ¦ ¦ Maior precisão (armas térmicas) ¦
+Higher Accuracy (Kinetic Weapons) ¦ Précision accrue (armes cinétiques) ¦ ¦ ¦ Maior precisão (armas cinéticas) ¦
+Higher Accuracy (Plasma Weapons) ¦ Précision accrue (armes plasma) ¦ ¦ ¦ Maior precisão (armas de plasma) ¦
+Chemical Formulae ¦ ¦ ¦ Fórmulas químicas ¦ Fórmulas químicas ¦
+Visitor Register ¦ ¦ ¦ Registro de visitantes ¦ Registro de visitantes ¦
+Surveillance Equipment ¦ ¦ ¦ Equipo de vigilancia ¦ Equipamento de vigilância ¦
+Slush Fund Logs ¦ ¦ ¦ Registros de fondos ilícitos ¦ Registros de caixa dois ¦
+Viscoelastic Polymer ¦ ¦ ¦ Polímero viscoelástico ¦ Polímero viscoelástico ¦
+Magazine size ¦ ¦ ¦ Tamaño del cargador ¦ Tamanho do pente ¦
+Added Melee Damage ¦ Dégâts au corps à corps supplémentaires ¦ ¦ ¦ Dano corpo a corpo adicional ¦
+
+# Missing French / Russian
+E-Breach ¦ E-Breach ¦ ¦ ¦ E-Breach ¦ E-Breach
+Energy Cell ¦ Cellule d'énergie ¦ ¦ ¦ Célula de energia ¦
+Engineered Detailed Surface Scanner V1 ¦ Scanner de surface détaillé ingéniéré V1 ¦ ¦ ¦ Scanner de superfície detalhado modificado V1 ¦
+Frag Grenade ¦ Grenade à fragmentation ¦ ¦ ¦ Granada de fragmentação ¦
+Guardian Module Blueprint Segment ¦ Fragment de plan de module gardien ¦ ¦ ¦ Fragmento de projeto de módulo guardião ¦
+Literary Fiction ¦ Fiction littéraire ¦ ¦ ¦ Ficção literária ¦
+Medkit ¦ Trousse de soins ¦ ¦ ¦ Kit médico ¦
+Modified Gauss Cannon (Fixed, Medium) ¦ Canon Gauss modifié (fixe, classe 2) ¦ ¦ ¦ Canhão Gauss modificado (fixo, classe 2) ¦
+Modified Gauss Cannon (Fixed, Small) ¦ Canon Gauss modifié (fixe, classe 1) ¦ ¦ ¦ Canhão Gauss modificado (fixo, classe 1) ¦
+Modified Mining Laser ¦ Laser minier modifié ¦ ¦ ¦ Laser de mineração modificado ¦
+Modified Plasma Charger (Fixed, Medium) ¦ Chargeur plasma modifié (fixe, classe 2) ¦ ¦ ¦ Carregador de plasma modificado (fixo, classe 2) ¦
+Modified Plasma Charger (Fixed, Small) ¦ Chargeur plasma modifié (fixe, classe 1) ¦ ¦ ¦ Carregador de plasma modificado (fixo, classe 1) ¦
+Modified Shard Cannon (Fixed, Medium) ¦ Canon à éclats modifié (fixe, classe 2) ¦ ¦ ¦ Canhão de estilhaços modificado (fixo, classe 2) ¦
+Modified Shard Cannon (Fixed, Small) ¦ Canon à éclats modifié (fixe, classe 1) ¦ ¦ ¦ Canhão de estilhaços modificado (fixo, classe 1) ¦
+Seed Geneaology ¦ ¦ ¦ ¦ Genealogia de sementes ¦ Генеалогия семян
+Shield Disruptor ¦ Perturbateur de bouclier ¦ ¦ ¦ Disruptor de escudo ¦
+Shield Projector ¦ Projecteur de bouclier ¦ ¦ ¦ Projetor de escudo ¦
+
+# Portuguese (Brazil)
+AX Explosive Munitions ¦ ¦ ¦ ¦ Munição explosiva AX ¦
+AX Remote Flak Munitions ¦ ¦ ¦ ¦ Munição antiaérea remota AX ¦
+Accident Logs ¦ ¦ ¦ ¦ Registros de acidentes ¦
+Aerogel ¦ ¦ ¦ ¦ Aerogel ¦
+Agricultural Process Sample ¦ ¦ ¦ ¦ Amostra de processo agrícola ¦
+Air Quality Reports ¦ ¦ ¦ ¦ Relatórios de qualidade do ar ¦
+Audio Logs ¦ ¦ ¦ ¦ Registros de áudio ¦
+Audio Masking ¦ ¦ ¦ ¦ Mascaramento de áudio ¦
+Biochemical Agent ¦ ¦ ¦ ¦ Agente bioquímico ¦
+Biological Sample ¦ ¦ ¦ ¦ Amostra biológica ¦
+Biological Weapon Data ¦ ¦ ¦ ¦ Dados de armas biológicas ¦
+Biometric Data ¦ ¦ ¦ ¦ Dados biométricos ¦
+Blacklist Data ¦ ¦ ¦ ¦ Dados de lista negra ¦
+Blast Block ¦ ¦ ¦ ¦ Bloqueio de explosão ¦
+Blood Test Results ¦ ¦ ¦ ¦ Resultados de exames de sangue ¦
+Boss Cells ¦ ¦ ¦ ¦ Células reforçadas ¦
+Building Schematic ¦ ¦ ¦ ¦ Esquema de edifício ¦
+Californium ¦ ¦ ¦ ¦ Califórnio ¦
+Campaign Plans ¦ ¦ ¦ ¦ Planos de campanha ¦
+Carbon Fibre Plating ¦ ¦ ¦ ¦ Placas de fibra de carbono ¦
+Cast Fossil ¦ ¦ ¦ ¦ Molde de fóssil ¦
+Cat Media ¦ ¦ ¦ ¦ Mídia de gatos ¦
+Census Data ¦ ¦ ¦ ¦ Dados de censo ¦
+Chemical Catalyst ¦ ¦ ¦ ¦ Catalisador químico ¦
+Chemical Experiment Data ¦ ¦ ¦ ¦ Dados de experimentos químicos ¦
+Chemical Inventory ¦ ¦ ¦ ¦ Inventário químico ¦
+Chemical Patents ¦ ¦ ¦ ¦ Patentes químicas ¦
+Chemical Process Sample ¦ ¦ ¦ ¦ Amostra de processo químico ¦
+Chemical Sample ¦ ¦ ¦ ¦ Amostra química ¦
+Chemical Superbase ¦ ¦ ¦ ¦ Superbase química ¦
+Chemical Weapon Data ¦ ¦ ¦ ¦ Dados de armas químicas ¦
+Circuit Board ¦ ¦ ¦ ¦ Placa de circuito ¦
+Circuit Switch ¦ ¦ ¦ ¦ Comutador de circuito ¦
+Classic Entertainment ¦ ¦ ¦ ¦ Entretenimento clássico ¦
+Clinical Trial Records ¦ ¦ ¦ ¦ Registros de ensaios clínicos ¦
+Cluster Capacitor ¦ ¦ ¦ ¦ Capacitor em grupo ¦
+Cocktail Recipes ¦ ¦ ¦ ¦ Receitas de coquetéis ¦
+Combat Training Material ¦ ¦ ¦ ¦ Material de treinamento de combate ¦
+Combatant Performance ¦ ¦ ¦ ¦ Desempenho de combatentes ¦
+Compact Library ¦ ¦ ¦ ¦ Biblioteca compacta ¦
+Compression-Liquefied Gas ¦ ¦ ¦ ¦ Gás liquefeito por compressão ¦
+Conflict History ¦ ¦ ¦ ¦ Histórico de conflitos ¦
+Criminal Records ¦ ¦ ¦ ¦ Fichas criminais ¦
+Crop Yield Analysis ¦ ¦ ¦ ¦ Análise de produtividade agrícola ¦
+Culinary Recipes ¦ ¦ ¦ ¦ Receitas culinárias ¦
+Dazzle Shell ¦ ¦ ¦ ¦ Projétil ofuscante ¦
+Deep Mantle Sample ¦ ¦ ¦ ¦ Amostra do manto profundo ¦
+Deep Plating ¦ ¦ ¦ ¦ Blindagem profunda ¦
+Degraded Power Regulator ¦ ¦ ¦ ¦ Regulador de energia degradado ¦
+Digital Designs ¦ ¦ ¦ ¦ Projetos digitais ¦
+Drag Munition ¦ ¦ ¦ ¦ Munição de arrasto ¦
+Drag Munition (Seeker only) ¦ ¦ ¦ ¦ Munição de arrasto (só teleguiados) ¦
+Duty Rota ¦ ¦ ¦ ¦ Escala de serviço ¦
+Electrical Fuse ¦ ¦ ¦ ¦ Fusível elétrico ¦
+Electrical Wiring ¦ ¦ ¦ ¦ Fiação elétrica ¦
+Electromagnet ¦ ¦ ¦ ¦ Eletroímã ¦
+Employee Directory ¦ ¦ ¦ ¦ Diretório de funcionários ¦
+Employee Expenses ¦ ¦ ¦ ¦ Despesas de funcionários ¦
+Employee Genetic Data ¦ ¦ ¦ ¦ Dados genéticos de funcionários ¦
+Employment History ¦ ¦ ¦ ¦ Histórico de emprego ¦
+Encrypted Memory Chip ¦ ¦ ¦ ¦ Chip de memória criptografado ¦
+Engineered FSD V1 ¦ ¦ ¦ ¦ FSD modificado V1 ¦
+Engineered Missile Rack V1 ¦ ¦ ¦ ¦ Lançador de mísseis modificado V1 ¦
+Enhanced Interrogation Recordings ¦ ¦ ¦ ¦ Gravações de interrogatório reforçado ¦
+Enzyme Missile Launcher Munitions ¦ ¦ ¦ ¦ Munição de lançador de mísseis enzimáticos ¦
+Epinephrine ¦ ¦ ¦ ¦ Epinefrina ¦
+Epoxy Adhesive ¦ ¦ ¦ ¦ Adesivo epóxi ¦
+Espionage Material ¦ ¦ ¦ ¦ Material de espionagem ¦
+Evacuation Protocols ¦ ¦ ¦ ¦ Protocolos de evacuação ¦
+Expanded Probe Scanning Radius ¦ ¦ ¦ ¦ Raio de varredura de sonda ampliado ¦
+Exploration Journals ¦ ¦ ¦ ¦ Diários de exploração ¦
+Extraction Yield Data ¦ ¦ ¦ ¦ Dados de rendimento de extração ¦
+FSD Interrupt (Dumbfire only) ¦ ¦ ¦ ¦ Interrupção de FSD (só não guiados) ¦
+Faction Associates ¦ ¦ ¦ ¦ Associados da facção ¦
+Faction Donator List ¦ ¦ ¦ ¦ Lista de doadores da facção ¦
+Faction News ¦ ¦ ¦ ¦ Notícias da facção ¦
+Fast Charge ¦ ¦ ¦ ¦ Carga rápida ¦
+Feedback Cascade ¦ ¦ ¦ ¦ Cascata de retroalimentação ¦
+Financial Projections ¦ ¦ ¦ ¦ Projeções financeiras ¦
+Flechette Launcher Munitions ¦ ¦ ¦ ¦ Munição de lançador de flechettes ¦
+Fleet Registry ¦ ¦ ¦ ¦ Registro de frota ¦
+Flow Control ¦ ¦ ¦ ¦ Controle de fluxo ¦
+Force Block ¦ ¦ ¦ ¦ Bloqueio de força ¦
+Force Shell ¦ ¦ ¦ ¦ Projétil de força ¦
+G-Meds ¦ ¦ ¦ ¦ Medicamentos G ¦
+Gene Sequencing Data ¦ ¦ ¦ ¦ Dados de sequenciamento genético ¦
+Genetic Repair Meds ¦ ¦ ¦ ¦ Medicamentos de reparo genético ¦
+Genetic Research ¦ ¦ ¦ ¦ Pesquisa genética ¦
+Geological Data ¦ ¦ ¦ ¦ Dados geológicos ¦
+Graphene ¦ ¦ ¦ ¦ Grafeno ¦
+Guardian Plasma Charger (Fixed, Large) ¦ ¦ ¦ ¦ Carregador de plasma guardião (fixo, classe 3) ¦
+Guardian Plasma Charger (Fixed, Medium) ¦ ¦ ¦ ¦ Carregador de plasma guardião (fixo, classe 2) ¦
+Guardian Plasma Charger (Fixed, Small) ¦ ¦ ¦ ¦ Carregador de plasma guardião (fixo, classe 1) ¦
+Guardian Plasma Charger (Turreted, Large) ¦ ¦ ¦ ¦ Carregador de plasma guardião (torreta, classe 3) ¦
+Guardian Plasma Charger (Turreted, Medium) ¦ ¦ ¦ ¦ Carregador de plasma guardião (torreta, classe 2) ¦
+Guardian Plasma Charger (Turreted, Small) ¦ ¦ ¦ ¦ Carregador de plasma guardião (torreta, classe 1) ¦
+Guardian Plasma Charger Munitions ¦ ¦ ¦ ¦ Munição de carregador de plasma guardião ¦
+Guardian Shard Cannon (Fixed, Large) ¦ ¦ ¦ ¦ Canhão de estilhaços guardião (fixo, classe 3) ¦
+Guardian Shard Cannon (Fixed, Medium) ¦ ¦ ¦ ¦ Canhão de estilhaços guardião (fixo, classe 2) ¦
+Guardian Shard Cannon (Fixed, Small) ¦ ¦ ¦ ¦ Canhão de estilhaços guardião (fixo, classe 1) ¦
+Guardian Shard Cannon (Turreted, Large) ¦ ¦ ¦ ¦ Canhão de estilhaços guardião (torreta, classe 3) ¦
+Guardian Shard Cannon (Turreted, Medium) ¦ ¦ ¦ ¦ Canhão de estilhaços guardião (torreta, classe 2) ¦
+Guardian Shard Cannon (Turreted, Small) ¦ ¦ ¦ ¦ Canhão de estilhaços guardião (torreta, classe 1) ¦
+Guardian Shard Cannon Munitions ¦ ¦ ¦ ¦ Munição de canhão de estilhaços guardião ¦
+Health Monitor ¦ ¦ ¦ ¦ Monitor de saúde ¦
+High Yield Shell ¦ ¦ ¦ ¦ Projétil de alto rendimento ¦
+Hush ¦ ¦ ¦ ¦ Hush ¦
+Hydroponic Data ¦ ¦ ¦ ¦ Dados hidropônicos ¦
+Incident Logs ¦ ¦ ¦ ¦ Registros de incidentes ¦
+Inertia Canister ¦ ¦ ¦ ¦ Cilindro de inércia ¦
+Infinity ¦ ¦ ¦ ¦ Infinity ¦
+Influence Projections ¦ ¦ ¦ ¦ Projeções de influência ¦
+Inorganic Contaminant ¦ ¦ ¦ ¦ Contaminante inorgânico ¦
+Insight Data Bank ¦ ¦ ¦ ¦ Banco de dados Insight ¦
+Insight Entertainment Suite ¦ ¦ ¦ ¦ Pacote de entretenimento Insight ¦
+Internal Correspondence ¦ ¦ ¦ ¦ Correspondência interna ¦
+Interrogation Recordings ¦ ¦ ¦ ¦ Gravações de interrogatórios ¦
+Interview Recordings ¦ ¦ ¦ ¦ Gravações de entrevistas ¦
+Ion Battery ¦ ¦ ¦ ¦ Bateria de íons ¦
+Ionised Gas ¦ ¦ ¦ ¦ Gás ionizado ¦
+Job Applications ¦ ¦ ¦ ¦ Candidaturas de emprego ¦
+Kompromat ¦ ¦ ¦ ¦ Kompromat ¦
+Layered Plating ¦ ¦ ¦ ¦ Blindagem em camadas ¦
+Lazarus ¦ ¦ ¦ ¦ Lazarus ¦
+Lo-draw ¦ ¦ ¦ ¦ Baixo consumo ¦
+Maintenance Logs ¦ ¦ ¦ ¦ Registros de manutenção ¦
+Manufacturing Instructions ¦ ¦ ¦ ¦ Instruções de fabricação ¦
+Mass Lock Munition ¦ ¦ ¦ ¦ Munição de bloqueio de massa ¦
+Medical Records ¦ ¦ ¦ ¦ Prontuários médicos ¦
+Meeting Minutes ¦ ¦ ¦ ¦ Atas de reunião ¦
+Memory Chip ¦ ¦ ¦ ¦ Chip de memória ¦
+Metal Coil ¦ ¦ ¦ ¦ Bobina metálica ¦
+Micro Hydraulics ¦ ¦ ¦ ¦ Micro-hidráulica ¦
+Micro Supercapacitor ¦ ¦ ¦ ¦ Microssupercapacitor ¦
+Micro Thrusters ¦ ¦ ¦ ¦ Micropropulsores ¦
+Micro Transformer ¦ ¦ ¦ ¦ Microtransformador ¦
+Microbial Inhibitor ¦ ¦ ¦ ¦ Inibidor microbiano ¦
+Microelectrode ¦ ¦ ¦ ¦ Microeletrodo ¦
+Mineral Survey ¦ ¦ ¦ ¦ Levantamento mineral ¦
+Mining Analytics ¦ ¦ ¦ ¦ Análises de mineração ¦
+Motor ¦ ¦ ¦ ¦ Motor ¦
+Multi-weave ¦ ¦ ¦ ¦ Multitrama ¦
+Multimedia Entertainment ¦ ¦ ¦ ¦ Entretenimento multimídia ¦
+Mutagenic Catalyst ¦ ¦ ¦ ¦ Catalisador mutagênico ¦
+NOC Data ¦ ¦ ¦ ¦ Dados de agentes infiltrados ¦
+Network Access History ¦ ¦ ¦ ¦ Histórico de acesso à rede ¦
+Network Security Protocols ¦ ¦ ¦ ¦ Protocolos de segurança de rede ¦
+Next of Kin Records ¦ ¦ ¦ ¦ Registros de parentes próximos ¦
+Nutritional Concentrate ¦ ¦ ¦ ¦ Concentrado nutricional ¦
+Operational Manual ¦ ¦ ¦ ¦ Manual de operações ¦
+Opinion Polls ¦ ¦ ¦ ¦ Pesquisas de opinião ¦
+Optical Fibre ¦ ¦ ¦ ¦ Fibra óptica ¦
+Optical Lens ¦ ¦ ¦ ¦ Lente óptica ¦
+Overload Munitions ¦ ¦ ¦ ¦ Munição de sobrecarga ¦
+Oxygenic Bacteria ¦ ¦ ¦ ¦ Bactérias oxigênicas ¦
+Patient History ¦ ¦ ¦ ¦ Histórico de pacientes ¦
+Patrol Routes ¦ ¦ ¦ ¦ Rotas de patrulha ¦
+Payroll Information ¦ ¦ ¦ ¦ Informações da folha de pagamento ¦
+Penetrator Munitions (Dumbfire only) ¦ ¦ ¦ ¦ Munição perfurante (só não guiados) ¦
+Penetrator Payload ¦ ¦ ¦ ¦ Carga perfurante ¦
+Personal Computer ¦ ¦ ¦ ¦ Computador pessoal ¦
+Personal Documents ¦ ¦ ¦ ¦ Documentos pessoais ¦
+Personal Logs ¦ ¦ ¦ ¦ Registros pessoais ¦
+Petrified Fossil ¦ ¦ ¦ ¦ Fóssil petrificado ¦
+Pharmaceutical Patents ¦ ¦ ¦ ¦ Patentes farmacêuticas ¦
+Photo Albums ¦ ¦ ¦ ¦ Álbuns de fotos ¦
+Planetary Settlement ¦ ¦ ¦ ¦ Assentamento planetário ¦
+Plant Growth Charts ¦ ¦ ¦ ¦ Gráficos de crescimento de plantas ¦
+Political Affiliations ¦ ¦ ¦ ¦ Afiliações políticas ¦
+Power Regulator ¦ ¦ ¦ ¦ Regulador de energia ¦
+Prisoner Logs ¦ ¦ ¦ ¦ Registros de prisioneiros ¦
+Production Reports ¦ ¦ ¦ ¦ Relatórios de produção ¦
+Production Schedule ¦ ¦ ¦ ¦ Cronograma de produção ¦
+Propaganda ¦ ¦ ¦ ¦ Propaganda ¦
+Purchase Records ¦ ¦ ¦ ¦ Registros de compras ¦
+Purchase Requests ¦ ¦ ¦ ¦ Pedidos de compra ¦
+Push ¦ ¦ ¦ ¦ Push ¦
+Pyrolytic Catalyst ¦ ¦ ¦ ¦ Catalisador pirolítico ¦
+Radiant Canister ¦ ¦ ¦ ¦ Cilindro radiante ¦
+Radioactivity Data ¦ ¦ ¦ ¦ Dados de radioatividade ¦
+Reactor Output Review ¦ ¦ ¦ ¦ Análise de produção do reator ¦
+Recycling Cells ¦ ¦ ¦ ¦ Células de reciclagem ¦
+Recycling Logs ¦ ¦ ¦ ¦ Registros de reciclagem ¦
+Refinement Process Sample ¦ ¦ ¦ ¦ Amostra de processo de refino ¦
+Reflective Plating ¦ ¦ ¦ ¦ Blindagem reflexiva ¦
+Residential Directory ¦ ¦ ¦ ¦ Diretório residencial ¦
+Risk Assessments ¦ ¦ ¦ ¦ Avaliações de risco ¦
+Sales Records ¦ ¦ ¦ ¦ Registros de vendas ¦
+Scope ¦ ¦ ¦ ¦ Mira telescópica ¦
+Scramble Spectrum ¦ ¦ ¦ ¦ Espectro embaralhado ¦
+Scrambler ¦ ¦ ¦ ¦ Embaralhador ¦
+Screening Shell ¦ ¦ ¦ ¦ Projétil de triagem ¦
+Security Expenses ¦ ¦ ¦ ¦ Despesas de segurança ¦
+Settlement Assault Plans ¦ ¦ ¦ ¦ Planos de ataque ao assentamento ¦
+Settlement Defence Plans ¦ ¦ ¦ ¦ Planos de defesa do assentamento ¦
+Shareholder Information ¦ ¦ ¦ ¦ Informações de acionistas ¦
+Shift-Lock Canister ¦ ¦ ¦ ¦ Cilindro de bloqueio de salto ¦
+Ship Schematic ¦ ¦ ¦ ¦ Esquema de nave ¦
+Shock Cannon (Fixed, Large) ¦ ¦ ¦ ¦ Canhão de choque (fixo, classe 3) ¦
+Shock Cannon (Fixed, Medium) ¦ ¦ ¦ ¦ Canhão de choque (fixo, classe 2) ¦
+Shock Cannon (Fixed, Small) ¦ ¦ ¦ ¦ Canhão de choque (fixo, classe 1) ¦
+Shock Cannon (Gimballed, Large) ¦ ¦ ¦ ¦ Canhão de choque (cardã, classe 3) ¦
+Shock Cannon (Gimballed, Medium) ¦ ¦ ¦ ¦ Canhão de choque (cardã, classe 2) ¦
+Shock Cannon (Gimballed, Small) ¦ ¦ ¦ ¦ Canhão de choque (cardã, classe 1) ¦
+Shock Cannon (Turreted, Large) ¦ ¦ ¦ ¦ Canhão de choque (torreta, classe 3) ¦
+Shock Cannon (Turreted, Medium) ¦ ¦ ¦ ¦ Canhão de choque (torreta, classe 2) ¦
+Shock Cannon (Turreted, Small) ¦ ¦ ¦ ¦ Canhão de choque (torreta, classe 1) ¦
+Smear Campaign Plans ¦ ¦ ¦ ¦ Planos de campanha difamatória ¦
+Spectral Analysis Data ¦ ¦ ¦ ¦ Dados de análise espectral ¦
+Spyware ¦ ¦ ¦ ¦ Spyware ¦
+Stellar Activity Logs ¦ ¦ ¦ ¦ Registros de atividade estelar ¦
+Suit ¦ ¦ ¦ ¦ Traje ¦
+Suit Schematic ¦ ¦ ¦ ¦ Esquema de traje ¦
+Surveillance Logs ¦ ¦ ¦ ¦ Registros de vigilância ¦
+Synthetic Genome ¦ ¦ ¦ ¦ Genoma sintético ¦
+Synthetic Pathogen ¦ ¦ ¦ ¦ Patógeno sintético ¦
+Tactical Plans ¦ ¦ ¦ ¦ Planos táticos ¦
+Target Lock Breaker ¦ ¦ ¦ ¦ Quebra-mira ¦
+Tax Records ¦ ¦ ¦ ¦ Registros fiscais ¦
+Thermal Cascade ¦ ¦ ¦ ¦ Cascata térmica ¦
+Thermo Block ¦ ¦ ¦ ¦ Bloqueio térmico ¦
+Titanium Plating ¦ ¦ ¦ ¦ Placas de titânio ¦
+Topographical Surveys ¦ ¦ ¦ ¦ Levantamentos topográficos ¦
+Transmitter ¦ ¦ ¦ ¦ Transmissor ¦
+Travel Permits ¦ ¦ ¦ ¦ Permissões de viagem ¦
+Troop Deployment Records ¦ ¦ ¦ ¦ Registros de mobilização de tropas ¦
+True Form Fossil ¦ ¦ ¦ ¦ Fóssil de forma verdadeira ¦
+Tungsten Carbide ¦ ¦ ¦ ¦ Carboneto de tungstênio ¦
+Union Membership ¦ ¦ ¦ ¦ Filiação sindical ¦
+Universal Translator ¦ ¦ ¦ ¦ Tradutor universal ¦
+VIP Security Detail ¦ ¦ ¦ ¦ Escolta de segurança VIP ¦
+Vaccination Records ¦ ¦ ¦ ¦ Registros de vacinação ¦
+Vaccine Research ¦ ¦ ¦ ¦ Pesquisa de vacinas ¦
+Vehicle Schematic ¦ ¦ ¦ ¦ Esquema de veículo ¦
+Virology Data ¦ ¦ ¦ ¦ Dados de virologia ¦
+Weapon ¦ ¦ ¦ ¦ Arma ¦
+Weapon Component ¦ ¦ ¦ ¦ Componente de arma ¦
+Weapon Inventory ¦ ¦ ¦ ¦ Inventário de armas ¦
+Weapon Schematic ¦ ¦ ¦ ¦ Esquema de arma ¦
+Weapon Test Data ¦ ¦ ¦ ¦ Dados de testes de armas ¦
+Xeno-Defence Protocols ¦ ¦ ¦ ¦ Protocolos de xenodefesa ¦
+pH Neutraliser ¦ ¦ ¦ ¦ Neutralizador de pH ¦

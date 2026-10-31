@@ -1,3 +1,4 @@
+import { gameName } from "../i18n.js";
 import { CATEGORY_FR } from "../data.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import { ownedOf, referenceOf, reserved, type Ctx } from "../context.js";
@@ -180,14 +181,14 @@ export class DetailPanel {
     const groups = new Map<string, Map<string, Blueprint[]>>();
     for (const bp of list) {
       const byModule = groups.get(bp.kind) ?? new Map<string, Blueprint[]>();
-      const k = `${bp.module} — ${bp.name}`;
+      const k = `${gameName(bp.module)} — ${gameName(bp.name)}`;
       byModule.set(k, [...(byModule.get(k) ?? []), bp]);
       groups.set(bp.kind, byModule);
     }
     return h(
       "section.used",
       null,
-      h("h3", null, `Utilisé dans ${list.length} recettes`),
+      h("h3", null, list.length === 1 ? "Utilisé dans 1 recette" : `Utilisé dans ${list.length} recettes`),
       [...groups.entries()].map(([kind, byModule]) =>
         h(
           "details",
@@ -211,7 +212,7 @@ export class DetailPanel {
                       .map((bp) =>
                         h(
                           "button.grade-chip",
-                          { title: `Ajouter à la wishlist (${bp.ingredients[m.id]} × ${m.name})`, onclick: () => addToWishlist(this.ctx, bp) },
+                          { title: `Ajouter à la wishlist (${bp.ingredients[m.id]} × ${gameName(m.name)})`, onclick: () => addToWishlist(this.ctx, bp) },
                           bp.grade ? `G${bp.grade}` : "+",
                           h("small", null, `×${bp.ingredients[m.id]}`),
                         ),

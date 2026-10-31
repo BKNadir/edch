@@ -31,7 +31,7 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 
 ## Langues
 
-EDCH est disponible dans les six langues du jeu : anglais (par défaut), français, allemand, espagnol, portugais (Brésil) et russe. L'installateur demande la langue et l'appli la reprend au premier lancement. Tu peux la changer à tout moment dans **Paramètres → Langue**. Les noms des matériaux, modules et commandes restent ceux du jeu en anglais.
+EDCH est disponible dans les six langues du jeu : anglais (par défaut), français, allemand, espagnol, portugais (Brésil) et russe. L'installateur demande la langue et l'appli la reprend au premier lancement. Tu peux la changer à tout moment dans **Paramètres → Langue**. Les noms des matériaux, modules, plans et effets suivent la traduction du jeu ; les noms des commandes restent ceux du jeu en anglais.
 
 Pour ajouter ou corriger une traduction, modifie `tools/translations_*.txt` (une ligne par texte : `fr ¦ en ¦ de ¦ es ¦ pt ¦ ru`), puis lance `python3 tools/gen_locales.py`.
 
@@ -66,7 +66,7 @@ Structure :
   - `i18n.ts` : couche de traduction.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.5.0` : un brouillon de Release est créé.
+Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.5.1` : un brouillon de Release est créé.
 
 ## Feuille de route
 

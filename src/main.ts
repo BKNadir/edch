@@ -1,10 +1,10 @@
-import { LANGS, guessLang, initI18n, saveLang, savedLang, watchTranslations } from "./i18n.js";
+import { LANGS, browserLang, guessLang, initI18n, saveLang, savedLang, watchTranslations } from "./i18n.js";
 import { installerLanguage, isTauri, onJournal, readAuxFile, startJournal, defaultJournalDir, type WatchStatus } from "./bridge.js";
 import { loadGame } from "./data.js";
 import { h, icon, replace } from "./dom.js";
 import { applyLines, applyLocker, applyStatus, emptyState } from "./journal.js";
 import { Uploaders } from "./uploaders.js";
-import { detectRemote, runRemoteClient, setupRemoteHost } from "./remote.js";
+import { detectRemote, remoteLanguage, runRemoteClient, setupRemoteHost } from "./remote.js";
 import { MobileView } from "./views/mobile.js";
 import { SearchView } from "./views/search.js";
 import { NavigationView } from "./views/navigation.js";
@@ -56,13 +56,22 @@ async function boot() {
     return;
   }
   // Language: chosen once (pre-selected from the installer / Windows language), changeable in Settings.
+  // A phone served by EDCH's local server follows the PC's language until it picks its own.
+  const remoteMode = isTauri() ? null : await detectRemote();
   let code = savedLang();
   if (!code || !LANGS.some((l) => l.code === code)) {
-    code = await pickLanguage(app, guessLang(await installerLanguage()));
-    saveLang(code);
+    if (remoteMode) code = (remoteMode === "paired" ? await remoteLanguage() : null) ?? browserLang();
+    else {
+      code = await pickLanguage(app, guessLang(await installerLanguage()));
+      saveLang(code);
+    }
   }
   await initI18n(code);
   watchTranslations(document.body);
+  if (remoteMode === "unpaired") {
+    replace(app, unpairedScreen());
+    return;
+  }
 
   const store = new Store();
   const ctx: Ctx = { game, store };
@@ -160,7 +169,7 @@ async function boot() {
 
   if (!isTauri()) {
     // Served by EDCH's local server to a phone? Then follow the PC; else browser demo.
-    if (await detectRemote()) {
+    if (remoteMode === "paired") {
       void runRemoteClient(store);
       return;
     }
@@ -227,6 +236,22 @@ async function boot() {
 }
 
 /** First-run language screen. Labels are in each language, so it needs no translation. */
+/** Shown on a phone that reached the local server without (or with an outdated) QR code. */
+function unpairedScreen(): HTMLElement {
+  const expired = location.hash === "#expired";
+  return h(
+    "div.lang-screen",
+    null,
+    h("img", { src: "favicon.png", alt: "" }),
+    h("h1", null, "EDCH"),
+    h("h2", null, "Cet appareil n'est pas connecté à EDCH"),
+    expired ? h("p.warn", null, "Ce QR code n'est plus valable : un nouveau code a été créé sur le PC. Scanne celui qui est affiché maintenant.") : null,
+    h("p", null, "Scanne le QR code affiché dans EDCH sur ton PC (page Mobile) pour connecter cet appareil."),
+    h("p.sub", null, "La connexion est enregistrée dans le navigateur qui ouvre le lien. Si ton lecteur de QR code l'ouvre dans sa propre fenêtre, ouvre-le plutôt dans Chrome ou Safari, ou copie le lien dans ton navigateur."),
+    h("button.primary", { onclick: () => location.replace("/") }, "Réessayer"),
+  );
+}
+
 function pickLanguage(app: HTMLElement, preselected: string): Promise<string> {
   return new Promise((resolve) => {
     let chosen = preselected;

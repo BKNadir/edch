@@ -1,3 +1,4 @@
+import { nameMatches } from "../i18n.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import { ownedOf, type Ctx, type View } from "../context.js";
 import type { Blueprint, BlueprintKind } from "../types.js";
@@ -57,7 +58,7 @@ export class EngineeringView implements View {
 
     const all = this.blueprints();
     const q = this.query;
-    const visible = q ? all.filter((b) => b.module.toLowerCase().includes(q) || b.name.toLowerCase().includes(q)) : all;
+    const visible = q ? all.filter((b) => nameMatches(b.module, q) || nameMatches(b.name, q)) : all;
     const modules = [...new Set(visible.map((b) => b.module))].sort((a, b) => a.localeCompare(b));
     if (!modules.includes(this.module)) this.module = modules[0] ?? "";
 
@@ -118,7 +119,7 @@ export class EngineeringView implements View {
         ),
       ),
       max.effects?.length
-        ? h("p.effects", null, max.effects.map((e) => h(`span.effect.${e.good ? "good" : "bad"}`, null, `${e.label} ${e.value}`)))
+        ? h("p.effects", null, max.effects.map((e) => h(`span.effect.${e.good ? "good" : "bad"}`, null, [e.label, " ", e.value])))
         : null,
       h(
         "div.grades",

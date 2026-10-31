@@ -1,3 +1,4 @@
+import { gameName } from "../i18n.js";
 import { h, icon, fmt, replace, toast } from "../dom.js";
 import { ownedOf, reserved, type Ctx, type View } from "../context.js";
 import { blueprintGrades, bpKey, defaultRolls, wishNeeds, type WishItem } from "../store.js";
@@ -18,7 +19,7 @@ export function addToWishlist(ctx: Ctx, bp: Blueprint, from?: number, to?: numbe
     count: 1,
   };
   ctx.store.setWishlist([...ctx.store.state.wishlist, item]);
-  toast(`Ajouté à la wishlist : ${bp.module} — ${bp.name}`);
+  toast(`Ajouté à la wishlist : ${gameName(bp.module)} — ${gameName(bp.name)}`);
 }
 
 export class WishlistView implements View {
@@ -160,7 +161,7 @@ export class WishlistView implements View {
         h(
           "div.wish-head",
           null,
-          h("div", null, h("strong", null, `${any.module} — ${any.name}`), h("p.sub", null, item.note ? h("span.badge.muted", null, item.note) : null, item.note ? " " : "", kindFr(any.kind), any.engineers?.length ? ` · ${any.engineers.join(", ")}` : "")),
+          h("div", null, h("strong", null, `${gameName(any.module)} — ${gameName(any.name)}`), h("p.sub", null, item.note ? h("span.badge.muted", null, item.note) : null, item.note ? " " : "", kindFr(any.kind), any.engineers?.length ? ` · ${any.engineers.join(", ")}` : "")),
           ready ? h("span.badge.hit", null, icon("check"), " Prêt") : null,
           h("button.icon-btn", { title: "Retirer", onclick: () => store.setWishlist(items.filter((w) => w.id !== item.id)) }, icon("close")),
         ),
@@ -205,7 +206,7 @@ export class WishlistView implements View {
       let plan: HTMLElement | null = null;
       if (missing && m && m.ledger === "ship") {
         const best = suggestTrades(game, m, store.state.cmdr.materials, needs, missing)[0];
-        if (best) plan = h("span.sub", null, `↹ ${fmt(best.pay)} ${best.from.name} → ${fmt(best.receive)}`);
+        if (best) plan = h("span.sub", null, `↹ ${fmt(best.pay)} ${gameName(best.from.name)} → ${fmt(best.receive)}`);
       }
       return h(
         "tr",
