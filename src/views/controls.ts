@@ -10,8 +10,10 @@ import {
   parseBinds,
   parseStartPreset,
   presetLineFor,
+  templateBox,
   type Bind,
   type BindsMeta,
+  type DeviceTemplate,
 } from "../binds.js";
 import { h, icon, replace, toast } from "../dom.js";
 import type { Ctx, View } from "../context.js";
@@ -56,6 +58,14 @@ export class ControlsView implements View {
   private layout = "en-US";
   private note = "";
   private device = "";
+  /** Per device: chosen template id ("" = none / simple diagram). */
+  private tplChoice: Record<string, string> = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("edch.templates") ?? "{}");
+    } catch {
+      return {};
+    }
+  })();
   private mode = "all";
   private query = "";
   private body = h("div.controls-body");
@@ -248,13 +258,96 @@ export class ControlsView implements View {
   }
 
   private diagram(device: string, binds: Bind[]): HTMLElement {
-    const info = deviceInfo(this.meta!, device);
-    const title = h("div.device-title", null, h("h2", null, info.label), h("span.sub", null, device !== info.label ? device : ""));
+    const meta = this.meta!;
+    const info = deviceInfo(meta, device);
+    const tplId = device in this.tplChoice ? this.tplChoice[device] : meta.templates[device] ? device : "";
+    const tpl = tplId ? meta.templates[tplId] : undefined;
+    const choose = (id: string) => {
+      this.tplChoice[device] = id;
+      try {
+        localStorage.setItem("edch.templates", JSON.stringify(this.tplChoice));
+      } catch {
+        /* per-viewer convenience only */
+      }
+      this.render();
+    };
+    const options = Object.entries(meta.templates)
+      .filter(([id, t], i, all) => all.findIndex(([, u]) => u.image === t.image && u.name === t.name) === i && id)
+      .sort(([, a], [, b]) => a.name.localeCompare(b.name));
+    const picker =
+      info.kind === "keyboard" || info.kind === "mouse"
+        ? null
+        : h(
+            "label.tpl-picker",
+            { title: "Ton modèle n'est pas reconnu ? Choisis le plus proche." },
+            "Gabarit ",
+            h(
+              "select",
+              { onchange: (e: Event) => choose((e.target as HTMLSelectElement).value) },
+              h("option", { value: "", selected: !tplId }, "Schéma simple (sans image)"),
+              options.map(([id, t]) => h("option", { value: id, selected: id === tplId }, t.name)),
+            ),
+          );
+    const title = h("div.device-title", null, h("h2", null, tpl && !meta.devices[device] ? tpl.name : info.label), h("span.sub", null, device !== info.label ? device : ""), picker);
     let drawing: HTMLElement;
     if (info.kind === "keyboard") drawing = this.keyboard(binds);
+    else if (tpl) drawing = this.templateView(device, tpl, binds, info.kind === "gamepad");
     else if (info.kind === "gamepad") drawing = this.gamepad(device, binds);
     else drawing = this.board(binds, info.kind === "mouse");
     return h("section.card.diagram", null, title, drawing);
+  }
+
+  /** EDRefCard picture of the device with each control's actions written in its box. */
+  private templateView(device: string, tpl: DeviceTemplate, binds: Bind[], gamepad: boolean): HTMLElement {
+    const meta = this.meta!;
+    const [w, hgt] = tpl.size;
+    const placed = new Map<string, Bind[]>();
+    const unplaced: Bind[] = [];
+    for (const b of binds) {
+      const box = templateBox(tpl, device, b.key);
+      if (box) placed.set(box, [...(placed.get(box) ?? []), b]);
+      else unplaced.push(b);
+    }
+    const fallback = () => (gamepad ? this.gamepad(device, binds) : this.board(binds, false));
+    const img = h("img.tpl-img", {
+      src: `${meta.templateBase}${tpl.image}.jpg`,
+      alt: tpl.name,
+      onerror: () => {
+        stage.replaceWith(h("div", null, h("p.notice", null, icon("warn"), " Image du gabarit indisponible (hors ligne ?). Schéma simple affiché à la place."), fallback()));
+      },
+    });
+    const boxes = [...placed.entries()].map(([key, list]) => {
+      const [x, y, bw, bh] = tpl.boxes[key];
+      const g = groupOf(meta, list[0].action);
+      const text = list
+        .map((b) => `${b.modifiers.length ? `${b.modifiers.map((m) => keyLabel(meta, m.key)).join("+")}+` : ""}${actionName(meta, b.action)}${b.inverted ? " (inv.)" : ""}`)
+        .join(" · ");
+      return h(
+        `div.tpl-box.${groupClass(g)}`,
+        {
+          title: `${keyLabel(meta, key)} : ${text}`,
+          style: {
+            left: `${(x / w) * 100}%`,
+            top: `${(y / hgt) * 100}%`,
+            width: `${(bw / w) * 100}%`,
+            height: `${(bh / hgt) * 100}%`,
+            fontSize: `${Math.min(0.95, (bh / w) * 100 * (list.length > 1 ? 0.4 : 0.62))}cqw`,
+          },
+        },
+        text,
+      );
+    });
+    const stage = h("div.tpl-stage", { style: { aspectRatio: `${w} / ${hgt}` } }, img, boxes);
+    const scroller = h("div.tpl-scroll", null, stage);
+    return h(
+      "div",
+      null,
+      h("div.row", null, h("button.ghost.small", { onclick: () => scroller.classList.toggle("zoom") }, icon("search"), " Agrandir / réduire")),
+      scroller,
+      h("p.sub.credits", null, "Gabarit EDRefCard (MIT), image chargée depuis le dépôt GitHub d'EDRefCard."),
+      this.legendKey(),
+      unplaced.length ? h("div", null, h("h4.sub", null, "Pas de case sur ce gabarit"), this.legendTable(unplaced)) : null,
+    );
   }
 
   // ---------------- legend helpers ----------------

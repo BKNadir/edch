@@ -101,7 +101,26 @@ def main() -> None:
     for n in names:
         kind = "keyboard" if n == "Keyboard" else "mouse" if n == "Mouse" else "gamepad" if n in GAMEPADS else "vr" if n == "OculusTouch" else "joystick"
         devices[n] = {"label": NICE.get(n, humanize(n)), "kind": kind}
+    # Device templates (EDRefCard): which picture a device uses and where each control's
+    # legend box sits on it. Pictures are loaded at runtime from EDRefCard's GitHub, not bundled.
+    sizes = {"vkb-kosmosima-scg-left": [3879, 2182], "x45": [5120, 2880]}
+    handled = {}
+    for name, sd in data.supportedDevices.items():
+        for dev in sd["HandledDevices"]:
+            handled.setdefault(dev, sd["Template"])
+    templates = {}
+    for dev, detail in data.hotasDetails.items():
+        tpl = handled.get(dev)
+        if not tpl or tpl == "keyboard":
+            continue
+        boxes = {}
+        for key, box in detail.items():
+            if isinstance(box, dict) and "x" in box:
+                boxes[key] = [box["x"], box["y"], box["width"], box.get("height", 54)]
+        templates[dev] = {"name": detail.get("displayName", dev), "image": tpl, "size": sizes.get(tpl, [3840, 2160]), "boxes": boxes}
     payload = {
+        "templates": templates,
+        "templateBase": "https://raw.githubusercontent.com/richardbuckle/EDRefCard/" + (SRC / "COMMIT").read_text().strip() + "/www/res/",
         "controls": controls,
         "keymap": data.keymap,
         "devices": devices,

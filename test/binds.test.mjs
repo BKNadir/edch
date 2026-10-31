@@ -22,7 +22,7 @@ test("parses a .binds file with BOM, modifiers, axes and layout", () => {
 });
 
 test("device names, pads and presets", () => {
-  assert.equal(deviceInfo(meta, "231D0200").label, "VKB 231D0200");
+  assert.equal(deviceInfo(meta, "231D9999").label, "VKB 231D9999");
   assert.equal(deviceInfo(meta, "045E028E").kind, "gamepad");
   assert.equal(deviceInfo(meta, "Keyboard").kind, "keyboard");
   assert.equal(padControl("GamePad", "GamePad_FaceRight"), "B");
@@ -33,4 +33,15 @@ test("device names, pads and presets", () => {
   assert.equal(presetLineFor(groupOf(meta, "HumanoidJumpButton")), 3);
   assert.equal(presetLineFor(groupOf(meta, "SteeringAxis")), 2);
   assert.equal(presetLineFor(groupOf(meta, "PrimaryFire")), 1);
+});
+
+test("templates: VKB Gladiator picture and pad box matching", async () => {
+  const { templateBox } = await import("../dist/js/binds.js");
+  const vkb = meta.templates["231D0200"];
+  assert.equal(vkb.image, "vkb-gladiator-nxt-premium-right");
+  assert.equal(templateBox(vkb, "231D0200", "Joy_1"), "Joy_1");
+  assert.equal(deviceInfo(meta, "231D0200").label, "VKB Gladiator NXT Premium Right");
+  const pad = meta.templates["GamePad"];
+  assert.ok(templateBox(pad, "GamePad", "GamePad_FaceDown"), "GamePad_* names find the Pad_* boxes");
+  assert.ok(meta.templateBase.startsWith("https://raw.githubusercontent.com/richardbuckle/EDRefCard/"));
 });

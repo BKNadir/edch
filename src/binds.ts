@@ -1,7 +1,17 @@
 // Reads Elite Dangerous .binds files (XML) into a flat list of bindings, and names
 // devices and keys for display. No DOM needed, so it is unit-testable in Node.
 
+export interface DeviceTemplate {
+  name: string;
+  image: string;
+  size: [number, number];
+  /** key → [x, y, width, height] of its legend box on the picture. */
+  boxes: Record<string, [number, number, number, number]>;
+}
+
 export interface BindsMeta {
+  templates: Record<string, DeviceTemplate>;
+  templateBase: string;
   controls: Record<string, { g: string; c: string; n: string; o: number }>;
   keymap: Record<string, string>;
   devices: Record<string, { label: string; kind: DeviceKind }>;
@@ -146,7 +156,9 @@ export function actionName(meta: BindsMeta, action: string): string {
 }
 
 export function deviceInfo(meta: BindsMeta, id: string): { label: string; kind: DeviceKind } {
+  const tpl = meta.templates?.[id];
   const known = meta.devices[id];
+  if (tpl && !known) return { label: tpl.name, kind: /pad|ds4|dualshock|710|xb360/i.test(id + tpl.image) ? "gamepad" : "joystick" };
   if (known) return known;
   const mapped = meta.vidpid[id.toUpperCase()];
   if (mapped && meta.devices[mapped]) return { label: meta.devices[mapped].label, kind: meta.devices[mapped].kind };
@@ -202,4 +214,14 @@ export function keyLabel(meta: BindsMeta, key: string): string {
 export function comboLabel(meta: BindsMeta, b: Bind): string {
   const mods = b.modifiers.map((m) => keyLabel(meta, m.key));
   return [...mods, keyLabel(meta, b.key)].join(" + ");
+}
+
+/** Box on a template for a binding key (exact, without Pos_/Neg_, or by gamepad equivalence). */
+export function templateBox(tpl: DeviceTemplate, device: string, key: string): string | undefined {
+  if (tpl.boxes[key]) return key;
+  const bare = key.replace(/^(Pos|Neg)_/, "");
+  if (tpl.boxes[bare]) return bare;
+  const canon = padControl(device, key)?.replace(/[+-]$/, "");
+  if (!canon) return undefined;
+  return Object.keys(tpl.boxes).find((k) => padControl(device, k)?.replace(/[+-]$/, "") === canon);
 }
