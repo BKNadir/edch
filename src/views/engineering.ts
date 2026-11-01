@@ -4,6 +4,13 @@ import { ownedOf, type Ctx, type View } from "../context.js";
 import type { Blueprint, BlueprintKind } from "../types.js";
 import { kindFr } from "./detail.js";
 import { addToWishlist } from "./wishlist.js";
+import { openCommodity } from "../links.js";
+
+/** A module to show when the page opens (a module name clicked elsewhere). */
+let focus: string | null = null;
+export function focusModule(module: string) {
+  focus = module;
+}
 
 const KINDS: { kind: BlueprintKind[]; label: string }[] = [
   { kind: ["modification"], label: "Modules" },
@@ -51,6 +58,21 @@ export class EngineeringView implements View {
 
   update() {
     if (!this.root) return;
+    if (focus) {
+      const want = focus.toLowerCase();
+      focus = null;
+      const bp = this.ctx.game.data.blueprints.find((b) => b.module.toLowerCase() === want);
+      const tab = bp ? KINDS.findIndex((k) => k.kind.includes(bp.kind)) : -1;
+      if (bp && tab >= 0) {
+        this.tab = tab;
+        this.module = bp.module;
+        this.query = "";
+      } else {
+        this.query = want; // not an exact module name: filter on it
+      }
+      const search = this.root.querySelector<HTMLInputElement>("input.search");
+      if (search) search.value = this.query;
+    }
     replace(
       this.tabs,
       KINDS.map((k, i) => h("button", { class: i === this.tab ? "active" : "", onclick: () => ((this.tab = i), (this.module = ""), this.update()) }, k.label)),
@@ -92,7 +114,7 @@ export class EngineeringView implements View {
         const known = Boolean(this.ctx.game.material(id));
         return h(
           "button.mat-chip",
-          { class: !known ? "commodity" : have >= n ? "ok" : "short", onclick: () => known && this.ctx.store.select(id), title: known ? `${have} possédés` : "Marchandise (soute)" },
+          { class: !known ? "commodity" : have >= n ? "ok" : "short", onclick: () => (known ? this.ctx.store.select(id) : openCommodity(this.ctx.game.nameOf(id))), title: known ? `${have} possédés` : "Marchandise (soute) : où l'acheter" },
           this.ctx.game.nameOf(id),
           h("small", null, known ? `${fmt(Math.min(have, n))}/${n}` : `×${n}`),
         );

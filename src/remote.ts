@@ -4,6 +4,7 @@
 import { DEFAULT_THEME } from "./theme.js";
 import { log } from "./logger.js";
 import {
+  clipboardWrite,
   forgetRemoteToken,
   onRemoteAction,
   remoteAction,
@@ -111,6 +112,10 @@ export async function setupRemoteHost(store: Store) {
   await onRemoteAction((action) => {
     log.info("remote", `Phone action: ${String(action?.type ?? "?")}`);
     if (action?.type === "wishlist" && Array.isArray(action.items)) store.setWishlist(action.items, true);
+    // A system clicked on the phone: the game runs here, so its clipboard is the one that matters.
+    if (action?.type === "clipboard" && typeof action.text === "string" && action.text.length <= 2000) {
+      clipboardWrite(action.text).catch((e) => log.warn("remote", `Clipboard: ${String((e as Error)?.message ?? e)}`));
+    }
     if (action?.type === "theme" && action.theme && typeof action.theme === "object") {
       store.updateSettings({ theme: { ...DEFAULT_THEME, ...store.state.settings.theme, ...action.theme } });
     }

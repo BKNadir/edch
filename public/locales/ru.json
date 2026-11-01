@@ -908,5 +908,10 @@
 "Page Accès mobile : active le serveur local, puis choisis « Tailscale » dans la liste « Adresse du PC » (l'adresse commence par 100). Le QR code et le lien se mettent à jour tout seuls.": "На странице «Мобильный доступ» включите локальный сервер и выберите «Tailscale» в списке «Адрес ПК» (адрес начинается со 100). QR-код и ссылка обновятся сами.",
 "c'est l'adresse Wi-Fi ou Ethernet qui est choisie : sélectionne « Tailscale » dans la liste « Adresse du PC ». Si Tailscale n'apparaît pas dans la liste, il n'était pas actif quand la page s'est ouverte : rouvre-la.": "выбран адрес Wi-Fi или Ethernet: выберите «Tailscale» в списке «Адрес ПК». Если Tailscale нет в списке, он не работал при открытии страницы: откройте её снова.",
 "Choisis la connexion par laquelle le téléphone joint ce PC : Wi-Fi ou Ethernet à la maison, Tailscale depuis l'extérieur. Le QR code et le lien suivent ton choix.": "Выберите подключение, через которое телефон достаёт до этого ПК: Wi-Fi или Ethernet дома, Tailscale вне дома. QR-код и ссылка следуют вашему выбору.",
-"Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.": "Tailscale работает на этом ПК ({0}). Чтобы использовать его, выберите «Tailscale» в списке «Адрес ПК» выше."
+"Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.": "Tailscale работает на этом ПК ({0}). Чтобы использовать его, выберите «Tailscale» в списке «Адрес ПК» выше.",
+"« {0} » copié (ici et sur le PC)": "«{0}» скопировано (здесь и на ПК)",
+"Voir les modifications de ce module": "Показать модификации этого модуля",
+"Marchandise (soute) : où l'acheter": "Товар (трюм): где купить",
+"Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination": "Нажатие на систему также открывает Навигацию с этой системой в качестве цели",
+"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "Название всегда копируется в буфер обмена, а при нажатии на телефоне — ещё и в буфер ПК."
 }

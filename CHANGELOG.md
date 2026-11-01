@@ -7,6 +7,9 @@ and EDCH shows it in the update banner.
 
 - Mobile access: the "PC address" list shows the PC's connections a phone can use, Ethernet, Wi-Fi, Tailscale and VPNs, with the network's name ("Wi-Fi (ASUS)"), and the QR code and the link follow the one you pick. Hyper-V, WSL and other virtual adapters are left out. The Tailscale checkbox is gone: pick the Tailscale address in the list. The "away from home" section moved to the bottom of the page.
 
+- Clickable references: a module name (engineers' specialities, materials' "used in" list, wishlist) opens Engineering on that module; a commodity (missions, recipes) opens the search for where to buy it; a system name is copied, and opens Navigation with it as destination when "Clicking a system also opens Navigation" is ticked in Settings.
+- A system clicked on the phone is also copied to the PC's clipboard, ready to paste in the galaxy map.
+
 ## 0.8.5
 
 - Turning the local server (mobile access) off and on again no longer fails with "port 47800 unavailable (os error 10048)": the port is now really released when the server stops.

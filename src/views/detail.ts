@@ -8,6 +8,7 @@ import { suggestTrades } from "../trade.js";
 import type { Blueprint, Material } from "../types.js";
 import { copySystem, finderSection } from "./results.js";
 import { addToWishlist } from "./wishlist.js";
+import { moduleLink } from "../links.js";
 
 const KIND_FR: Record<string, string> = {
   modification: "Modifications",
@@ -203,7 +204,7 @@ export class DetailPanel {
                 h(
                   "li",
                   null,
-                  h("span", null, label),
+                  h("span", null, moduleLink(bps[0].module), ` — ${gameName(bps[0].name)}`),
                   h(
                     "span.grades",
                     null,

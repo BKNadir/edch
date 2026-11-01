@@ -299,6 +299,7 @@ export async function onNtfy(line: (topic: string, text: string) => void, state:
     b();
   };
 }
+export const clipboardWrite = (text: string) => invoke<void>("clipboard_write", { text });
 export const logWrite = (level: string, source: string, message: string) => invoke<void>("log_write", { level, source, message });
 export const logSetDebug = (on: boolean) => invoke<string | null>("log_set_debug", { on });
 export const logsOpen = () => invoke<string>("logs_open");

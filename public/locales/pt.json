@@ -908,5 +908,10 @@
 "Page Accès mobile : active le serveur local, puis choisis « Tailscale » dans la liste « Adresse du PC » (l'adresse commence par 100). Le QR code et le lien se mettent à jour tout seuls.": "Na página Acesso pelo celular: ative o servidor local e escolha \"Tailscale\" na lista \"Endereço do PC\" (o endereço começa com 100). O QR code e o link se atualizam sozinhos.",
 "c'est l'adresse Wi-Fi ou Ethernet qui est choisie : sélectionne « Tailscale » dans la liste « Adresse du PC ». Si Tailscale n'apparaît pas dans la liste, il n'était pas actif quand la page s'est ouverte : rouvre-la.": "o endereço Wi-Fi ou Ethernet está selecionado: escolha \"Tailscale\" na lista \"Endereço do PC\". Se o Tailscale não aparece na lista, ele não estava ativo quando a página abriu: abra-a de novo.",
 "Choisis la connexion par laquelle le téléphone joint ce PC : Wi-Fi ou Ethernet à la maison, Tailscale depuis l'extérieur. Le QR code et le lien suivent ton choix.": "Escolha a conexão pela qual o celular chega a este PC: Wi-Fi ou Ethernet em casa, Tailscale de fora. O QR code e o link seguem sua escolha.",
-"Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.": "O Tailscale está ativo neste PC ({0}). Para usá-lo, escolha \"Tailscale\" na lista \"Endereço do PC\" acima."
+"Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.": "O Tailscale está ativo neste PC ({0}). Para usá-lo, escolha \"Tailscale\" na lista \"Endereço do PC\" acima.",
+"« {0} » copié (ici et sur le PC)": "\"{0}\" copiado (aqui e no PC)",
+"Voir les modifications de ce module": "Ver as modificações deste módulo",
+"Marchandise (soute) : où l'acheter": "Mercadoria (porão): onde comprar",
+"Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination": "Clicar num sistema também abre a Navegação, com esse sistema como destino",
+"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "O nome é sempre copiado para a área de transferência, e também para a do PC quando você clica pelo celular."
 }

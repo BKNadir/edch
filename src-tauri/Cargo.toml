@@ -1,6 +1,6 @@
 [package]
 name = "edch"
-version = "0.8.5"
+version = "0.8.6"
 description = "Elite Dangerous companion: materials, engineering and where to find them"
 authors = ["BKNadir"]
 edition = "2021"
@@ -23,6 +23,7 @@ zip = { version = "2", default-features = false, features = ["deflate"] }
 tiny_http = "0.12"
 qrcode = { version = "0.14", default-features = false, features = ["svg"] }
 local-ip-address = "0.6"
+arboard = { version = "3", default-features = false }
 
 [profile.release]
 codegen-units = 1

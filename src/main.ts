@@ -9,6 +9,7 @@ import { MobileView } from "./views/mobile.js";
 import { AboutView } from "./views/about.js";
 import { RemoteGuideView } from "./views/guide.js";
 import { applyTheme } from "./theme.js";
+import { bindLinks, openSystem } from "./links.js";
 import { captureActions, captureErrors, captureShownErrors, eventDetail, log, setDebugLog } from "./logger.js";
 import { MissionsView } from "./views/missions.js";
 import { ColonisationView } from "./views/colonisation.js";
@@ -35,7 +36,7 @@ import { EngineeringView } from "./views/engineering.js";
 import { WishlistView } from "./views/wishlist.js";
 import { EngineersView } from "./views/engineers.js";
 import { SettingsView } from "./views/settings.js";
-import { copySystem, setHere } from "./views/results.js";
+import { setHere } from "./views/results.js";
 
 const NAV: { id: string; label: string; icon: string }[] = [
   { id: "materials", label: "Matériaux", icon: "M4 7l8-4 8 4-8 4zM4 12l8 4 8-4M4 17l8 4 8-4" },
@@ -104,6 +105,7 @@ async function boot() {
 
   const store = new Store();
   bindStore(store);
+  bindLinks(store);
   await setDebugLog(store.state.settings.debugLog);
   log.info("app", `UI ready (language ${code}, view ${store.state.view})`);
   setHere(() => ({ system: store.state.cmdr.location?.system, seenAt: store.state.cmdr.location?.seenAt }));
@@ -363,7 +365,7 @@ function renderHeader(el: HTMLElement, ctx: Ctx) {
       ? h(
           "div.where",
           null,
-          h("button.sys", { title: "Copier le système", onclick: () => copySystem(loc.system) }, icon("pin"), h("span", null, loc.system)),
+          h("button.sys", { title: "Copier le système", onclick: () => openSystem(loc.system, { navigate: false }) }, icon("pin"), h("span", null, loc.system)),
           loc.station ? h("span.sub", null, loc.station) : null,
           [loc.security ? SECURITY_FR[loc.security] ?? loc.security : undefined, loc.allegiance ? ALLEGIANCE_FR[loc.allegiance] ?? loc.allegiance : undefined].filter(Boolean).map((t) => h("span.badge.muted", null, t!)),
           [...states].slice(0, 4).map((s) => h("span.badge.hit", null, s)),

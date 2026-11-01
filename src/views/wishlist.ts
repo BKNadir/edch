@@ -6,6 +6,7 @@ import { suggestTrades } from "../trade.js";
 import type { Blueprint } from "../types.js";
 import { kindFr } from "./detail.js";
 import { extractLoadout, importLoadout } from "../importer.js";
+import { moduleLink } from "../links.js";
 
 export function addToWishlist(ctx: Ctx, bp: Blueprint, from?: number, to?: number) {
   const grades = blueprintGrades(ctx.game, bpKey(bp));
@@ -161,7 +162,7 @@ export class WishlistView implements View {
         h(
           "div.wish-head",
           null,
-          h("div", null, h("strong", null, `${gameName(any.module)} — ${gameName(any.name)}`), h("p.sub", null, item.note ? h("span.badge.muted", null, item.note) : null, item.note ? " " : "", kindFr(any.kind), any.engineers?.length ? ` · ${any.engineers.join(", ")}` : "")),
+          h("div", null, h("strong", null, moduleLink(any.module), ` — ${gameName(any.name)}`), h("p.sub", null, item.note ? h("span.badge.muted", null, item.note) : null, item.note ? " " : "", kindFr(any.kind), any.engineers?.length ? ` · ${any.engineers.join(", ")}` : "")),
           ready ? h("span.badge.hit", null, icon("check"), " Prêt") : null,
           h("button.icon-btn", { title: "Retirer", onclick: () => store.setWishlist(items.filter((w) => w.id !== item.id)) }, icon("close")),
         ),

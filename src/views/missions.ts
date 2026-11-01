@@ -6,9 +6,9 @@ import { notify, playTone, TONES } from "../notifier.js";
 import { newWingCode, type NotifySettings, type WingSettings } from "../store.js";
 import { credits, hoursLeft, relTime } from "../time.js";
 import type { Ctx, View } from "../context.js";
-import { copySystem } from "./results.js";
 import { findHotspots, findSupply, HOTSPOT_NAMES, type Hotspot, type Offer } from "../sourcing.js";
 import { gameName } from "../i18n.js";
+import { commodityLink, systemLink } from "../links.js";
 
 /** Missions where the commander has to get the goods: sourcing, mining, donations. */
 export const needsSourcing = (m: Mission) => Boolean(m.commodityId) && !/delivery|courier|passenger|sightseeing/i.test(m.name);
@@ -52,7 +52,7 @@ export function busy(root?: HTMLElement): boolean {
   return Boolean(root && a && root.contains(a) && /^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName));
 }
 
-export const sys = (name?: string) => (name ? h("button.sys", { title: "Copier", onclick: () => copySystem(name) }, icon("copy"), h("span", null, name)) : null);
+export const sys = (name?: string) => systemLink(name);
 
 export class MissionsView implements View {
   private root?: HTMLElement;
@@ -117,7 +117,7 @@ export class MissionsView implements View {
               ? h("p.mission-dest", null, h("span", null, "Destination : "), m.destStation ? h("strong", null, m.destStation) : null, m.destStation && m.destSystem ? " · " : null, sys(m.destSystem))
               : null,
           m.killCount && m.targetFaction ? h("p.sub", null, `Cible : ${m.targetFaction}`) : null,
-          m.commodity && m.count ? h("p.sub", null, `${fmt(m.count)} × `, h("span", null, m.commodity)) : null,
+          m.commodity && m.count ? h("p.sub", null, `${fmt(m.count)} × `, commodityLink(m.commodity, m.commodity)) : null,
           progressOf(m),
           needsSourcing(m) ? this.sourcingBlock(m) : null,
           h(
@@ -343,7 +343,7 @@ export class MissionsView implements View {
                           )
                         : null,
                     ),
-                    h("td", null, r.mission.destStation ? `${r.mission.destStation} · ` : "", r.mission.destSystem ?? ""),
+                    h("td", null, r.mission.destStation ? `${r.mission.destStation} · ` : "", sys(r.mission.destSystem)),
                     h("td", null, relTime(r.mission.expiry)),
                     h(
                       "td",

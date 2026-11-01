@@ -146,6 +146,13 @@ export class SettingsView implements View {
             h("small", null, "Utilisé tant que le jeu n'a pas donné ta position."),
           ),
           h("label.check", null, h("input", { type: "checkbox", checked: s.largePadOnly, onchange: (e: Event) => set({ largePadOnly: (e.target as HTMLInputElement).checked }) }), " Traders avec pad L seulement"),
+          h(
+            "label.check",
+            null,
+            h("input", { type: "checkbox", checked: s.systemOpensNav, onchange: (e: Event) => set({ systemOpensNav: (e.target as HTMLInputElement).checked }) }),
+            " Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination",
+          ),
+          h("small.sub", null, "Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone."),
         ),
         this.appearance(),
         isTauri()

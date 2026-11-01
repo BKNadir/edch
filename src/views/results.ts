@@ -1,14 +1,13 @@
 import { locale } from "../i18n.js";
-import { copyText, openUrl } from "../bridge.js";
-import { h, icon, toast } from "../dom.js";
+import { openUrl } from "../bridge.js";
+import { openSystem } from "../links.js";
+import { h, icon } from "../dom.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../spansh.js";
 import type { Finder } from "../sources.js";
 import type { Settings } from "../store.js";
 
-export async function copySystem(system: string) {
-  const ok = await copyText(system);
-  toast(ok ? `« ${system} » copié — colle-le dans la carte galactique` : "Copie impossible");
-}
+/** A system name was clicked (see links.ts: copy, and open Navigation if chosen in Settings). */
+export const copySystem = (system: string) => openSystem(system);
 
 /** Where the commander is, from the journal: shown on the matching result. */
 let here: () => { system?: string; seenAt?: string } = () => ({});

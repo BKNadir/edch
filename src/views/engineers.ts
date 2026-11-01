@@ -5,6 +5,7 @@ import { openUrl } from "../bridge.js";
 import type { Engineer } from "../types.js";
 import type { EngineerStatus } from "../journal.js";
 import { copySystem } from "./results.js";
+import { moduleLink } from "../links.js";
 
 const PROGRESS_FR: Record<string, string> = {
   Unlocked: "Débloqué",
@@ -121,7 +122,7 @@ export class EngineersView implements View {
             h("span.sub", null, rank >= 5 ? "Rang max" : `Rang ${rank}${st?.rankProgress !== undefined ? ` · ${st.rankProgress} % vers ${rank + 1}` : ""}`),
           )
         : null,
-      h("div.specs", null, e.specialities.map((s) => h("span.spec", null, s.name, s.grade ? h("small", null, ` G${s.grade}`) : null))),
+      h("div.specs", null, e.specialities.map((s) => h("span.spec", null, moduleLink(s.name, s.name), s.grade ? h("small", null, ` G${s.grade}`) : null))),
       !unlocked
         ? h(
             "div.unlock",

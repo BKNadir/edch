@@ -77,7 +77,7 @@ export class GoalsView implements View {
       h("header.view-head", null, h("div", null, h("h1", null, "Objectifs communautaires"), h("p.sub", null, "Ta participation, lue dans le journal du jeu."))),
       live.length ? h("div.goal-grid", null, live.map((g) => this.goal(g))) : h("section.card", null, h("p.empty", null, "Aucun objectif communautaire suivi. Inscris-toi à un objectif en jeu (ou ouvre son panneau) : il apparaîtra ici.")),
       this.inaraSection(),
-      past.length ? h("section.card", null, h("h3", null, "Objectifs passés"), h("ul.plain", null, past.slice(0, 10).map((g) => h("li", null, h("strong", null, g.title), h("span.sub", null, ` · ${g.system} · ${g.tierReached ?? ""} · ${fmt(g.contribution ?? 0)}`))))) : null,
+      past.length ? h("section.card", null, h("h3", null, "Objectifs passés"), h("ul.plain", null, past.slice(0, 10).map((g) => h("li", null, h("strong", null, g.title), h("span.sub", null, " · ", sys(g.system), ` · ${g.tierReached ?? ""} · ${fmt(g.contribution ?? 0)}`))))) : null,
     );
   }
 

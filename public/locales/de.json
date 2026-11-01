@@ -908,5 +908,10 @@
 "Page Accès mobile : active le serveur local, puis choisis « Tailscale » dans la liste « Adresse du PC » (l'adresse commence par 100). Le QR code et le lien se mettent à jour tout seuls.": "Auf der Seite „Mobiler Zugriff“: Lokalen Server aktivieren, dann in der Liste „PC-Adresse“ „Tailscale“ wählen (die Adresse beginnt mit 100). QR-Code und Link aktualisieren sich von selbst.",
 "c'est l'adresse Wi-Fi ou Ethernet qui est choisie : sélectionne « Tailscale » dans la liste « Adresse du PC ». Si Tailscale n'apparaît pas dans la liste, il n'était pas actif quand la page s'est ouverte : rouvre-la.": "die WLAN- oder Ethernet-Adresse ist ausgewählt: Wähle „Tailscale“ in der Liste „PC-Adresse“. Fehlt Tailscale in der Liste, lief es beim Öffnen der Seite nicht: Öffne sie erneut.",
 "Choisis la connexion par laquelle le téléphone joint ce PC : Wi-Fi ou Ethernet à la maison, Tailscale depuis l'extérieur. Le QR code et le lien suivent ton choix.": "Wähle die Verbindung, über die das Handy diesen PC erreicht: WLAN oder Ethernet zu Hause, Tailscale von unterwegs. QR-Code und Link folgen deiner Wahl.",
-"Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.": "Tailscale ist auf diesem PC aktiv ({0}). Um es zu nutzen, wähle oben in der Liste „PC-Adresse“ „Tailscale“."
+"Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.": "Tailscale ist auf diesem PC aktiv ({0}). Um es zu nutzen, wähle oben in der Liste „PC-Adresse“ „Tailscale“.",
+"« {0} » copié (ici et sur le PC)": "„{0}“ kopiert (hier und auf dem PC)",
+"Voir les modifications de ce module": "Modifikationen dieses Moduls anzeigen",
+"Marchandise (soute) : où l'acheter": "Ware (Frachtraum): wo kaufen",
+"Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination": "Ein Klick auf ein System öffnet auch die Navigation mit diesem System als Ziel",
+"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "Der Name wird immer in die Zwischenablage kopiert, beim Klick auf dem Handy auch in die des PCs."
 }

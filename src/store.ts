@@ -30,6 +30,8 @@ export interface Settings {
   theme: ThemeSettings;
   /** Writes a separate, detailed debug log (Settings → Logs). */
   debugLog: boolean;
+  /** Clicking a system name also opens Navigation with it as destination. */
+  systemOpensNav: boolean;
 }
 
 export interface NotifySettings {
@@ -141,6 +143,7 @@ const DEFAULT_SETTINGS: Settings = {
   mining: DEFAULT_MINING,
   theme: DEFAULT_THEME,
   debugLog: false,
+  systemOpensNav: false,
 };
 
 function load<T>(key: string, fallback: T): T {

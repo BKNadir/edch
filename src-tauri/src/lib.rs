@@ -417,6 +417,20 @@ fn portable() -> bool {
     named || exe.parent().is_some_and(|d| d.join("portable").exists() || d.join("edch.portable").exists())
 }
 
+/// Puts text on this PC's clipboard (a system name clicked on a phone, to paste in the game).
+#[tauri::command]
+async fn clipboard_write(text: String) -> Result<(), String> {
+    if text.len() > 2000 {
+        return Err("Texte trop long".into());
+    }
+    tauri::async_runtime::spawn_blocking(move || {
+        let mut clipboard = arboard::Clipboard::new().map_err(|e| e.to_string())?;
+        clipboard.set_text(text).map_err(|e| e.to_string())
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
 #[tauri::command]
 fn is_portable() -> bool {
     portable()
@@ -744,6 +758,7 @@ pub fn run() {
             remote::remote_interfaces,
             remote::remote_tailscale,
             is_portable,
+            clipboard_write,
             ntfy::ntfy_subscribe,
             ntfy::ntfy_unsubscribe,
             logs::log_write,

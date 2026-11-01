@@ -19,6 +19,12 @@ async function coordsOf(name: string): Promise<[number, number, number] | null> 
 }
 
 let datalistTimer: number | undefined;
+/** A destination to put in the route forms (a system name clicked elsewhere). */
+let pendingDestination: string | null = null;
+export function setDestination(system: string) {
+  pendingDestination = system;
+}
+
 function systemInput(id: string, value: string, placeholder: string): HTMLInputElement {
   const list = h("datalist", { id: `${id}-list` });
   const input = h("input", {
@@ -64,7 +70,9 @@ export class NavigationView implements View {
 
     // ---- ship route ----
     const from = systemInput("nav-from", here, "Départ");
-    const to = systemInput("nav-to", "", "Destination");
+    const dest = pendingDestination ?? "";
+    pendingDestination = null;
+    const to = systemInput("nav-to", dest, "Destination");
     const range = h("input", { type: "number", step: "0.01", min: "1", value: this.defaultRange() ? String(this.defaultRange()) : "", placeholder: "al" });
     const eff = h("input", { type: "number", min: "1", max: "100", value: "60" });
     const plot = async () => {
@@ -79,7 +87,7 @@ export class NavigationView implements View {
     // ---- carrier ----
     const c = cmdr.carrier;
     const cFrom = systemInput("fc-from", here, "Départ du carrier");
-    const cTo = systemInput("fc-to", "", "Destination");
+    const cTo = systemInput("fc-to", dest, "Destination");
     const used = h("input", { type: "number", min: "0", max: "25000", value: String(c?.used ?? 5000) });
     const tank = h("input", { type: "number", min: "0", max: "1000", value: String(c?.fuel ?? 1000) });
     const hold = h("input", { type: "number", min: "0", max: "25000", value: String(c?.tritiumInCargo ?? 0) });
@@ -145,6 +153,15 @@ export class NavigationView implements View {
 
   update() {
     if (!this.root) return;
+    if (pendingDestination) {
+      // Already on this page: fill the destination fields in place.
+      for (const id of ["nav-to", "fc-to"]) {
+        const input = this.root.querySelector<HTMLInputElement>(`#${id}`);
+        if (input) input.value = pendingDestination;
+      }
+      this.root.querySelector<HTMLInputElement>("#nav-to")?.scrollIntoView({ block: "center", behavior: "smooth" });
+      pendingDestination = null;
+    }
     const cmdr = this.ctx.store.state.cmdr;
     const sig = JSON.stringify([cmdr.ship?.type, cmdr.ship?.name, cmdr.loadout?.shipId, cmdr.loadout?.ship, cmdr.loadout?.maxJumpRange, cmdr.loadout?.unladenMass, cmdr.fuel?.main, cmdr.cargoMass, this.cargo]);
     if (sig === this.signature) return;

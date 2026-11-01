@@ -136,6 +136,12 @@ PC injoignable : modification non envoyée
 Elite (d'origine)
 Contraste élevé
 Unhandled promise: {0}
+« {0} » copié (ici et sur le PC)
+« {0} » copié — colle-le dans la carte galactique
+Copie impossible
+Copier « {0} »
+Voir les modifications de ce module
+Où l'acheter
 Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)
 EDDN (EDCD)
 Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
@@ -265,7 +271,6 @@ Suggestions d'échange
  ({0} possédés, {1} réservés, {2} % utilisé · taux {3}:{4})
 Rien d'échangeable en surplus pour l'instant.
 Sites de farm connus
-Copier « {0} »
 Lat {0} / Lon {1}
 Où le trouver
 Utilisé dans
@@ -278,7 +283,7 @@ Courtier tech.
 Déblocages
 Module ou modification…
 {0} possédés
-Marchandise (soute)
+Marchandise (soute) : où l'acheter
 Ajouter seulement ce grade
 Débloqué
 Invité
@@ -478,7 +483,6 @@ Connecte le téléphone au même Wi-Fi que ce PC.
 Scanne le QR code : EDCH s'ouvre dans le navigateur et l'appareil reste autorisé.
 Ajoute la page à l'écran d'accueil pour l'ouvrir comme une appli.
 Lien copié : il contient le code secret, ne le partage qu'avec tes appareils
-Copie impossible
  Copier le lien
 Adresse du PC
 Choisis la connexion par laquelle le téléphone joint ce PC : Wi-Fi ou Ethernet à la maison, Tailscale depuis l'extérieur. Le QR code et le lien suivent ton choix.
@@ -558,7 +562,6 @@ Aucune puissance ne contrôle ce système.
 Puissances présentes : 
 Système de ta puissance : renforce-le (commerce, minage, missions, combat) pour gagner des mérites.
 Système d'une autre puissance : tu peux le saper pour gagner des mérites.
-« {0} » copié — colle-le dans la carte galactique
 à l'instant
 màj < 1 h
 màj il y a {0} h
@@ -656,6 +659,8 @@ Ignore les états de faction plus vieux (Boom, Guerre…). 0 = pas de limite.
 Système de repli
 Utilisé tant que le jeu n'a pas donné ta position.
  Traders avec pad L seulement
+ Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination
+Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.
 Mises à jour
 Version installée : {0}
  Vérifier automatiquement les nouvelles versions sur GitHub
