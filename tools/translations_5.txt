@@ -1,0 +1,244 @@
+# v0.7: missions, wing, colonisation, community goals, exploration, mining, Powerplay, session
+# fr ¦ en ¦ de ¦ es ¦ pt ¦ ru
+
+# --- navigation ---
+Missions ¦ Missions ¦ Missionen ¦ Misiones ¦ Missões ¦ Миссии
+Colonisation ¦ Colonisation ¦ Kolonisierung ¦ Colonización ¦ Colonização ¦ Колонизация
+Objectifs communautaires ¦ Community goals ¦ Community-Ziele ¦ Objetivos comunitarios ¦ Metas comunitárias ¦ Цели сообщества
+Exploration ¦ Exploration ¦ Erkundung ¦ Exploración ¦ Exploração ¦ Исследование
+Minage ¦ Mining ¦ Bergbau ¦ Minería ¦ Mineração ¦ Добыча
+Powerplay ¦ Powerplay ¦ Powerplay ¦ Powerplay ¦ Powerplay ¦ Powerplay
+Session ¦ Session ¦ Sitzung ¦ Sesión ¦ Sessão ¦ Сессия
+
+# --- side tab ---
+Aperçu ¦ Overview ¦ Übersicht ¦ Resumen ¦ Visão geral ¦ Обзор
+{0} en cours ¦ {0} active ¦ {0} aktiv ¦ {0} en curso ¦ {0} em andamento ¦ Активных: {0}
+Escadrille ¦ Wing ¦ Geschwader ¦ Ala ¦ Ala ¦ Звено
+Aucune mission d'escadrille pour l'instant. ¦ No wing missions yet. ¦ Noch keine Geschwadermissionen. ¦ Aún no hay misiones de ala. ¦ Ainda não há missões de ala. ¦ Пока нет миссий звена.
+Prochaines échéances ¦ Next deadlines ¦ Nächste Fristen ¦ Próximos vencimientos ¦ Próximos prazos ¦ Ближайшие сроки
+Objectif atteint · ¦ Objective done · ¦ Ziel erreicht · ¦ Objetivo cumplido · ¦ Objetivo cumprido · ¦ Цель выполнена ·
+Alertes ¦ Alerts ¦ Hinweise ¦ Alertas ¦ Alertas ¦ Оповещения
+Ouvrir la page Missions ¦ Open the Missions page ¦ Missionsseite öffnen ¦ Abrir la página Misiones ¦ Abrir a página Missões ¦ Открыть страницу миссий
+{0} : nouvelle mission d'escadrille « {1} » ¦ {0}: new wing mission "{1}" ¦ {0}: neue Geschwadermission „{1}“ ¦ {0}: nueva misión de ala «{1}» ¦ {0}: nova missão de ala "{1}" ¦ {0}: новая миссия звена «{1}»
+Toute l'escadrille a accepté « {0} » ¦ The whole wing accepted "{0}" ¦ Das ganze Geschwader hat „{0}“ angenommen ¦ Toda el ala aceptó «{0}» ¦ A ala inteira aceitou "{0}" ¦ Всё звено приняло «{0}»
+Cœur : {0} ¦ Motherlode: {0} ¦ Kern: {0} ¦ Núcleo: {0} ¦ Núcleo: {0} ¦ Ядро: {0}
+Test de notification ¦ Test notification ¦ Testbenachrichtigung ¦ Notificación de prueba ¦ Notificação de teste ¦ Тестовое оповещение
+
+# --- missions page ---
+{0} missions en cours · {1} d'escadrille ¦ {0} active missions · {1} wing ¦ {0} aktive Missionen · {1} Geschwader ¦ {0} misiones en curso · {1} de ala ¦ {0} missões em andamento · {1} de ala ¦ Активных миссий: {0} · звена: {1}
+Aucune mission en cours. Les missions acceptées en jeu apparaissent ici, avec leur objectif, leur destination et le temps restant. ¦ No active missions. Missions you accept in game show up here, with their objective, destination and time left. ¦ Keine aktiven Missionen. Im Spiel angenommene Missionen erscheinen hier mit Ziel, Zielort und verbleibender Zeit. ¦ No hay misiones en curso. Las misiones aceptadas en el juego aparecen aquí, con su objetivo, su destino y el tiempo restante. ¦ Nenhuma missão em andamento. As missões aceitas no jogo aparecem aqui, com objetivo, destino e tempo restante. ¦ Нет активных миссий. Принятые в игре миссии появятся здесь с целью, пунктом назначения и оставшимся временем.
+Massacre ¦ Massacre ¦ Massaker ¦ Masacre ¦ Massacre ¦ Истребление
+Assassinat ¦ Assassination ¦ Attentat ¦ Asesinato ¦ Assassinato ¦ Убийство
+Coursier ¦ Courier ¦ Kurier ¦ Mensajero ¦ Mensageiro ¦ Курьер
+Livraison ¦ Delivery ¦ Lieferung ¦ Entrega ¦ Entrega ¦ Доставка
+Passagers ¦ Passengers ¦ Passagiere ¦ Pasajeros ¦ Passageiros ¦ Пассажиры
+Récupération ¦ Salvage ¦ Bergung ¦ Rescate ¦ Recuperação ¦ Утиль
+À pied ¦ On foot ¦ Zu Fuß ¦ A pie ¦ A pé ¦ Пешком
+Mission ¦ Mission ¦ Mission ¦ Misión ¦ Missão ¦ Миссия
+Objectif atteint ¦ Objective done ¦ Ziel erreicht ¦ Objetivo cumplido ¦ Objetivo cumprido ¦ Цель выполнена
+Retourne à ¦ Return to ¦ Zurück zu ¦ Vuelve a ¦ Volte para ¦ Вернитесь на
+Destination : ¦ Destination: ¦ Ziel: ¦ Destino: ¦ Destino: ¦ Назначение:
+Cible : {0} ¦ Target: {0} ¦ Ziel: {0} ¦ Objetivo: {0} ¦ Alvo: {0} ¦ Цель: {0}
+{0} / {1} éliminations ¦ {0} / {1} kills ¦ {0} / {1} Abschüsse ¦ {0} / {1} bajas ¦ {0} / {1} abates ¦ {0} / {1} уничтожено
+{0} / {1} livrés ¦ {0} / {1} delivered ¦ {0} / {1} geliefert ¦ {0} / {1} entregados ¦ {0} / {1} entregues ¦ {0} / {1} доставлено
+Expire {0} ¦ Expires {0} ¦ Läuft ab {0} ¦ Caduca {0} ¦ Expira {0} ¦ Истекает {0}
+Influence {0} ¦ Influence {0} ¦ Einfluss {0} ¦ Influencia {0} ¦ Influência {0} ¦ Влияние {0}
+Missions de massacre empilées ¦ Stacked massacre missions ¦ Gestapelte Massakermissionen ¦ Misiones de masacre apiladas ¦ Missões de massacre empilhadas ¦ Стопка миссий на истребление
+Chaque élimination compte pour une mission par faction donneuse : il faut donc autant d'éliminations que la plus grosse pile. ¦ Each kill counts for one mission per issuing faction, so you need as many kills as the biggest stack. ¦ Jeder Abschuss zählt für eine Mission pro Auftraggeber-Fraktion: Du brauchst also so viele Abschüsse wie der größte Stapel. ¦ Cada baja cuenta para una misión por facción emisora: necesitas tantas bajas como la pila más grande. ¦ Cada abate conta para uma missão por facção emissora: você precisa de tantos abates quanto a maior pilha. ¦ Каждое уничтожение засчитывается одной миссии от каждой фракции-заказчика, поэтому нужно столько уничтожений, сколько в самой большой стопке.
+Faction donneuse ¦ Issuing faction ¦ Auftraggeber ¦ Facción emisora ¦ Facção emissora ¦ Фракция-заказчик
+Éliminations ¦ Kills ¦ Abschüsse ¦ Bajas ¦ Abates ¦ Уничтожения
+Récompense ¦ Reward ¦ Belohnung ¦ Recompensa ¦ Recompensa ¦ Награда
+Escadrille partagée ¦ Shared wing ¦ Geteiltes Geschwader ¦ Ala compartida ¦ Ala compartilhada ¦ Общее звено
+Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Vos missions d'escadrille sont partagées entre vous, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire. Seules les missions d'escadrille sont partagées. ¦ Every wing member using EDCH enters the same code. Your wing missions are shared between you, encrypted with this code, through the free ntfy.sh service: nobody else can read them. Only wing missions are shared. ¦ Jedes Geschwadermitglied, das EDCH nutzt, gibt denselben Code ein. Eure Geschwadermissionen werden zwischen euch geteilt, mit diesem Code verschlüsselt, über den kostenlosen Dienst ntfy.sh: Niemand sonst kann sie lesen. Nur Geschwadermissionen werden geteilt. ¦ Cada miembro del ala que usa EDCH introduce el mismo código. Vuestras misiones de ala se comparten entre vosotros, cifradas con este código, mediante el servicio gratuito ntfy.sh: nadie más puede leerlas. Solo se comparten las misiones de ala. ¦ Cada membro da ala que usa o EDCH digita o mesmo código. As missões de ala são compartilhadas entre vocês, criptografadas com esse código, pelo serviço gratuito ntfy.sh: ninguém mais consegue lê-las. Só as missões de ala são compartilhadas. ¦ Каждый участник звена с EDCH вводит один и тот же код. Миссии звена передаются между вами в зашифрованном этим кодом виде через бесплатный сервис ntfy.sh: никто другой не может их прочитать. Передаются только миссии звена.
+Activer le partage ¦ Enable sharing ¦ Teilen aktivieren ¦ Activar el uso compartido ¦ Ativar o compartilhamento ¦ Включить обмен
+Code de l'escadrille ¦ Wing code ¦ Geschwadercode ¦ Código del ala ¦ Código da ala ¦ Код звена
+Enregistrer ¦ Save ¦ Speichern ¦ Guardar ¦ Salvar ¦ Сохранить
+Créer un code ¦ Create a code ¦ Code erstellen ¦ Crear un código ¦ Criar um código ¦ Создать код
+Nouveau code créé : donne-le aux autres membres ¦ New code created: give it to the other members ¦ Neuer Code erstellt: Gib ihn den anderen Mitgliedern ¦ Código nuevo creado: dáselo a los demás miembros ¦ Novo código criado: passe para os outros membros ¦ Новый код создан: передайте его остальным участникам
+Nom affiché ¦ Display name ¦ Angezeigter Name ¦ Nombre mostrado ¦ Nome exibido ¦ Отображаемое имя
+Prévenir quand un membre a une mission d'escadrille que je n'ai pas ¦ Notify me when a member has a wing mission I don't have ¦ Benachrichtigen, wenn ein Mitglied eine Geschwadermission hat, die ich nicht habe ¦ Avisar cuando un miembro tenga una misión de ala que yo no tengo ¦ Avisar quando um membro tiver uma missão de ala que eu não tenho ¦ Сообщать, когда у участника есть миссия звена, которой нет у меня
+Prévenir quand toute l'escadrille a accepté une mission ¦ Notify me when the whole wing has accepted a mission ¦ Benachrichtigen, wenn das ganze Geschwader eine Mission angenommen hat ¦ Avisar cuando toda el ala haya aceptado una misión ¦ Avisar quando a ala inteira aceitar uma missão ¦ Сообщать, когда всё звено приняло миссию
+Connecté ¦ Connected ¦ Verbunden ¦ Conectado ¦ Conectado ¦ Подключено
+Erreur ¦ Error ¦ Fehler ¦ Error ¦ Erro ¦ Ошибка
+Connexion… ¦ Connecting… ¦ Verbinde… ¦ Conectando… ¦ Conectando… ¦ Подключение…
+(toi) ¦ (you) ¦ (du) ¦ (tú) ¦ (você) ¦ (вы)
+(parti) ¦ (left) ¦ (gegangen) ¦ (se fue) ¦ (saiu) ¦ (вышел)
+Destination ¦ Destination ¦ Ziel ¦ Destino ¦ Destino ¦ Назначение
+Expire ¦ Expires ¦ Läuft ab ¦ Caduca ¦ Expira ¦ Истекает
+Acceptée par ¦ Accepted by ¦ Angenommen von ¦ Aceptada por ¦ Aceita por ¦ Приняли
+Aucune mission d'escadrille partagée pour l'instant. ¦ No shared wing missions yet. ¦ Noch keine geteilten Geschwadermissionen. ¦ Aún no hay misiones de ala compartidas. ¦ Ainda não há missões de ala compartilhadas. ¦ Пока нет общих миссий звена.
+Saisis ou crée un code (au moins 8 caractères) pour rejoindre l'escadrille. ¦ Enter or create a code (at least 8 characters) to join the wing. ¦ Gib einen Code ein oder erstelle einen (mindestens 8 Zeichen), um dem Geschwader beizutreten. ¦ Introduce o crea un código (al menos 8 caracteres) para unirte al ala. ¦ Digite ou crie um código (pelo menos 8 caracteres) para entrar na ala. ¦ Введите или создайте код (не менее 8 символов), чтобы присоединиться к звену.
+Notifications ¦ Notifications ¦ Benachrichtigungen ¦ Notificaciones ¦ Notificações ¦ Оповещения
+Pas de fenêtre Windows : un son et/ou la languette sur le bord droit qui clignote. Clique sur la languette pour voir l'aperçu, clique ailleurs pour le refermer. ¦ No Windows pop-ups: a sound and/or the tab on the right edge flashing. Click the tab to see the overview, click anywhere else to close it. ¦ Keine Windows-Pop-ups: ein Ton und/oder die blinkende Lasche am rechten Rand. Klicke auf die Lasche für die Übersicht, klicke woanders hin, um sie zu schließen. ¦ Sin ventanas de Windows: un sonido y/o la pestaña del borde derecho que parpadea. Haz clic en la pestaña para ver el resumen y en cualquier otro sitio para cerrarlo. ¦ Sem janelas do Windows: um som e/ou a aba na borda direita piscando. Clique na aba para ver o resumo e em qualquer outro lugar para fechar. ¦ Без всплывающих окон Windows: звук и/или мигающая вкладка у правого края. Нажмите на вкладку, чтобы открыть обзор, и в любом другом месте, чтобы закрыть.
+Son ¦ Sound ¦ Ton ¦ Sonido ¦ Som ¦ Звук
+Volume ¦ Volume ¦ Lautstärke ¦ Volumen ¦ Volume ¦ Громкость
+Écouter ¦ Listen ¦ Anhören ¦ Escuchar ¦ Ouvir ¦ Прослушать
+Couleur ¦ Colour ¦ Farbe ¦ Color ¦ Cor ¦ Цвет
+Tester ¦ Test ¦ Testen ¦ Probar ¦ Testar ¦ Проверить
+Masquer la languette ¦ Hide the tab ¦ Lasche ausblenden ¦ Ocultar la pestaña ¦ Ocultar a aba ¦ Скрыть вкладку
+Carillon ¦ Chime ¦ Glockenspiel ¦ Campanilla ¦ Carrilhão ¦ Перезвон
+Bip ¦ Beep ¦ Piep ¦ Pitido ¦ Bipe ¦ Сигнал
+Radar ¦ Radar ¦ Radar ¦ Radar ¦ Radar ¦ Радар
+Doux ¦ Soft ¦ Sanft ¦ Suave ¦ Suave ¦ Мягкий
+ntfy.sh : trop de messages, réessaie plus tard ¦ ntfy.sh: too many messages, try again later ¦ ntfy.sh: zu viele Nachrichten, versuch es später ¦ ntfy.sh: demasiados mensajes, inténtalo más tarde ¦ ntfy.sh: mensagens demais, tente mais tarde ¦ ntfy.sh: слишком много сообщений, попробуйте позже
+ntfy.sh a répondu {0} ¦ ntfy.sh answered {0} ¦ ntfy.sh antwortete {0} ¦ ntfy.sh respondió {0} ¦ ntfy.sh respondeu {0} ¦ ntfy.sh ответил {0}
+
+# --- colonisation ---
+Chantiers de construction suivis depuis ton journal : ce qu'il reste à livrer, ta soute, les trajets et où acheter. ¦ Construction sites tracked from your journal: what's left to deliver, your hold, trips and where to buy. ¦ Baustellen aus deinem Journal: was noch zu liefern ist, dein Frachtraum, Fahrten und wo man kauft. ¦ Obras de construcción seguidas desde tu diario: lo que falta entregar, tu bodega, los viajes y dónde comprar. ¦ Obras de construção acompanhadas pelo seu diário: o que falta entregar, seu porão, as viagens e onde comprar. ¦ Стройки из вашего журнала: что осталось доставить, ваш трюм, рейсы и где купить.
+Afficher les chantiers terminés ¦ Show finished sites ¦ Abgeschlossene Baustellen anzeigen ¦ Mostrar obras terminadas ¦ Mostrar obras concluídas ¦ Показывать завершённые стройки
+Aucun chantier en cours. Docke à un dépôt de construction (Colonisation) : EDCH lira la liste des marchandises demandées. ¦ No construction in progress. Dock at a construction depot (Colonisation): EDCH will read the list of commodities it needs. ¦ Keine laufende Baustelle. Docke an einem Baudepot an (Kolonisierung): EDCH liest die Liste der benötigten Waren. ¦ No hay obras en curso. Atraca en un depósito de construcción (Colonización): EDCH leerá la lista de mercancías necesarias. ¦ Nenhuma obra em andamento. Atraque em um depósito de construção (Colonização): o EDCH vai ler a lista de mercadorias pedidas. ¦ Нет текущих строек. Пристыкуйтесь к строительному депо (колонизация): EDCH прочитает список нужных товаров.
+Dépôt #{0} ¦ Depot #{0} ¦ Depot #{0} ¦ Depósito #{0} ¦ Depósito #{0} ¦ Депо №{0}
+Terminé ¦ Complete ¦ Fertig ¦ Terminado ¦ Concluído ¦ Завершено
+Échoué ¦ Failed ¦ Gescheitert ¦ Fallido ¦ Falhou ¦ Провалено
+Mis à jour {0} ¦ Updated {0} ¦ Aktualisiert {0} ¦ Actualizado {0} ¦ Atualizado {0} ¦ Обновлено {0}
+t restantes ¦ t left ¦ t übrig ¦ t restantes ¦ t restantes ¦ т осталось
+t utiles en soute ¦ useful t in the hold ¦ nützliche t im Frachtraum ¦ t útiles en la bodega ¦ t úteis no porão ¦ т нужного в трюме
+trajets ({0} t par trajet) ¦ trips ({0} t per trip) ¦ Fahrten ({0} t pro Fahrt) ¦ viajes ({0} t por viaje) ¦ viagens ({0} t por viagem) ¦ рейсов ({0} т за рейс)
+Marchandise ¦ Commodity ¦ Ware ¦ Mercancía ¦ Mercadoria ¦ Товар
+Livré ¦ Delivered ¦ Geliefert ¦ Entregado ¦ Entregue ¦ Доставлено
+Demandé ¦ Required ¦ Benötigt ¦ Requerido ¦ Pedido ¦ Требуется
+Restant ¦ Left ¦ Übrig ¦ Restante ¦ Restante ¦ Осталось
+En soute ¦ In hold ¦ Im Frachtraum ¦ En bodega ¦ No porão ¦ В трюме
+Chercher où l'acheter près de toi ¦ Find where to buy it near you ¦ Suchen, wo man es in deiner Nähe kauft ¦ Buscar dónde comprarlo cerca de ti ¦ Procurar onde comprar perto de você ¦ Найти, где купить поблизости
+Acheter ¦ Buy ¦ Kaufen ¦ Comprar ¦ Comprar ¦ Купить
+
+# --- community goals ---
+Ta participation, lue dans le journal du jeu. ¦ Your participation, read from the game journal. ¦ Deine Teilnahme, aus dem Spiel-Journal gelesen. ¦ Tu participación, leída del diario del juego. ¦ Sua participação, lida do diário do jogo. ¦ Ваше участие по данным журнала игры.
+Aucun objectif communautaire suivi. Inscris-toi à un objectif en jeu (ou ouvre son panneau) : il apparaîtra ici. ¦ No community goal tracked. Sign up for a goal in game (or open its panel): it will show up here. ¦ Kein Community-Ziel verfolgt. Melde dich im Spiel für ein Ziel an (oder öffne sein Panel): Es erscheint dann hier. ¦ No se sigue ningún objetivo comunitario. Inscríbete en un objetivo en el juego (o abre su panel): aparecerá aquí. ¦ Nenhuma meta comunitária acompanhada. Inscreva-se em uma meta no jogo (ou abra o painel dela): ela vai aparecer aqui. ¦ Нет отслеживаемых целей сообщества. Запишитесь на цель в игре (или откройте её панель): она появится здесь.
+Objectifs passés ¦ Past goals ¦ Vergangene Ziele ¦ Objetivos pasados ¦ Metas passadas ¦ Прошлые цели
+ta contribution ¦ your contribution ¦ dein Beitrag ¦ tu contribución ¦ sua contribuição ¦ ваш вклад
+Top {0} % ¦ Top {0}% ¦ Top {0} % ¦ Top {0} % ¦ Top {0}% ¦ Топ {0} %
+ta tranche de récompense ¦ your reward band ¦ deine Belohnungsstufe ¦ tu tramo de recompensa ¦ sua faixa de recompensa ¦ ваша категория награды
+sur {0} ¦ of {0} ¦ von {0} ¦ de {0} ¦ de {0} ¦ из {0}
+palier atteint ¦ tier reached ¦ erreichte Stufe ¦ nivel alcanzado ¦ nível alcançado ¦ достигнутый уровень
+participants ¦ contributors ¦ Teilnehmer ¦ participantes ¦ participantes ¦ участников
+Tu es dans le top {0} des contributeurs. ¦ You are in the top {0} contributors. ¦ Du bist unter den Top {0} der Beitragenden. ¦ Estás entre los {0} mejores contribuyentes. ¦ Você está entre os {0} maiores contribuintes. ¦ Вы в топ-{0} участников.
+Se termine {0} ¦ Ends {0} ¦ Endet {0} ¦ Termina {0} ¦ Termina {0} ¦ Завершится {0}
+Total : {0} ¦ Total: {0} ¦ Gesamt: {0} ¦ Total: {0} ¦ Total: {0} ¦ Всего: {0}
+Tous les objectifs en cours ¦ All current goals ¦ Alle laufenden Ziele ¦ Todos los objetivos en curso ¦ Todas as metas em andamento ¦ Все текущие цели
+Via Inara, avec ta clé API (page Synchro). ¦ Through Inara, with your API key (Sync page). ¦ Über Inara, mit deinem API-Schlüssel (Seite Synchronisierung). ¦ A través de Inara, con tu clave API (página Sincronización). ¦ Pelo Inara, com sua chave API (página Sincronização). ¦ Через Inara, с вашим API-ключом (страница «Синхронизация»).
+Ajoute ta clé API Inara dans Synchro pour voir tous les objectifs en cours. ¦ Add your Inara API key in Sync to see all current goals. ¦ Trag deinen Inara-API-Schlüssel unter Synchronisierung ein, um alle laufenden Ziele zu sehen. ¦ Añade tu clave API de Inara en Sincronización para ver todos los objetivos en curso. ¦ Adicione sua chave API do Inara em Sincronização para ver todas as metas em andamento. ¦ Добавьте API-ключ Inara в «Синхронизации», чтобы видеть все текущие цели.
+Charger ¦ Load ¦ Laden ¦ Cargar ¦ Carregar ¦ Загрузить
+Chargement… ¦ Loading… ¦ Lädt… ¦ Cargando… ¦ Carregando… ¦ Загрузка…
+Objectif ¦ Goal ¦ Ziel ¦ Objetivo ¦ Meta ¦ Цель
+Lieu ¦ Location ¦ Ort ¦ Lugar ¦ Local ¦ Место
+Palier ¦ Tier ¦ Stufe ¦ Nivel ¦ Nível ¦ Уровень
+Participants ¦ Contributors ¦ Teilnehmer ¦ Participantes ¦ Participantes ¦ Участники
+Fin ¦ Ends ¦ Ende ¦ Fin ¦ Fim ¦ Конец
+Aucun objectif en cours sur Inara. ¦ No current goals on Inara. ¦ Keine laufenden Ziele auf Inara. ¦ No hay objetivos en curso en Inara. ¦ Nenhuma meta em andamento no Inara. ¦ На Inara нет текущих целей.
+
+# --- exploration ---
+Exobiologie ¦ Exobiology ¦ Exobiologie ¦ Exobiología ¦ Exobiologia ¦ Экзобиология
+Cartographie ¦ Cartography ¦ Kartografie ¦ Cartografía ¦ Cartografia ¦ Картография
+Ce que valent tes données pas encore vendues, et l'aide aux prélèvements biologiques. ¦ What your unsold data is worth, and help with biological sampling. ¦ Was deine noch nicht verkauften Daten wert sind, und Hilfe bei biologischen Proben. ¦ Lo que valen tus datos aún no vendidos, y ayuda con las muestras biológicas. ¦ Quanto valem seus dados ainda não vendidos, e ajuda com as amostras biológicas. ¦ Сколько стоят непроданные данные, и помощь со сбором биообразцов.
+Analyses à vendre (Vista Genomics) ¦ Analyses to sell (Vista Genomics) ¦ Analysen zum Verkauf (Vista Genomics) ¦ Análisis por vender (Vista Genomics) ¦ Análises para vender (Vista Genomics) ¦ Анализы на продажу (Vista Genomics)
+Espèce ¦ Species ¦ Art ¦ Especie ¦ Espécie ¦ Вид
+Valeur ¦ Value ¦ Wert ¦ Valor ¦ Valor ¦ Стоимость
+Premier pas sur cette planète : le bonus de première découverte multiplie la valeur par 5 ¦ First footfall on this planet: the first discovery bonus multiplies the value by 5 ¦ Erster Schritt auf diesem Planeten: Der Erstentdecker-Bonus verfünffacht den Wert ¦ Primera pisada en este planeta: el bono de primer descubrimiento multiplica el valor por 5 ¦ Primeiro passo neste planeta: o bônus de primeira descoberta multiplica o valor por 5 ¦ Первые следы на этой планете: бонус первооткрывателя умножает стоимость на 5
+×5 possible ¦ ×5 possible ¦ ×5 möglich ¦ ×5 posible ¦ ×5 possível ¦ возможно ×5
+Aucune analyse en attente. Les espèces analysées (3 prélèvements) s'ajoutent ici jusqu'à leur vente. ¦ No analyses waiting. Analysed species (3 samples) are added here until you sell them. ¦ Keine Analysen offen. Analysierte Arten (3 Proben) kommen hierher, bis du sie verkaufst. ¦ No hay análisis pendientes. Las especies analizadas (3 muestras) se añaden aquí hasta que las vendas. ¦ Nenhuma análise pendente. As espécies analisadas (3 amostras) entram aqui até você vender. ¦ Нет ожидающих анализов. Изученные виды (3 образца) появляются здесь до продажи.
+Attention : une destruction fait perdre toutes les analyses non vendues. ¦ Careful: being destroyed loses every unsold analysis. ¦ Achtung: Eine Zerstörung kostet alle nicht verkauften Analysen. ¦ Cuidado: ser destruido hace perder todos los análisis no vendidos. ¦ Atenção: ser destruído faz perder todas as análises não vendidas. ¦ Внимание: при гибели все непроданные анализы теряются.
+distance minimale entre prélèvements ¦ minimum distance between samples ¦ Mindestabstand zwischen Proben ¦ distancia mínima entre muestras ¦ distância mínima entre amostras ¦ мин. расстояние между образцами
+du prélèvement le plus proche ¦ from the nearest sample ¦ von der nächsten Probe ¦ de la muestra más cercana ¦ da amostra mais próxima ¦ до ближайшего образца
+La distance s'affiche quand tu es à la surface (EDCH lit ta position dans Status.json). ¦ The distance shows when you're on the surface (EDCH reads your position in Status.json). ¦ Der Abstand erscheint, wenn du auf der Oberfläche bist (EDCH liest deine Position aus Status.json). ¦ La distancia aparece cuando estás en la superficie (EDCH lee tu posición en Status.json). ¦ A distância aparece quando você está na superfície (o EDCH lê sua posição no Status.json). ¦ Расстояние появляется на поверхности (EDCH читает вашу позицию из Status.json).
+Assez loin : tu peux faire le prélèvement suivant. ¦ Far enough: you can take the next sample. ¦ Weit genug: Du kannst die nächste Probe nehmen. ¦ Lo bastante lejos: puedes tomar la siguiente muestra. ¦ Longe o bastante: você pode fazer a próxima amostra. ¦ Достаточно далеко: можно брать следующий образец.
+Trop près : éloigne-toi encore de {0} m. ¦ Too close: move another {0} m away. ¦ Zu nah: Entferne dich noch {0} m. ¦ Demasiado cerca: aléjate otros {0} m. ¦ Perto demais: afaste-se mais {0} m. ¦ Слишком близко: отойдите ещё на {0} м.
+Signaux biologiques dans {0} ¦ Biological signals in {0} ¦ Biologische Signale in {0} ¦ Señales biológicas en {0} ¦ Sinais biológicos em {0} ¦ Биосигналы в {0}
+· {0} signal(s) biologique(s) ¦ · {0} biological signal(s) ¦ · {0} biologische(s) Signal(e) ¦ · {0} señal(es) biológica(s) ¦ · {0} sinal(is) biológico(s) ¦ · биосигналов: {0}
+Premier pas ×5 ¦ First footfall ×5 ¦ Erster Schritt ×5 ¦ Primera pisada ×5 ¦ Primeiro passo ×5 ¦ Первые следы ×5
+Estimation : meilleure espèce possible de chaque genre ¦ Estimate: best possible species of each genus ¦ Schätzung: beste mögliche Art jeder Gattung ¦ Estimación: mejor especie posible de cada género ¦ Estimativa: melhor espécie possível de cada gênero ¦ Оценка: лучший возможный вид каждого рода
+jusqu'à {0} Cr ¦ up to {0} Cr ¦ bis zu {0} Cr ¦ hasta {0} Cr ¦ até {0} Cr ¦ до {0} Cr
+Scanne la planète (FSS ou scan détaillé) pour voir les espèces possibles. ¦ Scan the planet (FSS or detailed scan) to see the possible species. ¦ Scanne den Planeten (FSS oder Detailscan), um die möglichen Arten zu sehen. ¦ Escanea el planeta (FSS o escaneo detallado) para ver las especies posibles. ¦ Escaneie o planeta (FSS ou escaneamento detalhado) para ver as espécies possíveis. ¦ Просканируйте планету (FSS или детальный скан), чтобы увидеть возможные виды.
+Aucune espèce connue ne correspond : elle est peut-être rare ou de région. ¦ No known species matches: it may be rare or regional. ¦ Keine bekannte Art passt: Sie ist vielleicht selten oder regional. ¦ Ninguna especie conocida coincide: quizá sea rara o regional. ¦ Nenhuma espécie conhecida corresponde: talvez seja rara ou regional. ¦ Ни один известный вид не подходит: возможно, он редкий или региональный.
+Espèces possibles d'après le type de planète, l'atmosphère, la gravité, la température et la pression. La région galactique n'est pas vérifiée. ¦ Possible species from the planet type, atmosphere, gravity, temperature and pressure. The galactic region isn't checked. ¦ Mögliche Arten nach Planetentyp, Atmosphäre, Schwerkraft, Temperatur und Druck. Die galaktische Region wird nicht geprüft. ¦ Especies posibles según el tipo de planeta, la atmósfera, la gravedad, la temperatura y la presión. No se comprueba la región galáctica. ¦ Espécies possíveis pelo tipo de planeta, atmosfera, gravidade, temperatura e pressão. A região galáctica não é verificada. ¦ Возможные виды по типу планеты, атмосфере, гравитации, температуре и давлению. Галактический регион не проверяется.
+Données cartographiques à vendre ¦ Cartographic data to sell ¦ Kartografische Daten zum Verkauf ¦ Datos cartográficos por vender ¦ Dados cartográficos para vender ¦ Картографические данные на продажу
+≈ {0} Cr ¦ ≈ {0} Cr ¦ ≈ {0} Cr ¦ ≈ {0} Cr ¦ ≈ {0} Cr ¦ ≈ {0} Cr
+Corps ¦ Bodies ¦ Körper ¦ Cuerpos ¦ Corpos ¦ Тела
+Premières découvertes ¦ First discoveries ¦ Erstentdeckungen ¦ Primeros descubrimientos ¦ Primeiras descobertas ¦ Первооткрытия
+Cartographiés ¦ Mapped ¦ Kartiert ¦ Cartografiados ¦ Mapeados ¦ Картографировано
+Valeur estimée ¦ Estimated value ¦ Geschätzter Wert ¦ Valor estimado ¦ Valor estimado ¦ Оценочная стоимость
+Scanné ¦ Scanned ¦ Gescannt ¦ Escaneado ¦ Escaneado ¦ Сканировано
+Rien à vendre. Les corps scannés (FSS, scan détaillé, cartographie) s'ajoutent ici jusqu'à leur vente à Universal Cartographics. ¦ Nothing to sell. Scanned bodies (FSS, detailed scan, mapping) are added here until you sell them to Universal Cartographics. ¦ Nichts zu verkaufen. Gescannte Körper (FSS, Detailscan, Kartierung) kommen hierher, bis du sie an Universal Cartographics verkaufst. ¦ Nada que vender. Los cuerpos escaneados (FSS, escaneo detallado, cartografía) se añaden aquí hasta que los vendas a Universal Cartographics. ¦ Nada para vender. Os corpos escaneados (FSS, escaneamento detalhado, mapeamento) entram aqui até você vender à Universal Cartographics. ¦ Нечего продавать. Просканированные тела (FSS, детальный скан, картография) появляются здесь до продажи в Universal Cartographics.
+Valeurs estimées avec la formule communautaire (à quelques % près), bonus de première découverte et de cartographie compris. Une destruction fait tout perdre. ¦ Values estimated with the community formula (within a few %), first discovery and mapping bonuses included. Being destroyed loses everything. ¦ Werte mit der Community-Formel geschätzt (auf wenige % genau), Boni für Erstentdeckung und Kartierung inklusive. Eine Zerstörung kostet alles. ¦ Valores estimados con la fórmula de la comunidad (con unos pocos % de margen), bonos de primer descubrimiento y cartografía incluidos. Ser destruido hace perderlo todo. ¦ Valores estimados com a fórmula da comunidade (com poucos % de margem), bônus de primeira descoberta e mapeamento incluídos. Ser destruído faz perder tudo. ¦ Стоимость оценена по формуле сообщества (с точностью до нескольких %), с бонусами за первооткрытие и картографию. При гибели всё теряется.
+
+# --- mining ---
+Prospection ¦ Prospecting ¦ Prospektion ¦ Prospección ¦ Prospecção ¦ Разведка
+Merit Miner ¦ Merit Miner ¦ Merit Miner ¦ Merit Miner ¦ Merit Miner ¦ Merit Miner
+Résultats des prospecteurs en direct, et où miner et vendre pour gagner des mérites Powerplay. ¦ Live prospector results, and where to mine and sell to earn Powerplay merits. ¦ Prospektor-Ergebnisse live und wo man abbaut und verkauft, um Powerplay-Verdienste zu bekommen. ¦ Resultados de los prospectores en directo, y dónde minar y vender para ganar méritos de Powerplay. ¦ Resultados dos prospectores ao vivo, e onde minerar e vender para ganhar méritos de Powerplay. ¦ Результаты разведчиков в реальном времени, и где добывать и продавать ради заслуг Powerplay.
+Cibles ¦ Targets ¦ Ziele ¦ Objetivos ¦ Alvos ¦ Цели
++ Ajouter une cible ¦ + Add a target ¦ + Ziel hinzufügen ¦ + Añadir un objetivo ¦ + Adicionar um alvo ¦ + Добавить цель
+Retirer ¦ Remove ¦ Entfernen ¦ Quitar ¦ Remover ¦ Убрать
+Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Missions → Notifications. ¦ When a prospector finds one of these targets above the chosen percentage (or a motherlode for core mining), EDCH alerts you with the sound and colour chosen in Missions → Notifications. ¦ Findet ein Prospektor eines dieser Ziele über dem gewählten Prozentsatz (oder einen Kern für den Kernabbau), meldet EDCH das mit dem Ton und der Farbe aus Missionen → Benachrichtigungen. ¦ Cuando un prospector encuentra uno de estos objetivos por encima del porcentaje elegido (o un núcleo para minería profunda), EDCH te avisa con el sonido y el color elegidos en Misiones → Notificaciones. ¦ Quando um prospector encontra um desses alvos acima da porcentagem escolhida (ou um núcleo para mineração profunda), o EDCH avisa com o som e a cor escolhidos em Missões → Notificações. ¦ Когда разведчик находит одну из этих целей выше выбранного процента (или ядро для глубинной добычи), EDCH оповещает звуком и цветом, выбранными в «Миссии → Оповещения».
+Alerte sonore et visuelle ¦ Sound and visual alert ¦ Akustischer und visueller Hinweis ¦ Alerta sonora y visual ¦ Alerta sonoro e visual ¦ Звуковое и визуальное оповещение
+Dernier astéroïde ¦ Last asteroid ¦ Letzter Asteroid ¦ Último asteroide ¦ Último asteroide ¦ Последний астероид
+Contenu : {0} ¦ Content: {0} ¦ Gehalt: {0} ¦ Contenido: {0} ¦ Conteúdo: {0} ¦ Содержание: {0}
+Restant {0} % ¦ {0}% left ¦ {0} % übrig ¦ Queda {0} % ¦ Resta {0}% ¦ Осталось {0} %
+Précédents ¦ Previous ¦ Vorherige ¦ Anteriores ¦ Anteriores ¦ Предыдущие
+Lance un drone prospecteur sur un astéroïde : sa composition s'affichera ici. ¦ Fire a prospector limpet at an asteroid: its composition will show here. ¦ Schick eine Prospektor-Drohne auf einen Asteroiden: Seine Zusammensetzung erscheint hier. ¦ Lanza un dron prospector a un asteroide: su composición aparecerá aquí. ¦ Lance um drone prospector em um asteroide: a composição vai aparecer aqui. ¦ Запустите дрона-разведчика на астероид: его состав появится здесь.
+Cette session ¦ This session ¦ Diese Sitzung ¦ Esta sesión ¦ Esta sessão ¦ Эта сессия
+t raffinées ¦ t refined ¦ t raffiniert ¦ t refinadas ¦ t refinadas ¦ т переработано
+t / heure ¦ t / hour ¦ t / Stunde ¦ t / hora ¦ t / hora ¦ т / час
+astéroïdes prospectés ¦ asteroids prospected ¦ Asteroiden prospektiert ¦ asteroides prospectados ¦ asteroides prospectados ¦ астероидов разведано
+prospecteurs ¦ prospectors ¦ Prospektoren ¦ prospectores ¦ prospectores ¦ разведчиков
+collecteurs ¦ collectors ¦ Sammler ¦ recolectores ¦ coletores ¦ сборщиков
+cœurs fracturés ¦ cores cracked ¦ Kerne gesprengt ¦ núcleos fracturados ¦ núcleos fraturados ¦ ядер расколото
+de minage ¦ mining ¦ Bergbau ¦ de minería ¦ de mineração ¦ добычи
+Où miner et vendre dans les systèmes de ta puissance ¦ Where to mine and sell in your power's systems ¦ Wo man in den Systemen deiner Macht abbaut und verkauft ¦ Dónde minar y vender en los sistemas de tu potencia ¦ Onde minerar e vender nos sistemas da sua potência ¦ Где добывать и продавать в системах вашей державы
+Cherche les stations des systèmes contrôlés par la puissance choisie (exploités, fortifiés ou bastions) qui achètent le minerai, triées par prix, et les anneaux avec un point chaud de ce minerai dans ces systèmes. Vendre dans un système de ta puissance des minerais minés dans ce même système rapporte des mérites. Données Spansh. ¦ Finds the stations in systems controlled by the chosen power (exploited, fortified or stronghold) that buy the mineral, sorted by price, and the rings with a hotspot of that mineral in those systems. Selling in one of your power's systems minerals mined in that same system earns merits. Spansh data. ¦ Sucht Stationen in Systemen der gewählten Macht (ausgebeutet, befestigt oder Hochburg), die das Mineral kaufen, nach Preis sortiert, und Ringe mit einem Hotspot dieses Minerals in diesen Systemen. Wer in einem System seiner Macht Mineralien verkauft, die im selben System abgebaut wurden, bekommt Verdienste. Spansh-Daten. ¦ Busca las estaciones de los sistemas controlados por la potencia elegida (explotados, fortificados o bastiones) que compran el mineral, ordenadas por precio, y los anillos con un punto caliente de ese mineral en esos sistemas. Vender en un sistema de tu potencia minerales extraídos en ese mismo sistema da méritos. Datos de Spansh. ¦ Procura as estações dos sistemas controlados pela potência escolhida (explorados, fortificados ou fortalezas) que compram o mineral, ordenadas por preço, e os anéis com ponto quente desse mineral nesses sistemas. Vender em um sistema da sua potência minerais extraídos nesse mesmo sistema dá méritos. Dados do Spansh. ¦ Ищет станции в системах выбранной державы (эксплуатируемых, укреплённых или оплотах), которые покупают минерал, по цене, и кольца с горячей точкой этого минерала в этих системах. Продажа в системе вашей державы минералов, добытых в той же системе, приносит заслуги. Данные Spansh.
+Puissance ¦ Power ¦ Macht ¦ Potencia ¦ Potência ¦ Держава
+{0} (ta puissance) ¦ {0} (your power) ¦ {0} (deine Macht) ¦ {0} (tu potencia) ¦ {0} (sua potência) ¦ {0} (ваша держава)
+Recherche… ¦ Searching… ¦ Suche… ¦ Buscando… ¦ Buscando… ¦ Поиск…
+Où vendre ({0}) ¦ Where to sell ({0}) ¦ Wo verkaufen ({0}) ¦ Dónde vender ({0}) ¦ Onde vender ({0}) ¦ Где продать ({0})
+Minerai ¦ Mineral ¦ Mineral ¦ Mineral ¦ Mineral ¦ Минерал
+Prix ¦ Price ¦ Preis ¦ Precio ¦ Preço ¦ Цена
+Demande ¦ Demand ¦ Nachfrage ¦ Demanda ¦ Demanda ¦ Спрос
+État ¦ State ¦ Zustand ¦ Estado ¦ Estado ¦ Состояние
+Point chaud ici ¦ Hotspot here ¦ Hotspot hier ¦ Punto caliente aquí ¦ Ponto quente aqui ¦ Горячая точка здесь
+Aucune station de cette puissance n'achète ces minerais dans le rayon choisi. Augmente la distance dans les Paramètres. ¦ No station of this power buys these minerals within the chosen radius. Increase the distance in Settings. ¦ Keine Station dieser Macht kauft diese Mineralien im gewählten Umkreis. Erhöhe die Entfernung in den Einstellungen. ¦ Ninguna estación de esta potencia compra estos minerales en el radio elegido. Aumenta la distancia en Ajustes. ¦ Nenhuma estação dessa potência compra esses minerais no raio escolhido. Aumente a distância nas Configurações. ¦ Ни одна станция этой державы не покупает эти минералы в выбранном радиусе. Увеличьте расстояние в настройках.
+Points chauds dans ces systèmes ¦ Hotspots in these systems ¦ Hotspots in diesen Systemen ¦ Puntos calientes en estos sistemas ¦ Pontos quentes nesses sistemas ¦ Горячие точки в этих системах
+Anneau ¦ Ring ¦ Ring ¦ Anillo ¦ Anel ¦ Кольцо
+Points chauds ¦ Hotspots ¦ Hotspots ¦ Puntos calientes ¦ Pontos quentes ¦ Горячие точки
+
+# --- powerplay ---
+Tes mérites et l'état Powerplay du système où tu es. ¦ Your merits and the Powerplay state of the system you're in. ¦ Deine Verdienste und der Powerplay-Zustand des Systems, in dem du bist. ¦ Tus méritos y el estado de Powerplay del sistema donde estás. ¦ Seus méritos e o estado de Powerplay do sistema onde você está. ¦ Ваши заслуги и состояние Powerplay текущей системы.
+rang ¦ rank ¦ Rang ¦ rango ¦ posto ¦ ранг
+mérites au total ¦ total merits ¦ Verdienste gesamt ¦ méritos en total ¦ méritos no total ¦ всего заслуг
+mérites cette semaine ¦ merits this week ¦ Verdienste diese Woche ¦ méritos esta semana ¦ méritos nesta semana ¦ заслуг за неделю
+mérites cette session ¦ merits this session ¦ Verdienste diese Sitzung ¦ méritos esta sesión ¦ méritos nesta sessão ¦ заслуг за сессию
+d'engagement ¦ pledged ¦ verpflichtet ¦ de compromiso ¦ de compromisso ¦ в присяге
+Nouveau cycle {0}. ¦ New cycle {0}. ¦ Neuer Zyklus {0}. ¦ Nuevo ciclo el {0}. ¦ Novo ciclo {0}. ¦ Новый цикл: {0}.
+Tu n'es engagé auprès d'aucune puissance (ou le jeu ne l'a pas encore écrit dans le journal). Engage-toi en jeu, puis reconnecte-toi. ¦ You're not pledged to any power (or the game hasn't written it to the journal yet). Pledge in game, then log in again. ¦ Du bist keiner Macht verpflichtet (oder das Spiel hat es noch nicht ins Journal geschrieben). Verpflichte dich im Spiel und melde dich erneut an. ¦ No te has comprometido con ninguna potencia (o el juego aún no lo ha escrito en el diario). Comprométete en el juego y vuelve a conectarte. ¦ Você não está comprometido com nenhuma potência (ou o jogo ainda não escreveu isso no diário). Comprometa-se no jogo e entre de novo. ¦ Вы не присягнули ни одной державе (или игра ещё не записала это в журнал). Присягните в игре и перезайдите.
+Système actuel : {0} ¦ Current system: {0} ¦ Aktuelles System: {0} ¦ Sistema actual: {0} ¦ Sistema atual: {0} ¦ Текущая система: {0}
+puissance qui contrôle ¦ controlling power ¦ kontrollierende Macht ¦ potencia que controla ¦ potência que controla ¦ контролирующая держава
+état ¦ state ¦ Zustand ¦ estado ¦ estado ¦ состояние
+progression du contrôle ¦ control progress ¦ Kontrollfortschritt ¦ progreso del control ¦ progresso do controle ¦ прогресс контроля
+renforcement ¦ reinforcement ¦ Verstärkung ¦ refuerzo ¦ reforço ¦ укрепление
+sape ¦ undermining ¦ Untergrabung ¦ socavación ¦ sabotagem ¦ подрыв
+Aucune puissance ne contrôle ce système. ¦ No power controls this system. ¦ Keine Macht kontrolliert dieses System. ¦ Ninguna potencia controla este sistema. ¦ Nenhuma potência controla este sistema. ¦ Эту систему не контролирует ни одна держава.
+Puissances présentes : ¦ Powers present: ¦ Anwesende Mächte: ¦ Potencias presentes: ¦ Potências presentes: ¦ Присутствующие державы:
+Système de ta puissance : renforce-le (commerce, minage, missions, combat) pour gagner des mérites. ¦ Your power's system: reinforce it (trade, mining, missions, combat) to earn merits. ¦ System deiner Macht: Verstärke es (Handel, Bergbau, Missionen, Kampf), um Verdienste zu bekommen. ¦ Sistema de tu potencia: refuérzalo (comercio, minería, misiones, combate) para ganar méritos. ¦ Sistema da sua potência: reforce-o (comércio, mineração, missões, combate) para ganhar méritos. ¦ Система вашей державы: укрепляйте её (торговля, добыча, миссии, бой), чтобы получать заслуги.
+Système d'une autre puissance : tu peux le saper pour gagner des mérites. ¦ Another power's system: you can undermine it to earn merits. ¦ System einer anderen Macht: Du kannst es untergraben, um Verdienste zu bekommen. ¦ Sistema de otra potencia: puedes socavarlo para ganar méritos. ¦ Sistema de outra potência: você pode sabotá-lo para ganhar méritos. ¦ Система другой державы: подрывайте её, чтобы получать заслуги.
+
+# --- session ---
+Bilan de session ¦ Session summary ¦ Sitzungsbilanz ¦ Resumen de la sesión ¦ Resumo da sessão ¦ Итоги сессии
+Depuis le lancement du jeu, {0} ({1}) ¦ Since the game started, {0} ({1}) ¦ Seit dem Spielstart, {0} ({1}) ¦ Desde que empezó el juego, {0} ({1}) ¦ Desde que o jogo começou, {0} ({1}) ¦ С запуска игры, {0} ({1})
+Lance Elite Dangerous : le bilan démarre à la connexion. ¦ Start Elite Dangerous: the summary begins when you log in. ¦ Starte Elite Dangerous: Die Bilanz beginnt bei der Anmeldung. ¦ Inicia Elite Dangerous: el resumen empieza al conectarte. ¦ Abra o Elite Dangerous: o resumo começa quando você entra. ¦ Запустите Elite Dangerous: итоги начинаются при входе.
+Crédits gagnés ¦ Credits earned ¦ Verdiente Credits ¦ Créditos ganados ¦ Créditos ganhos ¦ Заработано кредитов
+Primes ¦ Bounties ¦ Kopfgelder ¦ Recompensas ¦ Recompensas ¦ Награды за головы
+Obligations de combat ¦ Combat bonds ¦ Kampfanleihen ¦ Bonos de combate ¦ Títulos de combate ¦ Боевые облигации
+Commerce (bénéfice) ¦ Trade (profit) ¦ Handel (Gewinn) ¦ Comercio (beneficio) ¦ Comércio (lucro) ¦ Торговля (прибыль)
+≈ {0} Cr par heure ¦ ≈ {0} Cr per hour ¦ ≈ {0} Cr pro Stunde ¦ ≈ {0} Cr por hora ¦ ≈ {0} Cr por hora ¦ ≈ {0} Cr в час
+Activité ¦ Activity ¦ Aktivität ¦ Actividad ¦ Atividade ¦ Активность
+sauts ¦ jumps ¦ Sprünge ¦ saltos ¦ saltos ¦ прыжков
+al parcourues ¦ ly travelled ¦ Lj zurückgelegt ¦ al recorridos ¦ al percorridos ¦ св. лет пройдено
+missions terminées ¦ missions completed ¦ Missionen abgeschlossen ¦ misiones completadas ¦ missões concluídas ¦ миссий выполнено
+éliminations ¦ kills ¦ Abschüsse ¦ bajas ¦ abates ¦ уничтожений
+matériaux ramassés ¦ materials collected ¦ Materialien gesammelt ¦ materiales recogidos ¦ materiais coletados ¦ материалов собрано
+t minées ¦ t mined ¦ t abgebaut ¦ t minadas ¦ t mineradas ¦ т добыто
+destructions ¦ deaths ¦ Zerstörungen ¦ destrucciones ¦ destruições ¦ гибелей
+{0} min ¦ {0} min ¦ {0} Min. ¦ {0} min ¦ {0} min ¦ {0} мин
+{0} h {1} ¦ {0} h {1} ¦ {0} Std. {1} ¦ {0} h {1} ¦ {0} h {1} ¦ {0} ч {1}
+{0} j {1} h ¦ {0} d {1} h ¦ {0} T {1} Std. ¦ {0} d {1} h ¦ {0} d {1} h ¦ {0} д {1} ч
+Les noms des espèces d'exobiologie tels que le journal les écrit ¦ Exobiology species names as the journal writes them ¦ Die Namen der Exobiologie-Arten, wie das Journal sie schreibt ¦ Los nombres de las especies de exobiología tal como los escribe el diario ¦ Os nomes das espécies de exobiologia como o diário os escreve ¦ Названия видов экзобиологии в том виде, как их пишет журнал
+Le relais gratuit qui transporte les messages chiffrés de l'escadrille ¦ The free relay that carries the wing's encrypted messages ¦ Das kostenlose Relais für die verschlüsselten Nachrichten des Geschwaders ¦ El relé gratuito que transporta los mensajes cifrados del ala ¦ O relé gratuito que transporta as mensagens criptografadas da ala ¦ Бесплатный ретранслятор зашифрованных сообщений звена
+Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie ¦ EDEngineer's and the engineers' data, gathered and corrected, and the exobiology catalogue ¦ Die Daten von EDEngineer und der Ingenieure, gesammelt und korrigiert, und der Exobiologie-Katalog ¦ Los datos de EDEngineer y de los ingenieros, reunidos y corregidos, y el catálogo de exobiología ¦ Os dados do EDEngineer e dos engenheiros, reunidos e corrigidos, e o catálogo de exobiologia ¦ Данные EDEngineer и инженеров, собранные и исправленные, и каталог экзобиологии

@@ -36,6 +36,13 @@ const SERVICES: [string, string][] = [
 const CLASSES = ["", "0", "1", "2", "3", "4", "5", "6", "7", "8"];
 const RATINGS = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I"];
 
+let pending: { tab: Tab; value: string } | null = null;
+
+/** Opens the search page on `tab` with `value` (an English game name) and runs it. */
+export function presetSearch(tab: "buy" | "sell", value: string) {
+  pending = { tab, value };
+}
+
 export class SearchView implements View {
   private root?: HTMLElement;
   private tab: Tab = "buy";
@@ -61,8 +68,16 @@ export class SearchView implements View {
       h("datalist#dl-modules", null, g.modules.map((s) => h("option", { value: gameName(s) }))),
     );
     replace(root, h("header.view-head", null, h("h1", null, "Recherche"), this.tabs), lists, h("section.card", null, this.form), this.out);
+    if (pending) {
+      this.tab = pending.tab;
+      this.values[pending.tab] = gameName(pending.value);
+    }
     this.renderTabs();
     this.renderForm();
+    if (pending) {
+      pending = null;
+      void this.run();
+    }
   }
 
   update() {

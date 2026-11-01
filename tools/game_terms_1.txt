@@ -189,3 +189,9 @@ Reduced Tool Battery Consumption ¦ Consommation des outils réduite ¦ Geringer
 Stowed Reloading ¦ Rechargement rangé ¦ Nachladen im Holster ¦ Recarga enfundada ¦ Recarga guardada ¦ Перезарядка в кобуре
 Combat Movement Speed ¦ Vitesse de déplacement au combat ¦ Kampfbewegungstempo ¦ Velocidad de movimiento de combate ¦ Velocidade de movimento em combate ¦ Скорость передвижения в бою
 Improved Hip Fire Accuracy ¦ Amélioration de la précision du tir au jugé ¦ Verbesserte Hüftfeuer-Präzision ¦ Precisión de disparo de cadera mejorada ¦ Precisão de tiro sem mira melhorada ¦ Точность стрельбы от бедра
+
+# Powerplay system states
+Exploited ¦ Exploité ¦ Ausgebeutet ¦ Explotado ¦ Explorado ¦ Эксплуатируемая
+Fortified ¦ Fortifié ¦ Befestigt ¦ Fortificado ¦ Fortificado ¦ Укреплённая
+Stronghold ¦ Bastion ¦ Hochburg ¦ Bastión ¦ Fortaleza ¦ Оплот
+Unoccupied ¦ Inoccupé ¦ Unbesetzt ¦ Desocupado ¦ Desocupado ¦ Не занята

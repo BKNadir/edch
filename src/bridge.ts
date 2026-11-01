@@ -276,3 +276,9 @@ export async function onUpdateProgress(cb: (done: number, total: number) => void
   if (!isTauri()) return () => undefined;
   return window.__TAURI__!.event.listen<{ done: number; total: number }>("update-progress", (e) => cb(e.payload.done, e.payload.total));
 }
+
+/** Journal lines of the last `days` days for these events (start-up rebuild of the activity). */
+export async function scanHistory(dir: string, days: number, events: string[]): Promise<string[]> {
+  if (!isTauri() || remote) return [];
+  return window.__TAURI__!.core.invoke<string[]>("scan_history", { dir, days, events });
+}

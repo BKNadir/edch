@@ -16,6 +16,9 @@ import {
 } from "./bridge.js";
 import { toast } from "./dom.js";
 import { lang } from "./i18n.js";
+import { emptyActivity } from "./activity.js";
+import { wingView } from "./live.js";
+import { unsoldSummary } from "./views/exploration.js";
 import { emptyState } from "./journal.js";
 import { newRemoteToken, type Store } from "./store.js";
 
@@ -61,8 +64,20 @@ export const detectedAddresses = () => remoteAddresses().catch(() => [] as strin
 function snapshot(store: Store): string {
   const s = store.state;
   // Never share API keys, the secret itself or the PC's paths.
-  const { sync: _sync, remote: _remote, journalDir: _dir, ...settings } = s.settings;
-  return JSON.stringify({ cmdr: s.cmdr, wishlist: s.wishlist, settings, watch: s.watch, lang: lang().code });
+  const { sync: _sync, remote: _remote, journalDir: _dir, wing: _wing, ...settings } = s.settings;
+  // Activity without the body table (big for explorers): the phone gets the summaries it shows.
+  const { bodies, ...activity } = s.activity;
+  const here = s.activity.system?.address;
+  const currentBodies = Object.fromEntries(Object.entries(bodies).filter(([, b]) => b.address === here));
+  return JSON.stringify({
+    cmdr: s.cmdr,
+    wishlist: s.wishlist,
+    settings,
+    watch: s.watch,
+    lang: lang().code,
+    activity: { ...activity, bodies: currentBodies, unsold: unsoldSummary(bodies, s.activity.unsoldSystems) },
+    wing: wingView(),
+  });
 }
 
 function publishNow(store: Store) {
@@ -136,6 +151,8 @@ export async function runRemoteClient(store: Store) {
         store.state.cmdr = { ...emptyState(), ...s.cmdr };
         store.setWishlist(Array.isArray(s.wishlist) ? s.wishlist : [], true);
         store.state.settings = { ...store.state.settings, ...s.settings };
+        if (s.activity) store.state.activity = { ...emptyActivity(), ...s.activity };
+        (store.state as unknown as Record<string, unknown>).remoteWing = s.wing ?? null;
       }
       if (store.state.watch.state !== "remote") {
         store.state.watch = { state: "remote" };

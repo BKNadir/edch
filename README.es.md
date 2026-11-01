@@ -32,6 +32,13 @@ Un compañero ligero para **Elite Dangerous** (Windows). Lee el diario del juego
 - **Navegación**: alcance de salto de tu nave (vacía, llena, cargada, ahora, carga simulada), ruta con impulso de estrellas de neutrones vía Spansh y Fleet Carrier (saltos, tritio y duración, como estimación rápida o plan detallado de Spansh con paradas de reabastecimiento).
 - **Controles y dispositivos**: lee tus asignaciones (preajuste activo, incluidos preajustes distintos para nave, SRV y a pie) y dibuja cada dispositivo. El teclado se dibuja tecla a tecla (QWERTY, AZERTY o QWERTZ) y el mando de Xbox o PlayStation con marcadores numerados. Los HOTAS, joysticks y mandos reconocidos (unos 45 modelos: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) se muestran sobre la imagen del modelo, con la acción escrita en la casilla de cada botón. Las plantillas vienen de EDRefCard y se cargan desde su repositorio de GitHub. Para un modelo no reconocido eliges la plantilla más parecida; si no, se muestra un esquema simple de ejes, setas y botones. Cada control tiene su leyenda y un color por modo, con filtros Nave / SRV / A pie, búsqueda y ficha imprimible.
 - **Copia de seguridad de la configuración**: exporta tus asignaciones (y ajustes gráficos) a un zip en Documentos\EDCH y las restaura con un clic. Tu configuración actual se guarda automáticamente antes de cada importación.
+- **Misiones**: cada misión en curso con su objetivo, destino, tiempo restante y progreso; las misiones de masacre apiladas con las bajas que aún necesita cada facción emisora.
+- **Misiones de ala compartidas**: los miembros del ala que usan EDCH introducen el mismo código y ven quién aceptó cada misión de ala. Los mensajes pasan por ntfy.sh, cifrados de extremo a extremo con ese código. Un sonido y/o una pestaña lateral que parpadea (sin ventanas de Windows) te avisan cuando alguien tiene una misión que tú no tienes, o cuando toda el ala la ha aceptado.
+- **Colonización**: cada depósito de construcción con lo que falta entregar, lo que llevas en la bodega, los viajes necesarios y una búsqueda con un clic de dónde comprar cada mercancía.
+- **Objetivos comunitarios**: tu contribución, tu tramo de recompensa y el nivel de los objetivos a los que te uniste; todos los objetivos en curso a través de Inara con tu clave API.
+- **Exploración**: valor de los datos cartográficos no vendidos, ayuda con las muestras de exobiología (distancia a las muestras anteriores frente al alcance de la colonia), especies posibles y valores de cada planeta con señales biológicas, análisis no vendidos.
+- **Minería**: resultados de los prospectores en directo con alertas para tus objetivos y núcleos, tonelaje de la sesión; una búsqueda al estilo Merit Miner de dónde minar y vender en los sistemas de tu potencia.
+- **Powerplay y sesión**: méritos de la semana y de la sesión, estado de Powerplay del sistema actual; créditos ganados por actividad desde que te conectaste.
 - **Acceso móvil**: abre EDCH en tu móvil o tableta escaneando un código QR. Un servidor local (desactivado por defecto) sirve la aplicación en tu red. Solo entran los dispositivos que escanearon el código QR: la IP del PC no basta. «Código nuevo» desconecta todos los dispositivos. La interfaz se adapta al móvil (navegación abajo, paneles a pantalla completa) y los cambios en la lista de deseos hechos en el móvil vuelven al PC.
 - **Actualizaciones automáticas**: EDCH comprueba en GitHub si hay una versión nueva, muestra un aviso, descarga el instalador cuando lo pides (suma de comprobación verificada) y se reinicia para terminar. Se puede desactivar en Ajustes.
 - **Sincronización al estilo EDMC**: envío en directo a **EDDN** (mercados, equipamiento, astilleros, saltos, escaneos, rutas), **EDSM** e **Inara** (con tu clave API). Se respetan las reglas de EDDN: datos personales eliminados, posición verificada, un mensaje rechazado nunca se reenvía, nada de tu historial.
@@ -45,6 +52,7 @@ EDCH lee el diario del juego en tu PC. Esto es todo lo que sale de él, y hacia 
 - **Spansh**: tus búsquedas (sistema, material, mercancía…) y tu posición como punto de partida.
 - **EDDN** (activado por defecto, como en EDMC; se puede desactivar en Sincronización): datos de mercados, equipamiento, astilleros, saltos y escaneos, sin tus datos personales, como exige EDDN.
 - **EDSM e Inara**: nada mientras no introduzcas tu propia clave API en Sincronización. Tus claves se quedan en tu PC.
+- **ntfy.sh** (solo si activas el ala compartida): tus misiones de ala, cifradas con el código del ala antes de salir de tu PC.
 - **GitHub**: solo para comprobar si hay una versión nueva (se puede desactivar en Ajustes).
 - **Acceso móvil**: se queda en tu red local; desactivado por defecto y protegido por el código QR.
 
@@ -89,7 +97,7 @@ Estructura:
   - `i18n.ts`: capa de traducción.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneran los datos de `public/` (ver NOTICE).
 
-Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.6.1`: se publica la Release y las copias instaladas ofrecen la actualización.
+Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.7.0`: se publica la Release y las copias instaladas ofrecen la actualización.
 
 ## Hoja de ruta
 

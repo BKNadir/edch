@@ -32,6 +32,13 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
 - **Navigation**: your ship's jump range (empty, full, laden, right now, simulated cargo), neutron-boosted route via Spansh, and fleet carrier (jumps, tritium and time, as a quick estimate or a detailed Spansh plan with restock stops).
 - **Controls & devices**: reads your bindings (active preset, including different presets for ship, SRV and on foot) and draws each device. The keyboard is drawn key by key (QWERTY, AZERTY or QWERTZ) and the Xbox or PlayStation pad with numbered markers. Recognised HOTAS, joysticks and pads (about 45 models: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) are shown on the model's picture, with the action written in each button's box. Templates come from EDRefCard and are loaded from its GitHub repository. For an unrecognised model you pick the closest template; otherwise a simple axes / hats / buttons diagram is shown. Every control has its legend and a colour per mode, with Ship / SRV / On foot filters, a search and a printable sheet.
 - **Configuration backup**: exports your bindings (and graphics settings) to a zip in Documents\EDCH and restores them in one click. Your current configuration is backed up automatically before every import.
+- **Missions**: every active mission with its objective, destination, time left and progress; stacked massacre missions with the kills each issuing faction still needs.
+- **Shared wing missions**: wing members who use EDCH type the same code and see who accepted which wing mission. Messages go through ntfy.sh, end-to-end encrypted with that code. A sound and/or a flashing side tab (no Windows pop-ups) tells you when someone has a mission you don't, or when the whole wing has accepted it.
+- **Colonisation**: each construction depot with what is left to deliver, what is in your hold, the trips needed and a one-click search for where to buy each commodity.
+- **Community goals**: your contribution, reward band and tier for the goals you joined; all current goals through Inara with your API key.
+- **Exploration**: value of unsold cartographic data, exobiology sampling help (distance from the previous samples against the colony range), possible species and values for each planet with biological signals, unsold analyses.
+- **Mining**: live prospector results with alerts for your targets and motherlodes, session tonnage; a Merit Miner-style search for where to mine and sell in your power's systems.
+- **Powerplay and session**: merits this week and this session, current system's Powerplay state; credits earned by activity since you logged in.
 - **Mobile access**: open EDCH on your phone or tablet by scanning a QR code. A local server (off by default) serves the app on your network; only devices that scanned the QR code are let in, because the PC's IP alone isn't enough. "New code" disconnects every device. The interface adapts to phones (bottom navigation, full-screen panels), and wishlist edits on the phone sync back to the PC.
 - **Automatic updates**: EDCH checks GitHub for a new release, shows a banner, downloads the installer on request (checksum verified) and restarts itself to finish. Can be turned off in Settings.
 - **EDMC-style sync**: live uploads to **EDDN** (markets, outfitting, shipyards, jumps, scans, routes), **EDSM** and **Inara** (with your API key). EDDN's rules are followed: personal data removed, location cross-checked, a rejected message is never resent, nothing from your history.
@@ -45,6 +52,7 @@ EDCH reads your game journal on your PC. Here is everything that leaves it, and 
 - **Spansh**: your searches (system, material, commodity…) and your position as their starting point.
 - **EDDN** (on by default, like EDMC; can be turned off in Sync): market, outfitting, shipyard, jump and scan data, with your personal details removed, as EDDN requires.
 - **EDSM and Inara**: nothing unless you enter your own API key in Sync. Your keys stay on your PC.
+- **ntfy.sh** (only if you enable wing sharing): your wing missions, encrypted with the wing code before leaving your PC.
 - **GitHub**: only to check whether a new version exists (can be turned off in Settings).
 - **Mobile access**: stays on your local network; off by default and protected by the QR code.
 
@@ -89,7 +97,7 @@ Layout:
   - `i18n.ts`: translation layer.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.6.1` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update.
+A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.7.0` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update.
 
 ## Roadmap
 

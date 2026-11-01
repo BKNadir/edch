@@ -113,6 +113,15 @@ def main() -> int:
             entry = ours.setdefault(cols[0].lower(), {})
             entry.update({l: t for l, t in zip(LANGS, cols[1:]) if t})
 
+    # Terms only our own tables know (Powerplay states…) are kept too.
+    known = {t.lower() for t in terms}
+    for path in sorted((ROOT / "tools").glob("game_terms_*.txt")):
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip() and not line.startswith("#") and "¦" in line:
+                en = line.split("¦")[0].strip()
+                if en.lower() not in known:
+                    terms.add(en)
+                    known.add(en.lower())
     target = ROOT / "public" / "locales"
     missing = {l: [] for l in LANGS}
     for lang in LANGS:

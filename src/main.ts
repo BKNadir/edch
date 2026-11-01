@@ -7,6 +7,16 @@ import { Uploaders } from "./uploaders.js";
 import { detectRemote, remoteLanguage, runRemoteClient, setupRemoteHost } from "./remote.js";
 import { MobileView } from "./views/mobile.js";
 import { AboutView } from "./views/about.js";
+import { MissionsView } from "./views/missions.js";
+import { ColonisationView } from "./views/colonisation.js";
+import { GoalsView } from "./views/goals.js";
+import { ExplorationView } from "./views/exploration.js";
+import { MiningView } from "./views/mining.js";
+import { PowerplayView } from "./views/powerplay.js";
+import { SessionView } from "./views/session.js";
+import { loadExobio } from "./exobio.js";
+import { applyActivityEvents, emptyActivity } from "./activity.js";
+import { loadHistory, onLiveEvents, setupLive } from "./live.js";
 import { startUpdateChecks } from "./updater.js";
 import { SearchView } from "./views/search.js";
 import { NavigationView } from "./views/navigation.js";
@@ -32,6 +42,15 @@ const NAV: { id: string; label: string; icon: string }[] = [
   { id: "engineers", label: "Ingénieurs", icon: "M4 20h16M6 20V9l6-5 6 5v11M10 20v-6h4v6" },
   { id: "search", label: "Recherche", icon: "M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM15.5 15.5L20 20" },
   { id: "navigation", label: "Navigation", icon: "M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" },
+  { id: "-", label: "", icon: "" },
+  { id: "missions", label: "Missions", icon: "M9 4h6v3H9zM7 5H5v16h14V5h-2M8 11h8M8 15h6" },
+  { id: "colonisation", label: "Colonisation", icon: "M5 21V4M5 4h11l-2 4 2 4H5" },
+  { id: "goals", label: "Objectifs communautaires", icon: "M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8" },
+  { id: "exploration", label: "Exploration", icon: "M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM3 15c3 2 15-4 18-8" },
+  { id: "mining", label: "Minage", icon: "M14 4l6 6M4 20l9-9M11 6c3-2 6-1 7 0M18 13c2-3 1-6 0-7" },
+  { id: "powerplay", label: "Powerplay", icon: "M13 2L4 14h7l-1 8 9-12h-7z" },
+  { id: "session", label: "Session", icon: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2" },
+  { id: "-", label: "", icon: "" },
   { id: "controls", label: "Commandes", icon: "M6 9h12a4 4 0 0 1 4 4v2a3 3 0 0 1-5.4 1.8L15 15H9l-1.6 1.8A3 3 0 0 1 2 15v-2a4 4 0 0 1 4-4zM7 11v3M5.5 12.5h3M15.5 12h.01M17.5 13.5h.01" },
   { id: "mobile", label: "Mobile", icon: "M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM11 18h2" },
   { id: "sync", label: "Synchro", icon: "M4 12a8 8 0 0 1 14-5.3M20 4v4h-4M20 12a8 8 0 0 1-14 5.3M4 20v-4h4" },
@@ -53,7 +72,7 @@ async function boot() {
   const app = document.getElementById("app")!;
   let game;
   try {
-    game = await loadGame();
+    [game] = await Promise.all([loadGame(), loadExobio()]);
   } catch (e) {
     replace(app, h("p.error", null, `Impossible de charger les données du jeu : ${e}`));
     return;
@@ -107,6 +126,13 @@ async function boot() {
     controls: new ControlsView(ctx),
     mobile: new MobileView(ctx),
     about: new AboutView(ctx),
+    missions: new MissionsView(ctx),
+    colonisation: new ColonisationView(ctx),
+    goals: new GoalsView(ctx),
+    exploration: new ExplorationView(ctx),
+    mining: new MiningView(ctx),
+    powerplay: new PowerplayView(ctx),
+    session: new SessionView(ctx),
     settings: new SettingsView(ctx, () => resetForReplay()),
   };
   const detail = new DetailPanel(ctx);
@@ -119,7 +145,7 @@ async function boot() {
     replace(
       nav,
       NAV.filter((n) => !(remoteMode && n.id === "mobile")).map((n) =>
-        h(
+        n.id === "-" ? h("div.nav-sep") : h(
           "button",
           { class: s.view === n.id ? "active" : "", "data-nav": n.id, title: n.label, onclick: () => store.setView(n.id) },
           navIcon(n.icon),
@@ -160,6 +186,7 @@ async function boot() {
     store.state.cmdr = emptyState();
     replaying = true;
     store.notify();
+    void loadHistory(store.state.settings.journalDir);
   }
 
   const setWatch = (w: WatchStatus) => {
@@ -174,17 +201,22 @@ async function boot() {
   if (!isTauri()) {
     // Served by EDCH's local server to a phone? Then follow the PC; else browser demo.
     if (remoteMode === "paired") {
+      setupLive(store);
       void runRemoteClient(store);
       return;
     }
     store.state.cmdr = emptyState();
-    applyLines(store.state.cmdr, demoLines(), cap);
+    const demo = applyLines(store.state.cmdr, demoLines(), cap);
+    store.state.activity = emptyActivity();
+    applyActivityEvents(store.state.activity, demo.events);
+    setupLive(store);
     setWatch({ state: "demo" });
     return;
   }
 
   await setupRemoteHost(store);
   startUpdateChecks(store);
+  setupLive(store);
 
   let saveTimer: number | undefined;
   let uploads = Promise.resolve();
@@ -192,6 +224,7 @@ async function boot() {
   await onJournal({
     batch: (b) => {
       const { changed, events } = applyLines(store.state.cmdr, b.lines, cap);
+      if (!b.replay) onLiveEvents(events);
       // Uploads run in order; nothing from the startup replay is ever sent.
       uploads = uploads.then(async () => {
         for (const ev of events) await sync.handle(ev, !b.replay);

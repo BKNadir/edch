@@ -25,6 +25,13 @@ export interface LocationInfo {
   population?: number;
   controllingFaction?: string;
   factions: FactionInfo[];
+  /** Powerplay 2.0 */
+  controllingPower?: string;
+  powerState?: string;
+  powers?: string[];
+  controlProgress?: number;
+  reinforcement?: number;
+  undermining?: number;
 }
 
 export interface EngineerStatus {
@@ -86,6 +93,8 @@ export interface CommanderState {
   /** From Status.json. */
   fuel?: { main: number; reserve: number };
   cargoMass?: number;
+  /** From Status.json, on or near a planet. */
+  surface?: { lat: number; lon: number; radius?: number; body?: string };
   carrier?: CarrierInfo;
   lastEvent?: string;
   materialsSeenAt?: string;
@@ -228,6 +237,12 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
         population: ev.Population,
         controllingFaction: ev.SystemFaction?.Name,
         factions: readFactions(ev),
+        controllingPower: ev.ControllingPower,
+        powerState: ev.PowerplayState,
+        powers: Array.isArray(ev.Powers) ? ev.Powers : undefined,
+        controlProgress: typeof ev.PowerplayStateControlProgress === "number" ? ev.PowerplayStateControlProgress : undefined,
+        reinforcement: typeof ev.PowerplayStateReinforcement === "number" ? ev.PowerplayStateReinforcement : undefined,
+        undermining: typeof ev.PowerplayStateUndermining === "number" ? ev.PowerplayStateUndermining : undefined,
       };
       return true;
     }
@@ -365,6 +380,14 @@ export function applyStatus(state: CommanderState, status: Json): boolean {
     const fuel = { main: status.Fuel.FuelMain, reserve: status.Fuel.FuelReservoir ?? 0 };
     if (state.fuel?.main !== fuel.main) changed = true;
     state.fuel = fuel;
+  }
+  if (typeof status.Latitude === "number" && typeof status.Longitude === "number") {
+    const surface = { lat: status.Latitude, lon: status.Longitude, radius: typeof status.PlanetRadius === "number" ? status.PlanetRadius : undefined, body: status.BodyName };
+    if (state.surface?.lat !== surface.lat || state.surface?.lon !== surface.lon) changed = true;
+    state.surface = surface;
+  } else if (state.surface) {
+    state.surface = undefined;
+    changed = true;
   }
   if (typeof status.Cargo === "number" && state.cargoMass !== status.Cargo) {
     state.cargoMass = status.Cargo;

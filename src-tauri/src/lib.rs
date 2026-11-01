@@ -239,6 +239,53 @@ fn watch_loop(app: AppHandle, dir: PathBuf, generation: u64) {
     }
 }
 
+/// Journal lines of the last `days` days whose event is one of `events`, oldest first. Used once at
+/// start-up to rebuild what outlives a single session (missions, colonisation depots, unsold
+/// exploration and exobiology data, Powerplay merits). Capped so a huge archive stays quick.
+#[tauri::command]
+async fn scan_history(dir: String, days: u64, events: Vec<String>) -> Result<Vec<String>, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        const MAX_BYTES: u64 = 400 * 1024 * 1024;
+        const MAX_LINES: usize = 200_000;
+        let since = SystemTime::now()
+            .checked_sub(Duration::from_secs(days.saturating_mul(86_400)))
+            .unwrap_or(SystemTime::UNIX_EPOCH);
+        let needles: Vec<String> = events.iter().map(|e| format!("\"event\":\"{e}\"")).collect();
+        let needles_spaced: Vec<String> = events.iter().map(|e| format!("\"event\": \"{e}\"")).collect();
+        let mut files: Vec<(PathBuf, SystemTime)> =
+            journal_files(Path::new(&dir)).into_iter().filter(|(_, modified)| *modified >= since).collect();
+        // Newest first while budgeting, then put back in order.
+        files.reverse();
+        let mut budget = MAX_BYTES;
+        let mut picked: Vec<PathBuf> = Vec::new();
+        for (path, _) in files {
+            let size = fs::metadata(&path).map(|m| m.len()).unwrap_or(0);
+            if size > budget {
+                break;
+            }
+            budget -= size;
+            picked.push(path);
+        }
+        picked.reverse();
+        let mut out: Vec<String> = Vec::new();
+        for path in picked {
+            let bytes = fs::read(&path).unwrap_or_default();
+            let len = complete_len(&bytes);
+            for line in split_lines(&bytes[..len]) {
+                if needles.iter().any(|n| line.contains(n.as_str())) || needles_spaced.iter().any(|n| line.contains(n.as_str())) {
+                    out.push(line);
+                }
+            }
+        }
+        if out.len() > MAX_LINES {
+            out.drain(..out.len() - MAX_LINES);
+        }
+        Ok(out)
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
 #[tauri::command]
 fn default_journal_dir() -> Option<String> {
     let home = std::env::var("USERPROFILE")
@@ -279,7 +326,8 @@ struct HttpReply {
 }
 
 /// Hosts the UI may talk to. Everything else is refused.
-const ALLOWED_HOSTS: [&str; 6] = [
+const ALLOWED_HOSTS: [&str; 7] = [
+    "https://ntfy.sh/",
     "https://spansh.co.uk/",
     "https://www.spansh.co.uk/",
     "https://eddn.edcd.io:4430/",
@@ -640,6 +688,7 @@ pub fn run() {
         .manage(remote::RemoteState::default())
         .invoke_handler(tauri::generate_handler![
             default_journal_dir,
+            scan_history,
             start_journal,
             read_aux_file,
             http_fetch,

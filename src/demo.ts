@@ -1,5 +1,8 @@
 // Sample journal used when the UI runs in a plain browser (no game, no Tauri).
 
+/** A time `hours` from now, so demo missions are always running. */
+const ahead = (hours: number) => new Date(Date.now() + hours * 3600000).toISOString().replace(/\.\d+Z$/, "Z");
+
 const t = (s: number) => new Date(Date.UTC(2026, 9, 30, 20, 0, s)).toISOString().replace(".000", "");
 
 export const DEMO_EVENTS: Record<string, unknown>[] = [
@@ -91,6 +94,56 @@ export const DEMO_EVENTS: Record<string, unknown>[] = [
   },
   { timestamp: t(9), event: "Cargo", Vessel: "Ship", Count: 12, Inventory: [{ Name: "bromellite", Count: 12 }] },
   { timestamp: t(10), event: "EngineerProgress", Engineer: "Bill Turner", EngineerID: 300010, Progress: "Invited" },
+  // ---- activity demo (missions, colonisation, goals, exploration, mining, powerplay) ----
+  { timestamp: t(100), event: "Powerplay", Power: "Aisling Duval", Rank: 42, Merits: 18450, TimePledged: 2_600_000 },
+  { timestamp: t(101), event: "PowerplayMerits", Power: "Aisling Duval", MeritsGained: 320, TotalMerits: 18770 },
+  { timestamp: t(102), event: "MissionAccepted", Faction: "Independents of Timbalderis", Name: "Mission_Massacre", LocalisedName: "Éliminer des pirates de Purple Hand Gang", TargetFaction: "Timbalderis Purple Hand Gang", KillCount: 24, DestinationSystem: "Timbalderis", Expiry: ahead(70), Wing: false, Influence: "++", Reward: 9_850_000, MissionID: 9001 },
+  { timestamp: t(103), event: "MissionAccepted", Faction: "Timbalderis Liberals", Name: "Mission_Massacre", LocalisedName: "Éliminer des pirates de Purple Hand Gang", TargetFaction: "Timbalderis Purple Hand Gang", KillCount: 18, DestinationSystem: "Timbalderis", Expiry: ahead(90), Wing: false, Influence: "+++", Reward: 7_400_000, MissionID: 9002 },
+  { timestamp: t(104), event: "MissionAccepted", Faction: "Independents of Timbalderis", Name: "Mission_Massacre", LocalisedName: "Éliminer des pirates de Purple Hand Gang", TargetFaction: "Timbalderis Purple Hand Gang", KillCount: 12, DestinationSystem: "Timbalderis", Expiry: ahead(110), Wing: false, Influence: "++", Reward: 5_100_000, MissionID: 9003 },
+  { timestamp: t(105), event: "MissionAccepted", Faction: "Timbalderis Liberals", Name: "Mission_Delivery_Boom_Wing", LocalisedName: "Livrer 720 t d'acier (escadrille)", Commodity: "$Steel_Name;", Commodity_Localised: "Acier", Count: 720, DestinationSystem: "Kamadhenu", DestinationStation: "Velazquez Port", Expiry: ahead(4), Wing: true, Influence: "++", Reward: 24_000_000, MissionID: 9004 },
+  { timestamp: t(106), event: "MissionAccepted", Faction: "Timbalderis Liberals", Name: "Mission_Courier", LocalisedName: "Transporter des données confidentielles", DestinationSystem: "LHS 3447", DestinationStation: "Bluford Orbital", Expiry: ahead(30), Wing: false, Reward: 650_000, MissionID: 9005 },
+  ...[...Array(9)].map((_, i) => ({ timestamp: t(110 + i), event: "Bounty", Target: "anaconda", VictimFaction: "Timbalderis Purple Hand Gang", TotalReward: 410_000 })),
+  { timestamp: t(120), event: "CargoDepot", MissionID: 9004, UpdateType: "WingUpdate", CargoType: "Steel", Count: 0, ItemsCollected: 340, ItemsDelivered: 340, TotalItemsToDeliver: 720, Progress: 0.47 },
+  { timestamp: t(121), event: "RedeemVoucher", Type: "bounty", Amount: 3_690_000 },
+  { timestamp: t(122), event: "MarketSell", Type: "platinum", Count: 80, SellPrice: 226_000, TotalSale: 18_080_000, AvgPricePaid: 0 },
+  { timestamp: t(123), event: "Docked", StationName: "Orbital Construction Site: Nadir's Reach", StarSystem: "Col 285 Sector AB-C c13-4", MarketID: 3700000001, StationType: "SpaceConstructionDepot" },
+  {
+    timestamp: t(124),
+    event: "ColonisationConstructionDepot",
+    MarketID: 3700000001,
+    ConstructionProgress: 0.38,
+    ConstructionComplete: false,
+    ConstructionFailed: false,
+    ResourcesRequired: [
+      { Name: "$Steel_name;", Name_Localised: "Acier", RequiredAmount: 6320, ProvidedAmount: 2900, Payment: 1500 },
+      { Name: "$Aluminium_name;", Name_Localised: "Aluminium", RequiredAmount: 7010, ProvidedAmount: 3800, Payment: 1200 },
+      { Name: "$CMMComposite_name;", Name_Localised: "Composite CMM", RequiredAmount: 6100, ProvidedAmount: 1200, Payment: 6500 },
+      { Name: "$CeramicComposites_name;", Name_Localised: "Composites céramiques", RequiredAmount: 820, ProvidedAmount: 820, Payment: 1100 },
+      { Name: "$Polymers_name;", Name_Localised: "Polymères", RequiredAmount: 790, ProvidedAmount: 120, Payment: 700 },
+      { Name: "$Water_name;", Name_Localised: "Eau", RequiredAmount: 670, ProvidedAmount: 670, Payment: 600 },
+    ],
+  },
+  { timestamp: t(125), event: "Cargo", Vessel: "Ship", Count: 256, Inventory: [{ Name: "steel", Count: 256, Stolen: 0 }] },
+  {
+    timestamp: t(126),
+    event: "CommunityGoal",
+    CurrentGoals: [
+      { CGID: 812, Title: "Construction de la station Nouvelle Aube", SystemName: "HIP 22460", MarketName: "Hale's Rest", Expiry: ahead(52), IsComplete: false, CurrentTotal: 182_450_000, PlayerContribution: 42_500, NumContributors: 6421, TopTier: { Name: "Tier 8", Bonus: "" }, TopRankSize: 10, PlayerInTopRank: false, TierReached: "Tier 5", PlayerPercentileBand: 25, Bonus: 25_000_000 },
+    ],
+  },
+  { timestamp: t(127), event: "FSDJump", StarSystem: "Synuefe XR-H d11-102", SystemAddress: 3549631072611, StarPos: [357.34, -49.16, -74.75], JumpDist: 42.6, ControllingPower: "Aisling Duval", PowerplayState: "Fortified", Powers: ["Aisling Duval", "Zemina Torval"], PowerplayStateControlProgress: 0.62, PowerplayStateReinforcement: 4120, PowerplayStateUndermining: 870, Factions: [] },
+  { timestamp: t(128), event: "Scan", ScanType: "Detailed", BodyName: "Synuefe XR-H d11-102 1 a", BodyID: 12, StarSystem: "Synuefe XR-H d11-102", SystemAddress: 3549631072611, PlanetClass: "Rocky body", Atmosphere: "thin carbon dioxide atmosphere", AtmosphereType: "CarbonDioxide", Volcanism: "", MassEM: 0.0352, Radius: 1820000, SurfaceGravity: 1.71, SurfaceTemperature: 178.2, SurfacePressure: 3200, Landable: true, TerraformState: "", WasDiscovered: true, WasMapped: false, WasFootfalled: false },
+  { timestamp: t(129), event: "FSSBodySignals", BodyName: "Synuefe XR-H d11-102 1 a", BodyID: 12, SystemAddress: 3549631072611, Signals: [{ Type: "$SAA_SignalType_Biological;", Type_Localised: "Biologique", Count: 3 }] },
+  { timestamp: t(130), event: "SAAScanComplete", BodyName: "Synuefe XR-H d11-102 1 a", BodyID: 12, SystemAddress: 3549631072611, ProbesUsed: 5, EfficiencyTarget: 7 },
+  { timestamp: t(131), event: "Scan", ScanType: "Detailed", BodyName: "Synuefe XR-H d11-102 3", BodyID: 15, StarSystem: "Synuefe XR-H d11-102", SystemAddress: 3549631072611, PlanetClass: "High metal content body", Atmosphere: "", Volcanism: "", MassEM: 2.1, Radius: 7100000, SurfaceGravity: 16.7, SurfaceTemperature: 412, Landable: false, TerraformState: "Terraformable", WasDiscovered: false, WasMapped: false },
+  { timestamp: t(132), event: "Touchdown", Body: "Synuefe XR-H d11-102 1 a", BodyID: 12, SystemAddress: 3549631072611, Latitude: 12.3, Longitude: -45.1 },
+  { timestamp: t(133), event: "ScanOrganic", ScanType: "Analyse", Genus: "$Codex_Ent_Bacterial_Genus_Name;", Genus_Localised: "Bacterium", Species: "$Codex_Ent_Bacterial_06_Name;", Species_Localised: "Bacterium Alcyoneum", SystemAddress: 3549631072611, Body: 12 },
+  { timestamp: t(134), event: "ScanOrganic", ScanType: "Log", Genus: "$Codex_Ent_Stratum_Genus_Name;", Genus_Localised: "Stratum", Species: "$Codex_Ent_Stratum_07_Name;", Species_Localised: "Stratum Tectonicas", Variant_Localised: "Stratum Tectonicas - Vert", SystemAddress: 3549631072611, Body: 12 },
+  { timestamp: t(135), event: "LaunchDrone", Type: "Prospector" },
+  { timestamp: t(136), event: "ProspectedAsteroid", Materials: [{ Name: "Platinum", Proportion: 31.4 }, { Name: "Painite", Name_Localised: "Painite", Proportion: 9.8 }, { Name: "Osmium", Proportion: 6.1 }], Content: "$AsteroidMaterialContent_High;", Content_Localised: "Élevé", Remaining: 100 },
+  { timestamp: t(137), event: "LaunchDrone", Type: "Collection" },
+  ...[...Array(6)].map((_, i) => ({ timestamp: t(138 + i), event: "MiningRefined", Type: "$platinum_name;", Type_Localised: "Platine" })),
+
 ];
 
 export const demoLines = (): string[] => DEMO_EVENTS.map((e) => JSON.stringify(e));

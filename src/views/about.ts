@@ -13,12 +13,14 @@ const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
   { name: "EDSM", what: "Synchronisation de ton journal de vol", links: [["edsm.net", "https://www.edsm.net"]] },
   { name: "Inara", what: "Synchronisation de ton profil de commandant", links: [["inara.cz", "https://inara.cz"]] },
   { name: "EDEngineer (msarilar)", what: "Recettes d'ingénierie, origines des matériaux et une partie des traductions", links: [["github.com/msarilar/EDEngineer", "https://github.com/msarilar/EDEngineer"]] },
-  { name: "d47 (dseelinger)", what: "Les données d'EDEngineer et des ingénieurs, réunies et corrigées", links: [["github.com/dseelinger/d47", "https://github.com/dseelinger/d47"]] },
+  { name: "d47 (dseelinger)", what: "Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie", links: [["github.com/dseelinger/d47", "https://github.com/dseelinger/d47"]] },
   {
     name: "Elite Dangerous Almanac",
     what: "Les noms officiels traduits du jeu (matériaux, marchandises, modules…)",
     links: [["github.com/Elite-Dangerous-Almanac/Almanac-Core", "https://github.com/Elite-Dangerous-Almanac/Almanac-Core"]],
   },
+  { name: "EDR (lekeno)", what: "Les noms des espèces d'exobiologie tels que le journal les écrit", links: [["github.com/lekeno/edr", "https://github.com/lekeno/edr"]] },
+  { name: "ntfy.sh", what: "Le relais gratuit qui transporte les messages chiffrés de l'escadrille", links: [["ntfy.sh", "https://ntfy.sh"], ["github.com/binwiederhier/ntfy", "https://github.com/binwiederhier/ntfy"]] },
   { name: "EDRefCard (Richard Buckle)", what: "Noms des commandes et schémas des HOTAS, joysticks et manettes", links: [["github.com/richardbuckle/EDRefCard", "https://github.com/richardbuckle/EDRefCard"]] },
   {
     name: "EDSY",

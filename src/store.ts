@@ -1,3 +1,4 @@
+import { emptyActivity, type ActivityState } from "./activity.js";
 import type { Game } from "./data.js";
 import { emptyState, type CommanderState } from "./journal.js";
 import type { Blueprint } from "./types.js";
@@ -21,6 +22,53 @@ export interface Settings {
   autoUpdate: boolean;
   /** A version the user chose to skip ("Plus tard" hides it until the next one). */
   skippedVersion: string;
+  notify: NotifySettings;
+  wing: WingSettings;
+  mining: MiningSettings;
+}
+
+export interface NotifySettings {
+  sound: boolean;
+  color: boolean;
+  /** chime | beep | radar */
+  tone: string;
+  volume: number;
+  /** CSS colour of the flashing tab. */
+  flash: string;
+  /** Hide the side tab entirely. */
+  hideTab: boolean;
+}
+
+export interface WingSettings {
+  enabled: boolean;
+  /** Shared secret: everyone in the wing types the same code. */
+  code: string;
+  /** Name shown to the others; empty = commander name. */
+  name: string;
+  notifyNew: boolean;
+  notifyAll: boolean;
+}
+
+export interface MiningSettings {
+  /** Materials to call out when prospected, with the minimum percentage. */
+  targets: { id: string; min: number }[];
+  alert: boolean;
+  /** Merit Miner: power (empty = pledged power) and minerals searched. */
+  power: string;
+  minerals: string[];
+}
+
+export const DEFAULT_NOTIFY: NotifySettings = { sound: true, color: true, tone: "chime", volume: 0.6, flash: "#ff7a18", hideTab: false };
+export const DEFAULT_WING: WingSettings = { enabled: false, code: "", name: "", notifyNew: true, notifyAll: true };
+export const DEFAULT_MINING: MiningSettings = { targets: [{ id: "painite", min: 25 }, { id: "platinum", min: 20 }], alert: true, power: "", minerals: ["Platinum", "Painite", "Low Temperature Diamonds"] };
+
+/** A wing code: 4 groups of 4 letters/digits (80 bits), easy to read out. */
+export function newWingCode(): string {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  const chars = Array.from(bytes, (b) => alphabet[b % alphabet.length]);
+  return [0, 4, 8, 12].map((i) => chars.slice(i, i + 4).join("")).join("-");
 }
 
 export interface RemoteSettings {
@@ -55,6 +103,8 @@ export interface WishItem {
 
 export interface AppState {
   cmdr: CommanderState;
+  /** Missions, colonisation, goals, exploration… rebuilt from the journal archive. */
+  activity: ActivityState;
   watch: WatchStatus;
   settings: Settings;
   wishlist: WishItem[];
@@ -73,6 +123,9 @@ const DEFAULT_SETTINGS: Settings = {
   remote: DEFAULT_REMOTE,
   autoUpdate: true,
   skippedVersion: "",
+  notify: DEFAULT_NOTIFY,
+  wing: DEFAULT_WING,
+  mining: DEFAULT_MINING,
 };
 
 function load<T>(key: string, fallback: T): T {
@@ -113,10 +166,18 @@ export class Store {
     this.state = {
       // Last known state is shown instantly at startup, then the journal replay overwrites it.
       cmdr: { ...emptyState(), ...load<CommanderState>("edc.cmdr", emptyState()) },
+      activity: emptyActivity(),
       watch: { state: "idle" },
       settings: (() => {
         const loaded = load<Settings>("edc.settings", DEFAULT_SETTINGS);
-        return { ...loaded, sync: { ...DEFAULT_SYNC, ...(loaded.sync ?? {}) }, remote: { ...DEFAULT_REMOTE, ...(loaded.remote ?? {}) } };
+        return {
+          ...loaded,
+          sync: { ...DEFAULT_SYNC, ...(loaded.sync ?? {}) },
+          remote: { ...DEFAULT_REMOTE, ...(loaded.remote ?? {}) },
+          notify: { ...DEFAULT_NOTIFY, ...(loaded.notify ?? {}) },
+          wing: { ...DEFAULT_WING, ...(loaded.wing ?? {}) },
+          mining: { ...DEFAULT_MINING, ...(loaded.mining ?? {}) },
+        };
       })(),
       wishlist: loadArray<WishItem>("edc.wishlist"),
       view: (() => {

@@ -29,3 +29,12 @@ Key bindings
 Live data
 ---------
 - Spansh (spansh.co.uk) — galaxy, body and station searches, built from EDDN.
+
+v0.7 additions:
+- dseelinger/d47 (MIT, Copyright (c) 2026 Doug Seelinger) — exobiology catalogue (species, values,
+  colony distances, planet conditions; values and ranges from Spansh's surveyed landmarks), vendored as
+  tools/sources/d47/Exobiology.tsv. Spansh search field names were checked against d47's request code.
+- lekeno/edr (Apache License 2.0) — journal symbols of exobiology species and genera,
+  vendored as tools/sources/edr/biology.json with its LICENSE.
+- ntfy.sh (binwiederhier/ntfy, Apache-2.0/GPL-2.0 server; public service) — used as a relay for the
+  optional, end-to-end encrypted wing mission sharing. No ntfy code is included.
