@@ -170,7 +170,11 @@ async function boot() {
     const view = (remoteMode && s.view === "mobile" ? null : hiddenNow ? null : views[s.view]) ?? views[shown.find((n) => n.id !== "-")?.id ?? "materials"] ?? views.materials;
     if (mounted !== s.view) {
       mounted = s.view;
-      view.mount(main);
+      // Each page draws in its own container: a page you left (a Spansh answer arriving late, a
+      // timer) then only redraws itself off screen, never over the page you are on.
+      const host = h("div.view-host");
+      replace(main, host);
+      view.mount(host);
       main.scrollTop = 0;
     } else {
       view.update();

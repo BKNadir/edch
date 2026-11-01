@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.3
+
+- Fixed: after a visit to Colonisation (and on some other pages that wait for Spansh, EDSM or Inara), the page could come back by itself over the one you were on, for example over Navigation. A page you left now stays closed, and Colonisation stops refreshing your carriers' markets once you leave it.
+
 ## 0.10.2
 
 - Neutron routes for the Caspian Explorer: its Mk II drive gets ×6 from neutron stars instead of ×4. EDCH now tells Spansh, so routes use far fewer jumps. On the Navigation page the "Neutron boost ×6" box is ticked by itself when your ship has that drive, and can be unticked to plot for another ship. The engineer tour uses it too.
