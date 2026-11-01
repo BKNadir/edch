@@ -972,5 +972,15 @@
 "Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)": "Syncing your flight log, and what the community knows about the system you're in (Exploration)",
 "Télécharger la nouvelle version": "Download the new version",
 "Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).": "On Linux, updates aren't installed automatically: when a new version is out, EDCH opens the download page (AppImage, .deb, .rpm…).",
-"Marché (ton journal, {0})": "Market (your journal, {0})"
+"Marché (ton journal, {0})": "Market (your journal, {0})",
+"Erreur inattendue au démarrage": "Unexpected error at start-up",
+"Journal du jeu illisible": "Game journal unreadable",
+"Aucun journal du jeu trouvé": "No game journal found",
+"Vérifie le dossier du journal dans les Paramètres.": "Check the journal folder in Settings.",
+"Escadrille : connexion impossible": "Wing: can't connect",
+"Historique du journal illisible": "Journal history unreadable",
+"Missions, colonisation et exploration ne montreront que la session en cours.": "Missions, colonisation and exploration will only show the current session.",
+"Accès mobile indisponible": "Mobile access unavailable",
+"{0} : envoi refusé": "{0}: upload refused",
+"Logs": "Logs"
 }

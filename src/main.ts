@@ -1,3 +1,4 @@
+import { bindAlerts, clearAlert, goTo, inStartup, startupAlert } from "./alerts.js";
 import { LANGS, browserLang, guessLang, initI18n, saveLang, savedLang, watchTranslations } from "./i18n.js";
 import { installerLanguage, isTauri, onJournal, readAuxFile, startJournal, defaultJournalDir, type WatchStatus } from "./bridge.js";
 import { loadGame } from "./data.js";
@@ -106,6 +107,14 @@ async function boot() {
   const store = new Store();
   bindStore(store);
   bindLinks(store);
+  bindAlerts(store);
+  // An unexpected error right after start-up is worth a banner, not just a log line.
+  window.addEventListener("error", (e) => {
+    if (inStartup()) startupAlert("ui-error", "Erreur inattendue au démarrage", String(e.message ?? e));
+  });
+  window.addEventListener("unhandledrejection", (e) => {
+    if (inStartup()) startupAlert("ui-error", "Erreur inattendue au démarrage", String((e.reason as Error)?.message ?? e.reason));
+  });
   await setDebugLog(store.state.settings.debugLog);
   log.info("app", `UI ready (language ${code}, view ${store.state.view})`);
   setHere(() => ({ system: store.state.cmdr.location?.system, seenAt: store.state.cmdr.location?.seenAt }));
@@ -207,6 +216,9 @@ async function boot() {
 
   const setWatch = (w: WatchStatus) => {
     store.state.watch = w;
+    if (w.state === "live") clearAlert("journal");
+    else if (w.state === "error") startupAlert("journal", "Journal du jeu illisible", w.message ?? "", goTo("settings", "Paramètres"));
+    else if (w.state === "waiting" && inStartup()) startupAlert("journal", "Aucun journal du jeu trouvé", w.message ?? "Vérifie le dossier du journal dans les Paramètres.", goTo("settings", "Paramètres"));
     if (w.state === "live" || w.state === "waiting") {
       replaying = false;
       store.persistCmdr();

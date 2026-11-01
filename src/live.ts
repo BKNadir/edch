@@ -1,3 +1,4 @@
+import { inStartup, startupAlert, goTo } from "./alerts.js";
 // Glue between the journal, the activity tracker, the wing link and the notifications.
 
 import { applyActivity, emptyActivity, HISTORY_DAYS, HISTORY_EVENTS, type Mission } from "./activity.js";
@@ -116,7 +117,9 @@ export async function syncWing() {
       missionsChanged();
       store.notify();
     },
-    error: () => undefined,
+    error: (message) => {
+      if (inStartup()) startupAlert("wing", "Escadrille : connexion impossible", message, goTo("missions", "Missions"));
+    },
   });
   store.notify();
   try {
@@ -217,6 +220,7 @@ export async function loadHistory(dir: string) {
     lines = await scanHistory(dir, HISTORY_DAYS, HISTORY_EVENTS);
   } catch (e) {
     log.warn("history", `Journal archive unreadable: ${String((e as Error)?.message ?? e)}`);
+    startupAlert("history", "Historique du journal illisible", "Missions, colonisation et exploration ne montreront que la session en cours.");
     return;
   }
   log.info("history", `${lines.length} archived journal line(s) read`);

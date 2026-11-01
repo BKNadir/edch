@@ -972,5 +972,15 @@
 "Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)": "Synchronisation deines Flugbuchs und was die Community über dein aktuelles System weiß (Erkundung)",
 "Télécharger la nouvelle version": "Neue Version herunterladen",
 "Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).": "Unter Linux werden Updates nicht automatisch installiert: Wenn eine neue Version erscheint, öffnet EDCH die Download-Seite (AppImage, .deb, .rpm…).",
-"Marché (ton journal, {0})": "Markt (dein Journal, {0})"
+"Marché (ton journal, {0})": "Markt (dein Journal, {0})",
+"Erreur inattendue au démarrage": "Unerwarteter Fehler beim Start",
+"Journal du jeu illisible": "Spiel-Journal nicht lesbar",
+"Aucun journal du jeu trouvé": "Kein Spiel-Journal gefunden",
+"Vérifie le dossier du journal dans les Paramètres.": "Prüfe den Journal-Ordner in den Einstellungen.",
+"Escadrille : connexion impossible": "Geschwader: keine Verbindung",
+"Historique du journal illisible": "Journal-Verlauf nicht lesbar",
+"Missions, colonisation et exploration ne montreront que la session en cours.": "Missionen, Kolonisierung und Erkundung zeigen nur die aktuelle Sitzung.",
+"Accès mobile indisponible": "Mobiler Zugriff nicht verfügbar",
+"{0} : envoi refusé": "{0}: Upload abgelehnt",
+"Logs": "Protokolle"
 }

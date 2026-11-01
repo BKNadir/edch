@@ -1,3 +1,4 @@
+import { goTo, startupAlert } from "./alerts.js";
 // Mobile access. On the PC: start/stop the local server and publish the state to it.
 // On the phone: follow the PC's state and send wishlist edits back.
 
@@ -124,7 +125,7 @@ export async function setupRemoteHost(store: Store) {
     try {
       await startRemote(store);
     } catch (e) {
-      toast(String(e));
+      startupAlert("remote", "Accès mobile indisponible", String((e as Error)?.message ?? e), goTo("mobile", "Accès mobile"));
     }
   }
 }

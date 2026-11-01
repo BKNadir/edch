@@ -1,3 +1,4 @@
+import { goTo, inStartup, startupAlert } from "./alerts.js";
 import { log as appLog } from "./logger.js";
 // Sends live game data to EDDN, EDSM and Inara (what EDMC does), with each service's rules:
 // only live events (never the startup replay), no retry on EDDN 400/426, ≥ 60 s before a retry.
@@ -79,7 +80,11 @@ export class Uploaders {
 
   private log(service: SyncLogEntry["service"], what: string, ok: boolean, detail?: string) {
     if (ok) appLog.debug(service, `${what}: OK`);
-    else appLog.warn(service, `${what}: ${detail ?? "error"}`);
+    else {
+      appLog.warn(service, `${what}: ${detail ?? "error"}`);
+      // A refused key or a service down right at start-up: say so (Inara's pending approval is known).
+      if (inStartup() && !/n'a pas encore autorisé/.test(detail ?? "")) startupAlert(`sync-${service}`, `${service} : envoi refusé`, detail ?? "", goTo("sync", "Synchro"));
+    }
     const key = service;
     if (ok) this.stats.sent[key] = (this.stats.sent[key] ?? 0) + 1;
     else this.stats.failed[key] = (this.stats.failed[key] ?? 0) + 1;

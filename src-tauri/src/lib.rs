@@ -810,6 +810,8 @@ pub fn run() {
     migrate_data_folder();
     logs::init(portable());
     tauri::Builder::default()
+        // Reopens the window where it was: position, size, maximised or full screen.
+        .plugin(tauri_plugin_window_state::Builder::default().build())
         .manage(Arc::new(WatchState::default()))
         .manage(remote::RemoteState::default())
         .invoke_handler(tauri::generate_handler![

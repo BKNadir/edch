@@ -3,6 +3,12 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.2
+
+- The window reopens where you left it: position, size, maximised or full screen.
+- Problems found at start-up are shown in a red banner, like the update offer: game journal missing or unreadable, mobile access port unavailable, journal history unreadable, wing connection failing, an upload refused by EDDN or EDSM, or an unexpected error. Each has a button to the right page and one to open the logs.
+- Settings: "Updates" moved up, right after the language.
+
 ## 0.9.1
 
 - Linux: each release now also has an AppImage, a .deb, an .rpm, a PKGBUILD for Arch Linux and an experimental Flatpak. EDCH finds the game's journal and options in Steam's Proton folder (native, Flatpak or Snap Steam, any Steam library). On Linux, updates open the release page.

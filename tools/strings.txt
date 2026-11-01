@@ -6,7 +6,11 @@ Objectifs communautaires
 Paramètres
 Game data: {0}
 Impossible de charger les données du jeu : {0}
+Erreur inattendue au démarrage
 UI ready (language {0}, view {1})
+Journal du jeu illisible
+Aucun journal du jeu trouvé
+Vérifie le dossier du journal dans les Paramètres.
 Carrier market read from Market.json
 Indique le dossier du journal dans les Paramètres.
 Cet appareil n'est pas connecté à EDCH
@@ -121,8 +125,11 @@ Toute l'escadrille a accepté « {0} »
 {0} a fermé EDCH
 {0} a quitté l'escadrille en jeu
 {0} a arrêté le partage d'escadrille
+Escadrille : connexion impossible
 Cœur : {0}
 Journal archive unreadable: {0}
+Historique du journal illisible
+Missions, colonisation et exploration ne montreront que la session en cours.
 Aucune mission d'escadrille pour l'instant.
 Prochaines échéances
 Objectif atteint · 
@@ -136,6 +143,8 @@ ntfy.sh a répondu {0}
 ), h("span.sub", null, "Relance l'application pour terminer la mise à jour. Elle se rouvrira toute seule.")),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => install(p) }, "Relancer maintenant")),\n    );\n  } else {\n    replace(\n      bar,\n      h("div.update-text", null, h("strong", null, "La mise à jour a échoué"), h("span.sub", null, p.message)),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => download(p.info) }, "Réessayer")),\n    );\n  }\n}\n\nfunction later() {\n  if (phase.kind === "hidden") return;\n  // "Later" on an offer skips this version; a downloaded one is kept for the next start.\n  if (phase.kind === "available" && store) store.updateSettings({ skippedVersion: phase.info.version });\n  phase = { kind: "hidden" };\n  render();\n}\n\nasync function download(info: UpdateInfo) {\n  log.info("update", 
 : also report "up to date" and errors, and ignore a skipped version. */\nexport async function checkForUpdate(manual = false): Promise<void> {\n  if (!isTauri() || isRemote() || !store) return;\n  if (phase.kind === "downloading" || phase.kind === "ready") {\n    if (manual) render();\n    return;\n  }\n  try {\n    const info = await updateCheck();\n    if (!info) {\n      if (manual) toast("EDCH est à jour");\n      return;\n    }\n    log.info("update", 
 Phone action: {0}
+Accès mobile indisponible
+Accès mobile
 PC injoignable : modification non envoyée
 Elite (d'origine)
 Contraste élevé
@@ -522,7 +531,6 @@ Saisis ou crée un code (au moins 8 caractères) pour rejoindre l'escadrille.
 Pas de fenêtre Windows : un son et/ou la languette sur le bord droit qui clignote. Clique sur la languette pour voir l'aperçu, clique ailleurs pour le refermer.
 Écouter
 Test de notification
-Accès mobile
 Ouvre EDCH sur ton téléphone ou ta tablette, sur le même réseau que ce PC.
  Cet appareil est connecté à EDCH sur ton PC. Les données se mettent à jour toutes seules.
 Disponible dans l'application (pas en mode démo).
@@ -695,6 +703,12 @@ Lecture arrêtée
 C:\Users\…\Saved Games\Frontier Developments\Elite Dangerous
 Langue de l'interface
 Les noms des matériaux, modules et effets suivent la traduction du jeu ; les noms des commandes restent ceux du jeu en anglais.
+Mises à jour
+Version installée : {0}
+ Vérifier automatiquement les nouvelles versions sur GitHub
+Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.
+Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).
+Vérifier maintenant
 Journal du jeu
 Dossier du journal
 Détecter
@@ -712,12 +726,6 @@ Utilisé tant que le jeu n'a pas donné ta position.
  Traders avec pad L seulement
  Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination
 Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.
-Mises à jour
-Version installée : {0}
- Vérifier automatiquement les nouvelles versions sur GitHub
-Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.
-Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).
-Vérifier maintenant
 Choisis un thème ou tes propres couleurs. Le téléphone connecté utilise les mêmes réglages.
 Couleur principale
 Couleur secondaire

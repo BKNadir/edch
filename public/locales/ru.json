@@ -972,5 +972,15 @@
 "Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)": "Синхронизация бортового журнала и то, что сообщество знает о текущей системе (Исследование)",
 "Télécharger la nouvelle version": "Скачать новую версию",
 "Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).": "В Linux обновления не устанавливаются автоматически: когда выходит новая версия, EDCH открывает страницу загрузки (AppImage, .deb, .rpm…).",
-"Marché (ton journal, {0})": "Рынок (ваш журнал, {0})"
+"Marché (ton journal, {0})": "Рынок (ваш журнал, {0})",
+"Erreur inattendue au démarrage": "Непредвиденная ошибка при запуске",
+"Journal du jeu illisible": "Журнал игры не читается",
+"Aucun journal du jeu trouvé": "Журнал игры не найден",
+"Vérifie le dossier du journal dans les Paramètres.": "Проверьте папку журнала в Настройках.",
+"Escadrille : connexion impossible": "Звено: не удаётся подключиться",
+"Historique du journal illisible": "История журнала не читается",
+"Missions, colonisation et exploration ne montreront que la session en cours.": "Миссии, колонизация и исследование покажут только текущую сессию.",
+"Accès mobile indisponible": "Мобильный доступ недоступен",
+"{0} : envoi refusé": "{0}: отправка отклонена",
+"Logs": "Журналы"
 }

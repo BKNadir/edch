@@ -92,6 +92,26 @@ export class SettingsView implements View {
             h("small", null, "Les noms des matériaux, modules et effets suivent la traduction du jeu ; les noms des commandes restent ceux du jeu en anglais."),
           ),
         ),
+        isTauri()
+          ? h(
+              "section.card",
+              null,
+              h("h3", null, "Mises à jour"),
+              h("p.sub", null, `Version installée : ${APP_VERSION}`),
+              h(
+                "label.check",
+                null,
+                h("input", { type: "checkbox", checked: s.autoUpdate, onchange: (e: Event) => set({ autoUpdate: (e.target as HTMLInputElement).checked }) }),
+                " Vérifier automatiquement les nouvelles versions sur GitHub",
+              ),
+              this.mode === "portable"
+                ? h("p.sub", null, "Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.")
+                : this.mode !== "installer"
+                  ? h("p.sub", null, "Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).")
+                  : null,
+              h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, "Vérifier maintenant")),
+            )
+          : null,
         h(
           "section.card",
           null,
@@ -155,26 +175,6 @@ export class SettingsView implements View {
           h("small.sub", null, "Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone."),
         ),
         this.appearance(),
-        isTauri()
-          ? h(
-              "section.card",
-              null,
-              h("h3", null, "Mises à jour"),
-              h("p.sub", null, `Version installée : ${APP_VERSION}`),
-              h(
-                "label.check",
-                null,
-                h("input", { type: "checkbox", checked: s.autoUpdate, onchange: (e: Event) => set({ autoUpdate: (e.target as HTMLInputElement).checked }) }),
-                " Vérifier automatiquement les nouvelles versions sur GitHub",
-              ),
-              this.mode === "portable"
-                ? h("p.sub", null, "Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.")
-                : this.mode !== "installer"
-                  ? h("p.sub", null, "Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).")
-                  : null,
-              h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, "Vérifier maintenant")),
-            )
-          : null,
         isTauri() && !isRemote() ? this.logsCard() : null,
       ),
     );
