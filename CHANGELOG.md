@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.3
+
+- The side menu scrolls when the window is too short, so the last pages (About, Settings) are always reachable.
+
 ## 0.8.2
 
 - Application logs: EDCH always writes a standard log (one file per start). Logs older than a week are deleted automatically, the last 5 are always kept.

@@ -46,7 +46,7 @@ input[type="number"] { font-variant-numeric: tabular-nums; }
 #app { height: 100%; display: flex; flex-direction: column; }
 .topbar {
   display: flex; align-items: center; gap: 22px; padding: 0 18px; height: 54px; flex: none;
-  background: linear-gradient(180deg, #12161c, #0e1216); border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel-inset)); border-bottom: 1px solid var(--line);
 }
 .brand { display: flex; align-items: center; gap: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-size: 13px; color: var(--accent); min-width: 170px; }
 .brand img { width: 26px; height: 26px; }
@@ -61,7 +61,9 @@ input[type="number"] { font-variant-numeric: tabular-nums; }
 @keyframes pulse { 50% { box-shadow: 0 0 0 6px transparent; } }
 
 .shell { flex: 1; display: grid; grid-template-columns: 196px minmax(0, 1fr) auto; min-height: 0; }
-.sidebar { display: flex; flex-direction: column; gap: 2px; padding: 12px 10px; border-right: 1px solid var(--line); background: var(--panel); }
+.sidebar { display: flex; flex-direction: column; gap: 2px; padding: 12px 10px; border-right: 1px solid var(--line); background: var(--panel); min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; }
+.sidebar > * { flex-shrink: 0; }
+.sidebar::-webkit-scrollbar { width: 6px; }
 .sidebar button {
   display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: var(--radius);
   background: none; border: 0; color: var(--muted); text-align: left; font-weight: 500;
@@ -521,7 +523,7 @@ kbd.num b { display: inline-grid; place-items: center; width: 18px; height: 18px
   .content { overflow: visible; padding: 12px 12px 86px; }
   .sidebar {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; flex-direction: row; gap: 0; padding: 4px 4px calc(4px + env(safe-area-inset-bottom));
-    border-right: 0; border-top: 1px solid var(--line); overflow-x: auto; scrollbar-width: none;
+    border-right: 0; border-top: 1px solid var(--line); overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
   }
   .sidebar::-webkit-scrollbar { display: none; }
   .sidebar button { flex: 0 0 auto; flex-direction: column; gap: 2px; padding: 6px 10px; font-size: 10.5px; min-width: 64px; }
