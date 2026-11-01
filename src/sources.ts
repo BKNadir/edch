@@ -52,9 +52,9 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
         {
           key: `hge:${hge[1].toLowerCase()}`,
           type: "systems",
-          title: `Émissions de haute qualité (HGE) — systèmes peuplés ${rule.fr}`,
+          title: `Émissions d'intensité élevée — systèmes peuplés ${rule.fr}`,
           hint:
-            "Sources de signal « High Grade Emissions » en supercroisière. Plus fréquentes dans les systèmes très peuplés, surtout Alliance et Indépendants. Les HGE disparaissent après quelques minutes : reste en supercroisière et surveille le radar.",
+            "Sources de signal « Émissions d'intensité élevée » en supercroisière. Plus fréquentes dans les systèmes très peuplés, surtout Alliance et Indépendants. Elles disparaissent après quelques minutes : reste en supercroisière et surveille le radar.",
           filters,
           states: rule.states,
           fresh: Boolean(rule.states),
@@ -70,8 +70,8 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: `uss:${level}`,
         type: "systems",
-        title: `Émissions encodées (USS) — systèmes à sécurité ${fr}`,
-        hint: "Sources de signal « Encoded Emissions » : scanne les épaves et les balises dans le signal.",
+        title: `Émissions codées — systèmes à sécurité ${fr}`,
+        hint: "Sources de signal « Émissions codées » : scanne les épaves et les balises dans le signal.",
         filters: { security: choice(level), population: atLeast(1) },
       },
     ];
@@ -99,7 +99,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
         type: "systems",
         title: "Scanner les sillages haute énergie — systèmes très fréquentés",
         hint:
-          "Installe un scanner de sillage (Frame Shift Wake Scanner) et scanne les sillages haute énergie près des stations. Les systèmes très peuplés (et ceux en Famine) ont beaucoup de trafic.",
+          "Installe un scanner de sillage et scanne les sillages à haute énergie près des stations. Les systèmes très peuplés (et ceux en Famine) ont beaucoup de trafic.",
         filters: { population: atLeast(1_000_000_000) },
       },
     ];
@@ -111,7 +111,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
         key: `surface:${m.id}`,
         type: "bodies",
         title: `Prospection en surface — planètes riches en ${gameName(m.name)}`,
-        hint: "Pose-toi, prends le SRV et tire sur les roches/affleurements (« Material Deposit »). Plus le % est élevé, plus le matériau sort souvent.",
+        hint: "Pose-toi, prends le SRV et tire sur les roches et affleurements minéraux. Plus le % est élevé, plus le matériau sort souvent.",
         filters: { materials: { name: choice(m.name) }, is_landable: choice("true") },
         materialName: m.name,
         size: 60,
@@ -136,8 +136,8 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "rings:pristine",
         type: "bodies",
-        title: "Minage — anneaux vierges (Pristine)",
-        hint: "Les anneaux « Pristine » donnent plus de fragments, donc plus de matériaux bruts.",
+        title: "Minage — anneaux vierges",
+        hint: "Les anneaux aux réserves « vierges » donnent plus de fragments, donc plus de matériaux bruts.",
         filters: { reserve_level: choice("Pristine"), rings: choice("Metallic", "Metal Rich", "Rocky", "Icy") },
       },
     ];
@@ -176,7 +176,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
         type: "systems",
         title: scan ? "Scanner des vaisseaux de combat — systèmes à pirates (sécurité basse / anarchie)" : "Débris de vaisseaux de combat — RES des systèmes à pirates",
         hint: scan
-          ? "Scanne les vaisseaux de combat (scanner de données / « Kill Warrant » non requis) dans les sites d'extraction de ressources (RES) des anneaux et en zones de conflit."
+          ? "Scanne les vaisseaux en combat dans les sites d'extraction de ressources des anneaux et dans les zones de conflit (aucun scanner spécial n'est nécessaire)."
           : "Détruis des pirates dans les sites d'extraction de ressources (RES), autour des anneaux, puis ramasse les matériaux qu'ils lâchent.",
         filters: { security: choice("Low", "Anarchy"), population: atLeast(1) },
       },
@@ -216,7 +216,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
     [/^mission reward/, "Récompense de mission", "Choisis ce matériau comme récompense de mission (tableau des missions)."],
     [/^surface poi/, "Points d'intérêt au sol", "Épaves et sites d'intérêt en surface."],
     [/^deep space data beacon/, "Balises de données en espace profond", "Balises dans les sources de signal en espace profond."],
-    [/^signal source$/, "Sources de signal (USS)", "Sources de signal non identifiées en supercroisière."],
+    [/^signal source$/, "Sources de signal non identifiées", "Sources de signal non identifiées en supercroisière."],
   ];
   for (const [re, title, hint] of hints) if (re.test(o)) return [info(title, hint)];
   return [info(origin, "")];

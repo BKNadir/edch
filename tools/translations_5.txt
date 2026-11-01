@@ -269,3 +269,6 @@ Aucune station ne vend {0} dans le rayon choisi. ¦ No station sells {0} within 
 Points chauds de minage les plus proches ¦ Nearest mining hotspots ¦ Nächste Bergbau-Hotspots ¦ Puntos calientes de minería más cercanos ¦ Pontos quentes de mineração mais próximos ¦ Ближайшие горячие точки добычи
 {0} al · {1} point(s) chaud(s) ¦ {0} ly · {1} hotspot(s) ¦ {0} Lj · {1} Hotspot(s) ¦ {0} al · {1} punto(s) caliente(s) ¦ {0} al · {1} ponto(s) quente(s) ¦ {0} св. лет · горячих точек: {1}
 Actualiser ¦ Refresh ¦ Aktualisieren ¦ Actualizar ¦ Atualizar ¦ Обновить
+Masquer les nouveautés ¦ Hide what's new ¦ Neuerungen ausblenden ¦ Ocultar novedades ¦ Ocultar novidades ¦ Скрыть новое
+Voir sur GitHub ¦ View on GitHub ¦ Auf GitHub ansehen ¦ Ver en GitHub ¦ Ver no GitHub ¦ Открыть на GitHub
+Population min. pour les émissions d'intensité élevée ¦ Min. population for High Grade Emissions ¦ Min. Bevölkerung für hochgradige Emissionen ¦ Población mín. para emisiones de alto grado ¦ População mín. para emissões de alto grau ¦ Мин. население для высокоуровневого излучения

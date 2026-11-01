@@ -16,6 +16,19 @@ type Phase =
   | { kind: "failed"; info: UpdateInfo; message: string };
 
 let phase: Phase = { kind: "hidden" };
+let showNotes = false;
+
+/** The release notes (CHANGELOG section, in English): bullet points before the install line. */
+function notesList(notes: string): HTMLElement | null {
+  const items = notes
+    .split(/\n---/)[0]
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => /^[-*] /.test(l))
+    .map((l) => l.slice(2).replace(/\*\*/g, "").replace(/`/g, ""));
+  if (!items.length) return null;
+  return h("ul.update-notes", { "data-no-tr": "" }, items.map((t) => h("li", null, t)));
+}
 let bar: HTMLElement | null = null;
 let store: Store | null = null;
 
@@ -36,8 +49,21 @@ function render() {
   if (p.kind === "available") {
     replace(
       bar,
-      h("div.update-text", null, h("strong", null, `EDCH ${p.info.version} est disponible`), h("span.sub", null, `Version installée : ${p.info.current}`)),
-      h("div.row", null, p.info.page ? h("button.ghost.small", { onclick: () => openUrl(p.info.page) }, "Nouveautés") : null, close, h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour")),
+      h(
+        "div.update-text",
+        null,
+        h("strong", null, `EDCH ${p.info.version} est disponible`),
+        h("span.sub", null, `Version installée : ${p.info.current}`),
+        showNotes ? notesList(p.info.notes) : null,
+        showNotes && p.info.page ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, "Voir sur GitHub") : null,
+      ),
+      h(
+        "div.row",
+        null,
+        h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? "Masquer les nouveautés" : "Nouveautés"),
+        close,
+        h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour"),
+      ),
     );
   } else if (p.kind === "downloading") {
     const pct = p.total > 0 ? Math.min(100, Math.round((p.done / p.total) * 100)) : 0;
