@@ -15,6 +15,7 @@ use std::thread;
 use std::time::{Duration, Instant, SystemTime};
 use tauri::{AppHandle, Emitter, Manager};
 
+mod app;
 mod logs;
 mod ntfy;
 mod remote;
@@ -810,8 +811,11 @@ pub fn run() {
     migrate_data_folder();
     logs::init(portable());
     tauri::Builder::default()
+        // EDCH runs once: launching it again brings the open window to the front.
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| app::show_main(app)))
         // Reopens the window where it was: position, size, maximised or full screen.
         .plugin(tauri_plugin_window_state::Builder::default().build())
+        .on_window_event(app::on_window_event)
         .manage(Arc::new(WatchState::default()))
         .manage(remote::RemoteState::default())
         .invoke_handler(tauri::generate_handler![
@@ -836,6 +840,10 @@ pub fn run() {
             remote::remote_interfaces,
             remote::remote_tailscale,
             is_portable,
+            app::game_running,
+            app::launch_game,
+            app::set_close_behavior,
+            app::app_quit,
             update_mode,
             clipboard_write,
             ntfy::ntfy_subscribe,
