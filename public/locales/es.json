@@ -791,5 +791,15 @@
 "{0} j {1} h": "{0} d {1} h",
 "Les noms des espèces d'exobiologie tels que le journal les écrit": "Los nombres de las especies de exobiología tal como los escribe el diario",
 "Le relais gratuit qui transporte les messages chiffrés de l'escadrille": "El relé gratuito que transporta los mensajes cifrados del ala",
-"Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie": "Los datos de EDEngineer y de los ingenieros, reunidos y corregidos, y el catálogo de exobiología"
+"Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie": "Los datos de EDEngineer y de los ingenieros, reunidos y corregidos, y el catálogo de exobiología",
+"{0} a accepté « {1} »": "{0} aceptó «{1}»",
+"Partagée automatiquement": "Compartida automáticamente",
+"Partagée (mission de l'escadrille)": "Compartida (misión del ala)",
+"Partagée avec l'escadrille": "Compartida con el ala",
+"Ne plus partager": "Dejar de compartir",
+"Partager avec l'escadrille": "Compartir con el ala",
+"Prévenir quand un membre accepte une mission que je partage": "Avisar cuando un miembro acepte una misión que comparto",
+"Partager automatiquement toutes mes missions d'escadrille": "Compartir automáticamente todas mis misiones de ala",
+"Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise.": "Si no, comparte cada misión con el botón «Compartir con el ala» de su tarjeta. Una misión que un miembro compartió y que aceptas se comparte al momento: los demás ven que la tomaste.",
+"Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Les missions que tu choisis de partager sont envoyées aux autres, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire.": "Cada miembro del ala que usa EDCH introduce el mismo código. Las misiones que eliges compartir se envían a los demás, cifradas con este código, mediante el servicio gratuito ntfy.sh: nadie más puede leerlas."
 }

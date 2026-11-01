@@ -7,7 +7,7 @@ import { gameName } from "./i18n.js";
 import { mountSideTab, notify, recentAlerts, refresh as refreshTab } from "./notifier.js";
 import type { Store } from "./store.js";
 import { hoursLeft, relTime } from "./time.js";
-import { toWingMissions, wingRows, WingLink, type WingMember, type WingRow } from "./wing.js";
+import { sameMission, toWingMission, toWingMissions, wingRows, WingLink, type WingMember, type WingRow } from "./wing.js";
 
 type Json = Record<string, any>;
 
@@ -37,9 +37,32 @@ export function activeMissions(): Mission[] {
   return Object.values(store.state.activity.missions).sort((a, b) => (a.expiry ?? "").localeCompare(b.expiry ?? ""));
 }
 
+/** Does another member show this mission? (Then accepting it means taking part: it is shared.) */
+function heldByOthers(m: Mission): boolean {
+  if (!link) return false;
+  const mine = toWingMission(m);
+  return [...link.members.values()].some((o) => !o.left && o.missions.some((x) => sameMission(mine, x)));
+}
+
+/** Is this mission shared with the wing? By hand, automatically, or because a wingmate shared it. */
+export function isShared(m: Mission): boolean {
+  const s = store.state.settings.wing;
+  return s.shared.includes(m.id) || (s.autoShare && m.wing) || heldByOthers(m);
+}
+
+/** Shares or stops sharing one mission. */
+export function setShared(id: number, on: boolean) {
+  const s = store.state.settings.wing;
+  const active = new Set(Object.keys(store.state.activity.missions).map(Number));
+  const shared = s.shared.filter((x) => x !== id && active.has(x));
+  if (on) shared.push(id);
+  store.updateSettings({ wing: { ...s, shared } });
+  missionsChanged();
+}
+
 export function wingMe(): WingMember {
   const s = store.state.settings.wing;
-  return { id: wingId(), name: s.name.trim() || store.state.cmdr.commander || "CMDR", at: new Date().toISOString(), missions: toWingMissions(activeMissions()) };
+  return { id: wingId(), name: s.name.trim() || store.state.cmdr.commander || "CMDR", at: new Date().toISOString(), missions: toWingMissions(activeMissions(), isShared) };
 }
 
 /** The wing as the views see it (on a phone: as the PC last published it). */
@@ -72,7 +95,14 @@ export async function syncWing() {
     everyone: (row) => {
       if (store.state.settings.wing.notifyAll) notify(`Toute l'escadrille a accepté « ${row.mission.title} »`);
     },
-    changed: () => store.notify(),
+    accepted: (row, by) => {
+      if (store.state.settings.wing.notifyAccept) notify(`${by} a accepté « ${row.mission.title} »`);
+    },
+    changed: () => {
+      // A wingmate's new mission may be one we hold: publish it as shared.
+      missionsChanged();
+      store.notify();
+    },
     error: () => undefined,
   });
   store.notify();

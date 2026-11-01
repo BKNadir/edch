@@ -1,7 +1,7 @@
 import { massacreStacks, type Mission } from "../activity.js";
 import { isRemote } from "../bridge.js";
 import { fmt, h, icon, replace, toast } from "../dom.js";
-import { activeMissions, syncWing, wingView } from "../live.js";
+import { activeMissions, isShared, setShared, syncWing, wingView } from "../live.js";
 import { notify, playTone, TONES } from "../notifier.js";
 import { newWingCode, type NotifySettings, type WingSettings } from "../store.js";
 import { credits, hoursLeft, relTime } from "../time.js";
@@ -107,8 +107,28 @@ export class MissionsView implements View {
             m.reward ? h("span", null, `${credits(m.reward)} Cr`) : null,
             m.influence ? h("span.sub", null, `Influence ${m.influence}`) : null,
           ),
+          this.shareControl(m),
         );
       }),
+    );
+  }
+
+  /** Share / stop sharing with the wing (only when the wing link is on, on the PC). */
+  private shareControl(m: Mission): HTMLElement | null {
+    const w = this.ctx.store.state.settings.wing;
+    if (isRemote() || !w.enabled || !wingView()) return null;
+    const shared = isShared(m);
+    const manual = w.shared.includes(m.id);
+    const auto = shared && !manual;
+    return h(
+      "div.mission-share",
+      null,
+      shared ? h("span.badge.ok", null, auto ? (w.autoShare && m.wing ? "Partagée automatiquement" : "Partagée (mission de l'escadrille)") : "Partagée avec l'escadrille") : null,
+      manual
+        ? h("button.ghost.small", { onclick: () => (setShared(m.id, false), this.render()) }, "Ne plus partager")
+        : !shared
+          ? h("button.ghost.small", { onclick: () => (setShared(m.id, true), this.render()) }, "Partager avec l'escadrille")
+          : null,
     );
   }
 
@@ -155,7 +175,7 @@ export class MissionsView implements View {
         h(
           "p.sub",
           null,
-          "Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Vos missions d'escadrille sont partagées entre vous, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire. Seules les missions d'escadrille sont partagées.",
+          "Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Les missions que tu choisis de partager sont envoyées aux autres, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire.",
         ),
         h(
           "div.wing-form",
@@ -191,7 +211,10 @@ export class MissionsView implements View {
             h("input", { type: "text", value: s.name, placeholder: store.state.cmdr.commander ?? "CMDR", onchange: (e: Event) => set({ name: (e.target as HTMLInputElement).value }) }),
           ),
           h("label.check", null, h("input", { type: "checkbox", checked: s.notifyNew, onchange: (e: Event) => set({ notifyNew: (e.target as HTMLInputElement).checked }) }), " Prévenir quand un membre a une mission d'escadrille que je n'ai pas"),
+          h("label.check", null, h("input", { type: "checkbox", checked: s.notifyAccept, onchange: (e: Event) => set({ notifyAccept: (e.target as HTMLInputElement).checked }) }), " Prévenir quand un membre accepte une mission que je partage"),
           h("label.check", null, h("input", { type: "checkbox", checked: s.notifyAll, onchange: (e: Event) => set({ notifyAll: (e.target as HTMLInputElement).checked }) }), " Prévenir quand toute l'escadrille a accepté une mission"),
+          h("label.check", null, h("input", { type: "checkbox", checked: s.autoShare, onchange: (e: Event) => set({ autoShare: (e.target as HTMLInputElement).checked }) }), " Partager automatiquement toutes mes missions d'escadrille"),
+          h("p.sub", null, "Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise."),
         ),
       );
     }

@@ -317,6 +317,11 @@ export function meritsThisWeek(pp: Powerplay, now = new Date()): number {
 
 export { weekStart };
 
+/** "Mission_Delivery_Boom_Wing_name" → "Delivery Boom Wing" (when the game gave no localised title). */
+export function missionTitle(symbol: string): string {
+  return symbol.replace(/^Mission_/i, "").replace(/_name$/i, "").replace(/_/g, " ").trim() || "Mission";
+}
+
 function massacreKill(st: ActivityState, victimFaction: string) {
   // One kill counts towards one mission per issuing faction: the oldest unfinished one.
   const byIssuer = new Map<string, Mission>();
@@ -374,8 +379,27 @@ export function applyActivity(st: ActivityState, ev: Json, ctx: ActivityContext 
 
     // ---------- missions ----------
     case "Missions": {
-      const active = new Set<number>((ev.Active ?? []).map((m: Json) => Number(m.MissionID)));
+      const list: Json[] = ev.Active ?? [];
+      const active = new Set<number>(list.map((m: Json) => Number(m.MissionID)));
       for (const id of Object.keys(st.missions).map(Number)) if (!active.has(id)) delete st.missions[id];
+      // Missions the archive didn't show being accepted (older than the archive, or accepted in a way
+      // the journal doesn't log): keep them visible with what the login list says.
+      for (const m of list) {
+        const id = Number(m.MissionID);
+        if (st.missions[id] || !id) continue;
+        const name = String(m.Name ?? "");
+        st.missions[id] = {
+          id,
+          name,
+          title: missionTitle(name),
+          faction: "",
+          accepted: at,
+          expiry: typeof m.Expires === "number" && at ? new Date(Date.parse(at) + m.Expires * 1000).toISOString() : undefined,
+          wing: /wing/i.test(name),
+          kills: 0,
+          status: "active",
+        };
+      }
       return true;
     }
     case "MissionAccepted": {
@@ -430,7 +454,11 @@ export function applyActivity(st: ActivityState, ev: Json, ctx: ActivityContext 
       return known || ev.event === "MissionCompleted";
     }
     case "CargoDepot": {
-      const m = st.missions[Number(ev.MissionID)];
+      const id = Number(ev.MissionID);
+      if (!st.missions[id] && id && !st.finished[id]) {
+        st.missions[id] = { id, name: "Mission_Delivery_Wing", title: missionTitle(`Mission_Delivery_${ev.CargoType ?? ""}`), faction: "", accepted: at, wing: true, kills: 0, status: "active" };
+      }
+      const m = st.missions[id];
       if (!m) return false;
       m.delivered = num(ev.ItemsDelivered) ?? m.delivered;
       m.collected = num(ev.ItemsCollected) ?? m.collected;

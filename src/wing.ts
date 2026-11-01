@@ -10,6 +10,8 @@ import type { Mission } from "./activity.js";
 
 export interface WingMission {
   id: number;
+  /** Journal symbol (language-independent), e.g. Mission_Delivery_Boom_Wing_name. */
+  name?: string;
   title: string;
   faction: string;
   destSystem?: string;
@@ -89,29 +91,44 @@ export async function open(key: CryptoKey, text: string): Promise<Packet | null>
   }
 }
 
-export function toWingMissions(missions: Mission[]): WingMission[] {
-  return missions
-    .filter((m) => m.wing)
-    .slice(0, 20)
-    .map((m) => ({
-      id: m.id,
-      title: m.title.slice(0, 80),
-      faction: m.faction.slice(0, 60),
-      destSystem: m.destSystem,
-      destStation: m.destStation,
-      expiry: m.expiry,
-      status: m.status,
-      killCount: m.killCount,
-      kills: m.killCount ? m.kills : undefined,
-      delivered: m.delivered,
-      total: m.total,
-    }));
+export function toWingMission(m: Mission): WingMission {
+  return {
+    id: m.id,
+    name: m.name,
+    title: m.title.slice(0, 80),
+    faction: m.faction.slice(0, 60),
+    destSystem: m.destSystem,
+    destStation: m.destStation,
+    expiry: m.expiry,
+    status: m.status,
+    killCount: m.killCount,
+    kills: m.killCount ? m.kills : undefined,
+    delivered: m.delivered,
+    total: m.total,
+  };
 }
 
-/** Same mission seen by two commanders: same id, or same title, faction, destination and expiry hour. */
+/** The missions we publish: those chosen by `share`, at most 20. */
+export function toWingMissions(missions: Mission[], share: (m: Mission) => boolean = (m) => m.wing): WingMission[] {
+  return missions.filter(share).slice(0, 20).map(toWingMission);
+}
+
+const norm = (s?: string) => (s ?? "").trim().toLowerCase();
+
+/**
+ * Same mission seen by two commanders. The copy a wingmate accepts can carry another id, another
+ * language for its title and no "wing" flag, so it is matched on what the game doesn't translate:
+ * mission type (journal symbol), issuing faction, destination and an expiry within a few hours.
+ */
 export function sameMission(a: WingMission, b: WingMission): boolean {
   if (a.id === b.id) return true;
-  return a.title === b.title && a.faction === b.faction && (a.destSystem ?? "") === (b.destSystem ?? "") && (a.expiry ?? "").slice(0, 13) === (b.expiry ?? "").slice(0, 13);
+  // A field only one side knows (a mission seen only in the login list has no faction or
+  // destination) doesn't count against the match.
+  const differ = (x?: string, y?: string) => Boolean(norm(x) && norm(y) && norm(x) !== norm(y));
+  if (differ(a.faction, b.faction) || differ(a.destSystem, b.destSystem) || differ(a.destStation, b.destStation)) return false;
+  if (a.expiry && b.expiry && Math.abs(Date.parse(a.expiry) - Date.parse(b.expiry)) > 3 * 3600000) return false;
+  if (a.name && b.name) return norm(a.name).replace(/_name$/, "") === norm(b.name).replace(/_name$/, "");
+  return a.title === b.title;
 }
 
 export interface WingRow {
@@ -150,6 +167,8 @@ export interface WingEvents {
   newMission: (row: WingRow, by: string) => void;
   /** Every active member now has this mission. */
   everyone: (row: WingRow) => void;
+  /** A member accepted a mission you share. */
+  accepted: (row: WingRow, by: string) => void;
   changed: () => void;
   error: (message: string) => void;
 }
@@ -167,6 +186,7 @@ export class WingLink {
   private stopped = false;
   private announcedNew = new Set<string>();
   private announcedAll = new Set<string>();
+  private announcedHolders = new Set<string>();
   private lastSent = "";
   /** The first poll only learns what already exists: no notifications for old news. */
   private primed = false;
@@ -273,7 +293,7 @@ export class WingLink {
     const me = this.me();
     const others = [...this.members.values()];
     const rows = wingRows(me, others);
-    const key = (r: WingRow) => `${r.mission.title}|${r.mission.faction}|${(r.mission.expiry ?? "").slice(0, 13)}`;
+    const key = (r: WingRow) => `${norm(r.mission.name) || r.mission.title}|${norm(r.mission.faction)}|${norm(r.mission.destSystem)}|${(r.mission.expiry ?? "").slice(0, 13)}`;
     const activeCount = 1 + others.filter((o) => isActive(o)).length;
     for (const r of rows) {
       const k = key(r);
@@ -281,6 +301,14 @@ export class WingLink {
         this.announcedNew.add(k);
         const by = others.find((o) => r.holders.includes(o.id))?.name ?? "";
         if (this.primed) this.on.newMission(r, by);
+      }
+      if (r.mine) {
+        for (const holder of r.holders) {
+          if (holder === me.id || this.announcedHolders.has(`${k}|${holder}`)) continue;
+          this.announcedHolders.add(`${k}|${holder}`);
+          const by = others.find((o) => o.id === holder)?.name ?? "";
+          if (this.primed && r.missing.length > 0) this.on.accepted(r, by);
+        }
       }
       if (activeCount >= 2 && r.missing.length === 0 && !this.announcedAll.has(k)) {
         this.announcedAll.add(k);

@@ -33,7 +33,7 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 - **Commandes & contrôleurs** : lit tes raccourcis (préréglage actif, y compris des préréglages différents pour le vaisseau, le SRV et à pied) et dessine chaque périphérique. Le clavier est dessiné touche par touche (QWERTY, AZERTY ou QWERTZ) et la manette Xbox ou PlayStation avec des repères numérotés. Les HOTAS, joysticks et manettes reconnus (environ 45 modèles : VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) sont affichés sur la photo du modèle, avec l'action écrite dans la case de chaque bouton. Les gabarits viennent d'EDRefCard et sont chargés depuis son dépôt GitHub. Pour un modèle non reconnu, tu choisis le gabarit le plus proche ; sinon, un schéma simple en axes, chapeaux et boutons s'affiche. Chaque commande a sa légende et une couleur par mode, avec des filtres Vaisseau / SRV / À pied, une recherche et une fiche imprimable.
 - **Sauvegarde de la configuration** : exporte tes raccourcis (et tes réglages graphiques) en zip dans Documents\EDCH, et les restaure en un clic. Ta configuration actuelle est sauvegardée automatiquement avant chaque import.
 - **Missions** : chaque mission en cours avec son objectif, sa destination, le temps restant et sa progression ; les missions de massacre empilées avec les éliminations qu'il reste par faction donneuse.
-- **Missions d'escadrille partagées** : les membres de l'escadrille qui utilisent EDCH saisissent le même code et voient qui a accepté quelle mission d'escadrille. Les messages passent par ntfy.sh, chiffrés de bout en bout avec ce code. Un son et/ou une languette qui clignote sur le côté (pas de fenêtre Windows) te préviennent quand quelqu'un a une mission que tu n'as pas, ou quand toute l'escadrille l'a acceptée.
+- **Missions d'escadrille partagées** : les membres de l'escadrille qui utilisent EDCH saisissent le même code et voient qui a accepté quelle mission partagée : tu choisis les missions à partager (ou toutes automatiquement). Les messages passent par ntfy.sh, chiffrés de bout en bout avec ce code. Un son et/ou une languette qui clignote sur le côté (pas de fenêtre Windows) te préviennent quand quelqu'un a une mission que tu n'as pas, ou quand toute l'escadrille l'a acceptée.
 - **Colonisation** : chaque dépôt de construction avec ce qu'il reste à livrer, ce que tu as en soute, le nombre de trajets et une recherche en un clic pour savoir où acheter chaque marchandise.
 - **Objectifs communautaires** : ta contribution, ta tranche de récompense et le palier des objectifs que tu as rejoints ; tous les objectifs en cours via Inara avec ta clé API.
 - **Exploration** : valeur des données cartographiques non vendues, aide aux prélèvements d'exobiologie (distance aux prélèvements précédents comparée à la portée de la colonie), espèces possibles et valeurs pour chaque planète à signaux biologiques, analyses non vendues.
@@ -97,7 +97,7 @@ Structure :
   - `i18n.ts` : couche de traduction.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.7.0` : la Release est publiée et les copies installées proposent la mise à jour.
+Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.7.1` : la Release est publiée et les copies installées proposent la mise à jour.
 
 ## Feuille de route
 

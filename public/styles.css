@@ -691,3 +691,4 @@ ul.plain { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 4p
 .chips select { background: var(--panel-2); border: 1px solid var(--line-2); border-radius: 16px; padding: 3px 10px; color: var(--text); }
 @media (min-width: 761px) { main.content { padding-right: 44px; } }
 @media (max-width: 760px) { .card:has(> .table), .card:has(> div > .table), .stack { overflow-x: auto; } }
+.mission-share { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-top: 1px solid var(--line); padding-top: 8px; margin-top: 2px; }

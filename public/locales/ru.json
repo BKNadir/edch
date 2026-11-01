@@ -791,5 +791,15 @@
 "{0} j {1} h": "{0} д {1} ч",
 "Les noms des espèces d'exobiologie tels que le journal les écrit": "Названия видов экзобиологии в том виде, как их пишет журнал",
 "Le relais gratuit qui transporte les messages chiffrés de l'escadrille": "Бесплатный ретранслятор зашифрованных сообщений звена",
-"Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie": "Данные EDEngineer и инженеров, собранные и исправленные, и каталог экзобиологии"
+"Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie": "Данные EDEngineer и инженеров, собранные и исправленные, и каталог экзобиологии",
+"{0} a accepté « {1} »": "{0} принял(а) «{1}»",
+"Partagée automatiquement": "Передаётся автоматически",
+"Partagée (mission de l'escadrille)": "Общая (миссия звена)",
+"Partagée avec l'escadrille": "Передана звену",
+"Ne plus partager": "Больше не передавать",
+"Partager avec l'escadrille": "Передать звену",
+"Prévenir quand un membre accepte une mission que je partage": "Сообщать, когда участник принимает миссию, которой я поделился",
+"Partager automatiquement toutes mes missions d'escadrille": "Автоматически передавать все мои миссии звена",
+"Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise.": "Иначе передавайте каждую миссию кнопкой «Передать звену» на её карточке. Миссия, которой поделился участник и которую вы приняли, передаётся сразу: остальные видят, что вы её взяли.",
+"Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Les missions que tu choisis de partager sont envoyées aux autres, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire.": "Каждый участник звена с EDCH вводит один и тот же код. Миссии, которыми вы решили поделиться, отправляются остальным в зашифрованном этим кодом виде через бесплатный сервис ntfy.sh: никто другой не может их прочитать."
 }

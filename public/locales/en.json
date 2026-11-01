@@ -791,5 +791,15 @@
 "{0} j {1} h": "{0} d {1} h",
 "Les noms des espèces d'exobiologie tels que le journal les écrit": "Exobiology species names as the journal writes them",
 "Le relais gratuit qui transporte les messages chiffrés de l'escadrille": "The free relay that carries the wing's encrypted messages",
-"Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie": "EDEngineer's and the engineers' data, gathered and corrected, and the exobiology catalogue"
+"Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie": "EDEngineer's and the engineers' data, gathered and corrected, and the exobiology catalogue",
+"{0} a accepté « {1} »": "{0} accepted \"{1}\"",
+"Partagée automatiquement": "Shared automatically",
+"Partagée (mission de l'escadrille)": "Shared (wing's mission)",
+"Partagée avec l'escadrille": "Shared with the wing",
+"Ne plus partager": "Stop sharing",
+"Partager avec l'escadrille": "Share with the wing",
+"Prévenir quand un membre accepte une mission que je partage": "Notify me when a member accepts a mission I share",
+"Partager automatiquement toutes mes missions d'escadrille": "Share all my wing missions automatically",
+"Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise.": "Otherwise, share each mission with the \"Share with the wing\" button on its card. A mission a member shared that you accept is shared right away: the others see you took it.",
+"Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Les missions que tu choisis de partager sont envoyées aux autres, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire.": "Every wing member using EDCH enters the same code. The missions you choose to share are sent to the others, encrypted with this code, through the free ntfy.sh service: nobody else can read them."
 }

@@ -33,7 +33,7 @@ Ein schlanker Begleiter für **Elite Dangerous** (Windows). Er liest das Spiel-J
 - **Steuerung & Geräte**: liest deine Tastenbelegung (aktive Vorlage, auch unterschiedliche Vorlagen für Schiff, SRV und zu Fuß) und zeichnet jedes Gerät. Die Tastatur wird Taste für Taste gezeichnet (QWERTY, AZERTY oder QWERTZ), das Xbox- oder PlayStation-Gamepad mit nummerierten Markierungen. Erkannte HOTAS, Joysticks und Gamepads (etwa 45 Modelle: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) werden auf dem Bild des Modells gezeigt, mit der Aktion im Feld jeder Taste. Die Vorlagen stammen von EDRefCard und werden aus dessen GitHub-Repository geladen. Für ein unbekanntes Modell wählst du die ähnlichste Vorlage, sonst erscheint ein einfaches Schema mit Achsen, Coolie-Hats und Tasten. Jeder Befehl hat eine Legende und eine Farbe pro Modus, mit Filtern Schiff / SRV / Zu Fuß, Suche und druckbarem Blatt.
 - **Sicherung der Konfiguration**: exportiert deine Tastenbelegung (und Grafikeinstellungen) als Zip nach Dokumente\EDCH und stellt sie mit einem Klick wieder her. Vor jedem Import wird die aktuelle Konfiguration automatisch gesichert.
 - **Missionen**: jede laufende Mission mit Ziel, Zielort, verbleibender Zeit und Fortschritt; gestapelte Massakermissionen mit den Abschüssen, die jede Auftraggeber-Fraktion noch braucht.
-- **Geteilte Geschwadermissionen**: Geschwadermitglieder mit EDCH geben denselben Code ein und sehen, wer welche Geschwadermission angenommen hat. Die Nachrichten laufen über ntfy.sh, Ende-zu-Ende mit diesem Code verschlüsselt. Ein Ton und/oder eine blinkende Seitenlasche (keine Windows-Pop-ups) melden, wenn jemand eine Mission hat, die du nicht hast, oder wenn das ganze Geschwader sie angenommen hat.
+- **Geteilte Geschwadermissionen**: Geschwadermitglieder mit EDCH geben denselben Code ein und sehen, wer welche geteilte Mission angenommen hat: Du wählst, welche Missionen du teilst (oder alle automatisch). Die Nachrichten laufen über ntfy.sh, Ende-zu-Ende mit diesem Code verschlüsselt. Ein Ton und/oder eine blinkende Seitenlasche (keine Windows-Pop-ups) melden, wenn jemand eine Mission hat, die du nicht hast, oder wenn das ganze Geschwader sie angenommen hat.
 - **Kolonisierung**: jedes Baudepot mit dem, was noch zu liefern ist, was in deinem Frachtraum ist, den nötigen Fahrten und einer Suche per Klick, wo man jede Ware kauft.
 - **Community-Ziele**: dein Beitrag, deine Belohnungsstufe und die erreichte Stufe der Ziele, denen du beigetreten bist; alle laufenden Ziele über Inara mit deinem API-Schlüssel.
 - **Erkundung**: Wert der nicht verkauften Kartendaten, Hilfe bei Exobiologie-Proben (Abstand zu den vorherigen Proben im Vergleich zur Kolonie-Reichweite), mögliche Arten und Werte für jeden Planeten mit biologischen Signalen, nicht verkaufte Analysen.
@@ -97,7 +97,7 @@ Aufbau:
   - `i18n.ts`: Übersetzungsschicht.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: erzeugen die Daten in `public/` neu (siehe NOTICE).
 
-Bei jedem Push auf `main` läuft ein Windows-Build. Um eine Version zu veröffentlichen, pushe einen Tag wie `v0.7.0`: Das Release wird veröffentlicht und installierte Kopien bieten das Update an.
+Bei jedem Push auf `main` läuft ein Windows-Build. Um eine Version zu veröffentlichen, pushe einen Tag wie `v0.7.1`: Das Release wird veröffentlicht und installierte Kopien bieten das Update an.
 
 ## Roadmap
 

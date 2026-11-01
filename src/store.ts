@@ -47,6 +47,12 @@ export interface WingSettings {
   name: string;
   notifyNew: boolean;
   notifyAll: boolean;
+  /** A wingmate accepted a mission I share. */
+  notifyAccept: boolean;
+  /** Share every wing mission as soon as it's accepted (otherwise one by one). */
+  autoShare: boolean;
+  /** Ids of the missions shared by hand. */
+  shared: number[];
 }
 
 export interface MiningSettings {
@@ -59,7 +65,7 @@ export interface MiningSettings {
 }
 
 export const DEFAULT_NOTIFY: NotifySettings = { sound: true, color: true, tone: "chime", volume: 0.6, flash: "#ff7a18", hideTab: false };
-export const DEFAULT_WING: WingSettings = { enabled: false, code: "", name: "", notifyNew: true, notifyAll: true };
+export const DEFAULT_WING: WingSettings = { enabled: false, code: "", name: "", notifyNew: true, notifyAll: true, notifyAccept: true, autoShare: false, shared: [] };
 export const DEFAULT_MINING: MiningSettings = { targets: [{ id: "painite", min: 25 }, { id: "platinum", min: 20 }], alert: true, power: "", minerals: ["Platinum", "Painite", "Low Temperature Diamonds"] };
 
 /** A wing code: 4 groups of 4 letters/digits (80 bits), easy to read out. */

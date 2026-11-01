@@ -33,7 +33,7 @@ Um companheiro leve para **Elite Dangerous** (Windows). Ele lê o diário do jog
 - **Controles e dispositivos**: lê seus atalhos (predefinição ativa, inclusive predefinições diferentes para nave, SRV e a pé) e desenha cada dispositivo. O teclado é desenhado tecla por tecla (QWERTY, AZERTY ou QWERTZ) e o controle de Xbox ou PlayStation com marcadores numerados. HOTAS, joysticks e controles reconhecidos (cerca de 45 modelos: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) aparecem sobre a imagem do modelo, com a ação escrita na caixa de cada botão. Os modelos vêm do EDRefCard e são carregados do repositório dele no GitHub. Para um modelo não reconhecido, você escolhe o mais parecido; senão, aparece um esquema simples de eixos, chapéus e botões. Cada controle tem sua legenda e uma cor por modo, com filtros Nave / SRV / A pé, busca e ficha para imprimir.
 - **Backup da configuração**: exporta seus atalhos (e configurações gráficas) para um zip em Documentos\EDCH e os restaura com um clique. Sua configuração atual é salva automaticamente antes de cada importação.
 - **Missões**: cada missão em andamento com objetivo, destino, tempo restante e progresso; as missões de massacre empilhadas com os abates que cada facção emissora ainda precisa.
-- **Missões de ala compartilhadas**: os membros da ala que usam o EDCH digitam o mesmo código e veem quem aceitou cada missão de ala. As mensagens passam pelo ntfy.sh, criptografadas de ponta a ponta com esse código. Um som e/ou uma aba lateral piscando (sem janelas do Windows) avisam quando alguém tem uma missão que você não tem, ou quando a ala inteira aceitou.
+- **Missões de ala compartilhadas**: os membros da ala que usam o EDCH digitam o mesmo código e veem quem aceitou cada missão compartilhada: você escolhe quais missões compartilhar (ou todas automaticamente). As mensagens passam pelo ntfy.sh, criptografadas de ponta a ponta com esse código. Um som e/ou uma aba lateral piscando (sem janelas do Windows) avisam quando alguém tem uma missão que você não tem, ou quando a ala inteira aceitou.
 - **Colonização**: cada depósito de construção com o que falta entregar, o que está no seu porão, as viagens necessárias e uma busca em um clique de onde comprar cada mercadoria.
 - **Metas comunitárias**: sua contribuição, sua faixa de recompensa e o nível das metas em que você entrou; todas as metas em andamento pelo Inara com sua chave API.
 - **Exploração**: valor dos dados cartográficos não vendidos, ajuda com as amostras de exobiologia (distância das amostras anteriores comparada ao alcance da colônia), espécies possíveis e valores de cada planeta com sinais biológicos, análises não vendidas.
@@ -97,7 +97,7 @@ Estrutura:
   - `i18n.ts`: camada de tradução.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneram os dados de `public/` (veja NOTICE).
 
-Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.7.0`: a Release é publicada e as cópias instaladas oferecem a atualização.
+Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.7.1`: a Release é publicada e as cópias instaladas oferecem a atualização.
 
 ## Roteiro
 

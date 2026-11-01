@@ -128,3 +128,51 @@ test("wing rows: who holds what", () => {
   assert.deepEqual(rows[0].missing, ["c"]);
   assert.ok(sameMission(m, { ...m, id: 99 }));
 });
+
+test("a wingmate's copy matches even with another id, language and no wing flag", async () => {
+  const { sameMission } = await import("../dist/js/wing.js");
+  const mine = { id: 1, name: "Mission_Delivery_Boom_Wing_name", title: "Livrer 720 t d'acier", faction: "Timbalderis Liberals", destSystem: "Kamadhenu", destStation: "Velazquez Port", expiry: "2026-11-02T10:00:00Z", status: "active" };
+  const theirs = { ...mine, id: 2, title: "Deliver 720 t of steel", expiry: "2026-11-02T10:00:05Z" };
+  assert.ok(sameMission(mine, theirs));
+  assert.ok(!sameMission(mine, { ...theirs, destStation: "Other Port" }));
+  assert.ok(!sameMission(mine, { ...theirs, name: "Mission_Courier_name" }));
+});
+
+test("wing notifications: shared missions only, then acceptances", async () => {
+  const { WingLink } = await import("../dist/js/wing.js");
+  const m = { id: 1, name: "Mission_Delivery_Wing", title: "Deliver", faction: "F", destSystem: "Sol", status: "active", expiry: "2026-11-02T10:00:00Z" };
+  const fresh = new Date().toISOString();
+  let mine = [];
+  const seen = [];
+  const link = new WingLink("CODE-CODE", () => ({ id: "me", name: "Me", at: fresh, missions: mine }), {
+    newMission: (r, by) => seen.push(`new:${by}`),
+    everyone: () => seen.push("all"),
+    accepted: (r, by) => seen.push(`acc:${by}`),
+    changed: () => {},
+    error: () => {},
+  });
+  link.primed = true;
+  link.members.set("b", { id: "b", name: "Bob", at: fresh, missions: [] });
+  link.members.set("c", { id: "c", name: "Cid", at: fresh, missions: [] });
+  link.check();
+  assert.deepEqual(seen, []); // nothing shared: nobody is told anything
+  mine = [m];
+  link.check();
+  link.members.set("b", { id: "b", name: "Bob", at: fresh, missions: [{ ...m, id: 7, title: "Livrer" }] });
+  link.check();
+  assert.deepEqual(seen, ["acc:Bob"]);
+  link.members.set("c", { id: "c", name: "Cid", at: fresh, missions: [{ ...m, id: 8 }] });
+  link.check();
+  assert.deepEqual(seen, ["acc:Bob", "all"]);
+});
+
+test("missions known only from the login list or a wing delivery still show", () => {
+  const st = emptyActivity();
+  applyActivityEvents(st, [
+    { timestamp: at(1), event: "Missions", Active: [{ MissionID: 42, Name: "Mission_Delivery_Boom_Wing_name", Expires: 3600 }] },
+    { timestamp: at(2), event: "CargoDepot", MissionID: 43, UpdateType: "WingUpdate", CargoType: "Steel", ItemsDelivered: 100, TotalItemsToDeliver: 500 },
+  ]);
+  assert.equal(st.missions[42].title, "Delivery Boom Wing");
+  assert.ok(st.missions[42].wing);
+  assert.equal(st.missions[43].total, 500);
+});
