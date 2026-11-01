@@ -3,6 +3,11 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.2
+
+- The Windows installer now shows what EDCH sends and to whom (Spansh, EDSM, EDDN, Inara, ntfy, GitHub) and how to turn each one off, followed by the MIT licence.
+- New code signing policy page with the privacy policy, linked from the README, ahead of free code signing by the SignPath Foundation (application in progress). Signed builds will stop Windows Defender from wrongly flagging the installer.
+
 ## 0.10.1
 
 - Navigation: when you arrive in a system of the ship route, the next one can be copied automatically, ready to paste into the galaxy map.

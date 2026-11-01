@@ -1,6 +1,6 @@
 # EDCH — Elite Dangerous Companion Helper
 
-[English](README.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · **Русский**
+[English](README.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · **Русский** · [Code signing policy (политика подписи)](CODE_SIGNING_POLICY.md)
 
 Лёгкий помощник для **Elite Dangerous** (Windows). Он читает журнал игры в реальном времени и для каждого инженерного материала показывает, **где его найти — с реальными системами рядом с вами, по которым можно кликнуть**.
 
@@ -112,7 +112,7 @@ npm run demo        # только интерфейс в браузере, с п
   - `i18n.ts`: слой перевода.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: заново создают данные в `public/` (см. NOTICE).
 
-Сборка для Windows запускается при каждом push в `main`. Чтобы выпустить версию, отправьте тег, например `v0.10.1`: Release будет опубликован, а установленные копии предложат обновление.
+Сборка для Windows запускается при каждом push в `main`. Чтобы выпустить версию, отправьте тег, например `v0.10.2`: Release будет опубликован, а установленные копии предложат обновление.
 
 ## Планы
 

@@ -1,6 +1,6 @@
 # EDCH — Elite Dangerous Companion Helper
 
-[English](README.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · **Español** · [Português (Brasil)](README.pt-BR.md) · [Русский](README.ru.md)
+[English](README.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · **Español** · [Português (Brasil)](README.pt-BR.md) · [Русский](README.ru.md) · [Code signing policy (política de firma)](CODE_SIGNING_POLICY.md)
 
 Un compañero ligero para **Elite Dangerous** (Windows). Lee el diario del juego en tiempo real y, para cada material de ingeniería, te dice **dónde encontrarlo, con sistemas reales y clicables a tu alrededor**.
 
@@ -112,7 +112,7 @@ Estructura:
   - `i18n.ts`: capa de traducción.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneran los datos de `public/` (ver NOTICE).
 
-Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.10.1`: se publica la Release y las copias instaladas ofrecen la actualización.
+Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.10.2`: se publica la Release y las copias instaladas ofrecen la actualización.
 
 ## Hoja de ruta
 
