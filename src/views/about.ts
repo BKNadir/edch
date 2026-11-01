@@ -75,6 +75,13 @@ export class AboutView implements View {
           h("p", null, "Un compagnon léger pour Elite Dangerous : inventaire en direct, où trouver chaque matériau, ingénieurs, recherches, navigation, commandes et synchro."),
         ),
         h(
+          "section.card.about-author",
+          null,
+          h("h3", null, "L'auteur"),
+          h("p", null, "Imaginé et piloté par ", h("strong", { "data-no-tr": "" }, "CMDR MDLuffy"), "."),
+          h("p.sub", null, "Merci d'utiliser EDCH ! Si tu croises MDLuffy dans le noir, un petit o7 fait toujours plaisir. Bon vol, Commandant, et que tes réservoirs soient toujours pleins."),
+        ),
+        h(
           "section.card",
           null,
           h("h3", null, "Liens utiles"),

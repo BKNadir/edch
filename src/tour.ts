@@ -10,6 +10,7 @@ import { toast } from "./dom.js";
 import { gameName } from "./i18n.js";
 import { jumpModel } from "./jump.js";
 import { log } from "./logger.js";
+import { notify } from "./notifier.js";
 import { distance } from "./spansh.js";
 import { blueprintGrades, defaultRolls, wishNeeds, type Store, type WishItem } from "./store.js";
 import { origin, pickEngineer, type Pick } from "./engineerPick.js";
@@ -168,6 +169,38 @@ export function nextJump(system: string): { next?: RouteJump; index: number } {
   return { next: i >= 0 ? route.jumps[i + 1] : undefined, index: i };
 }
 
+// ---------------- Navigation page route ----------------
+
+const NAV_KEY = "edch.navRoute";
+/** The systems of the last ship route plotted on the Navigation page, in order. */
+let navRoute: string[] = (() => {
+  try {
+    const raw = localStorage.getItem(NAV_KEY);
+    const v = raw ? JSON.parse(raw) : [];
+    return Array.isArray(v) ? v.filter((x) => typeof x === "string") : [];
+  } catch {
+    return [];
+  }
+})();
+
+export function setNavRoute(systems: string[]) {
+  navRoute = systems;
+  try {
+    localStorage.setItem(NAV_KEY, JSON.stringify(systems));
+  } catch {
+    /* kept in memory only */
+  }
+}
+
+/** Copies `system` (the next one of a route) and says so. */
+function copyNext(system: string, label: string) {
+  void copyText(system).then((ok) => {
+    if (!ok) return;
+    toast(label);
+    if (store?.state.settings.navNotifyCopy) notify(label, { sound: true });
+  });
+}
+
 // ---------------- live ----------------
 
 let store: Store | null = null;
@@ -181,14 +214,21 @@ export function bindTour(ctx: Ctx) {
 export function tourEvent(ev: Json) {
   if (!store) return;
   const s = store.state.settings.engineers;
-  if ((ev.event === "FSDJump" || ev.event === "CarrierJump") && s.autoCopyNext && route && typeof ev.StarSystem === "string") {
-    const { next, index } = nextJump(ev.StarSystem);
-    if (index < 0) return;
-    if (next) {
-      void copyText(next.system).then((ok) => {
-        if (ok) toast(next.engineer ? `Prochain saut copié : ${next.system} (${next.engineer})` : `Prochain saut copié : ${next.system}`);
-      });
-    } else toast("Dernière étape de la tournée des ingénieurs");
+  if ((ev.event === "FSDJump" || ev.event === "CarrierJump") && typeof ev.StarSystem === "string") {
+    const here = ev.StarSystem.toLowerCase();
+    // Navigation page route first: arriving at the end of a step copies the next system.
+    const i = store.state.settings.navAutoCopy ? navRoute.findIndex((x) => x.toLowerCase() === here) : -1;
+    if (i >= 0) {
+      const next = navRoute[i + 1];
+      if (next) copyNext(next, `Prochain saut copié : ${next}`);
+      else toast("Destination de l'itinéraire atteinte");
+    } else if (s.autoCopyNext && route) {
+      const { next, index } = nextJump(ev.StarSystem);
+      if (index >= 0) {
+        if (next) copyNext(next.system, next.engineer ? `Prochain saut copié : ${next.system} (${next.engineer})` : `Prochain saut copié : ${next.system}`);
+        else toast("Dernière étape de la tournée des ingénieurs");
+      }
+    }
   }
   if (ev.event === "EngineerCraft" && s.autoTick) tick(ev);
 }

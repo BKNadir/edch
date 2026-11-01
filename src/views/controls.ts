@@ -16,7 +16,7 @@ import {
   type DeviceTemplate,
 } from "../binds.js";
 import { h, icon, replace, toast } from "../dom.js";
-import { fold, tr } from "../i18n.js";
+import { fold, lang, tr } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
 import { DEMO_BINDS } from "../demo.js";
 
@@ -453,24 +453,24 @@ export class ControlsView implements View {
   /** The keyboard to draw: chosen in EDCH, or guessed from the bindings file. */
   private keyboardChoice(): { layout: Family; format: "iso" | "ansi" } {
     const s = this.ctx.store.state.settings;
-    const layout = s.kbLayout === "auto" ? layoutFamily(this.layout) : s.kbLayout;
-    // ANSI is the US keyboard; almost every other country uses ISO (L-shaped Enter, extra key by left Shift).
-    const format = s.kbFormat === "auto" ? (/^en-us$/i.test(this.layout) ? "ansi" : "iso") : s.kbFormat;
+    // Until one is chosen here: the usual keyboard for the app's language.
+    const code = lang().code;
+    const layout = s.kbLayout === "auto" ? (code === "fr" ? "azerty" : code === "de" ? "qwertz" : "qwerty") : s.kbLayout;
+    // ANSI is the US keyboard (most English-speaking players); the rest of the world mostly uses ISO.
+    const format = s.kbFormat === "auto" ? (code === "en" ? "ansi" : "iso") : s.kbFormat;
     return { layout, format };
   }
 
   private keyboardSwitches(): HTMLElement {
-    const s = this.ctx.store.state.settings;
+    const kb = this.keyboardChoice();
     const seg = <T extends string>(value: T, options: [T, string][], set: (v: T) => void) =>
       h("div.segmented.small", null, options.map(([v, l]) => h("button", { class: value === v ? "active" : "", onclick: () => (set(v), this.render()) }, l)));
-    const autoLayout = { qwerty: "QWERTY", azerty: "AZERTY", qwertz: "QWERTZ" }[layoutFamily(this.layout)];
-    const autoFormat = /^en-us$/i.test(this.layout) ? "ANSI" : "ISO";
     return h(
       "div.kb-switches",
       null,
       h("span.sub", null, "Mon clavier"),
-      seg(s.kbLayout, [["auto", `Auto (${autoLayout})`], ["azerty", "AZERTY"], ["qwerty", "QWERTY"], ["qwertz", "QWERTZ"]], (v) => this.ctx.store.updateSettings({ kbLayout: v })),
-      seg(s.kbFormat, [["auto", `Auto (${autoFormat})`], ["iso", "ISO"], ["ansi", "ANSI"]], (v) => this.ctx.store.updateSettings({ kbFormat: v })),
+      seg(kb.layout, [["azerty", "AZERTY"], ["qwerty", "QWERTY"], ["qwertz", "QWERTZ"]], (v) => this.ctx.store.updateSettings({ kbLayout: v })),
+      seg(kb.format, [["iso", "ISO"], ["ansi", "ANSI"]], (v) => this.ctx.store.updateSettings({ kbFormat: v })),
       h("span.sub", { title: "ISO : touche Entrée en L et une touche de plus à côté du Maj gauche (Europe). ANSI : Entrée sur une ligne (États-Unis)." }, `Raccourcis enregistrés pour un clavier ${this.layout}`),
     );
   }

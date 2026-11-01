@@ -54,6 +54,10 @@ export interface Settings {
   kbFormat: "auto" | "iso" | "ansi";
   /** Wishlist engineers and the engineer tour. */
   engineers: EngineerSettings;
+  /** Navigation page: copy the next system of the ship route on arrival. */
+  navAutoCopy: boolean;
+  /** An EDCH notification (Notifications tab, sound if chosen) when a next jump is copied. */
+  navNotifyCopy: boolean;
 }
 
 export interface EngineerSettings {
@@ -206,6 +210,8 @@ const DEFAULT_SETTINGS: Settings = {
   kbLayout: "auto",
   kbFormat: "auto",
   engineers: DEFAULT_ENGINEER_SETTINGS,
+  navAutoCopy: false,
+  navNotifyCopy: true,
 };
 
 function load<T>(key: string, fallback: T): T {

@@ -195,8 +195,9 @@ Active d'abord le serveur d'accès distant (page Accès distant) : c'est lui qui
 Plein écran : seulement cette page (Échap pour quitter)
 Ouvrir cette page seule dans le navigateur (pour un 2e écran)
 Engineer tour plotted: {0} stop(s), {1} jump(s)
-Prochain saut copié : {0} ({1})
 Prochain saut copié : {0}
+Destination de l'itinéraire atteinte
+Prochain saut copié : {0} ({1})
 Dernière étape de la tournée des ingénieurs
 Effet appliqué : {0} (encore {1})
 Effet appliqué : {0} — retiré de la wishlist
@@ -231,6 +232,9 @@ Le cadre qui fait tourner l'application sur Windows
 À propos d'EDCH
 EDCH — Elite Dangerous Companion Helper
 Un compagnon léger pour Elite Dangerous : inventaire en direct, où trouver chaque matériau, ingénieurs, recherches, navigation, commandes et synchro.
+Imaginé et piloté par 
+CMDR MDLuffy
+Merci d'utiliser EDCH ! Si tu croises MDLuffy dans le noir, un petit o7 fait toujours plaisir. Bon vol, Commandant, et que tes réservoirs soient toujours pleins.
 Liens utiles
 Code source :
 Proposer une idée :
@@ -335,7 +339,6 @@ Pg ↑
 Pg ↓
 Verr num
 Touches hors schéma : {0}
-Auto ({0})
 ISO : touche Entrée en L et une touche de plus à côté du Maj gauche (Europe). ANSI : Entrée sur une ligne (États-Unis).
 Raccourcis enregistrés pour un clavier {0}
 Pavé tactile
@@ -648,6 +651,8 @@ Durée
 Minimum théorique sans boost neutron ; l'itinéraire réel demande un peu plus de sauts.
  Spansh calcule l'itinéraire…
 Étapes
+Copie auto du prochain système à ton arrivée : activée
+Copie auto du prochain système : désactivée (Paramètres → Jeu et recherche → Navigation)
 Indique le départ et la destination.
  Il manque environ {0} t de tritium (réservoir + soute).
 Le tritium du réservoir et de la soute suffit (estimation).
@@ -796,13 +801,16 @@ Couleur principale
 Couleur secondaire
  Mode OLED : fond noir pur (économise la batterie des écrans OLED)
 Rétablir les couleurs d'origine
+Le système suivant est copié dans le presse-papiers du PC, prêt à coller dans la carte galactique.
+Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire (page Navigation)
+Copier automatiquement le prochain saut quand j'arrive dans un système de la tournée des ingénieurs (wishlist)
+Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)
 Pour la wishlist et la tournée des ingénieurs.
 Choisir l'ingénieur le plus proche pour chaque ligne de la wishlist (sinon, tous les ingénieurs sont listés)
 Seulement les ingénieurs déjà connus (rencontrés, invités ou débloqués)
 Rester dans ma région : pas d'ingénieurs de Colonia quand je suis dans la Bulle, et inversement
 Distance max. de la tournée (al)
 Total en ligne droite entre les arrêts. Au-delà, EDCH ne propose pas l'itinéraire.
-Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire
 Avancer la wishlist toute seule quand le jeu applique une modification
 EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés.
  Mode debug : enregistre aussi un log détaillé, dans un fichier séparé

@@ -1133,5 +1133,15 @@
 "(G{0} : aucun ingénieur connu ne le fait ici)": "(G{0}: ningún ingeniero conocido lo hace aquí)",
 "Aucun ingénieur connu pour ce module : à débloquer.": "Ningún ingeniero conocido para este módulo: por desbloquear.",
 "Le plus proche :": "El más cercano:",
-"{0} sauts · {1}": "{0} saltos · {1}"
+"{0} sauts · {1}": "{0} saltos · {1}",
+"L'auteur": "El autor",
+"Imaginé et piloté par": "Ideado y pilotado por",
+"Merci d'utiliser EDCH ! Si tu croises MDLuffy dans le noir, un petit o7 fait toujours plaisir. Bon vol, Commandant, et que tes réservoirs soient toujours pleins.": "¡Gracias por usar EDCH! Si te cruzas con MDLuffy en la negrura, un pequeño o7 siempre se agradece. Buen vuelo, Comandante, y que tus tanques estén siempre llenos.",
+"Copie auto du prochain système à ton arrivée : activée": "Copia automática del siguiente sistema al llegar: activada",
+"Copie auto du prochain système : désactivée (Paramètres → Jeu et recherche → Navigation)": "Copia automática del siguiente sistema: desactivada (Ajustes → Juego y búsqueda → Navegación)",
+"Destination de l'itinéraire atteinte": "Destino de la ruta alcanzado",
+"Le système suivant est copié dans le presse-papiers du PC, prêt à coller dans la carte galactique.": "El siguiente sistema se copia al portapapeles del PC, listo para pegar en el mapa galáctico.",
+"Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire (page Navigation)": "Copiar el siguiente salto automáticamente al llegar a un sistema de la ruta (página Navegación)",
+"Copier automatiquement le prochain saut quand j'arrive dans un système de la tournée des ingénieurs (wishlist)": "Copiar el siguiente salto automáticamente al llegar a un sistema de la ruta de ingenieros (lista de deseos)",
+"Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)": "Avisarme cuando se copie el siguiente salto (pestaña Notificaciones, con sonido si está activado)"
 }

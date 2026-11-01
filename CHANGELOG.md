@@ -3,6 +3,13 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.1
+
+- Navigation: when you arrive in a system of the ship route, the next one can be copied automatically, ready to paste into the galaxy map.
+- New Settings → Game and search → Navigation card: auto-copy for the Navigation route, auto-copy for the engineer tour (moved here from the Engineers card), and a notification when the next jump is copied.
+- Controls: the keyboard drawn by default follows the app's language (AZERTY in French, QWERTZ in German, QWERTY otherwise; ANSI in English, ISO otherwise). The switch is still there and your choice is kept.
+- About: a word from the author, CMDR MDLuffy.
+
 ## 0.10.0
 
 - Wishlist: each line shows the engineer to visit, and their name copies the workshop's system. For a modification, the nearest engineer you know who reaches the wanted grade, otherwise the best grade available (an engineer's own maximum counts, even if your rank with them is lower for now). For an experimental effect, simply the nearest engineer you know. Engineers you know but haven't unlocked are marked "to unlock"; a click shows what the game asks for. When nobody you know can do a line, the line turns red.

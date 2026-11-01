@@ -1133,5 +1133,15 @@
 "(G{0} : aucun ingénieur connu ne le fait ici)": "(G{0}: kein bekannter Ingenieur macht das hier)",
 "Aucun ingénieur connu pour ce module : à débloquer.": "Kein bekannter Ingenieur für dieses Modul: freizuschalten.",
 "Le plus proche :": "Der nächste:",
-"{0} sauts · {1}": "{0} Sprünge · {1}"
+"{0} sauts · {1}": "{0} Sprünge · {1}",
+"L'auteur": "Der Autor",
+"Imaginé et piloté par": "Erdacht und geflogen von",
+"Merci d'utiliser EDCH ! Si tu croises MDLuffy dans le noir, un petit o7 fait toujours plaisir. Bon vol, Commandant, et que tes réservoirs soient toujours pleins.": "Danke, dass du EDCH nutzt! Wenn du MDLuffy in der Schwärze begegnest, freut er sich immer über ein kleines o7. Guten Flug, Commander, und mögen deine Tanks immer voll sein.",
+"Copie auto du prochain système à ton arrivée : activée": "Auto-Kopie des nächsten Systems bei Ankunft: an",
+"Copie auto du prochain système : désactivée (Paramètres → Jeu et recherche → Navigation)": "Auto-Kopie des nächsten Systems: aus (Einstellungen → Spiel und Suche → Navigation)",
+"Destination de l'itinéraire atteinte": "Ziel der Route erreicht",
+"Le système suivant est copié dans le presse-papiers du PC, prêt à coller dans la carte galactique.": "Das nächste System wird in die Zwischenablage des PCs kopiert, bereit zum Einfügen in die Galaxiekarte.",
+"Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire (page Navigation)": "Nächsten Sprung automatisch kopieren, wenn ich in einem System der Route ankomme (Seite Navigation)",
+"Copier automatiquement le prochain saut quand j'arrive dans un système de la tournée des ingénieurs (wishlist)": "Nächsten Sprung automatisch kopieren, wenn ich in einem System der Ingenieurs-Tour ankomme (Wunschliste)",
+"Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)": "Mich benachrichtigen, wenn der nächste Sprung kopiert wird (Tab Benachrichtigungen, mit Ton, falls aktiviert)"
 }

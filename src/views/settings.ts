@@ -29,6 +29,7 @@ const CARD_TAB: Record<string, string> = {
   "Journal du jeu": "game",
   "Recherche de systèmes (Spansh)": "game",
   Ingénieurs: "game",
+  Navigation: "game",
   "Pages et affichage": "display",
   Apparence: "display",
   Notifications: "notifications",
@@ -220,6 +221,7 @@ export class SettingsView implements View {
             " Depuis le téléphone, copier aussi dans le presse-papiers du téléphone",
           ),
         ),
+        this.navigationCard(),
         this.engineersCard(),
         this.notifyCard(),
         this.pagesCard(),
@@ -300,6 +302,22 @@ export class SettingsView implements View {
     );
   }
 
+  private navigationCard(): HTMLElement {
+    const store = this.ctx.store;
+    const s = store.state.settings;
+    const box = (checked: boolean, onchange: (on: boolean) => void, label: string) =>
+      h("label.check", null, h("input", { type: "checkbox", checked, onchange: (ev: Event) => onchange((ev.target as HTMLInputElement).checked) }), ` ${label}`);
+    return h(
+      "section.card",
+      null,
+      h("h3", null, "Navigation"),
+      h("p.sub", null, "Le système suivant est copié dans le presse-papiers du PC, prêt à coller dans la carte galactique."),
+      box(s.navAutoCopy, (on) => store.updateSettings({ navAutoCopy: on }), "Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire (page Navigation)"),
+      box(s.engineers.autoCopyNext, (on) => store.updateSettings({ engineers: { ...store.state.settings.engineers, autoCopyNext: on } }), "Copier automatiquement le prochain saut quand j'arrive dans un système de la tournée des ingénieurs (wishlist)"),
+      box(s.navNotifyCopy, (on) => store.updateSettings({ navNotifyCopy: on }), "Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)"),
+    );
+  }
+
   private engineersCard(): HTMLElement {
     const store = this.ctx.store;
     const e = store.state.settings.engineers;
@@ -321,7 +339,6 @@ export class SettingsView implements View {
         h("input", { type: "number", min: "100", max: "50000", step: "100", value: String(e.maxTourLy), onchange: (ev: Event) => set({ maxTourLy: Math.max(100, Number((ev.target as HTMLInputElement).value) || 2000) }) }),
         h("small", null, "Total en ligne droite entre les arrêts. Au-delà, EDCH ne propose pas l'itinéraire."),
       ),
-      check("autoCopyNext", "Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire"),
       check("autoTick", "Avancer la wishlist toute seule quand le jeu applique une modification"),
     );
   }

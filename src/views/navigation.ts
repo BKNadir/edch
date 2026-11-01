@@ -1,3 +1,4 @@
+import { setNavRoute } from "../tour.js";
 import { locale } from "../i18n.js";
 import { spanshGet, spanshJob, spanshPost } from "../bridge.js";
 import { h, icon, fmt, replace } from "../dom.js";
@@ -241,9 +242,13 @@ export class NavigationView implements View {
       ]);
       const jumps: Json[] = res.system_jumps ?? [];
       const total = jumps.reduce((s, j) => s + Number(j.jumps ?? 0), 0);
+      // Kept for the auto-copy of the next system on arrival (Settings → Navigation).
+      setNavRoute(jumps.map((j) => String(j.system)));
+      const auto = this.ctx.store.state.settings.navAutoCopy;
       replace(
         this.routeOut,
         h("div.estimate", null, stat("Distance", fmtLy(Number(res.distance ?? 0))), stat("Sauts", fmt(total || Number(res.total_jumps ?? 0))), stat("Étapes", fmt(jumps.length)), stat("Durée", `≈ ${hours(((total || jumps.length) * 50) / 60)}`)),
+        h("p.sub", null, auto ? "Copie auto du prochain système à ton arrivée : activée" : "Copie auto du prochain système : désactivée (Paramètres → Jeu et recherche → Navigation)"),
         h(
           "table.table.route",
           null,

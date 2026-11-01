@@ -1133,5 +1133,15 @@
 "(G{0} : aucun ingénieur connu ne le fait ici)": "(G{0}: здесь его не делает ни один известный инженер)",
 "Aucun ingénieur connu pour ce module : à débloquer.": "Нет известного инженера для этого модуля: нужно открыть.",
 "Le plus proche :": "Ближайший:",
-"{0} sauts · {1}": "{0} прыжков · {1}"
+"{0} sauts · {1}": "{0} прыжков · {1}",
+"L'auteur": "Автор",
+"Imaginé et piloté par": "Придумано и пилотируется",
+"Merci d'utiliser EDCH ! Si tu croises MDLuffy dans le noir, un petit o7 fait toujours plaisir. Bon vol, Commandant, et que tes réservoirs soient toujours pleins.": "Спасибо, что пользуетесь EDCH! Если встретите MDLuffy в черноте, маленькое o7 всегда приятно. Лёгкого полёта, командир, и пусть баки всегда будут полны.",
+"Copie auto du prochain système à ton arrivée : activée": "Автокопирование следующей системы по прибытии: вкл.",
+"Copie auto du prochain système : désactivée (Paramètres → Jeu et recherche → Navigation)": "Автокопирование следующей системы: выкл. (Настройки → Игра и поиск → Навигация)",
+"Destination de l'itinéraire atteinte": "Пункт назначения маршрута достигнут",
+"Le système suivant est copié dans le presse-papiers du PC, prêt à coller dans la carte galactique.": "Следующая система копируется в буфер обмена ПК, готовая для вставки в галактическую карту.",
+"Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire (page Navigation)": "Автоматически копировать следующий прыжок при прибытии в систему маршрута (страница «Навигация»)",
+"Copier automatiquement le prochain saut quand j'arrive dans un système de la tournée des ingénieurs (wishlist)": "Автоматически копировать следующий прыжок при прибытии в систему маршрута по инженерам (список желаний)",
+"Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)": "Уведомлять, когда следующий прыжок скопирован (вкладка «Уведомления», со звуком, если он включён)"
 }
