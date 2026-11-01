@@ -1,10 +1,9 @@
 import { copyText, isRemote, isTauri, remoteInterfaces, remoteQr, type NetAddress } from "../bridge.js";
 import { h, icon, replace, toast } from "../dom.js";
 import type { Ctx, View } from "../context.js";
-import { tr } from "../i18n.js";
 import { pairingHost, pairingUrl, remoteRunning, rotateToken, startRemote, stopRemote } from "../remote.js";
 
-const KIND_LABEL: Record<NetAddress["kind"], string> = { ethernet: "Ethernet", wifi: "Wi-Fi", tailscale: "Tailscale", virtual: "Carte virtuelle", other: "Autre" };
+const KIND_LABEL: Record<NetAddress["kind"], string> = { ethernet: "Ethernet", wifi: "Wi-Fi", tailscale: "Tailscale", vpn: "VPN" };
 
 /** "Mobile access": QR code to open EDCH on a phone/tablet through the PC's local server. */
 export class MobileView implements View {
@@ -79,11 +78,12 @@ export class MobileView implements View {
           qr.innerHTML = svg;
         })
         .catch((e) => replace(qr, h("p.error", null, String(e))));
-      const options: NetAddress[] = nets.length ? nets : running.addresses.map((ip) => ({ ip, name: "", kind: "other" as const }));
+      const options: NetAddress[] = nets.length ? nets : running.addresses.map((ip) => ({ ip, kind: "ethernet" as const, network: "", adapter: "" }));
+      // "Wi-Fi (ASUS)": the network's name tells two connections apart; a VPN shows its adapter.
       const optionLabel = (n: NetAddress) => {
-        const kind = tr(KIND_LABEL[n.kind]);
-        const name = n.name && n.name.toLowerCase() !== kind.toLowerCase() ? ` (${n.name})` : "";
-        return `${kind}${name} · ${n.ip}`;
+        const kind = KIND_LABEL[n.kind];
+        const extra = n.kind === "tailscale" ? "" : n.network || (n.kind === "vpn" ? n.adapter : "");
+        return `${kind}${extra ? ` (${extra})` : ""} · ${n.ip}`;
       };
       parts.push(
         h(

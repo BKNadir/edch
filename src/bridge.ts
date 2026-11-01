@@ -266,8 +266,11 @@ export const remoteAddresses = () => invoke<string[]>("remote_addresses");
 /** This PC's Tailscale address (100.x.y.z), or null when Tailscale isn't running. */
 export interface NetAddress {
   ip: string;
-  name: string;
-  kind: "ethernet" | "wifi" | "tailscale" | "virtual" | "other";
+  kind: "ethernet" | "wifi" | "tailscale" | "vpn";
+  /** Network name as Windows shows it (Wi-Fi name, or the LAN's name such as "ASUS"). */
+  network: string;
+  /** Adapter name ("Wi-Fi", "Ethernet 2"…). */
+  adapter: string;
 }
 export const remoteInterfaces = () => invoke<NetAddress[]>("remote_interfaces").catch(() => [] as NetAddress[]);
 export const remoteTailscale = () => invoke<string | null>("remote_tailscale").catch(() => null);

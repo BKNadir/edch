@@ -907,8 +907,6 @@
 "Choisis l'adresse Tailscale dans EDCH": "Elige la dirección Tailscale en EDCH",
 "Page Accès mobile : active le serveur local, puis choisis « Tailscale » dans la liste « Adresse du PC » (l'adresse commence par 100). Le QR code et le lien se mettent à jour tout seuls.": "En la página Acceso móvil: activa el servidor local y elige «Tailscale» en la lista «Dirección del PC» (la dirección empieza por 100). El código QR y el enlace se actualizan solos.",
 "c'est l'adresse Wi-Fi ou Ethernet qui est choisie : sélectionne « Tailscale » dans la liste « Adresse du PC ». Si Tailscale n'apparaît pas dans la liste, il n'était pas actif quand la page s'est ouverte : rouvre-la.": "está elegida la dirección Wi-Fi o Ethernet: selecciona «Tailscale» en la lista «Dirección del PC». Si Tailscale no aparece en la lista, no estaba activo al abrir la página: vuelve a abrirla.",
-"Carte virtuelle": "Adaptador virtual",
-"Autre": "Otra",
 "Choisis la connexion par laquelle le téléphone joint ce PC : Wi-Fi ou Ethernet à la maison, Tailscale depuis l'extérieur. Le QR code et le lien suivent ton choix.": "Elige la conexión por la que el teléfono llega a este PC: Wi-Fi o Ethernet en casa, Tailscale desde fuera. El código QR y el enlace siguen tu elección.",
 "Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.": "Tailscale está activo en este PC ({0}). Para usarlo, elige «Tailscale» en la lista «Dirección del PC» de arriba."
 }

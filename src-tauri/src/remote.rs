@@ -270,25 +270,102 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
 #[derive(Serialize, Clone)]
 pub struct NetAddress {
     ip: String,
-    /// Adapter name as Windows shows it ("Wi-Fi", "Ethernet", "Tailscale"…).
-    name: String,
-    /// ethernet | wifi | tailscale | virtual | other
+    /// ethernet | wifi | tailscale | vpn
     kind: String,
+    /// Name of the network as Windows shows it (Wi-Fi name, or the LAN's name such as "ASUS").
+    network: String,
+    /// Adapter name ("Wi-Fi", "Ethernet 2", "Tailscale"…).
+    adapter: String,
 }
 
-fn kind_of(name: &str, ip: &std::net::IpAddr) -> &'static str {
-    let n = name.to_lowercase();
-    if is_tailscale(ip) || n.contains("tailscale") {
-        "tailscale"
-    } else if ["vethernet", "virtualbox", "vmware", "hyper-v", "wsl", "docker", "vpn", "tap", "tun", "zerotier", "hamachi", "radmin"].iter().any(|v| n.contains(v)) {
-        "virtual"
-    } else if ["wi-fi", "wifi", "wlan", "wireless", "sans fil"].iter().any(|v| n.contains(v)) {
-        "wifi"
-    } else if n.contains("ethernet") || n.starts_with("eth") || n.starts_with("en") {
-        "ethernet"
-    } else {
-        "other"
+/// What Windows says about one IPv4 address of this PC.
+struct RawAddress {
+    ip: std::net::IpAddr,
+    alias: String,
+    description: String,
+    media: String,
+    network: String,
+}
+
+const VPN_WORDS: [&str; 14] = [
+    "vpn", "tap-windows", "tap adapter", "wireguard", "openvpn", "wintun", "nordlynx", "proton", "zerotier", "hamachi", "radmin", "forti", "anyconnect", "pangp",
+];
+const HIDDEN_WORDS: [&str; 9] = ["hyper-v", "vethernet", "virtualbox", "vmware", "wsl", "docker", "loopback", "bluetooth", "default switch"];
+
+/// Ethernet, Wi-Fi, Tailscale or VPN; None for what a phone can't use (Hyper-V, VirtualBox,
+/// WSL, Bluetooth…).
+fn classify(a: &RawAddress) -> Option<&'static str> {
+    let text = format!("{} {}", a.alias, a.description).to_lowercase();
+    let media = a.media.to_lowercase();
+    if is_tailscale(&a.ip) || text.contains("tailscale") {
+        return Some("tailscale");
     }
+    if HIDDEN_WORDS.iter().any(|w| text.contains(w)) {
+        return None;
+    }
+    if VPN_WORDS.iter().any(|w| text.contains(w)) {
+        return Some("vpn");
+    }
+    if media.contains("802.11") || media.contains("wireless") || ["wi-fi", "wifi", "wlan", "wireless", "sans fil"].iter().any(|w| text.contains(w)) {
+        return Some("wifi");
+    }
+    if media.contains("802.3") || text.contains("ethernet") {
+        return Some("ethernet");
+    }
+    None
+}
+
+/// Windows: adapters, media types and network names, from PowerShell (one call).
+#[cfg(target_os = "windows")]
+fn windows_addresses() -> Option<Vec<RawAddress>> {
+    use std::os::windows::process::CommandExt;
+    const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+    let script = r#"[Console]::OutputEncoding=[Text.Encoding]::UTF8
+@(Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue | ForEach-Object {
+  $a = Get-NetAdapter -InterfaceIndex $_.InterfaceIndex -ErrorAction SilentlyContinue
+  $p = Get-NetConnectionProfile -InterfaceIndex $_.InterfaceIndex -ErrorAction SilentlyContinue | Select-Object -First 1
+  [pscustomobject]@{ ip = $_.IPAddress; alias = $_.InterfaceAlias; description = [string]$a.InterfaceDescription; media = [string]$a.PhysicalMediaType; network = [string]$p.Name }
+}) | ConvertTo-Json -Compress"#;
+    let out = std::process::Command::new("powershell")
+        .args(["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", script])
+        .creation_flags(CREATE_NO_WINDOW)
+        .output()
+        .ok()?;
+    let text = String::from_utf8_lossy(&out.stdout);
+    let value: serde_json::Value = serde_json::from_str(text.trim().trim_start_matches('\u{feff}')).ok()?;
+    let items = match value {
+        serde_json::Value::Array(a) => a,
+        other => vec![other],
+    };
+    let field = |v: &serde_json::Value, k: &str| v[k].as_str().unwrap_or_default().to_string();
+    Some(
+        items
+            .iter()
+            .filter_map(|v| {
+                Some(RawAddress {
+                    ip: field(v, "ip").parse().ok()?,
+                    alias: field(v, "alias"),
+                    description: field(v, "description"),
+                    media: field(v, "media"),
+                    network: field(v, "network"),
+                })
+            })
+            .collect(),
+    )
+}
+
+#[cfg(not(target_os = "windows"))]
+fn windows_addresses() -> Option<Vec<RawAddress>> {
+    None
+}
+
+/// Elsewhere, or if PowerShell fails: adapter names only.
+fn basic_addresses() -> Vec<RawAddress> {
+    local_ip_address::list_afinet_netifas()
+        .unwrap_or_default()
+        .into_iter()
+        .map(|(alias, ip)| RawAddress { ip, alias, description: String::new(), media: String::new(), network: String::new() })
+        .collect()
 }
 
 /// The address Windows uses for outgoing traffic (connecting a UDP socket sends nothing).
@@ -298,54 +375,57 @@ fn primary_address() -> Option<std::net::IpAddr> {
     Some(sock.local_addr().ok()?.ip())
 }
 
-/// Every IPv4 address of this PC a phone could reach: Ethernet, Wi-Fi, Tailscale… The one used
-/// for outgoing traffic comes first, then wired, Wi-Fi, Tailscale, others and virtual adapters.
-#[tauri::command]
-pub fn remote_interfaces() -> Vec<NetAddress> {
+/// The addresses a phone can use to reach this PC: Ethernet, Wi-Fi, Tailscale and VPNs (not
+/// Hyper-V, WSL or other virtual adapters). The one used for Internet comes first.
+/// `detailed`: ask Windows for media types and network names (PowerShell, about half a second).
+fn list_addresses(detailed: bool) -> Vec<NetAddress> {
     let primary = primary_address();
+    let raw = if detailed { windows_addresses().filter(|l| !l.is_empty()) } else { None }.unwrap_or_else(basic_addresses);
     let mut out: Vec<NetAddress> = Vec::new();
-    if let Ok(list) = local_ip_address::list_afinet_netifas() {
-        for (name, ip) in list {
-            let std::net::IpAddr::V4(v4) = ip else { continue };
-            if v4.is_loopback() || v4.is_unspecified() || v4.is_link_local() {
-                continue;
-            }
-            let s = ip.to_string();
-            if out.iter().any(|a| a.ip == s) {
-                continue;
-            }
-            let kind = kind_of(&name, &ip).to_string();
-            out.push(NetAddress { ip: s, name, kind });
+    for a in &raw {
+        let std::net::IpAddr::V4(v4) = a.ip else { continue };
+        if v4.is_loopback() || v4.is_unspecified() || v4.is_link_local() {
+            continue;
         }
+        let Some(kind) = classify(a) else { continue };
+        let ip = a.ip.to_string();
+        if out.iter().any(|o| o.ip == ip) {
+            continue;
+        }
+        out.push(NetAddress { ip, kind: kind.to_string(), network: a.network.clone(), adapter: a.alias.clone() });
     }
-    // Detection failed: at least the outgoing address.
+    // Nothing recognised: at least the address used for Internet.
     if out.is_empty() {
         if let Some(ip) = primary.filter(|ip| !ip.is_loopback()) {
-            out.push(NetAddress { ip: ip.to_string(), name: String::new(), kind: kind_of("", &ip).to_string() });
+            out.push(NetAddress { ip: ip.to_string(), kind: "ethernet".into(), network: String::new(), adapter: String::new() });
         }
     }
-    let rank = |a: &NetAddress| {
-        let base = match a.kind.as_str() {
-            "ethernet" => 1,
-            "wifi" => 2,
-            "tailscale" => 3,
-            "other" => 4,
-            _ => 5,
-        };
-        if primary.map(|p| p.to_string() == a.ip).unwrap_or(false) && a.kind != "tailscale" {
-            0
-        } else {
-            base
-        }
+    let rank = |a: &NetAddress| match a.kind.as_str() {
+        _ if a.kind != "tailscale" && primary.map(|p| p.to_string() == a.ip).unwrap_or(false) => 0,
+        "ethernet" => 1,
+        "wifi" => 2,
+        "tailscale" => 3,
+        _ => 4,
     };
     out.sort_by_key(rank);
+    crate::logs::debug("remote", &format!("Addresses: {}", out.iter().map(|a| format!("{} {} ({}/{})", a.kind, a.ip, a.network, a.adapter)).collect::<Vec<_>>().join(", ")));
     out
+}
+
+#[tauri::command]
+pub async fn remote_interfaces() -> Vec<NetAddress> {
+    tauri::async_runtime::spawn_blocking(|| list_addresses(true)).await.unwrap_or_default()
 }
 
 /// Just the addresses, best first (what the QR code uses when none was chosen).
 #[tauri::command]
-pub fn remote_addresses() -> Vec<String> {
-    remote_interfaces().into_iter().map(|a| a.ip).collect()
+pub async fn remote_addresses() -> Vec<String> {
+    tauri::async_runtime::spawn_blocking(fast_addresses).await.unwrap_or_default()
+}
+
+/// Without asking PowerShell (adapter names only): quick enough for starting the server.
+fn fast_addresses() -> Vec<String> {
+    list_addresses(false).into_iter().map(|a| a.ip).collect()
 }
 
 /// Tailscale gives every device an address in 100.64.0.0/10 (CGNAT range).
@@ -381,7 +461,7 @@ pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String
         let mut current = lock(&shared.server);
         if let Some(server) = current.as_ref() {
             if server.server_addr().to_ip().map(|a| a.port()) == Some(port) {
-                return Ok(RemoteInfo { port, addresses: remote_addresses() });
+                return Ok(RemoteInfo { port, addresses: fast_addresses() });
             }
         }
         current.take()
@@ -407,7 +487,7 @@ pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String
         }
     });
     crate::logs::info("remote", &format!("Local server started on port {port}"));
-    Ok(RemoteInfo { port, addresses: remote_addresses() })
+    Ok(RemoteInfo { port, addresses: fast_addresses() })
 }
 
 #[tauri::command]

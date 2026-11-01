@@ -466,7 +466,6 @@ Saisis ou crée un code (au moins 8 caractères) pour rejoindre l'escadrille.
 Pas de fenêtre Windows : un son et/ou la languette sur le bord droit qui clignote. Clique sur la languette pour voir l'aperçu, clique ailleurs pour le refermer.
 Écouter
 Test de notification
-Carte virtuelle
 Accès mobile
 Ouvre EDCH sur ton téléphone ou ta tablette, sur le même réseau que ce PC.
  Cet appareil est connecté à EDCH sur ton PC. Les données se mettent à jour toutes seules.

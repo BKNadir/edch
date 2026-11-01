@@ -5,7 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.8.6
 
-- Mobile access: the "PC address" list shows every connection of the PC (Ethernet, Wi-Fi, Tailscale…) with its name, and the QR code and the link follow the one you pick. The Tailscale checkbox is gone: pick the Tailscale address in the list. The "away from home" section moved to the bottom of the page.
+- Mobile access: the "PC address" list shows the PC's connections a phone can use, Ethernet, Wi-Fi, Tailscale and VPNs, with the network's name ("Wi-Fi (ASUS)"), and the QR code and the link follow the one you pick. Hyper-V, WSL and other virtual adapters are left out. The Tailscale checkbox is gone: pick the Tailscale address in the list. The "away from home" section moved to the bottom of the page.
 
 ## 0.8.5
 
