@@ -101,6 +101,7 @@ Pad L
 Pad M
 Pad S seulement
 Planétaire
+{0} : envoi refusé
 {0} événement(s)
 Inara n'a pas encore autorisé EDCH (validation de l'application en attente). Envoi vers Inara suspendu jusqu'au prochain démarrage.
 EDCH (PC) a répondu {0}
@@ -169,6 +170,18 @@ Le lanceur d'Elite Dangerous est ouvert
 Lanceur ouvert
 Lancer Elite Dangerous
  Lancer Elite
+Lithium Hydroxide
+Liquid oxygen
+Hydrogen Peroxide
+Low Temperature Diamonds
+Void Opal
+Laser (surface)
+Sous-surface (missiles d'abrasion)
+Cœur (charges sismiques)
+Métallique
+Riche en métaux
+Glacé
+Épuisé
 Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)
 EDDN (EDCD)
 Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
@@ -466,11 +479,6 @@ Nakato Kaine
 Pranav Antal
 Yuri Grom
 Zemina Torval
-Low Temperature Diamonds
-Void Opal
-Lithium Hydroxide
-Liquid oxygen
-Hydrogen Peroxide
 Résultats des prospecteurs en direct, et où miner et vendre pour gagner des mérites Powerplay.
 Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Missions → Notifications.
  Alerte sonore et visuelle
@@ -484,15 +492,27 @@ t raffinées
 astéroïdes prospectés
 cœurs fracturés
 de minage
+Où miner
+Les anneaux avec un point chaud du minerai choisi, les plus proches d'abord, puis où le vendre au meilleur prix. Rayon : {0} al, élargi automatiquement si rien n'est trouvé. Données Spansh.
+Autour de {0}
+Où vendre
 Où miner et vendre dans les systèmes de ta puissance
 Cherche les stations des systèmes contrôlés par la puissance choisie (exploités, fortifiés ou bastions) qui achètent le minerai, triées par prix, et les anneaux avec un point chaud de ce minerai dans ces systèmes. Vendre dans un système de ta puissance des minerais minés dans ce même système rapporte des mérites. Données Spansh.
 Autour de {0}, {1} al max
-Où vendre ({0})
-État
-Point chaud ici
-Aucune station de cette puissance n'achète ces minerais dans le rayon choisi. Augmente la distance dans les Paramètres.
-Points chauds dans ces systèmes
+Aucun point chaud connu à moins de {0} al. Il faudra aller plus loin, en fleet carrier par exemple.
+Aucun acheteur connu à moins de {0} al. Il faudra aller plus loin, en fleet carrier par exemple.
+Rien à moins de {0} al : rayon élargi à {1} al. Prévois un long trajet, ou déplace ton fleet carrier.
+Pas de point chaud pour ce minerai : il se mine au laser dans les anneaux du bon type (métallique pour les métaux), sans point chaud.
+Planète · anneau
+Type d'anneau
+Réserve
 Points chauds
+Arrivée
+Ouvrir la planète sur Spansh
+État
+point chaud ici
+Où miner (systèmes de {0})
+Où vendre ({0})
 Récupération
 {0} / {1} éliminations
 {0} / {1} livrés
@@ -773,7 +793,6 @@ Taille de l'interface
 Pages affichées dans le menu (décoche celles dont tu ne te sers pas) :
 Valable aussi sur le téléphone. Paramètres et À propos restent toujours visibles.
 Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services.
-Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Inara n'a pas encore validé EDCH : ses envois sont refusés pour l'instant et EDCH les met en pause. EDDN et EDSM fonctionnent.
 EDDN — réseau de données communautaire
 Envoie marchés, équipements, chantiers navals, systèmes et scans visités. C'est ce qui alimente Spansh, Inara et EDSM pour tout le monde (et les recherches de cette appli).
 Aucun compte requis. Rien de personnel n'est envoyé : ton nom de CMDR est haché par EDDN, tes amendes, réputations et carburant sont retirés. Seuls les événements en direct sont envoyés, jamais l'historique.

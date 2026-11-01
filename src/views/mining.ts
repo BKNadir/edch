@@ -1,4 +1,5 @@
-import { spanshPost } from "../bridge.js";
+import { openUrl } from "../bridge.js";
+import { findRingSpots, findSellSpots, MAX_RADIUS, METHOD_LABEL, miningMethods, RESERVE, RING_TYPE, spanshBodyUrl, type RingSpot, type SellSpot } from "../miningSpots.js";
 import { fmt, h, icon, replace } from "../dom.js";
 import { gameName } from "../i18n.js";
 import { referenceOf, type Ctx, type View } from "../context.js";
@@ -28,27 +29,11 @@ const MINERALS: [string, boolean][] = [
 /** Journal symbol of a mineral (ProspectedAsteroid uses these). */
 const symbolOf = (name: string) => (name === "Low Temperature Diamonds" ? "lowtemperaturediamond" : name === "Void Opal" ? "opal" : name.toLowerCase().replace(/\s+/g, ""));
 
-interface MeritRow {
-  mineral: string;
-  station: string;
-  system: string;
-  price: number;
-  demand: number;
-  distance?: number;
-  arrival?: number;
-  largePad?: boolean;
-  state?: string;
-  updated?: string;
-  hotspots: number;
-}
-
-interface HotspotRow {
-  mineral: string;
-  system: string;
-  ring: string;
-  count: number;
-  distance?: number;
-  state?: string;
+interface SpotResults {
+  mine: { mineral: string; ringable: boolean; spots: RingSpot[]; radius: number; widened: boolean }[];
+  sell: { mineral: string; spots: SellSpot[]; radius: number; widened: boolean }[];
+  /** The search radius from Settings. */
+  start: number;
 }
 
 const POWER_STATES = ["Exploited", "Fortified", "Stronghold"];
@@ -56,7 +41,11 @@ const POWER_STATES = ["Exploited", "Fortified", "Stronghold"];
 export class MiningView implements View {
   private root?: HTMLElement;
   private tab: Tab = "prospect";
-  private results: { rows: MeritRow[]; hotspots: HotspotRow[]; power: string } | null = null;
+  private results: (SpotResults & { power: string }) | null = null;
+  /** Prospecting tab: where to mine and sell the chosen mineral (any power). */
+  private found: SpotResults | null = null;
+  private findMineral = "";
+  private finding = false;
   private running = false;
   private error = "";
   constructor(private ctx: Ctx) {}
@@ -170,6 +159,7 @@ export class MiningView implements View {
         targetEditor,
         h("label.check", null, h("input", { type: "checkbox", checked: s.alert, onchange: (e: Event) => this.set({ alert: (e.target as HTMLInputElement).checked }) }), " Alerte sonore et visuelle"),
       ),
+      this.finder(s.targets.map((t) => MINERALS.find(([n]) => symbolOf(n) === t.id)?.[0]).filter(Boolean) as string[]),
       last
         ? h(
             "section.card.prospect",
@@ -209,6 +199,46 @@ export class MiningView implements View {
         refined.length ? h("div.chips", null, refined.map(([, r]) => h("span.chip", null, `${gameName(r.label)} · ${fmt(r.count)} t`))) : null,
       ),
     ];
+  }
+
+  /** Where to mine and sell a mineral, nearest first (prospecting tab, any power). */
+  private finder(targets: string[]): HTMLElement {
+    if (!this.findMineral || !MINERALS.some(([n]) => n === this.findMineral)) this.findMineral = targets[0] ?? "Platinum";
+    const run = async () => {
+      this.finding = true;
+      this.error = "";
+      this.render();
+      try {
+        this.found = await this.lookup([this.findMineral]);
+      } catch (e) {
+        this.error = String((e as Error)?.message ?? e);
+      }
+      this.finding = false;
+      this.render();
+    };
+    return h(
+      "div.spot-results",
+      null,
+      h(
+        "section.card",
+        null,
+        h("h3", null, "Où miner"),
+        h("p.sub", null, `Les anneaux avec un point chaud du minerai choisi, les plus proches d'abord, puis où le vendre au meilleur prix. Rayon : ${fmt(this.ctx.store.state.settings.maxDistance)} al, élargi automatiquement si rien n'est trouvé. Données Spansh.`),
+        h(
+          "div.row",
+          null,
+          h(
+            "select",
+            { onchange: (e: Event) => ((this.findMineral = (e.target as HTMLSelectElement).value), (this.found = null), this.render()) },
+            MINERALS.map(([n]) => h("option", { value: n, selected: n === this.findMineral }, gameName(n))),
+          ),
+          h("button.primary", { disabled: this.finding, onclick: run }, this.finding ? "Recherche…" : "Chercher"),
+          h("span.sub", null, `Autour de ${referenceOf(this.ctx).label}`),
+        ),
+        this.error && this.tab === "prospect" ? h("p.error", null, this.error) : null,
+      ),
+      this.found ? this.spotResults(this.found, { mine: "Où miner", sell: "Où vendre" }) : null,
+    );
   }
 
   // ---------- Merit Miner ----------
@@ -277,61 +307,9 @@ export class MiningView implements View {
     this.running = true;
     this.error = "";
     this.render();
-    const ref = referenceOf(this.ctx);
-    const where = ref.coords ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } } : { reference_system: ref.system };
-    const dist = { min: "0", max: String(this.ctx.store.state.settings.maxDistance) };
-    const base = { distance: dist, system_controlling_power: { value: [power] }, system_power_state: { value: POWER_STATES } };
-    const rows: MeritRow[] = [];
-    const hotspots: HotspotRow[] = [];
+    const extra = { system_controlling_power: { value: [power] }, system_power_state: { value: POWER_STATES } };
     try {
-      for (const mineral of minerals) {
-        const stations = await spanshPost("stations/search", {
-          filters: { ...base, market: [{ name: mineral, demand: { value: ["1", "1000000000"], comparison: "<=>" } }] },
-          sort: [{ distance: { direction: "asc" } }],
-          size: 100,
-          page: 0,
-          ...where,
-        });
-        const ring = MINERALS.find(([n]) => n === mineral)?.[1]
-          ? await spanshPost("bodies/search", {
-              filters: { ...base, ring_signals: { name: { value: [mineral] } } },
-              sort: [{ distance: { direction: "asc" } }],
-              size: 100,
-              page: 0,
-              ...where,
-            })
-          : { results: [] };
-        const perSystem = new Map<string, number>();
-        for (const b of (ring?.results ?? []) as Json[]) {
-          for (const r of (b.rings ?? []) as Json[]) {
-            const sig = ((r.signals ?? []) as Json[]).find((x) => String(x.name).toLowerCase() === mineral.toLowerCase());
-            if (!sig) continue;
-            const count = Number(sig.count ?? 1);
-            hotspots.push({ mineral, system: b.system_name, ring: r.name, count, distance: b.distance, state: b.system_power_state });
-            perSystem.set(b.system_name, (perSystem.get(b.system_name) ?? 0) + count);
-          }
-        }
-        for (const s of (stations?.results ?? []) as Json[]) {
-          const quote = ((s.market ?? []) as Json[]).find((x) => String(x.commodity).toLowerCase() === mineral.toLowerCase());
-          if (!quote || !quote.sell_price) continue;
-          rows.push({
-            mineral,
-            station: s.name,
-            system: s.system_name,
-            price: Number(quote.sell_price),
-            demand: Number(quote.demand ?? 0),
-            distance: s.distance,
-            arrival: s.distance_to_arrival,
-            largePad: s.has_large_pad,
-            state: s.system_power_state,
-            updated: s.market_updated_at ?? s.updated_at,
-            hotspots: perSystem.get(s.system_name) ?? 0,
-          });
-        }
-      }
-      rows.sort((a, b) => b.price - a.price);
-      hotspots.sort((a, b) => (a.distance ?? 0) - (b.distance ?? 0));
-      this.results = { rows, hotspots, power };
+      this.results = { power, ...(await this.lookup(minerals, extra)) };
     } catch (e) {
       this.error = String((e as Error)?.message ?? e);
     }
@@ -339,60 +317,126 @@ export class MiningView implements View {
     this.render();
   }
 
-  private meritResults(): HTMLElement {
-    const r = this.results!;
-    return h(
-      "div",
+  /** Hotspots and buyers for each mineral (radius widened when nothing is close). */
+  private async lookup(minerals: string[], extra: Json = {}): Promise<SpotResults> {
+    const mine: SpotResults["mine"] = [];
+    const sell: SpotResults["sell"] = [];
+    for (const mineral of minerals) {
+      const ringable = MINERALS.find(([n]) => n === mineral)?.[1];
+      const [rings, buyers] = await Promise.all([ringable ? findRingSpots(this.ctx, mineral, extra) : Promise.resolve(null), findSellSpots(this.ctx, mineral, extra)]);
+      mine.push({ mineral, ringable: Boolean(ringable), ...(rings ?? { spots: [], radius: 0, widened: false }) });
+      sell.push({ mineral, ...buyers });
+    }
+    return { mine, sell, start: this.ctx.store.state.settings.maxDistance };
+  }
+
+  /** Where to mine (green) first, then where to sell (blue). */
+  private spotResults(r: SpotResults, title: { mine: string; sell: string }): HTMLElement[] {
+    const tooFar = (radius: number, widened: boolean, found: boolean, what: string) =>
+      !found
+        ? h(
+            "p.notice.danger",
+            null,
+            icon("warn"),
+            " ",
+            h("span", null, what === "point chaud" ? `Aucun point chaud connu à moins de ${fmt(MAX_RADIUS)} al. Il faudra aller plus loin, en fleet carrier par exemple.` : `Aucun acheteur connu à moins de ${fmt(MAX_RADIUS)} al. Il faudra aller plus loin, en fleet carrier par exemple.`),
+          )
+        : widened
+          ? h("p.notice", null, icon("warn"), " ", h("span", null, `Rien à moins de ${fmt(r.start)} al : rayon élargi à ${fmt(radius)} al. Prévois un long trajet, ou déplace ton fleet carrier.`))
+          : null;
+    const mineCard = h(
+      "section.card.mine-zone",
       null,
-      h(
-        "section.card",
-        null,
-        h("h3", null, `Où vendre (${r.power})`),
-        r.rows.length
-          ? h(
-              "table.table",
-              null,
-              h("thead", null, h("tr", null, h("th", null, "Minerai"), h("th.num", null, "Prix"), h("th.num", null, "Demande"), h("th", null, "Station"), h("th", null, "Système"), h("th.num", null, "Distance"), h("th", null, "État"), h("th", null, "Point chaud ici"))),
-              h(
-                "tbody",
+      h("h3", null, title.mine),
+      r.mine.map((m) =>
+        h(
+          "div.mine-block",
+          null,
+          h(
+            "div.mine-head",
+            null,
+            h("h4", null, gameName(m.mineral)),
+            h("div.chips", null, miningMethods(m.mineral).map((x) => h("span.chip.method", null, METHOD_LABEL[x]))),
+          ),
+          !m.ringable
+            ? h("p.sub", null, "Pas de point chaud pour ce minerai : il se mine au laser dans les anneaux du bon type (métallique pour les métaux), sans point chaud.")
+            : [
+                tooFar(m.radius, m.widened, m.spots.length > 0, "point chaud"),
+                m.spots.length
+                  ? h(
+                      "table.table.spot-table",
+                      null,
+                      h("thead", null, h("tr", null, h("th", null, "Planète · anneau"), h("th", null, "Type d'anneau"), h("th", null, "Réserve"), h("th.num", null, "Points chauds"), h("th", null, "Système"), h("th.num", null, "Distance"), h("th.num", null, "Arrivée"))),
+                      h(
+                        "tbody",
+                        null,
+                        m.spots.slice(0, 15).map((x) =>
+                          h(
+                            "tr",
+                            null,
+                            h(
+                              "td",
+                              null,
+                              x.bodyId64 ? h("button.inline-link", { title: "Ouvrir la planète sur Spansh", "data-no-tr": "", onclick: () => openUrl(spanshBodyUrl(x.bodyId64!)) }, x.body) : h("span", { "data-no-tr": "" }, x.body),
+                              h("div.sub", { "data-no-tr": "" }, x.ring),
+                            ),
+                            h("td", null, x.ringType ? RING_TYPE[x.ringType] ?? x.ringType : ""),
+                            h("td", null, x.reserve ? RESERVE[x.reserve] ?? x.reserve : ""),
+                            h("td.num", null, h("strong", null, String(x.count))),
+                            h("td", null, sys(x.system), x.state ? h("div.sub", null, x.state) : null),
+                            h("td.num", null, x.distance !== undefined ? `${fmt(Math.round(x.distance))} al` : ""),
+                            h("td.num", null, x.arrival !== undefined ? `${fmt(Math.round(x.arrival))} ls` : ""),
+                          ),
+                        ),
+                      ),
+                    )
+                  : null,
+              ],
+        ),
+      ),
+    );
+    const sellCard = h(
+      "section.card.sell-zone",
+      null,
+      h("h3", null, title.sell),
+      r.sell.map((m) => {
+        const hot = new Set(r.mine.find((x) => x.mineral === m.mineral)?.spots.map((x) => x.system) ?? []);
+        return h(
+          "div.mine-block",
+          null,
+          h("h4", null, gameName(m.mineral)),
+          tooFar(m.radius, m.widened, m.spots.length > 0, "acheteur"),
+          m.spots.length
+            ? h(
+                "table.table.spot-table",
                 null,
-                r.rows.slice(0, 60).map((x) =>
-                  h(
-                    "tr",
-                    { class: x.hotspots ? "hot" : "" },
-                    h("td", null, gameName(x.mineral)),
-                    h("td.num", null, h("strong", null, `${fmt(x.price)} Cr`)),
-                    h("td.num", null, fmt(x.demand)),
-                    h("td", null, x.station, x.largePad ? h("span.badge.muted", null, "L") : null, x.updated ? h("div.sub", null, relTime(x.updated)) : null),
-                    h("td", null, sys(x.system)),
-                    h("td.num", null, x.distance !== undefined ? `${fmt(Math.round(x.distance))} al` : ""),
-                    h("td", null, x.state ?? ""),
-                    h("td", null, x.hotspots ? h("span.badge.ok", null, `✓ ${x.hotspots}`) : ""),
+                h("thead", null, h("tr", null, h("th.num", null, "Prix"), h("th.num", null, "Demande"), h("th", null, "Station"), h("th", null, "Système"), h("th.num", null, "Distance"), h("th", null, "État"))),
+                h(
+                  "tbody",
+                  null,
+                  m.spots.slice(0, 15).map((x) =>
+                    h(
+                      "tr",
+                      { class: hot.has(x.system) ? "hot" : "" },
+                      h("td.num", null, h("strong", null, `${fmt(x.price)} Cr`)),
+                      h("td.num", null, fmt(x.demand)),
+                      h("td", null, x.station, x.largePad ? h("span.badge.muted", null, "L") : null, x.updated ? h("div.sub", null, relTime(x.updated)) : null),
+                      h("td", null, sys(x.system), hot.has(x.system) ? h("span.badge.ok", null, "point chaud ici") : null),
+                      h("td.num", null, x.distance !== undefined ? `${fmt(Math.round(x.distance))} al` : ""),
+                      h("td", null, x.state ?? ""),
+                    ),
                   ),
                 ),
-              ),
-            )
-          : h("p.empty", null, "Aucune station de cette puissance n'achète ces minerais dans le rayon choisi. Augmente la distance dans les Paramètres."),
-      ),
-      r.hotspots.length
-        ? h(
-            "section.card",
-            null,
-            h("h3", null, "Points chauds dans ces systèmes"),
-            h(
-              "table.table",
-              null,
-              h("thead", null, h("tr", null, h("th", null, "Minerai"), h("th", null, "Anneau"), h("th", null, "Système"), h("th.num", null, "Points chauds"), h("th.num", null, "Distance"), h("th", null, "État"))),
-              h(
-                "tbody",
-                null,
-                r.hotspots.slice(0, 60).map((x) =>
-                  h("tr", null, h("td", null, gameName(x.mineral)), h("td", null, x.ring), h("td", null, sys(x.system)), h("td.num", null, String(x.count)), h("td.num", null, x.distance !== undefined ? `${fmt(Math.round(x.distance))} al` : ""), h("td", null, x.state ?? "")),
-                ),
-              ),
-            ),
-          )
-        : null,
+              )
+            : null,
+        );
+      }),
     );
+    return [mineCard, sellCard];
+  }
+
+  private meritResults(): HTMLElement {
+    const r = this.results!;
+    return h("div.spot-results", null, this.spotResults(r, { mine: `Où miner (systèmes de ${r.power})`, sell: `Où vendre (${r.power})` }));
   }
 }

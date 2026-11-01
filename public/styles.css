@@ -769,3 +769,15 @@ label.check.disabled { opacity: 0.55; }
 .changelog-version h4 { color: var(--accent); margin-bottom: 4px; }
 .page-toggles { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 4px 14px; }
 @media (max-width: 760px) { .game-launch { padding: 5px 8px; font-size: 12px; } }
+/* Mining: where to mine in green, where to sell in blue. */
+.spot-results { display: grid; gap: 12px; }
+.mine-zone { border-color: color-mix(in srgb, var(--ok) 55%, transparent); background: color-mix(in srgb, var(--ok) 6%, var(--panel)); }
+.mine-zone > h3 { color: var(--ok); }
+.sell-zone { border-color: color-mix(in srgb, #4da3ff 55%, transparent); background: color-mix(in srgb, #4da3ff 6%, var(--panel)); }
+.sell-zone > h3 { color: #6fb6ff; }
+.mine-block { display: grid; gap: 6px; padding-top: 8px; }
+.mine-block + .mine-block { border-top: 1px dashed var(--line-2); margin-top: 6px; }
+.mine-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.chip.method { border-color: color-mix(in srgb, var(--ok) 50%, transparent); color: var(--ok); }
+.spot-table tr.hot td { background: color-mix(in srgb, var(--ok) 8%, transparent); }
+.spot-table td .badge { margin-left: 6px; }

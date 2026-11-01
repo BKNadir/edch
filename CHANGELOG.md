@@ -6,6 +6,10 @@ and EDCH shows it in the update banner.
 ## 0.9.4
 
 - Inara has approved EDCH: Inara sync works, and the "in development" notice on the Synchronisation page is gone.
+- Mining (prospecting and Merit Miner): "where to mine" comes first, in green, then "where to sell", in blue. Each hotspot shows the planet (a link to its Spansh page), the ring, the ring type, its reserve, the number of hotspots and the distance from arrival.
+- Mining: each mineral shows how it's mined (laser, subsurface with displacement missiles, core with seismic charges).
+- Mining: when nothing is found within the search radius, EDCH widens it (up to 2,000 ly) and says so; if there's still nothing, it says you'll have to go further, with a fleet carrier for example.
+- Prospecting tab: a "Where to mine" finder for any mineral, nearest hotspots first, with the best places to sell it.
 
 ## 0.9.3
 
