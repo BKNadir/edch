@@ -103,6 +103,13 @@ export async function syncWing() {
     accepted: (row, by) => {
       if (store.state.settings.wing.notifyAccept) notify(`${by} a accepté « ${row.mission.title} »`);
     },
+    left: (name, reason) => {
+      log.info("wing", `${name} left (${reason ?? "?"})`);
+      if (!store.state.settings.wing.notifyLeave) return;
+      if (reason === "closed") notify(`${name} a fermé EDCH`);
+      else if (reason === "wing") notify(`${name} a quitté l'escadrille en jeu`);
+      else notify(`${name} a arrêté le partage d'escadrille`);
+    },
     changed: () => {
       enrichFromWing();
       // A wingmate's new mission may be one we hold: publish it as shared.
@@ -180,6 +187,9 @@ export function onLiveEvents(events: Json[]) {
   let missions = false;
   const surface = store.state.cmdr.surface;
   for (const ev of events) {
+    // Leaving or joining a wing in game: tell the EDCH wing (live events only, not the replay).
+    if (ev.event === "WingLeave") void link?.leftWing();
+    else if (ev.event === "WingJoin") void link?.joinedWing();
     const at = String(ev.timestamp ?? "");
     // Lines already read from the archive at start-up.
     if (historyEnd && at && (at < historyEnd || (at === historyEnd && historyEdge.has(lineKey(ev))))) continue;

@@ -2,6 +2,7 @@ import { massacreStacks, type Mission } from "../activity.js";
 import { isRemote } from "../bridge.js";
 import { callout, fmt, h, icon, replace, toast } from "../dom.js";
 import { activeMissions, isShared, setShared, syncWing, wingView } from "../live.js";
+import { isActive, type LeaveReason, type WingMember } from "../wing.js";
 import { notify, playTone, TONES } from "../notifier.js";
 import { newWingCode, type NotifySettings, type WingSettings } from "../store.js";
 import { credits, hoursLeft, relTime } from "../time.js";
@@ -53,6 +54,14 @@ export function busy(root?: HTMLElement): boolean {
 }
 
 export const sys = (name?: string) => systemLink(name);
+
+const LEFT_LABEL: Record<LeaveReason, string> = { closed: "EDCH fermé", wing: "a quitté l'escadrille", off: "partage arrêté" };
+
+/** Members to show: active ones, and those who left or went quiet less than 10 minutes ago. */
+function shownMembers(members: WingMember[]): WingMember[] {
+  const now = Date.now();
+  return members.filter((m) => (isActive(m, now) ? true : now - Date.parse(m.at) < 10 * 60 * 1000 + (m.left ? 0 : 45 * 60 * 1000)));
+}
 
 export class MissionsView implements View {
   private root?: HTMLElement;
@@ -306,6 +315,7 @@ export class MissionsView implements View {
           ),
           h("label.check", null, h("input", { type: "checkbox", checked: s.notifyNew, onchange: (e: Event) => set({ notifyNew: (e.target as HTMLInputElement).checked }) }), " Prévenir quand un membre a une mission d'escadrille que je n'ai pas"),
           h("label.check", null, h("input", { type: "checkbox", checked: s.notifyAccept, onchange: (e: Event) => set({ notifyAccept: (e.target as HTMLInputElement).checked }) }), " Prévenir quand un membre accepte une mission que je partage"),
+        h("label.check", null, h("input", { type: "checkbox", checked: s.notifyLeave, onchange: (e: Event) => set({ notifyLeave: (e.target as HTMLInputElement).checked }) }), " Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu"),
           h("label.check", null, h("input", { type: "checkbox", checked: s.notifyAll, onchange: (e: Event) => set({ notifyAll: (e.target as HTMLInputElement).checked }) }), " Prévenir quand toute l'escadrille a accepté une mission"),
           h("label.check", null, h("input", { type: "checkbox", checked: s.autoShare, onchange: (e: Event) => set({ autoShare: (e.target as HTMLInputElement).checked }) }), " Partager automatiquement toutes mes missions d'escadrille"),
           h("p.sub", null, "Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise."),
@@ -316,7 +326,7 @@ export class MissionsView implements View {
       const names = new Map<string, string>([[view.me.id, view.me.name], ...view.members.map((m) => [m.id, m.name] as [string, string])]);
       const status = view.status === "ok" ? h("span.badge.ok", null, "Connecté") : view.status === "error" ? h("span.badge.warn", null, view.error || "Erreur") : h("span.badge", null, "Connexion…");
       parts.push(
-        h("div.wing-members", null, status, h("span.badge.hit", null, view.me.name, " (toi)"), view.members.map((m) => h("span.badge", null, m.name, m.left ? " (parti)" : null, ` · ${relTime(m.at)}`))),
+        h("div.wing-members", null, status, h("span.badge.hit", null, view.me.name, " (toi)"), shownMembers(view.members).map((m) => h(`span.badge${m.left || !isActive(m) ? ".muted" : ""}`, null, m.name, m.left ? [" (", h("span", null, LEFT_LABEL[m.reason ?? "off"]), ")"] : !isActive(m) ? [" (", h("span", null, "inactif"), ")"] : null, ` · ${relTime(m.at)}`))),
         view.rows.length
           ? h(
               "table.table.wing-table",

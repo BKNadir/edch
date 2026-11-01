@@ -6,6 +6,7 @@
 use serde::Serialize;
 use std::io::{BufRead, BufReader};
 use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::Mutex;
 use std::thread;
 use std::time::Duration;
 use tauri::{AppHandle, Emitter};
@@ -103,4 +104,31 @@ pub fn ntfy_subscribe(app: AppHandle, topic: String, since: String) -> Result<()
 #[tauri::command]
 pub fn ntfy_unsubscribe() {
     GENERATION.fetch_add(1, Ordering::SeqCst);
+}
+
+/// The "I'm leaving" message (already encrypted by the UI) to send when EDCH closes: the UI
+/// may be gone by then, so Rust keeps it ready.
+static FAREWELL: Mutex<Option<(String, String)>> = Mutex::new(None);
+
+#[tauri::command]
+pub fn ntfy_set_farewell(topic: String, text: Option<String>) -> Result<(), String> {
+    if !valid_topic(&topic) {
+        return Err("Sujet ntfy invalide".into());
+    }
+    let mut f = FAREWELL.lock().map_err(|e| e.to_string())?;
+    *f = text.filter(|t| t.len() < 8192).map(|t| (topic, t));
+    Ok(())
+}
+
+/// Called when the app exits: tells the wing we're gone (a few seconds at most).
+pub fn send_farewell() {
+    let Some((topic, text)) = FAREWELL.lock().ok().and_then(|mut f| f.take()) else { return };
+    let agent = ureq::AgentBuilder::new()
+        .timeout(Duration::from_secs(3))
+        .user_agent(concat!("EDCH/", env!("CARGO_PKG_VERSION")))
+        .build();
+    match agent.post(&format!("https://ntfy.sh/{topic}")).set("Content-Type", "text/plain").send_string(&text) {
+        Ok(_) => logs::info("wing", "Told the wing EDCH is closing"),
+        Err(e) => logs::warn("wing", &format!("Couldn't tell the wing EDCH is closing: {e}")),
+    }
 }

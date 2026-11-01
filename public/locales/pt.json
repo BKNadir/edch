@@ -924,5 +924,13 @@
 "+ {0} t non identifiées": "+ {0} t não identificadas",
 "t utiles dans tes carriers": "t úteis nos seus carriers",
 "Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "O diário do jogo não lista o porão de um carrier: o EDCH o reconstrói a partir das suas transferências nave ↔ carrier e das suas compras e vendas no mercado dele. O que outros colocaram ou o que havia antes do início do seu histórico (60 dias) não aparece. As mercadorias pedidas pelas suas obras ficam destacadas.",
-"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Atraque no seu fleet carrier (ou no da sua esquadrilha) e transfira mercadorias: o EDCH também vai acompanhar o porão dele. O total do seu carrier vem da tela de gerenciamento do carrier."
+"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Atraque no seu fleet carrier (ou no da sua esquadrilha) e transfira mercadorias: o EDCH também vai acompanhar o porão dele. O total do seu carrier vem da tela de gerenciamento do carrier.",
+"{0} a fermé EDCH": "{0} fechou o EDCH",
+"{0} a quitté l'escadrille en jeu": "{0} saiu da ala no jogo",
+"{0} a arrêté le partage d'escadrille": "{0} parou o compartilhamento da ala",
+"EDCH fermé": "EDCH fechado",
+"a quitté l'escadrille": "saiu da ala",
+"partage arrêté": "compartilhamento parado",
+"inactif": "inativo",
+"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Avisar quando um membro fecha o EDCH ou sai da ala no jogo"
 }

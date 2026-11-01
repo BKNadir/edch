@@ -3,6 +3,12 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.8
+
+- Wing: when a member closes EDCH, their EDCH tells the others on its way out (an encrypted "leaving" message prepared in advance, sent even as the window closes). Leaving the wing in game does the same, and EDCH shares again when you join a wing.
+- Wing: a notification says when a member closed EDCH, left the wing in game or stopped sharing (can be turned off). Members who left stay shown, greyed out with the reason, for 10 minutes.
+- Wing: a member who sends nothing for 45 minutes (crash, PC asleep) is now considered gone, instead of after 2 hours.
+
 ## 0.8.7
 
 - Colonisation: the ship's hold is always up to date (EDCH now reads Cargo.json, which the game rewrites after every purchase, sale or delivery; the journal often only gives the total).

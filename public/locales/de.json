@@ -924,5 +924,13 @@
 "+ {0} t non identifiées": "+ {0} t nicht zugeordnet",
 "t utiles dans tes carriers": "t nützlich in deinen Carriern",
 "Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "Das Spieljournal listet den Frachtraum eines Carriers nicht auf: EDCH rekonstruiert ihn aus deinen Transfers Schiff ↔ Carrier und deinen Käufen und Verkäufen auf seinem Markt. Was andere hineingelegt haben oder was vor Beginn deines Verlaufs (60 Tage) darin war, erscheint nicht. Waren, die deine Baustellen brauchen, sind hervorgehoben.",
-"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Docke an deinem Fleet Carrier (oder dem deines Geschwaders) und transferiere Waren: EDCH verfolgt dann auch seinen Frachtraum. Die Gesamtmenge deines Carriers stammt aus dem Carrier-Verwaltungsbildschirm."
+"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Docke an deinem Fleet Carrier (oder dem deines Geschwaders) und transferiere Waren: EDCH verfolgt dann auch seinen Frachtraum. Die Gesamtmenge deines Carriers stammt aus dem Carrier-Verwaltungsbildschirm.",
+"{0} a fermé EDCH": "{0} hat EDCH geschlossen",
+"{0} a quitté l'escadrille en jeu": "{0} hat das Geschwader im Spiel verlassen",
+"{0} a arrêté le partage d'escadrille": "{0} hat das Teilen mit dem Geschwader beendet",
+"EDCH fermé": "EDCH geschlossen",
+"a quitté l'escadrille": "hat das Geschwader verlassen",
+"partage arrêté": "Teilen beendet",
+"inactif": "inaktiv",
+"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Benachrichtigen, wenn ein Mitglied EDCH schließt oder das Geschwader im Spiel verlässt"
 }

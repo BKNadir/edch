@@ -924,5 +924,13 @@
 "+ {0} t non identifiées": "+ {0} t not identified",
 "t utiles dans tes carriers": "t useful in your carriers",
 "Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "The game journal doesn't list a carrier's hold: EDCH rebuilds it from your ship ↔ carrier transfers and your purchases and sales on its market. What others put in it, or what was there before your history starts (60 days), doesn't show. Goods your construction sites need are highlighted.",
-"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Dock at your fleet carrier (or your squadron's) and transfer goods: EDCH will follow its hold too. Your carrier's total comes from the carrier management screen."
+"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Dock at your fleet carrier (or your squadron's) and transfer goods: EDCH will follow its hold too. Your carrier's total comes from the carrier management screen.",
+"{0} a fermé EDCH": "{0} closed EDCH",
+"{0} a quitté l'escadrille en jeu": "{0} left the wing in game",
+"{0} a arrêté le partage d'escadrille": "{0} stopped wing sharing",
+"EDCH fermé": "EDCH closed",
+"a quitté l'escadrille": "left the wing",
+"partage arrêté": "sharing stopped",
+"inactif": "inactive",
+"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Tell me when a member closes EDCH or leaves the wing in game"
 }

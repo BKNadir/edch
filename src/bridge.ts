@@ -289,6 +289,8 @@ export async function remoteAction(action: unknown): Promise<void> {
 
 /** Live link to a wing's ntfy topic (Rust keeps the connection open and pushes each line). */
 export const ntfySubscribe = (topic: string, since: string) => invoke<void>("ntfy_subscribe", { topic, since });
+/** The encrypted "leaving" message Rust sends when EDCH closes (null: nothing to send). */
+export const ntfySetFarewell = (topic: string, text: string | null) => invoke<void>("ntfy_set_farewell", { topic, text }).catch(() => undefined);
 export const ntfyUnsubscribe = () => invoke<void>("ntfy_unsubscribe").catch(() => undefined);
 export async function onNtfy(line: (topic: string, text: string) => void, state: (topic: string, connected: boolean, message?: string | null) => void): Promise<() => void> {
   const ev = window.__TAURI__!.event;

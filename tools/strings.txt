@@ -117,6 +117,9 @@ Wing link started
 {0} : nouvelle mission d'escadrille « {1} »
 Toute l'escadrille a accepté « {0} »
 {0} a accepté « {1} »
+{0} a fermé EDCH
+{0} a quitté l'escadrille en jeu
+{0} a arrêté le partage d'escadrille
 Cœur : {0}
 Journal archive unreadable: {0}
 Aucune mission d'escadrille pour l'instant.
@@ -431,6 +434,9 @@ Points chauds
 Récupération
 {0} / {1} éliminations
 {0} / {1} livrés
+EDCH fermé
+a quitté l'escadrille
+partage arrêté
 Page en cours de développement
 Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit rien dans le journal quand une mission est partagée ou reçue en escadrille, donc le suivi des missions partagées reste approximatif.
 Aucune mission en cours. Les missions acceptées en jeu apparaissent ici, avec leur objectif, leur destination et le temps restant.
@@ -467,6 +473,7 @@ Créer un code
 Nom affiché
  Prévenir quand un membre a une mission d'escadrille que je n'ai pas
  Prévenir quand un membre accepte une mission que je partage
+ Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu
  Prévenir quand toute l'escadrille a accepté une mission
  Partager automatiquement toutes mes missions d'escadrille
 Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise.

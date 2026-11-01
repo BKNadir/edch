@@ -5,7 +5,7 @@
 // random-looking text. Each EDCH publishes its wing missions when they change, plus a heartbeat,
 // and polls the topic for the others'.
 
-import { httpFetch, isTauri, ntfySubscribe, ntfyUnsubscribe, onNtfy } from "./bridge.js";
+import { httpFetch, isTauri, ntfySetFarewell, ntfySubscribe, ntfyUnsubscribe, onNtfy } from "./bridge.js";
 import { log } from "./logger.js";
 import type { Mission } from "./activity.js";
 
@@ -34,7 +34,11 @@ export interface WingMember {
   at: string;
   missions: WingMission[];
   left?: boolean;
+  /** Why they left: EDCH closed, left the wing in game, or turned sharing off. */
+  reason?: LeaveReason;
 }
+
+export type LeaveReason = "closed" | "wing" | "off";
 
 interface Packet {
   v: 1;
@@ -43,6 +47,7 @@ interface Packet {
   at: string;
   missions: WingMission[];
   bye?: boolean;
+  reason?: LeaveReason;
 }
 
 const NTFY = "https://ntfy.sh/";
@@ -163,7 +168,11 @@ export interface WingRow {
   mine: boolean;
 }
 
-const ACTIVE_MS = 2 * 60 * 60 * 1000;
+/**
+ * A member with no news for this long is considered gone (EDCH crashed, PC asleep…): the
+ * heartbeat comes every 20 minutes, so two missed beats plus a margin.
+ */
+const ACTIVE_MS = 45 * 60 * 1000;
 
 export const isActive = (m: WingMember, now = Date.now()) => !m.left && now - Date.parse(m.at) < ACTIVE_MS;
 
@@ -195,6 +204,8 @@ export interface WingEvents {
   everyone: (row: WingRow) => void;
   /** A member accepted a mission you share. */
   accepted: (row: WingRow, by: string) => void;
+  /** A member left: EDCH closed, left the wing in game, or stopped sharing. */
+  left: (name: string, reason: LeaveReason | undefined) => void;
   changed: () => void;
   error: (message: string) => void;
 }
@@ -262,18 +273,51 @@ export class WingLink {
     window.clearInterval(this.timer);
     window.clearInterval(this.beat);
     this.unlisten?.();
-    if (isTauri()) void ntfyUnsubscribe();
+    if (isTauri()) {
+      void ntfyUnsubscribe();
+      void ntfySetFarewell(this.topic, null);
+    }
     try {
       const me = this.me();
-      await this.send({ v: 1, from: me.id, name: me.name, at: new Date().toISOString(), missions: [], bye: true });
+      await this.send({ v: 1, from: me.id, name: me.name, at: new Date().toISOString(), missions: [], bye: true, reason: "off" });
     } catch {
       /* leaving quietly is fine */
     }
   }
 
+  /** Out of the wing in game: tell the others, and stay quiet until we join one again. */
+  private away = false;
+
+  async leftWing() {
+    if (this.away || this.stopped || !this.key) return;
+    this.away = true;
+    if (isTauri()) void ntfySetFarewell(this.topic, null);
+    try {
+      const me = this.me();
+      await this.send({ v: 1, from: me.id, name: me.name, at: new Date().toISOString(), missions: [], bye: true, reason: "wing" });
+      this.lastSent = "";
+    } catch (e) {
+      this.fail(e);
+    }
+  }
+
+  async joinedWing() {
+    if (!this.away) return;
+    this.away = false;
+    await this.publish(true);
+  }
+
+  /** Keeps Rust ready to tell the wing we're gone if EDCH closes (it must be newer than our last message). */
+  private async armFarewell() {
+    if (!isTauri() || this.stopped || this.away) return;
+    const me = this.me();
+    const text = await seal(this.key, { v: 1, from: me.id, name: me.name, at: new Date(Date.now() + 1000).toISOString(), missions: [], bye: true, reason: "closed" });
+    void ntfySetFarewell(this.topic, text);
+  }
+
   /** Publishes our wing missions when they changed (or always, for the heartbeat). */
   async publish(force = false) {
-    if (this.stopped || !this.key) return;
+    if (this.stopped || !this.key || this.away) return;
     const me = this.me();
     const body = JSON.stringify(me.missions);
     if (!force && body === this.lastSent) return;
@@ -281,6 +325,7 @@ export class WingLink {
     try {
       await this.send({ v: 1, from: me.id, name: me.name, at: new Date().toISOString(), missions: me.missions });
       this.ok();
+      void this.armFarewell();
     } catch (e) {
       this.fail(e);
     }
@@ -345,7 +390,8 @@ export class WingLink {
       if (!p || p.from === myId) continue;
       const prev = this.members.get(p.from);
       if (prev && prev.at > p.at) continue;
-      this.members.set(p.from, { id: p.from, name: p.name || "CMDR", at: p.at, missions: p.bye ? [] : p.missions ?? [], left: p.bye });
+      if (p.bye && prev && !prev.left && this.primed) this.on.left(p.name || prev.name || "CMDR", p.reason);
+      this.members.set(p.from, { id: p.from, name: p.name || "CMDR", at: p.at, missions: p.bye ? [] : p.missions ?? [], left: p.bye, reason: p.bye ? p.reason : undefined });
       log.debug("wing", `${p.name || "CMDR"}: ${p.bye ? "left" : `${(p.missions ?? []).length} mission(s)`} ${(p.missions ?? []).map((m) => `#${m.id}${m.total ? ` ${m.delivered ?? 0}/${m.total}` : ""}`).join(" ")}`);
       changed = true;
     }

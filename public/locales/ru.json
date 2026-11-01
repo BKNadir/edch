@@ -924,5 +924,13 @@
 "+ {0} t non identifiées": "+ {0} т не определено",
 "t utiles dans tes carriers": "т нужного в ваших носителях",
 "Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "Журнал игры не перечисляет трюм носителя: EDCH восстанавливает его по вашим переносам корабль ↔ носитель и вашим покупкам и продажам на его рынке. То, что положили другие или что было до начала вашей истории (60 дней), не отображается. Товары, нужные вашим стройкам, выделены.",
-"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Пристыкуйтесь к своему носителю (или носителю эскадрильи) и перенесите товары: EDCH будет отслеживать и его трюм. Общий объём вашего носителя берётся с экрана управления носителем."
+"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Пристыкуйтесь к своему носителю (или носителю эскадрильи) и перенесите товары: EDCH будет отслеживать и его трюм. Общий объём вашего носителя берётся с экрана управления носителем.",
+"{0} a fermé EDCH": "{0} закрыл EDCH",
+"{0} a quitté l'escadrille en jeu": "{0} покинул звено в игре",
+"{0} a arrêté le partage d'escadrille": "{0} отключил обмен со звеном",
+"EDCH fermé": "EDCH закрыт",
+"a quitté l'escadrille": "покинул звено",
+"partage arrêté": "обмен отключён",
+"inactif": "неактивен",
+"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Сообщать, когда участник закрывает EDCH или покидает звено в игре"
 }

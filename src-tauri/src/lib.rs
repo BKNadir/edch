@@ -761,6 +761,7 @@ pub fn run() {
             clipboard_write,
             ntfy::ntfy_subscribe,
             ntfy::ntfy_unsubscribe,
+            ntfy::ntfy_set_farewell,
             logs::log_write,
             logs::log_set_debug,
             logs::logs_open,
@@ -768,6 +769,12 @@ pub fn run() {
             update::update_download,
             update::update_install
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running EDCH");
+        .build(tauri::generate_context!())
+        .expect("error while running EDCH")
+        .run(|_app, event| {
+            if let tauri::RunEvent::Exit = event {
+                ntfy::send_farewell();
+                logs::info("app", "EDCH closed");
+            }
+        });
 }
