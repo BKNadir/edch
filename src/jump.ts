@@ -23,6 +23,14 @@ export function fsdInfo(item?: string): { size: number; rating: string } | null 
   return { size: Number(m[1]), rating: RATING[Number(m[2])] ?? "?" };
 }
 
+/**
+ * Neutron star boost of a drive: x6 for the Mk II supercharge-optimised drive (Caspian Explorer),
+ * x4 for every other one. White dwarfs stay at x1.5.
+ */
+export function superchargeMultiplier(item?: string): 4 | 6 {
+  return /overchargebooster_mkii/i.test(item ?? "") ? 6 : 4;
+}
+
 export function boosterBonus(item?: string): number {
   const m = /size(\d)/.exec(item ?? "");
   return m ? BOOSTER[Number(m[1])] ?? 0 : 0;

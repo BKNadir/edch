@@ -1143,5 +1143,10 @@
 "Le système suivant est copié dans le presse-papiers du PC, prêt à coller dans la carte galactique.": "Следующая система копируется в буфер обмена ПК, готовая для вставки в галактическую карту.",
 "Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire (page Navigation)": "Автоматически копировать следующий прыжок при прибытии в систему маршрута (страница «Навигация»)",
 "Copier automatiquement le prochain saut quand j'arrive dans un système de la tournée des ingénieurs (wishlist)": "Автоматически копировать следующий прыжок при прибытии в систему маршрута по инженерам (список желаний)",
-"Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)": "Уведомлять, когда следующий прыжок скопирован (вкладка «Уведомления», со звуком, если он включён)"
+"Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)": "Уведомлять, когда следующий прыжок скопирован (вкладка «Уведомления», со звуком, если он включён)",
+"Bonus neutron ×6 (FSD Mk II du Caspian Explorer)": "Нейтронное ускорение ×6 (FSD Mk II у Caspian Explorer)",
+"Le FSD Mk II du Caspian Explorer multiplie la portée par 6 près d'une étoile à neutrons (×4 pour les autres FSD)": "FSD Mk II у Caspian Explorer умножает дальность на 6 у нейтронной звезды (×4 у других FSD)",
+"Utiliser mon vaisseau actuel": "Использовать мой текущий корабль",
+"Pas encore de vaisseau lu dans le journal : lance le jeu": "Корабль ещё не прочитан из журнала: запустите игру",
+"{0} : portée {1}, bonus neutron ×{2}": "{0}: дальность {1}, нейтронное ускорение ×{2}"
 }

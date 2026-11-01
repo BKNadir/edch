@@ -5,6 +5,8 @@ and EDCH shows it in the update banner.
 
 ## 0.10.2
 
+- Neutron routes for the Caspian Explorer: its Mk II drive gets ×6 from neutron stars instead of ×4. EDCH now tells Spansh, so routes use far fewer jumps. On the Navigation page the "Neutron boost ×6" box is ticked by itself when your ship has that drive, and can be unticked to plot for another ship. The engineer tour uses it too.
+- Navigation: "Use my current ship" fills in the departure, your current jump range and the neutron boost from the ship you are flying.
 - The Windows installer now shows what EDCH sends and to whom (Spansh, EDSM, EDDN, Inara, ntfy, GitHub) and how to turn each one off, followed by the MIT licence.
 - New code signing policy page with the privacy policy, linked from the README, ahead of free code signing by the SignPath Foundation (application in progress). Signed builds will stop Windows Defender from wrongly flagging the installer.
 - The loading spinner showed as a thin line in some places (engineer tour, searches): it is round again everywhere.

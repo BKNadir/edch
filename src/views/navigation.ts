@@ -1,9 +1,9 @@
 import { setNavRoute } from "../tour.js";
 import { locale } from "../i18n.js";
 import { spanshGet, spanshJob, spanshPost } from "../bridge.js";
-import { h, icon, fmt, replace } from "../dom.js";
+import { h, icon, fmt, replace, toast } from "../dom.js";
 import type { Ctx, View } from "../context.js";
-import { CARRIER_MAX_JUMP, carrierEstimate, fsdInfo, jumpModel } from "../jump.js";
+import { CARRIER_MAX_JUMP, carrierEstimate, fsdInfo, jumpModel, superchargeMultiplier } from "../jump.js";
 import { fmtLy } from "../spansh.js";
 import { copySystem } from "./results.js";
 
@@ -76,13 +76,26 @@ export class NavigationView implements View {
     const to = systemInput("nav-to", dest, "Destination");
     const range = h("input", { type: "number", step: "0.01", min: "1", value: this.defaultRange() ? String(this.defaultRange()) : "", placeholder: "al" });
     const eff = h("input", { type: "number", min: "1", max: "100", value: "60" });
+    // The Caspian Explorer's Mk II drive gets x6 from neutron stars instead of x4: ticked when the
+    // current ship has it, and it can be unticked (to plot for another ship).
+    const x6 = h("input", { type: "checkbox", checked: superchargeMultiplier(cmdr.loadout?.fsd) === 6 });
     const plot = async () => {
       const r = Number(range.value) || this.defaultRange();
       if (!from.value.trim() || !to.value.trim() || !r) {
         replace(this.routeOut, h("p.error", null, "Indique un départ, une destination et une portée."));
         return;
       }
-      await this.plotShip(from.value.trim(), to.value.trim(), r, Number(eff.value) || 60);
+      await this.plotShip(from.value.trim(), to.value.trim(), r, Number(eff.value) || 60, x6.checked ? 6 : 4);
+    };
+    /** Fills the form from the ship you are flying: departure, range with the current cargo, drive. */
+    const fromShip = () => {
+      const now = this.ctx.store.state.cmdr;
+      if (!now.loadout) return toast("Pas encore de vaisseau lu dans le journal : lance le jeu");
+      const r = this.defaultRange();
+      if (r) range.value = String(r);
+      if (now.location?.system) from.value = now.location.system;
+      x6.checked = superchargeMultiplier(now.loadout.fsd) === 6;
+      toast(`${now.ship?.type ?? "Vaisseau"} : portée ${r ? fmtLy(r) : "?"}, bonus neutron ×${x6.checked ? 6 : 4}`);
     };
 
     // ---- carrier ----
@@ -112,6 +125,12 @@ export class NavigationView implements View {
             h("label", null, "Destination", to),
             h("label", null, "Portée (al)", range),
             h("label", { title: "Plus c'est haut, plus l'itinéraire colle à la ligne droite" }, "Efficacité (%)", eff),
+          ),
+          h(
+            "div.row.nav-ship",
+            null,
+            h("label.check", { title: "Le FSD Mk II du Caspian Explorer multiplie la portée par 6 près d'une étoile à neutrons (×4 pour les autres FSD)" }, x6, " Bonus neutron ×6 (FSD Mk II du Caspian Explorer)"),
+            h("button.ghost.small", { onclick: fromShip }, icon("play"), " Utiliser mon vaisseau actuel"),
           ),
           h("div.row", null, h("button.primary", { onclick: plot }, "Calculer l'itinéraire"), h("button.ghost", { onclick: () => this.estimateShip(from.value.trim(), to.value.trim(), Number(range.value) || this.defaultRange()) }, "Estimation rapide")),
           this.routeOut,
@@ -231,7 +250,7 @@ export class NavigationView implements View {
     }
   }
 
-  private async plotShip(from: string, to: string, range: number, efficiency: number) {
+  private async plotShip(from: string, to: string, range: number, efficiency: number, supercharge: 4 | 6 = 4) {
     replace(this.routeOut, h("p.sub", null, h("span.spinner"), " Spansh calcule l'itinéraire…"));
     try {
       const res: Json = await spanshJob("route", [
@@ -239,6 +258,7 @@ export class NavigationView implements View {
         ["to", to],
         ["range", String(range)],
         ["efficiency", String(efficiency)],
+        ["supercharge_multiplier", String(supercharge)],
       ]);
       const jumps: Json[] = res.system_jumps ?? [];
       const total = jumps.reduce((s, j) => s + Number(j.jumps ?? 0), 0);

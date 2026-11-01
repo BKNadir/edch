@@ -11,6 +11,7 @@ import { pickEngineer, type Pick } from "../engineerPick.js";
 import { clearRoute, currentRoute, nextJump, planTour, plotTour, tourRange, type TourPlan } from "../tour.js";
 import { fmtLy } from "../spansh.js";
 import { copyText } from "../bridge.js";
+import { superchargeMultiplier } from "../jump.js";
 import type { Engineer } from "../types.js";
 
 export function addToWishlist(ctx: Ctx, bp: Blueprint, from?: number, to?: number) {
@@ -184,7 +185,7 @@ export class WishlistView implements View {
     this.plotting = true;
     replace(this.tourOut, h("p.sub", null, h("span.spinner"), " Spansh calcule l'itinéraire…"));
     try {
-      await plotTour(from, plan.stops, range, (leg, of) => replace(this.tourOut, h("p.sub", null, h("span.spinner"), ` Spansh calcule l'étape ${leg}/${of}…`)));
+      await plotTour(from, plan.stops, range, (leg, of) => replace(this.tourOut, h("p.sub", null, h("span.spinner"), ` Spansh calcule l'étape ${leg}/${of}…`)), superchargeMultiplier(this.ctx.store.state.cmdr.loadout?.fsd));
       this.plotting = false;
       this.renderRoute(this.ctx.store.state.cmdr.location?.system);
     } catch (e) {

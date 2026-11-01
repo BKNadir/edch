@@ -1143,5 +1143,10 @@
 "Le système suivant est copié dans le presse-papiers du PC, prêt à coller dans la carte galactique.": "El siguiente sistema se copia al portapapeles del PC, listo para pegar en el mapa galáctico.",
 "Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire (page Navigation)": "Copiar el siguiente salto automáticamente al llegar a un sistema de la ruta (página Navegación)",
 "Copier automatiquement le prochain saut quand j'arrive dans un système de la tournée des ingénieurs (wishlist)": "Copiar el siguiente salto automáticamente al llegar a un sistema de la ruta de ingenieros (lista de deseos)",
-"Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)": "Avisarme cuando se copie el siguiente salto (pestaña Notificaciones, con sonido si está activado)"
+"Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)": "Avisarme cuando se copie el siguiente salto (pestaña Notificaciones, con sonido si está activado)",
+"Bonus neutron ×6 (FSD Mk II du Caspian Explorer)": "Impulso de neutrones ×6 (FSD Mk II del Caspian Explorer)",
+"Le FSD Mk II du Caspian Explorer multiplie la portée par 6 près d'une étoile à neutrons (×4 pour les autres FSD)": "El FSD Mk II del Caspian Explorer multiplica el alcance por 6 junto a una estrella de neutrones (×4 para los demás FSD)",
+"Utiliser mon vaisseau actuel": "Usar mi nave actual",
+"Pas encore de vaisseau lu dans le journal : lance le jeu": "Aún no se ha leído ninguna nave del diario: inicia el juego",
+"{0} : portée {1}, bonus neutron ×{2}": "{0}: alcance {1}, impulso de neutrones ×{2}"
 }

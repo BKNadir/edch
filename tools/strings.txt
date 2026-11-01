@@ -618,12 +618,17 @@ Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » da
 Tailscale n'est pas détecté sur ce PC. Suis le guide pour l'installer, puis reviens sur cette page.
 Départ
 Indique un départ, une destination et une portée.
+Pas encore de vaisseau lu dans le journal : lance le jeu
+{0} : portée {1}, bonus neutron ×{2}
 Départ du carrier
 Itinéraire du vaisseau
 Calcul Spansh avec boost des étoiles à neutrons (comme le Neutron Plotter).
 Portée (al)
 Plus c'est haut, plus l'itinéraire colle à la ligne droite
 Efficacité (%)
+Le FSD Mk II du Caspian Explorer multiplie la portée par 6 près d'une étoile à neutrons (×4 pour les autres FSD)
+ Bonus neutron ×6 (FSD Mk II du Caspian Explorer)
+ Utiliser mon vaisseau actuel
 Calculer l'itinéraire
 Estimation rapide
 Fleet Carrier

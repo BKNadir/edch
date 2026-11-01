@@ -128,7 +128,7 @@ function saveRoute(r: TourRoute | null) {
 export const clearRoute = () => saveRoute(null);
 
 /** Plots every leg with Spansh, one after the other. */
-export async function plotTour(from: string, stops: Stop[], range: number, onProgress: (leg: number, of: number) => void): Promise<TourRoute> {
+export async function plotTour(from: string, stops: Stop[], range: number, onProgress: (leg: number, of: number) => void, supercharge: 4 | 6 = 4): Promise<TourRoute> {
   const jumps: RouteJump[] = [{ system: from }];
   let total = 0;
   let dist = 0;
@@ -145,6 +145,7 @@ export async function plotTour(from: string, stops: Stop[], range: number, onPro
       ["to", e.system],
       ["range", String(range)],
       ["efficiency", "60"],
+      ["supercharge_multiplier", String(supercharge)],
     ]);
     const legs: Json[] = res.system_jumps ?? [];
     for (const j of legs.slice(1)) jumps.push({ system: String(j.system), neutron: Boolean(j.neutron_star) });
