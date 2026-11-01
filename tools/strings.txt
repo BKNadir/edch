@@ -1,10 +1,17 @@
 Matériaux
 Ingénierie
 Ingénieurs
+Objectifs communautaires
+À propos
 Paramètres
 Impossible de charger les données du jeu : {0}
 Indique le dossier du journal dans les Paramètres.
-Choisis ta langue · Choose your language · Sprache wählen · Elige tu idioma · Escolha o idioma · Выберите язык
+Cet appareil n'est pas connecté à EDCH
+Ce QR code n'est plus valable : un nouveau code a été créé sur le PC. Scanne celui qui est affiché maintenant.
+Scanne le QR code affiché dans EDCH sur ton PC (page Mobile) pour connecter cet appareil.
+La connexion est enregistrée dans le navigateur qui ouvre le lien. Si ton lecteur de QR code l'ouvre dans sa propre fenêtre, ouvre-le plutôt dans Chrome ou Safari, ou copie le lien dans ton navigateur.
+Réessayer
+Choose your language · Choisis ta langue · Sprache wählen · Elige tu idioma · Escolha o idioma · Выберите язык
 Sécurité haute
 Sécurité moyenne
 Sécurité basse
@@ -15,6 +22,8 @@ En direct
 En attente du jeu
 Démo
 Arrêté
+Connecté au PC
+PC injoignable
 CMDR —
 Copier le système
 Position inconnue
@@ -28,29 +37,29 @@ Civil Unrest
 en Épidémie
 de la Fédération
 de l'Empire
-Émissions de haute qualité (HGE) — systèmes peuplés {0}
-Sources de signal « High Grade Emissions » en supercroisière. Plus fréquentes dans les systèmes très peuplés, surtout Alliance et Indépendants. Les HGE disparaissent après quelques minutes : reste en supercroisière et surveille le radar.
-Émissions encodées (USS) — systèmes à sécurité {0}
-Sources de signal « Encoded Emissions » : scanne les épaves et les balises dans le signal.
+Émissions d'intensité élevée — systèmes peuplés {0}
+Sources de signal « Émissions d'intensité élevée » en supercroisière. Plus fréquentes dans les systèmes très peuplés, surtout Alliance et Indépendants. Elles disparaissent après quelques minutes : reste en supercroisière et surveille le radar.
+Émissions codées — systèmes à sécurité {0}
+Sources de signal « Émissions codées » : scanne les épaves et les balises dans le signal.
 Zones de conflit — systèmes en Guerre / Guerre civile
 Détruis des vaisseaux militaires ou d'autorité dans les zones de conflit et récupère leurs matériaux.
 Scanner les sillages d'intercepteurs Thargoid
 Utilise un scanner de sillage sur un intercepteur Thargoid qui saute.
 Scanner les sillages haute énergie — systèmes très fréquentés
-Installe un scanner de sillage (Frame Shift Wake Scanner) et scanne les sillages haute énergie près des stations. Les systèmes très peuplés (et ceux en Famine) ont beaucoup de trafic.
+Installe un scanner de sillage et scanne les sillages à haute énergie près des stations. Les systèmes très peuplés (et ceux en Famine) ont beaucoup de trafic.
 Prospection en surface — planètes riches en {0}
-Pose-toi, prends le SRV et tire sur les roches/affleurements (« Material Deposit »). Plus le % est élevé, plus le matériau sort souvent.
+Pose-toi, prends le SRV et tire sur les roches et affleurements minéraux. Plus le % est élevé, plus le matériau sort souvent.
 Minage — anneaux de glace
 Mine les astéroïdes des anneaux glacés : les matériaux bruts tombent avec les fragments.
-Minage — anneaux vierges (Pristine)
-Les anneaux « Pristine » donnent plus de fragments, donc plus de matériaux bruts.
+Minage — anneaux vierges
+Les anneaux aux réserves « vierges » donnent plus de fragments, donc plus de matériaux bruts.
 Sites Gardiens (ruines et structures)
 Scanne les obélisques et tire sur les panneaux/sentinelles. Les sites sont surtout dans les nébuleuses Gardiennes (Regor, Vela…).
 Sites Thargoid au sol
 Épaves, structures et barnacles Thargoid. Les intercepteurs et éclaireurs se rencontrent aussi autour des zones de guerre Thargoid.
 Scanner des vaisseaux de combat — systèmes à pirates (sécurité basse / anarchie)
 Débris de vaisseaux de combat — RES des systèmes à pirates
-Scanne les vaisseaux de combat (scanner de données / « Kill Warrant » non requis) dans les sites d'extraction de ressources (RES) des anneaux et en zones de conflit.
+Scanne les vaisseaux en combat dans les sites d'extraction de ressources des anneaux et dans les zones de conflit (aucun scanner spécial n'est nécessaire).
 Détruis des pirates dans les sites d'extraction de ressources (RES), autour des anneaux, puis ramasse les matériaux qu'ils lâchent.
 Scanner des cargos — systèmes très peuplés (beaucoup de trafic)
 Débris de cargos — systèmes très peuplés (beaucoup de trafic)
@@ -65,7 +74,7 @@ Points d'intérêt au sol
 Épaves et sites d'intérêt en surface.
 Balises de données en espace profond
 Balises dans les sources de signal en espace profond.
-Sources de signal (USS)
+Sources de signal non identifiées
 Sources de signal non identifiées en supercroisière.
 High Tech
 Médical
@@ -91,12 +100,86 @@ Pad M
 Pad S seulement
 Planétaire
 {0} événement(s)
+EDCH (PC) a répondu {0}
 {0} : trop de requêtes, réessaie dans un instant
+{0} est momentanément indisponible (erreur {1}), réessaie dans un instant
 {0} a répondu {1}
 {0} : réponse illisible
 Spansh n'a pas donné de numéro de calcul
 Spansh calcule encore après 3 minutes, réessaie plus tard
+Disponible seulement sur le PC
 Disponible dans l'application (pas en mode démo)
+{0} : nouvelle mission d'escadrille « {1} »
+Toute l'escadrille a accepté « {0} »
+{0} a accepté « {1} »
+Cœur : {0}
+Aucune mission d'escadrille pour l'instant.
+Prochaines échéances
+Objectif atteint · 
+Ouvrir la page Missions
+Aperçu
+ntfy.sh : trop de messages, réessaie plus tard
+ntfy.sh a répondu {0}
+/g, ""));\n  if (!items.length) return null;\n  return h("ul.update-notes", { "data-no-tr": "" }, items.map((t) => h("li", null, t)));\n}\nlet bar: HTMLElement | null = null;\nlet store: Store | null = null;\n\nconst mb = (n: number) => (n / 1048576).toLocaleString(locale(), { maximumFractionDigits: 1 });\n\nfunction render() {\n  if (!bar) {\n    bar = h("div#update-bar", { role: "status" });\n    document.body.append(bar);\n  }\n  if (phase.kind === "hidden") {\n    bar.classList.remove("show");\n    return;\n  }\n  bar.classList.add("show");\n  const p = phase;\n  const close = h("button.ghost.small", { title: "Plus tard", onclick: () => later() }, "Plus tard");\n  if (p.kind === "available") {\n    replace(\n      bar,\n      h(\n        "div.update-text",\n        null,\n        h("strong", null, 
+),\n        showNotes ? notesList(p.info.notes) : null,\n        showNotes && p.info.page ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, "Voir sur GitHub") : null,\n      ),\n      h(\n        "div.row",\n        null,\n        h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? "Masquer les nouveautés" : "Nouveautés"),\n        close,\n        h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour"),\n      ),\n    );\n  } else if (p.kind === "downloading") {\n    const pct = p.total > 0 ? Math.min(100, Math.round((p.done / p.total) * 100)) : 0;\n    replace(\n      bar,\n      h(\n        "div.update-text",\n        null,\n        h("strong", null, 
+), h("span.sub", null, "Relance l'application pour terminer la mise à jour. Elle se rouvrira toute seule.")),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => install(p) }, "Relancer maintenant")),\n    );\n  } else {\n    replace(\n      bar,\n      h("div.update-text", null, h("strong", null, "La mise à jour a échoué"), h("span.sub", null, p.message)),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => download(p.info) }, "Réessayer")),\n    );\n  }\n}\n\nfunction later() {\n  if (phase.kind === "hidden") return;\n  // "Later" on an offer skips this version; a downloaded one is kept for the next start.\n  if (phase.kind === "available" && store) store.updateSettings({ skippedVersion: phase.info.version });\n  phase = { kind: "hidden" };\n  render();\n}\n\nasync function download(info: UpdateInfo) {\n  phase = { kind: "downloading", info, done: 0, total: info.size };\n  render();\n  const stop = await onUpdateProgress((done, total) => {\n    if (phase.kind !== "downloading") return;\n    phase = { ...phase, done, total };\n    render();\n  });\n  try {\n    const path = await updateDownload(info);\n    phase = { kind: "ready", info, path };\n  } catch (e) {\n    phase = { kind: "failed", info, message: String((e as Error)?.message ?? e) };\n  } finally {\n    stop();\n  }\n  render();\n}\n\nasync function install(p: { info: UpdateInfo; path: string }) {\n  try {\n    await updateInstall(p.path);\n  } catch (e) {\n    phase = { kind: "failed", info: p.info, message: String((e as Error)?.message ?? e) };\n    render();\n  }\n}\n\n/** Checks GitHub now. 
+: also report "up to date" and errors, and ignore a skipped version. */\nexport async function checkForUpdate(manual = false): Promise<void> {\n  if (!isTauri() || isRemote() || !store) return;\n  if (phase.kind === "downloading" || phase.kind === "ready") {\n    if (manual) render();\n    return;\n  }\n  try {\n    const info = await updateCheck();\n    if (!info) {\n      if (manual) toast("EDCH est à jour");\n      return;\n    }\n    if (!manual && info.version === store.state.settings.skippedVersion) return;\n    phase = { kind: "available", info };\n    render();\n  } catch (e) {\n    if (manual) toast(
+PC injoignable : modification non envoyée
+Elite (d'origine)
+Contraste élevé
+Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)
+EDDN (EDCD)
+Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
+EDCD / FDevIDs
+Les identifiants et noms officiels du jeu
+Synchronisation de ton journal de vol
+Synchronisation de ton profil de commandant
+EDEngineer (msarilar)
+Recettes d'ingénierie, origines des matériaux et une partie des traductions
+Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie
+Elite Dangerous Almanac
+Les noms officiels traduits du jeu (matériaux, marchandises, modules…)
+EDR (lekeno)
+Les noms des espèces d'exobiologie tels que le journal les écrit
+Le relais gratuit qui transporte les messages chiffrés de l'escadrille
+EDRefCard (Richard Buckle)
+Noms des commandes et schémas des HOTAS, joysticks et manettes
+Format d'export de builds importé dans la wishlist
+Coriolis (EDCD)
+EDMarketConnector (EDCD)
+L'inspiration pour la synchro EDDN, EDSM et Inara
+Odyssey Materials Helper (Jixxed)
+L'inspiration de départ pour EDCH
+Le cadre qui fait tourner l'application sur Windows
+À propos d'EDCH
+EDCH — Elite Dangerous Companion Helper
+Un compagnon léger pour Elite Dangerous : inventaire en direct, où trouver chaque matériau, ingénieurs, recherches, navigation, commandes et synchro.
+Liens utiles
+Code source :
+Signaler un bug ou proposer une idée :
+ouvrir une issue
+Indique ta version d'EDCH, ce que tu faisais et ce qui s'est passé. Une capture d'écran aide beaucoup.
+Nouveautés de chaque version :
+À savoir
+EDCH ne remplace pas les autres outils de la communauté. C'est un projet indépendant, sans lien avec les projets cités ci-dessous ni avec Frontier Developments.
+Il a été codé en grande partie par une IA (Claude, d'Anthropic), avec le suivi d'un développeur qui définit les fonctionnalités, teste et valide chaque version. Il peut donc être incomplet ou contenir des bugs.
+Outil communautaire gratuit, non officiel et non commercial.
+Merci à eux 🙏
+EDCH ne fonctionnerait pas sans ces projets, créés et maintenus par des membres de la communauté. Merci à chacun d'eux. S'ils te sont utiles, pense à les soutenir.
+Elite Dangerous est une marque de Frontier Developments plc. Les noms et données du jeu leur appartiennent.
+Licences et détails : 
+Chantiers de construction suivis depuis ton journal : ce qu'il reste à livrer, ta soute, les trajets et où acheter.
+ Afficher les chantiers terminés
+Aucun chantier en cours. Docke à un dépôt de construction (Colonisation) : EDCH lira la liste des marchandises demandées.
+Dépôt #{0}
+Terminé
+Échoué
+Mis à jour {0}
+trajets ({0} t par trajet)
+Livré
+Demandé
+En soute
+Chercher où l'acheter près de toi
 Multi-équipage
 À pied
 Galaxy map
@@ -178,6 +261,7 @@ Lat {0} / Lon {1}
 Où le trouver
 Utilisé dans
 Aucune recette connue.
+Utilisé dans 1 recette
 Utilisé dans {0} recettes
 Ajouter à la wishlist ({0} × {1})
 Expérimentaux
@@ -199,6 +283,84 @@ Pas encore rencontré
 Voir le système sur Inara
 Rang max
  Recommandé par {0}
+Ce que valent tes données pas encore vendues, et l'aide aux prélèvements biologiques.
+Analyses à vendre (Vista Genomics)
+Espèce
+Premier pas sur cette planète : le bonus de première découverte multiplie la valeur par 5
+×5 possible
+Aucune analyse en attente. Les espèces analysées (3 prélèvements) s'ajoutent ici jusqu'à leur vente.
+Attention : une destruction fait perdre toutes les analyses non vendues.
+distance minimale entre prélèvements
+du prélèvement le plus proche
+La distance s'affiche quand tu es à la surface (EDCH lit ta position dans Status.json).
+Assez loin : tu peux faire le prélèvement suivant.
+Trop près : éloigne-toi encore de {0} m.
+Signaux biologiques dans {0}
+Premier pas ×5
+Estimation : meilleure espèce possible de chaque genre
+jusqu'à {0} Cr
+Scanne la planète (FSS ou scan détaillé) pour voir les espèces possibles.
+Aucune espèce connue ne correspond : elle est peut-être rare ou de région.
+Espèces possibles d'après le type de planète, l'atmosphère, la gravité, la température et la pression. La région galactique n'est pas vérifiée.
+Données cartographiques à vendre
+Système
+Premières découvertes
+Cartographiés
+Valeur estimée
+Scanné
+Rien à vendre. Les corps scannés (FSS, scan détaillé, cartographie) s'ajoutent ici jusqu'à leur vente à Universal Cartographics.
+Valeurs estimées avec la formule communautaire (à quelques % près), bonus de première découverte et de cartographie compris. Une destruction fait tout perdre.
+Ajoute ta clé API Inara dans Synchro pour voir tous les objectifs en cours.
+Inara : {0}
+Ta participation, lue dans le journal du jeu.
+Aucun objectif communautaire suivi. Inscris-toi à un objectif en jeu (ou ouvre son panneau) : il apparaîtra ici.
+Objectifs passés
+ta contribution
+Top {0} %
+ta tranche de récompense
+Tu es dans le top {0} des contributeurs.
+Se termine {0}
+Total : {0}
+Tous les objectifs en cours
+Via Inara, avec ta clé API (page Synchro).
+Aucun objectif en cours sur Inara.
+Accéder à EDCH hors de chez soi
+Guide pas à pas avec Tailscale
+← Retour à l'accès mobile
+À lire d'abord
+EDCH est conçu pour être utilisé sur ton réseau domestique. Passer par Internet n'est pas son objectif : l'accès à distance via Tailscale est pour l'instant la seule alternative, le temps de développer une solution intégrée à EDCH. Active-le seulement si tu en as besoin.
+Quand est-ce utile ?
+Loin de ton PC : 
+en déplacement ou au travail, tu suis tes missions, ta wishlist ou ton escadrille sur ton téléphone avec les données mobiles.
+Wi-Fi public : 
+à l'hôtel, à la gare ou dans un café, la connexion locale d'EDCH n'est pas chiffrée. Avec Tailscale, tout passe chiffré.
+Jeu dans le cloud : 
+si Elite Dangerous et EDCH tournent sur un PC distant (Shadow, Boosteroid…), ton téléphone n'est pas sur le même réseau. Tailscale relie les deux.
+Réseaux séparés chez toi : 
+Wi-Fi invité, répéteur ou deuxième routeur qui isole le téléphone du PC.
+Tailscale, c'est quoi ?
+Un réseau privé entre tes propres appareils. Chacun reçoit une adresse qui commence par 100. Les connexions sont chiffrées de bout en bout et rien n'est ouvert sur Internet : seuls les appareils connectés à ton compte Tailscale se voient. C'est gratuit pour un usage personnel. Tailscale est un service indépendant d'EDCH.
+Mise en place (10 minutes)
+Crée un compte Tailscale
+Sur tailscale.com, avec ton compte Google, Microsoft, Apple ou GitHub.
+Installe Tailscale sur le PC où tourne EDCH
+Télécharge la version Windows, lance-la et connecte-toi. L'icône Tailscale près de l'horloge doit indiquer « Connected ».
+Installe Tailscale sur ton téléphone
+Depuis le Play Store ou l'App Store. Connecte-toi avec le même compte et accepte l'activation du VPN quand l'appli le demande.
+Active l'option dans EDCH
+Page Accès mobile : active le serveur local, puis coche « Utiliser l'adresse Tailscale dans le QR code et le lien ». L'adresse affichée commence par 100.
+Scanne le QR code
+Avec Tailscale activé sur le téléphone. C'est fait : EDCH s'ouvre en Wi-Fi comme en 4G/5G.
+Ça ne marche pas ?
+« Tailscale n'est pas détecté » : 
+vérifie que Tailscale est connecté sur le PC, puis rouvre la page Accès mobile.
+Le téléphone ne se connecte pas : 
+vérifie que Tailscale est activé sur le téléphone. Dans Windows, ouvre Sécurité Windows → Pare-feu et protection du réseau → Autoriser une application via le pare-feu, puis coche EDCH pour les réseaux privés et publics (Tailscale est parfois classé « public »).
+Le QR code montre une adresse en 192.168… : 
+l'option n'est pas cochée, ou Tailscale n'était pas actif quand la page s'est ouverte.
+Ne partage jamais le QR code ni le lien : ils contiennent le code secret.
+Ne donne pas accès à ton compte Tailscale à d'autres personnes.
+Pour couper l'accès : décoche l'option, désactive le serveur local, ou clique sur « Nouveau code » pour déconnecter tous les appareils.
 Chercher un matériau…  (Ctrl+F)
 Matériaux d'ingénierie
 Possédés
@@ -207,6 +369,124 @@ Données Gardiens / Thargoid
 Gardiens / Thargoid (non échangeables)
 Aucun matériau ne correspond.
  Pas encore d'inventaire : lance Elite Dangerous (ou vérifie le dossier du journal dans les Paramètres). L'inventaire arrive avec l'événement de connexion du jeu.
+A. Lavigny-Duval
+Aisling Duval
+Archon Delaine
+Denton Patreus
+Edmund Mahon
+Felicia Winters
+Jerome Archer
+Li Yong-Rui
+Nakato Kaine
+Pranav Antal
+Yuri Grom
+Zemina Torval
+Low Temperature Diamonds
+Void Opal
+Lithium Hydroxide
+Liquid oxygen
+Hydrogen Peroxide
+Résultats des prospecteurs en direct, et où miner et vendre pour gagner des mérites Powerplay.
+Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Missions → Notifications.
+ Alerte sonore et visuelle
+Dernier astéroïde
+Contenu : {0}
+Restant {0} %
+Précédents
+Lance un drone prospecteur sur un astéroïde : sa composition s'affichera ici.
+Cette session
+t raffinées
+astéroïdes prospectés
+cœurs fracturés
+de minage
+Où miner et vendre dans les systèmes de ta puissance
+Cherche les stations des systèmes contrôlés par la puissance choisie (exploités, fortifiés ou bastions) qui achètent le minerai, triées par prix, et les anneaux avec un point chaud de ce minerai dans ces systèmes. Vendre dans un système de ta puissance des minerais minés dans ce même système rapporte des mérites. Données Spansh.
+Autour de {0}, {1} al max
+Où vendre ({0})
+État
+Point chaud ici
+Aucune station de cette puissance n'achète ces minerais dans le rayon choisi. Augmente la distance dans les Paramètres.
+Points chauds dans ces systèmes
+Points chauds
+Récupération
+{0} / {1} éliminations
+{0} / {1} livrés
+Aucune mission en cours. Les missions acceptées en jeu apparaissent ici, avec leur objectif, leur destination et le temps restant.
+Objectif atteint
+Retourne à 
+Destination : 
+Cible : {0}
+Le moins cher
+Le plus proche
+Prix le plus récent
+ Où le trouver (achat ou minage)
+ Où l'acheter
+ Recherche Spansh…
+bénéfice ≈ {0} Cr
+Aucune station ne vend {0} dans le rayon choisi.
+Points chauds de minage les plus proches
+ {0} al · {1} point(s) chaud(s)
+Partagée automatiquement
+Partagée (mission de l'escadrille)
+Partagée avec l'escadrille
+Ne plus partager
+Partager avec l'escadrille
+Missions de massacre empilées
+Chaque élimination compte pour une mission par faction donneuse : il faut donc autant d'éliminations que la plus grosse pile.
+Faction donneuse
+Éliminations
+Récompense
+Escadrille partagée
+Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Les missions que tu choisis de partager sont envoyées aux autres, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire.
+ Activer le partage
+Code de l'escadrille
+Nouveau code créé : donne-le aux autres membres
+Créer un code
+Nom affiché
+ Prévenir quand un membre a une mission d'escadrille que je n'ai pas
+ Prévenir quand un membre accepte une mission que je partage
+ Prévenir quand toute l'escadrille a accepté une mission
+ Partager automatiquement toutes mes missions d'escadrille
+Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise.
+Connecté
+Acceptée par
+Aucune mission d'escadrille partagée pour l'instant.
+Saisis ou crée un code (au moins 8 caractères) pour rejoindre l'escadrille.
+Pas de fenêtre Windows : un son et/ou la languette sur le bord droit qui clignote. Clique sur la languette pour voir l'aperçu, clique ailleurs pour le refermer.
+Écouter
+Test de notification
+Accès mobile
+Ouvre EDCH sur ton téléphone ou ta tablette, sur le même réseau que ce PC.
+ Cet appareil est connecté à EDCH sur ton PC. Les données se mettent à jour toutes seules.
+Disponible dans l'application (pas en mode démo).
+Serveur local
+Désactivé par défaut. Seuls les appareils qui ont scanné le QR code peuvent ouvrir la page : connaître l'adresse du PC ne suffit pas.
+Scanne avec l'appareil photo
+Active Tailscale sur le téléphone (même compte que sur ce PC). Wi-Fi ou données mobiles, peu importe.
+Connecte le téléphone au même Wi-Fi que ce PC.
+Scanne le QR code : EDCH s'ouvre dans le navigateur et l'appareil reste autorisé.
+Ajoute la page à l'écran d'accueil pour l'ouvrir comme une appli.
+Lien copié : il contient le code secret, ne le partage qu'avec tes appareils
+Copie impossible
+ Copier le lien
+Adresse Tailscale : {0}
+Adresse du PC
+Si le téléphone n'arrive pas à se connecter, essaie une autre adresse (VPN ou carte réseau virtuelle).
+Nouveau code : les appareils connectés doivent rescanner
+Nouveau code
+Accès hors de chez moi
+Avec Tailscale, un réseau privé chiffré entre tes propres appareils, gratuit pour un usage personnel.
+Guide pas à pas
+ Utiliser l'adresse Tailscale dans le QR code et le lien
+Tailscale est actif sur ce PC ({0}).
+Tailscale n'est pas détecté sur ce PC. Suis le guide pour l'installer, puis reviens sur cette page.
+Option cochée mais Tailscale n'est pas actif : le QR code utilise l'adresse locale.
+Bon à savoir
+Windows peut demander d'autoriser EDCH sur le pare-feu : accepte pour les réseaux privés.
+« Nouveau code » déconnecte tous les appareils déjà autorisés.
+La connexion locale n'est pas chiffrée (HTTP) : utilise-la sur ton réseau domestique, pas sur un Wi-Fi public. Hors de chez toi ou sur un Wi-Fi public, passe par Tailscale (chiffré).
+Le lien contient le code secret, comme le QR code : ne le partage qu'avec tes propres appareils.
+Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC.
 Départ
 Indique un départ, une destination et une portée.
 Départ du carrier
@@ -242,7 +522,6 @@ Durée
 Minimum théorique sans boost neutron ; l'itinéraire réel demande un peu plus de sauts.
  Spansh calcule l'itinéraire…
 Étapes
-Système
 Indique le départ et la destination.
  Il manque environ {0} t de tritium (réservoir + soute).
 Le tritium du réservoir et de la soute suffit (estimation).
@@ -257,17 +536,35 @@ Odyssey — casier du vaisseau
  Possédés seulement
  Casier vide ou pas encore lu : il se remplit quand le jeu écrit ShipLocker.json (en jeu, à bord ou à pied).
 Aucune recette
+Tes mérites et l'état Powerplay du système où tu es.
+mérites au total
+mérites cette semaine
+mérites cette session
+Nouveau cycle {0}.
+Tu n'es engagé auprès d'aucune puissance (ou le jeu ne l'a pas encore écrit dans le journal). Engage-toi en jeu, puis reconnecte-toi.
+Système actuel : {0}
+puissance qui contrôle
+état
+progression du contrôle
+Aucune puissance ne contrôle ce système.
+Puissances présentes : 
+Système de ta puissance : renforce-le (commerce, minage, missions, combat) pour gagner des mérites.
+Système d'une autre puissance : tu peux le saper pour gagner des mérites.
 « {0} » copié — colle-le dans la carte galactique
-Copie impossible
+à l'instant
 màj < 1 h
 màj il y a {0} h
 màj il y a {0} j
+Données lues dans ton journal
+Tu es ici · vu {0}
+Tu es ici
+Date de la dernière mise à jour de ce système chez Spansh (données envoyées par les joueurs via EDDN)
 Ouvrir sur {0}
+Relancer la recherche sans le cache (10 min)
 Recherche Spansh…
 Aucun résultat à moins de {0} al.
  Augmente la distance dans les Paramètres.
 {0} systèmes correspondent
-Réessayer
 Asteroid base
 Coriolis Starport
 Dodec Starport
@@ -294,12 +591,11 @@ Recherche et sauvetage
 Pioneer Supplies
 Apex Interstellar
 Frontline Solutions
-Autour de {0}, {1} al max
 Acheter une marchandise
 Vendre une marchandise
-Marchandise (ex. Tritium, Gold, Low Temperature Diamonds)
+Marchandise (ex. Tritium, Or, Diamants basse température)
 Vaisseau (ex. Krait MkII, Anaconda)
-Module (ex. Frame Shift Drive, Shield Booster)
+Module (ex. Réacteur FSD, Survolteur de bouclier)
 Toute classe
 Toute note
 Pad L seulement
@@ -307,7 +603,6 @@ Inclure les Fleet Carriers
 Inclure les ports planétaires
 Trier par prix le plus bas
 Trier par meilleur prix
- Recherche Spansh…
 Rien trouvé à moins de {0} al. Augmente la distance dans les Paramètres ou vérifie le nom.
 {0} stations correspondent · {1} affichées
 Prix d'achat · stock
@@ -317,6 +612,19 @@ Pad / arrivée
 Màj
 En vente
 Ouvrir sur Inara
+Obligations de combat
+Commerce (bénéfice)
+Bilan de session
+Depuis le lancement du jeu, {0} ({1})
+Lance Elite Dangerous : le bilan démarre à la connexion.
+Crédits gagnés
+≈ {0} Cr par heure
+Activité
+al parcourues
+missions terminées
+éliminations
+matériaux ramassés
+t minées
 Lecture en direct : {0}
 En attente du jeu…
 Erreur : {0}
@@ -324,7 +632,7 @@ Mode démo (navigateur) : journal d'exemple
 Lecture arrêtée
 C:\Users\…\Saved Games\Frontier Developments\Elite Dangerous
 Langue de l'interface
-Les noms des matériaux, modules et commandes restent ceux du jeu en anglais.
+Les noms des matériaux, modules et effets suivent la traduction du jeu ; les noms des commandes restent ceux du jeu en anglais.
 Journal du jeu
 Dossier du journal
 Détecter
@@ -333,17 +641,22 @@ Enregistrer et lire
 Recherche de systèmes (Spansh)
 Distance max (al)
 Rayon de recherche autour de ta position.
-Population min. pour les HGE
+Population min. pour les émissions d'intensité élevée
 « Haute population » : 1 000 000 par défaut.
 Données BGS max. (jours)
 Ignore les états de faction plus vieux (Boom, Guerre…). 0 = pas de limite.
 Système de repli
 Utilisé tant que le jeu n'a pas donné ta position.
  Traders avec pad L seulement
-À propos
-EDCH lit le journal local d'Elite Dangerous en temps réel. Les systèmes proposés viennent de 
- (données EDDN, mises à jour par les joueurs).
-Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel, non commercial.
+Mises à jour
+Version installée : {0}
+ Vérifier automatiquement les nouvelles versions sur GitHub
+Vérifier maintenant
+Choisis un thème ou tes propres couleurs. Le téléphone connecté utilise les mêmes réglages.
+Couleur principale
+Couleur secondaire
+ Mode OLED : fond noir pur (économise la batterie des écrans OLED)
+Rétablir les couleurs d'origine
 Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services.
 EDDN — réseau de données communautaire
 Envoie marchés, équipements, chantiers navals, systèmes et scans visités. C'est ce qui alimente Spansh, Inara et EDSM pour tout le monde (et les recherches de cette appli).
@@ -359,8 +672,6 @@ Met à jour ta position, ton vaisseau, tes matériaux et tes ingénieurs sur Ina
 Clé API Inara personnelle
 Inara → Paramètres → API key. Inara peut demander d'accepter une nouvelle appli avant d'enregistrer ses données : le journal ci-dessous affichera sa réponse.
 Ouvrir la page de clé API Inara
-Activité
-Disponible dans l'application (pas en mode démo).
 {0} échec(s)
 Rien envoyé pour l'instant : ça démarre avec les prochains événements du jeu (saut, amarrage, marché…).
 Ajouté à la wishlist : {0} — {1}

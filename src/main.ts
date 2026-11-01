@@ -7,6 +7,8 @@ import { Uploaders } from "./uploaders.js";
 import { detectRemote, remoteLanguage, runRemoteClient, setupRemoteHost } from "./remote.js";
 import { MobileView } from "./views/mobile.js";
 import { AboutView } from "./views/about.js";
+import { RemoteGuideView } from "./views/guide.js";
+import { applyTheme } from "./theme.js";
 import { MissionsView } from "./views/missions.js";
 import { ColonisationView } from "./views/colonisation.js";
 import { GoalsView } from "./views/goals.js";
@@ -127,6 +129,7 @@ async function boot() {
     controls: new ControlsView(ctx),
     mobile: new MobileView(ctx),
     about: new AboutView(ctx),
+    "guide-remote": new RemoteGuideView(ctx),
     missions: new MissionsView(ctx),
     colonisation: new ColonisationView(ctx),
     goals: new GoalsView(ctx),
@@ -165,6 +168,8 @@ async function boot() {
     }
     detail.update();
   };
+  applyTheme(store.state.settings.theme);
+  store.subscribe((st) => applyTheme(st.settings.theme));
   store.subscribe(render);
   render();
 

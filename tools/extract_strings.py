@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-FILES = ["main.ts", "context.ts", "data.ts", "sources.ts", "spansh.ts", "uploaders.ts", "bridge.ts", "binds.ts", "live.ts", "notifier.ts", "time.ts", "wing.ts", "updater.ts", "remote.ts"] + [
+FILES = ["main.ts", "context.ts", "data.ts", "sources.ts", "spansh.ts", "uploaders.ts", "bridge.ts", "binds.ts", "live.ts", "notifier.ts", "time.ts", "wing.ts", "updater.ts", "remote.ts", "theme.ts"] + [
     f"views/{p.name}" for p in sorted((ROOT / "src" / "views").glob("*.ts"))
 ]
 FRENCH = re.compile(r"[a-zàâçéèêëîïôûùüÿœ]{2,}", re.I)

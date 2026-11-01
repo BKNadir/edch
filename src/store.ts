@@ -1,3 +1,4 @@
+import { DEFAULT_THEME, type ThemeSettings } from "./theme.js";
 import { emptyActivity, type ActivityState } from "./activity.js";
 import type { Game } from "./data.js";
 import { emptyState, type CommanderState } from "./journal.js";
@@ -25,6 +26,7 @@ export interface Settings {
   notify: NotifySettings;
   wing: WingSettings;
   mining: MiningSettings;
+  theme: ThemeSettings;
 }
 
 export interface NotifySettings {
@@ -84,9 +86,11 @@ export interface RemoteSettings {
   token: string;
   /** Address put in the QR code; "" = first detected LAN address. */
   host: string;
+  /** Put the Tailscale address in the QR code and the link (access from anywhere). */
+  tailscale: boolean;
 }
 
-export const DEFAULT_REMOTE: RemoteSettings = { enabled: false, port: 47800, token: "", host: "" };
+export const DEFAULT_REMOTE: RemoteSettings = { enabled: false, port: 47800, token: "", host: "", tailscale: false };
 
 export function newRemoteToken(): string {
   const bytes = new Uint8Array(24);
@@ -132,6 +136,7 @@ const DEFAULT_SETTINGS: Settings = {
   notify: DEFAULT_NOTIFY,
   wing: DEFAULT_WING,
   mining: DEFAULT_MINING,
+  theme: DEFAULT_THEME,
 };
 
 function load<T>(key: string, fallback: T): T {
@@ -183,6 +188,7 @@ export class Store {
           notify: { ...DEFAULT_NOTIFY, ...(loaded.notify ?? {}) },
           wing: { ...DEFAULT_WING, ...(loaded.wing ?? {}) },
           mining: { ...DEFAULT_MINING, ...(loaded.mining ?? {}) },
+          theme: { ...DEFAULT_THEME, ...(loaded.theme ?? {}) },
         };
       })(),
       wishlist: loadArray<WishItem>("edc.wishlist"),

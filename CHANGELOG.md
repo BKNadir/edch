@@ -3,6 +3,13 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.0
+
+- The current ship is detected as soon as you change it (shipyard swap, new ship, rename), instead of keeping the previous ship's name until a restart.
+- Settings → Appearance: colour themes (Elite, Blue, Green, Purple, Red, High contrast), your own colours, a global OLED mode (pure black) and a button to restore the original colours. The phone follows the PC, and a change made on the phone is saved on the PC.
+- Mobile access shows the link next to the QR code, with a copy button.
+- Access away from home with Tailscale: EDCH detects it and can put its address in the QR code and the link. A step-by-step guide explains when it's useful (mobile data, public Wi-Fi, cloud gaming) and how to set it up. Remote access isn't EDCH's main purpose: Tailscale is the only option for now, while a built-in solution is developed.
+
 ## 0.7.3
 
 - Search results show "You are here" on the system you're in, with how long ago your journal saw it, next to the date of Spansh's data.

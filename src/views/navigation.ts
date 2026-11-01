@@ -146,7 +146,7 @@ export class NavigationView implements View {
   update() {
     if (!this.root) return;
     const cmdr = this.ctx.store.state.cmdr;
-    const sig = JSON.stringify([cmdr.loadout?.ship, cmdr.loadout?.maxJumpRange, cmdr.loadout?.unladenMass, cmdr.fuel?.main, cmdr.cargoMass, this.cargo]);
+    const sig = JSON.stringify([cmdr.ship?.type, cmdr.ship?.name, cmdr.loadout?.shipId, cmdr.loadout?.ship, cmdr.loadout?.maxJumpRange, cmdr.loadout?.unladenMass, cmdr.fuel?.main, cmdr.cargoMass, this.cargo]);
     if (sig === this.signature) return;
     this.signature = sig;
     const l = cmdr.loadout;

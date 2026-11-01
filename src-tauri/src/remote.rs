@@ -270,7 +270,7 @@ pub fn remote_addresses() -> Vec<String> {
             if sock.connect(target).is_ok() {
                 if let Ok(addr) = sock.local_addr() {
                     let ip = addr.ip();
-                    if !ip.is_loopback() && !ip.is_unspecified() {
+                    if !ip.is_loopback() && !ip.is_unspecified() && !is_tailscale(&ip) {
                         let s = ip.to_string();
                         if !out.contains(&s) {
                             out.push(s);
@@ -281,6 +281,27 @@ pub fn remote_addresses() -> Vec<String> {
         }
     }
     out
+}
+
+/// Tailscale gives every device an address in 100.64.0.0/10 (CGNAT range).
+fn is_tailscale(ip: &std::net::IpAddr) -> bool {
+    match ip {
+        std::net::IpAddr::V4(v4) => {
+            let o = v4.octets();
+            o[0] == 100 && (o[1] & 0xC0) == 64
+        }
+        std::net::IpAddr::V6(_) => false,
+    }
+}
+
+/// This PC's Tailscale address, if Tailscale is running. 100.100.100.100 is Tailscale's own
+/// resolver: only the Tailscale interface routes to it, so the socket picks that interface.
+#[tauri::command]
+pub fn remote_tailscale() -> Option<String> {
+    let sock = UdpSocket::bind("0.0.0.0:0").ok()?;
+    sock.connect("100.100.100.100:53").ok()?;
+    let ip = sock.local_addr().ok()?.ip();
+    is_tailscale(&ip).then(|| ip.to_string())
 }
 
 #[tauri::command]

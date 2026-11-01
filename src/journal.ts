@@ -81,7 +81,7 @@ export interface CarrierInfo {
 export interface CommanderState {
   commander?: string;
   fid?: string;
-  ship?: { type: string; name?: string; ident?: string };
+  ship?: { type: string; name?: string; ident?: string; symbol?: string; id?: number };
   location?: LocationInfo;
   /** Ship materials (Raw/Manufactured/Encoded) by lowercase symbol. */
   materials: Record<string, number>;
@@ -182,11 +182,28 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
     case "LoadGame":
       state.commander = ev.Commander ?? state.commander;
       state.fid = ev.FID ?? state.fid;
-      if (ev.Ship) state.ship = { type: ev.Ship_Localised ?? ev.Ship, name: ev.ShipName, ident: ev.ShipIdent };
+      if (ev.Ship) setShip(state, ev.Ship, ev.Ship_Localised, ev.ShipID, ev.ShipName, ev.ShipIdent);
       return true;
 
+    // Changing ship: shown at once, the Loadout that follows fills in the modules.
+    case "ShipyardSwap":
+    case "ShipyardNew":
+      setShip(state, ev.ShipType, ev.ShipType_Localised, ev.ShipID ?? ev.NewShipID);
+      if (state.loadout && state.loadout.shipId !== (ev.ShipID ?? ev.NewShipID)) {
+        state.loadout = undefined;
+        state.engineering = [];
+      }
+      return true;
+
+    case "SetUserShipName":
+      if (state.ship && (state.ship.id === undefined || state.ship.id === ev.ShipID)) {
+        state.ship = { ...state.ship, name: ev.UserShipName, ident: ev.UserShipId };
+        return true;
+      }
+      return false;
+
     case "Loadout":
-      state.ship = { type: ev.Ship_Localised ?? state.ship?.type ?? ev.Ship, name: ev.ShipName, ident: ev.ShipIdent };
+      setShip(state, ev.Ship, ev.Ship_Localised, ev.ShipID, ev.ShipName, ev.ShipIdent);
       state.engineering = (ev.Modules ?? [])
         .filter((m: Json) => m.Engineering)
         .map((m: Json) => ({
@@ -348,6 +365,39 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
     default:
       return false;
   }
+}
+
+/** Display names of the ships, by journal symbol (the Loadout event has no localised name). */
+const SHIP_NAMES: Record<string, string> = {
+  adder: "Adder", anaconda: "Anaconda", asp: "Asp Explorer", asp_scout: "Asp Scout", belugaliner: "Beluga Liner",
+  cobramkiii: "Cobra Mk III", cobramkiv: "Cobra Mk IV", cobramkv: "Cobra Mk V", corsair: "Corsair", cutter: "Imperial Cutter",
+  diamondback: "Diamondback Scout", diamondbackxl: "Diamondback Explorer", dolphin: "Dolphin", eagle: "Eagle",
+  empire_courier: "Imperial Courier", empire_eagle: "Imperial Eagle", empire_trader: "Imperial Clipper",
+  federation_corvette: "Federal Corvette", federation_dropship: "Federal Dropship", federation_dropship_mkii: "Federal Assault Ship",
+  federation_gunship: "Federal Gunship", ferdelance: "Fer-de-Lance", hauler: "Hauler", independant_trader: "Keelback",
+  krait_light: "Krait Phantom", krait_mkii: "Krait Mk II", mamba: "Mamba", mandalay: "Mandalay", orca: "Orca",
+  panthermkii: "Panther Clipper Mk II", python: "Python", python_nx: "Python Mk II", sidewinder: "Sidewinder",
+  type6: "Type-6 Transporter", type7: "Type-7 Transporter", type8: "Type-8 Transporter", type9: "Type-9 Heavy",
+  type9_military: "Type-10 Defender", typex: "Alliance Chieftain", typex_2: "Alliance Crusader", typex_3: "Alliance Challenger",
+  viper: "Viper Mk III", viper_mkiv: "Viper Mk IV", vulture: "Vulture", explorer_nx: "Caspian Explorer", lakonminer: "Type-11 Prospector",
+};
+
+export function shipName(symbol: string): string {
+  const k = String(symbol ?? "").toLowerCase();
+  return SHIP_NAMES[k] ?? k.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function setShip(state: CommanderState, symbol: string, localised?: string, id?: number, name?: string, ident?: string) {
+  const sym = String(symbol ?? "").toLowerCase();
+  const same = state.ship?.symbol === sym;
+  state.ship = {
+    symbol: sym,
+    // A localised name is only reused for the same ship type, never carried over to the next ship.
+    type: localised ?? (same ? state.ship?.type : undefined) ?? shipName(sym),
+    id: id ?? (same ? state.ship?.id : undefined),
+    name,
+    ident,
+  };
 }
 
 function readLoadout(ev: Json): ShipLoadout {

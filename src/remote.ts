@@ -1,6 +1,7 @@
 // Mobile access. On the PC: start/stop the local server and publish the state to it.
 // On the phone: follow the PC's state and send wishlist edits back.
 
+import { DEFAULT_THEME } from "./theme.js";
 import {
   forgetRemoteToken,
   onRemoteAction,
@@ -10,6 +11,7 @@ import {
   remotePublish,
   remoteStart,
   remoteState,
+  remoteTailscale,
   remoteStop,
   setRemote,
   type RemoteInfo,
@@ -30,10 +32,19 @@ let publishTimer: number | undefined;
 export const remoteRunning = () => running;
 
 /** The URL encoded in the QR code. */
+let tailscaleIp: string | null = null;
+/** Looks for this PC's Tailscale address (called when the Mobile page opens). */
+export async function detectTailscale(): Promise<string | null> {
+  tailscaleIp = await remoteTailscale();
+  return tailscaleIp;
+}
+export const tailscaleAddress = () => tailscaleIp;
+
+/** The URL in the QR code and the link: Tailscale address when chosen and available, else the LAN one. */
 export function pairingUrl(store: Store): string | null {
   const r = store.state.settings.remote;
   if (!running || !r.token) return null;
-  const host = r.host || running.addresses[0] || "localhost";
+  const host = (r.tailscale && tailscaleIp) || r.host || running.addresses[0] || "localhost";
   return `http://${host}:${running.port}/pair?t=${r.token}`;
 }
 
@@ -94,6 +105,9 @@ export async function setupRemoteHost(store: Store) {
   });
   await onRemoteAction((action) => {
     if (action?.type === "wishlist" && Array.isArray(action.items)) store.setWishlist(action.items, true);
+    if (action?.type === "theme" && action.theme && typeof action.theme === "object") {
+      store.updateSettings({ theme: { ...DEFAULT_THEME, ...store.state.settings.theme, ...action.theme } });
+    }
   });
   if (store.state.settings.remote.enabled) {
     try {
@@ -136,6 +150,15 @@ export async function runRemoteClient(store: Store) {
   store.onWishlistChange = (items) => {
     remoteAction({ type: "wishlist", items }).catch(() => toast("PC injoignable : modification non envoyée"));
   };
+  // Appearance changed on the phone: the PC saves it and every screen follows.
+  let sentTheme = "";
+  store.subscribe((st) => {
+    const key = JSON.stringify(st.settings.theme);
+    if (!sentTheme) sentTheme = key;
+    if (key === sentTheme) return;
+    sentTheme = key;
+    remoteAction({ type: "theme", theme: st.settings.theme }).catch(() => undefined);
+  });
   let version = 0;
   for (;;) {
     try {
@@ -151,6 +174,7 @@ export async function runRemoteClient(store: Store) {
         store.state.cmdr = { ...emptyState(), ...s.cmdr };
         store.setWishlist(Array.isArray(s.wishlist) ? s.wishlist : [], true);
         store.state.settings = { ...store.state.settings, ...s.settings };
+        sentTheme = JSON.stringify(store.state.settings.theme);
         if (s.activity) store.state.activity = { ...emptyActivity(), ...s.activity };
         (store.state as unknown as Record<string, unknown>).remoteWing = s.wing ?? null;
       }

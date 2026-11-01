@@ -216,6 +216,8 @@ export const remoteStop = () => invoke<void>("remote_stop");
 export const remotePublish = (state: string) => invoke<void>("remote_publish", { state });
 export const remoteQr = (text: string) => invoke<string>("remote_qr", { text });
 export const remoteAddresses = () => invoke<string[]>("remote_addresses");
+/** This PC's Tailscale address (100.x.y.z), or null when Tailscale isn't running. */
+export const remoteTailscale = () => invoke<string | null>("remote_tailscale").catch(() => null);
 export async function onRemoteAction(cb: (action: any) => void): Promise<void> {
   if (!isTauri()) return;
   await window.__TAURI__!.event.listen<any>("remote-action", (e) => cb(e.payload));

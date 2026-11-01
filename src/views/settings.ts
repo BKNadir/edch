@@ -5,6 +5,7 @@ import { SOFTWARE_VERSION as APP_VERSION } from "../eddn.js";
 import { LANGS, lang, saveLang } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
 import type { Settings } from "../store.js";
+import { DEFAULT_THEME, PRESETS, type ThemeSettings } from "../theme.js";
 
 export class SettingsView implements View {
   private root?: HTMLElement;
@@ -130,6 +131,7 @@ export class SettingsView implements View {
           ),
           h("label.check", null, h("input", { type: "checkbox", checked: s.largePadOnly, onchange: (e: Event) => set({ largePadOnly: (e.target as HTMLInputElement).checked }) }), " Traders avec pad L seulement"),
         ),
+        this.appearance(),
         isTauri()
           ? h(
               "section.card",
@@ -146,6 +148,47 @@ export class SettingsView implements View {
             )
           : null,
       ),
+    );
+  }
+
+  private appearance(): HTMLElement {
+    const t = this.ctx.store.state.settings.theme;
+    const setTheme = (patch: Partial<ThemeSettings>, rerender = true) => {
+      this.ctx.store.updateSettings({ theme: { ...this.ctx.store.state.settings.theme, ...patch } });
+      if (rerender) this.render();
+    };
+    const picker = (label: string, key: "accent" | "cyan" | "bg") =>
+      h(
+        "label",
+        null,
+        h("input", { type: "color", value: t[key], oninput: (e: Event) => setTheme({ [key]: (e.target as HTMLInputElement).value, preset: "custom" }, false), onchange: () => this.render() }),
+        h("span", null, label),
+      );
+    return h(
+      "section.card",
+      null,
+      h("h3", null, "Apparence"),
+      h("p.sub", null, "Choisis un thème ou tes propres couleurs. Le téléphone connecté utilise les mêmes réglages."),
+      h(
+        "div.theme-presets",
+        null,
+        PRESETS.map((p) =>
+          h(
+            `button.theme-preset${t.preset === p.id ? ".on" : ""}`,
+            { onclick: () => setTheme({ preset: p.id, accent: p.accent, cyan: p.cyan, bg: p.bg }) },
+            h("span.theme-swatch", null, h("i", { style: { background: p.accent } }), h("i", { style: { background: p.cyan } }), h("i", { style: { background: p.bg } })),
+            p.label,
+          ),
+        ),
+      ),
+      h("div.theme-colors", null, picker("Couleur principale", "accent"), picker("Couleur secondaire", "cyan"), picker("Fond", "bg")),
+      h(
+        "label.check",
+        null,
+        h("input", { type: "checkbox", checked: t.oled, onchange: (e: Event) => setTheme({ oled: (e.target as HTMLInputElement).checked }) }),
+        " Mode OLED : fond noir pur (économise la batterie des écrans OLED)",
+      ),
+      h("div.row", null, h("button.ghost", { onclick: () => setTheme({ ...DEFAULT_THEME }) }, "Rétablir les couleurs d'origine")),
     );
   }
 }

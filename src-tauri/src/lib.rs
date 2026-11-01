@@ -705,6 +705,7 @@ pub fn run() {
             remote::remote_publish,
             remote::remote_qr,
             remote::remote_addresses,
+            remote::remote_tailscale,
             update::update_check,
             update::update_download,
             update::update_install
