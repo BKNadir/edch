@@ -1,7 +1,7 @@
 {
   "name": "edch",
   "private": true,
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Elite Dangerous companion: live journal, materials, engineering and where to find everything",
   "type": "module",
   "scripts": {
