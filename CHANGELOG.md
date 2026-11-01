@@ -7,6 +7,8 @@ and EDCH shows it in the update banner.
 
 - The Windows installer now shows what EDCH sends and to whom (Spansh, EDSM, EDDN, Inara, ntfy, GitHub) and how to turn each one off, followed by the MIT licence.
 - New code signing policy page with the privacy policy, linked from the README, ahead of free code signing by the SignPath Foundation (application in progress). Signed builds will stop Windows Defender from wrongly flagging the installer.
+- The loading spinner showed as a thin line in some places (engineer tour, searches): it is round again everywhere.
+- Phones: the Controls page no longer runs past the right edge (search bar, notices), and the Mining search form wraps instead of being cut off.
 
 ## 0.10.1
 

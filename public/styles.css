@@ -195,7 +195,7 @@ button.link { background: none; border: 1px solid var(--line-2); color: var(--mu
 button.link .icon { width: 11px; height: 11px; }
 button.link:hover { color: var(--text); border-color: var(--muted); }
 .age { font-size: 11px; }
-.spinner { width: 12px; height: 12px; border: 2px solid var(--line-2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+.spinner { display: inline-block; vertical-align: -2px; flex: none; box-sizing: border-box; width: 12px; height: 12px; border: 2px solid var(--line-2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .used { padding-top: 14px; }
@@ -577,7 +577,7 @@ kbd.num b { display: inline-grid; place-items: center; width: 18px; height: 18px
   .controls-bar { flex-direction: column; align-items: stretch; }
   .controls-bar .search { width: 100%; }
   .tpl-picker { margin-left: 0; width: 100%; }
-  .tpl-picker select { max-width: none; flex: 1; }
+  .tpl-picker select { max-width: 100%; min-width: 0; width: 0; flex: 1; }
   .hat { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .axis-row { grid-template-columns: 80px 1fr; }
   .axis-row .axis-bar { display: none; }
@@ -848,3 +848,13 @@ body.focus-mode .focus-exit { display: inline-flex; }
 .tour-route li { display: flex; gap: 8px; align-items: center; }
 .tour-route li.stop { font-weight: 600; }
 .tour-route li.here .sys { color: var(--accent); }
+
+/* Phones: rows of controls wrap instead of pushing the page wider. */
+@media (max-width: 760px) {
+  .row { flex-wrap: wrap; }
+  .row > select, .row > input { min-width: 0; max-width: 100%; }
+  .segmented, .controls-bar > * { min-width: 0; }
+}
+/* The Controls page grid must not grow to its widest content (phones). */
+.controls-body { grid-template-columns: minmax(0, 1fr); }
+.controls-body > * { min-width: 0; }
