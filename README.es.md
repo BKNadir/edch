@@ -100,7 +100,7 @@ Estructura:
   - `i18n.ts`: capa de traducción.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneran los datos de `public/` (ver NOTICE).
 
-Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.8.9`: se publica la Release y las copias instaladas ofrecen la actualización.
+Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.9.0`: se publica la Release y las copias instaladas ofrecen la actualización.
 
 ## Hoja de ruta
 

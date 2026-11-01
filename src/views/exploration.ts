@@ -4,6 +4,9 @@ import { colonyDistance, possibleSpecies, speciesValue } from "../exobio.js";
 import { credits, relTime } from "../time.js";
 import type { Ctx, View } from "../context.js";
 import { busy, sys } from "./missions.js";
+import { openUrl } from "../bridge.js";
+import { icon } from "../dom.js";
+import { edsmCached, edsmSystem, edsmSystemUrl, type EdsmSystem } from "../edsm.js";
 
 type Tab = "bio" | "carto";
 
@@ -170,11 +173,74 @@ export class ExplorationView implements View {
 
   // ---------- cartography ----------
 
+  /** The system you are in, as EDSM knows it: who was here first, what is worth scanning. */
+  private edsmCard(): HTMLElement | null {
+    const system = this.ctx.store.state.cmdr.location?.system;
+    if (!system) return null;
+    const data = edsmCached(system);
+    const failedRecently = this.edsmError.startsWith(`${system}:`) && Date.now() - this.edsmFailedAt < 2 * 60 * 1000;
+    if ((!data || Date.now() - data.fetched > 10 * 60 * 1000) && !failedRecently) {
+      edsmSystem(system)
+        .then(() => {
+          if (!busy(this.root)) this.render();
+        })
+        .catch((e) => {
+          this.edsmError = `${system}: ${String((e as Error)?.message ?? e)}`;
+          this.edsmFailedAt = Date.now();
+          if (!busy(this.root)) this.render();
+        });
+    }
+    const head = h(
+      "div.sync-head",
+      null,
+      h("h3", null, "Système actuel sur EDSM"),
+      h("button.link", { title: "Ouvrir la page du système sur EDSM", onclick: () => openUrl(edsmSystemUrl(system)) }, "EDSM", icon("link")),
+    );
+    if (!data) {
+      const err = this.edsmError?.startsWith(`${system}:`) ? this.edsmError.slice(system.length + 2) : "";
+      return h("section.card.edsm", null, head, sys(system), err ? h("p.sub", null, `EDSM indisponible : ${err}`) : h("p.sub", null, h("span.spinner"), " Recherche sur EDSM…"));
+    }
+    return h("section.card.edsm", null, head, sys(system), ...this.edsmBody(data));
+  }
+  private edsmError = "";
+  private edsmFailedAt = 0;
+
+  private edsmBody(d: EdsmSystem): (HTMLElement | null)[] {
+    if (d.unknown) return [h("p", null, h("span.badge.hit", null, "Inconnu d'EDSM"), " Personne n'a encore envoyé ce système à EDSM : tu es peut-être le premier à l'explorer.")];
+    const firsts = new Map<string, number>();
+    for (const b of d.bodies) if (b.discoveredBy) firsts.set(b.discoveredBy, (firsts.get(b.discoveredBy) ?? 0) + 1);
+    const star = d.bodies.find((b) => b.type === "Star" && (b.distance ?? 0) === 0) ?? d.bodies.find((b) => b.type === "Star");
+    return [
+      h(
+        "div.stats",
+        null,
+        h("div.stat", null, h("strong", null, d.bodyCount ? `${fmt(d.bodies.length)} / ${fmt(d.bodyCount)}` : fmt(d.bodies.length)), h("span.sub", null, "corps connus d'EDSM")),
+        d.value !== undefined ? h("div.stat", null, h("strong", null, `${credits(d.value)} Cr`), h("span.sub", null, "valeur estimée (scan)")) : null,
+        d.valueMapped !== undefined ? h("div.stat", null, h("strong", null, `${credits(d.valueMapped)} Cr`), h("span.sub", null, "avec cartographie")) : null,
+      ),
+      star?.discoveredBy ? h("p.sub", null, `Découvert par ${star.discoveredBy}${star.discoveredAt ? ` (${star.discoveredAt.slice(0, 10)})` : ""}`) : h("p.sub", null, "Aucun découvreur connu d'EDSM pour l'étoile principale."),
+      d.bodyCount && d.bodies.length < d.bodyCount ? h("p.sub", null, `${fmt(d.bodyCount - d.bodies.length)} corps jamais envoyés à EDSM.`) : null,
+      d.valuable.length
+        ? h(
+            "table.table",
+            null,
+            h("thead", null, h("tr", null, h("th", null, "Corps intéressants"), h("th.num", null, "Distance"), h("th.num", null, "Valeur max"))),
+            h(
+              "tbody",
+              null,
+              d.valuable.slice(0, 8).map((v) => h("tr", null, h("td", null, v.name), h("td.num", null, v.distance !== undefined ? `${fmt(Math.round(v.distance))} ls` : ""), h("td.num", null, `${credits(v.value)} Cr`))),
+            ),
+          )
+        : null,
+    ];
+  }
+
   private carto(): (HTMLElement | null)[] {
     const a = this.ctx.store.state.activity as typeof this.ctx.store.state.activity & { unsold?: ReturnType<typeof unsoldSummary> };
     const list = a.unsold ?? unsoldSummary(a.bodies, a.unsoldSystems);
     const total = list.reduce((s, x) => s + x.value, 0);
     return [
+      this.edsmCard(),
       h(
         "section.card",
         null,

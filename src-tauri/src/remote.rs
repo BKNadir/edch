@@ -408,7 +408,8 @@ fn list_addresses(detailed: bool) -> Vec<NetAddress> {
         _ => 4,
     };
     out.sort_by_key(rank);
-    crate::logs::debug("remote", &format!("Addresses: {}", out.iter().map(|a| format!("{} {} ({}/{})", a.kind, a.ip, a.network, a.adapter)).collect::<Vec<_>>().join(", ")));
+    // Network and adapter names are not logged (a Wi-Fi name can identify a home).
+    crate::logs::debug("remote", &format!("Addresses: {}", out.iter().map(|a| format!("{} {}{}", a.kind, a.ip, if a.network.is_empty() { "" } else { " (named)" })).collect::<Vec<_>>().join(", ")));
     out
 }
 

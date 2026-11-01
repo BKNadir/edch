@@ -139,7 +139,7 @@ pub fn init(portable: bool) {
 pub fn write(level: &str, source: &str, message: &str) {
     let Some(l) = LOGGER.get() else { return };
     let level = level.to_uppercase();
-    let text = format!("{} [{:<5}] {}: {}\n", line_stamp(), level, source, message.replace('\n', " ⏎ "));
+    let text = format!("{} [{:<5}] {}: {}\n", line_stamp(), level, source, sanitize(&message.replace('\n', " ⏎ ")));
     if level != "DEBUG" {
         if let Ok(mut f) = l.standard.lock() {
             if let Some(f) = f.as_mut() {
@@ -182,6 +182,93 @@ pub fn debug(source: &str, message: &str) {
 }
 pub fn debug_enabled() -> bool {
     LOGGER.get().is_some_and(|l| l.debug_on.load(Ordering::Relaxed))
+}
+
+/// Removes private information from every log line, whatever wrote it, so a log can be
+/// attached to a public bug report:
+/// - the Windows user folder and user name (`C:\Users\name\…` → `%USERPROFILE%\…`);
+/// - IP addresses (local network, Tailscale, the phone's): `192.168.x.x`;
+/// - long hexadecimal or random-looking tokens (pairing code, wing topic, keys): `***`;
+/// - Frontier ids (`F12345678`): `F***`.
+/// API keys never reach a log in the first place (URLs go through `redact`, bodies aren't logged).
+pub fn sanitize(text: &str) -> String {
+    let mut out = text.to_string();
+    // User folder first (longest), then the bare user name.
+    let mut homes: Vec<String> = ["USERPROFILE", "HOME"].iter().filter_map(|v| std::env::var(v).ok()).filter(|h| h.len() > 3).collect();
+    homes.sort_by_key(|h| std::cmp::Reverse(h.len()));
+    for home in homes {
+        out = replace_ci(&out, &home, "%USERPROFILE%");
+        out = replace_ci(&out, &home.replace('\\', "/"), "%USERPROFILE%");
+    }
+    if let Ok(user) = std::env::var("USERNAME").or_else(|_| std::env::var("USER")) {
+        if user.len() >= 3 {
+            out = replace_ci(&out, &format!("\\{user}\\"), "\\%USERNAME%\\");
+            out = replace_ci(&out, &format!("/{user}/"), "/%USERNAME%/");
+        }
+    }
+    mask_tokens(&out)
+}
+
+fn replace_ci(text: &str, needle: &str, with: &str) -> String {
+    if needle.is_empty() {
+        return text.to_string();
+    }
+    let lower = text.to_lowercase();
+    let n = needle.to_lowercase();
+    // Only when lowercasing keeps byte offsets (ASCII paths); otherwise an exact match.
+    if lower.len() != text.len() {
+        return text.replace(needle, with);
+    }
+    let mut out = String::with_capacity(text.len());
+    let mut i = 0;
+    while let Some(pos) = lower[i..].find(&n) {
+        out.push_str(&text[i..i + pos]);
+        out.push_str(with);
+        i += pos + n.len();
+    }
+    out.push_str(&text[i..]);
+    out
+}
+
+/// Masks IPv4 addresses, long hex/alphanumeric tokens and Frontier ids, word by word.
+fn mask_tokens(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut word = String::new();
+    let flush = |word: &mut String, out: &mut String| {
+        out.push_str(&mask_word(word));
+        word.clear();
+    };
+    for ch in text.chars() {
+        if ch.is_ascii_alphanumeric() || ch == '.' || ch == '_' {
+            word.push(ch);
+        } else {
+            flush(&mut word, &mut out);
+            out.push(ch);
+        }
+    }
+    flush(&mut word, &mut out);
+    out
+}
+
+fn mask_word(word: &str) -> String {
+    // IPv4 (possibly followed by a sentence's full stop).
+    let trimmed = word.trim_end_matches('.');
+    let parts: Vec<&str> = trimmed.split('.').collect();
+    if parts.len() == 4 && parts.iter().all(|p| !p.is_empty() && p.len() <= 3 && p.chars().all(|c| c.is_ascii_digit())) {
+        return format!("{}.{}.x.x{}", parts[0], parts[1], &word[trimmed.len()..]);
+    }
+    // Frontier id: F followed by 6+ digits.
+    if word.len() >= 7 && word.starts_with('F') && word[1..].chars().all(|c| c.is_ascii_digit()) {
+        return "F***".into();
+    }
+    // Secrets: 24+ characters of hex, or 24+ mixed letters and digits (pairing code, wing topic…).
+    let core = word.trim_start_matches("edch_");
+    let hexish = core.len() >= 24 && core.chars().all(|c| c.is_ascii_hexdigit());
+    let tokenish = core.len() >= 24 && core.chars().all(|c| c.is_ascii_alphanumeric()) && core.chars().any(|c| c.is_ascii_digit()) && core.chars().any(|c| c.is_ascii_alphabetic());
+    if hexish || tokenish {
+        return format!("{}***", &word[..word.len() - core.len()]);
+    }
+    word.to_string()
 }
 
 /// Hides secrets in URLs before they reach a log (API keys, tokens).
@@ -260,6 +347,17 @@ mod tests {
         assert_eq!(civil(0), (1970, 1, 1, 0, 0, 0));
         assert_eq!(civil(1_793_523_749), (2026, 11, 1, 9, 2, 29));
         assert_eq!(civil(951_782_400), (2000, 2, 29, 0, 0, 0));
+    }
+
+    #[test]
+    fn private_data_is_removed() {
+        use super::sanitize;
+        assert_eq!(sanitize("from 192.168.50.200 and 100.113.82.26."), "from 192.168.x.x and 100.113.x.x.");
+        assert_eq!(sanitize("GET https://ntfy.sh/edch_0e143513d9dc2a6934d0fb36a28bb6ae/json?poll=1"), "GET https://ntfy.sh/edch_***/json?poll=1");
+        assert_eq!(sanitize("pair?t=8fa8ba55c0934d4e2895683173ca68f66eb5e35c05a8312d"), "pair?t=***");
+        assert_eq!(sanitize("FID F13288383 ok"), "FID F*** ok");
+        assert_eq!(sanitize("EDCH 0.8.9 (installed) MissionID=1070079228"), "EDCH 0.8.9 (installed) MissionID=1070079228");
+        assert_eq!(sanitize("Journal.2026-11-01T080133.01.log"), "Journal.2026-11-01T080133.01.log");
     }
 
     #[test]

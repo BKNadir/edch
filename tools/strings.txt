@@ -150,7 +150,7 @@ EDDN (EDCD)
 Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
 EDCD / FDevIDs
 Les identifiants et noms officiels du jeu
-Synchronisation de ton journal de vol
+Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)
 Synchronisation de ton profil de commandant
 EDEngineer (msarilar)
 Recettes d'ingénierie, origines des matériaux et une partie des traductions
@@ -174,9 +174,8 @@ EDCH — Elite Dangerous Companion Helper
 Un compagnon léger pour Elite Dangerous : inventaire en direct, où trouver chaque matériau, ingénieurs, recherches, navigation, commandes et synchro.
 Liens utiles
 Code source :
-Signaler un bug ou proposer une idée :
+Proposer une idée :
 ouvrir une issue
-Indique ta version d'EDCH, ce que tu faisais et ce qui s'est passé. Une capture d'écran aide beaucoup.
 Nouveautés de chaque version :
 À savoir
 EDCH ne remplace pas les autres outils de la communauté. C'est un projet indépendant, sans lien avec les projets cités ci-dessous ni avec Frontier Developments.
@@ -186,9 +185,25 @@ Merci à eux 🙏
 EDCH ne fonctionnerait pas sans ces projets, créés et maintenus par des membres de la communauté. Merci à chacun d'eux. S'ils te sont utiles, pense à les soutenir.
 Elite Dangerous est une marque de Frontier Developments plc. Les noms et données du jeu leur appartiennent.
 Licences et détails : 
+Signaler un bug
+Les bugs se signalent sur GitHub, avec le log debug : c'est lui qui permet de comprendre ce qui s'est passé.
+Paramètres → Logs de l'application : coche « Mode debug ».
+Refais ce qui pose problème.
+Ouvre le dossier des logs et prends le fichier « edch-debug_… » le plus récent (et « edch-error_… » s'il y en a un).
+Ouvre une issue sur GitHub : explique ce que tu faisais et ce qui s'est passé, puis glisse le fichier dans le message.
+Décoche ensuite le mode debug : le fichier grossit vite.
+Impossible d'ouvrir le dossier : {0}
+Ouvrir le dossier des logs
+ Ouvrir une issue sur GitHub
+Ce que contient un log (et ce qu'il ne contient jamais)
+Jamais : tes clés API (EDSM, Inara), le code du QR code, le code d'escadrille, ton nom d'utilisateur Windows ni le chemin de ton dossier personnel, tes adresses IP complètes, le nom de ton Wi-Fi, ni le texte que tu tapes. EDCH les retire automatiquement de chaque ligne, avant l'écriture.
+Oui : la version d'EDCH, les pages ouvertes et les boutons cliqués, les erreurs, les événements du jeu (systèmes, stations, missions, marchandises), et les noms de commandant (le tien et ceux de ton escadrille).
+Un log est un simple fichier texte : tu peux le relire, et retirer ce que tu ne veux pas partager, avant de l'envoyer. Une issue GitHub est publique.
 inconnu de Spansh
 Chantiers de construction suivis depuis ton journal : ce qu'il reste à livrer, ta soute, les trajets et où acheter.
  Afficher les chantiers terminés
+Page en cours de développement
+Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit pas le contenu d'un fleet carrier dans le journal : sa soute est une estimation, complétée par le marché vu par Spansh. Une connexion à l'API de Frontier, qui donne la soute complète de ton carrier, est prévue.
 Aucun chantier en cours. Docke à un dépôt de construction (Colonisation) : EDCH lira la liste des marchandises demandées.
  Marché du carrier sur Spansh…
 Marché sur Spansh : {0}
@@ -332,6 +347,19 @@ jusqu'à {0} Cr
 Scanne la planète (FSS ou scan détaillé) pour voir les espèces possibles.
 Aucune espèce connue ne correspond : elle est peut-être rare ou de région.
 Espèces possibles d'après le type de planète, l'atmosphère, la gravité, la température et la pression. La région galactique n'est pas vérifiée.
+Système actuel sur EDSM
+Ouvrir la page du système sur EDSM
+EDSM indisponible : {0}
+ Recherche sur EDSM…
+Inconnu d'EDSM
+ Personne n'a encore envoyé ce système à EDSM : tu es peut-être le premier à l'explorer.
+valeur estimée (scan)
+avec cartographie
+Découvert par {0}{1}
+Aucun découvreur connu d'EDSM pour l'étoile principale.
+{0} corps jamais envoyés à EDSM.
+Corps intéressants
+Valeur max
 Données cartographiques à vendre
 Système
 Premières découvertes
@@ -444,7 +472,6 @@ Récupération
 EDCH fermé
 a quitté l'escadrille
 partage arrêté
-Page en cours de développement
 Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit rien dans le journal quand une mission est partagée ou reçue en escadrille, donc le suivi des missions partagées reste approximatif.
 Aucune mission en cours. Les missions acceptées en jeu apparaissent ici, avec leur objectif, leur destination et le temps restant.
 Objectif atteint
@@ -695,9 +722,8 @@ Logs de l'application
 EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés.
  Mode debug : enregistre aussi un log détaillé, dans un fichier séparé
 Le log debug contient tout : le log standard, les erreurs, et chaque action (clics, réglages modifiés, pages ouvertes, échanges avec le jeu et les services). Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API et le texte tapé ne sont jamais écrits dans les logs.
-Impossible d'ouvrir le dossier : {0}
-Ouvrir le dossier des logs
 Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services.
+Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Inara n'a pas encore validé EDCH : ses envois sont refusés pour l'instant et EDCH les met en pause. EDDN et EDSM fonctionnent.
 EDDN — réseau de données communautaire
 Envoie marchés, équipements, chantiers navals, systèmes et scans visités. C'est ce qui alimente Spansh, Inara et EDSM pour tout le monde (et les recherches de cette appli).
 Aucun compte requis. Rien de personnel n'est envoyé : ton nom de CMDR est haché par EDDN, tes amendes, réputations et carburant sont retirés. Seuls les événements en direct sont envoyés, jamais l'historique.

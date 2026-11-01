@@ -3,6 +3,13 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.0
+
+- Exploration → Cartography: what EDSM knows about the system you're in: bodies already reported (and how many were never sent), who discovered the main star, the estimated value with and without mapping, and the most valuable bodies. A system EDSM has never seen is flagged: you may be the first.
+- About: a "Report a bug" section with the steps (debug mode, logs folder, GitHub issue pre-filled with your version) and exactly what a log contains and never contains.
+- Logs are cleaned automatically, on every line and in every file: no Windows user name or personal folder path, no full IP addresses, no Wi-Fi name, no pairing or wing codes, no long tokens or Frontier ids. API keys and typed text were already never written.
+- Colonisation and Synchronisation say they're still in development, like Missions (carrier holds are estimates until the Frontier API connection; Inara hasn't approved EDCH yet).
+
 ## 0.8.9
 
 - Colonisation: each carrier (yours and your squadron's) also shows its market as Spansh last saw it, what it sells with its stock and what it buys, with the data's age. EDCH checks again every 5 minutes while the page is open. The "Carriers" column uses the higher of the journal estimate and the stock on sale.

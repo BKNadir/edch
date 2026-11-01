@@ -1,5 +1,5 @@
 import type { CarrierHold, Depot } from "../activity.js";
-import { fmt, h, icon, replace } from "../dom.js";
+import { callout, fmt, h, icon, replace } from "../dom.js";
 import { gameName } from "../i18n.js";
 import { relTime } from "../time.js";
 import type { Ctx, View } from "../context.js";
@@ -113,6 +113,11 @@ export class ColonisationView implements View {
         all.some((d) => d.complete || d.failed)
           ? h("label.check", null, h("input", { type: "checkbox", checked: this.showDone, onchange: (e: Event) => ((this.showDone = (e.target as HTMLInputElement).checked), this.render()) }), " Afficher les chantiers terminés")
           : null,
+      ),
+      callout(
+        "info",
+        "Page en cours de développement",
+        "Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit pas le contenu d'un fleet carrier dans le journal : sa soute est une estimation, complétée par le marché vu par Spansh. Une connexion à l'API de Frontier, qui donne la soute complète de ton carrier, est prévue.",
       ),
       this.holds(shown, capacity),
       shown.length
