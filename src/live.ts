@@ -3,6 +3,7 @@
 import { applyActivity, emptyActivity, HISTORY_DAYS, HISTORY_EVENTS, type Mission } from "./activity.js";
 import { isRemote, scanHistory } from "./bridge.js";
 import { h } from "./dom.js";
+import { log } from "./logger.js";
 import { gameName } from "./i18n.js";
 import { mountSideTab, notify, recentAlerts, refresh as refreshTab } from "./notifier.js";
 import type { Store } from "./store.js";
@@ -81,13 +82,17 @@ export async function syncWing() {
   const s = store.state.settings.wing;
   const want = s.enabled && s.code.trim().length >= 8 ? s.code : "";
   if (want === linkCode) return;
-  if (link) await link.stop();
+  if (link) {
+    log.info("wing", "Wing link stopped");
+    await link.stop();
+  }
   link = null;
   linkCode = want;
   if (!want) {
     store.notify();
     return;
   }
+  log.info("wing", "Wing link started");
   link = new WingLink(want, wingMe, {
     newMission: (row, by) => {
       if (store.state.settings.wing.notifyNew) notify(`${by} : nouvelle mission d'escadrille « ${row.mission.title} »`);
@@ -200,9 +205,11 @@ export async function loadHistory(dir: string) {
   let lines: string[] = [];
   try {
     lines = await scanHistory(dir, HISTORY_DAYS, HISTORY_EVENTS);
-  } catch {
+  } catch (e) {
+    log.warn("history", `Journal archive unreadable: ${String((e as Error)?.message ?? e)}`);
     return;
   }
+  log.info("history", `${lines.length} archived journal line(s) read`);
   const st = emptyActivity();
   let last = "";
   for (const line of lines) {

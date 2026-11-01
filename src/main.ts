@@ -9,7 +9,7 @@ import { MobileView } from "./views/mobile.js";
 import { AboutView } from "./views/about.js";
 import { RemoteGuideView } from "./views/guide.js";
 import { applyTheme } from "./theme.js";
-import { captureErrors, eventDetail, log, setDebugLog } from "./logger.js";
+import { captureActions, captureErrors, captureShownErrors, eventDetail, log, setDebugLog } from "./logger.js";
 import { MissionsView } from "./views/missions.js";
 import { ColonisationView } from "./views/colonisation.js";
 import { GoalsView } from "./views/goals.js";
@@ -74,6 +74,8 @@ function navIcon(d: string): SVGSVGElement {
 async function boot() {
   const app = document.getElementById("app")!;
   captureErrors();
+  captureActions();
+  captureShownErrors();
   let game;
   try {
     [game] = await Promise.all([loadGame(), loadExobio()]);

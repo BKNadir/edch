@@ -148,6 +148,11 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
     let path = path.to_string();
     let query = query.to_string();
     let token = lock(&shared.token).clone();
+    // The query can hold the secret token: only the path is logged. Long-polls are not logged.
+    if path != "/api/state" {
+        let from = req.remote_addr().map(|a| a.ip().to_string()).unwrap_or_default();
+        crate::logs::debug("remote", &format!("{} {path} from {from}", req.method()));
+    }
 
     // Pairing: the QR code's URL. A valid token is handed to the browser; a stale one sends the
     // phone to the app, which explains that the code must be scanned again.
@@ -197,6 +202,7 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
         return;
     }
     if !authorised {
+        crate::logs::warn("remote", &format!("Refused {path}: device not paired (old or missing code)"));
         respond(req, 401, "application/json", br#"{"error":"not paired"}"#.to_vec(), &[]);
         return;
     }

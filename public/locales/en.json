@@ -901,5 +901,7 @@
 "Impossible d'ouvrir le dossier : {0}": "Can't open the folder: {0}",
 "Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.": "Portable version: updates aren't installed automatically. When a new version is out, EDCH opens the download page.",
 "Télécharger la version portable": "Download the portable version",
-"Page en cours de développement": "Work in progress"
+"Page en cours de développement": "Work in progress",
+"EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés.": "EDCH always records what it does in a standard log (one file per start). Warnings and errors are also copied to a separate error log, created only when something goes wrong. Logs older than a week are deleted automatically, but the last 5 of each kind are always kept.",
+"Le log debug contient tout : le log standard, les erreurs, et chaque action (clics, réglages modifiés, pages ouvertes, échanges avec le jeu et les services). Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API et le texte tapé ne sont jamais écrits dans les logs.": "The debug log contains everything: the standard log, the errors, and every action (clicks, changed settings, pages opened, exchanges with the game and the services). Turn it on to report a problem, then turn it off: it grows quickly. API keys and typed text are never written to the logs."
 }

@@ -6,6 +6,9 @@ and EDCH shows it in the update banner.
 ## 0.8.5
 
 - Turning the local server (mobile access) off and on again no longer fails with "port 47800 unavailable (os error 10048)": the port is now really released when the server stops.
+- Error log: warnings and errors also go to a separate `edch-error_….log`, next to the standard log, created only when something goes wrong. The debug log still contains everything.
+- Debug log: every action is logged (clicks, settings changed, pages opened), every call to the app's backend with its duration, and phone requests. Errors shown on screen (red lines, red notices, toasts) are logged too. API keys and typed text are never logged.
+- Standard log: also records notifications, wing link start/stop, journal archive reading and actions coming from the phone.
 
 ## 0.8.4
 

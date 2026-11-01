@@ -249,6 +249,7 @@ export class Store {
   onWishlistChange?: (items: WishItem[]) => void;
 
   setWishlist(items: WishItem[], fromRemote = false) {
+    log.debug("wishlist", `${items.length} line(s)${fromRemote ? " (from the phone)" : ""}`);
     this.state.wishlist = items;
     save("edc.wishlist", items);
     this.notify();

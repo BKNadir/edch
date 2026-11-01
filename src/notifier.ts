@@ -2,6 +2,7 @@
 // The side tab opens a small overview panel; another click (anywhere) closes it.
 
 import { h, replace } from "./dom.js";
+import { log } from "./logger.js";
 import type { Store } from "./store.js";
 
 let audio: AudioContext | null = null;
@@ -75,6 +76,7 @@ export const recentAlerts = () => alerts;
 /** Plays the chosen sound and/or flashes the tab, and keeps the message in the panel. */
 export function notify(text: string, opts: { sound?: boolean } = {}) {
   if (!store) return;
+  log.info("notify", text);
   const n = store.state.settings.notify;
   alerts.unshift({ at: new Date().toISOString(), text });
   alerts.length = Math.min(alerts.length, 15);

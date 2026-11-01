@@ -29,6 +29,53 @@ export interface AuxFile {
   content: string;
 }
 
+// ---------------- logging of every call to the Rust side ----------------
+
+let debugCalls = false;
+/** Debug mode: every call to the Rust side is logged (the logger switches it). */
+export const setCallLogging = (on: boolean) => {
+  debugCalls = on;
+};
+
+/** Writes one log line through Rust (never logged itself). */
+export function rawLog(level: string, source: string, message: string): Promise<void> {
+  if (!isTauri() || remote) return Promise.resolve();
+  return window.__TAURI__!.core.invoke<void>("log_write", { level, source, message }).catch(() => undefined);
+}
+
+/** Calls nobody needs in the debug log: they run all the time and log themselves when useful. */
+const QUIET = new Set(["log_write", "log_set_debug", "http_fetch", "remote_publish", "remote_qr"]);
+/** Arguments that may hold secrets or big payloads: only their size is logged. */
+const HIDDEN = /token|key|secret|data|state|body|content|text/i;
+
+function describeArgs(args?: Record<string, unknown>): string {
+  if (!args) return "";
+  return Object.entries(args)
+    .map(([k, v]) => {
+      if (Array.isArray(v)) return `${k}=[${v.length}]`;
+      if (typeof v === "string") return HIDDEN.test(k) ? `${k}=<${v.length} chars>` : `${k}=${v.length > 120 ? `${v.slice(0, 120)}…` : v}`;
+      if (v && typeof v === "object") return `${k}={…}`;
+      return `${k}=${v}`;
+    })
+    .join(" ");
+}
+
+function tauriInvoke<T>(cmd: string, args?: Record<string, unknown>): Promise<T> {
+  const started = performance.now();
+  const call = window.__TAURI__!.core.invoke<T>(cmd, args);
+  if (QUIET.has(cmd)) return call;
+  return call.then(
+    (value) => {
+      if (debugCalls) void rawLog("DEBUG", "call", `${cmd} ${describeArgs(args)} → ok (${Math.round(performance.now() - started)} ms)`);
+      return value;
+    },
+    (err) => {
+      void rawLog("WARN", "call", `${cmd} ${describeArgs(args)} → ${String((err as Error)?.message ?? err)}`);
+      throw err;
+    },
+  );
+}
+
 export const isTauri = (): boolean => typeof window !== "undefined" && Boolean(window.__TAURI__?.core);
 
 /** True when this page is served by EDCH's local server to another device (phone, tablet). */
@@ -73,17 +120,17 @@ async function remoteJson(path: string, init?: RequestInit): Promise<any> {
 
 export async function defaultJournalDir(): Promise<string | null> {
   if (!isTauri()) return null;
-  return window.__TAURI__!.core.invoke<string | null>("default_journal_dir");
+  return tauriInvoke<string | null>("default_journal_dir");
 }
 
 export async function startJournal(dir: string): Promise<void> {
   if (!isTauri()) return;
-  await window.__TAURI__!.core.invoke("start_journal", { dir });
+  await tauriInvoke("start_journal", { dir });
 }
 
 export async function readAuxFile(dir: string, name: string): Promise<string> {
   if (!isTauri()) throw new Error("not in app");
-  return window.__TAURI__!.core.invoke<string>("read_aux_file", { dir, name });
+  return tauriInvoke<string>("read_aux_file", { dir, name });
 }
 
 export async function onJournal(handlers: {
@@ -109,7 +156,7 @@ export async function httpFetch(method: string, url: string, body?: string, cont
     return remoteJson("/api/http", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ method, url, body: body ?? null, contentType }) });
   }
   if (isTauri()) {
-    return window.__TAURI__!.core.invoke<HttpReply>("http_fetch", { method, url, body: body ?? null, contentType });
+    return tauriInvoke<HttpReply>("http_fetch", { method, url, body: body ?? null, contentType });
   }
   const response = await fetch(url, { method, headers: body ? { "Content-Type": contentType } : undefined, body });
   return { status: response.status, body: await response.text() };
@@ -191,7 +238,7 @@ export interface ImportReport {
 const invoke = <T>(cmd: string, args?: Record<string, unknown>) => {
   if (remote) return Promise.reject(new Error("Disponible seulement sur le PC"));
   if (!isTauri()) return Promise.reject(new Error("Disponible dans l'application (pas en mode démo)"));
-  return window.__TAURI__!.core.invoke<T>(cmd, args);
+  return tauriInvoke<T>(cmd, args);
 };
 
 export const optionsDir = () => invoke<string>("options_dir");
@@ -252,7 +299,7 @@ export const installerLanguage = () => (isTauri() ? invoke<number | null>("insta
 
 export async function openUrl(url: string): Promise<void> {
   if (isTauri() && !remote) {
-    await window.__TAURI__!.core.invoke("open_url", { url });
+    await tauriInvoke("open_url", { url });
   } else {
     window.open(url, "_blank", "noopener");
   }
@@ -299,5 +346,5 @@ export async function onUpdateProgress(cb: (done: number, total: number) => void
 /** Journal lines of the last `days` days for these events (start-up rebuild of the activity). */
 export async function scanHistory(dir: string, days: number, events: string[]): Promise<string[]> {
   if (!isTauri() || remote) return [];
-  return window.__TAURI__!.core.invoke<string[]>("scan_history", { dir, days, events });
+  return tauriInvoke<string[]>("scan_history", { dir, days, events });
 }

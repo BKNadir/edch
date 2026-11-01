@@ -901,5 +901,7 @@
 "Impossible d'ouvrir le dossier : {0}": "Не удалось открыть папку: {0}",
 "Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.": "Портативная версия: обновления не устанавливаются автоматически. Когда выходит новая версия, EDCH открывает страницу загрузки.",
 "Télécharger la version portable": "Скачать портативную версию",
-"Page en cours de développement": "Страница в разработке"
+"Page en cours de développement": "Страница в разработке",
+"EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés.": "EDCH всегда записывает свои действия в стандартный журнал (один файл на запуск). Предупреждения и ошибки также копируются в отдельный журнал ошибок, который создаётся только при проблемах. Журналы старше недели удаляются автоматически, но 5 последних каждого типа всегда сохраняются.",
+"Le log debug contient tout : le log standard, les erreurs, et chaque action (clics, réglages modifiés, pages ouvertes, échanges avec le jeu et les services). Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API et le texte tapé ne sont jamais écrits dans les logs.": "Отладочный журнал содержит всё: стандартный журнал, ошибки и каждое действие (клики, изменённые настройки, открытые страницы, обмен с игрой и сервисами). Включайте его, чтобы сообщить о проблеме, затем выключайте: он быстро растёт. API-ключи и введённый текст никогда не записываются в журналы."
 }

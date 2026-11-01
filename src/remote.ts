@@ -2,6 +2,7 @@
 // On the phone: follow the PC's state and send wishlist edits back.
 
 import { DEFAULT_THEME } from "./theme.js";
+import { log } from "./logger.js";
 import {
   forgetRemoteToken,
   onRemoteAction,
@@ -104,6 +105,7 @@ export async function setupRemoteHost(store: Store) {
     publishTimer = window.setTimeout(() => publishNow(store), 600);
   });
   await onRemoteAction((action) => {
+    log.info("remote", `Phone action: ${String(action?.type ?? "?")}`);
     if (action?.type === "wishlist" && Array.isArray(action.items)) store.setWishlist(action.items, true);
     if (action?.type === "theme" && action.theme && typeof action.theme === "object") {
       store.updateSettings({ theme: { ...DEFAULT_THEME, ...store.state.settings.theme, ...action.theme } });

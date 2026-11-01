@@ -302,6 +302,7 @@ export class WingLink {
   }
 
   private fail(e: unknown) {
+    log.warn("wing", String((e as Error)?.message ?? e));
     this.status = "error";
     this.lastError = String((e as Error)?.message ?? e);
     this.on.error(this.lastError);

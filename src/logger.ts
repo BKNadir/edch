@@ -1,7 +1,7 @@
 // Application logs (written by the Rust side into the logs folder). Standard lines always;
 // DEBUG lines only reach the debug log, which exists while debug mode is on in Settings.
 
-import { isRemote, isTauri, logSetDebug, logWrite } from "./bridge.js";
+import { isRemote, isTauri, logSetDebug, logWrite, setCallLogging } from "./bridge.js";
 
 type Level = "DEBUG" | "INFO" | "WARN" | "ERROR";
 
@@ -26,6 +26,7 @@ export const log = {
 /** Applies the Settings choice; returns the debug log's path while on. */
 export async function setDebugLog(on: boolean): Promise<string | null> {
   debugOn = on;
+  setCallLogging(on);
   if (!isTauri() || isRemote()) return null;
   return logSetDebug(on).catch(() => null);
 }
@@ -53,4 +54,95 @@ export function eventDetail(ev: Record<string, any>): string | null {
   if (e.startsWith("Wing")) return `${e} ${pick("Name", "Others")}`;
   if (e === "Bounty" || e === "FactionKillBond") return `${e} ${pick("VictimFaction", "Faction", "AwardingFaction", "TotalReward", "Reward")}`;
   return null;
+}
+
+// ---------------- what the user does, what the user is shown ----------------
+
+const clean = (t: string | null | undefined) => (t ?? "").replace(/\s+/g, " ").trim().slice(0, 80);
+
+/** A readable name for a control: its text, label, title or placeholder. */
+function controlName(el: Element): string {
+  const own = clean((el as HTMLElement).innerText);
+  if (own) return own;
+  const label = el.closest("label") ?? (el.id ? document.querySelector(`label[for="${el.id}"]`) : null);
+  return (
+    clean(label?.textContent) ||
+    clean(el.getAttribute("aria-label")) ||
+    clean(el.getAttribute("title")) ||
+    clean(el.getAttribute("placeholder")) ||
+    clean(el.getAttribute("name")) ||
+    el.tagName.toLowerCase()
+  );
+}
+
+const view = () => {
+  try {
+    return localStorage.getItem("edc.view") ?? "";
+  } catch {
+    return "";
+  }
+};
+
+/**
+ * Debug mode: every click and every setting change is logged (what was clicked, on which page).
+ * Typed text is never logged, only that a field was edited: it can be an API key.
+ */
+export function captureActions() {
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (!debugOn) return;
+      const el = (e.target as Element | null)?.closest("button, a, [role=button], summary, .chip, .mat, tr[data-id]");
+      if (!el) return;
+      log.debug("action", `[${view()}] click "${controlName(el)}"`);
+    },
+    true,
+  );
+  document.addEventListener(
+    "change",
+    (e) => {
+      if (!debugOn) return;
+      const el = e.target as HTMLInputElement | HTMLSelectElement | null;
+      if (!el || !("value" in el)) return;
+      const name = controlName(el);
+      let value: string;
+      if (el instanceof HTMLInputElement && (el.type === "checkbox" || el.type === "radio")) value = el.checked ? "on" : "off";
+      else if (el instanceof HTMLSelectElement || (el instanceof HTMLInputElement && ["number", "range", "color"].includes(el.type))) value = el.value;
+      else value = "(edited)";
+      log.debug("action", `[${view()}] set "${name}" = ${value}`);
+    },
+    true,
+  );
+}
+
+/**
+ * Errors shown on screen (red lines, red callouts, warning badges, toasts) also go to the logs:
+ * a user who reports "it showed an error" then has it in the error log.
+ */
+export function captureShownErrors(root: HTMLElement = document.body) {
+  const recent = new Map<string, number>();
+  const report = (level: "WARN" | "INFO", source: string, text: string) => {
+    const t = clean(text);
+    if (!t) return;
+    const now = Date.now();
+    if ((recent.get(t) ?? 0) > now - 10_000) return;
+    recent.set(t, now);
+    if (recent.size > 200) recent.clear();
+    write(level, source, `[${view()}] ${t}`);
+  };
+  const scan = (node: Node) => {
+    if (!(node instanceof Element)) return;
+    const hits = node.matches(".error, .callout.danger, .badge.warn") ? [node] : [...node.querySelectorAll(".error, .callout.danger, .badge.warn")];
+    for (const el of hits) report("WARN", "shown", el.textContent ?? "");
+    if (node.id === "toast" || node.closest?.("#toast")) report("INFO", "toast", node.textContent ?? "");
+  };
+  new MutationObserver((records) => {
+    for (const r of records) {
+      if (r.type === "characterData" || (r.target as Element).id === "toast") {
+        const el = r.target instanceof Element ? r.target : r.target.parentElement;
+        if (el?.closest("#toast")) report("INFO", "toast", el.closest("#toast")!.textContent ?? "");
+      }
+      r.addedNodes.forEach(scan);
+    }
+  }).observe(root, { childList: true, subtree: true, characterData: true });
 }

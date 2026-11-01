@@ -218,7 +218,7 @@ export class SettingsView implements View {
       "section.card",
       null,
       h("h3", null, "Logs de l'application"),
-      h("p.sub", null, "EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers sont toujours gardés."),
+      h("p.sub", null, "EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés."),
       h(
         "label.check",
         null,
@@ -234,7 +234,7 @@ export class SettingsView implements View {
         }),
         " Mode debug : enregistre aussi un log détaillé, dans un fichier séparé",
       ),
-      h("p.sub", null, "Le log debug reprend aussi tout le contenu du log standard. Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API ne sont jamais écrites dans les logs."),
+      h("p.sub", null, "Le log debug contient tout : le log standard, les erreurs, et chaque action (clics, réglages modifiés, pages ouvertes, échanges avec le jeu et les services). Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API et le texte tapé ne sont jamais écrits dans les logs."),
       on && this.debugPath ? h("p.sub", { "data-no-tr": "" }, this.debugPath) : null,
       h(
         "div.row",

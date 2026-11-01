@@ -901,5 +901,7 @@
 "Impossible d'ouvrir le dossier : {0}": "Não foi possível abrir a pasta: {0}",
 "Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.": "Versão portátil: as atualizações não são instaladas automaticamente. Quando sai uma nova versão, o EDCH abre a página de download.",
 "Télécharger la version portable": "Baixar a versão portátil",
-"Page en cours de développement": "Página em desenvolvimento"
+"Page en cours de développement": "Página em desenvolvimento",
+"EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés.": "O EDCH sempre anota o que faz num log padrão (um arquivo por inicialização). Avisos e erros também são copiados para um log de erros separado, criado só quando há um problema. Logs com mais de uma semana são apagados automaticamente, mas os 5 últimos de cada tipo são sempre mantidos.",
+"Le log debug contient tout : le log standard, les erreurs, et chaque action (clics, réglages modifiés, pages ouvertes, échanges avec le jeu et les services). Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API et le texte tapé ne sont jamais écrits dans les logs.": "O log debug contém tudo: o log padrão, os erros e cada ação (cliques, configurações alteradas, páginas abertas, trocas com o jogo e os serviços). Ative para relatar um problema e depois desative: ele cresce rápido. As chaves de API e o texto digitado nunca são gravados nos logs."
 }

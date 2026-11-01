@@ -2,8 +2,11 @@
 //!
 //! - Standard log (`edch_<start time>.log`): always written, one file per start. Info,
 //!   warnings and errors.
+//! - Error log (`edch-error_<start time>.log`): warnings and errors only, created at the first
+//!   one (a run without problems leaves no error log). They are in the standard log too.
 //! - Debug log (`edch-debug_<start time>.log`): only while debug mode is on in Settings.
-//!   It repeats every standard line plus the detailed ones, so it can be read alone.
+//!   It repeats every standard line (so every warning and error) plus the detailed ones, so
+//!   it can be read alone.
 //!
 //! At start-up, log files older than a week are deleted, but the 5 most recent of each
 //! kind are always kept.
@@ -19,11 +22,14 @@ const KEEP_DAYS: u64 = 7;
 const KEEP_FILES: usize = 5;
 const STANDARD: &str = "edch_";
 const DEBUG: &str = "edch-debug_";
+const ERRORS: &str = "edch-error_";
 
 struct Logger {
     dir: PathBuf,
     stamp: String,
     standard: Mutex<Option<File>>,
+    /// Opened at the first warning or error.
+    errors: Mutex<Option<File>>,
     debug: Mutex<Option<File>>,
     debug_on: AtomicBool,
 }
@@ -102,12 +108,14 @@ pub fn init(portable: bool) {
     let _ = fs::create_dir_all(&dir);
     cleanup(&dir, STANDARD);
     cleanup(&dir, DEBUG);
+    cleanup(&dir, ERRORS);
     let stamp = file_stamp();
     let standard = open(&dir.join(format!("{STANDARD}{stamp}.log")));
     let _ = LOGGER.set(Logger {
         dir,
         stamp,
         standard: Mutex::new(standard),
+        errors: Mutex::new(None),
         debug: Mutex::new(None),
         debug_on: AtomicBool::new(false),
     });
@@ -139,6 +147,16 @@ pub fn write(level: &str, source: &str, message: &str) {
             }
         }
     }
+    if level == "WARN" || level == "ERROR" {
+        if let Ok(mut f) = l.errors.lock() {
+            if f.is_none() {
+                *f = open(&l.dir.join(format!("{ERRORS}{}.log", l.stamp)));
+            }
+            if let Some(f) = f.as_mut() {
+                let _ = f.write_all(text.as_bytes());
+            }
+        }
+    }
     if l.debug_on.load(Ordering::Relaxed) {
         if let Ok(mut f) = l.debug.lock() {
             if let Some(f) = f.as_mut() {
@@ -153,6 +171,9 @@ pub fn info(source: &str, message: &str) {
 }
 pub fn warn(source: &str, message: &str) {
     write("WARN", source, message);
+}
+pub fn error(source: &str, message: &str) {
+    write("ERROR", source, message);
 }
 pub fn debug(source: &str, message: &str) {
     if debug_enabled() {
