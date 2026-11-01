@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.5
+
+- Turning the local server (mobile access) off and on again no longer fails with "port 47800 unavailable (os error 10048)": the port is now really released when the server stops.
+
 ## 0.8.4
 
 - Wing missions are linked by their mission id, which is the same for the commander who shares and the one who accepts. Matching on faction, destination and expiry is only a fallback now.

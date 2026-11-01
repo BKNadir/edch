@@ -12,10 +12,10 @@
 
 use serde::Serialize;
 use std::io::Read;
-use std::net::UdpSocket;
+use std::net::{Ipv4Addr, SocketAddr, TcpStream, UdpSocket};
 use std::sync::{Arc, Condvar, Mutex, MutexGuard};
 use std::thread;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 use tauri::{AppHandle, Emitter, Manager, State};
 use tiny_http::{Header, Method, Request, Response, Server, StatusCode};
 
@@ -312,13 +312,19 @@ pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String
     let shared = state.inner.clone();
     *lock(&shared.token) = token;
     // Already running on this port: just keep it (the token was updated above).
-    if let Some(server) = lock(&shared.server).as_ref() {
-        if server.server_addr().to_ip().map(|a| a.port()) == Some(port) {
-            return Ok(RemoteInfo { port, addresses: remote_addresses() });
+    let previous = {
+        let mut current = lock(&shared.server);
+        if let Some(server) = current.as_ref() {
+            if server.server_addr().to_ip().map(|a| a.port()) == Some(port) {
+                return Ok(RemoteInfo { port, addresses: remote_addresses() });
+            }
         }
-        server.unblock();
+        current.take()
+    };
+    if let Some(old) = previous {
+        shutdown(old);
     }
-    let server = Arc::new(Server::http(("0.0.0.0", port)).map_err(|e| format!("Port {port} indisponible : {e}"))?);
+    let server = Arc::new(bind(port)?);
     *lock(&shared.server) = Some(server.clone());
     let loop_shared = shared.clone();
     thread::spawn(move || loop {
@@ -342,12 +348,52 @@ pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String
 #[tauri::command]
 pub fn remote_stop(state: State<'_, RemoteState>) {
     let shared = state.inner.clone();
-    if let Some(server) = lock(&shared.server).take() {
-        crate::logs::info("remote", "Local server stopped");
-        server.unblock();
-    }
     lock(&shared.token).clear();
     shared.changed.notify_all();
+    let server = lock(&shared.server).take();
+    if let Some(server) = server {
+        shutdown(server);
+        crate::logs::info("remote", "Local server stopped");
+    }
+}
+
+/// Binds the port. Right after a stop, Windows can take a moment to release it: retry briefly.
+fn bind(port: u16) -> Result<Server, String> {
+    let started = Instant::now();
+    loop {
+        match Server::http(("0.0.0.0", port)) {
+            Ok(server) => return Ok(server),
+            Err(e) if started.elapsed() < Duration::from_secs(5) => {
+                crate::logs::debug("remote", &format!("Port {port} busy, retrying: {e}"));
+                thread::sleep(Duration::from_millis(150));
+            }
+            Err(e) => {
+                crate::logs::warn("remote", &format!("Port {port} unavailable: {e}"));
+                return Err(format!("Port {port} indisponible : {e}"));
+            }
+        }
+    }
+}
+
+/// Really closes a server so its port can be used again.
+///
+/// tiny_http stops its listening thread by connecting to its own address, but it listens on
+/// 0.0.0.0, which Windows refuses as a destination: the port then stayed taken until EDCH was
+/// closed ("os error 10048" when turning the server back on). So: stop our request loop, drop
+/// the last reference (that sets tiny_http's close flag), then wake its listening thread
+/// ourselves through 127.0.0.1.
+fn shutdown(server: Arc<Server>) {
+    let port = server.server_addr().to_ip().map(|a| a.port());
+    server.unblock();
+    let started = Instant::now();
+    while Arc::strong_count(&server) > 1 && started.elapsed() < Duration::from_secs(2) {
+        thread::sleep(Duration::from_millis(20));
+    }
+    drop(server);
+    if let Some(port) = port {
+        let addr = SocketAddr::from((Ipv4Addr::LOCALHOST, port));
+        let _ = TcpStream::connect_timeout(&addr, Duration::from_millis(500));
+    }
 }
 
 #[tauri::command]
