@@ -1046,5 +1046,13 @@
 "Arrivée": "Da chegada",
 "point chaud ici": "ponto quente aqui",
 "Où miner (systèmes de {0})": "Onde minerar (sistemas de {0})",
-"Ouvrir la planète sur Spansh": "Abrir o planeta no Spansh"
+"Ouvrir la planète sur Spansh": "Abrir o planeta no Spansh",
+"{0} récente(s)": "{0} recente(s)",
+"aucune": "nenhuma",
+"Dernières notifications": "Últimas notificações",
+"Rien pour l'instant.": "Nada por enquanto.",
+"Réglages des notifications": "Configurações de notificações",
+"Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications.": "Quando um prospector encontra um desses alvos acima da porcentagem escolhida (ou um núcleo para mineração profunda), o EDCH avisa com o som e a cor escolhidos em Configurações → Notificações.",
+"Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer.": "Sem janela do Windows: um som e/ou a aba \"Notificações\" na borda direita que pisca. Ela reúne todas as notificações: ala, mineração, atualizações, problemas ao iniciar… Clique nela para vê-las e fora para fechar.",
+"Masquer la languette (le son reste actif s'il est coché)": "Ocultar a aba (o som continua ativo se marcado)"
 }

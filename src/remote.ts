@@ -29,7 +29,7 @@ import { newRemoteToken, type Settings, type Store } from "./store.js";
 import { startGame } from "./desktop.js";
 
 /** Settings a phone can change (display only: never keys, paths or the PC's behaviour). */
-const PHONE_SETTINGS = ["theme", "hiddenViews", "uiScale", "startView", "systemOpensNav"] as const;
+const PHONE_SETTINGS = ["theme", "hiddenViews", "uiScale", "startView", "systemOpensNav", "notify"] as const;
 
 // ---------------- PC side ----------------
 

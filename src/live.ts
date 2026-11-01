@@ -250,7 +250,19 @@ export async function loadHistory(dir: string) {
 function panel(): (Node | null)[] {
   const missions = activeMissions();
   const wing = wingView();
-  const parts: (Node | null)[] = [h("div.side-head", null, h("strong", null, "Missions"), h("span.sub", null, `${missions.length} en cours`))];
+  const alerts = recentAlerts();
+  const parts: (Node | null)[] = [h("div.side-head", null, h("strong", null, "Notifications"), h("span.sub", null, alerts.length ? `${alerts.length} récente(s)` : "aucune"))];
+  // Every notification first (wing, mining, updates, start-up problems…), then the missions overview.
+  parts.push(
+    h(
+      "section.side-section",
+      null,
+      h("h4", null, "Dernières notifications"),
+      alerts.length
+        ? h("ul.side-list", null, alerts.slice(0, 10).map((a) => h("li", null, h("span", null, a.text), h("span.sub", null, relTime(a.at)))))
+        : h("p.sub", null, "Rien pour l'instant."),
+    ),
+  );
   if (wing) {
     const names = new Map([[wing.me.id, wing.me.name], ...wing.members.map((m) => [m.id, m.name] as [string, string])]);
     parts.push(
@@ -301,11 +313,14 @@ function panel(): (Node | null)[] {
       ),
     );
   }
-  const alerts = recentAlerts();
-  if (alerts.length) {
-    parts.push(h("section.side-section", null, h("h4", null, "Alertes"), h("ul.side-list", null, alerts.slice(0, 6).map((a) => h("li", null, h("span", null, a.text), h("span.sub", null, relTime(a.at)))))));
-  }
-  parts.push(h("button.ghost.small", { onclick: () => store.setView("missions") }, "Ouvrir la page Missions"));
+  parts.push(
+    h(
+      "div.row",
+      null,
+      h("button.ghost.small", { onclick: () => store.setView("missions") }, "Missions"),
+      h("button.ghost.small", { onclick: () => store.setView("settings") }, "Réglages des notifications"),
+    ),
+  );
   return parts;
 }
 

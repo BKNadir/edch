@@ -126,10 +126,13 @@ Cœur : {0}
 Journal archive unreadable: {0}
 Historique du journal illisible
 Missions, colonisation et exploration ne montreront que la session en cours.
+{0} récente(s)
+Dernières notifications
+Rien pour l'instant.
 Aucune mission d'escadrille pour l'instant.
 Prochaines échéances
 Objectif atteint · 
-Ouvrir la page Missions
+Réglages des notifications
 Aperçu
 Live link unavailable, polling instead: {0}
 ntfy.sh : trop de messages, réessaie plus tard
@@ -480,7 +483,7 @@ Pranav Antal
 Yuri Grom
 Zemina Torval
 Résultats des prospecteurs en direct, et où miner et vendre pour gagner des mérites Powerplay.
-Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Missions → Notifications.
+Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications.
  Alerte sonore et visuelle
 Dernier astéroïde
 Contenu : {0}
@@ -562,9 +565,6 @@ Connecté
 Acceptée par
 Aucune mission d'escadrille partagée pour l'instant.
 Saisis ou crée un code (au moins 8 caractères) pour rejoindre l'escadrille.
-Pas de fenêtre Windows : un son et/ou la languette sur le bord droit qui clignote. Clique sur la languette pour voir l'aperçu, clique ailleurs pour le refermer.
-Écouter
-Test de notification
 Ouvre EDCH sur ton téléphone ou ta tablette, sur le même réseau que ce PC.
  Cet appareil est connecté à EDCH sur ton PC. Les données se mettent à jour toutes seules.
 Disponible dans l'application (pas en mode démo).
@@ -792,6 +792,10 @@ La dernière page ouverte
 Taille de l'interface
 Pages affichées dans le menu (décoche celles dont tu ne te sers pas) :
 Valable aussi sur le téléphone. Paramètres et À propos restent toujours visibles.
+Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer.
+Écouter
+Test de notification
+ Masquer la languette (le son reste actif s'il est coché)
 Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services.
 EDDN — réseau de données communautaire
 Envoie marchés, équipements, chantiers navals, systèmes et scans visités. C'est ce qui alimente Spansh, Inara et EDSM pour tout le monde (et les recherches de cette appli).

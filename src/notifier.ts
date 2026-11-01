@@ -67,7 +67,7 @@ let tab: HTMLElement | null = null;
 let panel: HTMLElement | null = null;
 let badge: HTMLElement | null = null;
 let renderPanel: () => (Node | null)[] = () => [];
-let label = "Missions";
+let label = "Notifications";
 const alerts: Alert[] = [];
 let unseen = 0;
 

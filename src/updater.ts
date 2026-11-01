@@ -5,6 +5,7 @@ import { isRemote, isTauri, updateMode, onUpdateProgress, openUrl, updateCheck, 
 import { h, replace, toast } from "./dom.js";
 import { locale } from "./i18n.js";
 import { log } from "./logger.js";
+import { notify } from "./notifier.js";
 import type { Store } from "./store.js";
 
 const EVERY = 6 * 60 * 60 * 1000;
@@ -152,6 +153,7 @@ export async function checkForUpdate(manual = false): Promise<void> {
     log.info("update", `Version ${info.version} available (installed ${info.current})`);
     if (!manual && info.version === store.state.settings.skippedVersion) return;
     phase = { kind: "available", info };
+    if (!manual) notify(`EDCH ${info.version} est disponible`, { sound: false });
     render();
   } catch (e) {
     log.warn("update", `Check failed: ${String((e as Error)?.message ?? e)}`);

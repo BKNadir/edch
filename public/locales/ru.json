@@ -1046,5 +1046,13 @@
 "Arrivée": "От точки прибытия",
 "point chaud ici": "горячая точка здесь",
 "Où miner (systèmes de {0})": "Где добывать (системы {0})",
-"Ouvrir la planète sur Spansh": "Открыть планету в Spansh"
+"Ouvrir la planète sur Spansh": "Открыть планету в Spansh",
+"{0} récente(s)": "недавних: {0}",
+"aucune": "нет",
+"Dernières notifications": "Последние уведомления",
+"Rien pour l'instant.": "Пока ничего.",
+"Réglages des notifications": "Настройки уведомлений",
+"Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications.": "Когда разведчик находит одну из этих целей выше выбранного процента (или ядро для глубокой добычи), EDCH сообщает звуком и цветом из Настройки → Уведомления.",
+"Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer.": "Никаких окон Windows: звук и/или мигающая вкладка «Уведомления» у правого края. Там собраны все уведомления: звено, добыча, обновления, проблемы при запуске… Нажмите, чтобы посмотреть, и вне её, чтобы закрыть.",
+"Masquer la languette (le son reste actif s'il est coché)": "Скрыть вкладку (звук остаётся, если включён)"
 }

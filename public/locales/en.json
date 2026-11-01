@@ -1046,5 +1046,13 @@
 "Arrivée": "From arrival",
 "point chaud ici": "hotspot here",
 "Où miner (systèmes de {0})": "Where to mine ({0} systems)",
-"Ouvrir la planète sur Spansh": "Open the planet on Spansh"
+"Ouvrir la planète sur Spansh": "Open the planet on Spansh",
+"{0} récente(s)": "{0} recent",
+"aucune": "none",
+"Dernières notifications": "Latest notifications",
+"Rien pour l'instant.": "Nothing yet.",
+"Réglages des notifications": "Notification settings",
+"Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications.": "When a prospector finds one of these targets above the chosen percentage (or a core for deep mining), EDCH tells you with the sound and colour chosen in Settings → Notifications.",
+"Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer.": "No Windows pop-up: a sound and/or the \"Notifications\" tab on the right edge that flashes. It gathers every notification: wing, mining, updates, start-up problems… Click it to see them, click elsewhere to close.",
+"Masquer la languette (le son reste actif s'il est coché)": "Hide the tab (the sound stays on if ticked)"
 }

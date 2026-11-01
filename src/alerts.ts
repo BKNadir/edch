@@ -4,6 +4,7 @@
 import { isRemote, isTauri, logsOpen } from "./bridge.js";
 import { h, icon, replace, toast } from "./dom.js";
 import { log } from "./logger.js";
+import { notify } from "./notifier.js";
 import type { Store } from "./store.js";
 
 interface Alert {
@@ -35,6 +36,7 @@ export function startupAlert(key: string, title: string, detail: string, action?
   if (existing) Object.assign(existing, { title, detail, action });
   else alerts.push({ key, title, detail, action });
   log.warn("startup", `${title}: ${detail}`);
+  if (!existing) notify(title, { sound: false });
   render();
 }
 

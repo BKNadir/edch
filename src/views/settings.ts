@@ -5,7 +5,8 @@ import { checkForUpdate } from "../updater.js";
 import { SOFTWARE_VERSION as APP_VERSION } from "../eddn.js";
 import { LANGS, lang, saveLang } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
-import type { Settings } from "../store.js";
+import type { NotifySettings, Settings } from "../store.js";
+import { notify, playTone, TONES } from "../notifier.js";
 import { DEFAULT_THEME, PRESETS, type ThemeSettings } from "../theme.js";
 import { ALWAYS_SHOWN, NAV } from "../nav.js";
 import { startGame } from "../desktop.js";
@@ -179,6 +180,7 @@ export class SettingsView implements View {
           ),
           h("small.sub", null, "Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone."),
         ),
+        this.notifyCard(),
         this.pagesCard(),
         this.appearance(),
         isTauri() && !isRemote() ? this.logsCard() : null,
@@ -384,6 +386,38 @@ export class SettingsView implements View {
         ),
       ),
       h("small.sub", null, "Valable aussi sur le téléphone. Paramètres et À propos restent toujours visibles."),
+    );
+  }
+
+  private notifyCard(): HTMLElement {
+    const store = this.ctx.store;
+    const n = store.state.settings.notify;
+    const set = (patch: Partial<NotifySettings>) => store.updateSettings({ notify: { ...store.state.settings.notify, ...patch } });
+    return h(
+      "section.card",
+      null,
+      h("h3", null, "Notifications"),
+      h("p.sub", null, "Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer."),
+      h(
+        "div.notify-form",
+        null,
+        h("label.check", null, h("input", { type: "checkbox", checked: n.sound, onchange: (e: Event) => set({ sound: (e.target as HTMLInputElement).checked }) }), " Son"),
+        h(
+          "select",
+          { "data-no-tr": "", onchange: (e: Event) => set({ tone: (e.target as HTMLSelectElement).value }) },
+          TONES.map(([v, l]) => h("option", { value: v, selected: v === n.tone }, l)),
+        ),
+        h("input", { type: "range", min: "0", max: "1", step: "0.05", value: String(n.volume), title: "Volume", onchange: (e: Event) => set({ volume: Number((e.target as HTMLInputElement).value) }) }),
+        h("button.ghost.small", { onclick: () => playTone(store.state.settings.notify.tone, store.state.settings.notify.volume) }, "Écouter"),
+      ),
+      h(
+        "div.notify-form",
+        null,
+        h("label.check", null, h("input", { type: "checkbox", checked: n.color, onchange: (e: Event) => set({ color: (e.target as HTMLInputElement).checked }) }), " Couleur"),
+        h("input", { type: "color", value: n.flash, onchange: (e: Event) => set({ flash: (e.target as HTMLInputElement).value }) }),
+        h("button.ghost.small", { onclick: () => notify("Test de notification") }, "Tester"),
+      ),
+      h("label.check", null, h("input", { type: "checkbox", checked: n.hideTab, onchange: (e: Event) => set({ hideTab: (e.target as HTMLInputElement).checked }) }), " Masquer la languette (le son reste actif s'il est coché)"),
     );
   }
 }

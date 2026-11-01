@@ -155,7 +155,7 @@ export class MiningView implements View {
         "section.card",
         null,
         h("h3", null, "Cibles"),
-        h("p.sub", null, "Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Missions → Notifications."),
+        h("p.sub", null, "Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications."),
         targetEditor,
         h("label.check", null, h("input", { type: "checkbox", checked: s.alert, onchange: (e: Event) => this.set({ alert: (e.target as HTMLInputElement).checked }) }), " Alerte sonore et visuelle"),
       ),

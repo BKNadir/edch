@@ -3,6 +3,12 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.5
+
+- Notifications settings moved to Settings. The side tab is now called "Notifications" and gathers every notification: wing, mining, available updates, start-up problems… The latest come first, then the missions overview.
+- "Hide the tab" really hides it now (it kept showing). The sound still plays if it's ticked.
+- The phone can change the notification settings too.
+
 ## 0.9.4
 
 - Inara has approved EDCH: Inara sync works, and the "in development" notice on the Synchronisation page is gone.

@@ -781,3 +781,5 @@ label.check.disabled { opacity: 0.55; }
 .chip.method { border-color: color-mix(in srgb, var(--ok) 50%, transparent); color: var(--ok); }
 .spot-table tr.hot td { background: color-mix(in srgb, var(--ok) 8%, transparent); }
 .spot-table td .badge { margin-left: 6px; }
+/* "Hide the tab" must win over the tab's own display. */
+.side-tab[hidden], .side-tab-badge[hidden] { display: none !important; }

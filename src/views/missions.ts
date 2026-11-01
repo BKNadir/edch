@@ -3,8 +3,7 @@ import { isRemote } from "../bridge.js";
 import { callout, fmt, h, icon, replace, toast } from "../dom.js";
 import { activeMissions, isShared, setShared, syncWing, wingView } from "../live.js";
 import { isActive, type LeaveReason, type WingMember } from "../wing.js";
-import { notify, playTone, TONES } from "../notifier.js";
-import { newWingCode, type NotifySettings, type WingSettings } from "../store.js";
+import { newWingCode, type WingSettings } from "../store.js";
 import { credits, hoursLeft, relTime } from "../time.js";
 import type { Ctx, View } from "../context.js";
 import { findHotspots, findSupply, HOTSPOT_NAMES, type Hotspot, type Offer } from "../sourcing.js";
@@ -92,7 +91,6 @@ export class MissionsView implements View {
       this.massacre(missions),
       this.list(missions),
       this.wing(),
-      isRemote() ? null : this.notifications(),
     );
   }
 
@@ -373,35 +371,4 @@ export class MissionsView implements View {
     return h("section.card.wing", null, parts);
   }
 
-  private notifications(): HTMLElement {
-    const store = this.ctx.store;
-    const n = store.state.settings.notify;
-    const set = (patch: Partial<NotifySettings>) => store.updateSettings({ notify: { ...store.state.settings.notify, ...patch } });
-    return h(
-      "section.card",
-      null,
-      h("h3", null, "Notifications"),
-      h("p.sub", null, "Pas de fenêtre Windows : un son et/ou la languette sur le bord droit qui clignote. Clique sur la languette pour voir l'aperçu, clique ailleurs pour le refermer."),
-      h(
-        "div.notify-form",
-        null,
-        h("label.check", null, h("input", { type: "checkbox", checked: n.sound, onchange: (e: Event) => set({ sound: (e.target as HTMLInputElement).checked }) }), " Son"),
-        h(
-          "select",
-          { "data-no-tr": "", onchange: (e: Event) => set({ tone: (e.target as HTMLSelectElement).value }) },
-          TONES.map(([v, l]) => h("option", { value: v, selected: v === n.tone }, l)),
-        ),
-        h("input", { type: "range", min: "0", max: "1", step: "0.05", value: String(n.volume), title: "Volume", onchange: (e: Event) => set({ volume: Number((e.target as HTMLInputElement).value) }) }),
-        h("button.ghost.small", { onclick: () => playTone(store.state.settings.notify.tone, store.state.settings.notify.volume) }, "Écouter"),
-      ),
-      h(
-        "div.notify-form",
-        null,
-        h("label.check", null, h("input", { type: "checkbox", checked: n.color, onchange: (e: Event) => set({ color: (e.target as HTMLInputElement).checked }) }), " Couleur"),
-        h("input", { type: "color", value: n.flash, onchange: (e: Event) => set({ flash: (e.target as HTMLInputElement).value }) }),
-        h("button.ghost.small", { onclick: () => notify("Test de notification") }, "Tester"),
-      ),
-      h("label.check", null, h("input", { type: "checkbox", checked: n.hideTab, onchange: (e: Event) => set({ hideTab: (e.target as HTMLInputElement).checked }) }), " Masquer la languette"),
-    );
-  }
 }
