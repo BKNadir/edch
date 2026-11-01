@@ -128,9 +128,46 @@ export function gameEnglish(text: string): string {
   return gameBack.get(text.trim().toLowerCase()) ?? text;
 }
 
-/** Does a game name match a search, in English or in the current language? */
+/** Text reduced for searching: no accents, no case, apostrophes unified, punctuation as spaces. */
+export function fold(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[’‘`´]/g, "'")
+    .replace(/[^\p{L}\p{N}']+/gu, " ")
+    .trim();
+}
+
+/** Does a game name match a search, in English or in the current language (accents and case ignored)? */
 export function nameMatches(name: string, query: string): boolean {
-  return name.toLowerCase().includes(query) || gameName(name).toLowerCase().includes(query);
+  const q = fold(query);
+  return !q || fold(name).includes(q) || fold(gameName(name)).includes(q);
+}
+
+/**
+ * The game name (English) meant by what was typed, among `candidates` (English names): exact
+ * match first, in English or in the app's language, accents and case ignored, then the only name
+ * that starts with the text, then the only one that contains it. `suggestions` when it's ambiguous.
+ */
+export function resolveGameName(typed: string, candidates: string[]): { name?: string; suggestions: string[] } {
+  const q = fold(typed);
+  if (!q) return { suggestions: [] };
+  const forms = candidates.map((c) => ({ c, f: [fold(c), fold(gameName(c))] }));
+  const exact = forms.find((x) => x.f.includes(q));
+  if (exact) return { name: exact.c, suggestions: [] };
+  const back = gameBack.get(typed.trim().toLowerCase());
+  if (back && candidates.includes(back)) return { name: back, suggestions: [] };
+  const tiers = [
+    forms.filter((x) => x.f.some((f) => f.startsWith(q))),
+    forms.filter((x) => x.f.some((f) => f.split(" ").some((w) => w.startsWith(q)) || f.includes(` ${q}`))),
+    forms.filter((x) => x.f.some((f) => f.includes(q))),
+  ];
+  for (const tier of tiers) {
+    if (tier.length === 1) return { name: tier[0].c, suggestions: [] };
+    if (tier.length > 1) return { suggestions: tier.slice(0, 8).map((x) => x.c) };
+  }
+  return { suggestions: [] };
 }
 
 /** Translates one string (trimmed match, surrounding whitespace kept). */

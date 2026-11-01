@@ -4,7 +4,7 @@ import { ownedOf, type Ctx, type View } from "../context.js";
 import type { Blueprint, BlueprintKind } from "../types.js";
 import { kindFr } from "./detail.js";
 import { addToWishlist } from "./wishlist.js";
-import { openCommodity } from "../links.js";
+import { engineerLinks, openCommodity } from "../links.js";
 
 /** A module to show when the page opens (a module name clicked elsewhere). */
 let focus: string | null = null;
@@ -132,7 +132,7 @@ export class EngineeringView implements View {
       h(
         "div.bp-head",
         null,
-        h("div", null, h("h3", null, first.name), h("p.sub", null, kindFr(first.kind), engineers.length ? ` · ${engineers.join(", ")}` : "")),
+        h("div", null, h("h3", null, first.name), h("p.sub", null, kindFr(first.kind), engineers.length ? [" · ", ...engineerLinks(engineers)] : "")),
         h(
           "button.primary.small",
           { onclick: () => addToWishlist(this.ctx, max, first.kind === "modification" ? 1 : undefined, max.grade) },

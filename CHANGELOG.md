@@ -3,6 +3,13 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.9
+
+- Clicking an engineer copies the system of their workshop: on the engineer's name in Engineers, and wherever engineers are listed (Engineering, wishlist).
+- Searches ignore accents and case everywhere ("energie" finds "Énergie"). On the Search page, a name can be typed in the app's language or in English, or only partly: EDCH finds the game's name, or lists the names that match when there are several. An older, slower answer no longer replaces the latest search.
+- The controls search also looks at the text shown on screen, the group and the internal name of each command.
+- Controls: choose your keyboard (AZERTY, QWERTY, QWERTZ) and its format (ISO with the L-shaped Enter and the extra key next to left Shift, or ANSI). By default EDCH follows the layout written in the bindings file.
+
 ## 0.9.8
 
 - Click the EDCH logo to fold the side menu away (and click it again to bring it back). It stays folded at the next start.

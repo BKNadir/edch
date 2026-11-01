@@ -16,7 +16,7 @@ import {
   type DeviceTemplate,
 } from "../binds.js";
 import { h, icon, replace, toast } from "../dom.js";
-import { tr } from "../i18n.js";
+import { fold, tr } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
 import { DEMO_BINDS } from "../demo.js";
 
@@ -72,7 +72,7 @@ export class ControlsView implements View {
   private body = h("div.controls-body");
   private backupOut = h("div.backup-out");
 
-  constructor(_ctx: Ctx) {}
+  constructor(private ctx: Ctx) {}
 
   async mount(root: HTMLElement) {
     replace(root, h("header.view-head", null, h("h1", null, "Commandes & contrôleurs")), this.backupCard(), this.body);
@@ -192,12 +192,15 @@ export class ControlsView implements View {
   private visible(): Bind[] {
     const meta = this.meta!;
     const groups = MODES.find(([m]) => m === this.mode)?.[2];
-    const q = this.query.toLowerCase();
+    // Searched in English and in the language shown, accents and case ignored.
+    const q = fold(this.query);
     return this.binds.filter((b) => {
       const g = groupOf(meta, b.action);
       if (groups && !groups.includes(g)) return false;
-      if (q && !actionName(meta, b.action).toLowerCase().includes(q) && !comboLabel(meta, b).toLowerCase().includes(q)) return false;
-      return true;
+      if (!q) return true;
+      const name = actionName(meta, b.action);
+      const combo = comboLabel(meta, b);
+      return [name, tr(name), combo, tr(combo), b.action, GROUP_FR[g] ?? g, tr(GROUP_FR[g] ?? g)].some((t) => fold(t).includes(q));
     });
   }
 
@@ -382,26 +385,40 @@ export class ControlsView implements View {
     // Modifier keys used in combos are highlighted too.
     const modKeys = new Set(binds.flatMap((b) => b.modifiers.filter((m) => m.device === "Keyboard").map((m) => m.key)));
     const drawn = new Set<string>();
-    const key = (id: string, label: string, w = 1): HTMLElement => {
-      drawn.add(id);
-      const list = byKey.get(id) ?? [];
+    /** A key; `ids` are the names the game may give it (the first that is bound wins the colour). */
+    const key = (ids: string | string[], label: string, w = 1, tail = false): HTMLElement => {
+      const all = Array.isArray(ids) ? ids : [ids];
+      for (const id of all) drawn.add(id);
+      const list = all.flatMap((id) => byKey.get(id) ?? []);
       const g = list[0] ? groupOf(meta, list[0].action) : "";
       return h(
-        `div.kb-key${list.length ? `.bound.${groupClass(g)}` : ""}${modKeys.has(id) ? ".modkey" : ""}`,
+        `div.kb-key${list.length ? `.bound.${groupClass(g)}` : ""}${all.some((id) => modKeys.has(id)) ? ".modkey" : ""}${tail ? ".enter-tail" : ""}`,
         { style: { flexGrow: String(w), flexBasis: `${w * 44}px` }, title: list.length ? list.map((b) => `${comboLabel(meta, b)} → ${actionName(meta, b.action)}`).join("\n") : label },
-        h("span.kb-cap", null, label),
-        list.length ? h("span.kb-act", null, actionName(meta, list[0].action)) : null,
-        list.length > 1 ? h("span.kb-more", null, `+${list.length - 1}`) : null,
+        tail ? null : h("span.kb-cap", { "data-no-tr": "" }, label),
+        list.length && !tail ? h("span.kb-act", null, actionName(meta, list[0].action)) : null,
+        list.length > 1 && !tail ? h("span.kb-more", null, `+${list.length - 1}`) : null,
       );
     };
     const gap = () => h("div.kb-gap");
-    const letters = keyboardLetters(this.layout);
+    // Where each key is: the game names keys after the layout written in the bindings file;
+    // the labels are those of the keyboard chosen here (by default, the same one).
+    const ids = KEY_IDS[layoutFamily(this.layout)];
+    const kb = this.keyboardChoice();
+    const caps = KEY_CAPS[kb.layout];
+    const iso = kb.format === "iso";
+    const at = (row: Id[], cap: string[]) => row.map((id, i) => key(id, cap[i] ?? ""));
     const rows: HTMLElement[][] = [
       [key("Key_Escape", "Échap"), gap(), ...[1, 2, 3, 4].map((n) => key(`Key_F${n}`, `F${n}`)), gap(), ...[5, 6, 7, 8].map((n) => key(`Key_F${n}`, `F${n}`)), gap(), ...[9, 10, 11, 12].map((n) => key(`Key_F${n}`, `F${n}`))],
-      [key("Key_Grave", letters.grave), ..."1234567890".split("").map((c) => key(`Key_${c}`, c)), key("Key_Minus", "-"), key("Key_Equals", "="), key("Key_Backspace", "⌫", 2)],
-      [key("Key_Tab", "Tab", 1.5), ...letters.row1.map((c) => key(`Key_${c}`, c)), key("Key_LeftBracket", "["), key("Key_RightBracket", "]"), key("Key_BackSlash", "\\", 1.5)],
-      [key("Key_CapsLock", "Verr. maj", 1.75), ...letters.row2.map((c) => key(`Key_${c}`, c)), key("Key_SemiColon", ";"), key("Key_Apostrophe", "'"), key("Key_Enter", "Entrée", 2.25)],
-      [key("Key_LeftShift", "Maj G", 2.25), ...letters.row3.map((c) => key(`Key_${c}`, c)), key("Key_Comma", ","), key("Key_Period", "."), key("Key_Slash", "/"), key("Key_RightShift", "Maj D", 2.75)],
+      [...at(ids.num, caps.num), key("Key_Backspace", "⌫", 2)],
+      iso
+        ? [key("Key_Tab", "Tab", 1.5), ...at(ids.r1, caps.r1), key("Key_Enter", "Entrée", 1.5)]
+        : [key("Key_Tab", "Tab", 1.5), ...at(ids.r1, caps.r1), key(ids.extra, caps.extra, 1.5)],
+      iso
+        ? [key("Key_CapsLock", "Verr. maj", 1.75), ...at(ids.r2, caps.r2), key(ids.extra, caps.extra), key("Key_Enter", "", 1.25, true)]
+        : [key("Key_CapsLock", "Verr. maj", 1.75), ...at(ids.r2, caps.r2), key("Key_Enter", "Entrée", 2.25)],
+      iso
+        ? [key("Key_LeftShift", "Maj G", 1.25), key(ids.iso, caps.iso), ...at(ids.r3, caps.r3), key("Key_RightShift", "Maj D", 2.75)]
+        : [key("Key_LeftShift", "Maj G", 2.25), ...at(ids.r3, caps.r3), key("Key_RightShift", "Maj D", 2.75)],
       [key("Key_LeftControl", "Ctrl G", 1.5), key("Key_LeftWin", "Win", 1.25), key("Key_LeftAlt", "Alt", 1.25), key("Key_Space", "Espace", 6.25), key("Key_RightAlt", "Alt Gr", 1.25), key("Key_Apps", "Menu", 1.25), key("Key_RightControl", "Ctrl D", 1.5)],
     ];
     const nav: HTMLElement[][] = [
@@ -425,10 +442,36 @@ export class ControlsView implements View {
     return h(
       "div",
       null,
+      this.keyboardSwitches(),
       h("div.kb", null, block(rows, "main"), block(nav, "nav"), block(pad, "numpad")),
       this.legendKey(),
       others.length ? h("p.sub", null, `Touches hors schéma : ${[...new Set(others.map((b) => keyLabel(meta, b.key)))].join(", ")}`) : null,
       this.legendTable(binds),
+    );
+  }
+
+  /** The keyboard to draw: chosen in EDCH, or guessed from the bindings file. */
+  private keyboardChoice(): { layout: Family; format: "iso" | "ansi" } {
+    const s = this.ctx.store.state.settings;
+    const layout = s.kbLayout === "auto" ? layoutFamily(this.layout) : s.kbLayout;
+    // ANSI is the US keyboard; almost every other country uses ISO (L-shaped Enter, extra key by left Shift).
+    const format = s.kbFormat === "auto" ? (/^en-us$/i.test(this.layout) ? "ansi" : "iso") : s.kbFormat;
+    return { layout, format };
+  }
+
+  private keyboardSwitches(): HTMLElement {
+    const s = this.ctx.store.state.settings;
+    const seg = <T extends string>(value: T, options: [T, string][], set: (v: T) => void) =>
+      h("div.segmented.small", null, options.map(([v, l]) => h("button", { class: value === v ? "active" : "", onclick: () => (set(v), this.render()) }, l)));
+    const autoLayout = { qwerty: "QWERTY", azerty: "AZERTY", qwertz: "QWERTZ" }[layoutFamily(this.layout)];
+    const autoFormat = /^en-us$/i.test(this.layout) ? "ANSI" : "ISO";
+    return h(
+      "div.kb-switches",
+      null,
+      h("span.sub", null, "Mon clavier"),
+      seg(s.kbLayout, [["auto", `Auto (${autoLayout})`], ["azerty", "AZERTY"], ["qwerty", "QWERTY"], ["qwertz", "QWERTZ"]], (v) => this.ctx.store.updateSettings({ kbLayout: v })),
+      seg(s.kbFormat, [["auto", `Auto (${autoFormat})`], ["iso", "ISO"], ["ansi", "ANSI"]], (v) => this.ctx.store.updateSettings({ kbFormat: v })),
+      h("span.sub", { title: "ISO : touche Entrée en L et une touche de plus à côté du Maj gauche (Europe). ANSI : Entrée sur une ligne (États-Unis)." }, `Raccourcis enregistrés pour un clavier ${this.layout}`),
     );
   }
 
@@ -572,9 +615,86 @@ function rank(meta: BindsMeta, device: string): number {
 }
 
 /** Letter rows for the common layouts (Elite names keys after the layout's printed letters). */
-function keyboardLetters(layout: string): { grave: string; row1: string[]; row2: string[]; row3: string[] } {
-  const l = layout.toLowerCase();
-  if (l.startsWith("fr")) return { grave: "²", row1: "AZERTYUIOP".split(""), row2: "QSDFGHJKLM".split(""), row3: "WXCVBN".split("") };
-  if (l.startsWith("de")) return { grave: "^", row1: "QWERTZUIOP".split(""), row2: "ASDFGHJKL".split(""), row3: "YXCVBNM".split("") };
-  return { grave: "`", row1: "QWERTYUIOP".split(""), row2: "ASDFGHJKL".split(""), row3: "ZXCVBNM".split("") };
+type Family = "qwerty" | "azerty" | "qwertz";
+type Id = string | string[];
+interface KeyRows<T> {
+  num: T[];
+  r1: T[];
+  r2: T[];
+  r3: T[];
+  /** ANSI: the key at the end of the Q row; ISO: the key left of Enter. */
+  extra: T;
+  /** ISO only: the key between left Shift and the first letter. */
+  iso: T;
 }
+
+/** The keyboard family of a layout code from the bindings file (fr-FR, de-DE, en-GB…). */
+export function layoutFamily(layout: string): Family {
+  const l = layout.toLowerCase();
+  if (/^(de|cs|sk|hu|sl|hr|bs|sr-latn|sq)\b|-ch$/.test(l)) return "qwertz";
+  if (/^(fr|nl-be)\b/.test(l)) return "azerty";
+  return "qwerty";
+}
+
+const letters = (s: string) => s.split("").map((c) => `Key_${c}`);
+const digits = "1234567890".split("").map((c) => `Key_${c}`);
+
+/**
+ * The names the game gives the keys, position by position, for each family of layouts. Letters
+ * follow the layout; for the other keys the usual name comes first, then the alternatives some
+ * layouts use.
+ */
+const KEY_IDS: Record<Family, KeyRows<Id>> = {
+  qwerty: {
+    num: ["Key_Grave", ...digits, "Key_Minus", "Key_Equals"],
+    r1: [...letters("QWERTYUIOP"), "Key_LeftBracket", "Key_RightBracket"],
+    r2: [...letters("ASDFGHJKL"), "Key_SemiColon", "Key_Apostrophe"],
+    r3: [...letters("ZXCVBNM"), "Key_Comma", "Key_Period", "Key_Slash"],
+    extra: ["Key_BackSlash", "Key_Hash"],
+    iso: ["Key_LessThan", "Key_OEM102"],
+  },
+  azerty: {
+    num: [["Key_Grave", "Key_Superscript_Two"], ...digits, ["Key_Minus", "Key_RightParenthesis"], "Key_Equals"],
+    r1: [...letters("AZERTYUIOP"), ["Key_LeftBracket", "Key_Circumflex"], ["Key_RightBracket", "Key_Dollar"]],
+    r2: [...letters("QSDFGHJKLM"), ["Key_Apostrophe", "Key_U_Grave"]],
+    r3: [...letters("WXCVBN"), "Key_Comma", "Key_SemiColon", ["Key_Period", "Key_Colon"], ["Key_Slash", "Key_Exclamation"]],
+    extra: ["Key_BackSlash", "Key_Hash", "Key_Asterisk"],
+    iso: ["Key_LessThan", "Key_OEM102"],
+  },
+  qwertz: {
+    num: [["Key_Grave", "Key_Circumflex"], ...digits, ["Key_Minus", "Key_SZ"], ["Key_Equals", "Key_Acute"]],
+    r1: [...letters("QWERTZUIOP"), ["Key_LeftBracket", "Key_U_Umlaut"], ["Key_RightBracket", "Key_Plus"]],
+    r2: [...letters("ASDFGHJKL"), ["Key_SemiColon", "Key_O_Umlaut"], ["Key_Apostrophe", "Key_A_Umlaut"]],
+    r3: [...letters("YXCVBNM"), "Key_Comma", "Key_Period", "Key_Slash"],
+    extra: ["Key_BackSlash", "Key_Hash"],
+    iso: ["Key_LessThan", "Key_OEM102"],
+  },
+};
+
+/** What is printed on the keys, for the keyboard chosen in EDCH. */
+const KEY_CAPS: Record<Family, KeyRows<string>> = {
+  qwerty: {
+    num: ["`", ..."1234567890".split(""), "-", "="],
+    r1: [..."QWERTYUIOP".split(""), "[", "]"],
+    r2: [..."ASDFGHJKL".split(""), ";", "'"],
+    r3: [..."ZXCVBNM".split(""), ",", ".", "/"],
+    extra: "\\",
+    iso: "\\",
+  },
+  azerty: {
+    num: ["²", "& 1", "é 2", "\" 3", "' 4", "( 5", "- 6", "è 7", "_ 8", "ç 9", "à 0", ")", "="],
+    r1: [..."AZERTYUIOP".split(""), "^", "$"],
+    r2: [..."QSDFGHJKLM".split(""), "ù"],
+    r3: [..."WXCVBN".split(""), ",", ";", ":", "!"],
+    extra: "*",
+    iso: "<",
+  },
+  qwertz: {
+    num: ["^", ..."1234567890".split(""), "ß", "´"],
+    r1: [..."QWERTZUIOP".split(""), "Ü", "+"],
+    r2: [..."ASDFGHJKL".split(""), "Ö", "Ä"],
+    r3: [..."YXCVBNM".split(""), ",", ".", "-"],
+    extra: "#",
+    iso: "<",
+  },
+};

@@ -153,6 +153,7 @@ Unhandled promise: {0}
 PC injoignable : rien n'a été copié
 Copie impossible
 Copier « {0} »
+Copier le système de {0} ({1})
 Voir les modifications de ce module
 Où l'acheter
 Matériaux
@@ -312,8 +313,8 @@ Gabarit EDRefCard (MIT), image chargée depuis le dépôt GitHub d'EDRefCard.
 Pas de case sur ce gabarit
  (inversé)
 Échap
-Verr. maj
 Entrée
+Verr. maj
 Ctrl G
 Alt Gr
 Ctrl D
@@ -323,6 +324,9 @@ Pg ↑
 Pg ↓
 Verr num
 Touches hors schéma : {0}
+Auto ({0})
+ISO : touche Entrée en L et une touche de plus à côté du Maj gauche (Europe). ANSI : Entrée sur une ligne (États-Unis).
+Raccourcis enregistrés pour un clavier {0}
 Pavé tactile
 View / Back
 Menu / Start
@@ -713,6 +717,10 @@ Inclure les Fleet Carriers
 Inclure les ports planétaires
 Trier par prix le plus bas
 Trier par meilleur prix
+Aucun nom connu ne correspond à « {0} ». Choisis dans la liste qui s'affiche quand tu tapes.
+Plusieurs marchandises correspondent à « {0} » :
+Plusieurs vaisseaux correspondent à « {0} » :
+Plusieurs modules correspondent à « {0} » :
 Rien trouvé à moins de {0} al. Augmente la distance dans les Paramètres ou vérifie le nom.
 {0} stations correspondent · {1} affichées
 Prix d'achat · stock

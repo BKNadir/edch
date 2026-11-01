@@ -1087,5 +1087,14 @@
 "Plein écran : seulement cette page (Échap pour quitter)": "Full screen: this page only (Esc to exit)",
 "Ouvrir cette page seule dans le navigateur (pour un 2e écran)": "Open this page alone in the browser (for a second screen)",
 "Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone.": "The name is always copied to the PC's clipboard, even when you click from the phone.",
-"Depuis le téléphone, copier aussi dans le presse-papiers du téléphone": "From the phone, also copy to the phone's clipboard"
+"Depuis le téléphone, copier aussi dans le presse-papiers du téléphone": "From the phone, also copy to the phone's clipboard",
+"Copier le système de {0} ({1})": "Copy {0}'s system ({1})",
+"Auto ({0})": "Auto ({0})",
+"Mon clavier": "My keyboard",
+"ISO : touche Entrée en L et une touche de plus à côté du Maj gauche (Europe). ANSI : Entrée sur une ligne (États-Unis).": "ISO: L-shaped Enter key and one more key next to left Shift (Europe). ANSI: one-row Enter (United States).",
+"Raccourcis enregistrés pour un clavier {0}": "Bindings saved for a {0} keyboard",
+"Aucun nom connu ne correspond à « {0} ». Choisis dans la liste qui s'affiche quand tu tapes.": "No known name matches \"{0}\". Pick one from the list that appears as you type.",
+"Plusieurs marchandises correspondent à « {0} » :": "Several commodities match \"{0}\":",
+"Plusieurs vaisseaux correspondent à « {0} » :": "Several ships match \"{0}\":",
+"Plusieurs modules correspondent à « {0} » :": "Several modules match \"{0}\":"
 }

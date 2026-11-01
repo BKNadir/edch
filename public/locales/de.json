@@ -1087,5 +1087,14 @@
 "Plein écran : seulement cette page (Échap pour quitter)": "Vollbild: nur diese Seite (Esc zum Verlassen)",
 "Ouvrir cette page seule dans le navigateur (pour un 2e écran)": "Diese Seite allein im Browser öffnen (für einen zweiten Bildschirm)",
 "Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone.": "Der Name wird immer in die Zwischenablage des PCs kopiert, auch wenn du auf dem Handy klickst.",
-"Depuis le téléphone, copier aussi dans le presse-papiers du téléphone": "Vom Handy aus auch in die Zwischenablage des Handys kopieren"
+"Depuis le téléphone, copier aussi dans le presse-papiers du téléphone": "Vom Handy aus auch in die Zwischenablage des Handys kopieren",
+"Copier le système de {0} ({1})": "System von {0} kopieren ({1})",
+"Auto ({0})": "Auto ({0})",
+"Mon clavier": "Meine Tastatur",
+"ISO : touche Entrée en L et une touche de plus à côté du Maj gauche (Europe). ANSI : Entrée sur une ligne (États-Unis).": "ISO: L-förmige Eingabetaste und eine zusätzliche Taste neben der linken Umschalttaste (Europa). ANSI: einzeilige Eingabetaste (USA).",
+"Raccourcis enregistrés pour un clavier {0}": "Belegung für eine {0}-Tastatur gespeichert",
+"Aucun nom connu ne correspond à « {0} ». Choisis dans la liste qui s'affiche quand tu tapes.": "Kein bekannter Name passt zu „{0}“. Wähle aus der Liste, die beim Tippen erscheint.",
+"Plusieurs marchandises correspondent à « {0} » :": "Mehrere Waren passen zu „{0}“:",
+"Plusieurs vaisseaux correspondent à « {0} » :": "Mehrere Schiffe passen zu „{0}“:",
+"Plusieurs modules correspondent à « {0} » :": "Mehrere Module passen zu „{0}“:"
 }

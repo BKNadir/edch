@@ -48,6 +48,10 @@ export interface Settings {
   uiScale: number;
   /** On a phone, also copy to the phone's own clipboard (the PC's always gets it). */
   copyOnPhone: boolean;
+  /** Keyboard drawn on the Controls page ("auto": from the bindings file). */
+  kbLayout: "auto" | "qwerty" | "azerty" | "qwertz";
+  /** ISO (Europe: L-shaped Enter) or ANSI (US). */
+  kbFormat: "auto" | "iso" | "ansi";
 }
 
 export interface NotifySettings {
@@ -172,6 +176,8 @@ const DEFAULT_SETTINGS: Settings = {
   startView: "",
   uiScale: 100,
   copyOnPhone: false,
+  kbLayout: "auto",
+  kbFormat: "auto",
 };
 
 function load<T>(key: string, fallback: T): T {

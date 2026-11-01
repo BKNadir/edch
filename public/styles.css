@@ -802,3 +802,14 @@ body.focus-mode .focus-exit { display: inline-flex; }
   body.nav-collapsed .content { padding-bottom: 16px; }
   .focus-buttons { display: none; }
 }
+
+/* Engineer name: copies the workshop's system. */
+.eng-name { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; text-align: left; }
+.eng-name:hover { color: var(--cyan); text-decoration: underline; }
+
+/* Controls: which keyboard to draw (layout, ISO/ANSI). */
+.kb-switches { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 12px; }
+.segmented.small button { padding: 4px 10px; font-size: 12px; }
+/* ISO Enter: the lower part of the L, joined to the key above. */
+.kb-key.enter-tail { margin-top: -5px; min-height: 51px; border-top-left-radius: 0; border-top-right-radius: 0; border-top-color: transparent; }
+.kb-key .kb-cap { white-space: nowrap; }

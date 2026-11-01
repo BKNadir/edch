@@ -88,7 +88,7 @@ async function boot() {
 
   const store = new Store();
   bindStore(store);
-  bindLinks(store);
+  bindLinks(store, game.data.engineers);
   bindAlerts(store);
   initFocus(store);
   setRemoteCopyHere(store.state.settings.copyOnPhone);

@@ -1087,5 +1087,14 @@
 "Plein écran : seulement cette page (Échap pour quitter)": "Pantalla completa: solo esta página (Esc para salir)",
 "Ouvrir cette page seule dans le navigateur (pour un 2e écran)": "Abrir esta página sola en el navegador (para una segunda pantalla)",
 "Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone.": "El nombre siempre se copia al portapapeles del PC, incluso cuando haces clic desde el móvil.",
-"Depuis le téléphone, copier aussi dans le presse-papiers du téléphone": "Desde el móvil, copiar también al portapapeles del móvil"
+"Depuis le téléphone, copier aussi dans le presse-papiers du téléphone": "Desde el móvil, copiar también al portapapeles del móvil",
+"Copier le système de {0} ({1})": "Copiar el sistema de {0} ({1})",
+"Auto ({0})": "Auto ({0})",
+"Mon clavier": "Mi teclado",
+"ISO : touche Entrée en L et une touche de plus à côté du Maj gauche (Europe). ANSI : Entrée sur une ligne (États-Unis).": "ISO: tecla Intro en forma de L y una tecla más junto a Mayús izquierda (Europa). ANSI: Intro de una sola fila (Estados Unidos).",
+"Raccourcis enregistrés pour un clavier {0}": "Atajos guardados para un teclado {0}",
+"Aucun nom connu ne correspond à « {0} ». Choisis dans la liste qui s'affiche quand tu tapes.": "Ningún nombre conocido coincide con «{0}». Elige en la lista que aparece al escribir.",
+"Plusieurs marchandises correspondent à « {0} » :": "Varias mercancías coinciden con «{0}»:",
+"Plusieurs vaisseaux correspondent à « {0} » :": "Varias naves coinciden con «{0}»:",
+"Plusieurs modules correspondent à « {0} » :": "Varios módulos coinciden con «{0}»:"
 }

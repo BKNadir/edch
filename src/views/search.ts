@@ -1,4 +1,4 @@
-import { gameEnglish, gameName } from "../i18n.js";
+import { gameEnglish, gameName, resolveGameName, fold } from "../i18n.js";
 import { locale } from "../i18n.js";
 import { spanshPost } from "../bridge.js";
 import { h, icon, fmt, replace } from "../dom.js";
@@ -52,6 +52,8 @@ export class SearchView implements View {
   private opts = { largePad: false, carriers: false, planetary: true, sortPrice: true, minQty: 1 };
   private values: Record<Tab, string> = { buy: "", sell: "", ship: "", module: "", service: SERVICES[0][0] };
   private cls = "";
+  /** Only the latest search may show its results (an older, slower answer is dropped). */
+  private runId = 0;
   private rating = "";
 
   constructor(private ctx: Ctx) {}
@@ -170,16 +172,48 @@ export class SearchView implements View {
     const g = this.ctx.game.data;
     const f = this.filters();
     let name = value;
+    // Typed in any language, with or without accents, or only partly: find the game's name.
+    const pick = (candidates: string[], several: (typed: string) => string): string | null => {
+      const r = resolveGameName(typed, candidates);
+      if (r.name) {
+        if (fold(gameName(r.name)) !== fold(typed) && fold(r.name) !== fold(typed)) {
+          this.values[t] = gameName(r.name);
+          const input = this.form.querySelector<HTMLInputElement>("input.big");
+          if (input) input.value = this.values[t];
+        }
+        return r.name;
+      }
+      replace(
+        this.out,
+        r.suggestions.length
+          ? h(
+              "div.notice",
+              null,
+              icon("search"),
+              ` ${several(typed)} `,
+              r.suggestions.flatMap((sug, i) => [
+                i ? " · " : "",
+                h("button.inline-link.ref-link", { "data-no-tr": "", onclick: () => ((this.values[t] = gameName(sug)), this.renderForm(), this.run()) }, gameName(sug)),
+              ]),
+            )
+          : h("p.empty", null, `Aucun nom connu ne correspond à « ${typed} ». Choisis dans la liste qui s'affiche quand tu tapes.`),
+      );
+      return null;
+    };
     if (t === "buy" || t === "sell") {
-      const lower = value.toLowerCase();
-      const c = g.commodities.find((x) => x.name.toLowerCase() === lower) ?? g.commodities.find((x) => gameName(x.name).toLowerCase() === typed.toLowerCase());
-      name = c?.name ?? value;
+      const found = pick(g.commodities.map((c) => c.name), (x) => `Plusieurs marchandises correspondent à « ${x} » :`);
+      if (!found) return;
+      name = found;
       f.market = [{ name, [t === "buy" ? "supply" : "demand"]: { value: [String(this.opts.minQty), "1000000000"], comparison: "<=>" } }];
     } else if (t === "ship") {
-      name = g.ships.find((x) => x.toLowerCase() === value.toLowerCase()) ?? value;
+      const found = pick(g.ships, (x) => `Plusieurs vaisseaux correspondent à « ${x} » :`);
+      if (!found) return;
+      name = found;
       f.ships = { value: [name] };
     } else if (t === "module") {
-      name = g.modules.find((x) => x.toLowerCase() === value.toLowerCase()) ?? g.modules.find((x) => gameName(x).toLowerCase() === typed.toLowerCase()) ?? value;
+      const found = pick(g.modules, (x) => `Plusieurs modules correspondent à « ${x} » :`);
+      if (!found) return;
+      name = found;
       const group: Json = { name: { value: [name, ...(g.moduleAliases[name] ?? [])] } };
       if (this.cls) group.class = { value: [this.cls] };
       if (this.rating) group.rating = { value: [this.rating] };
@@ -197,8 +231,10 @@ export class SearchView implements View {
       ...(ref.coords ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } } : { reference_system: ref.system }),
     };
     replace(this.out, h("p.sub", null, h("span.spinner"), " Recherche Spansh…"));
+    const id = ++this.runId;
     try {
       const res = await spanshPost("stations/search", body);
+      if (id !== this.runId) return;
       let rows: Json[] = Array.isArray(res?.results) ? res.results : [];
       if ((t === "buy" || t === "sell") && this.opts.sortPrice) {
         const price = (r: Json) => {
@@ -234,6 +270,7 @@ export class SearchView implements View {
         ),
       );
     } catch (e) {
+      if (id !== this.runId) return;
       replace(this.out, h("p.error", null, icon("warn"), ` ${String((e as Error).message ?? e)}`));
     }
   }

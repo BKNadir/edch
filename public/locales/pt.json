@@ -1087,5 +1087,14 @@
 "Plein écran : seulement cette page (Échap pour quitter)": "Tela cheia: só esta página (Esc para sair)",
 "Ouvrir cette page seule dans le navigateur (pour un 2e écran)": "Abrir só esta página no navegador (para uma segunda tela)",
 "Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone.": "O nome é sempre copiado para a área de transferência do PC, mesmo quando você clica pelo celular.",
-"Depuis le téléphone, copier aussi dans le presse-papiers du téléphone": "Pelo celular, copiar também para a área de transferência do celular"
+"Depuis le téléphone, copier aussi dans le presse-papiers du téléphone": "Pelo celular, copiar também para a área de transferência do celular",
+"Copier le système de {0} ({1})": "Copiar o sistema de {0} ({1})",
+"Auto ({0})": "Auto ({0})",
+"Mon clavier": "Meu teclado",
+"ISO : touche Entrée en L et une touche de plus à côté du Maj gauche (Europe). ANSI : Entrée sur une ligne (États-Unis).": "ISO: tecla Enter em L e uma tecla a mais ao lado do Shift esquerdo (Europa). ANSI: Enter de uma linha (Estados Unidos).",
+"Raccourcis enregistrés pour un clavier {0}": "Atalhos salvos para um teclado {0}",
+"Aucun nom connu ne correspond à « {0} ». Choisis dans la liste qui s'affiche quand tu tapes.": "Nenhum nome conhecido corresponde a \"{0}\". Escolha na lista que aparece enquanto você digita.",
+"Plusieurs marchandises correspondent à « {0} » :": "Várias mercadorias correspondem a \"{0}\":",
+"Plusieurs vaisseaux correspondent à « {0} » :": "Várias naves correspondem a \"{0}\":",
+"Plusieurs modules correspondent à « {0} » :": "Vários módulos correspondem a \"{0}\":"
 }

@@ -12,8 +12,11 @@ import { setDestination } from "./views/navigation.js";
 import { presetSearch } from "./views/search.js";
 
 let store: Store | null = null;
-export function bindLinks(s: Store) {
+/** Engineer → the system of their workshop. */
+const engineerSystems = new Map<string, string>();
+export function bindLinks(s: Store, engineers: { name: string; system: string }[] = []) {
   store = s;
+  for (const e of engineers) engineerSystems.set(e.name, e.system);
 }
 
 /** Copies on the PC, where the game runs (from a phone, only the PC's clipboard is used). */
@@ -61,6 +64,24 @@ export function openMaterial(id: string) {
 
 export const systemLink = (name?: string, opts: { navigate?: boolean; title?: string; text?: string } = {}) =>
   name ? h("button.sys", { title: opts.title ?? `Copier « ${name} »`, onclick: () => openSystem(name, opts) }, icon("copy"), h("span", null, opts.text ?? name)) : null;
+
+/** An engineer was clicked: copy the system of their workshop (like a system link). */
+export function openEngineer(name: string) {
+  const system = engineerSystems.get(name);
+  log.debug("link", `engineer "${name}"`);
+  if (system) void openSystem(system);
+}
+
+/** An engineer's name that copies their system when clicked. */
+export const engineerLink = (name: string) => {
+  const system = engineerSystems.get(name);
+  return system
+    ? h("button.inline-link.ref-link", { title: `Copier le système de ${name} (${system})`, "data-no-tr": "", onclick: (e: Event) => (e.stopPropagation(), openEngineer(name)) }, name)
+    : h("span", { "data-no-tr": "" }, name);
+};
+
+/** Several engineers, comma separated, each clickable. */
+export const engineerLinks = (names: string[]) => names.flatMap((n, i) => [i ? ", " : "", engineerLink(n)]);
 
 export const moduleLink = (module: string, label = gameName(module)) =>
   h("button.inline-link.ref-link", { title: "Voir les modifications de ce module", onclick: (e: Event) => (e.stopPropagation(), openModule(module)) }, label);

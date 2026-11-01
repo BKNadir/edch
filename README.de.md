@@ -102,7 +102,7 @@ Aufbau:
   - `i18n.ts`: Übersetzungsschicht.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: erzeugen die Daten in `public/` neu (siehe NOTICE).
 
-Bei jedem Push auf `main` läuft ein Windows-Build. Um eine Version zu veröffentlichen, pushe einen Tag wie `v0.9.8`: Das Release wird veröffentlicht und installierte Kopien bieten das Update an.
+Bei jedem Push auf `main` läuft ein Windows-Build. Um eine Version zu veröffentlichen, pushe einen Tag wie `v0.9.9`: Das Release wird veröffentlicht und installierte Kopien bieten das Update an.
 
 ## Roadmap
 

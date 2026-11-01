@@ -4,8 +4,7 @@ import { distance, fmtLy, inaraSystem } from "../spansh.js";
 import { openUrl } from "../bridge.js";
 import type { Engineer } from "../types.js";
 import type { EngineerStatus } from "../journal.js";
-import { copySystem } from "./results.js";
-import { moduleLink } from "../links.js";
+import { moduleLink, openSystem } from "../links.js";
 
 const PROGRESS_FR: Record<string, string> = {
   Unlocked: "Débloqué",
@@ -102,7 +101,7 @@ export class EngineersView implements View {
       h(
         "div.eng-head",
         null,
-        h("div", null, h("h3", null, e.name), h("p.sub", null, `${e.station}${e.body ? ` · corps ${e.body}` : ""}`)),
+        h("div", null, h("h3", null, h("button.eng-name", { title: `Copier le système de ${e.name} (${e.system})`, "data-no-tr": "", onclick: () => openSystem(e.system) }, e.name)), h("p.sub", null, `${e.station}${e.body ? ` · corps ${e.body}` : ""}`)),
         st
           ? h(`span.badge${unlocked ? ".hit" : ""}`, null, PROGRESS_FR[st.progress] ?? st.progress)
           : h("span.badge.muted", null, "Pas encore rencontré"),
@@ -110,7 +109,7 @@ export class EngineersView implements View {
       h(
         "div.result-main",
         null,
-        h("button.sys", { title: `Copier « ${e.system} »`, onclick: () => copySystem(e.system) }, icon("copy"), h("span", null, e.system)),
+        h("button.sys", { title: `Copier « ${e.system} »`, onclick: () => openSystem(e.system) }, icon("copy"), h("span", null, e.system)),
         h("span.dist", null, fmtLy(d)),
         h("button.link", { title: "Voir le système sur Inara", onclick: () => openUrl(inaraSystem(e.system)) }, "Inara", icon("link")),
       ),
