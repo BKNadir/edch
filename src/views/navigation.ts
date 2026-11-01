@@ -250,7 +250,20 @@ export class NavigationView implements View {
     }
   }
 
+  private plottingShip = false;
+
   private async plotShip(from: string, to: string, range: number, efficiency: number, supercharge: 4 | 6 = 4) {
+    // A second click while Spansh is still working would ask for the same route twice.
+    if (this.plottingShip) return;
+    this.plottingShip = true;
+    try {
+      await this.plotShipNow(from, to, range, efficiency, supercharge);
+    } finally {
+      this.plottingShip = false;
+    }
+  }
+
+  private async plotShipNow(from: string, to: string, range: number, efficiency: number, supercharge: 4 | 6) {
     replace(this.routeOut, h("p.sub", null, h("span.spinner"), " Spansh calcule l'itinéraire…"));
     try {
       const res: Json = await spanshJob("route", [
@@ -314,8 +327,20 @@ export class NavigationView implements View {
     }
   }
 
+  private plottingCarrier = false;
+
   private async plotCarrier(from: string, to: string, used: number, tank: number, hold: number) {
     if (!from || !to) return replace(this.carrierOut, h("p.error", null, "Indique le départ et la destination."));
+    if (this.plottingCarrier) return;
+    this.plottingCarrier = true;
+    try {
+      await this.plotCarrierNow(from, to, used, tank, hold);
+    } finally {
+      this.plottingCarrier = false;
+    }
+  }
+
+  private async plotCarrierNow(from: string, to: string, used: number, tank: number, hold: number) {
     replace(this.carrierOut, h("p.sub", null, h("span.spinner"), " Spansh calcule l'itinéraire du carrier…"));
     try {
       const res: Json = await spanshJob("fleetcarrier/route", [

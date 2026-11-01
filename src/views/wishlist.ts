@@ -182,14 +182,18 @@ export class WishlistView implements View {
   }
 
   private async plot(plan: TourPlan, from: string, range: number) {
+    // A second click while Spansh is still working would plot the whole tour twice.
+    if (this.plotting) return;
     this.plotting = true;
+    this.update(); // the button shows as disabled
     replace(this.tourOut, h("p.sub", null, h("span.spinner"), " Spansh calcule l'itinéraire…"));
     try {
       await plotTour(from, plan.stops, range, (leg, of) => replace(this.tourOut, h("p.sub", null, h("span.spinner"), ` Spansh calcule l'étape ${leg}/${of}…`)), superchargeMultiplier(this.ctx.store.state.cmdr.loadout?.fsd));
       this.plotting = false;
-      this.renderRoute(this.ctx.store.state.cmdr.location?.system);
+      this.update();
     } catch (e) {
       this.plotting = false;
+      this.update();
       replace(this.tourOut, h("p.error", null, icon("warn"), ` ${String((e as Error).message ?? e)}`));
     }
   }

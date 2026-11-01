@@ -6,6 +6,7 @@ and EDCH shows it in the update banner.
 ## 0.10.3
 
 - Fixed: after a visit to Colonisation (and on some other pages that wait for Spansh, EDSM or Inara), the page could come back by itself over the one you were on, for example over Navigation. A page you left now stays closed, and Colonisation stops refreshing your carriers' markets once you leave it.
+- A second click on "Plot the route" (engineer tour, ship route, carrier route) while Spansh is still working no longer starts the same calculation again.
 
 ## 0.10.2
 
