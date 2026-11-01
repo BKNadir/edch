@@ -279,7 +279,7 @@ export class Uploaders {
   private ship: Json = {};
 
   private queueInara(ev: Json) {
-    const add = (eventName: string, eventData: unknown) => this.inaraEvents.push({ eventName, eventTimestamp: ev.timestamp, eventData });
+    const add = (eventName: string, eventData: unknown) => !this.inaraRefused && this.inaraEvents.push({ eventName, eventTimestamp: ev.timestamp, eventData });
     const ship = { shipType: this.ship.type, shipGameID: this.ship.id };
     switch (ev.event) {
       case "LoadGame":
@@ -335,7 +335,7 @@ export class Uploaders {
 
   private async flushInara() {
     const s = this.settings();
-    if (!s.inara || !s.inaraKey || !this.session.commander) return;
+    if (!s.inara || !s.inaraKey || !this.session.commander || this.inaraRefused) return;
     if (this.inaraMaterials) {
       this.inaraMaterials = false;
       const mats = Object.entries(this.materials()).map(([itemName, itemCount]) => ({ itemName, itemCount }));
@@ -360,6 +360,14 @@ export class Uploaders {
       const status = Number(res?.header?.eventStatus ?? reply.status);
       const ok = status === 200 || status === 204;
       const bad = (res.events ?? []).filter((e: Json) => Number(e.eventStatus) >= 300);
+      // Inara only accepts applications it has whitelisted: until EDCH is, every request is
+      // refused. Stop for this session instead of piling up errors on Inara's side.
+      if (status === 400 && /no access allowed/i.test(String(res?.header?.eventStatusText ?? ""))) {
+        this.inaraRefused = true;
+        this.inaraEvents = [];
+        this.log("Inara", `${events.length} événement(s)`, false, "Inara n'a pas encore autorisé EDCH (validation de l'application en attente). Envoi vers Inara suspendu jusqu'au prochain démarrage.");
+        return;
+      }
       this.log("Inara", `${events.length} événement(s)`, ok && !bad.length, ok && !bad.length ? undefined : `${status} ${res?.header?.eventStatusText ?? bad[0]?.eventStatusText ?? ""}`);
     } catch (e) {
       this.inaraEvents.unshift(...events);
@@ -378,4 +386,5 @@ export class Uploaders {
     }
   }
   private lastInara = 0;
+  private inaraRefused = false;
 }

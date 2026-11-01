@@ -891,5 +891,6 @@
 "Ne donne pas accès à ton compte Tailscale à d'autres personnes.": "Не давайте другим доступ к своему аккаунту Tailscale.",
 "Pour couper l'accès : décoche l'option, désactive le serveur local, ou clique sur « Nouveau code » pour déconnecter tous les appareils.": "Чтобы закрыть доступ: снимите опцию, выключите локальный сервер или нажмите «Новый код», чтобы отключить все устройства.",
 "Page en cours de développement :": "Страница в разработке:",
-"toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit rien dans le journal quand une mission est partagée ou reçue en escadrille, donc le suivi des missions partagées reste approximatif.": "не все функции пока работают полностью. Игра ничего не пишет в журнал, когда миссией делятся или получают её в звене, поэтому отслеживание общих миссий пока приблизительное."
+"toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit rien dans le journal quand une mission est partagée ou reçue en escadrille, donc le suivi des missions partagées reste approximatif.": "не все функции пока работают полностью. Игра ничего не пишет в журнал, когда миссией делятся или получают её в звене, поэтому отслеживание общих миссий пока приблизительное.",
+"Inara n'a pas encore autorisé EDCH (validation de l'application en attente). Envoi vers Inara suspendu jusqu'au prochain démarrage.": "Inara ещё не разрешила EDCH (одобрение приложения ожидается). Отправка в Inara приостановлена до следующего запуска."
 }

@@ -6,6 +6,7 @@ and EDCH shows it in the update banner.
 ## 0.8.1
 
 - The Missions page says it's still in development: the game writes nothing to the journal when a wing mission is shared or received, so tracking shared missions is approximate.
+- Inara: while Inara hasn't approved EDCH, the sync log says so clearly and EDCH stops sending until the next start, instead of repeating the error.
 
 ## 0.8.0
 
