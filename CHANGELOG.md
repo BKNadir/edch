@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.1
+
+- The Missions page says it's still in development: the game writes nothing to the journal when a wing mission is shared or received, so tracking shared missions is approximate.
+
 ## 0.8.0
 
 - The current ship is detected as soon as you change it (shipyard swap, new ship, rename), instead of keeping the previous ship's name until a restart.

@@ -889,5 +889,7 @@
 "l'option n'est pas cochée, ou Tailscale n'était pas actif quand la page s'est ouverte.": "a opção não está marcada, ou o Tailscale não estava ativo quando a página abriu.",
 "Ne partage jamais le QR code ni le lien : ils contiennent le code secret.": "Nunca compartilhe o QR code nem o link: eles contêm o código secreto.",
 "Ne donne pas accès à ton compte Tailscale à d'autres personnes.": "Não dê acesso à sua conta Tailscale a outras pessoas.",
-"Pour couper l'accès : décoche l'option, désactive le serveur local, ou clique sur « Nouveau code » pour déconnecter tous les appareils.": "Para cortar o acesso: desmarque a opção, desative o servidor local ou clique em \"Novo código\" para desconectar todos os aparelhos."
+"Pour couper l'accès : décoche l'option, désactive le serveur local, ou clique sur « Nouveau code » pour déconnecter tous les appareils.": "Para cortar o acesso: desmarque a opção, desative o servidor local ou clique em \"Novo código\" para desconectar todos os aparelhos.",
+"Page en cours de développement :": "Página em desenvolvimento:",
+"toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit rien dans le journal quand une mission est partagée ou reçue en escadrille, donc le suivi des missions partagées reste approximatif.": "nem todas as funções estão 100 % operacionais ainda. O jogo não escreve nada no diário quando uma missão é compartilhada ou recebida na esquadrilha, então o acompanhamento das missões compartilhadas continua aproximado."
 }

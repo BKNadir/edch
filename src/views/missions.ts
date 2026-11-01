@@ -75,6 +75,13 @@ export class MissionsView implements View {
     replace(
       this.root,
       h("header.view-head", null, h("div", null, h("h1", null, "Missions"), h("p.sub", null, `${missions.length} missions en cours · ${wingCount} d'escadrille`))),
+      h(
+        "p.notice",
+        null,
+        icon("warn"),
+        " ",
+        h("span", null, h("strong", null, "Page en cours de développement : "), "toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit rien dans le journal quand une mission est partagée ou reçue en escadrille, donc le suivi des missions partagées reste approximatif."),
+      ),
       this.massacre(missions),
       this.list(missions),
       this.wing(),

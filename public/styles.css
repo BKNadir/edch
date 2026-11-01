@@ -110,7 +110,7 @@ button:disabled { opacity: 0.45; cursor: not-allowed; }
 .bar.small { height: 3px; margin: 3px 0; max-width: 160px; }
 
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
-.notice { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: var(--radius); background: var(--accent-dim); color: #ffc79e; margin-bottom: 14px; }
+.notice { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: var(--radius); background: var(--accent-dim); color: var(--accent-soft); margin-bottom: 14px; }
 .empty { color: var(--muted); font-size: 13px; padding: 4px 0; }
 .error { color: #ff9a9a; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .empty-state { text-align: center; padding: 60px 20px; display: grid; gap: 10px; justify-items: center; }

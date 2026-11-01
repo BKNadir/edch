@@ -411,6 +411,8 @@ Points chauds
 Récupération
 {0} / {1} éliminations
 {0} / {1} livrés
+Page en cours de développement : 
+toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit rien dans le journal quand une mission est partagée ou reçue en escadrille, donc le suivi des missions partagées reste approximatif.
 Aucune mission en cours. Les missions acceptées en jeu apparaissent ici, avec leur objectif, leur destination et le temps restant.
 Objectif atteint
 Retourne à 

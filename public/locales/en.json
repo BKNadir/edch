@@ -889,5 +889,7 @@
 "l'option n'est pas cochée, ou Tailscale n'était pas actif quand la page s'est ouverte.": "the option isn't ticked, or Tailscale wasn't running when the page opened.",
 "Ne partage jamais le QR code ni le lien : ils contiennent le code secret.": "Never share the QR code or the link: they contain the secret code.",
 "Ne donne pas accès à ton compte Tailscale à d'autres personnes.": "Don't give other people access to your Tailscale account.",
-"Pour couper l'accès : décoche l'option, désactive le serveur local, ou clique sur « Nouveau code » pour déconnecter tous les appareils.": "To cut access: untick the option, turn the local server off, or click \"New code\" to disconnect every device."
+"Pour couper l'accès : décoche l'option, désactive le serveur local, ou clique sur « Nouveau code » pour déconnecter tous les appareils.": "To cut access: untick the option, turn the local server off, or click \"New code\" to disconnect every device.",
+"Page en cours de développement :": "Work in progress:",
+"toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit rien dans le journal quand une mission est partagée ou reçue en escadrille, donc le suivi des missions partagées reste approximatif.": "not every feature is fully working yet. The game writes nothing to the journal when a mission is shared or received in a wing, so tracking shared missions is still approximate."
 }
