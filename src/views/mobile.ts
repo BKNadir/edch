@@ -15,7 +15,7 @@ export class MobileView implements View {
 
   async mount(root: HTMLElement) {
     this.root = root;
-    replace(root, h("header.view-head", null, h("div", null, h("h1", null, "Accès mobile"), h("p.sub", null, "Ouvre EDCH sur ton téléphone ou ta tablette, sur le même réseau que ce PC."))), this.body);
+    replace(root, h("header.view-head", null, h("div", null, h("h1", null, "Accès distant"), h("p.sub", null, "Ouvre EDCH sur ton téléphone, ta tablette ou un autre écran (navigateur), sur le même réseau que ce PC."))), this.body);
     await this.render();
   }
 
@@ -63,7 +63,7 @@ export class MobileView implements View {
       h(
         "section.card",
         null,
-        h("div.sync-head", null, h("div", null, h("h3", null, "Serveur local"), h("p.sub", null, "Désactivé par défaut. Seuls les appareils qui ont scanné le QR code peuvent ouvrir la page : connaître l'adresse du PC ne suffit pas.")), toggle),
+        h("div.sync-head", null, h("div", null, h("h3", null, "Serveur d'accès distant"), h("p.sub", null, "Désactivé par défaut. Il sert aussi la page « Ouvrir dans le navigateur ». Seuls les appareils qui ont scanné le QR code peuvent ouvrir la page : connaître l'adresse du PC ne suffit pas.")), toggle),
         this.error ? h("p.error", null, icon("warn"), ` ${this.error}`) : null,
       ),
     ];

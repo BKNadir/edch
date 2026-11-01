@@ -310,6 +310,8 @@ export async function onConfirmClose(cb: () => void): Promise<void> {
   if (!isTauri() || remote) return;
   await window.__TAURI__!.event.listen("confirm-close", () => cb());
 }
+export const setFullscreen = (on: boolean) => (isTauri() && !remote ? invoke<void>("set_fullscreen", { on }).catch(() => undefined) : Promise.resolve());
+export const openPageInBrowser = (view: string) => invoke<void>("open_page_in_browser", { view });
 export const logWrite = (level: string, source: string, message: string) => invoke<void>("log_write", { level, source, message });
 export const logSetDebug = (on: boolean) => invoke<string | null>("log_set_debug", { on });
 export const logsOpen = () => invoke<string>("logs_open");
@@ -331,8 +333,15 @@ export async function openUrl(url: string): Promise<void> {
  * Copies text to the clipboard. On a phone (remote), nothing is copied on the phone: the text
  * goes to the PC's clipboard, where the game runs.
  */
+let copyHereToo = false;
+/** On a phone: also copy on the phone itself (Settings option), besides the PC. */
+export const setRemoteCopyHere = (on: boolean) => {
+  copyHereToo = on;
+};
+
 export async function copyText(text: string): Promise<boolean> {
   if (remote) {
+    if (copyHereToo) await localCopy(text);
     try {
       await remoteAction({ type: "clipboard", text });
       return true;
@@ -340,6 +349,10 @@ export async function copyText(text: string): Promise<boolean> {
       return false;
     }
   }
+  return localCopy(text);
+}
+
+async function localCopy(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text);
     return true;

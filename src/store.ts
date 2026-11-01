@@ -46,6 +46,8 @@ export interface Settings {
   startView: string;
   /** Interface size, in percent. */
   uiScale: number;
+  /** On a phone, also copy to the phone's own clipboard (the PC's always gets it). */
+  copyOnPhone: boolean;
 }
 
 export interface NotifySettings {
@@ -169,6 +171,7 @@ const DEFAULT_SETTINGS: Settings = {
   hiddenViews: [],
   startView: "",
   uiScale: 100,
+  copyOnPhone: false,
 };
 
 function load<T>(key: string, fallback: T): T {

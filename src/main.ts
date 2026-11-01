@@ -1,5 +1,7 @@
 import { NAV, visibleNav } from "./nav.js";
 import { gameBadge, setupDesktop } from "./desktop.js";
+import { focusButtons, initFocus, toggleNav } from "./focus.js";
+import { setRemoteCopyHere } from "./bridge.js";
 import { changelogAfterUpdate } from "./changelog.js";
 import { bindAlerts, clearAlert, goTo, inStartup, startupAlert } from "./alerts.js";
 import { LANGS, browserLang, guessLang, initI18n, saveLang, savedLang, watchTranslations } from "./i18n.js";
@@ -88,6 +90,9 @@ async function boot() {
   bindStore(store);
   bindLinks(store);
   bindAlerts(store);
+  initFocus(store);
+  setRemoteCopyHere(store.state.settings.copyOnPhone);
+  store.subscribe((st) => setRemoteCopyHere(st.settings.copyOnPhone));
   // An unexpected error right after start-up is worth a banner, not just a log line.
   window.addEventListener("error", (e) => {
     if (inStartup()) startupAlert("ui-error", "Erreur inattendue au démarrage", String(e.message ?? e));
@@ -391,7 +396,7 @@ function renderHeader(el: HTMLElement, ctx: Ctx) {
   }
   replace(
     el,
-    h("div.brand", null, h("img", { src: "favicon.png", alt: "" }), h("span", null, "EDCH")),
+    h("button.brand", { title: "Masquer ou afficher le menu", onclick: () => toggleNav() }, h("img", { src: "favicon.png", alt: "" }), h("span", null, "EDCH")),
     h(
       "div.cmdr",
       null,
@@ -409,6 +414,7 @@ function renderHeader(el: HTMLElement, ctx: Ctx) {
         )
       : h("div.where.sub", null, "Position inconnue"),
     gameBadge(ctx.store.state.game),
+    focusButtons(),
     h("div.live", { class: watch.state, title: watch.message ?? watch.file ?? "" }, h("span.dot"), statusLabel[watch.state] ?? watch.state),
   );
 }

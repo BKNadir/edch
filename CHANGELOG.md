@@ -3,6 +3,14 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.8
+
+- Click the EDCH logo to fold the side menu away (and click it again to bring it back). It stays folded at the next start.
+- Full screen button in the top bar: only the current page, without the menu and the top bar. Esc (or the "Exit full screen" button) brings everything back; F11 also toggles it.
+- "Open this page alone in the browser" button, for a second screen. It appears while the remote access server is on, since that server serves the page.
+- "Mobile access" is now called "Remote access": it serves the phone, a tablet, or any browser.
+- New option in Settings → Game and search: from the phone, also copy to the phone's clipboard. The PC's clipboard always gets it.
+
 ## 0.9.7
 
 - On the phone, copying (a system name, for example) no longer touches the phone's clipboard: the text only goes to the clipboard of the PC running EDCH, where the game is.

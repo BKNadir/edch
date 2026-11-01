@@ -29,11 +29,12 @@ import { newRemoteToken, type Settings, type Store } from "./store.js";
 import { startGame } from "./desktop.js";
 
 /** Settings a phone can change (display only: never keys, paths or the PC's behaviour). */
-const PHONE_SETTINGS = ["theme", "hiddenViews", "uiScale", "startView", "systemOpensNav", "notify", "mining"] as const;
+const PHONE_SETTINGS = ["theme", "hiddenViews", "uiScale", "startView", "systemOpensNav", "notify", "mining", "copyOnPhone"] as const;
 
 // ---------------- PC side ----------------
 
 let running: RemoteInfo | null = null;
+let hostStore: Store | null = null;
 let publishTimer: number | undefined;
 
 export const remoteRunning = () => running;
@@ -67,12 +68,14 @@ export async function startRemote(store: Store): Promise<RemoteInfo> {
   }
   running = await remoteStart(r.token, r.port);
   publishNow(store);
+  store.notify(); // the top bar shows "open in the browser" only while the server runs
   return running;
 }
 
 export async function stopRemote() {
   running = null;
   await remoteStop().catch(() => undefined);
+  hostStore?.notify();
 }
 
 /** A new secret: every paired device has to scan the new QR code. */
@@ -110,6 +113,7 @@ function publishNow(store: Store) {
 
 /** PC: keep phones up to date and apply what they send. */
 export async function setupRemoteHost(store: Store) {
+  hostStore = store;
   store.subscribe(() => {
     if (!running) return;
     window.clearTimeout(publishTimer);
@@ -137,7 +141,7 @@ export async function setupRemoteHost(store: Store) {
     try {
       await startRemote(store);
     } catch (e) {
-      startupAlert("remote", "Accès mobile indisponible", String((e as Error)?.message ?? e), goTo("mobile", "Accès mobile"));
+      startupAlert("remote", "Accès distant indisponible", String((e as Error)?.message ?? e), goTo("mobile", "Accès distant"));
     }
   }
 }

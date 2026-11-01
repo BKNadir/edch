@@ -33,7 +33,7 @@ export function setupDesktop(s: Store) {
   applyClose();
   s.subscribe(applyClose);
   void onConfirmClose(async () => {
-    const answer = await dialog("Fermer EDCH ?", [h("p", null, "EDCH arrête de lire le journal du jeu et l'accès mobile se coupe.")], [
+    const answer = await dialog("Fermer EDCH ?", [h("p", null, "EDCH arrête de lire le journal du jeu et l'accès distant se coupe.")], [
       { label: "Annuler", value: "no" },
       { label: "Fermer", primary: true, value: "yes" },
     ]);

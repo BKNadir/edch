@@ -844,6 +844,8 @@ pub fn run() {
             app::launch_game,
             app::set_close_behavior,
             app::app_quit,
+            app::set_fullscreen,
+            remote::open_page_in_browser,
             update_mode,
             clipboard_write,
             ntfy::ntfy_subscribe,

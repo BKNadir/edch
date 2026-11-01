@@ -118,11 +118,13 @@ fn json<T: Serialize>(req: Request, value: &T) {
 
 /// Page returned by /pair: the browser keeps the secret (cookie + local storage, for browsers
 /// that drop the cookie) and then opens the app with a fresh, same-origin navigation.
-fn pair_page(token: &str) -> String {
+fn pair_page(token: &str, go: &str) -> String {
+    // Where to go once paired: a page name only (letters, digits, dashes), opened full screen.
+    let target = if !go.is_empty() && go.len() <= 32 && go.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') { format!("/#focus={go}") } else { "/".to_string() };
     format!(
         r#"<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EDCH</title>
 <style>body{{font-family:system-ui,sans-serif;background:#0a0c0f;color:#e7e9ec;display:grid;place-items:center;min-height:100vh;margin:0}}a{{color:#ff7a18}}</style></head>
-<body><p><a href="/">EDCH</a></p><script>try{{localStorage.setItem("edch.remoteToken","{token}")}}catch(e){{}}location.replace("/");</script></body></html>"#
+<body><p><a href="/">EDCH</a></p><script>try{{localStorage.setItem("edch.remoteToken","{token}")}}catch(e){{}}location.replace("{target}");</script></body></html>"#
     )
 }
 
@@ -160,7 +162,8 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
         let given = query_param(&query, "t").unwrap_or_default();
         if same_secret(&given, &token) {
             let cookie = format!("edch_t={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000");
-            respond(req, 200, "text/html; charset=utf-8", pair_page(&token).into_bytes(), &[("Set-Cookie", cookie)]);
+            let go = query_param(&query, "go").unwrap_or_default();
+            respond(req, 200, "text/html; charset=utf-8", pair_page(&token, &go).into_bytes(), &[("Set-Cookie", cookie)]);
         } else {
             respond(req, 302, "text/plain", b"Expired".to_vec(), &[("Location", "/#expired".to_string())]);
         }
@@ -566,4 +569,20 @@ pub fn remote_qr(text: String) -> Result<String, String> {
         .dark_color(qrcode::render::svg::Color("#000000"))
         .light_color(qrcode::render::svg::Color("#ffffff"))
         .build())
+}
+
+/// Opens one page of EDCH, full screen, in the PC's browser (through the local server): handy on
+/// a second screen. The local server must be on.
+#[tauri::command]
+pub fn open_page_in_browser(state: State<'_, RemoteState>, view: String) -> Result<(), String> {
+    if view.is_empty() || view.len() > 32 || !view.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') {
+        return Err("Page inconnue".into());
+    }
+    let shared = state.inner.clone();
+    let port = lock(&shared.server).as_ref().and_then(|s| s.server_addr().to_ip()).map(|a| a.port());
+    let token = lock(&shared.token).clone();
+    let Some(port) = port.filter(|_| !token.is_empty()) else {
+        return Err("local-server-off".into());
+    };
+    crate::app::open_uri(&format!("http://127.0.0.1:{port}/pair?t={token}&go={view}"))
 }

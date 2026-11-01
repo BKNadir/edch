@@ -82,7 +82,7 @@ pub fn launch_game(method: String, path: String) -> Result<(), String> {
     open_uri(&target)
 }
 
-fn open_uri(uri: &str) -> Result<(), String> {
+pub fn open_uri(uri: &str) -> Result<(), String> {
     #[cfg(target_os = "windows")]
     let result = {
         use std::os::windows::process::CommandExt;
@@ -93,6 +93,12 @@ fn open_uri(uri: &str) -> Result<(), String> {
     #[cfg(all(unix, not(target_os = "macos")))]
     let result = std::process::Command::new("xdg-open").arg(uri).spawn();
     result.map(|_| ()).map_err(|e| e.to_string())
+}
+
+/// Full screen on or off (focus mode).
+#[tauri::command]
+pub fn set_fullscreen(window: tauri::Window, on: bool) -> Result<(), String> {
+    window.set_fullscreen(on).map_err(|e| e.to_string())
 }
 
 /// What closing the window does. Creates the notification-area icon when needed.

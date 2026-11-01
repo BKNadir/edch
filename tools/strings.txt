@@ -142,8 +142,8 @@ ntfy.sh a répondu {0}
 ), h("span.sub", null, "Relance l'application pour terminer la mise à jour. Elle se rouvrira toute seule.")),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => install(p) }, "Relancer maintenant")),\n    );\n  } else {\n    replace(\n      bar,\n      h("div.update-text", null, h("strong", null, "La mise à jour a échoué"), h("span.sub", null, p.message)),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => download(p.info) }, "Réessayer")),\n    );\n  }\n}\n\nfunction later() {\n  if (phase.kind === "hidden") return;\n  // "Later" on an offer skips this version; a downloaded one is kept for the next start.\n  if (phase.kind === "available" && store) store.updateSettings({ skippedVersion: phase.info.version });\n  phase = { kind: "hidden" };\n  render();\n}\n\nasync function download(info: UpdateInfo) {\n  log.info("update", 
 : also report "up to date" and errors, and ignore a skipped version. */\nexport async function checkForUpdate(manual = false): Promise<void> {\n  if (!isTauri() || isRemote() || !store) return;\n  if (phase.kind === "downloading" || phase.kind === "ready") {\n    if (manual) render();\n    return;\n  }\n  try {\n    const info = await updateCheck();\n    if (!info) {\n      if (manual) toast("EDCH est à jour");\n      return;\n    }\n    log.info("update", 
 Phone action: {0}
-Accès mobile indisponible
-Accès mobile
+Accès distant indisponible
+Accès distant
 PC injoignable : modification non envoyée
 Elite (d'origine)
 Contraste élevé
@@ -163,7 +163,7 @@ Objectifs communautaires
 Elite Dangerous {0}
 Elite Dangerous not running
 Fermer EDCH ?
-EDCH arrête de lire le journal du jeu et l'accès mobile se coupe.
+EDCH arrête de lire le journal du jeu et l'accès distant se coupe.
 Lancement demandé au PC
 Lancement via Steam…
 Lancement via Epic Games…
@@ -186,6 +186,12 @@ Métallique
 Riche en métaux
 Glacé
 Épuisé
+Focus mode {0}
+Quitter le plein écran (Échap)
+Quitter le plein écran
+Active d'abord le serveur d'accès distant (page Accès distant) : c'est lui qui sert la page au navigateur.
+Plein écran : seulement cette page (Échap pour quitter)
+Ouvrir cette page seule dans le navigateur (pour un 2e écran)
 Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)
 EDDN (EDCD)
 Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
@@ -428,7 +434,7 @@ Via Inara, avec ta clé API (page Synchro).
 Aucun objectif en cours sur Inara.
 Accéder à EDCH hors de chez soi
 Guide pas à pas avec Tailscale
-← Retour à l'accès mobile
+← Retour à l'accès distant
 À lire d'abord
 EDCH est conçu pour être utilisé sur ton réseau domestique. Passer par Internet n'est pas son objectif : l'accès à distance via Tailscale est pour l'instant la seule alternative, le temps de développer une solution intégrée à EDCH. Active-le seulement si tu en as besoin.
 Quand est-ce utile ?
@@ -450,19 +456,19 @@ Télécharge la version Windows, lance-la et connecte-toi. L'icône Tailscale pr
 Installe Tailscale sur ton téléphone
 Depuis le Play Store ou l'App Store. Connecte-toi avec le même compte et accepte l'activation du VPN quand l'appli le demande.
 Choisis l'adresse Tailscale dans EDCH
-Page Accès mobile : active le serveur local, puis choisis « Tailscale » dans la liste « Adresse du PC » (l'adresse commence par 100). Le QR code et le lien se mettent à jour tout seuls.
+Page Accès distant : active le serveur d'accès distant, puis choisis « Tailscale » dans la liste « Adresse du PC » (l'adresse commence par 100). Le QR code et le lien se mettent à jour tout seuls.
 Scanne le QR code
 Avec Tailscale activé sur le téléphone. C'est fait : EDCH s'ouvre en Wi-Fi comme en 4G/5G.
 Ça ne marche pas ?
 « Tailscale n'est pas détecté » : 
-vérifie que Tailscale est connecté sur le PC, puis rouvre la page Accès mobile.
+vérifie que Tailscale est connecté sur le PC, puis rouvre la page Accès distant.
 Le téléphone ne se connecte pas : 
 vérifie que Tailscale est activé sur le téléphone. Dans Windows, ouvre Sécurité Windows → Pare-feu et protection du réseau → Autoriser une application via le pare-feu, puis coche EDCH pour les réseaux privés et publics (Tailscale est parfois classé « public »).
 Le QR code montre une adresse en 192.168… : 
 c'est l'adresse Wi-Fi ou Ethernet qui est choisie : sélectionne « Tailscale » dans la liste « Adresse du PC ». Si Tailscale n'apparaît pas dans la liste, il n'était pas actif quand la page s'est ouverte : rouvre-la.
 Ne partage jamais le QR code ni le lien : ils contiennent le code secret.
 Ne donne pas accès à ton compte Tailscale à d'autres personnes.
-Pour couper l'accès : décoche l'option, désactive le serveur local, ou clique sur « Nouveau code » pour déconnecter tous les appareils.
+Pour couper l'accès : décoche l'option, désactive le serveur d'accès distant, ou clique sur « Nouveau code » pour déconnecter tous les appareils.
 Chercher un matériau…  (Ctrl+F)
 Matériaux d'ingénierie
 Possédés
@@ -565,11 +571,11 @@ Connecté
 Acceptée par
 Aucune mission d'escadrille partagée pour l'instant.
 Saisis ou crée un code (au moins 8 caractères) pour rejoindre l'escadrille.
-Ouvre EDCH sur ton téléphone ou ta tablette, sur le même réseau que ce PC.
+Ouvre EDCH sur ton téléphone, ta tablette ou un autre écran (navigateur), sur le même réseau que ce PC.
  Cet appareil est connecté à EDCH sur ton PC. Les données se mettent à jour toutes seules.
 Disponible dans l'application (pas en mode démo).
-Serveur local
-Désactivé par défaut. Seuls les appareils qui ont scanné le QR code peuvent ouvrir la page : connaître l'adresse du PC ne suffit pas.
+Serveur d'accès distant
+Désactivé par défaut. Il sert aussi la page « Ouvrir dans le navigateur ». Seuls les appareils qui ont scanné le QR code peuvent ouvrir la page : connaître l'adresse du PC ne suffit pas.
 Scanne avec l'appareil photo
 Active Tailscale sur le téléphone (même compte que sur ce PC). Wi-Fi ou données mobiles, peu importe.
 Connecte le téléphone au même Wi-Fi que ce PC.
@@ -764,7 +770,8 @@ Système de repli
 Utilisé tant que le jeu n'a pas donné ta position.
  Traders avec pad L seulement
  Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination
-Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone (rien n'est copié sur le téléphone).
+Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone.
+ Depuis le téléphone, copier aussi dans le presse-papiers du téléphone
 Choisis un thème ou tes propres couleurs. Le téléphone connecté utilise les mêmes réglages.
 Couleur principale
 Couleur secondaire

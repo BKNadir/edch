@@ -786,3 +786,19 @@ label.check.disabled { opacity: 0.55; }
 .settings-sub { margin-top: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: 11.5px; }
 .settings-tabs { flex-wrap: wrap; }
 .settings > [hidden] { display: none !important; }
+/* The EDCH logo folds the side menu away. */
+button.brand { background: none; border: 0; padding: 0; cursor: pointer; }
+button.brand:hover img { filter: brightness(1.2); }
+body.nav-collapsed .shell { grid-template-columns: minmax(0, 1fr) auto; }
+body.nav-collapsed .sidebar { display: none; }
+/* Focus mode: only the page. */
+.focus-buttons { display: flex; gap: 4px; }
+body.focus-mode .topbar, body.focus-mode .sidebar, body.focus-mode .side-tab { display: none !important; }
+body.focus-mode .shell { grid-template-columns: minmax(0, 1fr) auto; }
+.focus-exit { display: none; position: fixed; top: 10px; right: 14px; z-index: 80; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--panel-2); color: var(--muted); opacity: 0.35; transition: opacity 0.2s; }
+.focus-exit:hover { opacity: 1; color: var(--text); }
+body.focus-mode .focus-exit { display: inline-flex; }
+@media (max-width: 760px) {
+  body.nav-collapsed .content { padding-bottom: 16px; }
+  .focus-buttons { display: none; }
+}
