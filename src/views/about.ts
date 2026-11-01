@@ -1,6 +1,7 @@
 import { isRemote, isTauri, logsOpen, openUrl, updateMode } from "../bridge.js";
 import { h, icon, replace, toast } from "../dom.js";
 import { SOFTWARE_VERSION } from "../eddn.js";
+import { showChangelog } from "../changelog.js";
 import type { Ctx, View } from "../context.js";
 
 const REPO = "https://github.com/BKNadir/edch";
@@ -82,7 +83,7 @@ export class AboutView implements View {
             null,
             h("li", null, "📦 ", h("span", null, "Code source :"), " ", link("github.com/BKNadir/edch", REPO)),
             h("li", null, "💡 ", h("span", null, "Proposer une idée :"), " ", h("button.inline-link", { onclick: () => openUrl(`${REPO}/issues/new`) }, "ouvrir une issue")),
-            h("li", null, "📝 ", h("span", null, "Nouveautés de chaque version :"), " ", h("button.inline-link", { onclick: () => openUrl(`${REPO}/releases`) }, "Releases")),
+            h("li", null, "📝 ", h("span", null, "Nouveautés de chaque version :"), " ", h("button.inline-link", { onclick: () => showChangelog() }, "cette version"), " · ", h("button.inline-link", { onclick: () => openUrl(`${REPO}/releases`) }, "Releases")),
           ),
         ),
         this.bugCard(),

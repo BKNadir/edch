@@ -1,14 +1,9 @@
-Matériaux
-Ingénierie
-Ingénieurs
-Objectifs communautaires
-À propos
-Paramètres
 Game data: {0}
 Impossible de charger les données du jeu : {0}
 Erreur inattendue au démarrage
 UI ready (language {0}, view {1})
 Journal du jeu illisible
+Paramètres
 Aucun journal du jeu trouvé
 Vérifie le dossier du journal dans les Paramètres.
 Carrier market read from Market.json
@@ -155,6 +150,25 @@ Copie impossible
 Copier « {0} »
 Voir les modifications de ce module
 Où l'acheter
+Matériaux
+Ingénierie
+Ingénieurs
+Objectifs communautaires
+À propos
+Elite Dangerous {0}
+Elite Dangerous not running
+Fermer EDCH ?
+EDCH arrête de lire le journal du jeu et l'accès mobile se coupe.
+Lancement demandé au PC
+Lancement via Steam…
+Lancement via Epic Games…
+Lancement du jeu…
+Elite Dangerous est lancé
+Elite lancé
+Le lanceur d'Elite Dangerous est ouvert
+Lanceur ouvert
+Lancer Elite Dangerous
+ Lancer Elite
 Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)
 EDDN (EDCD)
 Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
@@ -735,6 +749,29 @@ Logs de l'application
 EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés.
  Mode debug : enregistre aussi un log détaillé, dans un fichier séparé
 Le log debug contient tout : le log standard, les erreurs, et chaque action (clics, réglages modifiés, pages ouvertes, échanges avec le jeu et les services). Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API et le texte tapé ne sont jamais écrits dans les logs.
+Quitter EDCH
+Réduire dans la barre des tâches
+Masquer dans la zone de notification (à côté de l'horloge)
+Demander avant de quitter
+Bouton de fermeture de la fenêtre
+Masqué dans la zone de notification, EDCH continue de lire le journal : double-clique sur son icône pour le rouvrir, ou clic droit → Quitter.
+ Afficher les nouveautés après une mise à jour
+Voir les nouveautés de cette version
+EDCH ne s'ouvre qu'une fois : le relancer ramène la fenêtre déjà ouverte au premier plan. La fenêtre se rouvre là où tu l'as laissée.
+Epic Games
+Un lanceur au choix (Frontier, MinEdLauncher…)
+Le bouton « Lancer Elite » en haut de l'écran démarre le jeu, et indique quand il tourne. Il marche aussi depuis le téléphone.
+Lancer avec
+Chemin du lanceur
+C:\Program Files (x86)\Frontier\EDLaunch\EDLaunch.exe
+Un .exe, un raccourci .lnk, ou MinEdLauncher. Astuce : clic droit sur le fichier → « Copier en tant que chemin d'accès », puis colle ici (sans les guillemets).
+Lancer maintenant
+Pages et affichage
+Page au démarrage
+La dernière page ouverte
+Taille de l'interface
+Pages affichées dans le menu (décoche celles dont tu ne te sers pas) :
+Valable aussi sur le téléphone. Paramètres et À propos restent toujours visibles.
 Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services.
 Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Inara n'a pas encore validé EDCH : ses envois sont refusés pour l'instant et EDCH les met en pause. EDDN et EDSM fonctionnent.
 EDDN — réseau de données communautaire

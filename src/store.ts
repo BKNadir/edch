@@ -32,6 +32,20 @@ export interface Settings {
   debugLog: boolean;
   /** Clicking a system name also opens Navigation with it as destination. */
   systemOpensNav: boolean;
+  /** How to start the game from EDCH. */
+  gameLaunch: { method: "steam" | "epic" | "exe"; path: string };
+  /** What the window's close button does. */
+  closeBehavior: "quit" | "minimize" | "tray" | "ask";
+  /** Show what's new after an update. */
+  showChangelog: boolean;
+  /** Version whose news were last shown (empty: first start). */
+  lastSeenVersion: string;
+  /** Pages hidden from the menu (PC and phone). */
+  hiddenViews: string[];
+  /** Page to open at start-up ("" = the last one). */
+  startView: string;
+  /** Interface size, in percent. */
+  uiScale: number;
 }
 
 export interface NotifySettings {
@@ -127,6 +141,8 @@ export interface AppState {
   wishlist: WishItem[];
   view: string;
   selected?: string; // material id in the detail panel
+  /** Elite Dangerous on the PC: "game", "launcher" or "" (not running); undefined = unknown. */
+  game?: string;
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -146,6 +162,13 @@ const DEFAULT_SETTINGS: Settings = {
   theme: DEFAULT_THEME,
   debugLog: false,
   systemOpensNav: false,
+  gameLaunch: { method: "steam", path: "" },
+  closeBehavior: "quit",
+  showChangelog: true,
+  lastSeenVersion: "",
+  hiddenViews: [],
+  startView: "",
+  uiScale: 100,
 };
 
 function load<T>(key: string, fallback: T): T {

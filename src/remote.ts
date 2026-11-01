@@ -25,7 +25,11 @@ import { emptyActivity } from "./activity.js";
 import { wingView } from "./live.js";
 import { unsoldSummary } from "./views/exploration.js";
 import { emptyState } from "./journal.js";
-import { newRemoteToken, type Store } from "./store.js";
+import { newRemoteToken, type Settings, type Store } from "./store.js";
+import { startGame } from "./desktop.js";
+
+/** Settings a phone can change (display only: never keys, paths or the PC's behaviour). */
+const PHONE_SETTINGS = ["theme", "hiddenViews", "uiScale", "startView", "systemOpensNav"] as const;
 
 // ---------------- PC side ----------------
 
@@ -82,7 +86,7 @@ export const detectedAddresses = () => remoteAddresses().catch(() => [] as strin
 function snapshot(store: Store): string {
   const s = store.state;
   // Never share API keys, the secret itself or the PC's paths.
-  const { sync: _sync, remote: _remote, journalDir: _dir, wing: _wing, debugLog: _debug, ...settings } = s.settings;
+  const { sync: _sync, remote: _remote, journalDir: _dir, wing: _wing, debugLog: _debug, gameLaunch: _launch, ...settings } = s.settings;
   // Activity without the body table (big for explorers): the phone gets the summaries it shows.
   const { bodies, ...activity } = s.activity;
   const here = s.activity.system?.address;
@@ -95,6 +99,7 @@ function snapshot(store: Store): string {
     lang: lang().code,
     activity: { ...activity, bodies: currentBodies, unsold: unsoldSummary(bodies, s.activity.unsoldSystems) },
     wing: wingView(),
+    game: s.game,
   });
 }
 
@@ -120,6 +125,13 @@ export async function setupRemoteHost(store: Store) {
     if (action?.type === "theme" && action.theme && typeof action.theme === "object") {
       store.updateSettings({ theme: { ...DEFAULT_THEME, ...store.state.settings.theme, ...action.theme } });
     }
+    // Display settings changed on the phone: the PC keeps them, and every screen follows.
+    if (action?.type === "settings" && action.patch && typeof action.patch === "object") {
+      const patch: Record<string, unknown> = {};
+      for (const k of PHONE_SETTINGS) if (k in action.patch) patch[k] = action.patch[k];
+      if (Object.keys(patch).length) store.updateSettings(patch as Partial<Settings>);
+    }
+    if (action?.type === "launch") void startGame();
   });
   if (store.state.settings.remote.enabled) {
     try {
@@ -162,14 +174,16 @@ export async function runRemoteClient(store: Store) {
   store.onWishlistChange = (items) => {
     remoteAction({ type: "wishlist", items }).catch(() => toast("PC injoignable : modification non envoyée"));
   };
-  // Appearance changed on the phone: the PC saves it and every screen follows.
+  // Display settings changed on the phone: the PC saves them and every screen follows.
+  const phonePart = (st: { settings: Settings }) => JSON.stringify(PHONE_SETTINGS.map((k) => st.settings[k]));
   let sentTheme = "";
   store.subscribe((st) => {
-    const key = JSON.stringify(st.settings.theme);
+    const key = phonePart(st);
     if (!sentTheme) sentTheme = key;
     if (key === sentTheme) return;
     sentTheme = key;
-    remoteAction({ type: "theme", theme: st.settings.theme }).catch(() => undefined);
+    const patch = Object.fromEntries(PHONE_SETTINGS.map((k) => [k, st.settings[k]]));
+    remoteAction({ type: "settings", patch }).catch(() => undefined);
   });
   let version = 0;
   for (;;) {
@@ -186,7 +200,8 @@ export async function runRemoteClient(store: Store) {
         store.state.cmdr = { ...emptyState(), ...s.cmdr };
         store.setWishlist(Array.isArray(s.wishlist) ? s.wishlist : [], true);
         store.state.settings = { ...store.state.settings, ...s.settings };
-        sentTheme = JSON.stringify(store.state.settings.theme);
+        if (typeof s.game === "string" || s.game === undefined) store.state.game = s.game;
+        sentTheme = phonePart(store.state);
         if (s.activity) store.state.activity = { ...emptyActivity(), ...s.activity };
         (store.state as unknown as Record<string, unknown>).remoteWing = s.wing ?? null;
       }

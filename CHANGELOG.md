@@ -3,6 +3,14 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.3
+
+- Top bar: EDCH shows whether Elite Dangerous (or its launcher) is running, and a "Launch Elite" button starts it through Steam, Epic Games or a launcher of your choice (Frontier's, MinEdLauncher…), set in Settings. It works from the phone too.
+- What's new is shown after an update (can be turned off in Settings), and from About or Settings at any time.
+- Settings → Pages and display: hide the pages you don't use from the menu, pick the start page and the interface size. It applies on the phone as well, and can be changed from either.
+- Settings → Application: what the window's close button does: quit, minimise to the taskbar, hide in the notification area (EDCH keeps running), or ask before quitting.
+- EDCH only runs once: launching it again brings the open window to the front.
+
 ## 0.9.2
 
 - The window reopens where you left it: position, size, maximised or full screen.

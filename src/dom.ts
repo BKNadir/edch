@@ -55,7 +55,7 @@ export function toast(message: string) {
 export const fmt = (n: number) => n.toLocaleString(locale());
 
 /** Small inline SVG icons. */
-export function icon(name: "copy" | "link" | "search" | "star" | "close" | "plus" | "check" | "warn" | "pin"): SVGSVGElement {
+export function icon(name: "copy" | "link" | "search" | "star" | "close" | "plus" | "check" | "warn" | "pin" | "play"): SVGSVGElement {
   const paths: Record<string, string> = {
     copy: "M8 8h11v11H8zM5 16V5h11",
     link: "M10 14l10-10M14 4h6v6M20 14v6H4V4h6",
@@ -65,6 +65,7 @@ export function icon(name: "copy" | "link" | "search" | "star" | "close" | "plus
     plus: "M12 5v14M5 12h14",
     check: "M5 12.5l4.5 4.5L19 7",
     warn: "M12 4l9 16H3zM12 10v4M12 17.5v.5",
+    play: "M7 5l12 7-12 7z",
     pin: "M12 21s-6-5.5-6-11a6 6 0 1 1 12 0c0 5.5-6 11-6 11zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
   };
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");

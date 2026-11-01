@@ -7,6 +7,9 @@ import { LANGS, lang, saveLang } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
 import type { Settings } from "../store.js";
 import { DEFAULT_THEME, PRESETS, type ThemeSettings } from "../theme.js";
+import { ALWAYS_SHOWN, NAV } from "../nav.js";
+import { startGame } from "../desktop.js";
+import { showChangelog } from "../changelog.js";
 
 export class SettingsView implements View {
   private root?: HTMLElement;
@@ -112,6 +115,8 @@ export class SettingsView implements View {
               h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, "Vérifier maintenant")),
             )
           : null,
+        isTauri() && !isRemote() ? this.appCard() : null,
+        isTauri() && !isRemote() ? this.launchCard() : null,
         h(
           "section.card",
           null,
@@ -174,6 +179,7 @@ export class SettingsView implements View {
           ),
           h("small.sub", null, "Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone."),
         ),
+        this.pagesCard(),
         this.appearance(),
         isTauri() && !isRemote() ? this.logsCard() : null,
       ),
@@ -257,6 +263,127 @@ export class SettingsView implements View {
           "Ouvrir le dossier des logs",
         ),
       ),
+    );
+  }
+
+  /** Window behaviour and what's new after an update (PC). */
+  private appCard(): HTMLElement {
+    const s = this.ctx.store.state.settings;
+    const set = (patch: Partial<Settings>) => this.ctx.store.updateSettings(patch);
+    const options: [Settings["closeBehavior"], string][] = [
+      ["quit", "Quitter EDCH"],
+      ["minimize", "Réduire dans la barre des tâches"],
+      ["tray", "Masquer dans la zone de notification (à côté de l'horloge)"],
+      ["ask", "Demander avant de quitter"],
+    ];
+    return h(
+      "section.card",
+      null,
+      h("h3", null, "Application"),
+      h(
+        "label.field",
+        null,
+        h("span", null, "Bouton de fermeture de la fenêtre"),
+        h("select", { onchange: (e: Event) => set({ closeBehavior: (e.target as HTMLSelectElement).value as Settings["closeBehavior"] }) }, options.map(([v, l]) => h("option", { value: v, selected: s.closeBehavior === v }, l))),
+        h("small", null, "Masqué dans la zone de notification, EDCH continue de lire le journal : double-clique sur son icône pour le rouvrir, ou clic droit → Quitter."),
+      ),
+      h(
+        "label.check",
+        null,
+        h("input", { type: "checkbox", checked: s.showChangelog, onchange: (e: Event) => set({ showChangelog: (e.target as HTMLInputElement).checked }) }),
+        " Afficher les nouveautés après une mise à jour",
+      ),
+      h("div.row", null, h("button.ghost", { onclick: () => showChangelog() }, "Voir les nouveautés de cette version")),
+      h("p.sub", null, "EDCH ne s'ouvre qu'une fois : le relancer ramène la fenêtre déjà ouverte au premier plan. La fenêtre se rouvre là où tu l'as laissée."),
+    );
+  }
+
+  /** How EDCH starts the game (button in the top bar). */
+  private launchCard(): HTMLElement {
+    const g = this.ctx.store.state.settings.gameLaunch;
+    const set = (patch: Partial<Settings["gameLaunch"]>) => {
+      this.ctx.store.updateSettings({ gameLaunch: { ...this.ctx.store.state.settings.gameLaunch, ...patch } });
+      this.render();
+    };
+    const methods: [Settings["gameLaunch"]["method"], string][] = [
+      ["steam", "Steam"],
+      ["epic", "Epic Games"],
+      ["exe", "Un lanceur au choix (Frontier, MinEdLauncher…)"],
+    ];
+    return h(
+      "section.card",
+      null,
+      h("h3", null, "Lancer Elite Dangerous"),
+      h("p.sub", null, "Le bouton « Lancer Elite » en haut de l'écran démarre le jeu, et indique quand il tourne. Il marche aussi depuis le téléphone."),
+      h("label.field", null, h("span", null, "Lancer avec"), h("select", { onchange: (e: Event) => set({ method: (e.target as HTMLSelectElement).value as Settings["gameLaunch"]["method"] }) }, methods.map(([v, l]) => h("option", { value: v, selected: g.method === v }, l)))),
+      g.method === "exe"
+        ? h(
+            "label.field.wide",
+            null,
+            h("span", null, "Chemin du lanceur"),
+            h("input", { type: "text", value: g.path, placeholder: "C:\\Program Files (x86)\\Frontier\\EDLaunch\\EDLaunch.exe", spellcheck: false, onchange: (e: Event) => set({ path: (e.target as HTMLInputElement).value.trim() }) }),
+            h("small", null, "Un .exe, un raccourci .lnk, ou MinEdLauncher. Astuce : clic droit sur le fichier → « Copier en tant que chemin d'accès », puis colle ici (sans les guillemets)."),
+          )
+        : null,
+      h("div.row", null, h("button.ghost", { onclick: () => startGame() }, "Lancer maintenant")),
+    );
+  }
+
+  /** Pages shown in the menu, start page and interface size (PC and phone). */
+  private pagesCard(): HTMLElement {
+    const s = this.ctx.store.state.settings;
+    const set = (patch: Partial<Settings>) => {
+      this.ctx.store.updateSettings(patch);
+      this.render();
+    };
+    const pages = NAV.filter((n) => n.id !== "-" && !ALWAYS_SHOWN.has(n.id) && !(isRemote() && n.id === "mobile"));
+    const hidden = new Set(s.hiddenViews ?? []);
+    return h(
+      "section.card",
+      null,
+      h("h3", null, "Pages et affichage"),
+      h(
+        "label.field",
+        null,
+        h("span", null, "Page au démarrage"),
+        h(
+          "select",
+          { onchange: (e: Event) => set({ startView: (e.target as HTMLSelectElement).value }) },
+          h("option", { value: "", selected: !s.startView }, "La dernière page ouverte"),
+          pages.filter((p) => !hidden.has(p.id)).map((p) => h("option", { value: p.id, selected: s.startView === p.id }, p.label)),
+        ),
+      ),
+      h(
+        "label.field",
+        null,
+        h("span", null, "Taille de l'interface"),
+        h("select", { onchange: (e: Event) => set({ uiScale: Number((e.target as HTMLSelectElement).value) }) }, [80, 90, 100, 110, 125, 150].map((v) => h("option", { value: String(v), selected: (s.uiScale || 100) === v }, `${v} %`))),
+      ),
+      h("p.sub", null, "Pages affichées dans le menu (décoche celles dont tu ne te sers pas) :"),
+      h(
+        "div.page-toggles",
+        null,
+        pages.map((p) =>
+          h(
+            "label.check",
+            null,
+            h("input", {
+              type: "checkbox",
+              checked: !hidden.has(p.id),
+              onchange: (e: Event) => {
+                const on = (e.target as HTMLInputElement).checked;
+                const next = new Set(this.ctx.store.state.settings.hiddenViews ?? []);
+                if (on) next.delete(p.id);
+                else next.add(p.id);
+                set({ hiddenViews: [...next] });
+              },
+            }),
+            " ",
+            h("span", null, p.label),
+          ),
+        ),
+      ),
+      h("small.sub", null, "Valable aussi sur le téléphone. Paramètres et À propos restent toujours visibles."),
     );
   }
 }

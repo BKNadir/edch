@@ -302,6 +302,14 @@ export async function onNtfy(line: (topic: string, text: string) => void, state:
   };
 }
 export const clipboardWrite = (text: string) => invoke<void>("clipboard_write", { text });
+export const gameRunning = () => invoke<string>("game_running").catch(() => "");
+export const launchGame = (method: string, path: string) => invoke<void>("launch_game", { method, path });
+export const setCloseBehavior = (mode: string) => invoke<void>("set_close_behavior", { mode }).catch(() => undefined);
+export const appQuit = () => invoke<void>("app_quit");
+export async function onConfirmClose(cb: () => void): Promise<void> {
+  if (!isTauri() || remote) return;
+  await window.__TAURI__!.event.listen("confirm-close", () => cb());
+}
 export const logWrite = (level: string, source: string, message: string) => invoke<void>("log_write", { level, source, message });
 export const logSetDebug = (on: boolean) => invoke<string | null>("log_set_debug", { on });
 export const logsOpen = () => invoke<string>("logs_open");
