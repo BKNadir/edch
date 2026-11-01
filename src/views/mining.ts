@@ -1,3 +1,4 @@
+import { openSettingsTab } from "./settings.js";
 import { openUrl } from "../bridge.js";
 import { findRingSpots, findSellSpots, MAX_RADIUS, METHOD_LABEL, miningMethods, RESERVE, RING_TYPE, spanshBodyUrl, type RingSpot, type SellSpot } from "../miningSpots.js";
 import { fmt, h, icon, replace } from "../dom.js";
@@ -157,7 +158,7 @@ export class MiningView implements View {
         h("h3", null, "Cibles"),
         h("p.sub", null, "Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications."),
         targetEditor,
-        h("label.check", null, h("input", { type: "checkbox", checked: s.alert, onchange: (e: Event) => this.set({ alert: (e.target as HTMLInputElement).checked }) }), " Alerte sonore et visuelle"),
+        h("p.sub", null, s.alert ? "Alerte activée · " : "Alerte désactivée · ", h("button.inline-link", { onclick: () => openSettingsTab(this.ctx.store, "notifications") }, "Paramètres → Notifications")),
       ),
       this.finder(s.targets.map((t) => MINERALS.find(([n]) => symbolOf(n) === t.id)?.[0]).filter(Boolean) as string[]),
       last

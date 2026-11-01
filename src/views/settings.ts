@@ -12,6 +12,42 @@ import { ALWAYS_SHOWN, NAV } from "../nav.js";
 import { startGame } from "../desktop.js";
 import { showChangelog } from "../changelog.js";
 
+const TABS: [string, string][] = [
+  ["general", "Général"],
+  ["game", "Jeu et recherche"],
+  ["display", "Affichage"],
+  ["notifications", "Notifications"],
+  ["advanced", "Avancé"],
+];
+
+/** Which tab each card goes to, by its (French) title. */
+const CARD_TAB: Record<string, string> = {
+  Langue: "general",
+  "Mises à jour": "general",
+  Application: "general",
+  "Lancer Elite Dangerous": "game",
+  "Journal du jeu": "game",
+  "Recherche de systèmes (Spansh)": "game",
+  "Pages et affichage": "display",
+  Apparence: "display",
+  Notifications: "notifications",
+  "Logs de l'application": "advanced",
+};
+
+let currentTab = (() => {
+  try {
+    return localStorage.getItem("edc.settingsTab") ?? "general";
+  } catch {
+    return "general";
+  }
+})();
+
+/** Opens Settings on a given tab (links from other pages). */
+export function openSettingsTab(store: { setView(view: string): void }, tab: string) {
+  currentTab = tab;
+  store.setView("settings");
+}
+
 export class SettingsView implements View {
   private root?: HTMLElement;
   constructor(private ctx: Ctx, private restart: () => void) {}
@@ -66,10 +102,7 @@ export class SettingsView implements View {
 
     const dir = h("input", { type: "text", value: s.journalDir, placeholder: "C:\\Users\\…\\Saved Games\\Frontier Developments\\Elite Dangerous", spellcheck: false });
 
-    replace(
-      this.root,
-      h("header.view-head", null, h("h1", null, "Paramètres")),
-      h(
+    const body = h(
         "div.settings",
         null,
         isRemote()
@@ -184,8 +217,38 @@ export class SettingsView implements View {
         this.pagesCard(),
         this.appearance(),
         isTauri() && !isRemote() ? this.logsCard() : null,
+      );
+    // Tabs: each card goes to the tab of its title (titles are compared before translation).
+    const cards = [...body.children] as HTMLElement[];
+    const tabOf = (card: HTMLElement) => CARD_TAB[card.querySelector("h3")?.textContent?.trim() ?? ""] ?? "general";
+    const tabs = TABS.filter(([id]) => cards.some((c) => tabOf(c) === id));
+    if (!tabs.some(([id]) => id === currentTab)) currentTab = tabs[0]?.[0] ?? "general";
+    for (const c of cards) c.hidden = tabOf(c) !== currentTab;
+    replace(
+      this.root,
+      h(
+        "header.view-head",
+        null,
+        h("h1", null, "Paramètres"),
+        h(
+          "div.segmented.settings-tabs",
+          null,
+          tabs.map(([id, label]) => h("button", { class: id === currentTab ? "active" : "", onclick: () => this.showTab(id) }, label)),
+        ),
       ),
+      body,
     );
+  }
+
+  private showTab(id: string) {
+    currentTab = id;
+    try {
+      localStorage.setItem("edc.settingsTab", id);
+    } catch {
+      /* not kept: fine */
+    }
+    this.render();
+    this.root?.scrollTo?.({ top: 0 });
   }
 
   private appearance(): HTMLElement {
@@ -393,6 +456,13 @@ export class SettingsView implements View {
     const store = this.ctx.store;
     const n = store.state.settings.notify;
     const set = (patch: Partial<NotifySettings>) => store.updateSettings({ notify: { ...store.state.settings.notify, ...patch } });
+    const wingCheck = (key: "notifyNew" | "notifyAccept" | "notifyAll" | "notifyLeave", label: string) =>
+      h(
+        "label.check",
+        null,
+        h("input", { type: "checkbox", checked: store.state.settings.wing[key], onchange: (e: Event) => store.updateSettings({ wing: { ...store.state.settings.wing, [key]: (e.target as HTMLInputElement).checked } }) }),
+        ` ${label}`,
+      );
     return h(
       "section.card",
       null,
@@ -418,6 +488,25 @@ export class SettingsView implements View {
         h("button.ghost.small", { onclick: () => notify("Test de notification") }, "Tester"),
       ),
       h("label.check", null, h("input", { type: "checkbox", checked: n.hideTab, onchange: (e: Event) => set({ hideTab: (e.target as HTMLInputElement).checked }) }), " Masquer la languette (le son reste actif s'il est coché)"),
+      h("h4.settings-sub", null, "Escadrille"),
+      isRemote()
+        ? h("p.sub", null, "Ces réglages se font sur le PC (ils vont avec le code d'escadrille).")
+        : [
+            wingCheck("notifyNew", "Prévenir quand un membre a une mission d'escadrille que je n'ai pas"),
+            wingCheck("notifyAccept", "Prévenir quand un membre accepte une mission que je partage"),
+            wingCheck("notifyAll", "Prévenir quand toute l'escadrille a accepté une mission"),
+            wingCheck("notifyLeave", "Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu"),
+          ],
+      h("h4.settings-sub", null, "Minage"),
+      h(
+        "label.check",
+        null,
+        h("input", { type: "checkbox", checked: store.state.settings.mining.alert, onchange: (e: Event) => store.updateSettings({ mining: { ...store.state.settings.mining, alert: (e.target as HTMLInputElement).checked } }) }),
+        " Prévenir quand un prospecteur trouve une cible ou un cœur",
+      ),
+      h("small.sub", null, "Les cibles et leurs pourcentages se choisissent sur la page Minage."),
+      h("h4.settings-sub", null, "Application"),
+      h("p.sub", null, "Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son."),
     );
   }
 }

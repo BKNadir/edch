@@ -783,3 +783,6 @@ label.check.disabled { opacity: 0.55; }
 .spot-table td .badge { margin-left: 6px; }
 /* "Hide the tab" must win over the tab's own display. */
 .side-tab[hidden], .side-tab-badge[hidden] { display: none !important; }
+.settings-sub { margin-top: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: 11.5px; }
+.settings-tabs { flex-wrap: wrap; }
+.settings > [hidden] { display: none !important; }

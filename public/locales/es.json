@@ -1054,5 +1054,17 @@
 "Réglages des notifications": "Ajustes de notificaciones",
 "Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications.": "Cuando un prospector encuentra uno de estos objetivos por encima del porcentaje elegido (o un núcleo para minería profunda), EDCH te avisa con el sonido y el color elegidos en Ajustes → Notificaciones.",
 "Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer.": "Sin ventana de Windows: un sonido y/o la pestaña «Notificaciones» del borde derecho que parpadea. Reúne todas las notificaciones: ala, minería, actualizaciones, problemas al iniciar… Haz clic para verlas y fuera para cerrar.",
-"Masquer la languette (le son reste actif s'il est coché)": "Ocultar la pestaña (el sonido sigue activo si está marcado)"
+"Masquer la languette (le son reste actif s'il est coché)": "Ocultar la pestaña (el sonido sigue activo si está marcado)",
+"Général": "General",
+"Jeu et recherche": "Juego y búsqueda",
+"Affichage": "Visualización",
+"Avancé": "Avanzado",
+"Alerte activée ·": "Alerta activada ·",
+"Alerte désactivée ·": "Alerta desactivada ·",
+"Paramètres → Notifications": "Ajustes → Notificaciones",
+"Ce qui te prévient (nouvelle mission, acceptation, départ d'un membre…) se règle dans": "Lo que te avisa (nueva misión, aceptación, salida de un miembro…) se ajusta en",
+"Ces réglages se font sur le PC (ils vont avec le code d'escadrille).": "Se ajustan en el PC (van con el código del ala).",
+"Prévenir quand un prospecteur trouve une cible ou un cœur": "Avisar cuando un prospector encuentra un objetivo o un núcleo",
+"Les cibles et leurs pourcentages se choisissent sur la page Minage.": "Los objetivos y sus porcentajes se eligen en la página Minería.",
+"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "Las nuevas versiones y los problemas al iniciar también aparecen en la pestaña, sin sonido."
 }

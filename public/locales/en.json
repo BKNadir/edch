@@ -1054,5 +1054,17 @@
 "Réglages des notifications": "Notification settings",
 "Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications.": "When a prospector finds one of these targets above the chosen percentage (or a core for deep mining), EDCH tells you with the sound and colour chosen in Settings → Notifications.",
 "Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer.": "No Windows pop-up: a sound and/or the \"Notifications\" tab on the right edge that flashes. It gathers every notification: wing, mining, updates, start-up problems… Click it to see them, click elsewhere to close.",
-"Masquer la languette (le son reste actif s'il est coché)": "Hide the tab (the sound stays on if ticked)"
+"Masquer la languette (le son reste actif s'il est coché)": "Hide the tab (the sound stays on if ticked)",
+"Général": "General",
+"Jeu et recherche": "Game and search",
+"Affichage": "Display",
+"Avancé": "Advanced",
+"Alerte activée ·": "Alert on ·",
+"Alerte désactivée ·": "Alert off ·",
+"Paramètres → Notifications": "Settings → Notifications",
+"Ce qui te prévient (nouvelle mission, acceptation, départ d'un membre…) se règle dans": "What notifies you (new mission, acceptance, a member leaving…) is set in",
+"Ces réglages se font sur le PC (ils vont avec le code d'escadrille).": "These are set on the PC (they go with the wing code).",
+"Prévenir quand un prospecteur trouve une cible ou un cœur": "Tell me when a prospector finds a target or a core",
+"Les cibles et leurs pourcentages se choisissent sur la page Minage.": "Targets and their percentages are chosen on the Mining page.",
+"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "New versions and start-up problems also show in the tab, without sound."
 }

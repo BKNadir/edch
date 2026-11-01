@@ -1054,5 +1054,17 @@
 "Réglages des notifications": "Benachrichtigungseinstellungen",
 "Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications.": "Wenn ein Prospektor eines dieser Ziele über dem gewählten Prozentsatz findet (oder einen Kern für Tiefenabbau), meldet EDCH es mit dem Ton und der Farbe aus Einstellungen → Benachrichtigungen.",
 "Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer.": "Kein Windows-Popup: ein Ton und/oder der Reiter „Benachrichtigungen“ am rechten Rand, der blinkt. Er sammelt alle Benachrichtigungen: Geschwader, Bergbau, Updates, Startprobleme… Klicke darauf, um sie zu sehen, und daneben, um zu schließen.",
-"Masquer la languette (le son reste actif s'il est coché)": "Reiter ausblenden (der Ton bleibt aktiv, wenn angehakt)"
+"Masquer la languette (le son reste actif s'il est coché)": "Reiter ausblenden (der Ton bleibt aktiv, wenn angehakt)",
+"Général": "Allgemein",
+"Jeu et recherche": "Spiel und Suche",
+"Affichage": "Anzeige",
+"Avancé": "Erweitert",
+"Alerte activée ·": "Alarm an ·",
+"Alerte désactivée ·": "Alarm aus ·",
+"Paramètres → Notifications": "Einstellungen → Benachrichtigungen",
+"Ce qui te prévient (nouvelle mission, acceptation, départ d'un membre…) se règle dans": "Was dich benachrichtigt (neue Mission, Annahme, ein Mitglied geht…), stellst du ein unter",
+"Ces réglages se font sur le PC (ils vont avec le code d'escadrille).": "Das wird am PC eingestellt (gehört zum Geschwader-Code).",
+"Prévenir quand un prospecteur trouve une cible ou un cœur": "Benachrichtigen, wenn ein Prospektor ein Ziel oder einen Kern findet",
+"Les cibles et leurs pourcentages se choisissent sur la page Minage.": "Ziele und ihre Prozentsätze wählst du auf der Seite Bergbau.",
+"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "Neue Versionen und Startprobleme erscheinen ebenfalls im Reiter, ohne Ton."
 }

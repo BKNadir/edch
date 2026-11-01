@@ -484,7 +484,9 @@ Yuri Grom
 Zemina Torval
 Résultats des prospecteurs en direct, et où miner et vendre pour gagner des mérites Powerplay.
 Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications.
- Alerte sonore et visuelle
+Alerte activée · 
+Alerte désactivée · 
+Paramètres → Notifications
 Dernier astéroïde
 Contenu : {0}
 Restant {0} %
@@ -555,10 +557,7 @@ Code de l'escadrille
 Nouveau code créé : donne-le aux autres membres
 Créer un code
 Nom affiché
- Prévenir quand un membre a une mission d'escadrille que je n'ai pas
- Prévenir quand un membre accepte une mission que je partage
- Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu
- Prévenir quand toute l'escadrille a accepté une mission
+Ce qui te prévient (nouvelle mission, acceptation, départ d'un membre…) se règle dans 
  Partager automatiquement toutes mes missions d'escadrille
 Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise.
 Connecté
@@ -729,6 +728,14 @@ missions terminées
 éliminations
 matériaux ramassés
 t minées
+Général
+Jeu et recherche
+Avancé
+Mises à jour
+Journal du jeu
+Recherche de systèmes (Spansh)
+Pages et affichage
+Logs de l'application
 Lecture en direct : {0}
 En attente du jeu…
 Erreur : {0}
@@ -737,18 +744,15 @@ Lecture arrêtée
 C:\Users\…\Saved Games\Frontier Developments\Elite Dangerous
 Langue de l'interface
 Les noms des matériaux, modules et effets suivent la traduction du jeu ; les noms des commandes restent ceux du jeu en anglais.
-Mises à jour
 Version installée : {0}
  Vérifier automatiquement les nouvelles versions sur GitHub
 Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.
 Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).
 Vérifier maintenant
-Journal du jeu
 Dossier du journal
 Détecter
 Lecture du journal démarrée
 Enregistrer et lire
-Recherche de systèmes (Spansh)
 Distance max (al)
 Rayon de recherche autour de ta position.
 Population min. pour les émissions d'intensité élevée
@@ -765,7 +769,6 @@ Couleur principale
 Couleur secondaire
  Mode OLED : fond noir pur (économise la batterie des écrans OLED)
 Rétablir les couleurs d'origine
-Logs de l'application
 EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés.
  Mode debug : enregistre aussi un log détaillé, dans un fichier séparé
 Le log debug contient tout : le log standard, les erreurs, et chaque action (clics, réglages modifiés, pages ouvertes, échanges avec le jeu et les services). Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API et le texte tapé ne sont jamais écrits dans les logs.
@@ -786,7 +789,6 @@ Chemin du lanceur
 C:\Program Files (x86)\Frontier\EDLaunch\EDLaunch.exe
 Un .exe, un raccourci .lnk, ou MinEdLauncher. Astuce : clic droit sur le fichier → « Copier en tant que chemin d'accès », puis colle ici (sans les guillemets).
 Lancer maintenant
-Pages et affichage
 Page au démarrage
 La dernière page ouverte
 Taille de l'interface
@@ -796,6 +798,14 @@ Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le b
 Écouter
 Test de notification
  Masquer la languette (le son reste actif s'il est coché)
+Ces réglages se font sur le PC (ils vont avec le code d'escadrille).
+Prévenir quand un membre a une mission d'escadrille que je n'ai pas
+Prévenir quand un membre accepte une mission que je partage
+Prévenir quand toute l'escadrille a accepté une mission
+Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu
+ Prévenir quand un prospecteur trouve une cible ou un cœur
+Les cibles et leurs pourcentages se choisissent sur la page Minage.
+Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.
 Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services.
 EDDN — réseau de données communautaire
 Envoie marchés, équipements, chantiers navals, systèmes et scans visités. C'est ce qui alimente Spansh, Inara et EDSM pour tout le monde (et les recherches de cette appli).

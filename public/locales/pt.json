@@ -1054,5 +1054,17 @@
 "Réglages des notifications": "Configurações de notificações",
 "Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications.": "Quando um prospector encontra um desses alvos acima da porcentagem escolhida (ou um núcleo para mineração profunda), o EDCH avisa com o som e a cor escolhidos em Configurações → Notificações.",
 "Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer.": "Sem janela do Windows: um som e/ou a aba \"Notificações\" na borda direita que pisca. Ela reúne todas as notificações: ala, mineração, atualizações, problemas ao iniciar… Clique nela para vê-las e fora para fechar.",
-"Masquer la languette (le son reste actif s'il est coché)": "Ocultar a aba (o som continua ativo se marcado)"
+"Masquer la languette (le son reste actif s'il est coché)": "Ocultar a aba (o som continua ativo se marcado)",
+"Général": "Geral",
+"Jeu et recherche": "Jogo e busca",
+"Affichage": "Exibição",
+"Avancé": "Avançado",
+"Alerte activée ·": "Alerta ativado ·",
+"Alerte désactivée ·": "Alerta desativado ·",
+"Paramètres → Notifications": "Configurações → Notificações",
+"Ce qui te prévient (nouvelle mission, acceptation, départ d'un membre…) se règle dans": "O que te avisa (nova missão, aceitação, saída de um membro…) se ajusta em",
+"Ces réglages se font sur le PC (ils vont avec le code d'escadrille).": "Isso se ajusta no PC (vai junto com o código da ala).",
+"Prévenir quand un prospecteur trouve une cible ou un cœur": "Avisar quando um prospector encontra um alvo ou um núcleo",
+"Les cibles et leurs pourcentages se choisissent sur la page Minage.": "Os alvos e suas porcentagens se escolhem na página Mineração.",
+"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "Novas versões e problemas ao iniciar também aparecem na aba, sem som."
 }

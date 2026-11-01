@@ -3,6 +3,11 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.6
+
+- Settings are split into tabs: General, Game and search, Display, Notifications, Advanced. The last tab opened is remembered.
+- Every notification option is now in Settings → Notifications: sound and colour, the tab, wing notifications (new mission, acceptance, everyone accepted, a member leaving) and the mining alert. The Missions and Mining pages link there.
+
 ## 0.9.5
 
 - Notifications settings moved to Settings. The side tab is now called "Notifications" and gathers every notification: wing, mining, available updates, start-up problems… The latest come first, then the missions overview.

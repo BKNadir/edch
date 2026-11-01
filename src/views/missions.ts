@@ -1,3 +1,4 @@
+import { openSettingsTab } from "./settings.js";
 import { massacreStacks, type Mission } from "../activity.js";
 import { isRemote } from "../bridge.js";
 import { callout, fmt, h, icon, replace, toast } from "../dom.js";
@@ -311,10 +312,7 @@ export class MissionsView implements View {
             h("span", null, "Nom affiché"),
             h("input", { type: "text", value: s.name, placeholder: store.state.cmdr.commander ?? "CMDR", onchange: (e: Event) => set({ name: (e.target as HTMLInputElement).value }) }),
           ),
-          h("label.check", null, h("input", { type: "checkbox", checked: s.notifyNew, onchange: (e: Event) => set({ notifyNew: (e.target as HTMLInputElement).checked }) }), " Prévenir quand un membre a une mission d'escadrille que je n'ai pas"),
-          h("label.check", null, h("input", { type: "checkbox", checked: s.notifyAccept, onchange: (e: Event) => set({ notifyAccept: (e.target as HTMLInputElement).checked }) }), " Prévenir quand un membre accepte une mission que je partage"),
-        h("label.check", null, h("input", { type: "checkbox", checked: s.notifyLeave, onchange: (e: Event) => set({ notifyLeave: (e.target as HTMLInputElement).checked }) }), " Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu"),
-          h("label.check", null, h("input", { type: "checkbox", checked: s.notifyAll, onchange: (e: Event) => set({ notifyAll: (e.target as HTMLInputElement).checked }) }), " Prévenir quand toute l'escadrille a accepté une mission"),
+          h("p.sub", null, "Ce qui te prévient (nouvelle mission, acceptation, départ d'un membre…) se règle dans ", h("button.inline-link", { onclick: () => openSettingsTab(store, "notifications") }, "Paramètres → Notifications"), "."),
           h("label.check", null, h("input", { type: "checkbox", checked: s.autoShare, onchange: (e: Event) => set({ autoShare: (e.target as HTMLInputElement).checked }) }), " Partager automatiquement toutes mes missions d'escadrille"),
           h("p.sub", null, "Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise."),
         ),
