@@ -5,15 +5,88 @@ import { relTime } from "../time.js";
 import type { Ctx, View } from "../context.js";
 import { presetSearch } from "./search.js";
 import { busy, sys } from "./missions.js";
+import { spanshGet, spanshPost } from "../bridge.js";
+import { log } from "../logger.js";
+
+/** A carrier's market as Spansh last saw it (data players send through EDDN when docking). */
+interface CarrierMarket {
+  fetched: number;
+  /** When the market data was sent to EDDN. */
+  updated?: string;
+  /** Sell orders: what the carrier offers, with its stock. */
+  selling: { id: string; name: string; count: number }[];
+  /** Buy orders: what the carrier wants. */
+  buying: { id: string; name: string; count: number }[];
+  error?: string;
+  loading?: boolean;
+}
+
+/** Look again when our copy is older than this. */
+const MARKET_REFRESH = 5 * 60 * 1000;
+const markets = new Map<number, CarrierMarket>();
+const callsignOf = (name: string) => /\b[A-Z0-9]{3}-[A-Z0-9]{3}\b/.exec(name)?.[0];
 
 export class ColonisationView implements View {
   private root?: HTMLElement;
   private showDone = false;
   constructor(private ctx: Ctx) {}
 
+  private timer?: number;
+
   mount(root: HTMLElement) {
     this.root = root;
     this.render();
+    this.refreshMarkets();
+    window.clearInterval(this.timer);
+    // While the page is open: refresh what Spansh knows about the carriers every 5 minutes.
+    this.timer = window.setInterval(() => {
+      if (!this.root?.isConnected) return window.clearInterval(this.timer);
+      this.refreshMarkets();
+    }, 60_000);
+  }
+
+  /** Fetches the carriers' markets from Spansh when our copy is older than 5 minutes. */
+  private refreshMarkets() {
+    for (const c of this.carriers()) {
+      const prev = markets.get(c.marketId);
+      if (prev?.loading || (prev && Date.now() - prev.fetched < MARKET_REFRESH)) continue;
+      const callsign = callsignOf(c.name);
+      if (!callsign) continue;
+      markets.set(c.marketId, { ...(prev ?? { selling: [], buying: [] }), fetched: Date.now(), loading: true });
+      void this.fetchMarket(c.marketId, callsign);
+    }
+  }
+
+  private async fetchMarket(marketId: number, callsign: string) {
+    const toId = (name: string) => this.ctx.game.data.commodities.find((x) => x.name.toLowerCase() === name.toLowerCase())?.id ?? name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    try {
+      // The station page by market id first; the name search as a fallback.
+      let r: Record<string, any> | undefined;
+      try {
+        const page = await spanshGet(`station/${marketId}`);
+        r = page?.record ?? (page?.market_id ? page : undefined);
+      } catch {
+        r = undefined;
+      }
+      if (!r) {
+        const res = await spanshPost("stations/search", { filters: { name: { value: [callsign] } }, size: 10, page: 0, reference_system: "Sol" });
+        const rows: Record<string, any>[] = Array.isArray(res?.results) ? res.results : [];
+        r = rows.find((x) => Number(x.market_id) === marketId) ?? rows.find((x) => String(x.name ?? "").toUpperCase() === callsign);
+      }
+      const market: Record<string, any>[] = Array.isArray(r?.market) ? r.market : [];
+      markets.set(marketId, {
+        fetched: Date.now(),
+        updated: r?.market_updated_at,
+        selling: market.filter((m) => Number(m.supply) > 0).map((m) => ({ id: toId(String(m.commodity)), name: String(m.commodity), count: Number(m.supply) })),
+        buying: market.filter((m) => Number(m.demand) > 0).map((m) => ({ id: toId(String(m.commodity)), name: String(m.commodity), count: Number(m.demand) })),
+        error: r ? undefined : "inconnu de Spansh",
+      });
+      log.debug("carrier", `${callsign}: Spansh market ${r ? `${market.length} line(s), updated ${r.market_updated_at ?? "?"}` : "not found"}`);
+    } catch (e) {
+      markets.set(marketId, { fetched: Date.now(), selling: [], buying: [], error: String((e as Error)?.message ?? e) });
+      log.warn("carrier", `${callsign}: Spansh ${String((e as Error)?.message ?? e)}`);
+    }
+    if (!busy(this.root)) this.render();
   }
 
   update() {
@@ -55,9 +128,29 @@ export class ColonisationView implements View {
       .sort((a, b) => Number(b.mine) - Number(a.mine));
   }
 
-  /** How much of a commodity sits in your carriers. */
+  /** How much of a commodity sits in your carriers (journal estimate, or the stock it sells if higher). */
   private inCarriers(id: string): number {
-    return this.carriers().reduce((s, c) => s + (c.items[id]?.count ?? 0), 0);
+    return this.carriers().reduce((s, c) => {
+      const selling = markets.get(c.marketId)?.selling.find((x) => x.id === id)?.count ?? 0;
+      return s + Math.max(c.items[id]?.count ?? 0, selling);
+    }, 0);
+  }
+
+  /** What the carrier's market shows on Spansh: sell orders (stock) and buy orders. */
+  private marketBlock(marketId: number, needed: Set<string>, name: (id: string, label?: string) => string): HTMLElement | null {
+    const m = markets.get(marketId);
+    if (!m) return null;
+    if (m.loading && !m.updated && !m.selling.length) return h("p.sub", null, h("span.spinner"), " Marché du carrier sur Spansh…");
+    if (m.error) return h("p.sub", null, `Marché sur Spansh : ${m.error}`);
+    const line = (x: { id: string; name: string; count: number }) => h("li", { class: needed.has(x.id) ? "needed" : "" }, h("span", null, name(x.id, x.name)), h("strong", null, `${fmt(x.count)} t`));
+    return h(
+      "div.carrier-market",
+      null,
+      h("p.sub", null, `Marché (Spansh, données ${m.updated ? relTime(m.updated) : "?"})`),
+      m.selling.length ? [h("small.sub", null, "En vente (stock)"), h("ul.hold-list", null, m.selling.map(line))] : null,
+      m.buying.length ? [h("small.sub", null, "Achète"), h("ul.hold-list", null, m.buying.map(line))] : null,
+      !m.selling.length && !m.buying.length ? h("p.empty", null, "Aucun ordre d'achat ou de vente") : null,
+    );
   }
 
   /** Ship hold, own fleet carrier and squadron carrier, side by side. */
@@ -100,6 +193,7 @@ export class ColonisationView implements View {
           c.total !== undefined ? h("p.sub", null, `${fmt(c.total)} t de marchandises (jeu, ${relTime(c.totalAt)})`) : null,
           list(items),
           unknown ? h("p.sub", null, `+ ${fmt(unknown)} t non identifiées`) : null,
+          this.marketBlock(c.marketId, needed, name),
         ),
       );
     }
@@ -109,7 +203,7 @@ export class ColonisationView implements View {
       h("h3", null, "Soutes"),
       h("div.hold-grid", null, cards),
       this.carriers().length
-        ? h("p.sub", null, "Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.")
+        ? h("p.sub", null, "Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Le marché du carrier (ce qu'il vend avec son stock, ce qu'il achète) vient de Spansh, revérifié toutes les 5 minutes : il dépend des joueurs qui s'y sont dockés. Inara ne permet pas de lire la soute d'un carrier. Les marchandises demandées par tes chantiers sont surlignées.")
         : h("p.sub", null, "Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier."),
     );
   }

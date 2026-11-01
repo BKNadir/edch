@@ -3,6 +3,11 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.9
+
+- Colonisation: each carrier (yours and your squadron's) also shows its market as Spansh last saw it, what it sells with its stock and what it buys, with the data's age. EDCH checks again every 5 minutes while the page is open. The "Carriers" column uses the higher of the journal estimate and the stock on sale.
+- Inara doesn't let apps read a carrier's hold, so it can't be used for this; the only complete source would be Frontier's own API (Frontier account login), which EDCH doesn't use yet.
+
 ## 0.8.8
 
 - Wing: when a member closes EDCH, their EDCH tells the others on its way out (an encrypted "leaving" message prepared in advance, sent even as the window closes). Leaving the wing in game does the same, and EDCH shares again when you join a wing.

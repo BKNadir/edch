@@ -923,7 +923,6 @@
 "{0} t de marchandises (jeu, {1})": "{0} т товаров (игра, {1})",
 "+ {0} t non identifiées": "+ {0} т не определено",
 "t utiles dans tes carriers": "т нужного в ваших носителях",
-"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "Журнал игры не перечисляет трюм носителя: EDCH восстанавливает его по вашим переносам корабль ↔ носитель и вашим покупкам и продажам на его рынке. То, что положили другие или что было до начала вашей истории (60 дней), не отображается. Товары, нужные вашим стройкам, выделены.",
 "Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Пристыкуйтесь к своему носителю (или носителю эскадрильи) и перенесите товары: EDCH будет отслеживать и его трюм. Общий объём вашего носителя берётся с экрана управления носителем.",
 "{0} a fermé EDCH": "{0} закрыл EDCH",
 "{0} a quitté l'escadrille en jeu": "{0} покинул звено в игре",
@@ -932,5 +931,13 @@
 "a quitté l'escadrille": "покинул звено",
 "partage arrêté": "обмен отключён",
 "inactif": "неактивен",
-"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Сообщать, когда участник закрывает EDCH или покидает звено в игре"
+"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Сообщать, когда участник закрывает EDCH или покидает звено в игре",
+"inconnu de Spansh": "нет в Spansh",
+"Marché du carrier sur Spansh…": "Рынок носителя в Spansh…",
+"Marché sur Spansh : {0}": "Рынок в Spansh: {0}",
+"Marché (Spansh, données {0})": "Рынок (Spansh, данные {0})",
+"En vente (stock)": "Продаёт (запас)",
+"Achète": "Покупает",
+"Aucun ordre d'achat ou de vente": "Нет заказов на покупку или продажу",
+"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Le marché du carrier (ce qu'il vend avec son stock, ce qu'il achète) vient de Spansh, revérifié toutes les 5 minutes : il dépend des joueurs qui s'y sont dockés. Inara ne permet pas de lire la soute d'un carrier. Les marchandises demandées par tes chantiers sont surlignées.": "Журнал игры не перечисляет трюм носителя: EDCH восстанавливает его по вашим переносам корабль ↔ носитель и вашим покупкам и продажам на его рынке. То, что положили другие или что было до начала вашей истории (60 дней), не отображается. Рынок носителя (что он продаёт с запасом, что покупает) берётся из Spansh и перепроверяется каждые 5 минут: он зависит от игроков, которые там стыковались. Inara не позволяет читать трюм носителя. Товары, нужные вашим стройкам, выделены."
 }

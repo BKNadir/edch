@@ -923,7 +923,6 @@
 "{0} t de marchandises (jeu, {1})": "{0} t Waren (Spiel, {1})",
 "+ {0} t non identifiées": "+ {0} t nicht zugeordnet",
 "t utiles dans tes carriers": "t nützlich in deinen Carriern",
-"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "Das Spieljournal listet den Frachtraum eines Carriers nicht auf: EDCH rekonstruiert ihn aus deinen Transfers Schiff ↔ Carrier und deinen Käufen und Verkäufen auf seinem Markt. Was andere hineingelegt haben oder was vor Beginn deines Verlaufs (60 Tage) darin war, erscheint nicht. Waren, die deine Baustellen brauchen, sind hervorgehoben.",
 "Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Docke an deinem Fleet Carrier (oder dem deines Geschwaders) und transferiere Waren: EDCH verfolgt dann auch seinen Frachtraum. Die Gesamtmenge deines Carriers stammt aus dem Carrier-Verwaltungsbildschirm.",
 "{0} a fermé EDCH": "{0} hat EDCH geschlossen",
 "{0} a quitté l'escadrille en jeu": "{0} hat das Geschwader im Spiel verlassen",
@@ -932,5 +931,13 @@
 "a quitté l'escadrille": "hat das Geschwader verlassen",
 "partage arrêté": "Teilen beendet",
 "inactif": "inaktiv",
-"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Benachrichtigen, wenn ein Mitglied EDCH schließt oder das Geschwader im Spiel verlässt"
+"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Benachrichtigen, wenn ein Mitglied EDCH schließt oder das Geschwader im Spiel verlässt",
+"inconnu de Spansh": "Spansh unbekannt",
+"Marché du carrier sur Spansh…": "Carrier-Markt auf Spansh…",
+"Marché sur Spansh : {0}": "Markt auf Spansh: {0}",
+"Marché (Spansh, données {0})": "Markt (Spansh, Daten {0})",
+"En vente (stock)": "Im Verkauf (Bestand)",
+"Achète": "Kauft",
+"Aucun ordre d'achat ou de vente": "Keine Kauf- oder Verkaufsaufträge",
+"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Le marché du carrier (ce qu'il vend avec son stock, ce qu'il achète) vient de Spansh, revérifié toutes les 5 minutes : il dépend des joueurs qui s'y sont dockés. Inara ne permet pas de lire la soute d'un carrier. Les marchandises demandées par tes chantiers sont surlignées.": "Das Spieljournal listet den Frachtraum eines Carriers nicht auf: EDCH rekonstruiert ihn aus deinen Transfers Schiff ↔ Carrier und deinen Käufen und Verkäufen auf seinem Markt. Was andere hineingelegt haben oder was vor Beginn deines Verlaufs (60 Tage) darin war, erscheint nicht. Der Markt des Carriers (was er mit Bestand verkauft, was er kauft) kommt von Spansh und wird alle 5 Minuten neu geprüft: Er hängt von Spielern ab, die dort angedockt haben. Inara erlaubt nicht, den Frachtraum eines Carriers auszulesen. Waren, die deine Baustellen brauchen, sind hervorgehoben."
 }

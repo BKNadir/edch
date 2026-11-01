@@ -742,3 +742,4 @@ label.check.disabled { opacity: 0.55; }
 .hold-list li { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; padding: 2px 6px; border-radius: 4px; }
 .hold-list li.needed { background: var(--accent-dim); }
 .hold-list li.needed strong { color: var(--accent); }
+.carrier-market { display: grid; gap: 4px; border-top: 1px dashed var(--line-2); padding-top: 6px; margin-top: 2px; }

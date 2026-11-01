@@ -923,7 +923,6 @@
 "{0} t de marchandises (jeu, {1})": "{0} t of goods (game, {1})",
 "+ {0} t non identifiées": "+ {0} t not identified",
 "t utiles dans tes carriers": "t useful in your carriers",
-"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "The game journal doesn't list a carrier's hold: EDCH rebuilds it from your ship ↔ carrier transfers and your purchases and sales on its market. What others put in it, or what was there before your history starts (60 days), doesn't show. Goods your construction sites need are highlighted.",
 "Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Dock at your fleet carrier (or your squadron's) and transfer goods: EDCH will follow its hold too. Your carrier's total comes from the carrier management screen.",
 "{0} a fermé EDCH": "{0} closed EDCH",
 "{0} a quitté l'escadrille en jeu": "{0} left the wing in game",
@@ -932,5 +931,13 @@
 "a quitté l'escadrille": "left the wing",
 "partage arrêté": "sharing stopped",
 "inactif": "inactive",
-"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Tell me when a member closes EDCH or leaves the wing in game"
+"Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu": "Tell me when a member closes EDCH or leaves the wing in game",
+"inconnu de Spansh": "unknown to Spansh",
+"Marché du carrier sur Spansh…": "Carrier market on Spansh…",
+"Marché sur Spansh : {0}": "Market on Spansh: {0}",
+"Marché (Spansh, données {0})": "Market (Spansh, data {0})",
+"En vente (stock)": "For sale (stock)",
+"Achète": "Buying",
+"Aucun ordre d'achat ou de vente": "No buy or sell orders",
+"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Le marché du carrier (ce qu'il vend avec son stock, ce qu'il achète) vient de Spansh, revérifié toutes les 5 minutes : il dépend des joueurs qui s'y sont dockés. Inara ne permet pas de lire la soute d'un carrier. Les marchandises demandées par tes chantiers sont surlignées.": "The game journal doesn't list a carrier's hold: EDCH rebuilds it from your ship ↔ carrier transfers and your purchases and sales on its market. What others put in it, or what was there before your history starts (60 days), doesn't show. The carrier's market (what it sells with its stock, what it buys) comes from Spansh, checked again every 5 minutes: it depends on players who docked there. Inara doesn't let apps read a carrier's hold. Goods your construction sites need are highlighted."
 }
