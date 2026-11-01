@@ -1,7 +1,10 @@
-import { copyText, isRemote, isTauri, remoteQr } from "../bridge.js";
+import { copyText, isRemote, isTauri, remoteInterfaces, remoteQr, type NetAddress } from "../bridge.js";
 import { h, icon, replace, toast } from "../dom.js";
 import type { Ctx, View } from "../context.js";
-import { detectTailscale, pairingUrl, remoteRunning, rotateToken, startRemote, stopRemote, tailscaleAddress } from "../remote.js";
+import { tr } from "../i18n.js";
+import { pairingHost, pairingUrl, remoteRunning, rotateToken, startRemote, stopRemote } from "../remote.js";
+
+const KIND_LABEL: Record<NetAddress["kind"], string> = { ethernet: "Ethernet", wifi: "Wi-Fi", tailscale: "Tailscale", virtual: "Carte virtuelle", other: "Autre" };
 
 /** "Mobile access": QR code to open EDCH on a phone/tablet through the PC's local server. */
 export class MobileView implements View {
@@ -35,9 +38,9 @@ export class MobileView implements View {
     const r = store.state.settings.remote;
     const set = (patch: Partial<typeof r>) => store.updateSettings({ remote: { ...store.state.settings.remote, ...patch } });
     const running = remoteRunning();
-    await detectTailscale();
-    const ts = tailscaleAddress();
-    const viaTailscale = r.tailscale && Boolean(ts);
+    const nets = await remoteInterfaces();
+    const known = nets.map((n) => n.ip);
+    const ts = nets.find((n) => n.kind === "tailscale")?.ip ?? null;
 
     const toggle = h("label.switch", null, h("input", {
       type: "checkbox",
@@ -67,14 +70,21 @@ export class MobileView implements View {
     ];
 
     if (running) {
-      const url = pairingUrl(store)!;
+      const url = pairingUrl(store, known.length ? known : undefined)!;
+      const host = pairingHost(store, known.length ? known : running.addresses);
+      const viaTailscale = nets.find((n) => n.ip === host)?.kind === "tailscale";
       const qr = h("div.qr", null, h("span.spinner"));
       remoteQr(url)
         .then((svg) => {
           qr.innerHTML = svg;
         })
         .catch((e) => replace(qr, h("p.error", null, String(e))));
-      const hostOptions = [...new Set([...(r.host ? [r.host] : []), ...running.addresses])];
+      const options: NetAddress[] = nets.length ? nets : running.addresses.map((ip) => ({ ip, name: "", kind: "other" as const }));
+      const optionLabel = (n: NetAddress) => {
+        const kind = tr(KIND_LABEL[n.kind]);
+        const name = n.name && n.name.toLowerCase() !== kind.toLowerCase() ? ` (${n.name})` : "";
+        return `${kind}${name} · ${n.ip}`;
+      };
       parts.push(
         h(
           "section.card.qr-card",
@@ -99,9 +109,7 @@ export class MobileView implements View {
               h("code", { "data-no-tr": "" }, url),
               h("button.ghost.small", { onclick: async () => toast((await copyText(url)) ? "Lien copié : il contient le code secret, ne le partage qu'avec tes appareils" : "Copie impossible") }, icon("copy"), " Copier le lien"),
             ),
-            viaTailscale
-              ? h("p.ok", null, `Adresse Tailscale : ${ts}`)
-              : h(
+            h(
               "label.field",
               null,
               h("span", null, "Adresse du PC"),
@@ -113,10 +121,10 @@ export class MobileView implements View {
                     await this.render();
                   },
                 },
-                hostOptions.map((a) => h("option", { value: a, selected: a === (r.host || running.addresses[0]) }, a)),
+                options.map((n) => h("option", { value: n.ip, selected: n.ip === host, "data-no-tr": "" }, optionLabel(n))),
               ),
-              h("small", null, "Si le téléphone n'arrive pas à se connecter, essaie une autre adresse (VPN ou carte réseau virtuelle)."),
-                ),
+              h("small", null, "Choisis la connexion par laquelle le téléphone joint ce PC : Wi-Fi ou Ethernet à la maison, Tailscale depuis l'extérieur. Le QR code et le lien suivent ton choix."),
+            ),
             h(
               "label.field",
               null,
@@ -157,34 +165,6 @@ export class MobileView implements View {
           ),
         ),
         h(
-          "section.card.away",
-          null,
-          h(
-            "div.sync-head",
-            null,
-            h("div", null, h("h3", null, "Accès hors de chez moi"), h("p.sub", null, "Avec Tailscale, un réseau privé chiffré entre tes propres appareils, gratuit pour un usage personnel.")),
-            h("button.ghost", { onclick: () => this.ctx.store.setView("guide-remote") }, "Guide pas à pas"),
-          ),
-          h(
-            "label.check",
-            { class: ts ? "" : "disabled" },
-            h("input", {
-              type: "checkbox",
-              checked: r.tailscale,
-              disabled: !ts && !r.tailscale,
-              onchange: async (e: Event) => {
-                set({ tailscale: (e.target as HTMLInputElement).checked });
-                await this.render();
-              },
-            }),
-            " Utiliser l'adresse Tailscale dans le QR code et le lien",
-          ),
-          ts
-            ? h("p.sub", null, `Tailscale est actif sur ce PC (${ts}).`)
-            : h("p.sub", null, "Tailscale n'est pas détecté sur ce PC. Suis le guide pour l'installer, puis reviens sur cette page."),
-          r.tailscale && !ts ? h("p.warn", null, "Option cochée mais Tailscale n'est pas actif : le QR code utilise l'adresse locale.") : null,
-        ),
-        h(
           "section.card",
           null,
           h("h3", null, "Bon à savoir"),
@@ -197,6 +177,19 @@ export class MobileView implements View {
             h("li", null, "Le lien contient le code secret, comme le QR code : ne le partage qu'avec tes propres appareils."),
             h("li", null, "Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC."),
           ),
+        ),
+        h(
+          "section.card.away",
+          null,
+          h(
+            "div.sync-head",
+            null,
+            h("div", null, h("h3", null, "Accès hors de chez moi"), h("p.sub", null, "Avec Tailscale, un réseau privé chiffré entre tes propres appareils, gratuit pour un usage personnel.")),
+            h("button.ghost", { onclick: () => this.ctx.store.setView("guide-remote") }, "Guide pas à pas"),
+          ),
+          ts
+            ? h("p.sub", null, `Tailscale est actif sur ce PC (${ts}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.`)
+            : h("p.sub", null, "Tailscale n'est pas détecté sur ce PC. Suis le guide pour l'installer, puis reviens sur cette page."),
         ),
       );
     }

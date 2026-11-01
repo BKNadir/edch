@@ -41,12 +41,16 @@ export async function detectTailscale(): Promise<string | null> {
 }
 export const tailscaleAddress = () => tailscaleIp;
 
-/** The URL in the QR code and the link: Tailscale address when chosen and available, else the LAN one. */
-export function pairingUrl(store: Store): string | null {
+/** The address in the QR code and the link: the one chosen in the list, if this PC still has it. */
+export function pairingHost(store: Store, known: string[] = running?.addresses ?? []): string {
+  const r = store.state.settings.remote;
+  return (r.host && known.includes(r.host) ? r.host : known[0]) || r.host || "localhost";
+}
+
+export function pairingUrl(store: Store, known?: string[]): string | null {
   const r = store.state.settings.remote;
   if (!running || !r.token) return null;
-  const host = (r.tailscale && tailscaleIp) || r.host || running.addresses[0] || "localhost";
-  return `http://${host}:${running.port}/pair?t=${r.token}`;
+  return `http://${pairingHost(store, known)}:${running.port}/pair?t=${r.token}`;
 }
 
 export async function startRemote(store: Store): Promise<RemoteInfo> {

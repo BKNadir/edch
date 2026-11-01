@@ -58,7 +58,7 @@ export class RemoteGuideView implements View {
             step(1, "Crée un compte Tailscale", h("p", null, "Sur tailscale.com, avec ton compte Google, Microsoft, Apple ou GitHub."), h("button.ghost.small", { onclick: () => openUrl("https://tailscale.com/download") }, icon("link"), " tailscale.com/download")),
             step(2, "Installe Tailscale sur le PC où tourne EDCH", h("p", null, "Télécharge la version Windows, lance-la et connecte-toi. L'icône Tailscale près de l'horloge doit indiquer « Connected »."), ),
             step(3, "Installe Tailscale sur ton téléphone", h("p", null, "Depuis le Play Store ou l'App Store. Connecte-toi avec le même compte et accepte l'activation du VPN quand l'appli le demande.")),
-            step(4, "Active l'option dans EDCH", h("p", null, "Page Accès mobile : active le serveur local, puis coche « Utiliser l'adresse Tailscale dans le QR code et le lien ». L'adresse affichée commence par 100.")),
+            step(4, "Choisis l'adresse Tailscale dans EDCH", h("p", null, "Page Accès mobile : active le serveur local, puis choisis « Tailscale » dans la liste « Adresse du PC » (l'adresse commence par 100). Le QR code et le lien se mettent à jour tout seuls.")),
             step(5, "Scanne le QR code", h("p", null, "Avec Tailscale activé sur le téléphone. C'est fait : EDCH s'ouvre en Wi-Fi comme en 4G/5G.")),
           ),
         ),
@@ -71,7 +71,7 @@ export class RemoteGuideView implements View {
             null,
             h("li", null, h("strong", null, "« Tailscale n'est pas détecté » : "), "vérifie que Tailscale est connecté sur le PC, puis rouvre la page Accès mobile."),
             h("li", null, h("strong", null, "Le téléphone ne se connecte pas : "), "vérifie que Tailscale est activé sur le téléphone. Dans Windows, ouvre Sécurité Windows → Pare-feu et protection du réseau → Autoriser une application via le pare-feu, puis coche EDCH pour les réseaux privés et publics (Tailscale est parfois classé « public »)."),
-            h("li", null, h("strong", null, "Le QR code montre une adresse en 192.168… : "), "l'option n'est pas cochée, ou Tailscale n'était pas actif quand la page s'est ouverte."),
+            h("li", null, h("strong", null, "Le QR code montre une adresse en 192.168… : "), "c'est l'adresse Wi-Fi ou Ethernet qui est choisie : sélectionne « Tailscale » dans la liste « Adresse du PC ». Si Tailscale n'apparaît pas dans la liste, il n'était pas actif quand la page s'est ouverte : rouvre-la."),
           ),
         ),
         h(

@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.6
+
+- Mobile access: the "PC address" list shows every connection of the PC (Ethernet, Wi-Fi, Tailscale…) with its name, and the QR code and the link follow the one you pick. The Tailscale checkbox is gone: pick the Tailscale address in the list. The "away from home" section moved to the bottom of the page.
+
 ## 0.8.5
 
 - Turning the local server (mobile access) off and on again no longer fails with "port 47800 unavailable (os error 10048)": the port is now really released when the server stops.

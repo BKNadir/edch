@@ -264,6 +264,12 @@ export const remotePublish = (state: string) => invoke<void>("remote_publish", {
 export const remoteQr = (text: string) => invoke<string>("remote_qr", { text });
 export const remoteAddresses = () => invoke<string[]>("remote_addresses");
 /** This PC's Tailscale address (100.x.y.z), or null when Tailscale isn't running. */
+export interface NetAddress {
+  ip: string;
+  name: string;
+  kind: "ethernet" | "wifi" | "tailscale" | "virtual" | "other";
+}
+export const remoteInterfaces = () => invoke<NetAddress[]>("remote_interfaces").catch(() => [] as NetAddress[]);
 export const remoteTailscale = () => invoke<string | null>("remote_tailscale").catch(() => null);
 export async function onRemoteAction(cb: (action: any) => void): Promise<void> {
   if (!isTauri()) return;

@@ -266,27 +266,86 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
     }
 }
 
-/// LAN addresses to put in the QR code (the one used for outgoing traffic first).
+/// One network address of this PC, for the "PC address" list of the Mobile page.
+#[derive(Serialize, Clone)]
+pub struct NetAddress {
+    ip: String,
+    /// Adapter name as Windows shows it ("Wi-Fi", "Ethernet", "Tailscale"…).
+    name: String,
+    /// ethernet | wifi | tailscale | virtual | other
+    kind: String,
+}
+
+fn kind_of(name: &str, ip: &std::net::IpAddr) -> &'static str {
+    let n = name.to_lowercase();
+    if is_tailscale(ip) || n.contains("tailscale") {
+        "tailscale"
+    } else if ["vethernet", "virtualbox", "vmware", "hyper-v", "wsl", "docker", "vpn", "tap", "tun", "zerotier", "hamachi", "radmin"].iter().any(|v| n.contains(v)) {
+        "virtual"
+    } else if ["wi-fi", "wifi", "wlan", "wireless", "sans fil"].iter().any(|v| n.contains(v)) {
+        "wifi"
+    } else if n.contains("ethernet") || n.starts_with("eth") || n.starts_with("en") {
+        "ethernet"
+    } else {
+        "other"
+    }
+}
+
+/// The address Windows uses for outgoing traffic (connecting a UDP socket sends nothing).
+fn primary_address() -> Option<std::net::IpAddr> {
+    let sock = UdpSocket::bind("0.0.0.0:0").ok()?;
+    sock.connect("8.8.8.8:80").ok()?;
+    Some(sock.local_addr().ok()?.ip())
+}
+
+/// Every IPv4 address of this PC a phone could reach: Ethernet, Wi-Fi, Tailscale… The one used
+/// for outgoing traffic comes first, then wired, Wi-Fi, Tailscale, others and virtual adapters.
 #[tauri::command]
-pub fn remote_addresses() -> Vec<String> {
-    let mut out = Vec::new();
-    // Connecting a UDP socket sends nothing; it only picks the outgoing interface.
-    for target in ["192.168.1.1:80", "10.255.255.255:80", "8.8.8.8:80"] {
-        if let Ok(sock) = UdpSocket::bind("0.0.0.0:0") {
-            if sock.connect(target).is_ok() {
-                if let Ok(addr) = sock.local_addr() {
-                    let ip = addr.ip();
-                    if !ip.is_loopback() && !ip.is_unspecified() && !is_tailscale(&ip) {
-                        let s = ip.to_string();
-                        if !out.contains(&s) {
-                            out.push(s);
-                        }
-                    }
-                }
+pub fn remote_interfaces() -> Vec<NetAddress> {
+    let primary = primary_address();
+    let mut out: Vec<NetAddress> = Vec::new();
+    if let Ok(list) = local_ip_address::list_afinet_netifas() {
+        for (name, ip) in list {
+            let std::net::IpAddr::V4(v4) = ip else { continue };
+            if v4.is_loopback() || v4.is_unspecified() || v4.is_link_local() {
+                continue;
             }
+            let s = ip.to_string();
+            if out.iter().any(|a| a.ip == s) {
+                continue;
+            }
+            let kind = kind_of(&name, &ip).to_string();
+            out.push(NetAddress { ip: s, name, kind });
         }
     }
+    // Detection failed: at least the outgoing address.
+    if out.is_empty() {
+        if let Some(ip) = primary.filter(|ip| !ip.is_loopback()) {
+            out.push(NetAddress { ip: ip.to_string(), name: String::new(), kind: kind_of("", &ip).to_string() });
+        }
+    }
+    let rank = |a: &NetAddress| {
+        let base = match a.kind.as_str() {
+            "ethernet" => 1,
+            "wifi" => 2,
+            "tailscale" => 3,
+            "other" => 4,
+            _ => 5,
+        };
+        if primary.map(|p| p.to_string() == a.ip).unwrap_or(false) && a.kind != "tailscale" {
+            0
+        } else {
+            base
+        }
+    };
+    out.sort_by_key(rank);
     out
+}
+
+/// Just the addresses, best first (what the QR code uses when none was chosen).
+#[tauri::command]
+pub fn remote_addresses() -> Vec<String> {
+    remote_interfaces().into_iter().map(|a| a.ip).collect()
 }
 
 /// Tailscale gives every device an address in 100.64.0.0/10 (CGNAT range).

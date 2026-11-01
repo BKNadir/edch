@@ -741,6 +741,7 @@ pub fn run() {
             remote::remote_publish,
             remote::remote_qr,
             remote::remote_addresses,
+            remote::remote_interfaces,
             remote::remote_tailscale,
             is_portable,
             ntfy::ntfy_subscribe,

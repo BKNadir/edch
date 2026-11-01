@@ -356,8 +356,8 @@ Installe Tailscale sur le PC où tourne EDCH
 Télécharge la version Windows, lance-la et connecte-toi. L'icône Tailscale près de l'horloge doit indiquer « Connected ».
 Installe Tailscale sur ton téléphone
 Depuis le Play Store ou l'App Store. Connecte-toi avec le même compte et accepte l'activation du VPN quand l'appli le demande.
-Active l'option dans EDCH
-Page Accès mobile : active le serveur local, puis coche « Utiliser l'adresse Tailscale dans le QR code et le lien ». L'adresse affichée commence par 100.
+Choisis l'adresse Tailscale dans EDCH
+Page Accès mobile : active le serveur local, puis choisis « Tailscale » dans la liste « Adresse du PC » (l'adresse commence par 100). Le QR code et le lien se mettent à jour tout seuls.
 Scanne le QR code
 Avec Tailscale activé sur le téléphone. C'est fait : EDCH s'ouvre en Wi-Fi comme en 4G/5G.
 Ça ne marche pas ?
@@ -366,7 +366,7 @@ vérifie que Tailscale est connecté sur le PC, puis rouvre la page Accès mobil
 Le téléphone ne se connecte pas : 
 vérifie que Tailscale est activé sur le téléphone. Dans Windows, ouvre Sécurité Windows → Pare-feu et protection du réseau → Autoriser une application via le pare-feu, puis coche EDCH pour les réseaux privés et publics (Tailscale est parfois classé « public »).
 Le QR code montre une adresse en 192.168… : 
-l'option n'est pas cochée, ou Tailscale n'était pas actif quand la page s'est ouverte.
+c'est l'adresse Wi-Fi ou Ethernet qui est choisie : sélectionne « Tailscale » dans la liste « Adresse du PC ». Si Tailscale n'apparaît pas dans la liste, il n'était pas actif quand la page s'est ouverte : rouvre-la.
 Ne partage jamais le QR code ni le lien : ils contiennent le code secret.
 Ne donne pas accès à ton compte Tailscale à d'autres personnes.
 Pour couper l'accès : décoche l'option, désactive le serveur local, ou clique sur « Nouveau code » pour déconnecter tous les appareils.
@@ -466,6 +466,7 @@ Saisis ou crée un code (au moins 8 caractères) pour rejoindre l'escadrille.
 Pas de fenêtre Windows : un son et/ou la languette sur le bord droit qui clignote. Clique sur la languette pour voir l'aperçu, clique ailleurs pour le refermer.
 Écouter
 Test de notification
+Carte virtuelle
 Accès mobile
 Ouvre EDCH sur ton téléphone ou ta tablette, sur le même réseau que ce PC.
  Cet appareil est connecté à EDCH sur ton PC. Les données se mettent à jour toutes seules.
@@ -480,24 +481,21 @@ Ajoute la page à l'écran d'accueil pour l'ouvrir comme une appli.
 Lien copié : il contient le code secret, ne le partage qu'avec tes appareils
 Copie impossible
  Copier le lien
-Adresse Tailscale : {0}
 Adresse du PC
-Si le téléphone n'arrive pas à se connecter, essaie une autre adresse (VPN ou carte réseau virtuelle).
+Choisis la connexion par laquelle le téléphone joint ce PC : Wi-Fi ou Ethernet à la maison, Tailscale depuis l'extérieur. Le QR code et le lien suivent ton choix.
 Nouveau code : les appareils connectés doivent rescanner
 Nouveau code
-Accès hors de chez moi
-Avec Tailscale, un réseau privé chiffré entre tes propres appareils, gratuit pour un usage personnel.
-Guide pas à pas
- Utiliser l'adresse Tailscale dans le QR code et le lien
-Tailscale est actif sur ce PC ({0}).
-Tailscale n'est pas détecté sur ce PC. Suis le guide pour l'installer, puis reviens sur cette page.
-Option cochée mais Tailscale n'est pas actif : le QR code utilise l'adresse locale.
 Bon à savoir
 Windows peut demander d'autoriser EDCH sur le pare-feu : accepte pour les réseaux privés.
 « Nouveau code » déconnecte tous les appareils déjà autorisés.
 La connexion locale n'est pas chiffrée (HTTP) : utilise-la sur ton réseau domestique, pas sur un Wi-Fi public. Hors de chez toi ou sur un Wi-Fi public, passe par Tailscale (chiffré).
 Le lien contient le code secret, comme le QR code : ne le partage qu'avec tes propres appareils.
 Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC.
+Accès hors de chez moi
+Avec Tailscale, un réseau privé chiffré entre tes propres appareils, gratuit pour un usage personnel.
+Guide pas à pas
+Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.
+Tailscale n'est pas détecté sur ce PC. Suis le guide pour l'installer, puis reviens sur cette page.
 Départ
 Indique un départ, une destination et une portée.
 Départ du carrier
