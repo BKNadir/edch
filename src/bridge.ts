@@ -327,7 +327,19 @@ export async function openUrl(url: string): Promise<void> {
   }
 }
 
+/**
+ * Copies text to the clipboard. On a phone (remote), nothing is copied on the phone: the text
+ * goes to the PC's clipboard, where the game runs.
+ */
 export async function copyText(text: string): Promise<boolean> {
+  if (remote) {
+    try {
+      await remoteAction({ type: "clipboard", text });
+      return true;
+    } catch {
+      return false;
+    }
+  }
   try {
     await navigator.clipboard.writeText(text);
     return true;

@@ -1066,5 +1066,8 @@
 "Ces réglages se font sur le PC (ils vont avec le code d'escadrille).": "Se ajustan en el PC (van con el código del ala).",
 "Prévenir quand un prospecteur trouve une cible ou un cœur": "Avisar cuando un prospector encuentra un objetivo o un núcleo",
 "Les cibles et leurs pourcentages se choisissent sur la page Minage.": "Los objetivos y sus porcentajes se eligen en la página Minería.",
-"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "Las nuevas versiones y los problemas al iniciar también aparecen en la pestaña, sin sonido."
+"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "Las nuevas versiones y los problemas al iniciar también aparecen en la pestaña, sin sonido.",
+"« {0} » copié sur le PC — colle-le dans la carte galactique": "«{0}» copiado en el PC — pégalo en el mapa galáctico",
+"PC injoignable : rien n'a été copié": "PC inaccesible: no se copió nada",
+"Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone (rien n'est copié sur le téléphone).": "El nombre siempre se copia al portapapeles del PC, incluso al hacer clic desde el teléfono (no se copia nada en el teléfono)."
 }

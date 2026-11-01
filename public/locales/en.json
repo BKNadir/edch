@@ -1066,5 +1066,8 @@
 "Ces réglages se font sur le PC (ils vont avec le code d'escadrille).": "These are set on the PC (they go with the wing code).",
 "Prévenir quand un prospecteur trouve une cible ou un cœur": "Tell me when a prospector finds a target or a core",
 "Les cibles et leurs pourcentages se choisissent sur la page Minage.": "Targets and their percentages are chosen on the Mining page.",
-"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "New versions and start-up problems also show in the tab, without sound."
+"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "New versions and start-up problems also show in the tab, without sound.",
+"« {0} » copié sur le PC — colle-le dans la carte galactique": "\"{0}\" copied on the PC — paste it in the galaxy map",
+"PC injoignable : rien n'a été copié": "PC unreachable: nothing was copied",
+"Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone (rien n'est copié sur le téléphone).": "The name is always copied to the PC's clipboard, even when you click on the phone (nothing is copied on the phone)."
 }

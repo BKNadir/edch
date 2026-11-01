@@ -148,8 +148,9 @@ PC injoignable : modification non envoyée
 Elite (d'origine)
 Contraste élevé
 Unhandled promise: {0}
-« {0} » copié (ici et sur le PC)
+« {0} » copié sur le PC — colle-le dans la carte galactique
 « {0} » copié — colle-le dans la carte galactique
+PC injoignable : rien n'a été copié
 Copie impossible
 Copier « {0} »
 Voir les modifications de ce module
@@ -763,7 +764,7 @@ Système de repli
 Utilisé tant que le jeu n'a pas donné ta position.
  Traders avec pad L seulement
  Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination
-Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.
+Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone (rien n'est copié sur le téléphone).
 Choisis un thème ou tes propres couleurs. Le téléphone connecté utilise les mêmes réglages.
 Couleur principale
 Couleur secondaire

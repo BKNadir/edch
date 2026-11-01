@@ -2,7 +2,7 @@
 // deals with it. A system is also copied to the clipboard (and to the PC's clipboard when the
 // click comes from a phone), ready to paste in the galaxy map.
 
-import { copyText, isRemote, remoteAction } from "./bridge.js";
+import { copyText, isRemote } from "./bridge.js";
 import { h, icon, toast } from "./dom.js";
 import { gameEnglish, gameName } from "./i18n.js";
 import { log } from "./logger.js";
@@ -16,16 +16,9 @@ export function bindLinks(s: Store) {
   store = s;
 }
 
-/** Copies here, and on the PC too when this is a phone (the game runs on the PC). */
+/** Copies on the PC, where the game runs (from a phone, only the PC's clipboard is used). */
 export async function copyEverywhere(text: string): Promise<boolean> {
-  const here = await copyText(text);
-  if (!isRemote()) return here;
-  try {
-    await remoteAction({ type: "clipboard", text });
-    return true;
-  } catch {
-    return here;
-  }
+  return copyText(text);
 }
 
 /**
@@ -36,7 +29,7 @@ export async function openSystem(system: string, opts: { navigate?: boolean } = 
   const ok = await copyEverywhere(system);
   const toNav = (opts.navigate ?? true) && Boolean(store?.state.settings.systemOpensNav);
   log.debug("link", `system "${system}"${toNav ? " → navigation" : ""}`);
-  toast(ok ? (isRemote() ? `« ${system} » copié (ici et sur le PC)` : `« ${system} » copié — colle-le dans la carte galactique`) : "Copie impossible");
+  toast(ok ? (isRemote() ? `« ${system} » copié sur le PC — colle-le dans la carte galactique` : `« ${system} » copié — colle-le dans la carte galactique`) : isRemote() ? "PC injoignable : rien n'a été copié" : "Copie impossible");
   if (toNav && store) {
     setDestination(system);
     store.setView("navigation");

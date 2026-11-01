@@ -1066,5 +1066,8 @@
 "Ces réglages se font sur le PC (ils vont avec le code d'escadrille).": "Это настраивается на ПК (вместе с кодом звена).",
 "Prévenir quand un prospecteur trouve une cible ou un cœur": "Сообщать, когда разведчик находит цель или ядро",
 "Les cibles et leurs pourcentages se choisissent sur la page Minage.": "Цели и их проценты выбираются на странице «Добыча».",
-"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "Новые версии и проблемы при запуске тоже появляются во вкладке, без звука."
+"Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son.": "Новые версии и проблемы при запуске тоже появляются во вкладке, без звука.",
+"« {0} » copié sur le PC — colle-le dans la carte galactique": "«{0}» скопировано на ПК — вставьте в карту галактики",
+"PC injoignable : rien n'a été copié": "ПК недоступен: ничего не скопировано",
+"Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone (rien n'est copié sur le téléphone).": "Название всегда копируется в буфер обмена ПК, даже при нажатии на телефоне (на телефон ничего не копируется)."
 }

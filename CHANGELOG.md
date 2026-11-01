@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.7
+
+- On the phone, copying (a system name, for example) no longer touches the phone's clipboard: the text only goes to the clipboard of the PC running EDCH, where the game is.
+
 ## 0.9.6
 
 - Settings are split into tabs: General, Game and search, Display, Notifications, Advanced. The last tab opened is remembered.

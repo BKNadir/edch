@@ -4,7 +4,7 @@
 
 export const EDDN_URL = "https://eddn.edcd.io:4430/upload/";
 export const SOFTWARE_NAME = "EDCH";
-export const SOFTWARE_VERSION = "0.9.6";
+export const SOFTWARE_VERSION = "0.9.7";
 
 type Json = Record<string, any>;
 

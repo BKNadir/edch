@@ -211,7 +211,7 @@ export class SettingsView implements View {
             h("input", { type: "checkbox", checked: s.systemOpensNav, onchange: (e: Event) => set({ systemOpensNav: (e.target as HTMLInputElement).checked }) }),
             " Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination",
           ),
-          h("small.sub", null, "Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone."),
+          h("small.sub", null, "Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone (rien n'est copié sur le téléphone)."),
         ),
         this.notifyCard(),
         this.pagesCard(),
