@@ -82,8 +82,8 @@ export class Uploaders {
     if (ok) appLog.debug(service, `${what}: OK`);
     else {
       appLog.warn(service, `${what}: ${detail ?? "error"}`);
-      // A refused key or a service down right at start-up: say so (Inara's pending approval is known).
-      if (inStartup() && !/n'a pas encore autorisé/.test(detail ?? "")) startupAlert(`sync-${service}`, `${service} : envoi refusé`, detail ?? "", goTo("sync", "Synchro"));
+      // A refused key or a service down right at start-up: say so.
+      if (inStartup()) startupAlert(`sync-${service}`, `${service} : envoi refusé`, detail ?? "", goTo("sync", "Synchro"));
     }
     const key = service;
     if (ok) this.stats.sent[key] = (this.stats.sent[key] ?? 0) + 1;

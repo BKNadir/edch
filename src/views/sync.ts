@@ -1,6 +1,6 @@
 import { locale } from "../i18n.js";
 import { openUrl } from "../bridge.js";
-import { callout, h, icon, replace } from "../dom.js";
+import { h, icon, replace } from "../dom.js";
 import type { Ctx, View } from "../context.js";
 import type { SyncSettings } from "../uploaders.js";
 
@@ -28,11 +28,6 @@ export class SyncView implements View {
     replace(
       root,
       h("header.view-head", null, h("h1", null, "Synchronisation"), h("p.sub", null, "Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services.")),
-      callout(
-        "info",
-        "Page en cours de développement",
-        "Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Inara n'a pas encore validé EDCH : ses envois sont refusés pour l'instant et EDCH les met en pause. EDDN et EDSM fonctionnent.",
-      ),
       h(
         "div.settings",
         null,

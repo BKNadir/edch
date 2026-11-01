@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.4
+
+- Inara has approved EDCH: Inara sync works, and the "in development" notice on the Synchronisation page is gone.
+
 ## 0.9.3
 
 - Top bar: EDCH shows whether Elite Dangerous (or its launcher) is running, and a "Launch Elite" button starts it through Steam, Epic Games or a launcher of your choice (Frontier's, MinEdLauncher…), set in Settings. It works from the phone too.
