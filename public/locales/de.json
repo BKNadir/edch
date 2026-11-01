@@ -818,5 +818,14 @@
 "{0} al · {1} point(s) chaud(s)": "{0} Lj · {1} Hotspot(s)",
 "Actualiser": "Aktualisieren",
 "Masquer les nouveautés": "Neuerungen ausblenden",
-"Voir sur GitHub": "Auf GitHub ansehen"
+"Voir sur GitHub": "Auf GitHub ansehen",
+"Tu es ici": "Du bist hier",
+"Tu es ici · vu {0}": "Du bist hier · gesehen {0}",
+"Données lues dans ton journal": "Daten aus deinem Journal",
+"à l'instant": "gerade eben",
+"il y a {0} min": "vor {0} Min.",
+"il y a {0} h": "vor {0} Std.",
+"il y a {0} j": "vor {0} T.",
+"Date de la dernière mise à jour de ce système chez Spansh (données envoyées par les joueurs via EDDN)": "Letzte Aktualisierung dieses Systems bei Spansh (Daten, die Spieler über EDDN senden)",
+"Relancer la recherche sans le cache (10 min)": "Suche ohne den 10-Minuten-Cache neu starten"
 }

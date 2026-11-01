@@ -818,5 +818,14 @@
 "{0} al · {1} point(s) chaud(s)": "{0} св. лет · горячих точек: {1}",
 "Actualiser": "Обновить",
 "Masquer les nouveautés": "Скрыть новое",
-"Voir sur GitHub": "Открыть на GitHub"
+"Voir sur GitHub": "Открыть на GitHub",
+"Tu es ici": "Вы здесь",
+"Tu es ici · vu {0}": "Вы здесь · данные {0}",
+"Données lues dans ton journal": "Данные из вашего журнала",
+"à l'instant": "только что",
+"il y a {0} min": "{0} мин назад",
+"il y a {0} h": "{0} ч назад",
+"il y a {0} j": "{0} д назад",
+"Date de la dernière mise à jour de ce système chez Spansh (données envoyées par les joueurs via EDDN)": "Когда Spansh последний раз обновил систему (данные игроков через EDDN)",
+"Relancer la recherche sans le cache (10 min)": "Повторить поиск без 10-минутного кэша"
 }

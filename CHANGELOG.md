@@ -3,6 +3,12 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.7.3
+
+- Search results show "You are here" on the system you're in, with how long ago your journal saw it, next to the date of Spansh's data.
+- Each search has a "Refresh" button that skips the 10-minute cache.
+- The Spansh date has a tooltip explaining where it comes from (data sent by players through EDDN).
+
 ## 0.7.2
 
 - Game terms are shown as the game names them in your language (for example "High Grade Emissions" becomes "Émissions d'intensité élevée" in French), instead of English names or abbreviations such as HGE or USS.

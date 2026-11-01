@@ -25,6 +25,8 @@ export interface LocationInfo {
   population?: number;
   controllingFaction?: string;
   factions: FactionInfo[];
+  /** When the journal last told us about this system (arrival, login, docking). */
+  seenAt?: string;
   /** Powerplay 2.0 */
   controllingPower?: string;
   powerState?: string;
@@ -237,6 +239,7 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
         population: ev.Population,
         controllingFaction: ev.SystemFaction?.Name,
         factions: readFactions(ev),
+        seenAt: ev.timestamp,
         controllingPower: ev.ControllingPower,
         powerState: ev.PowerplayState,
         powers: Array.isArray(ev.Powers) ? ev.Powers : undefined,
@@ -251,6 +254,7 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
       if (state.location) {
         state.location.docked = true;
         state.location.station = ev.StationName;
+        if (state.location.system === ev.StarSystem) state.location.seenAt = ev.timestamp;
       } else {
         state.location = { system: ev.StarSystem, docked: true, station: ev.StationName, factions: [] };
       }

@@ -10,6 +10,21 @@ export async function copySystem(system: string) {
   toast(ok ? `« ${system} » copié — colle-le dans la carte galactique` : "Copie impossible");
 }
 
+/** Where the commander is, from the journal: shown on the matching result. */
+let here: () => { system?: string; seenAt?: string } = () => ({});
+export function setHere(fn: typeof here) {
+  here = fn;
+}
+
+function sinceText(iso?: string): string {
+  if (!iso) return "";
+  const min = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 60000));
+  if (min < 1) return "à l'instant";
+  if (min < 60) return `il y a ${min} min`;
+  if (min < 48 * 60) return `il y a ${Math.round(min / 60)} h`;
+  return `il y a ${Math.round(min / 1440)} j`;
+}
+
 function ago(iso?: string): string {
   if (!iso) return "";
   const t = Date.parse(iso.endsWith("Z") || iso.includes("+") ? iso : `${iso}Z`);
@@ -40,7 +55,13 @@ export function resultRow(r: ResultRow): HTMLElement {
       null,
       r.badges.map((b) => h(`span.badge${b.tone ? `.${b.tone}` : ""}`, null, b.text)),
       r.sub.length ? h("span.sub", null, r.sub.flatMap((x, i) => (i ? [" · ", x] : [x]))) : null,
-      r.updated ? h("span.sub.age", null, ago(r.updated)) : null,
+      (() => {
+        const me = here();
+        return me.system && me.system.toLowerCase() === r.system.toLowerCase()
+          ? h("span.badge.ok", { title: "Données lues dans ton journal" }, me.seenAt ? `Tu es ici · vu ${sinceText(me.seenAt)}` : "Tu es ici")
+          : null;
+      })(),
+      r.updated ? h("span.sub.age", { title: "Date de la dernière mise à jour de ce système chez Spansh (données envoyées par les joueurs via EDDN)" }, ago(r.updated)) : null,
       h(
         "span.links",
         null,
@@ -54,10 +75,12 @@ export function resultRow(r: ResultRow): HTMLElement {
 export function finderSection(f: Finder, ref: Reference, settings: Settings, opts: { compact?: boolean } = {}): HTMLElement {
   const list = h("div.results");
   const status = h("span.status");
+  let force = false;
+  const refresh = h("button.ghost.small", { title: "Relancer la recherche sans le cache (10 min)", onclick: () => ((force = true), load()) }, "Actualiser");
   const section = h(
     `section.finder.${f.type}`,
     null,
-    h("div.finder-head", null, h("h4", null, f.title), status),
+    h("div.finder-head", null, h("h4", null, f.title), status, f.type === "info" ? null : refresh),
     f.hint && !opts.compact ? h("p.hint", null, f.hint) : null,
     f.type === "info" ? null : list,
   );
@@ -66,8 +89,9 @@ export function finderSection(f: Finder, ref: Reference, settings: Settings, opt
   const load = () => {
     status.replaceChildren(h("span.spinner"), "Recherche Spansh…");
     list.replaceChildren();
-    runFinder(f, ref, settings)
+    runFinder(f, ref, settings, force)
       .then((res) => {
+        force = false;
         status.replaceChildren();
         if (!res.rows.length) {
           list.replaceChildren(

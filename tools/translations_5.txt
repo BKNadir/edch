@@ -272,3 +272,13 @@ Actualiser ¦ Refresh ¦ Aktualisieren ¦ Actualizar ¦ Atualizar ¦ Обнов�
 Masquer les nouveautés ¦ Hide what's new ¦ Neuerungen ausblenden ¦ Ocultar novedades ¦ Ocultar novidades ¦ Скрыть новое
 Voir sur GitHub ¦ View on GitHub ¦ Auf GitHub ansehen ¦ Ver en GitHub ¦ Ver no GitHub ¦ Открыть на GitHub
 Population min. pour les émissions d'intensité élevée ¦ Min. population for High Grade Emissions ¦ Min. Bevölkerung für hochgradige Emissionen ¦ Población mín. para emisiones de alto grado ¦ População mín. para emissões de alto grau ¦ Мин. население для высокоуровневого излучения
+# v0.7.3: freshness of search results
+Tu es ici ¦ You are here ¦ Du bist hier ¦ Estás aquí ¦ Você está aqui ¦ Вы здесь
+Tu es ici · vu {0} ¦ You are here · seen {0} ¦ Du bist hier · gesehen {0} ¦ Estás aquí · visto {0} ¦ Você está aqui · visto {0} ¦ Вы здесь · данные {0}
+Données lues dans ton journal ¦ Data read from your journal ¦ Daten aus deinem Journal ¦ Datos leídos de tu diario ¦ Dados lidos do seu diário ¦ Данные из вашего журнала
+à l'instant ¦ just now ¦ gerade eben ¦ ahora mismo ¦ agora há pouco ¦ только что
+il y a {0} min ¦ {0} min ago ¦ vor {0} Min. ¦ hace {0} min ¦ há {0} min ¦ {0} мин назад
+il y a {0} h ¦ {0} h ago ¦ vor {0} Std. ¦ hace {0} h ¦ há {0} h ¦ {0} ч назад
+il y a {0} j ¦ {0} d ago ¦ vor {0} T. ¦ hace {0} d ¦ há {0} d ¦ {0} д назад
+Date de la dernière mise à jour de ce système chez Spansh (données envoyées par les joueurs via EDDN) ¦ When Spansh last updated this system (data sent by players through EDDN) ¦ Letzte Aktualisierung dieses Systems bei Spansh (Daten, die Spieler über EDDN senden) ¦ Última actualización de este sistema en Spansh (datos enviados por los jugadores a través de EDDN) ¦ Última atualização deste sistema no Spansh (dados enviados pelos jogadores pelo EDDN) ¦ Когда Spansh последний раз обновил систему (данные игроков через EDDN)
+Relancer la recherche sans le cache (10 min) ¦ Run the search again, skipping the 10-minute cache ¦ Suche ohne den 10-Minuten-Cache neu starten ¦ Repetir la búsqueda sin la caché de 10 min ¦ Refazer a busca sem o cache de 10 min ¦ Повторить поиск без 10-минутного кэша

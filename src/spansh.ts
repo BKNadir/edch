@@ -151,12 +151,12 @@ function stationRow(r: any): ResultRow {
   };
 }
 
-export async function runFinder(f: Finder, ref: Reference, s: Settings): Promise<FinderResult> {
+export async function runFinder(f: Finder, ref: Reference, s: Settings, force = false): Promise<FinderResult> {
   if (f.type === "info") return { rows: [], total: 0 };
   const body = buildRequest(f, ref, s);
   const cacheKey = `${f.type}:${JSON.stringify(body)}`;
   const hit = cache.get(cacheKey);
-  if (hit && Date.now() - hit.at < TTL) return hit.value;
+  if (hit && !force && Date.now() - hit.at < TTL) return hit.value;
 
   const data = await spanshPost(`${f.type}/search`, body);
   const results: any[] = Array.isArray(data?.results) ? data.results : [];

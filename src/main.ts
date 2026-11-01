@@ -32,7 +32,7 @@ import { EngineeringView } from "./views/engineering.js";
 import { WishlistView } from "./views/wishlist.js";
 import { EngineersView } from "./views/engineers.js";
 import { SettingsView } from "./views/settings.js";
-import { copySystem } from "./views/results.js";
+import { copySystem, setHere } from "./views/results.js";
 
 const NAV: { id: string; label: string; icon: string }[] = [
   { id: "materials", label: "Matériaux", icon: "M4 7l8-4 8 4-8 4zM4 12l8 4 8-4M4 17l8 4 8-4" },
@@ -96,6 +96,7 @@ async function boot() {
   }
 
   const store = new Store();
+  setHere(() => ({ system: store.state.cmdr.location?.system, seenAt: store.state.cmdr.location?.seenAt }));
   const ctx: Ctx = { game, store };
   const cap = (id: string) => game.capacityOf(id);
   const sync = new Uploaders(
