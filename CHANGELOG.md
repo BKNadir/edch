@@ -6,6 +6,9 @@ and EDCH shows it in the update banner.
 ## 0.8.3
 
 - The side menu scrolls when the window is too short, so the last pages (About, Settings) are always reachable.
+- Notices look the same everywhere: informative ones follow the theme colour, important warnings are red.
+- Fixed a blank page when EDCH started on the Missions page.
+- The top bar follows the colour theme and OLED mode.
 
 ## 0.8.2
 

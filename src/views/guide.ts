@@ -1,5 +1,5 @@
 import { openUrl } from "../bridge.js";
-import { h, icon, replace } from "../dom.js";
+import { callout, h, icon, replace } from "../dom.js";
 import type { Ctx, View } from "../context.js";
 
 /** Step-by-step guide: reaching EDCH from outside the home network with Tailscale. */
@@ -20,15 +20,10 @@ export class RemoteGuideView implements View {
       h(
         "div.guide",
         null,
-        h(
-          "section.card.guide-warning",
-          null,
-          h("p", null, icon("warn"), " ", h("strong", null, "À lire d'abord")),
-          h(
-            "p",
-            null,
-            "EDCH est conçu pour être utilisé sur ton réseau domestique. Passer par Internet n'est pas son objectif : l'accès à distance via Tailscale est pour l'instant la seule alternative, le temps de développer une solution intégrée à EDCH. Active-le seulement si tu en as besoin.",
-          ),
+        callout(
+          "danger",
+          "À lire d'abord",
+          "EDCH est conçu pour être utilisé sur ton réseau domestique. Passer par Internet n'est pas son objectif : l'accès à distance via Tailscale est pour l'instant la seule alternative, le temps de développer une solution intégrée à EDCH. Active-le seulement si tu en as besoin.",
         ),
         h(
           "section.card",

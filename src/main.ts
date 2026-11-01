@@ -19,7 +19,7 @@ import { PowerplayView } from "./views/powerplay.js";
 import { SessionView } from "./views/session.js";
 import { loadExobio } from "./exobio.js";
 import { applyActivityEvents, emptyActivity } from "./activity.js";
-import { loadHistory, onLiveEvents, setupLive } from "./live.js";
+import { bindStore, loadHistory, onLiveEvents, setupLive } from "./live.js";
 import { startUpdateChecks } from "./updater.js";
 import { SearchView } from "./views/search.js";
 import { NavigationView } from "./views/navigation.js";
@@ -101,6 +101,7 @@ async function boot() {
   }
 
   const store = new Store();
+  bindStore(store);
   await setDebugLog(store.state.settings.debugLog);
   log.info("app", `UI ready (language ${code}, view ${store.state.view})`);
   setHere(() => ({ system: store.state.cmdr.location?.system, seenAt: store.state.cmdr.location?.seenAt }));

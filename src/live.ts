@@ -251,6 +251,11 @@ function panel(): (Node | null)[] {
   return parts;
 }
 
+/** Pages can be drawn before setupLive runs (start-up on the Missions page): give them the store first. */
+export function bindStore(s: Store) {
+  store = s;
+}
+
 export function setupLive(s: Store) {
   store = s;
   mountSideTab(store, panel);

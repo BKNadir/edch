@@ -76,3 +76,13 @@ export function icon(name: "copy" | "link" | "search" | "star" | "close" | "plus
   svg.appendChild(path);
   return svg;
 }
+
+/** A highlighted box: "info" follows the theme colour, "danger" is red for important warnings. */
+export function callout(kind: "info" | "danger", title: string, ...body: (Node | string | null)[]): HTMLElement {
+  return h(
+    `div.callout.${kind}`,
+    { role: kind === "danger" ? "alert" : "note" },
+    h("div.callout-title", null, icon("warn"), h("span", null, title)),
+    h("p", null, ...body),
+  );
+}
