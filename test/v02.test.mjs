@@ -28,7 +28,7 @@ test("journal/1 strips personal data and localised keys", () => {
     Factions: [{ Name: "Mother Gaia", MyReputation: 50, HomeSystem: true, FactionState_Localised: "x" }],
   });
   assert.equal(m.$schemaRef, "https://eddn.edcd.io/schemas/journal/1");
-  assert.deepEqual(m.header, { uploaderID: "Jameson", softwareName: "EDCH", softwareVersion: "0.8.6", gameversion: "4.2.0.1", gamebuild: "r1/r0 " });
+  assert.deepEqual(m.header, { uploaderID: "Jameson", softwareName: "EDCH", softwareVersion: "0.8.7", gameversion: "4.2.0.1", gamebuild: "r1/r0 " });
   const msg = m.message;
   for (const k of ["JumpDist", "FuelUsed", "FuelLevel", "BoostUsed", "Wanted", "SystemEconomy_Localised"]) assert.ok(!(k in msg), k);
   assert.deepEqual(msg.Factions, [{ Name: "Mother Gaia" }]);

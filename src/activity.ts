@@ -56,6 +56,28 @@ export interface Depot {
   updated: string;
 }
 
+/**
+ * What a fleet carrier holds, rebuilt from the journal. The journal never lists a carrier's
+ * hold: it is estimated from transfers between ship and carrier, and from buying from or
+ * selling to the carrier's market. The total comes from CarrierStats (own carrier only).
+ */
+export interface CarrierHold {
+  marketId: number;
+  /** Name or callsign as the game shows it when docking. */
+  name: string;
+  /** Your own carrier (seen in CarrierStats). */
+  mine: boolean;
+  /** A squadron carrier. */
+  squadron: boolean;
+  items: Record<string, { label: string; count: number }>;
+  /** Total tonnes of cargo according to the game (CarrierStats), and when. */
+  total?: number;
+  totalAt?: string;
+  /** First event this estimate is built from. */
+  since: string;
+  updated: string;
+}
+
 export interface CommunityGoal {
   id: number;
   title: string;
@@ -180,6 +202,9 @@ export interface ActivityState {
   finished: Record<number, { status: "done" | "failed" | "abandoned"; at: string }>;
   markets: Record<number, { station: string; system: string }>;
   depots: Record<number, Depot>;
+  carriers: Record<number, CarrierHold>;
+  /** Where you are docked (market id, and whether it is a fleet carrier). */
+  docked?: { marketId: number; carrier: boolean; squadron: boolean; name: string };
   goals: Record<number, CommunityGoal>;
   bodies: Record<string, BodyInfo>;
   /** Systems with unsold cartographic data, by name: body keys scanned there. */
@@ -208,6 +233,7 @@ export function emptyActivity(): ActivityState {
     finished: {},
     markets: {},
     depots: {},
+    carriers: {},
     goals: {},
     bodies: {},
     unsoldSystems: {},
@@ -226,7 +252,7 @@ export const HISTORY_EVENTS = [
   "CommunityGoal",
   "Scan", "SAAScanComplete", "FSSBodySignals", "SAASignalsFound", "SellExplorationData", "MultiSellExplorationData",
   "ScanOrganic", "SellOrganicData",
-  "RedeemVoucher", "MarketSell", "MaterialCollected",
+  "RedeemVoucher", "MarketSell", "MarketBuy", "MaterialCollected", "Undocked", "CargoTransfer", "CarrierStats", "CarrierDepositFuel",
   "MiningRefined", "ProspectedAsteroid", "LaunchDrone", "AsteroidCracked",
   "Powerplay", "PowerplayMerits", "PowerplayRank", "PowerplayJoin", "PowerplayLeave", "PowerplayDefect",
 ];
@@ -238,6 +264,28 @@ const G = 9.80665;
 const ATM = 101325;
 
 /** "$Painite_Name;" / "painite" → "painite" */
+function dockAt(st: ActivityState, ev: Json, at: string) {
+  const id = Number(ev.MarketID);
+  if (!id) return;
+  const type = String(ev.StationType ?? "");
+  const carrier = /carrier/i.test(type);
+  const squadron = /squadron/i.test(type);
+  st.docked = { marketId: id, carrier, squadron, name: String(ev.StationName ?? "") };
+  if (!carrier) return;
+  const c = (st.carriers[id] ??= { marketId: id, name: String(ev.StationName ?? ""), mine: false, squadron, items: {}, since: at, updated: at });
+  if (squadron) c.squadron = true;
+  if (!c.name) c.name = String(ev.StationName ?? "");
+}
+
+function carrierAdd(c: CarrierHold, type: unknown, label: unknown, delta: number) {
+  const id = symbolId(type);
+  if (!id || !delta) return;
+  const item = (c.items[id] ??= { label: String(label ?? id), count: 0 });
+  if (label) item.label = String(label);
+  item.count = Math.max(0, item.count + delta);
+  if (!item.count) delete c.items[id];
+}
+
 export function symbolId(raw: unknown): string {
   return String(raw ?? "")
     .toLowerCase()
@@ -361,11 +409,19 @@ export function applyActivity(st: ActivityState, ev: Json, ctx: ActivityContext 
         s.jumps += 1;
         s.distance += num(ev.JumpDist) ?? 0;
       }
-      if (ev.Docked && ev.MarketID) st.markets[ev.MarketID] = { station: ev.StationName, system: ev.StarSystem };
+      if (ev.Docked && ev.MarketID) {
+        st.markets[ev.MarketID] = { station: ev.StationName, system: ev.StarSystem };
+        dockAt(st, ev, at);
+      } else if (ev.event === "FSDJump") st.docked = undefined;
       pruneBodies(st);
       return true;
 
+    case "Undocked":
+      st.docked = undefined;
+      return false;
+
     case "Docked":
+      dockAt(st, ev, at);
       if (ev.MarketID) st.markets[ev.MarketID] = { station: ev.StationName, system: ev.StarSystem };
       if (ev.MarketID && st.depots[ev.MarketID]) Object.assign(st.depots[ev.MarketID], { station: ev.StationName, system: ev.StarSystem });
       return false;
@@ -636,7 +692,57 @@ export function applyActivity(st: ActivityState, ev: Json, ctx: ActivityContext 
     }
 
     // ---------- trade, materials ----------
+    // ---------- fleet carrier hold ----------
+    case "CargoTransfer": {
+      const c = st.docked?.carrier ? st.carriers[st.docked.marketId] : undefined;
+      if (!c) return false;
+      for (const t of ev.Transfers ?? []) {
+        const dir = String(t.Direction ?? "").toLowerCase();
+        const n = num(t.Count) ?? 0;
+        if (dir === "tocarrier") carrierAdd(c, t.Type, t.Type_Localised, n);
+        else if (dir === "toship" || dir === "tosrv") carrierAdd(c, t.Type, t.Type_Localised, -n);
+      }
+      c.updated = at;
+      return true;
+    }
+    case "CarrierStats": {
+      const id = Number(ev.CarrierID);
+      if (!id) return false;
+      const c = (st.carriers[id] ??= { marketId: id, name: String(ev.Callsign ?? ""), mine: false, squadron: false, items: {}, since: at, updated: at });
+      c.mine = !/squadron/i.test(String(ev.CarrierType ?? ""));
+      c.squadron = /squadron/i.test(String(ev.CarrierType ?? ""));
+      c.name = [ev.Name, ev.Callsign].filter(Boolean).join(" · ") || c.name;
+      const cargo = num(ev.SpaceUsage?.Cargo);
+      if (cargo !== undefined) {
+        c.total = cargo;
+        c.totalAt = at;
+      }
+      c.updated = at;
+      return true;
+    }
+    case "CarrierDepositFuel": {
+      // Tritium from the carrier's hold into its tank.
+      const c = st.carriers[Number(ev.CarrierID)];
+      if (!c) return false;
+      carrierAdd(c, "tritium", "Tritium", -(num(ev.Amount) ?? 0));
+      c.updated = at;
+      return true;
+    }
+    case "MarketBuy": {
+      const c = st.carriers[Number(ev.MarketID)];
+      if (!c) return false;
+      carrierAdd(c, ev.Type, ev.Type_Localised, -(num(ev.Count) ?? 0));
+      c.updated = at;
+      return true;
+    }
+
     case "MarketSell": {
+      const sold = st.carriers[Number(ev.MarketID)];
+      if (sold) {
+        // Selling to a carrier's buy order puts the goods in its hold.
+        carrierAdd(sold, ev.Type, ev.Type_Localised, num(ev.Count) ?? 0);
+        sold.updated = at;
+      }
       const total = num(ev.TotalSale) ?? 0;
       const paid = (num(ev.AvgPricePaid) ?? 0) * (num(ev.Count) ?? 0);
       s.trade += total - paid;

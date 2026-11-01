@@ -913,5 +913,16 @@
 "Voir les modifications de ce module": "Ver las modificaciones de este módulo",
 "Marchandise (soute) : où l'acheter": "Mercancía (bodega): dónde comprarla",
 "Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination": "Hacer clic en un sistema también abre Navegación, con ese sistema como destino",
-"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "El nombre siempre se copia al portapapeles, y también al del PC cuando haces clic desde el teléfono."
+"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "El nombre siempre se copia al portapapeles, y también al del PC cuando haces clic desde el teléfono.",
+"Soutes": "Bodegas",
+"Mon fleet carrier": "Mi fleet carrier",
+"Carrier de l'escadrille": "Carrier del escuadrón",
+"Vide": "Vacía",
+"Carriers": "Carriers",
+"{0} / {1} t": "{0} / {1} t",
+"{0} t de marchandises (jeu, {1})": "{0} t de mercancías (juego, {1})",
+"+ {0} t non identifiées": "+ {0} t sin identificar",
+"t utiles dans tes carriers": "t útiles en tus carriers",
+"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "El diario del juego no lista la bodega de un carrier: EDCH la reconstruye a partir de tus transferencias nave ↔ carrier y de tus compras y ventas en su mercado. Lo que otros hayan puesto o lo que había antes del inicio de tu historial (60 días) no aparece. Las mercancías que piden tus obras están resaltadas.",
+"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Atraca en tu fleet carrier (o en el de tu escuadrón) y transfiere mercancías: EDCH seguirá también su bodega. El total de tu carrier viene de la pantalla de gestión del carrier."
 }

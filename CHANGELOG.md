@@ -3,6 +3,12 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.7
+
+- Colonisation: the ship's hold is always up to date (EDCH now reads Cargo.json, which the game rewrites after every purchase, sale or delivery; the journal often only gives the total).
+- Colonisation: a "Holds" panel shows the ship's hold, your fleet carrier's and your squadron carrier's, side by side, with the goods your construction sites need highlighted, and a "Carriers" column in each site's table.
+- A carrier's hold is rebuilt from the journal (ship ↔ carrier transfers, tritium deposited as fuel, purchases and sales on its market), as the game never lists it. Your carrier's total comes from the carrier management screen; what can't be identified is shown as such.
+
 ## 0.8.6
 
 - Mobile access: the "PC address" list shows the PC's connections a phone can use, Ethernet, Wi-Fi, Tailscale and VPNs, with the network's name ("Wi-Fi (ASUS)"), and the QR code and the link follow the one you pick. Hyper-V, WSL and other virtual adapters are left out. The Tailscale checkbox is gone: pick the Tailscale address in the list. The "away from home" section moved to the bottom of the page.

@@ -1,4 +1,4 @@
-import type { Depot } from "../activity.js";
+import type { CarrierHold, Depot } from "../activity.js";
 import { fmt, h, icon, replace } from "../dom.js";
 import { gameName } from "../i18n.js";
 import { relTime } from "../time.js";
@@ -41,9 +41,76 @@ export class ColonisationView implements View {
           ? h("label.check", null, h("input", { type: "checkbox", checked: this.showDone, onchange: (e: Event) => ((this.showDone = (e.target as HTMLInputElement).checked), this.render()) }), " Afficher les chantiers terminés")
           : null,
       ),
+      this.holds(shown, capacity),
       shown.length
         ? shown.map((d) => this.depot(d, capacity))
         : h("section.card", null, h("p.empty", null, "Aucun chantier en cours. Docke à un dépôt de construction (Colonisation) : EDCH lira la liste des marchandises demandées.")),
+    );
+  }
+
+  /** Your carrier and your squadron's: the ones whose hold is worth showing. */
+  private carriers(): CarrierHold[] {
+    return Object.values(this.ctx.store.state.activity.carriers ?? {})
+      .filter((c) => c.mine || c.squadron)
+      .sort((a, b) => Number(b.mine) - Number(a.mine));
+  }
+
+  /** How much of a commodity sits in your carriers. */
+  private inCarriers(id: string): number {
+    return this.carriers().reduce((s, c) => s + (c.items[id]?.count ?? 0), 0);
+  }
+
+  /** Ship hold, own fleet carrier and squadron carrier, side by side. */
+  private holds(depots: Depot[], capacity: number): HTMLElement {
+    const cmdr = this.ctx.store.state.cmdr;
+    const needed = new Set(depots.flatMap((d) => d.resources.filter((r) => r.required > r.provided).map((r) => r.id)));
+    const name = (id: string, label?: string) => gameName(this.commodity(id, label ?? id));
+    const list = (items: [string, number, string?][]) =>
+      items.length
+        ? h(
+            "ul.hold-list",
+            null,
+            items
+              .sort((a, b) => Number(needed.has(b[0])) - Number(needed.has(a[0])) || b[1] - a[1])
+              .map(([id, n, label]) => h("li", { class: needed.has(id) ? "needed" : "" }, h("span", null, name(id, label)), h("strong", null, `${fmt(n)} t`))),
+          )
+        : h("p.empty", null, "Vide");
+    const shipItems = Object.entries(cmdr.cargo ?? {}).filter(([, n]) => n > 0) as [string, number][];
+    const shipUsed = shipItems.reduce((s, [, n]) => s + n, 0);
+    const cards: HTMLElement[] = [
+      h(
+        "div.hold",
+        null,
+        h("h4", null, "Vaisseau"),
+        h("p.sub", null, capacity ? `${fmt(shipUsed)} / ${fmt(capacity)} t` : `${fmt(shipUsed)} t`),
+        capacity ? h("div.bar", null, h("span", { style: { width: `${Math.min(100, (shipUsed / capacity) * 100)}%` } })) : null,
+        list(shipItems),
+      ),
+    ];
+    for (const c of this.carriers()) {
+      const items = Object.entries(c.items).map(([id, v]) => [id, v.count, v.label] as [string, number, string]);
+      const known = items.reduce((s, [, n]) => s + n, 0);
+      const unknown = c.total !== undefined ? Math.max(0, c.total - known) : 0;
+      cards.push(
+        h(
+          "div.hold",
+          null,
+          h("h4", null, c.mine ? "Mon fleet carrier" : "Carrier de l'escadrille"),
+          h("p.sub", { "data-no-tr": "" }, c.name),
+          c.total !== undefined ? h("p.sub", null, `${fmt(c.total)} t de marchandises (jeu, ${relTime(c.totalAt)})`) : null,
+          list(items),
+          unknown ? h("p.sub", null, `+ ${fmt(unknown)} t non identifiées`) : null,
+        ),
+      );
+    }
+    return h(
+      "section.card.holds",
+      null,
+      h("h3", null, "Soutes"),
+      h("div.hold-grid", null, cards),
+      this.carriers().length
+        ? h("p.sub", null, "Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.")
+        : h("p.sub", null, "Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier."),
     );
   }
 
@@ -54,6 +121,8 @@ export class ColonisationView implements View {
     const pct = d.complete ? 100 : Math.round((d.progress || (required ? 1 - remaining / required : 0)) * 1000) / 10;
     const inHold = d.resources.reduce((s, r) => s + Math.min(cargo[r.id] ?? 0, Math.max(0, r.required - r.provided)), 0);
     const trips = capacity ? Math.ceil(Math.max(0, remaining - inHold) / capacity) : null;
+    const inCarrier = d.resources.reduce((s, r) => s + Math.min(this.inCarriers(r.id), Math.max(0, r.required - r.provided)), 0);
+    const showCarrier = this.carriers().length > 0;
     const rows = d.resources
       .map((r) => ({ ...r, left: Math.max(0, r.required - r.provided), hold: cargo[r.id] ?? 0 }))
       .sort((a, b) => Number(a.left === 0) - Number(b.left === 0) || b.left - a.left);
@@ -72,12 +141,13 @@ export class ColonisationView implements View {
         null,
         h("div.stat", null, h("strong", null, fmt(remaining)), h("span.sub", null, "t restantes")),
         h("div.stat", null, h("strong", null, fmt(inHold)), h("span.sub", null, "t utiles en soute")),
+        inCarrier ? h("div.stat", null, h("strong", null, fmt(inCarrier)), h("span.sub", null, "t utiles dans tes carriers")) : null,
         trips !== null ? h("div.stat", null, h("strong", null, fmt(trips)), h("span.sub", null, `trajets (${fmt(capacity)} t par trajet)`)) : null,
       ),
       h(
         "table.table.depot-table",
         null,
-        h("thead", null, h("tr", null, h("th", null, "Marchandise"), h("th.num", null, "Livré"), h("th.num", null, "Demandé"), h("th.num", null, "Restant"), h("th.num", null, "En soute"), h("th", null, ""))),
+        h("thead", null, h("tr", null, h("th", null, "Marchandise"), h("th.num", null, "Livré"), h("th.num", null, "Demandé"), h("th.num", null, "Restant"), h("th.num", null, "En soute"), showCarrier ? h("th.num", null, "Carriers") : null, h("th", null, ""))),
         h(
           "tbody",
           null,
@@ -91,6 +161,7 @@ export class ColonisationView implements View {
               h("td.num", null, fmt(r.required)),
               h("td.num", null, r.left ? h("strong", null, fmt(r.left)) : h("span.ok", null, "✓")),
               h("td.num", null, r.hold ? fmt(r.hold) : ""),
+              showCarrier ? h("td.num", null, this.inCarriers(r.id) ? fmt(this.inCarriers(r.id)) : "") : null,
               h(
                 "td",
                 null,

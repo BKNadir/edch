@@ -913,5 +913,16 @@
 "Voir les modifications de ce module": "Modifikationen dieses Moduls anzeigen",
 "Marchandise (soute) : où l'acheter": "Ware (Frachtraum): wo kaufen",
 "Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination": "Ein Klick auf ein System öffnet auch die Navigation mit diesem System als Ziel",
-"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "Der Name wird immer in die Zwischenablage kopiert, beim Klick auf dem Handy auch in die des PCs."
+"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "Der Name wird immer in die Zwischenablage kopiert, beim Klick auf dem Handy auch in die des PCs.",
+"Soutes": "Frachträume",
+"Mon fleet carrier": "Mein Fleet Carrier",
+"Carrier de l'escadrille": "Geschwader-Carrier",
+"Vide": "Leer",
+"Carriers": "Carrier",
+"{0} / {1} t": "{0} / {1} t",
+"{0} t de marchandises (jeu, {1})": "{0} t Waren (Spiel, {1})",
+"+ {0} t non identifiées": "+ {0} t nicht zugeordnet",
+"t utiles dans tes carriers": "t nützlich in deinen Carriern",
+"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "Das Spieljournal listet den Frachtraum eines Carriers nicht auf: EDCH rekonstruiert ihn aus deinen Transfers Schiff ↔ Carrier und deinen Käufen und Verkäufen auf seinem Markt. Was andere hineingelegt haben oder was vor Beginn deines Verlaufs (60 Tage) darin war, erscheint nicht. Waren, die deine Baustellen brauchen, sind hervorgehoben.",
+"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Docke an deinem Fleet Carrier (oder dem deines Geschwaders) und transferiere Waren: EDCH verfolgt dann auch seinen Frachtraum. Die Gesamtmenge deines Carriers stammt aus dem Carrier-Verwaltungsbildschirm."
 }

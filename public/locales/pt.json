@@ -913,5 +913,16 @@
 "Voir les modifications de ce module": "Ver as modificações deste módulo",
 "Marchandise (soute) : où l'acheter": "Mercadoria (porão): onde comprar",
 "Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination": "Clicar num sistema também abre a Navegação, com esse sistema como destino",
-"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "O nome é sempre copiado para a área de transferência, e também para a do PC quando você clica pelo celular."
+"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "O nome é sempre copiado para a área de transferência, e também para a do PC quando você clica pelo celular.",
+"Soutes": "Porões",
+"Mon fleet carrier": "Meu fleet carrier",
+"Carrier de l'escadrille": "Carrier da esquadrilha",
+"Vide": "Vazio",
+"Carriers": "Carriers",
+"{0} / {1} t": "{0} / {1} t",
+"{0} t de marchandises (jeu, {1})": "{0} t de mercadorias (jogo, {1})",
+"+ {0} t non identifiées": "+ {0} t não identificadas",
+"t utiles dans tes carriers": "t úteis nos seus carriers",
+"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "O diário do jogo não lista o porão de um carrier: o EDCH o reconstrói a partir das suas transferências nave ↔ carrier e das suas compras e vendas no mercado dele. O que outros colocaram ou o que havia antes do início do seu histórico (60 dias) não aparece. As mercadorias pedidas pelas suas obras ficam destacadas.",
+"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Atraque no seu fleet carrier (ou no da sua esquadrilha) e transfira mercadorias: o EDCH também vai acompanhar o porão dele. O total do seu carrier vem da tela de gerenciamento do carrier."
 }

@@ -46,3 +46,27 @@ test("a shared mission accepted by a wingmate is linked by its id and shows the 
   assert.equal(rows[0].mission.faction, "Astra Militarum");
   assert.equal(rows[0].mission.delivered, 784);
 });
+
+test("a fleet carrier's hold is rebuilt from transfers, fuel deposits and carrier market trades", () => {
+  // Real lines from a journal (own carrier H7N-WVK).
+  const st = emptyActivity();
+  const lines = [
+    { timestamp: "2026-10-05T07:42:31Z", event: "Docked", StationName: "[DSFS] THOUSAND SUNNY H7N-WVK", StationType: "FleetCarrier", MarketID: 3702811392, StarSystem: "Mbutsi" },
+    { timestamp: "2026-10-05T09:03:46Z", event: "CargoTransfer", Transfers: [{ Type: "powertransferconduits", Type_Localised: "Power Transfer Bus", Count: 17, Direction: "tocarrier" }, { Type: "powerconverter", Type_Localised: "Power Converter", Count: 18, Direction: "tocarrier" }] },
+    { timestamp: "2026-10-11T12:06:25Z", event: "CargoTransfer", Transfers: [{ Type: "tritium", Count: 786, Direction: "tocarrier" }] },
+    { timestamp: "2026-10-11T12:07:00Z", event: "CarrierDepositFuel", CarrierID: 3702811392, Amount: 200, Total: 1000 },
+    { timestamp: "2026-10-11T12:08:00Z", event: "CargoTransfer", Transfers: [{ Type: "powerconverter", Count: 8, Direction: "toship" }] },
+    { timestamp: "2026-10-11T12:09:00Z", event: "MarketSell", MarketID: 3702811392, Type: "steel", Type_Localised: "Steel", Count: 100, SellPrice: 1, TotalSale: 100, AvgPricePaid: 1 },
+    { timestamp: "2026-10-11T12:10:00Z", event: "Undocked", StationName: "[DSFS] THOUSAND SUNNY H7N-WVK", MarketID: 3702811392 },
+    { timestamp: "2026-10-11T12:11:00Z", event: "CargoTransfer", Transfers: [{ Type: "steel", Count: 5, Direction: "tocarrier" }] },
+    { timestamp: "2026-10-29T15:42:53Z", event: "CarrierStats", CarrierID: 3702811392, CarrierType: "FleetCarrier", Callsign: "H7N-WVK", Name: "[DSFS] THOUSAND SUNNY", SpaceUsage: { Cargo: 2486 } },
+  ];
+  for (const e of lines) applyActivity(st, e);
+  const c = st.carriers[3702811392];
+  assert.equal(c.mine, true);
+  assert.equal(c.total, 2486);
+  assert.equal(c.items.powertransferconduits.count, 17);
+  assert.equal(c.items.powerconverter.count, 10);
+  assert.equal(c.items.tritium.count, 586);
+  assert.equal(c.items.steel.count, 100, "a transfer after undocking doesn't count");
+});

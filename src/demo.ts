@@ -126,6 +126,11 @@ export const DEMO_EVENTS: Record<string, unknown>[] = [
     ],
   },
   { timestamp: t(125), event: "Cargo", Vessel: "Ship", Count: 256, Inventory: [{ Name: "steel", Count: 256, Stolen: 0 }] },
+  // Demo fleet carrier: docked, goods transferred, then the carrier management screen.
+  { timestamp: t(125), event: "Docked", StationName: "NADIR'S HOPE X9Z-41K", StarSystem: "Col 285 Sector AB-C c13-4", MarketID: 3709999999, StationType: "FleetCarrier" },
+  { timestamp: t(125), event: "CargoTransfer", Transfers: [{ Type: "aluminium", Type_Localised: "Aluminium", Count: 1800, Direction: "tocarrier" }, { Type: "cmmcomposite", Type_Localised: "CMM Composite", Count: 950, Direction: "tocarrier" }, { Type: "tritium", Type_Localised: "Tritium", Count: 600, Direction: "tocarrier" }] },
+  { timestamp: t(125), event: "CarrierStats", CarrierID: 3709999999, CarrierType: "FleetCarrier", Callsign: "X9Z-41K", Name: "NADIR'S HOPE", SpaceUsage: { TotalCapacity: 25000, Cargo: 3650 } },
+  { timestamp: t(125), event: "Undocked", StationName: "NADIR'S HOPE X9Z-41K", MarketID: 3709999999 },
   {
     timestamp: t(126),
     event: "CommunityGoal",

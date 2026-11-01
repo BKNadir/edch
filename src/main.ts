@@ -2,7 +2,7 @@ import { LANGS, browserLang, guessLang, initI18n, saveLang, savedLang, watchTran
 import { installerLanguage, isTauri, onJournal, readAuxFile, startJournal, defaultJournalDir, type WatchStatus } from "./bridge.js";
 import { loadGame } from "./data.js";
 import { h, icon, replace } from "./dom.js";
-import { applyLines, applyLocker, applyStatus, emptyState } from "./journal.js";
+import { applyCargoFile, applyLines, applyLocker, applyStatus, emptyState } from "./journal.js";
 import { Uploaders } from "./uploaders.js";
 import { detectRemote, remoteLanguage, runRemoteClient, setupRemoteHost } from "./remote.js";
 import { MobileView } from "./views/mobile.js";
@@ -254,6 +254,14 @@ async function boot() {
       uploads = uploads.then(async () => {
         for (const ev of events) await sync.handle(ev, !b.replay);
       });
+      // Cargo events often only give the total: the hold's content is in Cargo.json.
+      if (!b.replay && events.some((e) => e.event === "Cargo" && !e.Inventory && (e.Vessel ?? "Ship") === "Ship") && store.state.settings.journalDir) {
+        readAuxFile(store.state.settings.journalDir, "Cargo.json")
+          .then((text) => {
+            if (applyCargoFile(store.state.cmdr, JSON.parse(text))) store.notify();
+          })
+          .catch(() => undefined);
+      }
       // ShipLocker events often only say "look at ShipLocker.json".
       if (events.some((e) => e.event === "ShipLocker" && !e.Items) && store.state.settings.journalDir) {
         readAuxFile(store.state.settings.journalDir, "ShipLocker.json")
@@ -275,6 +283,10 @@ async function boot() {
       try {
         if (a.name === "Status.json") {
           if (applyStatus(store.state.cmdr, JSON.parse(a.content))) store.notify();
+          return;
+        }
+        if (a.name === "Cargo.json") {
+          if (applyCargoFile(store.state.cmdr, JSON.parse(a.content))) store.notify();
           return;
         }
         if (a.name !== "ShipLocker.json") return;

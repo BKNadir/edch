@@ -913,5 +913,16 @@
 "Voir les modifications de ce module": "Показать модификации этого модуля",
 "Marchandise (soute) : où l'acheter": "Товар (трюм): где купить",
 "Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination": "Нажатие на систему также открывает Навигацию с этой системой в качестве цели",
-"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "Название всегда копируется в буфер обмена, а при нажатии на телефоне — ещё и в буфер ПК."
+"Le nom est toujours copié dans le presse-papiers, et aussi sur le PC quand tu cliques depuis le téléphone.": "Название всегда копируется в буфер обмена, а при нажатии на телефоне — ещё и в буфер ПК.",
+"Soutes": "Трюмы",
+"Mon fleet carrier": "Мой корабль-носитель",
+"Carrier de l'escadrille": "Носитель эскадрильи",
+"Vide": "Пусто",
+"Carriers": "Носители",
+"{0} / {1} t": "{0} / {1} т",
+"{0} t de marchandises (jeu, {1})": "{0} т товаров (игра, {1})",
+"+ {0} t non identifiées": "+ {0} т не определено",
+"t utiles dans tes carriers": "т нужного в ваших носителях",
+"Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.": "Журнал игры не перечисляет трюм носителя: EDCH восстанавливает его по вашим переносам корабль ↔ носитель и вашим покупкам и продажам на его рынке. То, что положили другие или что было до начала вашей истории (60 дней), не отображается. Товары, нужные вашим стройкам, выделены.",
+"Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.": "Пристыкуйтесь к своему носителю (или носителю эскадрильи) и перенесите товары: EDCH будет отслеживать и его трюм. Общий объём вашего носителя берётся с экрана управления носителем."
 }

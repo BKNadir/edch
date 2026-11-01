@@ -186,10 +186,16 @@ Licences et détails :
 Chantiers de construction suivis depuis ton journal : ce qu'il reste à livrer, ta soute, les trajets et où acheter.
  Afficher les chantiers terminés
 Aucun chantier en cours. Docke à un dépôt de construction (Colonisation) : EDCH lira la liste des marchandises demandées.
+Carrier de l'escadrille
+{0} t de marchandises (jeu, {1})
++ {0} t non identifiées
+Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Les marchandises demandées par tes chantiers sont surlignées.
+Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.
 Dépôt #{0}
 Terminé
 Échoué
 Mis à jour {0}
+t utiles dans tes carriers
 trajets ({0} t par trajet)
 Livré
 Demandé

@@ -427,6 +427,19 @@ function readLoadout(ev: Json): ShipLoadout {
 }
 
 /** Applies Status.json (fuel, cargo mass). */
+/**
+ * Cargo.json, rewritten by the game whenever the hold changes. The Cargo journal event often
+ * only says "look at Cargo.json" (no Inventory), so the file is the reliable source.
+ */
+export function applyCargoFile(state: CommanderState, file: Json): boolean {
+  if (!file || (file.Vessel ?? "Ship") !== "Ship" || !Array.isArray(file.Inventory)) return false;
+  const next: Record<string, number> = {};
+  for (const c of file.Inventory) next[key(c.Name)] = (next[key(c.Name)] ?? 0) + Number(c.Count ?? 0);
+  if (JSON.stringify(next) === JSON.stringify(state.cargo)) return false;
+  state.cargo = next;
+  return true;
+}
+
 export function applyStatus(state: CommanderState, status: Json): boolean {
   if (!status || typeof status !== "object") return false;
   let changed = false;
