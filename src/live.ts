@@ -99,6 +99,7 @@ export async function syncWing() {
       if (store.state.settings.wing.notifyAccept) notify(`${by} a accepté « ${row.mission.title} »`);
     },
     changed: () => {
+      enrichFromWing();
       // A wingmate's new mission may be one we hold: publish it as shared.
       missionsChanged();
       store.notify();
@@ -119,7 +120,40 @@ function missionsChanged() {
     if (!link) return;
     void link.publish();
     link.check();
-  }, 2500);
+  }, 1000);
+}
+
+/**
+ * Accepting a wingmate's shared mission writes nothing to the journal: EDCH first learns about it
+ * from a cargo depot update (same mission id as the wingmate's). Such a mission only has an id
+ * and a progress: complete it with what the wingmate's EDCH published, and keep the furthest
+ * delivery progress anyone reported.
+ */
+function enrichFromWing() {
+  if (!link) return;
+  const others = [...link.members.values()].filter((o) => !o.left);
+  for (const m of Object.values(store.state.activity.missions)) {
+    const copies = others.flatMap((o) => o.missions.filter((x) => x.id === m.id));
+    for (const c of copies) {
+      // A stub (known only from a cargo depot update or the login list) has no faction.
+      if (!m.faction && c.faction) {
+        m.faction = c.faction;
+        if (c.name) m.name = c.name;
+        if (c.title) m.title = c.title;
+        m.wing = true;
+      }
+      m.destSystem ??= c.destSystem;
+      m.destStation ??= c.destStation;
+      m.expiry ??= c.expiry;
+      m.reward ??= c.reward;
+      m.commodity ??= c.commodity;
+      m.count ??= c.count;
+      if (c.total && (c.delivered ?? 0) > (m.delivered ?? 0)) {
+        m.delivered = c.delivered;
+        m.total = c.total;
+      }
+    }
+  }
 }
 
 function checkMining(ev: Json) {
@@ -150,7 +184,10 @@ export function onLiveEvents(events: Json[]) {
     }
     checkMining(ev);
   }
-  if (missions) missionsChanged();
+  if (missions) {
+    enrichFromWing();
+    missionsChanged();
+  }
   if (changed) {
     store.notify();
     refreshTab();

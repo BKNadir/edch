@@ -5,7 +5,8 @@
 // random-looking text. Each EDCH publishes its wing missions when they change, plus a heartbeat,
 // and polls the topic for the others'.
 
-import { httpFetch } from "./bridge.js";
+import { httpFetch, isTauri, ntfySubscribe, ntfyUnsubscribe, onNtfy } from "./bridge.js";
+import { log } from "./logger.js";
 import type { Mission } from "./activity.js";
 
 export interface WingMission {
@@ -22,6 +23,9 @@ export interface WingMission {
   kills?: number;
   delivered?: number;
   total?: number;
+  reward?: number;
+  commodity?: string;
+  count?: number;
 }
 
 export interface WingMember {
@@ -105,6 +109,9 @@ export function toWingMission(m: Mission): WingMission {
     kills: m.killCount ? m.kills : undefined,
     delivered: m.delivered,
     total: m.total,
+    reward: m.reward,
+    commodity: m.commodity,
+    count: m.count,
   };
 }
 
@@ -131,6 +138,23 @@ export function sameMission(a: WingMission, b: WingMission): boolean {
   return a.title === b.title;
 }
 
+/**
+ * Two copies of one mission: keep what either knows (a copy seen only through a cargo depot
+ * update has no title or faction) and the furthest delivery progress.
+ */
+export function mergeMission(a: WingMission, b: WingMission): WingMission {
+  const out: WingMission = { ...a };
+  for (const k of ["name", "faction", "destSystem", "destStation", "expiry", "reward", "commodity", "count"] as const) {
+    if ((out[k] === undefined || out[k] === "") && b[k] !== undefined && b[k] !== "") (out as unknown as Record<string, unknown>)[k] = b[k];
+  }
+  if (!out.title || /^Mission_/.test(out.title)) out.title = b.title || out.title;
+  if (b.total && (b.delivered ?? 0) >= (out.delivered ?? 0)) {
+    out.delivered = b.delivered;
+    out.total = b.total;
+  }
+  return out;
+}
+
 export interface WingRow {
   mission: WingMission;
   holders: string[];
@@ -151,8 +175,10 @@ export function wingRows(me: WingMember, others: WingMember[], now = Date.now())
     for (const mission of m.missions) {
       let row = rows.find((r) => sameMission(r.mission, mission));
       if (!row) {
-        row = { mission, holders: [], missing: [], mine: false };
+        row = { mission: { ...mission }, holders: [], missing: [], mine: false };
         rows.push(row);
+      } else {
+        row.mission = mergeMission(row.mission, mission);
       }
       if (!row.holders.includes(m.id)) row.holders.push(m.id);
       if (m.id === me.id) row.mine = true;
@@ -202,14 +228,41 @@ export class WingLink {
     this.topic = await topicFor(this.code);
     await this.publish(true);
     await this.poll();
-    this.timer = window.setInterval(() => void this.poll(), 15_000);
     this.beat = window.setInterval(() => void this.publish(true), 20 * 60 * 1000);
+    // In the app: a live connection, ntfy pushes each message at once. A slow poll stays as a
+    // safety net. In a plain browser (demo): poll every 15 s.
+    if (isTauri()) {
+      try {
+        this.unlisten = await onNtfy(
+          (topic, line) => {
+            if (topic === this.topic) void this.handleLines([line]);
+          },
+          (topic, connected, message) => {
+            if (topic !== this.topic) return;
+            this.live = connected;
+            if (!connected && message) log.warn("wing", `ntfy: ${message}`);
+          },
+        );
+        await ntfySubscribe(this.topic, this.since);
+        this.timer = window.setInterval(() => void this.poll(), 120_000);
+        return;
+      } catch (e) {
+        log.warn("wing", `Live link unavailable, polling instead: ${String((e as Error)?.message ?? e)}`);
+      }
+    }
+    this.timer = window.setInterval(() => void this.poll(), 15_000);
   }
+
+  /** True while the live connection to ntfy is open. */
+  live = false;
+  private unlisten?: () => void;
 
   async stop() {
     this.stopped = true;
     window.clearInterval(this.timer);
     window.clearInterval(this.beat);
+    this.unlisten?.();
+    if (isTauri()) void ntfyUnsubscribe();
     try {
       const me = this.me();
       await this.send({ v: 1, from: me.id, name: me.name, at: new Date().toISOString(), missions: [], bye: true });
@@ -260,32 +313,45 @@ export class WingLink {
     try {
       const reply = await httpFetch("GET", `${NTFY}${this.topic}/json?poll=1&since=${encodeURIComponent(this.since)}`);
       if (reply.status < 200 || reply.status >= 300) throw new Error(`ntfy.sh a répondu ${reply.status}`);
-      const myId = this.me().id;
-      let changed = false;
-      for (const line of reply.body.split("\n")) {
-        if (!line.trim()) continue;
-        let msg: { id?: string; event?: string; message?: string };
-        try {
-          msg = JSON.parse(line);
-        } catch {
-          continue;
-        }
-        if (msg.id) this.since = msg.id;
-        if (msg.event !== "message" || !msg.message) continue;
-        const p = await open(this.key, msg.message);
-        if (!p || p.from === myId) continue;
-        const prev = this.members.get(p.from);
-        if (prev && prev.at > p.at) continue;
-        this.members.set(p.from, { id: p.from, name: p.name || "CMDR", at: p.at, missions: p.bye ? [] : p.missions ?? [], left: p.bye });
-        changed = true;
-      }
-      this.ok();
-      if (changed || !this.primed) this.check();
-      this.primed = true;
-      if (changed) this.on.changed();
+      await this.handleLines(reply.body.split("\n"));
     } catch (e) {
       this.fail(e);
     }
+  }
+
+  /** ntfy lines, from a poll or from the live connection. Messages are processed in order. */
+  private queue: Promise<void> = Promise.resolve();
+  handleLines(lines: string[]): Promise<void> {
+    this.queue = this.queue.then(() => this.process(lines)).catch(() => undefined);
+    return this.queue;
+  }
+
+  private async process(lines: string[]) {
+    if (this.stopped || !this.key) return;
+    const myId = this.me().id;
+    let changed = false;
+    for (const line of lines) {
+      if (!line.trim()) continue;
+      let msg: { id?: string; event?: string; message?: string };
+      try {
+        msg = JSON.parse(line);
+      } catch {
+        continue;
+      }
+      if (msg.event !== "message" || !msg.message) continue;
+      if (msg.id) this.since = msg.id;
+      const p = await open(this.key, msg.message);
+      if (!p || p.from === myId) continue;
+      const prev = this.members.get(p.from);
+      if (prev && prev.at > p.at) continue;
+      this.members.set(p.from, { id: p.from, name: p.name || "CMDR", at: p.at, missions: p.bye ? [] : p.missions ?? [], left: p.bye });
+      log.debug("wing", `${p.name || "CMDR"}: ${p.bye ? "left" : `${(p.missions ?? []).length} mission(s)`} ${(p.missions ?? []).map((m) => `#${m.id}${m.total ? ` ${m.delivered ?? 0}/${m.total}` : ""}`).join(" ")}`);
+      changed = true;
+    }
+    this.ok();
+    if (changed || !this.primed) this.check();
+    this.primed = true;
+    if (changed) this.on.changed();
   }
 
   /** Fires the notifications for what changed. Called after polls and when our missions change. */

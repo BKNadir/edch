@@ -38,3 +38,19 @@ export function captureErrors() {
     log.error("ui", `Unhandled promise: ${typeof r === "string" ? r : (r?.stack ?? r?.message ?? String(r))}`);
   });
 }
+
+/** Debug detail for the events that matter when testing missions and wings. */
+export function eventDetail(ev: Record<string, any>): string | null {
+  const e = String(ev.event ?? "");
+  const pick = (...keys: string[]) =>
+    keys
+      .filter((k) => ev[k] !== undefined && ev[k] !== "")
+      .map((k) => `${k}=${typeof ev[k] === "object" ? JSON.stringify(ev[k]) : ev[k]}`)
+      .join(" ");
+  if (e === "CargoDepot") return `${e} ${pick("MissionID", "UpdateType", "CargoType", "Count", "ItemsCollected", "ItemsDelivered", "TotalItemsToDeliver", "EndMarketID")}`;
+  if (e === "Missions") return `${e} active=${(ev.Active ?? []).map((m: any) => m.MissionID).join(",")}`;
+  if (e.startsWith("Mission")) return `${e} ${pick("MissionID", "Name", "Wing", "Faction", "DestinationSystem", "DestinationStation", "KillCount", "Count", "Expiry")}`;
+  if (e.startsWith("Wing")) return `${e} ${pick("Name", "Others")}`;
+  if (e === "Bounty" || e === "FactionKillBond") return `${e} ${pick("VictimFaction", "Faction", "AwardingFaction", "TotalReward", "Reward")}`;
+  return null;
+}

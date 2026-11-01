@@ -16,6 +16,7 @@ use std::time::{Duration, Instant, SystemTime};
 use tauri::{AppHandle, Emitter, Manager};
 
 mod logs;
+mod ntfy;
 mod remote;
 mod update;
 
@@ -742,6 +743,8 @@ pub fn run() {
             remote::remote_addresses,
             remote::remote_tailscale,
             is_portable,
+            ntfy::ntfy_subscribe,
+            ntfy::ntfy_unsubscribe,
             logs::log_write,
             logs::log_set_debug,
             logs::logs_open,

@@ -3,6 +3,14 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.4
+
+- Wing missions are linked by their mission id, which is the same for the commander who shares and the one who accepts. Matching on faction, destination and expiry is only a fallback now.
+- Accepting a shared mission writes nothing to the journal: EDCH now adds it to your missions as soon as the game sends a cargo depot update for it, completed with what the sharer's EDCH published (title, faction, destination, reward, expiry).
+- Delivery and collection wing missions show the wing's progress ("384 / 784 delivered"), updated each time a member with EDCH delivers.
+- Wing messages arrive within a second or two: EDCH keeps a live connection to ntfy.sh instead of checking every 15 seconds, and sends changes after 1 second instead of 3.
+- Debug log: mission, cargo depot and wing events are logged with their details (mission id, type, progress, members).
+
 ## 0.8.3
 
 - The side menu scrolls when the window is too short, so the last pages (About, Settings) are always reachable.

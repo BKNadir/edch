@@ -9,7 +9,7 @@ import { MobileView } from "./views/mobile.js";
 import { AboutView } from "./views/about.js";
 import { RemoteGuideView } from "./views/guide.js";
 import { applyTheme } from "./theme.js";
-import { captureErrors, log, setDebugLog } from "./logger.js";
+import { captureErrors, eventDetail, log, setDebugLog } from "./logger.js";
 import { MissionsView } from "./views/missions.js";
 import { ColonisationView } from "./views/colonisation.js";
 import { GoalsView } from "./views/goals.js";
@@ -238,7 +238,13 @@ async function boot() {
       const { changed, events } = applyLines(store.state.cmdr, b.lines, cap);
       if (!b.replay) {
         onLiveEvents(events);
-        if (log.debugOn && events.length) log.debug("journal", `Events: ${events.map((e) => e.event).join(", ")}`);
+        if (log.debugOn && events.length) {
+          log.debug("journal", `Events: ${events.map((e) => e.event).join(", ")}`);
+          for (const e of events) {
+            const d = eventDetail(e);
+            if (d) log.debug("journal", d);
+          }
+        }
       }
       // Uploads run in order; nothing from the startup replay is ever sent.
       uploads = uploads.then(async () => {

@@ -329,7 +329,20 @@ export class MissionsView implements View {
                   h(
                     "tr",
                     { class: r.mine ? "" : "not-mine" },
-                    h("td", null, h("strong", null, r.mission.title), h("div.sub", null, r.mission.faction)),
+                    h(
+                      "td",
+                      null,
+                      h("strong", null, r.mission.title),
+                      h("div.sub", null, r.mission.faction),
+                      r.mission.total
+                        ? h(
+                            "div.mission-progress",
+                            null,
+                            h("div.bar", null, h("span", { style: { width: `${Math.min(100, ((r.mission.delivered ?? 0) / r.mission.total) * 100)}%` } })),
+                            h("span.sub", null, `${fmt(r.mission.delivered ?? 0)} / ${fmt(r.mission.total)} livrés`),
+                          )
+                        : null,
+                    ),
                     h("td", null, r.mission.destStation ? `${r.mission.destStation} · ` : "", r.mission.destSystem ?? ""),
                     h("td", null, relTime(r.mission.expiry)),
                     h(

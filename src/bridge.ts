@@ -231,6 +231,18 @@ export async function remoteAction(action: unknown): Promise<void> {
   await remoteJson("/api/action", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(action) });
 }
 
+/** Live link to a wing's ntfy topic (Rust keeps the connection open and pushes each line). */
+export const ntfySubscribe = (topic: string, since: string) => invoke<void>("ntfy_subscribe", { topic, since });
+export const ntfyUnsubscribe = () => invoke<void>("ntfy_unsubscribe").catch(() => undefined);
+export async function onNtfy(line: (topic: string, text: string) => void, state: (topic: string, connected: boolean, message?: string | null) => void): Promise<() => void> {
+  const ev = window.__TAURI__!.event;
+  const a = await ev.listen<{ topic: string; line: string }>("ntfy-line", (e) => line(e.payload.topic, e.payload.line));
+  const b = await ev.listen<{ topic: string; connected: boolean; message?: string | null }>("ntfy-state", (e) => state(e.payload.topic, e.payload.connected, e.payload.message));
+  return () => {
+    a();
+    b();
+  };
+}
 export const logWrite = (level: string, source: string, message: string) => invoke<void>("log_write", { level, source, message });
 export const logSetDebug = (on: boolean) => invoke<string | null>("log_set_debug", { on });
 export const logsOpen = () => invoke<string>("logs_open");
