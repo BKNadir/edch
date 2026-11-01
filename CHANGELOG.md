@@ -5,6 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.3
 
+- Navigation: new **exact route with fuel**, now the default (Spansh Galaxy Plotter). It is plotted with your ship as the journal describes it (drive and its engineering, masses, tanks, Guardian FSD Booster, cargo): every jump is possible with the fuel left, the route shows the fuel in the tank after each jump, the stars you can scoop, and where you **must refuel**. Options: priority (fewest jumps, follow the neutron route, fast calculation, save fuel), neutron stars, already supercharged, FSD Injection, avoid secondary stars, refuel at every scoopable star, and the Caspian's ×6. A warning shows when your ship has no Fuel Scoop. The quick neutron route is still one click away.
 - Fixed: after a visit to Colonisation (and on some other pages that wait for Spansh, EDSM or Inara), the page could come back by itself over the one you were on, for example over Navigation. A page you left now stays closed, and Colonisation stops refreshing your carriers' markets once you leave it.
 - A second click on "Plot the route" (engineer tour, ship route, carrier route) while Spansh is still working no longer starts the same calculation again.
 

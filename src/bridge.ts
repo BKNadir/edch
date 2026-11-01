@@ -216,6 +216,8 @@ export async function spanshJob(endpoint: string, form: [string, string][], onWa
     onWait?.(i);
     const res = parse(await spanshFetch("GET", `https://spansh.co.uk/api/results/${job}`), "Spansh");
     if (res.status === "queued") continue;
+    // The exact (galaxy) plotter also says "state": still running until it is "completed".
+    if (res.status === "ok" && res.state && res.state !== "completed" && !res.result) continue;
     if (res.status === "ok" && res.result) return res.result;
     throw new Error(String(res.error ?? `calcul ${res.status ?? "échoué"}`));
   }

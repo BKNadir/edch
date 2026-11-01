@@ -58,6 +58,8 @@ export interface Settings {
   navAutoCopy: boolean;
   /** An EDCH notification (Notifications tab, sound if chosen) when a next jump is copied. */
   navNotifyCopy: boolean;
+  /** Navigation: exact route with fuel (Spansh Galaxy Plotter) rather than the quick neutron route. */
+  navExact: boolean;
 }
 
 export interface EngineerSettings {
@@ -212,6 +214,7 @@ const DEFAULT_SETTINGS: Settings = {
   engineers: DEFAULT_ENGINEER_SETTINGS,
   navAutoCopy: false,
   navNotifyCopy: true,
+  navExact: true,
 };
 
 function load<T>(key: string, fallback: T): T {

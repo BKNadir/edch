@@ -205,6 +205,10 @@ Effet appliqué : {0} — retiré de la wishlist
 {0} G{1} terminé — retiré de la wishlist
 {0} G{1} : jet compté
 Wishlist line moved on after EngineerCraft
+vaisseau (lance le jeu)
+FSD (modèle inconnu)
+masse à vide
+réservoir
 Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)
 EDDN (EDCD)
 Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
@@ -224,6 +228,7 @@ EDRefCard (Richard Buckle)
 Noms des commandes et schémas des HOTAS, joysticks et manettes
 Format d'export de builds importé dans la wishlist
 Coriolis (EDCD)
+Format d'export de builds importé dans la wishlist, et les caractéristiques des réacteurs FSD pour l'itinéraire exact (coriolis-data)
 EDMarketConnector (EDCD)
 L'inspiration pour la synchro EDDN, EDSM et Inara
 Odyssey Materials Helper (Jixxed)
@@ -617,15 +622,34 @@ Guide pas à pas
 Tailscale est actif sur ce PC ({0}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.
 Tailscale n'est pas détecté sur ce PC. Suis le guide pour l'installer, puis reviens sur cette page.
 Départ
+Le moins de sauts (privilégie les étoiles à neutrons)
+Suivre l'itinéraire neutron classique
+Calcul rapide (itinéraire un peu moins bon)
+Économiser le carburant (sans écoper ni neutrons)
+Économiser le carburant, puis moins de sauts
+Indique un départ et une destination.
 Indique un départ, une destination et une portée.
 Pas encore de vaisseau lu dans le journal : lance le jeu
 {0} : portée {1}, bonus neutron ×{2}
+Exacte, avec le carburant
+Rapide (neutrons)
+Spansh calcule avec ton vaisseau (FSD, masse, réservoirs) : chaque saut est possible avec le carburant restant, et l'itinéraire indique où écoper.
+Calcul Spansh avec boost des étoiles à neutrons (comme le Neutron Plotter), sans tenir compte du carburant.
 Départ du carrier
 Itinéraire du vaisseau
-Calcul Spansh avec boost des étoiles à neutrons (comme le Neutron Plotter).
 Portée (al)
 Plus c'est haut, plus l'itinéraire colle à la ligne droite
 Efficacité (%)
+Cargaison (t)
+Priorité
+ Utiliser les étoiles à neutrons
+Ton réacteur FSD est déjà suralimenté au départ (tu viens de passer dans le cône d'une étoile à neutrons)
+ Déjà suralimenté au départ
+Synthèse « Injection FSD » : coûte des matériaux
+ Utiliser l'Injection FSD (synthèse)
+Évite les sauts vers une étoile secondaire du système (moins de supercroisière)
+ Éviter les étoiles secondaires
+ Faire le plein à chaque étoile écopable
 Le FSD Mk II du Caspian Explorer multiplie la portée par 6 près d'une étoile à neutrons (×4 pour les autres FSD)
  Bonus neutron ×6 (FSD Mk II du Caspian Explorer)
  Utiliser mon vaisseau actuel
@@ -636,6 +660,26 @@ Capacité utilisée (t)
 Tritium dans le réservoir
 Tritium en soute
 Calculer avec Spansh
+ Calcul exact impossible pour l'instant : {0}. Lance le jeu, ou utilise le calcul rapide.
+ · FSD {0} (masse optimale {1} t, {2} t max par saut)
+ · réservoir {0} t
+ · survolteur Guardians +{0} al
+récupérateur de carburant : oui
+pas de récupérateur de carburant !
+ Calcul exact impossible : {0}. Utilise le calcul rapide.
+ Spansh calcule l'itinéraire exact (carburant compris)…
+ Spansh calcule l'itinéraire exact (carburant compris)… {0} s
+ Spansh n'a pas trouvé d'itinéraire avec ce vaisseau (portée ou carburant insuffisants ?).
+Pleins à faire
+Étoiles à neutrons
+Durée
+ Ton vaisseau n'a pas de récupérateur de carburant : les pleins prévus ne sont possibles que dans une station ou avec un carrier.
+Copie auto du prochain système à ton arrivée : activée
+Copie auto du prochain système : désactivée (Paramètres → Jeu et recherche → Navigation)
+Écope ici : le carburant ne suffit pas pour la suite sans plein
+⛽ Faire le plein
+Étoile écopable (KGBFOAM)
+Écopable
 Portée de saut
 Le jeu n'a pas encore donné la configuration de ton vaisseau (événement Loadout). Lance le jeu ou change de vaisseau.
 Maximale (vide, carburant pour 1 saut)
@@ -652,12 +696,9 @@ Les portées intermédiaires sont calculées à partir de la valeur du jeu (form
  Recherche des coordonnées…
 Système introuvable sur Spansh
 Sauts (ligne droite)
-Durée
 Minimum théorique sans boost neutron ; l'itinéraire réel demande un peu plus de sauts.
  Spansh calcule l'itinéraire…
 Étapes
-Copie auto du prochain système à ton arrivée : activée
-Copie auto du prochain système : désactivée (Paramètres → Jeu et recherche → Navigation)
 Indique le départ et la destination.
  Il manque environ {0} t de tritium (réservoir + soute).
 Le tritium du réservoir et de la soute suffit (estimation).

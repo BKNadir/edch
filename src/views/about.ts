@@ -33,10 +33,11 @@ const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
   },
   {
     name: "Coriolis (EDCD)",
-    what: "Format d'export de builds importé dans la wishlist",
+    what: "Format d'export de builds importé dans la wishlist, et les caractéristiques des réacteurs FSD pour l'itinéraire exact (coriolis-data)",
     links: [
       ["coriolis.io", "https://coriolis.io"],
       ["github.com/EDCD/coriolis", "https://github.com/EDCD/coriolis"],
+      ["github.com/EDCD/coriolis-data", "https://github.com/EDCD/coriolis-data"],
     ],
   },
   { name: "EDMarketConnector (EDCD)", what: "L'inspiration pour la synchro EDDN, EDSM et Inara", links: [["github.com/EDCD/EDMarketConnector", "https://github.com/EDCD/EDMarketConnector"]] },

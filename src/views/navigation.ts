@@ -1,3 +1,4 @@
+import { plotGalaxy, shipParams, type GalaxyAlgorithm, type GalaxyOptions, type GalaxyRoute } from "../galaxyRoute.js";
 import { setNavRoute } from "../tour.js";
 import { locale } from "../i18n.js";
 import { spanshGet, spanshJob, spanshPost } from "../bridge.js";
@@ -79,9 +80,48 @@ export class NavigationView implements View {
     // The Caspian Explorer's Mk II drive gets x6 from neutron stars instead of x4: ticked when the
     // current ship has it, and it can be unticked (to plot for another ship).
     const x6 = h("input", { type: "checkbox", checked: superchargeMultiplier(cmdr.loadout?.fsd) === 6 });
+    // Exact route (Spansh Galaxy Plotter): knows the ship, so it accounts for fuel and refuels.
+    const cargo = h("input", { type: "number", min: "0", max: "2000", value: String(Math.round(cmdr.cargoMass ?? 0)) });
+    const algo = h(
+      "select",
+      null,
+      ([
+        ["optimistic", "Le moins de sauts (privilégie les étoiles à neutrons)"],
+        ["guided", "Suivre l'itinéraire neutron classique"],
+        ["pessimistic", "Calcul rapide (itinéraire un peu moins bon)"],
+        ["fuel", "Économiser le carburant (sans écoper ni neutrons)"],
+        ["fuel_jumps", "Économiser le carburant, puis moins de sauts"],
+      ] as [GalaxyAlgorithm, string][]).map(([v, l]) => h("option", { value: v }, l)),
+    );
+    const opt = (checked: boolean) => h("input", { type: "checkbox", checked });
+    const useNeutrons = opt(true);
+    const supercharged = opt(false);
+    const injections = opt(false);
+    const noSecondary = opt(false);
+    const refuelAll = opt(false);
+    const exact = () => this.ctx.store.state.settings.navExact;
     const plot = async () => {
+      if (!from.value.trim() || !to.value.trim()) {
+        replace(this.routeOut, h("p.error", null, "Indique un départ et une destination."));
+        return;
+      }
+      if (exact()) {
+        await this.plotExact({
+          from: from.value.trim(),
+          to: to.value.trim(),
+          cargo: Number(cargo.value) || 0,
+          algorithm: algo.value as GalaxyAlgorithm,
+          useSupercharge: useNeutrons.checked,
+          isSupercharged: supercharged.checked,
+          useInjections: injections.checked,
+          excludeSecondary: noSecondary.checked,
+          refuelEveryScoopable: refuelAll.checked,
+          supercharge: x6.checked ? 6 : 4,
+        });
+        return;
+      }
       const r = Number(range.value) || this.defaultRange();
-      if (!from.value.trim() || !to.value.trim() || !r) {
+      if (!r) {
         replace(this.routeOut, h("p.error", null, "Indique un départ, une destination et une portée."));
         return;
       }
@@ -94,8 +134,29 @@ export class NavigationView implements View {
       const r = this.defaultRange();
       if (r) range.value = String(r);
       if (now.location?.system) from.value = now.location.system;
+      cargo.value = String(Math.round(now.cargoMass ?? 0));
       x6.checked = superchargeMultiplier(now.loadout.fsd) === 6;
+      this.renderShipLine(shipLine);
       toast(`${now.ship?.type ?? "Vaisseau"} : portée ${r ? fmtLy(r) : "?"}, bonus neutron ×${x6.checked ? 6 : 4}`);
+    };
+
+    const shipLine = h("p.sub.nav-shipline");
+    this.shipLine = shipLine;
+    const modeSwitch = h("div.segmented.small.nav-mode");
+    const card = () => modeSwitch.closest("section.card");
+    const setMode = (on: boolean) => {
+      if (on !== this.ctx.store.state.settings.navExact) this.ctx.store.updateSettings({ navExact: on });
+      replace(
+        modeSwitch,
+        h("button", { class: on ? "active" : "", onclick: () => setMode(true) }, "Exacte, avec le carburant"),
+        h("button", { class: on ? "" : "active", onclick: () => setMode(false) }, "Rapide (neutrons)"),
+      );
+      card()?.classList.toggle("exact", on);
+      const help = card()?.querySelector(".nav-mode-help");
+      if (help)
+        help.textContent = on
+          ? "Spansh calcule avec ton vaisseau (FSD, masse, réservoirs) : chaque saut est possible avec le carburant restant, et l'itinéraire indique où écoper."
+          : "Calcul Spansh avec boost des étoiles à neutrons (comme le Neutron Plotter), sans tenir compte du carburant.";
     };
 
     // ---- carrier ----
@@ -117,14 +178,27 @@ export class NavigationView implements View {
           "section.card",
           null,
           h("h3", null, "Itinéraire du vaisseau"),
-          h("p.sub", null, "Calcul Spansh avec boost des étoiles à neutrons (comme le Neutron Plotter)."),
+          modeSwitch,
+          h("p.sub.nav-mode-help", null, ""),
+          shipLine,
           h(
             "div.form-grid",
             null,
             h("label", null, "Départ", from),
             h("label", null, "Destination", to),
-            h("label", null, "Portée (al)", range),
-            h("label", { title: "Plus c'est haut, plus l'itinéraire colle à la ligne droite" }, "Efficacité (%)", eff),
+            h("label.quick-only", null, "Portée (al)", range),
+            h("label.quick-only", { title: "Plus c'est haut, plus l'itinéraire colle à la ligne droite" }, "Efficacité (%)", eff),
+            h("label.exact-only", null, "Cargaison (t)", cargo),
+            h("label.exact-only", null, "Priorité", algo),
+          ),
+          h(
+            "div.nav-options.exact-only",
+            null,
+            h("label.check", null, useNeutrons, " Utiliser les étoiles à neutrons"),
+            h("label.check", { title: "Ton réacteur FSD est déjà suralimenté au départ (tu viens de passer dans le cône d'une étoile à neutrons)" }, supercharged, " Déjà suralimenté au départ"),
+            h("label.check", { title: "Synthèse « Injection FSD » : coûte des matériaux" }, injections, " Utiliser l'Injection FSD (synthèse)"),
+            h("label.check", { title: "Évite les sauts vers une étoile secondaire du système (moins de supercroisière)" }, noSecondary, " Éviter les étoiles secondaires"),
+            h("label.check", null, refuelAll, " Faire le plein à chaque étoile écopable"),
           ),
           h(
             "div.row.nav-ship",
@@ -132,7 +206,7 @@ export class NavigationView implements View {
             h("label.check", { title: "Le FSD Mk II du Caspian Explorer multiplie la portée par 6 près d'une étoile à neutrons (×4 pour les autres FSD)" }, x6, " Bonus neutron ×6 (FSD Mk II du Caspian Explorer)"),
             h("button.ghost.small", { onclick: fromShip }, icon("play"), " Utiliser mon vaisseau actuel"),
           ),
-          h("div.row", null, h("button.primary", { onclick: plot }, "Calculer l'itinéraire"), h("button.ghost", { onclick: () => this.estimateShip(from.value.trim(), to.value.trim(), Number(range.value) || this.defaultRange()) }, "Estimation rapide")),
+          h("div.row", null, h("button.primary", { onclick: plot }, "Calculer l'itinéraire"), h("button.ghost.quick-only", { onclick: () => this.estimateShip(from.value.trim(), to.value.trim(), Number(range.value) || this.defaultRange()) }, "Estimation rapide")),
           this.routeOut,
         ),
         h(
@@ -159,8 +233,108 @@ export class NavigationView implements View {
         ),
       ),
     );
+    setMode(this.ctx.store.state.settings.navExact);
+    this.renderShipLine(shipLine);
     this.signature = "";
     this.update();
+  }
+
+  /** What the exact route will use from the ship, or what is missing. */
+  private renderShipLine(el: HTMLElement) {
+    const cmdr = this.ctx.store.state.cmdr;
+    const { params, missing, hasScoop } = shipParams(cmdr.loadout);
+    if (!params) {
+      replace(el, icon("warn"), ` Calcul exact impossible pour l'instant : ${missing.join(", ")}. Lance le jeu, ou utilise le calcul rapide.`);
+      el.classList.add("warn");
+      return;
+    }
+    el.classList.remove("warn");
+    const fsd = fsdInfo(cmdr.loadout?.fsd);
+    replace(
+      el,
+      h("strong", { "data-no-tr": "" }, cmdr.ship?.type ?? ""),
+      ` · FSD ${fsd ? `${fsd.size}${fsd.rating}` : "?"} (masse optimale ${fmt(Math.round(params.optimal_mass))} t, ${fmt(params.max_fuel_per_jump)} t max par saut)`,
+      ` · réservoir ${fmt(params.tank_size)} t`,
+      params.range_boost ? ` · survolteur Guardians +${fmt(params.range_boost)} al` : "",
+      " · ",
+      hasScoop ? h("span", null, "récupérateur de carburant : oui") : h("span.bad-text", null, "pas de récupérateur de carburant !"),
+    );
+  }
+
+  private plottingExact = false;
+  private shipLine?: HTMLElement;
+  private shipSig = "";
+
+  private async plotExact(o: GalaxyOptions) {
+    if (this.plottingExact) return;
+    const { params, missing, hasScoop } = shipParams(this.ctx.store.state.cmdr.loadout);
+    if (!params) {
+      replace(this.routeOut, h("p.error", null, icon("warn"), ` Calcul exact impossible : ${missing.join(", ")}. Utilise le calcul rapide.`));
+      return;
+    }
+    this.plottingExact = true;
+    replace(this.routeOut, h("p.sub", null, h("span.spinner"), " Spansh calcule l'itinéraire exact (carburant compris)…"));
+    try {
+      const r = await plotGalaxy(params, o, (n) => {
+        if (n % 4 === 3) replace(this.routeOut, h("p.sub", null, h("span.spinner"), ` Spansh calcule l'itinéraire exact (carburant compris)… ${Math.round((n + 1) * 1.5)} s`));
+      });
+      setNavRoute(r.jumps.map((j) => j.system));
+      this.renderExact(r, params.tank_size, hasScoop);
+    } catch (e) {
+      const msg = String((e as Error).message ?? e);
+      replace(this.routeOut, h("p.error", null, icon("warn"), /unable to find route/i.test(msg) ? " Spansh n'a pas trouvé d'itinéraire avec ce vaisseau (portée ou carburant insuffisants ?)." : ` ${msg}`));
+    } finally {
+      this.plottingExact = false;
+    }
+  }
+
+  private renderExact(r: GalaxyRoute, tank: number, hasScoop: boolean) {
+    const auto = this.ctx.store.state.settings.navAutoCopy;
+    const jumps = r.jumps;
+    replace(
+      this.routeOut,
+      h(
+        "div.estimate",
+        null,
+        stat("Distance", fmtLy(r.distance)),
+        stat("Sauts", fmt(Math.max(0, jumps.length - 1))),
+        stat("Pleins à faire", fmt(r.refuels)),
+        stat("Étoiles à neutrons", fmt(r.neutrons)),
+        stat("Durée", `≈ ${hours((Math.max(1, jumps.length - 1) * 50 + r.refuels * 40) / 60)}`),
+      ),
+      !hasScoop && r.refuels ? h("p.notice.danger", null, icon("warn"), " Ton vaisseau n'a pas de récupérateur de carburant : les pleins prévus ne sont possibles que dans une station ou avec un carrier.") : null,
+      h("p.sub", null, auto ? "Copie auto du prochain système à ton arrivée : activée" : "Copie auto du prochain système : désactivée (Paramètres → Jeu et recherche → Navigation)"),
+      h(
+        "table.table.route.exact",
+        null,
+        h("thead", null, h("tr", null, h("th", null, "Système"), h("th.num", null, "Saut"), h("th.num", null, "Restant"), h("th", null, "Carburant"))),
+        h(
+          "tbody",
+          null,
+          jumps.map((j) =>
+            h(
+              "tr",
+              { class: j.mustRefuel ? "refuel" : "" },
+              h(
+                "td",
+                null,
+                h("button.sys", { onclick: () => copySystem(j.system) }, icon("copy"), h("span", null, j.system)),
+                j.neutron ? h("span.badge.hit", null, "Neutron") : null,
+                j.mustRefuel ? h("span.badge.warn", { title: "Écope ici : le carburant ne suffit pas pour la suite sans plein" }, "⛽ Faire le plein") : j.scoopable ? h("span.badge.muted", { title: "Étoile écopable (KGBFOAM)" }, "Écopable") : null,
+              ),
+              h("td.num", null, j.distance ? fmtLy(j.distance) : ""),
+              h("td.num", null, fmtLy(j.toGo)),
+              h(
+                "td.fuel",
+                null,
+                h("div.bar.small", null, h("span", { style: { width: `${Math.max(0, Math.min(100, (j.fuelInTank / Math.max(1, tank)) * 100))}%` } })),
+                h("small", null, `${fmt(Math.round(j.fuelInTank * 10) / 10)} t`),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   /** Range with a full tank and the current cargo (what you'd plot with). */
@@ -183,6 +357,22 @@ export class NavigationView implements View {
       pendingDestination = null;
     }
     const cmdr = this.ctx.store.state.cmdr;
+    // The ship is read from the journal after the page opened, or you changed ships: refresh the
+    // line saying what the exact route will use (and the ×6 box for the Caspian's drive).
+    const shipSig = JSON.stringify([cmdr.loadout?.shipId, cmdr.loadout?.fsd, cmdr.loadout?.fsdOptimalMass, cmdr.loadout?.unladenMass, cmdr.loadout?.fuelMain, cmdr.ship?.type]);
+    // The position arrived after the page opened: fill an empty departure.
+    const here = cmdr.location?.system;
+    if (here) for (const id of ["nav-from", "fc-from"]) {
+      const input = this.root.querySelector<HTMLInputElement>(`#${id}`);
+      if (input && !input.value && document.activeElement !== input) input.value = here;
+    }
+    if (this.shipLine && shipSig !== this.shipSig) {
+      const first = this.shipSig === "" || this.shipSig === JSON.stringify([null, null, null, null, null, null]);
+      this.shipSig = shipSig;
+      this.renderShipLine(this.shipLine);
+      const x6 = this.root.querySelector<HTMLInputElement>(".nav-ship input[type=checkbox]");
+      if (x6 && cmdr.loadout && first) x6.checked = superchargeMultiplier(cmdr.loadout.fsd) === 6;
+    }
     const sig = JSON.stringify([cmdr.ship?.type, cmdr.ship?.name, cmdr.loadout?.shipId, cmdr.loadout?.ship, cmdr.loadout?.maxJumpRange, cmdr.loadout?.unladenMass, cmdr.fuel?.main, cmdr.cargoMass, this.cargo]);
     if (sig === this.signature) return;
     this.signature = sig;

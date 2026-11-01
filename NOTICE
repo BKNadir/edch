@@ -19,7 +19,9 @@ Community data used to build public/data/game.json (tools/gen_data.py)
   vendored in tools/sources/almanac with its LICENSE, ATTRIBUTIONS.md and the commit they come from.
 - msarilar/EDEngineer (MIT, Copyright (c) 2016 Max) — translations of the game's names (materials, modules, blueprints), kept in tools/sources/edengineer/ and completed in tools/game_terms_*.txt.
 - EDCD/FDevIDs — journal symbols and grades, via d47.
-- EDCD/coriolis-data — cross-check of recipes, via d47.
+- EDCD/coriolis-data — cross-check of recipes, via d47; Frame Shift Drive constants (optimal mass, max fuel
+  per jump, fuel multiplier and power) in src/fsdData.ts, from modules/standard/frame_shift_drive.json.
+  Game data © Frontier Developments plc, under its terms.
 
 Key bindings
 ------------

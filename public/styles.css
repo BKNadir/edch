@@ -858,3 +858,16 @@ body.focus-mode .focus-exit { display: inline-flex; }
 /* The Controls page grid must not grow to its widest content (phones). */
 .controls-body { grid-template-columns: minmax(0, 1fr); }
 .controls-body > * { min-width: 0; }
+
+/* Navigation: exact route (fuel) or quick neutron route. */
+section.card:not(.exact) .exact-only, section.card.exact .quick-only { display: none !important; }
+.nav-mode { margin: 8px 0 4px; }
+.nav-shipline { margin: 6px 0 10px; line-height: 1.6; }
+.nav-shipline .icon { vertical-align: -3px; }
+.nav-shipline.warn { color: var(--bad-text); }
+.nav-options { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 10px 0 4px; }
+.bad-text { color: var(--bad-text); font-weight: 600; }
+.route.exact tr.refuel td { background: color-mix(in srgb, var(--bad) 8%, transparent); }
+.route.exact td.fuel { min-width: 110px; }
+.route.exact td.fuel .bar { display: inline-block; width: 60px; vertical-align: middle; margin-right: 6px; }
+.route.exact td .badge { margin-left: 6px; }
