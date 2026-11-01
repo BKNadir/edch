@@ -801,5 +801,20 @@
 "Prévenir quand un membre accepte une mission que je partage": "Notify me when a member accepts a mission I share",
 "Partager automatiquement toutes mes missions d'escadrille": "Share all my wing missions automatically",
 "Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise.": "Otherwise, share each mission with the \"Share with the wing\" button on its card. A mission a member shared that you accept is shared right away: the others see you took it.",
-"Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Les missions que tu choisis de partager sont envoyées aux autres, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire.": "Every wing member using EDCH enters the same code. The missions you choose to share are sent to the others, encrypted with this code, through the free ntfy.sh service: nobody else can read them."
+"Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Les missions que tu choisis de partager sont envoyées aux autres, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire.": "Every wing member using EDCH enters the same code. The missions you choose to share are sent to the others, encrypted with this code, through the free ntfy.sh service: nobody else can read them.",
+"Approvisionnement": "Sourcing",
+"Où l'acheter": "Where to buy it",
+"Où le trouver (achat ou minage)": "Where to get it (buy or mine)",
+"Meilleur compromis": "Best overall",
+"Le moins cher": "Cheapest",
+"Le plus proche": "Nearest",
+"Prix le plus récent": "Freshest price",
+"{0} Cr/t": "{0} Cr/t",
+"stock {0}": "stock {0}",
+"prix {0}": "price {0}",
+"bénéfice ≈ {0} Cr": "profit ≈ {0} Cr",
+"Aucune station ne vend {0} dans le rayon choisi.": "No station sells {0} within the chosen radius.",
+"Points chauds de minage les plus proches": "Nearest mining hotspots",
+"{0} al · {1} point(s) chaud(s)": "{0} ly · {1} hotspot(s)",
+"Actualiser": "Refresh"
 }

@@ -7,14 +7,27 @@ import { newWingCode, type NotifySettings, type WingSettings } from "../store.js
 import { credits, hoursLeft, relTime } from "../time.js";
 import type { Ctx, View } from "../context.js";
 import { copySystem } from "./results.js";
+import { findHotspots, findSupply, HOTSPOT_NAMES, type Hotspot, type Offer } from "../sourcing.js";
+import { gameName } from "../i18n.js";
+
+/** Missions where the commander has to get the goods: sourcing, mining, donations. */
+export const needsSourcing = (m: Mission) => Boolean(m.commodityId) && !/delivery|courier|passenger|sightseeing/i.test(m.name);
+
+interface Sourcing {
+  loading: boolean;
+  error?: string;
+  offers?: Offer[];
+  hotspots?: Hotspot[];
+}
 
 function kindOf(m: Mission): string {
   const n = m.name.toLowerCase();
   if (m.killCount || n.includes("massacre")) return "Massacre";
   if (n.includes("assassin")) return "Assassinat";
   if (n.includes("courier")) return "Coursier";
-  if (n.includes("delivery") || n.includes("collect")) return "Livraison";
   if (n.includes("mining")) return "Minage";
+  if (n.includes("collect") || n.includes("altruism")) return "Approvisionnement";
+  if (n.includes("delivery")) return "Livraison";
   if (n.includes("passenger") || n.includes("sightseeing") || m.passengers) return "Passagers";
   if (n.includes("salvage")) return "Récupération";
   if (n.includes("onfoot") || n.includes("on_foot")) return "À pied";
@@ -43,6 +56,7 @@ export const sys = (name?: string) => (name ? h("button.sys", { title: "Copier",
 
 export class MissionsView implements View {
   private root?: HTMLElement;
+  private sourcing = new Map<number, Sourcing>();
   constructor(private ctx: Ctx) {}
 
   mount(root: HTMLElement) {
@@ -100,6 +114,7 @@ export class MissionsView implements View {
           m.killCount && m.targetFaction ? h("p.sub", null, `Cible : ${m.targetFaction}`) : null,
           m.commodity && m.count ? h("p.sub", null, `${fmt(m.count)} × `, h("span", null, m.commodity)) : null,
           progressOf(m),
+          needsSourcing(m) ? this.sourcingBlock(m) : null,
           h(
             "div.mission-foot",
             null,
@@ -110,6 +125,80 @@ export class MissionsView implements View {
           this.shareControl(m),
         );
       }),
+    );
+  }
+
+  private commodityName(m: Mission): string {
+    return this.ctx.game.data.commodities.find((c) => c.id === m.commodityId)?.name ?? m.commodity ?? "";
+  }
+
+  private async loadSourcing(m: Mission) {
+    const name = this.commodityName(m);
+    const need = Math.max(1, (m.count ?? 1) - (m.delivered ?? 0) - (this.ctx.store.state.cmdr.cargo[m.commodityId ?? ""] ?? 0));
+    const state: Sourcing = { loading: true };
+    this.sourcing.set(m.id, state);
+    this.render();
+    try {
+      const hot = HOTSPOT_NAMES[m.commodityId ?? ""];
+      state.offers = await findSupply(this.ctx, name, Math.min(need, 1000));
+      if (hot && /mining/i.test(m.name)) state.hotspots = await findHotspots(this.ctx, hot);
+    } catch (e) {
+      state.error = String((e as Error)?.message ?? e);
+    }
+    state.loading = false;
+    this.render();
+  }
+
+  private sourcingBlock(m: Mission): HTMLElement {
+    const st = this.sourcing.get(m.id);
+    const tagLabel: Record<string, string> = { best: "Meilleur compromis", cheapest: "Le moins cher", nearest: "Le plus proche", freshest: "Prix le plus récent" };
+    const need = Math.max(0, (m.count ?? 0) - (m.delivered ?? 0));
+    if (!st)
+      return h(
+        "div.mission-source",
+        null,
+        h("button.ghost.small", { onclick: () => this.loadSourcing(m) }, icon("search"), /mining/i.test(m.name) ? " Où le trouver (achat ou minage)" : " Où l'acheter"),
+      );
+    if (st.loading) return h("div.mission-source", null, h("span.spinner"), " Recherche Spansh…");
+    return h(
+      "div.mission-source",
+      null,
+      st.error ? h("p.error", null, st.error) : null,
+      st.offers?.length
+        ? h(
+            "ul.offers",
+            null,
+            st.offers.map((o) => {
+              const profit = m.reward && need ? m.reward - o.price * need : null;
+              return h(
+                "li",
+                { class: o.tags.includes("best") ? "best" : "" },
+                h("div.offer-head", null, h("strong", null, o.station), " · ", sys(o.system), o.largePad ? h("span.badge.muted", null, "L") : null, ...o.tags.map((t) => h("span.badge.hit", null, tagLabel[t]))),
+                h(
+                  "div.offer-line",
+                  null,
+                  h("span", null, `${fmt(o.price)} Cr/t`),
+                  h("span.sub", null, `stock ${fmt(o.supply)}`),
+                  h("span.sub", null, `${fmt(Math.round(o.distance))} al`),
+                  o.arrival ? h("span.sub", null, `${fmt(Math.round(o.arrival))} ls`) : null,
+                  o.updated ? h("span.sub", null, `prix ${relTime(new Date(Date.now() - o.ageDays * 86400000).toISOString())}`) : null,
+                  profit !== null ? h("span", { class: profit > 0 ? "ok" : "warn" }, `bénéfice ≈ ${credits(profit)} Cr`) : null,
+                ),
+              );
+            }),
+          )
+        : !st.error
+          ? h("p.sub", null, `Aucune station ne vend ${gameName(this.commodityName(m))} dans le rayon choisi.`)
+          : null,
+      st.hotspots?.length
+        ? h(
+            "div",
+            null,
+            h("h4", null, "Points chauds de minage les plus proches"),
+            h("ul.offers", null, st.hotspots.map((x) => h("li", null, h("div.offer-head", null, h("strong", null, x.ring), " · ", sys(x.system), h("span.sub", null, ` ${fmt(Math.round(x.distance))} al · ${x.count} point(s) chaud(s)`))))),
+          )
+        : null,
+      h("button.ghost.small", { onclick: () => this.loadSourcing(m) }, "Actualiser"),
     );
   }
 

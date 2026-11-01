@@ -692,3 +692,11 @@ ul.plain { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 4p
 @media (min-width: 761px) { main.content { padding-right: 44px; } }
 @media (max-width: 760px) { .card:has(> .table), .card:has(> div > .table), .stack { overflow-x: auto; } }
 .mission-share { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-top: 1px solid var(--line); padding-top: 8px; margin-top: 2px; }
+.mission-source { display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 8px; }
+.mission-source h4 { margin: 4px 0 0; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+.offers { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.offers li { display: grid; gap: 2px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; font-size: 12.5px; }
+.offers li.best { border-color: rgba(79, 209, 139, 0.45); background: var(--ok-dim); }
+.offer-head { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.offer-line { display: flex; flex-wrap: wrap; gap: 10px; }
+.mission-source > button { justify-self: start; }

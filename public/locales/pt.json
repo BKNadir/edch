@@ -801,5 +801,20 @@
 "Prévenir quand un membre accepte une mission que je partage": "Avisar quando um membro aceitar uma missão que eu compartilho",
 "Partager automatiquement toutes mes missions d'escadrille": "Compartilhar automaticamente todas as minhas missões de ala",
 "Sinon, partage chaque mission avec le bouton « Partager avec l'escadrille » de sa carte. Une mission qu'un membre a partagée et que tu acceptes est partagée d'office : les autres voient que tu l'as prise.": "Senão, compartilhe cada missão com o botão \"Compartilhar com a ala\" do cartão dela. Uma missão que um membro compartilhou e que você aceita é compartilhada na hora: os outros veem que você pegou.",
-"Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Les missions que tu choisis de partager sont envoyées aux autres, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire.": "Cada membro da ala que usa o EDCH digita o mesmo código. As missões que você escolhe compartilhar vão para os outros, criptografadas com esse código, pelo serviço gratuito ntfy.sh: ninguém mais consegue lê-las."
+"Chaque membre de l'escadrille qui utilise EDCH saisit le même code. Les missions que tu choisis de partager sont envoyées aux autres, chiffrées avec ce code, via le service gratuit ntfy.sh : personne d'autre ne peut les lire.": "Cada membro da ala que usa o EDCH digita o mesmo código. As missões que você escolhe compartilhar vão para os outros, criptografadas com esse código, pelo serviço gratuito ntfy.sh: ninguém mais consegue lê-las.",
+"Approvisionnement": "Abastecimento",
+"Où l'acheter": "Onde comprar",
+"Où le trouver (achat ou minage)": "Onde conseguir (comprar ou minerar)",
+"Meilleur compromis": "Melhor custo-benefício",
+"Le moins cher": "O mais barato",
+"Le plus proche": "O mais próximo",
+"Prix le plus récent": "Preço mais recente",
+"{0} Cr/t": "{0} Cr/t",
+"stock {0}": "estoque {0}",
+"prix {0}": "preço {0}",
+"bénéfice ≈ {0} Cr": "lucro ≈ {0} Cr",
+"Aucune station ne vend {0} dans le rayon choisi.": "Nenhuma estação vende {0} no raio escolhido.",
+"Points chauds de minage les plus proches": "Pontos quentes de mineração mais próximos",
+"{0} al · {1} point(s) chaud(s)": "{0} al · {1} ponto(s) quente(s)",
+"Actualiser": "Atualizar"
 }

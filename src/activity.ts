@@ -21,6 +21,8 @@ export interface Mission {
   influence?: string;
   reputation?: string;
   commodity?: string;
+  /** Commodity symbol, lower case (e.g. "steel"). */
+  commodityId?: string;
   count?: number;
   targetFaction?: string;
   target?: string;
@@ -418,6 +420,7 @@ export function applyActivity(st: ActivityState, ev: Json, ctx: ActivityContext 
         influence: ev.Influence,
         reputation: ev.Reputation,
         commodity: ev.Commodity_Localised ?? ev.Commodity,
+        commodityId: ev.Commodity ? symbolId(ev.Commodity) : undefined,
         count: num(ev.Count),
         targetFaction: ev.TargetFaction,
         target: ev.Target_Localised ?? ev.Target ?? ev.TargetType_Localised,
