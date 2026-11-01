@@ -124,7 +124,7 @@ Objectif ¦ Goal ¦ Ziel ¦ Objetivo ¦ Meta ¦ Цель
 Lieu ¦ Location ¦ Ort ¦ Lugar ¦ Local ¦ Место
 Palier ¦ Tier ¦ Stufe ¦ Nivel ¦ Nível ¦ Уровень
 Participants ¦ Contributors ¦ Teilnehmer ¦ Participantes ¦ Participantes ¦ Участники
-Fin ¦ Ends ¦ Ende ¦ Fin ¦ Fim ¦ Конец
+Fin ¦ End ¦ Ende ¦ Fin ¦ Fim ¦ Конец
 Aucun objectif en cours sur Inara. ¦ No current goals on Inara. ¦ Keine laufenden Ziele auf Inara. ¦ No hay objetivos en curso en Inara. ¦ Nenhuma meta em andamento no Inara. ¦ На Inara нет текущих целей.
 
 # --- exploration ---

@@ -3,6 +3,16 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.0
+
+- Wishlist: each line shows the engineer to visit, and their name copies the workshop's system. For a modification, the nearest engineer you know who reaches the wanted grade, otherwise the best grade available (an engineer's own maximum counts, even if your rank with them is lower for now). For an experimental effect, simply the nearest engineer you know. Engineers you know but haven't unlocked are marked "to unlock"; a click shows what the game asks for. When nobody you know can do a line, the line turns red.
+- Engineer tour: the stops of the wishlist, nearest first from where you are, with what to do at each one and the materials still missing (stops you can't complete yet are greyed out). Spansh plots each leg with your ship's jump range, so the jumps really follow one another.
+- Optional: copy the next jump of the tour as soon as you arrive in a system of the route.
+- When the game applies a modification or an experimental effect, the matching wishlist line moves on by itself, and is removed once done.
+- The Bubble and Colonia are kept apart: engineers of the other region are left out, and the tour has a maximum length.
+- New Settings → Game and search → Engineers card to turn each of these on or off.
+- New "Day (light)" theme. With a light background the whole interface switches to dark text, and colours too light (or too dark) to read are adjusted by themselves.
+
 ## 0.9.9
 
 - Clicking an engineer copies the system of their workshop: on the engineer's name in Engineers, and wherever engineers are listed (Engineering, wishlist).

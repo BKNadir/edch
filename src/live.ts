@@ -1,3 +1,4 @@
+import { tourEvent } from "./tour.js";
 import { inStartup, startupAlert, goTo } from "./alerts.js";
 // Glue between the journal, the activity tracker, the wing link and the notifications.
 
@@ -196,6 +197,7 @@ export function onLiveEvents(events: Json[]) {
     const at = String(ev.timestamp ?? "");
     // Lines already read from the archive at start-up.
     if (historyEnd && at && (at < historyEnd || (at === historyEnd && historyEdge.has(lineKey(ev))))) continue;
+    tourEvent(ev);
     if (applyActivity(st, ev, { position: surface ? { lat: surface.lat, lon: surface.lon } : undefined })) {
       changed = true;
       if (/^Mission|^CargoDepot$|^Bounty$/.test(ev.event)) missions = true;

@@ -25,12 +25,12 @@ Ein schlanker Begleiter für **Elite Dangerous** (Windows). Er liest das Spiel-J
   - Klick auf ein System: Es wird kopiert und kann direkt in die Galaxiekarte eingefügt werden. Daneben Links zu Spansh und Inara.
 - **Nächster Materialhändler** des passenden Typs, mit **Tauschvorschlägen** auf Basis deines Bestands (Kurse des Spiels, unter Berücksichtigung dessen, was deine Wunschliste reserviert).
 - **Ingenieurwesen**: alle Modifikationen, experimentellen Effekte, Synthesen, Technologiemakler-Freischaltungen und Odyssey-Upgrades, mit dem, was du schon besitzt.
-- **Wunschliste**: Füge Modifikationen hinzu (Stufen, Anzahl der Würfe, Menge). Sie berechnet, was fehlt, und den besten Tausch, um es zu decken.
+- **Wunschliste**: Füge Modifikationen hinzu (Stufen, Anzahl der Würfe, Menge). Sie berechnet, was fehlt, und den besten Tausch, um es zu decken. Jede Zeile zeigt den nächsten bekannten Ingenieur, der sie machen kann, und eine **Ingenieurs-Tour** verbindet die Halte mit einer Spansh-Route, den an jedem Halt noch fehlenden Materialien und auf Wunsch dem nächsten Sprung, der bei deiner Ankunft kopiert wird. Die Zeilen schreiten von selbst fort, wenn das Spiel eine Modifikation anwendet.
 - **Ingenieure**: Status und Rang aus dem Journal, kopierbares System, Entfernung, und Freischaltbedingungen, die automatisch abgehakt werden, wenn das Journal sie prüfen kann (Odyssey-Spind, Fracht, Materialien).
 - **Build-Import**: Füge einen **EDSY**- oder **Coriolis**-Export ein oder wähle die Datei (SLEF oder Loadout-JSON). Jedes modifizierte Modul und sein experimenteller Effekt landen auf der Wunschliste. Du kannst auch von deinem aktuellen Schiff ausgehen.
 - **Suche wie bei Inara**: wo du eine Ware kaufen oder verkaufen kannst (nach Preis oder Entfernung), ein Schiff, ein Modul (Klasse und Bewertung) oder einen Dienst (Interstellar Factors, Technologiemakler, Materialhändler…) in deiner Nähe.
 - **Navigation**: Sprungreichweite deines Schiffs (leer, voll, beladen, jetzt, simulierte Fracht), Route mit Neutronen-Boost über Spansh und Fleet Carrier (Sprünge, Tritium und Dauer – als Schnellschätzung oder detaillierter Spansh-Plan mit Nachladestopps).
-- **Steuerung & Geräte**: liest deine Tastenbelegung (aktive Vorlage, auch unterschiedliche Vorlagen für Schiff, SRV und zu Fuß) und zeichnet jedes Gerät. Die Tastatur wird Taste für Taste gezeichnet (QWERTY, AZERTY oder QWERTZ), das Xbox- oder PlayStation-Gamepad mit nummerierten Markierungen. Erkannte HOTAS, Joysticks und Gamepads (etwa 45 Modelle: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) werden auf dem Bild des Modells gezeigt, mit der Aktion im Feld jeder Taste. Die Vorlagen stammen von EDRefCard und werden aus dessen GitHub-Repository geladen. Für ein unbekanntes Modell wählst du die ähnlichste Vorlage, sonst erscheint ein einfaches Schema mit Achsen, Coolie-Hats und Tasten. Jeder Befehl hat eine Legende und eine Farbe pro Modus, mit Filtern Schiff / SRV / Zu Fuß, Suche und druckbarem Blatt.
+- **Steuerung & Geräte**: liest deine Tastenbelegung (aktive Vorlage, auch unterschiedliche Vorlagen für Schiff, SRV und zu Fuß) und zeichnet jedes Gerät. Die Tastatur wird Taste für Taste gezeichnet (QWERTY, AZERTY oder QWERTZ), das Xbox- oder PlayStation-Gamepad mit nummerierten Markierungen. Erkannte HOTAS, Joysticks und Gamepads (etwa 45 Modelle: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) werden auf dem Bild des Modells gezeigt, mit der Aktion im Feld jeder Taste. Die Vorlagen stammen von EDRefCard und werden aus dessen GitHub-Repository geladen. Für ein unbekanntes Modell wählst du die ähnlichste Vorlage, sonst erscheint ein einfaches Schema mit Achsen, Coolie-Hats und Tasten. Jeder Befehl hat eine Legende und eine Farbe pro Modus, mit Filtern Schiff / SRV / Zu Fuß, Suche und druckbarem Blatt. Wähle deine Tastatur (AZERTY, QWERTY oder QWERTZ) und ihr Format (ISO oder ANSI).
 - **Sicherung der Konfiguration**: exportiert deine Tastenbelegung (und Grafikeinstellungen) als Zip nach Dokumente\EDCH und stellt sie mit einem Klick wieder her. Vor jedem Import wird die aktuelle Konfiguration automatisch gesichert.
 - **Missionen**: jede laufende Mission mit Ziel, Zielort, verbleibender Zeit und Fortschritt; gestapelte Massakermissionen mit den Abschüssen, die jede Auftraggeber-Fraktion noch braucht.
 - Bei Beschaffungs- und Bergbaumissionen, wo man die Ware bekommt: Stationen nach Preis, Entfernung und Aktualität der Marktdaten sortiert, mit geschätztem Gewinn, und die nächsten Hotspots für Bergbaumissionen.
@@ -40,11 +40,21 @@ Ein schlanker Begleiter für **Elite Dangerous** (Windows). Er liest das Spiel-J
 - **Erkundung**: Wert der nicht verkauften Kartendaten, Hilfe bei Exobiologie-Proben (Abstand zu den vorherigen Proben im Vergleich zur Kolonie-Reichweite), mögliche Arten und Werte für jeden Planeten mit biologischen Signalen, nicht verkaufte Analysen.
 - **Bergbau**: Prospektor-Ergebnisse live mit Hinweisen für deine Ziele und Kerne, Tonnage der Sitzung; eine Suche im Stil von Merit Miner, wo man in den Systemen deiner Macht abbaut und verkauft.
 - **Powerplay und Sitzung**: Verdienste der Woche und der Sitzung, Powerplay-Zustand des aktuellen Systems; verdiente Credits nach Aktivität seit der Anmeldung.
-- **Mobiler Zugriff**: Öffne EDCH auf Handy oder Tablet per QR-Code. Ein lokaler Server (standardmäßig aus) stellt die App in deinem Netzwerk bereit. Nur Geräte, die den QR-Code gescannt haben, erhalten Zugang – die IP des PCs allein reicht nicht. „Neuer Code“ trennt alle Geräte. Die Oberfläche passt sich dem Handy an (Navigation unten, Vollbild-Panels), und Änderungen an der Wunschliste auf dem Handy werden zum PC synchronisiert.
+- **Fernzugriff**: Öffne EDCH auf Handy oder Tablet per QR-Code. Ein lokaler Server (standardmäßig aus) stellt die App in deinem Netzwerk bereit. Nur Geräte, die den QR-Code gescannt haben, erhalten Zugang – die IP des PCs allein reicht nicht. „Neuer Code“ trennt alle Geräte. Die Oberfläche passt sich dem Handy an (Navigation unten, Vollbild-Panels), und Änderungen an der Wunschliste auf dem Handy werden zum PC synchronisiert. Öffnet auf Wunsch auch eine einzelne Seite im Browser, für einen zweiten Bildschirm, und ein Vollbildmodus zeigt nur die aktuelle Seite.
+- **Themes**: fertige Themes (darunter ein helles „Tag“-Theme), eigene Farben und ein OLED-Modus. Zu helle oder zu dunkle Farben werden automatisch lesbar gemacht.
 - **Automatische Updates**: EDCH prüft auf GitHub, ob es eine neue Version gibt, zeigt ein Banner, lädt das Installationsprogramm auf Wunsch herunter (Prüfsumme kontrolliert) und startet sich zum Abschluss neu. In den Einstellungen abschaltbar.
 - **Synchronisierung wie EDMC**: Live-Übertragung an **EDDN** (Märkte, Ausrüstung, Werften, Sprünge, Scans, Routen), **EDSM** und **Inara** (mit deinem API-Schlüssel). Die Regeln von EDDN werden eingehalten: persönliche Daten entfernt, Position gegengeprüft, abgelehnte Nachrichten werden nie erneut gesendet, nichts aus deinem Verlauf.
 
-![Ein VKB Gladiator mit seiner Belegung (Demo-Belegung)](docs/controls.png)
+![Die Tastatur als AZERTY ISO, mit ihrer Belegung (Demo-Belegung)](docs/controls.png)
+
+<p>
+<img src="docs/wishlist.png" width="49%" alt="Die Wunschliste mit der Ingenieurs-Tour">
+<img src="docs/colonisation.png" width="49%" alt="Kolonisierung: Laderäume und eine Baustelle">
+</p>
+<p>
+<img src="docs/day-theme.png" width="68%" alt="Die Seite Ingenieure im hellen „Tag“-Theme">
+<img src="docs/phone.png" width="29%" alt="Die Wunschliste auf dem Handy (Fernzugriff)">
+</p>
 
 ## Daten und Privatsphäre
 
@@ -55,7 +65,7 @@ EDCH liest das Spiel-Journal auf deinem PC. Das ist alles, was ihn verlässt, un
 - **EDSM und Inara**: nichts, solange du nicht unter Synchronisierung deinen eigenen API-Schlüssel einträgst. Deine Schlüssel bleiben auf deinem PC.
 - **ntfy.sh** (nur wenn du das Geschwader-Teilen aktivierst): deine Geschwadermissionen, mit dem Geschwadercode verschlüsselt, bevor sie deinen PC verlassen.
 - **GitHub**: nur um zu prüfen, ob es eine neue Version gibt (in den Einstellungen abschaltbar).
-- **Mobiler Zugriff**: bleibt in deinem lokalen Netzwerk; standardmäßig aus und durch den QR-Code geschützt.
+- **Fernzugriff**: bleibt in deinem lokalen Netzwerk; standardmäßig aus und durch den QR-Code geschützt.
 
 Sonst wird nichts gesammelt oder gesendet. Einstellungen, Schlüssel und Wunschliste liegen in `%LOCALAPPDATA%\EDCompanionHelper`.
 
@@ -102,7 +112,7 @@ Aufbau:
   - `i18n.ts`: Übersetzungsschicht.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: erzeugen die Daten in `public/` neu (siehe NOTICE).
 
-Bei jedem Push auf `main` läuft ein Windows-Build. Um eine Version zu veröffentlichen, pushe einen Tag wie `v0.9.9`: Das Release wird veröffentlicht und installierte Kopien bieten das Update an.
+Bei jedem Push auf `main` läuft ein Windows-Build. Um eine Version zu veröffentlichen, pushe einen Tag wie `v0.10.0`: Das Release wird veröffentlicht und installierte Kopien bieten das Update an.
 
 ## Roadmap
 

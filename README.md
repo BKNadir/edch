@@ -25,12 +25,12 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
   - Click a system: it is copied, ready to paste into the galaxy map. Spansh and Inara links next to it.
 - **Nearest material trader** of the right type, with **trade suggestions** computed from your stock (game rates, taking into account what your wishlist reserves).
 - **Engineering**: every modification, experimental effect, synthesis, technology broker unlock and Odyssey upgrade, with what you already own.
-- **Wishlist**: add modifications (grades, number of rolls, quantity). It works out what is missing and the best trade to cover it.
+- **Wishlist**: add modifications (grades, number of rolls, quantity). It works out what is missing and the best trade to cover it. Each line shows the nearest engineer you know who can do it, and an **engineer tour** chains the stops with a Spansh route, the materials still missing at each stop and, optionally, the next jump copied as soon as you arrive. Lines move on by themselves when the game applies a modification.
 - **Engineers**: status and rank read from the journal, copyable system, distance, and unlock conditions ticked automatically when the journal can check them (Odyssey locker, cargo, materials).
 - **Build import**: paste or pick an **EDSY** or **Coriolis** export (SLEF or Loadout JSON). Every engineered module and its experimental effect goes into the wishlist. You can also start from your current ship.
 - **Inara-style search**: where to buy or sell a commodity (by price or distance), a ship, a module (class and rating) or a service (Interstellar Factors, technology broker, material trader…) around you.
 - **Navigation**: your ship's jump range (empty, full, laden, right now, simulated cargo), neutron-boosted route via Spansh, and fleet carrier (jumps, tritium and time, as a quick estimate or a detailed Spansh plan with restock stops).
-- **Controls & devices**: reads your bindings (active preset, including different presets for ship, SRV and on foot) and draws each device. The keyboard is drawn key by key (QWERTY, AZERTY or QWERTZ) and the Xbox or PlayStation pad with numbered markers. Recognised HOTAS, joysticks and pads (about 45 models: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) are shown on the model's picture, with the action written in each button's box. Templates come from EDRefCard and are loaded from its GitHub repository. For an unrecognised model you pick the closest template; otherwise a simple axes / hats / buttons diagram is shown. Every control has its legend and a colour per mode, with Ship / SRV / On foot filters, a search and a printable sheet.
+- **Controls & devices**: reads your bindings (active preset, including different presets for ship, SRV and on foot) and draws each device. The keyboard is drawn key by key (QWERTY, AZERTY or QWERTZ) and the Xbox or PlayStation pad with numbered markers. Recognised HOTAS, joysticks and pads (about 45 models: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) are shown on the model's picture, with the action written in each button's box. Templates come from EDRefCard and are loaded from its GitHub repository. For an unrecognised model you pick the closest template; otherwise a simple axes / hats / buttons diagram is shown. Every control has its legend and a colour per mode, with Ship / SRV / On foot filters, a search and a printable sheet. Pick your keyboard (AZERTY, QWERTY or QWERTZ) and its format (ISO or ANSI).
 - **Configuration backup**: exports your bindings (and graphics settings) to a zip in Documents\EDCH and restores them in one click. Your current configuration is backed up automatically before every import.
 - **Missions**: every active mission with its objective, destination, time left and progress; stacked massacre missions with the kills each issuing faction still needs.
 - For sourcing and mining missions, where to get the goods: stations ranked on price, distance and freshness of the market data, with the estimated profit, and the nearest hotspots for mining missions.
@@ -40,11 +40,21 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
 - **Exploration**: value of unsold cartographic data, exobiology sampling help (distance from the previous samples against the colony range), possible species and values for each planet with biological signals, unsold analyses.
 - **Mining**: live prospector results with alerts for your targets and motherlodes, session tonnage; a Merit Miner-style search for where to mine and sell in your power's systems.
 - **Powerplay and session**: merits this week and this session, current system's Powerplay state; credits earned by activity since you logged in.
-- **Mobile access**: open EDCH on your phone or tablet by scanning a QR code. A local server (off by default) serves the app on your network; only devices that scanned the QR code are let in, because the PC's IP alone isn't enough. "New code" disconnects every device. The interface adapts to phones (bottom navigation, full-screen panels), and wishlist edits on the phone sync back to the PC.
+- **Remote access**: open EDCH on your phone or tablet by scanning a QR code. A local server (off by default) serves the app on your network; only devices that scanned the QR code are let in, because the PC's IP alone isn't enough. "New code" disconnects every device. The interface adapts to phones (bottom navigation, full-screen panels), and wishlist edits on the phone sync back to the PC. It can also open one page alone in a browser, for a second screen, and a full-screen mode shows only the current page.
+- **Themes**: ready-made themes (including a light "Day" theme), your own colours and an OLED mode. Colours too light or too dark to read are adjusted automatically.
 - **Automatic updates**: EDCH checks GitHub for a new release, shows a banner, downloads the installer on request (checksum verified) and restarts itself to finish. Can be turned off in Settings.
 - **EDMC-style sync**: live uploads to **EDDN** (markets, outfitting, shipyards, jumps, scans, routes), **EDSM** and **Inara** (with your API key). EDDN's rules are followed: personal data removed, location cross-checked, a rejected message is never resent, nothing from your history.
 
-![A VKB Gladiator with its bindings (demo bindings)](docs/controls.png)
+![The keyboard drawn as AZERTY ISO, with its bindings (demo bindings)](docs/controls.png)
+
+<p>
+<img src="docs/wishlist.png" width="49%" alt="The wishlist with the engineer tour">
+<img src="docs/colonisation.png" width="49%" alt="Colonisation: holds and a construction site">
+</p>
+<p>
+<img src="docs/day-theme.png" width="68%" alt="The Engineers page in the light Day theme">
+<img src="docs/phone.png" width="29%" alt="The wishlist on a phone (remote access)">
+</p>
 
 ## Data and privacy
 
@@ -55,7 +65,7 @@ EDCH reads your game journal on your PC. Here is everything that leaves it, and 
 - **EDSM and Inara**: nothing unless you enter your own API key in Sync. Your keys stay on your PC.
 - **ntfy.sh** (only if you enable wing sharing): your wing missions, encrypted with the wing code before leaving your PC.
 - **GitHub**: only to check whether a new version exists (can be turned off in Settings).
-- **Mobile access**: stays on your local network; off by default and protected by the QR code.
+- **Remote access**: stays on your local network; off by default and protected by the QR code.
 
 Nothing else is collected or sent. Your settings, keys and wishlist are stored in `%LOCALAPPDATA%\EDCompanionHelper`.
 
@@ -102,7 +112,7 @@ Layout:
   - `i18n.ts`: translation layer.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.9.9` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
+A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.10.0` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
 
 ## Roadmap
 

@@ -108,7 +108,6 @@ Arrêt défil ¦ Scroll Lock ¦ Rollen ¦ Bloq Despl ¦ Scroll Lock ¦ Scroll Lo
 Inser ¦ Ins ¦ Einfg ¦ Insert ¦ Insert ¦ Ins
 Début ¦ Home ¦ Pos1 ¦ Inicio ¦ Home ¦ Home
 Suppr ¦ Del ¦ Entf ¦ Supr ¦ Del ¦ Del
-Fin ¦ End ¦ Ende ¦ Fin ¦ End ¦ End
 Verr num ¦ Num Lock ¦ Num ¦ Bloq Num ¦ Num Lock ¦ Num Lock
 Pavé tactile ¦ Touchpad ¦ Touchpad ¦ Panel táctil ¦ Touchpad ¦ Сенсорная панель
 Pavé ¦ Pad ¦ Pad ¦ Panel ¦ Painel ¦ Панель

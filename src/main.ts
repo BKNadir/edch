@@ -1,3 +1,4 @@
+import { bindTour } from "./tour.js";
 import { NAV, visibleNav } from "./nav.js";
 import { gameBadge, setupDesktop } from "./desktop.js";
 import { focusButtons, initFocus, toggleNav } from "./focus.js";
@@ -104,6 +105,7 @@ async function boot() {
   log.info("app", `UI ready (language ${code}, view ${store.state.view})`);
   setHere(() => ({ system: store.state.cmdr.location?.system, seenAt: store.state.cmdr.location?.seenAt }));
   const ctx: Ctx = { game, store };
+  bindTour(ctx);
   const cap = (id: string) => game.capacityOf(id);
   const sync = new Uploaders(
     () => store.state.settings.sync,

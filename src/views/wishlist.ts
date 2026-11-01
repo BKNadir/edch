@@ -6,7 +6,12 @@ import { suggestTrades } from "../trade.js";
 import type { Blueprint } from "../types.js";
 import { kindFr } from "./detail.js";
 import { extractLoadout, importLoadout } from "../importer.js";
-import { engineerLinks, moduleLink } from "../links.js";
+import { engineerLinks, moduleLink, openSystem } from "../links.js";
+import { pickEngineer, type Pick } from "../engineerPick.js";
+import { clearRoute, currentRoute, nextJump, planTour, plotTour, tourRange, type TourPlan } from "../tour.js";
+import { fmtLy } from "../spansh.js";
+import { copyText } from "../bridge.js";
+import type { Engineer } from "../types.js";
 
 export function addToWishlist(ctx: Ctx, bp: Blueprint, from?: number, to?: number) {
   const grades = blueprintGrades(ctx.game, bpKey(bp));
@@ -118,6 +123,111 @@ export class WishlistView implements View {
     this.ctx.store.setWishlist(list);
   }
 
+  // ---------------- engineer tour ----------------
+
+  private tourOut = h("div.tour-out");
+  private plotting = false;
+
+  private tourCard(): HTMLElement | null {
+    const ctx = this.ctx;
+    const plan = planTour(ctx);
+    if (!plan.stops.length) return null;
+    const s = ctx.store.state.settings.engineers;
+    const tooFar = plan.total > s.maxTourLy;
+    const range = tourRange(ctx);
+    const here = ctx.store.state.cmdr.location?.system;
+    const stopRows = plan.stops.map((st, i) => {
+      const e = st.pick.engineer;
+      const missing = Object.entries(st.missing);
+      return h(
+        "li.tour-stop",
+        { class: missing.length ? "blocked" : "" },
+        h("span.tour-num", null, String(i + 1)),
+        h(
+          "div",
+          null,
+          h("div", null, engineerButton(e), st.pick.unlocked ? null : unlockBadge(e, Boolean(st.pick.status)), h("span.sub", null, ` · ${e.system} — ${e.station}`), st.leg !== undefined ? h("span.sub", null, ` · ${fmtLy(st.leg)}`) : null),
+          h("div.sub", null, st.lines.map((l) => lineLabel(ctx, l)).join(" · ")),
+          missing.length
+            ? h("div.tour-missing", null, icon("warn"), " Il manque : ", missing.flatMap(([id, n], i) => [i ? ", " : "", h("span", { "data-no-tr": "" }, `${fmt(n)} × `), h("span", null, ctx.game.nameOf(id))]))
+            : h("div.tour-ok", null, icon("check"), " Matériaux OK pour cet arrêt"),
+        ),
+      );
+    });
+    const plotBtn = h(
+      "button.primary",
+      {
+        disabled: tooFar || this.plotting || !here || !range,
+        title: !range ? "Portée inconnue : lance le jeu pour lire ton vaisseau" : !here ? "Position inconnue" : "",
+        onclick: () => this.plot(plan, here!, range),
+      },
+      icon("search"),
+      ` Calculer l'itinéraire (portée ${range ? fmtLy(range) : "?"})`,
+    );
+    if (!this.plotting) this.renderRoute(here);
+    return h(
+      "section.card.tour",
+      null,
+      h(
+        "div.sync-head",
+        null,
+        h("div", null, h("h3", null, "Tournée des ingénieurs"), h("p.sub", null, `${plan.stops.length} arrêt(s) · ${fmtLy(plan.total)} en ligne droite, du plus proche au suivant`)),
+        plotBtn,
+      ),
+      tooFar ? h("p.notice.danger", null, icon("warn"), ` La tournée fait ${fmtLy(plan.total)}, plus que ta limite (${fmtLy(s.maxTourLy)}, Paramètres → Jeu et recherche → Ingénieurs). Rapproche-toi des ingénieurs ou augmente la limite.`) : null,
+      h("ol.tour-stops", null, stopRows),
+      this.tourOut,
+    );
+  }
+
+  private async plot(plan: TourPlan, from: string, range: number) {
+    this.plotting = true;
+    replace(this.tourOut, h("p.sub", null, h("span.spinner"), " Spansh calcule l'itinéraire…"));
+    try {
+      await plotTour(from, plan.stops, range, (leg, of) => replace(this.tourOut, h("p.sub", null, h("span.spinner"), ` Spansh calcule l'étape ${leg}/${of}…`)));
+      this.plotting = false;
+      this.renderRoute(this.ctx.store.state.cmdr.location?.system);
+    } catch (e) {
+      this.plotting = false;
+      replace(this.tourOut, h("p.error", null, icon("warn"), ` ${String((e as Error).message ?? e)}`));
+    }
+  }
+
+  private renderRoute(here?: string) {
+    const r = currentRoute();
+    if (!r) return replace(this.tourOut);
+    const auto = this.ctx.store.state.settings.engineers.autoCopyNext;
+    const at = here ? nextJump(here).index : -1;
+    const next = at >= 0 ? r.jumps[at + 1] : undefined;
+    replace(
+      this.tourOut,
+      h(
+        "div.row.tour-head",
+        null,
+        h("strong", null, `${fmt(r.totalJumps)} sauts · ${fmtLy(r.distance)}`),
+        next
+          ? h("button.ghost.small", { onclick: () => copyText(next.system).then((ok) => ok && toast(`Prochain saut copié : ${next.system}`)) }, icon("copy"), ` Copier le prochain saut (${next.system})`)
+          : null,
+        h("span.sub", null, auto ? "Copie auto du prochain saut : activée" : "Copie auto du prochain saut : désactivée (Paramètres)"),
+        h("button.ghost.small", { onclick: () => (clearRoute(), this.update()) }, icon("close"), " Effacer l'itinéraire"),
+      ),
+      h(
+        "ol.tour-route",
+        null,
+        r.jumps.map((j, i) =>
+          h(
+            "li",
+            { class: `${j.engineer ? "stop" : ""}${i === at ? " here" : ""}` },
+            h("button.sys", { title: `Copier « ${j.system} »`, onclick: () => openSystem(j.system, { navigate: false }) }, icon("copy"), h("span", null, j.system)),
+            j.engineer ? h("span.badge.hit", { "data-no-tr": "" }, j.engineer) : null,
+            j.neutron ? h("span.badge", null, "Neutron") : null,
+            i === at ? h("span.badge.muted", null, "Tu es ici") : null,
+          ),
+        ),
+      ),
+    );
+  }
+
   update() {
     if (!this.root) return;
     const { game, store } = this.ctx;
@@ -156,16 +266,19 @@ export class WishlistView implements View {
       const local = wishNeeds(game, item);
       const ready = Object.entries(local).every(([id, n]) => ownedOf(this.ctx, id) >= n);
       const gradeOptions = [...grades.keys()].sort();
+      const autoPick = store.state.settings.engineers.autoPick;
+      const chosen = autoPick ? pickEngineer(this.ctx, item) : null;
       return h(
         "div.wish.card",
-        { class: ready ? "ready" : "" },
+        { class: `${ready ? "ready" : ""}${chosen?.toMeet ? " no-engineer" : ""}` },
         h(
           "div.wish-head",
           null,
-          h("div", null, h("strong", null, moduleLink(any.module), ` — ${gameName(any.name)}`), h("p.sub", null, item.note ? h("span.badge.muted", null, item.note) : null, item.note ? " " : "", kindFr(any.kind), any.engineers?.length ? [" · ", ...engineerLinks(any.engineers)] : "")),
+          h("div", null, h("strong", null, moduleLink(any.module), ` — ${gameName(any.name)}`), h("p.sub", null, item.note ? h("span.badge.muted", null, item.note) : null, item.note ? " " : "", kindFr(any.kind), !autoPick && any.engineers?.length ? [" · ", ...engineerLinks(any.engineers)] : "")),
           ready ? h("span.badge.hit", null, icon("check"), " Prêt") : null,
           h("button.icon-btn", { title: "Retirer", onclick: () => store.setWishlist(items.filter((w) => w.id !== item.id)) }, icon("close")),
         ),
+        chosen ? engineerRow(chosen.pick, chosen.toMeet, any.kind === "modification" ? item.gradeTo : 0) : null,
         h(
           "div.wish-controls",
           null,
@@ -224,6 +337,7 @@ export class WishlistView implements View {
       this.root,
       h("header.view-head", null, h("div", null, h("h1", null, "Wishlist"), h("p.sub", null, `${items.length} recettes · ${done}/${rows.length} matériaux complets`)), this.toolbar),
       importer,
+      store.state.settings.engineers.autoPick ? this.tourCard() : null,
       h(
         "div.wish-layout",
         null,
@@ -254,4 +368,51 @@ function select(options: number[], value: number, onChange: (v: number) => void)
     { onchange: (e: Event) => onChange(Number((e.target as HTMLSelectElement).value)) },
     options.map((o) => h("option", { value: String(o), selected: o === value }, `G${o}`)),
   );
+}
+
+/** An engineer's name: copies the system of the workshop. */
+function engineerButton(e: Engineer): HTMLElement {
+  return h("button.inline-link.ref-link.eng-link", { title: `Copier le système de ${e.name} (${e.system})`, "data-no-tr": "", onclick: () => openSystem(e.system) }, e.name);
+}
+
+/** "To unlock" (or "to meet"): a click shows what the game asks for. */
+function unlockBadge(e: Engineer, known: boolean): HTMLElement {
+  const how = known ? e.unlock || e.meeting : e.meeting || e.discovery;
+  return h(
+    "details.unlock-badge",
+    null,
+    h("summary.badge.warn", null, known ? "à débloquer" : "à rencontrer"),
+    h("div.unlock-how", null, e.referredBy ? h("p", null, `Recommandé par ${e.referredBy}`) : null, how ? h("p", null, how) : h("p", null, "Voir la page Ingénieurs.")),
+  );
+}
+
+/** The engineer chosen for a wishlist line, or the red notice when nobody you know can do it. */
+function engineerRow(pick: Pick | undefined, toMeet: Pick | undefined, want: number): HTMLElement {
+  if (pick) {
+    const e = pick.engineer;
+    return h(
+      "div.wish-eng",
+      null,
+      icon("pin"),
+      " ",
+      engineerButton(e),
+      want ? h("span.badge.muted", { title: "Grade maximal que cet ingénieur peut faire" }, `G${pick.grade}`) : null,
+      want && pick.grade < want ? h("span.sub", null, ` (G${want} : aucun ingénieur connu ne le fait ici)`) : null,
+      h("span.sub", null, ` · ${e.system} — ${e.station}`, pick.dist !== undefined ? ` · ${fmtLy(pick.dist)}` : ""),
+      pick.unlocked ? null : unlockBadge(e, Boolean(pick.status)),
+    );
+  }
+  const e = toMeet?.engineer;
+  return h(
+    "div.wish-eng.alert",
+    null,
+    icon("warn"),
+    " Aucun ingénieur connu pour ce module : à débloquer.",
+    e ? [h("span.sub", null, " Le plus proche : "), engineerButton(e), h("span.sub", null, ` · ${e.system}${toMeet!.dist !== undefined ? ` · ${fmtLy(toMeet!.dist)}` : ""}`), unlockBadge(e, false)] : null,
+  );
+}
+
+function lineLabel(ctx: Ctx, item: WishItem): string {
+  const [kind, module, name] = item.bp.split("|");
+  return kind === "modification" ? `${gameName(module)} — ${gameName(name)} G${item.gradeTo}` : `${gameName(module)} — ${gameName(name)}`;
 }

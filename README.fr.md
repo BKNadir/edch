@@ -25,12 +25,12 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
   - Clic sur un système : il est copié, prêt à coller dans la carte galactique. Liens Spansh et Inara à côté.
 - **Trader de matériaux le plus proche** du bon type, avec des **suggestions d'échange** calculées sur ton stock (taux du jeu, en tenant compte de ce que ta wishlist réserve).
 - **Ingénierie** : toutes les modifications, effets expérimentaux, synthèses, courtiers technologiques et améliorations Odyssey, avec ce que tu possèdes déjà.
-- **Wishlist** : ajoute des modifications (grades, nombre de jets, quantité). Elle calcule ce qu'il manque et le meilleur échange pour le combler.
+- **Wishlist** : ajoute des modifications (grades, nombre de jets, quantité). Elle calcule ce qu'il manque et le meilleur échange pour le combler. Chaque ligne indique l'ingénieur connu le plus proche qui peut la faire, et une **tournée des ingénieurs** enchaîne les arrêts avec un itinéraire Spansh, les matériaux qui manquent à chaque arrêt et, en option, le prochain saut copié dès ton arrivée. Les lignes avancent toutes seules quand le jeu applique une modification.
 - **Ingénieurs** : statut et rang lus dans le journal, système copiable, distance, et conditions de déblocage cochées automatiquement quand le journal permet de les vérifier (casier Odyssey, soute, matériaux).
 - **Import de build** : colle ou choisis un export **EDSY** ou **Coriolis** (SLEF ou Loadout JSON). Chaque module ingénié et son effet expérimental vont dans la wishlist. Tu peux aussi repartir de ton vaisseau actuel.
 - **Recherche façon Inara** : où acheter ou vendre une marchandise (par prix ou par distance), un vaisseau, un module (classe et note) ou un service (Interstellar Factors, courtier technologique, trader…) autour de toi.
 - **Navigation** : portée de saut de ton vaisseau (vide, plein, chargé, maintenant, cargaison simulée), itinéraire avec boost neutron via Spansh, et Fleet Carrier (sauts, tritium et durée, en estimation rapide ou en plan Spansh détaillé avec ravitaillements).
-- **Commandes & contrôleurs** : lit tes raccourcis (préréglage actif, y compris des préréglages différents pour le vaisseau, le SRV et à pied) et dessine chaque périphérique. Le clavier est dessiné touche par touche (QWERTY, AZERTY ou QWERTZ) et la manette Xbox ou PlayStation avec des repères numérotés. Les HOTAS, joysticks et manettes reconnus (environ 45 modèles : VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) sont affichés sur la photo du modèle, avec l'action écrite dans la case de chaque bouton. Les gabarits viennent d'EDRefCard et sont chargés depuis son dépôt GitHub. Pour un modèle non reconnu, tu choisis le gabarit le plus proche ; sinon, un schéma simple en axes, chapeaux et boutons s'affiche. Chaque commande a sa légende et une couleur par mode, avec des filtres Vaisseau / SRV / À pied, une recherche et une fiche imprimable.
+- **Commandes & contrôleurs** : lit tes raccourcis (préréglage actif, y compris des préréglages différents pour le vaisseau, le SRV et à pied) et dessine chaque périphérique. Le clavier est dessiné touche par touche (QWERTY, AZERTY ou QWERTZ) et la manette Xbox ou PlayStation avec des repères numérotés. Les HOTAS, joysticks et manettes reconnus (environ 45 modèles : VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) sont affichés sur la photo du modèle, avec l'action écrite dans la case de chaque bouton. Les gabarits viennent d'EDRefCard et sont chargés depuis son dépôt GitHub. Pour un modèle non reconnu, tu choisis le gabarit le plus proche ; sinon, un schéma simple en axes, chapeaux et boutons s'affiche. Chaque commande a sa légende et une couleur par mode, avec des filtres Vaisseau / SRV / À pied, une recherche et une fiche imprimable. Choisis ton clavier (AZERTY, QWERTY ou QWERTZ) et son format (ISO ou ANSI).
 - **Sauvegarde de la configuration** : exporte tes raccourcis (et tes réglages graphiques) en zip dans Documents\EDCH, et les restaure en un clic. Ta configuration actuelle est sauvegardée automatiquement avant chaque import.
 - **Missions** : chaque mission en cours avec son objectif, sa destination, le temps restant et sa progression ; les missions de massacre empilées avec les éliminations qu'il reste par faction donneuse.
 - Pour les missions d'approvisionnement et de minage, où se procurer la marchandise : stations classées selon le prix, la distance et la fraîcheur des données du marché, avec le bénéfice estimé, et les points chauds les plus proches pour les missions de minage.
@@ -40,11 +40,21 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 - **Exploration** : valeur des données cartographiques non vendues, aide aux prélèvements d'exobiologie (distance aux prélèvements précédents comparée à la portée de la colonie), espèces possibles et valeurs pour chaque planète à signaux biologiques, analyses non vendues.
 - **Minage** : résultats des prospecteurs en direct avec alertes pour tes cibles et les cœurs, tonnage de la session ; une recherche façon Merit Miner pour savoir où miner et vendre dans les systèmes de ta puissance.
 - **Powerplay et session** : mérites de la semaine et de la session, état Powerplay du système actuel ; crédits gagnés par activité depuis ta connexion.
-- **Accès mobile** : ouvre EDCH sur ton téléphone ou ta tablette en scannant un QR code. Un serveur local (désactivé par défaut) sert l'appli sur ton réseau. Seuls les appareils qui ont scanné le QR code y accèdent : l'IP du PC ne suffit pas. « Nouveau code » déconnecte tous les appareils. L'interface s'adapte au téléphone (navigation en bas, panneaux plein écran), et les modifications de la wishlist faites sur le téléphone reviennent sur le PC.
+- **Accès distant** : ouvre EDCH sur ton téléphone ou ta tablette en scannant un QR code. Un serveur local (désactivé par défaut) sert l'appli sur ton réseau. Seuls les appareils qui ont scanné le QR code y accèdent : l'IP du PC ne suffit pas. « Nouveau code » déconnecte tous les appareils. L'interface s'adapte au téléphone (navigation en bas, panneaux plein écran), et les modifications de la wishlist faites sur le téléphone reviennent sur le PC. Il peut aussi ouvrir une page seule dans un navigateur, pour un 2e écran, et un mode plein écran n'affiche que la page en cours.
+- **Thèmes** : thèmes prêts à l'emploi (dont un thème clair « Jour »), couleurs libres et mode OLED. Les couleurs trop claires ou trop foncées pour être lues sont ajustées automatiquement.
 - **Mises à jour automatiques** : EDCH vérifie sur GitHub si une nouvelle version existe, affiche un bandeau, télécharge l'installateur à ta demande (somme de contrôle vérifiée) et se relance pour terminer. Désactivable dans les Paramètres.
 - **Synchro façon EDMC** : envoi en direct vers **EDDN** (marchés, équipements, chantiers navals, sauts, scans, routes), **EDSM** et **Inara** (avec ta clé API). Les règles d'EDDN sont respectées : données personnelles retirées, position recoupée, aucun renvoi d'un message refusé, rien de l'historique.
 
-![Un VKB Gladiator avec ses raccourcis (raccourcis de démo)](docs/controls.png)
+![Le clavier dessiné en AZERTY ISO, avec ses raccourcis (raccourcis de démo)](docs/controls.png)
+
+<p>
+<img src="docs/wishlist.png" width="49%" alt="La wishlist avec la tournée des ingénieurs">
+<img src="docs/colonisation.png" width="49%" alt="Colonisation : soutes et chantier de construction">
+</p>
+<p>
+<img src="docs/day-theme.png" width="68%" alt="La page Ingénieurs avec le thème clair « Jour »">
+<img src="docs/phone.png" width="29%" alt="La wishlist sur un téléphone (accès distant)">
+</p>
 
 ## Données et vie privée
 
@@ -55,7 +65,7 @@ EDCH lit le journal du jeu sur ton PC. Voici tout ce qui en sort, et vers où :
 - **EDSM et Inara** : rien tant que tu n'as pas saisi ta propre clé API dans Synchro. Tes clés restent sur ton PC.
 - **ntfy.sh** (seulement si tu actives le partage d'escadrille) : tes missions d'escadrille, chiffrées avec le code de l'escadrille avant de quitter ton PC.
 - **GitHub** : seulement pour vérifier si une nouvelle version existe (désactivable dans les Paramètres).
-- **Accès mobile** : reste sur ton réseau local ; désactivé par défaut et protégé par le QR code.
+- **Accès distant** : reste sur ton réseau local ; désactivé par défaut et protégé par le QR code.
 
 Rien d'autre n'est collecté ni envoyé. Tes réglages, clés et wishlist sont stockés dans `%LOCALAPPDATA%\EDCompanionHelper`.
 
@@ -102,7 +112,7 @@ Structure :
   - `i18n.ts` : couche de traduction.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.9.9` : la Release est publiée et les copies installées proposent la mise à jour.
+Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.10.0` : la Release est publiée et les copies installées proposent la mise à jour.
 
 ## Feuille de route
 

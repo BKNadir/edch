@@ -28,6 +28,7 @@ const CARD_TAB: Record<string, string> = {
   "Lancer Elite Dangerous": "game",
   "Journal du jeu": "game",
   "Recherche de systèmes (Spansh)": "game",
+  Ingénieurs: "game",
   "Pages et affichage": "display",
   Apparence: "display",
   Notifications: "notifications",
@@ -219,6 +220,7 @@ export class SettingsView implements View {
             " Depuis le téléphone, copier aussi dans le presse-papiers du téléphone",
           ),
         ),
+        this.engineersCard(),
         this.notifyCard(),
         this.pagesCard(),
         this.appearance(),
@@ -295,6 +297,32 @@ export class SettingsView implements View {
         " Mode OLED : fond noir pur (économise la batterie des écrans OLED)",
       ),
       h("div.row", null, h("button.ghost", { onclick: () => setTheme({ ...DEFAULT_THEME }) }, "Rétablir les couleurs d'origine")),
+    );
+  }
+
+  private engineersCard(): HTMLElement {
+    const store = this.ctx.store;
+    const e = store.state.settings.engineers;
+    const set = (patch: Partial<typeof e>) => store.updateSettings({ engineers: { ...store.state.settings.engineers, ...patch } });
+    const check = (key: "autoPick" | "knownOnly" | "regionLimit" | "autoCopyNext" | "autoTick", label: string) =>
+      h("label.check", null, h("input", { type: "checkbox", checked: e[key], onchange: (ev: Event) => set({ [key]: (ev.target as HTMLInputElement).checked }) }), ` ${label}`);
+    return h(
+      "section.card",
+      null,
+      h("h3", null, "Ingénieurs"),
+      h("p.sub", null, "Pour la wishlist et la tournée des ingénieurs."),
+      check("autoPick", "Choisir l'ingénieur le plus proche pour chaque ligne de la wishlist (sinon, tous les ingénieurs sont listés)"),
+      check("knownOnly", "Seulement les ingénieurs déjà connus (rencontrés, invités ou débloqués)"),
+      check("regionLimit", "Rester dans ma région : pas d'ingénieurs de Colonia quand je suis dans la Bulle, et inversement"),
+      h(
+        "label.field",
+        null,
+        h("span", null, "Distance max. de la tournée (al)"),
+        h("input", { type: "number", min: "100", max: "50000", step: "100", value: String(e.maxTourLy), onchange: (ev: Event) => set({ maxTourLy: Math.max(100, Number((ev.target as HTMLInputElement).value) || 2000) }) }),
+        h("small", null, "Total en ligne droite entre les arrêts. Au-delà, EDCH ne propose pas l'itinéraire."),
+      ),
+      check("autoCopyNext", "Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire"),
+      check("autoTick", "Avancer la wishlist toute seule quand le jeu applique une modification"),
     );
   }
 

@@ -147,6 +147,7 @@ Accès distant
 PC injoignable : modification non envoyée
 Elite (d'origine)
 Contraste élevé
+Jour (clair)
 Unhandled promise: {0}
 « {0} » copié sur le PC — colle-le dans la carte galactique
 « {0} » copié — colle-le dans la carte galactique
@@ -193,6 +194,16 @@ Quitter le plein écran
 Active d'abord le serveur d'accès distant (page Accès distant) : c'est lui qui sert la page au navigateur.
 Plein écran : seulement cette page (Échap pour quitter)
 Ouvrir cette page seule dans le navigateur (pour un 2e écran)
+Engineer tour plotted: {0} stop(s), {1} jump(s)
+Prochain saut copié : {0} ({1})
+Prochain saut copié : {0}
+Dernière étape de la tournée des ingénieurs
+Effet appliqué : {0} (encore {1})
+Effet appliqué : {0} — retiré de la wishlist
+{0} G{1} terminé (encore {2})
+{0} G{1} terminé — retiré de la wishlist
+{0} G{1} : jet compté
+Wishlist line moved on after EngineerCraft
 Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)
 EDDN (EDCD)
 Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
@@ -785,6 +796,14 @@ Couleur principale
 Couleur secondaire
  Mode OLED : fond noir pur (économise la batterie des écrans OLED)
 Rétablir les couleurs d'origine
+Pour la wishlist et la tournée des ingénieurs.
+Choisir l'ingénieur le plus proche pour chaque ligne de la wishlist (sinon, tous les ingénieurs sont listés)
+Seulement les ingénieurs déjà connus (rencontrés, invités ou débloqués)
+Rester dans ma région : pas d'ingénieurs de Colonia quand je suis dans la Bulle, et inversement
+Distance max. de la tournée (al)
+Total en ligne droite entre les arrêts. Au-delà, EDCH ne propose pas l'itinéraire.
+Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire
+Avancer la wishlist toute seule quand le jeu applique une modification
 EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés.
  Mode debug : enregistre aussi un log détaillé, dans un fichier séparé
 Le log debug contient tout : le log standard, les erreurs, et chaque action (clics, réglages modifiés, pages ouvertes, échanges avec le jeu et les services). Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API et le texte tapé ne sont jamais écrits dans les logs.
@@ -857,6 +876,18 @@ ton vaisseau actuel
 Depuis mon vaisseau actuel
  Fermer l'import
  Importer EDSY / Coriolis
+ Il manque : 
+ Matériaux OK pour cet arrêt
+Portée inconnue : lance le jeu pour lire ton vaisseau
+ Calculer l'itinéraire (portée {0})
+Tournée des ingénieurs
+{0} arrêt(s) · {1} en ligne droite, du plus proche au suivant
+ La tournée fait {0}, plus que ta limite ({1}, Paramètres → Jeu et recherche → Ingénieurs). Rapproche-toi des ingénieurs ou augmente la limite.
+ Spansh calcule l'étape {0}/{1}…
+ Copier le prochain saut ({0})
+Copie auto du prochain saut : activée
+Copie auto du prochain saut : désactivée (Paramètres)
+ Effacer l'itinéraire
 Ta wishlist est vide.
 Importe un build EDSY / Coriolis ci-dessus, ou ajoute des modifications depuis l'onglet Ingénierie ou la fiche d'un matériau.
 Ouvrir l'ingénierie
@@ -871,3 +902,11 @@ Matériau
 Possédé
 Progression / échange
 Clique encore sur « Vider » pour confirmer
+à débloquer
+à rencontrer
+Recommandé par {0}
+Voir la page Ingénieurs.
+Grade maximal que cet ingénieur peut faire
+ (G{0} : aucun ingénieur connu ne le fait ici)
+ Aucun ingénieur connu pour ce module : à débloquer.
+ Le plus proche : 

@@ -394,7 +394,7 @@ export class ControlsView implements View {
       return h(
         `div.kb-key${list.length ? `.bound.${groupClass(g)}` : ""}${all.some((id) => modKeys.has(id)) ? ".modkey" : ""}${tail ? ".enter-tail" : ""}`,
         { style: { flexGrow: String(w), flexBasis: `${w * 44}px` }, title: list.length ? list.map((b) => `${comboLabel(meta, b)} → ${actionName(meta, b.action)}`).join("\n") : label },
-        tail ? null : h("span.kb-cap", { "data-no-tr": "" }, label),
+        tail ? null : h("span.kb-cap", null, label),
         list.length && !tail ? h("span.kb-act", null, actionName(meta, list[0].action)) : null,
         list.length > 1 && !tail ? h("span.kb-more", null, `+${list.length - 1}`) : null,
       );

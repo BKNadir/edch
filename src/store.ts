@@ -52,7 +52,34 @@ export interface Settings {
   kbLayout: "auto" | "qwerty" | "azerty" | "qwertz";
   /** ISO (Europe: L-shaped Enter) or ANSI (US). */
   kbFormat: "auto" | "iso" | "ansi";
+  /** Wishlist engineers and the engineer tour. */
+  engineers: EngineerSettings;
 }
+
+export interface EngineerSettings {
+  /** Show one engineer per line (the best one) instead of the full list. */
+  autoPick: boolean;
+  /** Only engineers already in the journal (met, invited, unlocked…). */
+  knownOnly: boolean;
+  /** Leave out the engineers of the other region (Bubble / Colonia). */
+  regionLimit: boolean;
+  /** Longest engineer tour proposed, in ly (straight lines between stops). */
+  maxTourLy: number;
+  /** Copy the next jump of the tour when arriving in a system of the route. */
+  autoCopyNext: boolean;
+  /** Tick wishlist lines off when the game says a modification was made (EngineerCraft). */
+  autoTick: boolean;
+}
+
+export const DEFAULT_ENGINEER_SETTINGS: EngineerSettings = {
+  autoPick: true,
+  knownOnly: true,
+  regionLimit: true,
+  maxTourLy: 2000,
+  autoCopyNext: false,
+  autoTick: true,
+};
+
 
 export interface NotifySettings {
   sound: boolean;
@@ -178,6 +205,7 @@ const DEFAULT_SETTINGS: Settings = {
   copyOnPhone: false,
   kbLayout: "auto",
   kbFormat: "auto",
+  engineers: DEFAULT_ENGINEER_SETTINGS,
 };
 
 function load<T>(key: string, fallback: T): T {
@@ -230,6 +258,7 @@ export class Store {
           wing: { ...DEFAULT_WING, ...(loaded.wing ?? {}) },
           mining: { ...DEFAULT_MINING, ...(loaded.mining ?? {}) },
           theme: { ...DEFAULT_THEME, ...(loaded.theme ?? {}) },
+          engineers: { ...DEFAULT_ENGINEER_SETTINGS, ...(loaded.engineers ?? {}) },
         };
       })(),
       wishlist: loadArray<WishItem>("edc.wishlist"),
