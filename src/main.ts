@@ -9,6 +9,7 @@ import { MobileView } from "./views/mobile.js";
 import { AboutView } from "./views/about.js";
 import { RemoteGuideView } from "./views/guide.js";
 import { applyTheme } from "./theme.js";
+import { captureErrors, log, setDebugLog } from "./logger.js";
 import { MissionsView } from "./views/missions.js";
 import { ColonisationView } from "./views/colonisation.js";
 import { GoalsView } from "./views/goals.js";
@@ -72,10 +73,12 @@ function navIcon(d: string): SVGSVGElement {
 
 async function boot() {
   const app = document.getElementById("app")!;
+  captureErrors();
   let game;
   try {
     [game] = await Promise.all([loadGame(), loadExobio()]);
   } catch (e) {
+    log.error("app", `Game data: ${e}`);
     replace(app, h("p.error", null, `Impossible de charger les données du jeu : ${e}`));
     return;
   }
@@ -98,6 +101,8 @@ async function boot() {
   }
 
   const store = new Store();
+  await setDebugLog(store.state.settings.debugLog);
+  log.info("app", `UI ready (language ${code}, view ${store.state.view})`);
   setHere(() => ({ system: store.state.cmdr.location?.system, seenAt: store.state.cmdr.location?.seenAt }));
   const ctx: Ctx = { game, store };
   const cap = (id: string) => game.capacityOf(id);
@@ -230,7 +235,10 @@ async function boot() {
   await onJournal({
     batch: (b) => {
       const { changed, events } = applyLines(store.state.cmdr, b.lines, cap);
-      if (!b.replay) onLiveEvents(events);
+      if (!b.replay) {
+        onLiveEvents(events);
+        if (log.debugOn && events.length) log.debug("journal", `Events: ${events.map((e) => e.event).join(", ")}`);
+      }
       // Uploads run in order; nothing from the startup replay is ever sent.
       uploads = uploads.then(async () => {
         for (const ev of events) await sync.handle(ev, !b.replay);

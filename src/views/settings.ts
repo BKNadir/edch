@@ -1,4 +1,5 @@
-import { defaultJournalDir, isRemote, isTauri, startJournal } from "../bridge.js";
+import { defaultJournalDir, isPortable, isRemote, isTauri, logsOpen, startJournal } from "../bridge.js";
+import { setDebugLog } from "../logger.js";
 import { h, replace, toast } from "../dom.js";
 import { checkForUpdate } from "../updater.js";
 import { SOFTWARE_VERSION as APP_VERSION } from "../eddn.js";
@@ -11,9 +12,24 @@ export class SettingsView implements View {
   private root?: HTMLElement;
   constructor(private ctx: Ctx, private restart: () => void) {}
 
+  private portable = false;
+  private debugPath: string | null = null;
+
   mount(root: HTMLElement) {
     this.root = root;
     this.render();
+    void isPortable().then((p) => {
+      if (p !== this.portable) {
+        this.portable = p;
+        this.render();
+      }
+    });
+    if (this.ctx.store.state.settings.debugLog) {
+      void setDebugLog(true).then((path) => {
+        this.debugPath = path;
+        this.render();
+      });
+    }
   }
 
   // Inputs keep focus: only re-render on mount.
@@ -144,9 +160,13 @@ export class SettingsView implements View {
                 h("input", { type: "checkbox", checked: s.autoUpdate, onchange: (e: Event) => set({ autoUpdate: (e.target as HTMLInputElement).checked }) }),
                 " Vérifier automatiquement les nouvelles versions sur GitHub",
               ),
+              this.portable
+                ? h("p.sub", null, "Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.")
+                : null,
               h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, "Vérifier maintenant")),
             )
           : null,
+        isTauri() && !isRemote() ? this.logsCard() : null,
       ),
     );
   }
@@ -189,6 +209,45 @@ export class SettingsView implements View {
         " Mode OLED : fond noir pur (économise la batterie des écrans OLED)",
       ),
       h("div.row", null, h("button.ghost", { onclick: () => setTheme({ ...DEFAULT_THEME }) }, "Rétablir les couleurs d'origine")),
+    );
+  }
+
+  private logsCard(): HTMLElement {
+    const on = this.ctx.store.state.settings.debugLog;
+    return h(
+      "section.card",
+      null,
+      h("h3", null, "Logs de l'application"),
+      h("p.sub", null, "EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers sont toujours gardés."),
+      h(
+        "label.check",
+        null,
+        h("input", {
+          type: "checkbox",
+          checked: on,
+          onchange: async (e: Event) => {
+            const value = (e.target as HTMLInputElement).checked;
+            this.ctx.store.updateSettings({ debugLog: value });
+            this.debugPath = await setDebugLog(value);
+            this.render();
+          },
+        }),
+        " Mode debug : enregistre aussi un log détaillé, dans un fichier séparé",
+      ),
+      h("p.sub", null, "Le log debug reprend aussi tout le contenu du log standard. Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API ne sont jamais écrites dans les logs."),
+      on && this.debugPath ? h("p.sub", { "data-no-tr": "" }, this.debugPath) : null,
+      h(
+        "div.row",
+        null,
+        h(
+          "button.ghost",
+          {
+            onclick: () =>
+              logsOpen().catch((e) => toast(`Impossible d'ouvrir le dossier : ${e}`)),
+          },
+          "Ouvrir le dossier des logs",
+        ),
+      ),
     );
   }
 }

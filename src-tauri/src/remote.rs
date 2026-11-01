@@ -335,6 +335,7 @@ pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String
             Err(_) => break,
         }
     });
+    crate::logs::info("remote", &format!("Local server started on port {port}"));
     Ok(RemoteInfo { port, addresses: remote_addresses() })
 }
 
@@ -342,6 +343,7 @@ pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String
 pub fn remote_stop(state: State<'_, RemoteState>) {
     let shared = state.inner.clone();
     if let Some(server) = lock(&shared.server).take() {
+        crate::logs::info("remote", "Local server stopped");
         server.unblock();
     }
     lock(&shared.token).clear();

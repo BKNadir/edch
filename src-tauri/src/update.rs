@@ -63,7 +63,10 @@ pub fn update_check() -> Result<Option<UpdateInfo>, String> {
     let release: serde_json::Value = match agent().get(&url).set("Accept", "application/vnd.github+json").call() {
         Ok(r) => serde_json::from_str(&r.into_string().map_err(|e| e.to_string())?).map_err(|e| e.to_string())?,
         Err(ureq::Error::Status(404, _)) => return Ok(None), // no release published yet
-        Err(ureq::Error::Status(code, _)) => return Err(format!("GitHub a répondu {code}")),
+        Err(ureq::Error::Status(code, _)) => {
+            crate::logs::warn("update", &format!("GitHub answered {code}"));
+            return Err(format!("GitHub a répondu {code}"));
+        }
         Err(e) => return Err(format!("Réseau : {e}")),
     };
     let tag = release["tag_name"].as_str().unwrap_or_default();
@@ -168,6 +171,7 @@ pub fn update_install(app: AppHandle, path: String) -> Result<(), String> {
     if !inside || !is_exe || !path.is_file() {
         return Err("Installateur introuvable, relance le téléchargement".into());
     }
+    crate::logs::info("update", &format!("Running installer {}", path.display()));
     std::process::Command::new(&path)
         .args(["/UPDATE", "/P", "/R"])
         .spawn()

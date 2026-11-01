@@ -892,5 +892,13 @@
 "Pour couper l'accès : décoche l'option, désactive le serveur local, ou clique sur « Nouveau code » pour déconnecter tous les appareils.": "Para cortar el acceso: desmarca la opción, desactiva el servidor local o pulsa «Nuevo código» para desconectar todos los dispositivos.",
 "Page en cours de développement :": "Página en desarrollo:",
 "toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit rien dans le journal quand une mission est partagée ou reçue en escadrille, donc le suivi des missions partagées reste approximatif.": "todavía no todas las funciones están operativas al 100 %. El juego no escribe nada en el diario cuando se comparte o recibe una misión en escuadrón, así que el seguimiento de misiones compartidas sigue siendo aproximado.",
-"Inara n'a pas encore autorisé EDCH (validation de l'application en attente). Envoi vers Inara suspendu jusqu'au prochain démarrage.": "Inara aún no ha autorizado EDCH (validación de la aplicación pendiente). Envío a Inara en pausa hasta el próximo inicio."
+"Inara n'a pas encore autorisé EDCH (validation de l'application en attente). Envoi vers Inara suspendu jusqu'au prochain démarrage.": "Inara aún no ha autorizado EDCH (validación de la aplicación pendiente). Envío a Inara en pausa hasta el próximo inicio.",
+"Logs de l'application": "Registros de la aplicación",
+"EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers sont toujours gardés.": "EDCH siempre anota lo que hace en un registro estándar (un archivo por inicio). Los registros de más de una semana se borran automáticamente, pero siempre se conservan los 5 últimos.",
+"Mode debug : enregistre aussi un log détaillé, dans un fichier séparé": "Modo debug: también escribe un registro detallado, en un archivo aparte",
+"Le log debug reprend aussi tout le contenu du log standard. Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API ne sont jamais écrites dans les logs.": "El registro debug también incluye todo el contenido del registro estándar. Actívalo para informar de un problema y luego desactívalo: crece rápido. Las claves API nunca se escriben en los registros.",
+"Ouvrir le dossier des logs": "Abrir la carpeta de registros",
+"Impossible d'ouvrir le dossier : {0}": "No se puede abrir la carpeta: {0}",
+"Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.": "Versión portátil: las actualizaciones no se instalan automáticamente. Cuando sale una nueva versión, EDCH abre la página de descarga.",
+"Télécharger la version portable": "Descargar la versión portátil"
 }

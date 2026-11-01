@@ -67,7 +67,9 @@ Pour ajouter ou corriger une traduction, modifie `tools/translations_*.txt` (une
 
 ## Installer
 
-Télécharge l'installateur (`.exe` ou `.msi`) dans les [Releases](../../releases), ou la version portable `edch.exe` dans les artefacts du dernier build (onglet *Actions*). Windows 10/11 a déjà WebView2.
+Télécharge l'installateur (`.exe` ou `.msi`) dans les [Releases](../../releases), ou la version portable `EDCH_<version>_x64-portable.exe` : rien à installer, lance-la depuis n'importe quel dossier (elle te prévient quand une nouvelle version sort et ouvre la page de la release). Windows 10/11 a déjà WebView2.
+
+EDCH garde des logs de ce qu'il fait (Paramètres → Logs de l'application, avec un bouton pour ouvrir le dossier). Un mode debug écrit un log détaillé séparé, à joindre à un signalement de bug.
 
 L'installateur n'est pas signé numériquement (un certificat coûte cher pour un outil gratuit) : Windows SmartScreen peut afficher « Windows a protégé votre ordinateur » la première fois. Clique sur **Informations complémentaires**, puis **Exécuter quand même**. Les mises à jour suivantes sont proposées directement dans EDCH.
 
@@ -98,7 +100,7 @@ Structure :
   - `i18n.ts` : couche de traduction.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.8.1` : la Release est publiée et les copies installées proposent la mise à jour.
+Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.8.2` : la Release est publiée et les copies installées proposent la mise à jour.
 
 ## Feuille de route
 

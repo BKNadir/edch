@@ -15,6 +15,7 @@ use std::thread;
 use std::time::{Duration, Instant, SystemTime};
 use tauri::{AppHandle, Emitter, Manager};
 
+mod logs;
 mod remote;
 mod update;
 
@@ -102,6 +103,12 @@ fn has_materials_event(bytes: &[u8]) -> bool {
 }
 
 fn emit_status(app: &AppHandle, state: &str, file: Option<String>, message: Option<String>) {
+    let text = format!("{state} {} {}", file.as_deref().unwrap_or(""), message.as_deref().unwrap_or(""));
+    if state == "error" {
+        logs::warn("journal", text.trim());
+    } else {
+        logs::info("journal", text.trim());
+    }
     let _ = app.emit(
         "journal-status",
         WatchStatus {
@@ -113,6 +120,9 @@ fn emit_status(app: &AppHandle, state: &str, file: Option<String>, message: Opti
 }
 
 fn emit_lines(app: &AppHandle, lines: Vec<String>, replay: bool, file: &str) {
+    if logs::debug_enabled() && !lines.is_empty() {
+        logs::debug("journal", &format!("{} line(s) from {file}{}", lines.len(), if replay { " (replay)" } else { "" }));
+    }
     for chunk in lines.chunks(BATCH) {
         let _ = app.emit(
             "journal-batch",
@@ -381,10 +391,34 @@ async fn http_fetch(
     content_type: Option<String>,
 ) -> Result<HttpReply, String> {
     tauri::async_runtime::spawn_blocking(move || {
-        blocking_http(&method, &url, body.as_deref(), content_type.as_deref())
+        let started = Instant::now();
+        let result = blocking_http(&method, &url, body.as_deref(), content_type.as_deref());
+        let ms = started.elapsed().as_millis();
+        match &result {
+            Ok(reply) if reply.status < 400 => logs::debug("http", &format!("{method} {} → {} ({ms} ms)", logs::redact(&url), reply.status)),
+            Ok(reply) => logs::warn("http", &format!("{method} {} → {} ({ms} ms) {}", logs::redact(&url), reply.status, reply.body.chars().take(200).collect::<String>())),
+            Err(e) => logs::warn("http", &format!("{method} {} → {e} ({ms} ms)", logs::redact(&url))),
+        }
+        result
     })
     .await
     .map_err(|e| e.to_string())?
+}
+
+/// Portable build: an exe named "...portable..." or a "portable" file next to it.
+/// It is never installed, so updates only point to the release page.
+fn portable() -> bool {
+    let Ok(exe) = std::env::current_exe() else { return false };
+    let named = exe
+        .file_name()
+        .map(|n| n.to_string_lossy().to_lowercase().contains("portable"))
+        .unwrap_or(false);
+    named || exe.parent().is_some_and(|d| d.join("portable").exists() || d.join("edch.portable").exists())
+}
+
+#[tauri::command]
+fn is_portable() -> bool {
+    portable()
 }
 
 #[tauri::command]
@@ -683,6 +717,7 @@ fn migrate_data_folder() {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     migrate_data_folder();
+    logs::init(portable());
     tauri::Builder::default()
         .manage(Arc::new(WatchState::default()))
         .manage(remote::RemoteState::default())
@@ -706,6 +741,10 @@ pub fn run() {
             remote::remote_qr,
             remote::remote_addresses,
             remote::remote_tailscale,
+            is_portable,
+            logs::log_write,
+            logs::log_set_debug,
+            logs::logs_open,
             update::update_check,
             update::update_download,
             update::update_install

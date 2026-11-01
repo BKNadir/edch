@@ -3,6 +3,12 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.8.2
+
+- Application logs: EDCH always writes a standard log (one file per start). Logs older than a week are deleted automatically, the last 5 are always kept.
+- Settings → Application logs: a debug mode writes a separate, detailed log (it also contains the standard lines), and a button opens the logs folder. API keys are never written to the logs.
+- Portable version (`-portable.exe`): no installation needed. It doesn't install updates; when a new version is out, it opens the release page.
+
 ## 0.8.1
 
 - The Missions page says it's still in development: the game writes nothing to the journal when a wing mission is shared or received, so tracking shared missions is approximate.

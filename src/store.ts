@@ -1,3 +1,4 @@
+import { log } from "./logger.js";
 import { DEFAULT_THEME, type ThemeSettings } from "./theme.js";
 import { emptyActivity, type ActivityState } from "./activity.js";
 import type { Game } from "./data.js";
@@ -27,6 +28,8 @@ export interface Settings {
   wing: WingSettings;
   mining: MiningSettings;
   theme: ThemeSettings;
+  /** Writes a separate, detailed debug log (Settings → Logs). */
+  debugLog: boolean;
 }
 
 export interface NotifySettings {
@@ -137,6 +140,7 @@ const DEFAULT_SETTINGS: Settings = {
   wing: DEFAULT_WING,
   mining: DEFAULT_MINING,
   theme: DEFAULT_THEME,
+  debugLog: false,
 };
 
 function load<T>(key: string, fallback: T): T {
@@ -222,6 +226,7 @@ export class Store {
   }
 
   setView(view: string) {
+    if (view !== this.state.view) log.debug("ui", `View: ${view}`);
     this.state.view = view;
     save("edc.view", view);
     this.notify();
@@ -233,6 +238,8 @@ export class Store {
   }
 
   updateSettings(patch: Partial<Settings>) {
+    // Only the names of the changed settings: values can hold API keys.
+    log.debug("settings", `Changed: ${Object.keys(patch).join(", ")}`);
     this.state.settings = { ...this.state.settings, ...patch };
     save("edc.settings", this.state.settings);
     this.notify();

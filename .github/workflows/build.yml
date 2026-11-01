@@ -51,6 +51,7 @@ jobs:
       # "[release]", also publishes a GitHub release (tag v<version from tauri.conf.json>),
       # which installed copies of EDCH pick up as an update.
       - uses: tauri-apps/tauri-action@v0
+        id: tauri
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -59,10 +60,30 @@ jobs:
           releaseBody: ${{ steps.notes.outputs.body }}
           releaseDraft: false
 
+      # Portable version: the same exe, named so EDCH knows it isn't installed (its updates
+      # open the release page instead of running an installer).
+      - name: Portable exe
+        id: portable
+        shell: bash
+        run: |
+          version=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          file="EDCH_${version}_x64-portable.exe"
+          cp src-tauri/target/release/edch.exe "$file"
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+
+      - name: Attach the portable exe to the release
+        if: steps.tauri.outputs.releaseId != ''
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${{ steps.portable.outputs.tag }}" "${{ steps.portable.outputs.file }}" --clobber -R "${{ github.repository }}"
+
       - uses: actions/upload-artifact@v4
         with:
           name: edch-windows
           path: |
+            ${{ steps.portable.outputs.file }}
             src-tauri/target/release/edch.exe
             src-tauri/target/release/bundle/nsis/*.exe
             src-tauri/target/release/bundle/msi/*.msi

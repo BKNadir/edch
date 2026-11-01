@@ -231,6 +231,11 @@ export async function remoteAction(action: unknown): Promise<void> {
   await remoteJson("/api/action", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(action) });
 }
 
+export const logWrite = (level: string, source: string, message: string) => invoke<void>("log_write", { level, source, message });
+export const logSetDebug = (on: boolean) => invoke<string | null>("log_set_debug", { on });
+export const logsOpen = () => invoke<string>("logs_open");
+/** Portable build (no installer): updates open the release page instead. */
+export const isPortable = () => (isTauri() && !isRemote() ? invoke<boolean>("is_portable").catch(() => false) : Promise.resolve(false));
 export const installerLanguage = () => (isTauri() ? invoke<number | null>("installer_language").catch(() => null) : Promise.resolve(null));
 
 export async function openUrl(url: string): Promise<void> {

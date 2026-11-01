@@ -75,7 +75,7 @@ export const detectedAddresses = () => remoteAddresses().catch(() => [] as strin
 function snapshot(store: Store): string {
   const s = store.state;
   // Never share API keys, the secret itself or the PC's paths.
-  const { sync: _sync, remote: _remote, journalDir: _dir, wing: _wing, ...settings } = s.settings;
+  const { sync: _sync, remote: _remote, journalDir: _dir, wing: _wing, debugLog: _debug, ...settings } = s.settings;
   // Activity without the body table (big for explorers): the phone gets the summaries it shows.
   const { bodies, ...activity } = s.activity;
   const here = s.activity.system?.address;

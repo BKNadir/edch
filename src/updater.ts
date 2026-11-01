@@ -1,9 +1,10 @@
 // Automatic updates: compares this build with the latest GitHub release, offers it in a
 // banner, downloads the installer on demand and restarts EDCH through it.
 
-import { isRemote, isTauri, onUpdateProgress, openUrl, updateCheck, updateDownload, updateInstall, type UpdateInfo } from "./bridge.js";
+import { isPortable, isRemote, isTauri, onUpdateProgress, openUrl, updateCheck, updateDownload, updateInstall, type UpdateInfo } from "./bridge.js";
 import { h, replace, toast } from "./dom.js";
 import { locale } from "./i18n.js";
+import { log } from "./logger.js";
 import type { Store } from "./store.js";
 
 const EVERY = 6 * 60 * 60 * 1000;
@@ -16,6 +17,8 @@ type Phase =
   | { kind: "failed"; info: UpdateInfo; message: string };
 
 let phase: Phase = { kind: "hidden" };
+/** Portable build: nothing is installed, "Update" opens the latest release page. */
+let portable = false;
 let showNotes = false;
 
 /** The release notes (CHANGELOG section, in English): bullet points before the install line. */
@@ -62,7 +65,9 @@ function render() {
         null,
         h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? "Masquer les nouveautés" : "Nouveautés"),
         close,
-        h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour"),
+        portable
+          ? h("button.primary.small", { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") }, "Télécharger la version portable")
+          : h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour"),
       ),
     );
   } else if (p.kind === "downloading") {
@@ -101,6 +106,7 @@ function later() {
 }
 
 async function download(info: UpdateInfo) {
+  log.info("update", `Downloading ${info.version}`);
   phase = { kind: "downloading", info, done: 0, total: info.size };
   render();
   const stop = await onUpdateProgress((done, total) => {
@@ -113,6 +119,7 @@ async function download(info: UpdateInfo) {
     phase = { kind: "ready", info, path };
   } catch (e) {
     phase = { kind: "failed", info, message: String((e as Error)?.message ?? e) };
+    log.warn("update", `Download failed: ${phase.message}`);
   } finally {
     stop();
   }
@@ -141,10 +148,12 @@ export async function checkForUpdate(manual = false): Promise<void> {
       if (manual) toast("EDCH est à jour");
       return;
     }
+    log.info("update", `Version ${info.version} available (installed ${info.current})`);
     if (!manual && info.version === store.state.settings.skippedVersion) return;
     phase = { kind: "available", info };
     render();
   } catch (e) {
+    log.warn("update", `Check failed: ${String((e as Error)?.message ?? e)}`);
     if (manual) toast(`Vérification impossible : ${String((e as Error)?.message ?? e)}`);
   }
 }
@@ -153,6 +162,7 @@ export async function checkForUpdate(manual = false): Promise<void> {
 export function startUpdateChecks(s: Store) {
   store = s;
   if (!isTauri()) return;
+  void isPortable().then((p) => (portable = p));
   const tick = () => {
     if (store?.state.settings.autoUpdate) void checkForUpdate(false);
   };

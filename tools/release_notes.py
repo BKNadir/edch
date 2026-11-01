@@ -19,6 +19,8 @@ def main() -> int:
     print()
     print("---")
     print("Install the `-setup.exe` (or the `.msi`). Installed copies of EDCH offer this update by themselves.")
+    print()
+    print("No installation wanted? Download the `-portable.exe` and run it from any folder. The portable version tells you when a new version is out and opens this page.")
     return 0
 
 

@@ -4,7 +4,9 @@ Ingénieurs
 Objectifs communautaires
 À propos
 Paramètres
+Game data: {0}
 Impossible de charger les données du jeu : {0}
+UI ready (language {0}, view {1})
 Indique le dossier du journal dans les Paramètres.
 Cet appareil n'est pas connecté à EDCH
 Ce QR code n'est plus valable : un nouveau code a été créé sur le PC. Scanne celui qui est affiché maintenant.
@@ -100,6 +102,7 @@ Pad M
 Pad S seulement
 Planétaire
 {0} événement(s)
+Inara n'a pas encore autorisé EDCH (validation de l'application en attente). Envoi vers Inara suspendu jusqu'au prochain démarrage.
 EDCH (PC) a répondu {0}
 {0} : trop de requêtes, réessaie dans un instant
 {0} est momentanément indisponible (erreur {1}), réessaie dans un instant
@@ -121,12 +124,13 @@ Aperçu
 ntfy.sh : trop de messages, réessaie plus tard
 ntfy.sh a répondu {0}
 /g, ""));\n  if (!items.length) return null;\n  return h("ul.update-notes", { "data-no-tr": "" }, items.map((t) => h("li", null, t)));\n}\nlet bar: HTMLElement | null = null;\nlet store: Store | null = null;\n\nconst mb = (n: number) => (n / 1048576).toLocaleString(locale(), { maximumFractionDigits: 1 });\n\nfunction render() {\n  if (!bar) {\n    bar = h("div#update-bar", { role: "status" });\n    document.body.append(bar);\n  }\n  if (phase.kind === "hidden") {\n    bar.classList.remove("show");\n    return;\n  }\n  bar.classList.add("show");\n  const p = phase;\n  const close = h("button.ghost.small", { title: "Plus tard", onclick: () => later() }, "Plus tard");\n  if (p.kind === "available") {\n    replace(\n      bar,\n      h(\n        "div.update-text",\n        null,\n        h("strong", null, 
-),\n        showNotes ? notesList(p.info.notes) : null,\n        showNotes && p.info.page ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, "Voir sur GitHub") : null,\n      ),\n      h(\n        "div.row",\n        null,\n        h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? "Masquer les nouveautés" : "Nouveautés"),\n        close,\n        h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour"),\n      ),\n    );\n  } else if (p.kind === "downloading") {\n    const pct = p.total > 0 ? Math.min(100, Math.round((p.done / p.total) * 100)) : 0;\n    replace(\n      bar,\n      h(\n        "div.update-text",\n        null,\n        h("strong", null, 
-), h("span.sub", null, "Relance l'application pour terminer la mise à jour. Elle se rouvrira toute seule.")),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => install(p) }, "Relancer maintenant")),\n    );\n  } else {\n    replace(\n      bar,\n      h("div.update-text", null, h("strong", null, "La mise à jour a échoué"), h("span.sub", null, p.message)),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => download(p.info) }, "Réessayer")),\n    );\n  }\n}\n\nfunction later() {\n  if (phase.kind === "hidden") return;\n  // "Later" on an offer skips this version; a downloaded one is kept for the next start.\n  if (phase.kind === "available" && store) store.updateSettings({ skippedVersion: phase.info.version });\n  phase = { kind: "hidden" };\n  render();\n}\n\nasync function download(info: UpdateInfo) {\n  phase = { kind: "downloading", info, done: 0, total: info.size };\n  render();\n  const stop = await onUpdateProgress((done, total) => {\n    if (phase.kind !== "downloading") return;\n    phase = { ...phase, done, total };\n    render();\n  });\n  try {\n    const path = await updateDownload(info);\n    phase = { kind: "ready", info, path };\n  } catch (e) {\n    phase = { kind: "failed", info, message: String((e as Error)?.message ?? e) };\n  } finally {\n    stop();\n  }\n  render();\n}\n\nasync function install(p: { info: UpdateInfo; path: string }) {\n  try {\n    await updateInstall(p.path);\n  } catch (e) {\n    phase = { kind: "failed", info: p.info, message: String((e as Error)?.message ?? e) };\n    render();\n  }\n}\n\n/** Checks GitHub now. 
-: also report "up to date" and errors, and ignore a skipped version. */\nexport async function checkForUpdate(manual = false): Promise<void> {\n  if (!isTauri() || isRemote() || !store) return;\n  if (phase.kind === "downloading" || phase.kind === "ready") {\n    if (manual) render();\n    return;\n  }\n  try {\n    const info = await updateCheck();\n    if (!info) {\n      if (manual) toast("EDCH est à jour");\n      return;\n    }\n    if (!manual && info.version === store.state.settings.skippedVersion) return;\n    phase = { kind: "available", info };\n    render();\n  } catch (e) {\n    if (manual) toast(
+),\n        showNotes ? notesList(p.info.notes) : null,\n        showNotes && p.info.page ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, "Voir sur GitHub") : null,\n      ),\n      h(\n        "div.row",\n        null,\n        h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? "Masquer les nouveautés" : "Nouveautés"),\n        close,\n        portable\n          ? h("button.primary.small", { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") }, "Télécharger la version portable")\n          : h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour"),\n      ),\n    );\n  } else if (p.kind === "downloading") {\n    const pct = p.total > 0 ? Math.min(100, Math.round((p.done / p.total) * 100)) : 0;\n    replace(\n      bar,\n      h(\n        "div.update-text",\n        null,\n        h("strong", null, 
+), h("span.sub", null, "Relance l'application pour terminer la mise à jour. Elle se rouvrira toute seule.")),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => install(p) }, "Relancer maintenant")),\n    );\n  } else {\n    replace(\n      bar,\n      h("div.update-text", null, h("strong", null, "La mise à jour a échoué"), h("span.sub", null, p.message)),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => download(p.info) }, "Réessayer")),\n    );\n  }\n}\n\nfunction later() {\n  if (phase.kind === "hidden") return;\n  // "Later" on an offer skips this version; a downloaded one is kept for the next start.\n  if (phase.kind === "available" && store) store.updateSettings({ skippedVersion: phase.info.version });\n  phase = { kind: "hidden" };\n  render();\n}\n\nasync function download(info: UpdateInfo) {\n  log.info("update", 
+: also report "up to date" and errors, and ignore a skipped version. */\nexport async function checkForUpdate(manual = false): Promise<void> {\n  if (!isTauri() || isRemote() || !store) return;\n  if (phase.kind === "downloading" || phase.kind === "ready") {\n    if (manual) render();\n    return;\n  }\n  try {\n    const info = await updateCheck();\n    if (!info) {\n      if (manual) toast("EDCH est à jour");\n      return;\n    }\n    log.info("update", 
 PC injoignable : modification non envoyée
 Elite (d'origine)
 Contraste élevé
+Unhandled promise: {0}
 Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)
 EDDN (EDCD)
 Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
@@ -653,12 +657,19 @@ Utilisé tant que le jeu n'a pas donné ta position.
 Mises à jour
 Version installée : {0}
  Vérifier automatiquement les nouvelles versions sur GitHub
+Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.
 Vérifier maintenant
 Choisis un thème ou tes propres couleurs. Le téléphone connecté utilise les mêmes réglages.
 Couleur principale
 Couleur secondaire
  Mode OLED : fond noir pur (économise la batterie des écrans OLED)
 Rétablir les couleurs d'origine
+Logs de l'application
+EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers sont toujours gardés.
+ Mode debug : enregistre aussi un log détaillé, dans un fichier séparé
+Le log debug reprend aussi tout le contenu du log standard. Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API ne sont jamais écrites dans les logs.
+Impossible d'ouvrir le dossier : {0}
+Ouvrir le dossier des logs
 Ce que fait EDMC : partager ce que tu vois en jeu avec la communauté et tes services.
 EDDN — réseau de données communautaire
 Envoie marchés, équipements, chantiers navals, systèmes et scans visités. C'est ce qui alimente Spansh, Inara et EDSM pour tout le monde (et les recherches de cette appli).
