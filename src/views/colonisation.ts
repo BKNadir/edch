@@ -45,9 +45,23 @@ export class ColonisationView implements View {
     }, 60_000);
   }
 
-  /** Fetches the carriers' markets from Spansh when our copy is older than 5 minutes. */
+  /** The freshest view of a carrier's market: your own journal (Market.json) first, Spansh only if newer. */
+  private marketOf(marketId: number): (CarrierMarket & { source: "journal" | "spansh" }) | undefined {
+    const local = this.ctx.store.state.cmdr.carrierMarkets?.[marketId];
+    const remote = markets.get(marketId);
+    const remoteNewer = remote?.updated && (!local || Date.parse(remote.updated) > Date.parse(local.at));
+    if (local && !remoteNewer) {
+      const list = (book: Record<string, { label: string; count: number }>) => Object.entries(book).map(([id, v]) => ({ id, name: v.label, count: v.count }));
+      return { fetched: Date.now(), updated: local.at, selling: list(local.selling), buying: list(local.buying), source: "journal" };
+    }
+    return remote ? { ...remote, source: "spansh" } : undefined;
+  }
+
+  /** Asks Spansh only when your own data on the carrier's market is older than 5 minutes (or missing). */
   private refreshMarkets() {
     for (const c of this.carriers()) {
+      const local = this.ctx.store.state.cmdr.carrierMarkets?.[c.marketId];
+      if (local && Date.now() - Date.parse(local.at) < MARKET_REFRESH) continue;
       const prev = markets.get(c.marketId);
       if (prev?.loading || (prev && Date.now() - prev.fetched < MARKET_REFRESH)) continue;
       const callsign = callsignOf(c.name);
@@ -136,14 +150,14 @@ export class ColonisationView implements View {
   /** How much of a commodity sits in your carriers (journal estimate, or the stock it sells if higher). */
   private inCarriers(id: string): number {
     return this.carriers().reduce((s, c) => {
-      const selling = markets.get(c.marketId)?.selling.find((x) => x.id === id)?.count ?? 0;
+      const selling = this.marketOf(c.marketId)?.selling.find((x) => x.id === id)?.count ?? 0;
       return s + Math.max(c.items[id]?.count ?? 0, selling);
     }, 0);
   }
 
   /** What the carrier's market shows on Spansh: sell orders (stock) and buy orders. */
   private marketBlock(marketId: number, needed: Set<string>, name: (id: string, label?: string) => string): HTMLElement | null {
-    const m = markets.get(marketId);
+    const m = this.marketOf(marketId);
     if (!m) return null;
     if (m.loading && !m.updated && !m.selling.length) return h("p.sub", null, h("span.spinner"), " Marché du carrier sur Spansh…");
     if (m.error) return h("p.sub", null, `Marché sur Spansh : ${m.error}`);
@@ -151,7 +165,9 @@ export class ColonisationView implements View {
     return h(
       "div.carrier-market",
       null,
-      h("p.sub", null, `Marché (Spansh, données ${m.updated ? relTime(m.updated) : "?"})`),
+      m.source === "journal"
+        ? h("p.sub", null, `Marché (ton journal, ${m.updated ? relTime(m.updated) : "?"})`)
+        : h("p.sub", null, `Marché (Spansh, données ${m.updated ? relTime(m.updated) : "?"})`),
       m.selling.length ? [h("small.sub", null, "En vente (stock)"), h("ul.hold-list", null, m.selling.map(line))] : null,
       m.buying.length ? [h("small.sub", null, "Achète"), h("ul.hold-list", null, m.buying.map(line))] : null,
       !m.selling.length && !m.buying.length ? h("p.empty", null, "Aucun ordre d'achat ou de vente") : null,

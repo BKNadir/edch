@@ -37,10 +37,16 @@ struct Logger {
 static LOGGER: OnceLock<Logger> = OnceLock::new();
 
 pub fn dir() -> PathBuf {
-    let base = std::env::var("LOCALAPPDATA")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| std::env::temp_dir());
-    base.join("EDCompanionHelper").join("logs")
+    if let Ok(base) = std::env::var("LOCALAPPDATA") {
+        return PathBuf::from(base).join("EDCompanionHelper").join("logs");
+    }
+    let home = std::env::var("HOME").map(PathBuf::from).unwrap_or_else(|_| std::env::temp_dir());
+    if cfg!(target_os = "macos") {
+        return home.join("Library").join("Logs").join("EDCompanionHelper");
+    }
+    // Linux: $XDG_DATA_HOME (usually ~/.local/share).
+    let data = std::env::var("XDG_DATA_HOME").map(PathBuf::from).unwrap_or_else(|_| home.join(".local").join("share"));
+    data.join("EDCompanionHelper").join("logs")
 }
 
 /// UTC date and time from a Unix timestamp (no date crate needed).

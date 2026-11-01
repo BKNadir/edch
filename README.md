@@ -69,6 +69,8 @@ To add or fix a translation, edit `tools/translations_*.txt` (one line per text:
 
 Download the installer (`.exe` or `.msi`) from [Releases](../../releases), or the portable version `EDCH_<version>_x64-portable.exe`: nothing to install, run it from any folder (it tells you when a new version is out and opens the release page). Windows 10/11 already has WebView2.
 
+**Linux** (Steam/Proton, Steam Deck included): each release also has an `.AppImage` (any distribution: make it executable and run it), a `.deb` (Debian, Ubuntu, Mint, Pop!_OS), an `.rpm` (Fedora, openSUSE), a `PKGBUILD` for Arch Linux and derivatives (`makepkg -si` in the folder where you saved it), and an experimental `.flatpak` (`flatpak install EDCH_….flatpak`). EDCH finds the journal in Steam's Proton folder by itself. Updates aren't installed automatically on Linux: EDCH opens the release page.
+
 EDCH keeps logs of what it does (Settings → Application logs, with a button to open the folder). A debug mode writes a separate, detailed log to attach to a bug report.
 
 The installer isn't digitally signed (a certificate is expensive for a free tool), so Windows SmartScreen may show "Windows protected your PC" the first time. Click **More info**, then **Run anyway**. Later updates are offered inside EDCH.
@@ -100,7 +102,7 @@ Layout:
   - `i18n.ts`: translation layer.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.9.0` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
+A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.9.1` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
 
 ## Roadmap
 

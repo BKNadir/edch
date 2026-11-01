@@ -7,6 +7,7 @@ Paramètres
 Game data: {0}
 Impossible de charger les données du jeu : {0}
 UI ready (language {0}, view {1})
+Carrier market read from Market.json
 Indique le dossier du journal dans les Paramètres.
 Cet appareil n'est pas connecté à EDCH
 Ce QR code n'est plus valable : un nouveau code a été créé sur le PC. Scanne celui qui est affiché maintenant.
@@ -131,7 +132,7 @@ Live link unavailable, polling instead: {0}
 ntfy.sh : trop de messages, réessaie plus tard
 ntfy.sh a répondu {0}
 /g, ""));\n  if (!items.length) return null;\n  return h("ul.update-notes", { "data-no-tr": "" }, items.map((t) => h("li", null, t)));\n}\nlet bar: HTMLElement | null = null;\nlet store: Store | null = null;\n\nconst mb = (n: number) => (n / 1048576).toLocaleString(locale(), { maximumFractionDigits: 1 });\n\nfunction render() {\n  if (!bar) {\n    bar = h("div#update-bar", { role: "status" });\n    document.body.append(bar);\n  }\n  if (phase.kind === "hidden") {\n    bar.classList.remove("show");\n    return;\n  }\n  bar.classList.add("show");\n  const p = phase;\n  const close = h("button.ghost.small", { title: "Plus tard", onclick: () => later() }, "Plus tard");\n  if (p.kind === "available") {\n    replace(\n      bar,\n      h(\n        "div.update-text",\n        null,\n        h("strong", null, 
-),\n        showNotes ? notesList(p.info.notes) : null,\n        showNotes && p.info.page ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, "Voir sur GitHub") : null,\n      ),\n      h(\n        "div.row",\n        null,\n        h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? "Masquer les nouveautés" : "Nouveautés"),\n        close,\n        portable\n          ? h("button.primary.small", { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") }, "Télécharger la version portable")\n          : h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour"),\n      ),\n    );\n  } else if (p.kind === "downloading") {\n    const pct = p.total > 0 ? Math.min(100, Math.round((p.done / p.total) * 100)) : 0;\n    replace(\n      bar,\n      h(\n        "div.update-text",\n        null,\n        h("strong", null, 
+),\n        showNotes ? notesList(p.info.notes) : null,\n        showNotes && p.info.page ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, "Voir sur GitHub") : null,\n      ),\n      h(\n        "div.row",\n        null,\n        h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? "Masquer les nouveautés" : "Nouveautés"),\n        close,\n        selfInstall()\n          ? h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour")\n          : h("button.primary.small", { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") }, mode === "portable" ? "Télécharger la version portable" : "Télécharger la nouvelle version"),\n      ),\n    );\n  } else if (p.kind === "downloading") {\n    const pct = p.total > 0 ? Math.min(100, Math.round((p.done / p.total) * 100)) : 0;\n    replace(\n      bar,\n      h(\n        "div.update-text",\n        null,\n        h("strong", null, 
 ), h("span.sub", null, "Relance l'application pour terminer la mise à jour. Elle se rouvrira toute seule.")),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => install(p) }, "Relancer maintenant")),\n    );\n  } else {\n    replace(\n      bar,\n      h("div.update-text", null, h("strong", null, "La mise à jour a échoué"), h("span.sub", null, p.message)),\n      h("div.row", null, close, h("button.primary.small", { onclick: () => download(p.info) }, "Réessayer")),\n    );\n  }\n}\n\nfunction later() {\n  if (phase.kind === "hidden") return;\n  // "Later" on an offer skips this version; a downloaded one is kept for the next start.\n  if (phase.kind === "available" && store) store.updateSettings({ skippedVersion: phase.info.version });\n  phase = { kind: "hidden" };\n  render();\n}\n\nasync function download(info: UpdateInfo) {\n  log.info("update", 
 : also report "up to date" and errors, and ignore a skipped version. */\nexport async function checkForUpdate(manual = false): Promise<void> {\n  if (!isTauri() || isRemote() || !store) return;\n  if (phase.kind === "downloading" || phase.kind === "ready") {\n    if (manual) render();\n    return;\n  }\n  try {\n    const info = await updateCheck();\n    if (!info) {\n      if (manual) toast("EDCH est à jour");\n      return;\n    }\n    log.info("update", 
 Phone action: {0}
@@ -185,6 +186,8 @@ Merci à eux 🙏
 EDCH ne fonctionnerait pas sans ces projets, créés et maintenus par des membres de la communauté. Merci à chacun d'eux. S'ils te sont utiles, pense à les soutenir.
 Elite Dangerous est une marque de Frontier Developments plc. Les noms et données du jeu leur appartiennent.
 Licences et détails : 
+Windows, installed
+Windows, portable
 Signaler un bug
 Les bugs se signalent sur GitHub, avec le log debug : c'est lui qui permet de comprendre ce qui s'est passé.
 Paramètres → Logs de l'application : coche « Mode debug ».
@@ -207,6 +210,7 @@ Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écr
 Aucun chantier en cours. Docke à un dépôt de construction (Colonisation) : EDCH lira la liste des marchandises demandées.
  Marché du carrier sur Spansh…
 Marché sur Spansh : {0}
+Marché (ton journal, {0})
 Marché (Spansh, données {0})
 En vente (stock)
 Achète
@@ -712,6 +716,7 @@ Mises à jour
 Version installée : {0}
  Vérifier automatiquement les nouvelles versions sur GitHub
 Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.
+Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).
 Vérifier maintenant
 Choisis un thème ou tes propres couleurs. Le téléphone connecté utilise les mêmes réglages.
 Couleur principale

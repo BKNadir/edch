@@ -969,5 +969,8 @@
 "{0} corps jamais envoyés à EDSM.": "{0} cuerpos nunca enviados a EDSM.",
 "Corps intéressants": "Cuerpos interesantes",
 "Valeur max": "Valor máx.",
-"Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)": "Sincronización de tu diario de vuelo, y lo que la comunidad sabe del sistema donde estás (Exploración)"
+"Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)": "Sincronización de tu diario de vuelo, y lo que la comunidad sabe del sistema donde estás (Exploración)",
+"Télécharger la nouvelle version": "Descargar la nueva versión",
+"Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).": "En Linux, las actualizaciones no se instalan automáticamente: cuando sale una nueva versión, EDCH abre la página de descarga (AppImage, .deb, .rpm…).",
+"Marché (ton journal, {0})": "Mercado (tu diario, {0})"
 }

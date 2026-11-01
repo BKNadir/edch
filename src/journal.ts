@@ -98,6 +98,11 @@ export interface CommanderState {
   /** From Status.json, on or near a planet. */
   surface?: { lat: number; lon: number; radius?: number; body?: string };
   carrier?: CarrierInfo;
+  /**
+   * Fleet carrier markets read from Market.json when docked (the freshest local data): what the
+   * carrier sells with its stock, what it buys. Kept up to date by MarketBuy/MarketSell.
+   */
+  carrierMarkets?: Record<number, CarrierMarketSnapshot>;
   lastEvent?: string;
   materialsSeenAt?: string;
   lockerSeenAt?: string;
@@ -217,6 +222,10 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
         }));
       state.loadout = readLoadout(ev);
       return true;
+
+    case "MarketBuy":
+    case "MarketSell":
+      return tradeAtCarrier(state, ev);
 
     case "Cargo":
       if (Array.isArray(ev.Inventory) && (ev.Vessel ?? "Ship") === "Ship") {
@@ -437,6 +446,55 @@ export function applyCargoFile(state: CommanderState, file: Json): boolean {
   for (const c of file.Inventory) next[key(c.Name)] = (next[key(c.Name)] ?? 0) + Number(c.Count ?? 0);
   if (JSON.stringify(next) === JSON.stringify(state.cargo)) return false;
   state.cargo = next;
+  return true;
+}
+
+export interface CarrierMarketSnapshot {
+  at: string;
+  station: string;
+  selling: Record<string, { label: string; count: number; price?: number }>;
+  buying: Record<string, { label: string; count: number; price?: number }>;
+}
+
+/** "$Tritium_Name;" → "tritium" */
+const commodityKey = (raw: unknown) =>
+  String(raw ?? "")
+    .toLowerCase()
+    .replace(/^\$/, "")
+    .replace(/_name;$/, "")
+    .replace(/;$/, "");
+
+/** Market.json at a fleet carrier: its sell orders (with stock) and buy orders, as the game shows them now. */
+export function applyMarketFile(state: CommanderState, file: Json): boolean {
+  if (!file || !Array.isArray(file.Items) || !/carrier/i.test(String(file.StationType ?? ""))) return false;
+  const id = Number(file.MarketID);
+  if (!id) return false;
+  const snap: CarrierMarketSnapshot = { at: String(file.timestamp ?? new Date().toISOString()), station: String(file.StationName ?? ""), selling: {}, buying: {} };
+  for (const it of file.Items) {
+    const key = commodityKey(it.Name);
+    const label = String(it.Name_Localised ?? key);
+    if (Number(it.Stock) > 0) snap.selling[key] = { label, count: Number(it.Stock), price: Number(it.BuyPrice) || undefined };
+    if (Number(it.Demand) > 0) snap.buying[key] = { label, count: Number(it.Demand), price: Number(it.SellPrice) || undefined };
+  }
+  const prev = state.carrierMarkets?.[id];
+  if (prev && prev.at > snap.at) return false;
+  state.carrierMarkets = { ...(state.carrierMarkets ?? {}), [id]: snap };
+  return true;
+}
+
+/** Buying from / selling to a carrier changes its market right away. */
+function tradeAtCarrier(state: CommanderState, ev: Json): boolean {
+  const snap = state.carrierMarkets?.[Number(ev.MarketID)];
+  if (!snap || (ev.timestamp && ev.timestamp < snap.at)) return false;
+  const key = commodityKey(ev.Type);
+  const n = Number(ev.Count ?? 0);
+  const book = ev.event === "MarketBuy" ? snap.selling : snap.buying;
+  const line = book[key];
+  if (line) {
+    line.count = Math.max(0, line.count - n);
+    if (!line.count) delete book[key];
+  }
+  snap.at = ev.timestamp ?? snap.at;
   return true;
 }
 

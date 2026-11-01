@@ -969,5 +969,8 @@
 "{0} corps jamais envoyés à EDSM.": "{0} тел никогда не отправлялись в EDSM.",
 "Corps intéressants": "Ценные тела",
 "Valeur max": "Макс. стоимость",
-"Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)": "Синхронизация бортового журнала и то, что сообщество знает о текущей системе (Исследование)"
+"Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)": "Синхронизация бортового журнала и то, что сообщество знает о текущей системе (Исследование)",
+"Télécharger la nouvelle version": "Скачать новую версию",
+"Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).": "В Linux обновления не устанавливаются автоматически: когда выходит новая версия, EDCH открывает страницу загрузки (AppImage, .deb, .rpm…).",
+"Marché (ton journal, {0})": "Рынок (ваш журнал, {0})"
 }

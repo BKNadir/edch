@@ -306,6 +306,8 @@ export const logWrite = (level: string, source: string, message: string) => invo
 export const logSetDebug = (on: boolean) => invoke<string | null>("log_set_debug", { on });
 export const logsOpen = () => invoke<string>("logs_open");
 /** Portable build (no installer): updates open the release page instead. */
+/** How updates are installed: "installer" (Windows setup) or not ("portable", "linux", "macos": the release page opens). */
+export const updateMode = () => (isTauri() && !isRemote() ? invoke<string>("update_mode").catch(() => "installer") : Promise.resolve("installer"));
 export const isPortable = () => (isTauri() && !isRemote() ? invoke<boolean>("is_portable").catch(() => false) : Promise.resolve(false));
 export const installerLanguage = () => (isTauri() ? invoke<number | null>("installer_language").catch(() => null) : Promise.resolve(null));
 

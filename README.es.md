@@ -69,6 +69,8 @@ Para añadir o corregir una traducción, edita `tools/translations_*.txt` (una l
 
 Descarga el instalador (`.exe` o `.msi`) desde [Releases](../../releases), o la versión portátil `EDCH_<version>_x64-portable.exe`: sin instalación, ejecútala desde cualquier carpeta (avisa cuando sale una nueva versión y abre la página de la release). Windows 10/11 ya incluye WebView2.
 
+**Linux** (Steam/Proton, Steam Deck incluido): cada release incluye también un `.AppImage` (cualquier distribución: hazlo ejecutable y lánzalo), un `.deb` (Debian, Ubuntu, Mint, Pop!_OS), un `.rpm` (Fedora, openSUSE), un `PKGBUILD` para Arch Linux y derivadas (`makepkg -si` en la carpeta donde lo guardaste) y un `.flatpak` experimental (`flatpak install EDCH_….flatpak`). EDCH encuentra solo el diario en la carpeta Proton de Steam. En Linux, las actualizaciones no se instalan automáticamente: EDCH abre la página de la release.
+
 EDCH guarda registros de lo que hace (Ajustes → Registros de la aplicación, con un botón para abrir la carpeta). Un modo debug escribe un registro detallado aparte, para adjuntarlo a un informe de error.
 
 El instalador no está firmado digitalmente (un certificado es caro para una herramienta gratuita), así que Windows SmartScreen puede mostrar «Windows protegió su PC» la primera vez. Pulsa **Más información** y luego **Ejecutar de todas formas**. Las siguientes actualizaciones se ofrecen dentro de EDCH.
@@ -100,7 +102,7 @@ Estructura:
   - `i18n.ts`: capa de traducción.
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneran los datos de `public/` (ver NOTICE).
 
-Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.9.0`: se publica la Release y las copias instaladas ofrecen la actualización.
+Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.9.1`: se publica la Release y las copias instaladas ofrecen la actualización.
 
 ## Hoja de ruta
 

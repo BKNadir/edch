@@ -47,7 +47,7 @@ struct AuxFile {
 }
 
 /// Companion files the game rewrites in place; the UI gets them whenever they change.
-const AUX_FILES: [&str; 4] = ["ShipLocker.json", "Backpack.json", "Cargo.json", "Status.json"];
+const AUX_FILES: [&str; 5] = ["ShipLocker.json", "Backpack.json", "Cargo.json", "Status.json", "Market.json"];
 const BATCH: usize = 2000;
 const MAX_REPLAY_FILES: usize = 40;
 
@@ -149,7 +149,7 @@ fn read_from(path: &Path, offset: &mut u64) -> std::io::Result<Vec<u8>> {
     Ok(buffer)
 }
 
-fn check_aux(app: &AppHandle, dir: &Path, seen: &mut [Option<SystemTime>; 4]) {
+fn check_aux(app: &AppHandle, dir: &Path, seen: &mut [Option<SystemTime>; 5]) {
     for (index, name) in AUX_FILES.iter().enumerate() {
         let path = dir.join(name);
         let modified = match fs::metadata(&path).and_then(|m| m.modified()) {
@@ -207,7 +207,7 @@ fn watch_loop(app: AppHandle, dir: PathBuf, generation: u64) {
         offset = len as u64;
     }
 
-    let mut aux_seen: [Option<SystemTime>; 4] = [None, None, None, None];
+    let mut aux_seen: [Option<SystemTime>; 5] = [None, None, None, None, None];
     check_aux(&app, &dir, &mut aux_seen);
 
     if files.is_empty() {
@@ -299,6 +299,16 @@ async fn scan_history(dir: String, days: u64, events: Vec<String>) -> Result<Vec
 
 #[tauri::command]
 fn default_journal_dir() -> Option<String> {
+    // Linux: the game runs through Steam's Proton; its "Windows" user folder is in the prefix.
+    #[cfg(target_os = "linux")]
+    {
+        for user in proton_users() {
+            let path = user.join("Saved Games").join("Frontier Developments").join("Elite Dangerous");
+            if path.is_dir() {
+                return Some(path.to_string_lossy().to_string());
+            }
+        }
+    }
     let home = std::env::var("USERPROFILE")
         .ok()
         .or_else(|| std::env::var("HOME").ok())?;
@@ -481,6 +491,16 @@ struct ImportReport {
 const OPTION_FOLDERS: [&str; 2] = ["Bindings", "Graphics"];
 
 fn options_root() -> Result<PathBuf, String> {
+    #[cfg(target_os = "linux")]
+    {
+        let found = proton_users()
+            .into_iter()
+            .map(|u| u.join("AppData").join("Local").join("Frontier Developments").join("Elite Dangerous").join("Options"))
+            .find(|p| p.is_dir());
+        if let Some(p) = found {
+            return Ok(p);
+        }
+    }
     let base = std::env::var("LOCALAPPDATA")
         .map(PathBuf::from)
         .or_else(|_| std::env::var("HOME").map(|h| Path::new(&h).join(".local/share")))
@@ -489,6 +509,62 @@ fn options_root() -> Result<PathBuf, String> {
         .join("Frontier Developments")
         .join("Elite Dangerous")
         .join("Options"))
+}
+
+/// Linux: the "steamuser" folders of Elite Dangerous's Proton prefixes (app 359320), in every
+/// Steam install (native, Flatpak, Snap) and every Steam library.
+#[cfg(target_os = "linux")]
+fn proton_users() -> Vec<PathBuf> {
+    let Ok(home) = std::env::var("HOME") else { return Vec::new() };
+    let home = PathBuf::from(home);
+    let roots = [
+        ".local/share/Steam",
+        ".steam/steam",
+        ".steam/root",
+        ".var/app/com.valvesoftware.Steam/.local/share/Steam",
+        "snap/steam/common/.local/share/Steam",
+    ];
+    let mut libraries: Vec<PathBuf> = Vec::new();
+    for root in roots {
+        let root = home.join(root);
+        if !root.is_dir() {
+            continue;
+        }
+        libraries.push(root.clone());
+        // Other Steam libraries (other disks), from libraryfolders.vdf: lines like "path" "/mnt/games/Steam".
+        if let Ok(text) = fs::read_to_string(root.join("steamapps").join("libraryfolders.vdf")) {
+            for line in text.lines() {
+                let parts: Vec<&str> = line.split('"').collect();
+                if parts.len() >= 4 && parts[1] == "path" {
+                    libraries.push(PathBuf::from(parts[3].replace("\\\\", "\\")));
+                }
+            }
+        }
+    }
+    let mut out: Vec<PathBuf> = Vec::new();
+    for lib in libraries {
+        let user = lib.join("steamapps/compatdata/359320/pfx/drive_c/users/steamuser");
+        let canonical = user.canonicalize().unwrap_or(user.clone());
+        if user.is_dir() && !out.iter().any(|o| o.canonicalize().unwrap_or(o.clone()) == canonical) {
+            out.push(user);
+        }
+    }
+    out
+}
+
+/// How this build updates: "installer" (Windows setup), "portable" (Windows, no installer),
+/// "linux" or "macos" (both: the release page opens).
+#[tauri::command]
+fn update_mode() -> &'static str {
+    if cfg!(target_os = "linux") {
+        "linux"
+    } else if cfg!(target_os = "macos") {
+        "macos"
+    } else if portable() {
+        "portable"
+    } else {
+        "installer"
+    }
 }
 
 fn documents_dir() -> PathBuf {
@@ -758,6 +834,7 @@ pub fn run() {
             remote::remote_interfaces,
             remote::remote_tailscale,
             is_portable,
+            update_mode,
             clipboard_write,
             ntfy::ntfy_subscribe,
             ntfy::ntfy_unsubscribe,

@@ -1,0 +1,19 @@
+# Maintainer: BKNadir <https://github.com/BKNadir>
+# Arch Linux package built from the release's .deb. The release build fills in the version
+# and checksum and attaches the result as "PKGBUILD" to each GitHub release.
+pkgname=edch-bin
+pkgver=@VERSION@
+pkgrel=1
+pkgdesc="EDCH - Elite Dangerous Companion Helper: materials, engineering, missions, navigation and more"
+arch=('x86_64')
+url="https://github.com/BKNadir/edch"
+license=('MIT')
+depends=('webkit2gtk-4.1' 'gtk3' 'libsoup3' 'openssl' 'xdotool' 'hicolor-icon-theme')
+provides=('edch')
+conflicts=('edch')
+source=("https://github.com/BKNadir/edch/releases/download/v${pkgver}/EDCH_${pkgver}_amd64.deb")
+sha256sums=('@SHA256@')
+
+package() {
+  bsdtar -xf data.tar.gz -C "${pkgdir}"
+}

@@ -1,4 +1,4 @@
-import { defaultJournalDir, isPortable, isRemote, isTauri, logsOpen, startJournal } from "../bridge.js";
+import { defaultJournalDir, isRemote, isTauri, logsOpen, startJournal, updateMode } from "../bridge.js";
 import { setDebugLog } from "../logger.js";
 import { h, replace, toast } from "../dom.js";
 import { checkForUpdate } from "../updater.js";
@@ -12,15 +12,15 @@ export class SettingsView implements View {
   private root?: HTMLElement;
   constructor(private ctx: Ctx, private restart: () => void) {}
 
-  private portable = false;
+  private mode = "installer";
   private debugPath: string | null = null;
 
   mount(root: HTMLElement) {
     this.root = root;
     this.render();
-    void isPortable().then((p) => {
-      if (p !== this.portable) {
-        this.portable = p;
+    void updateMode().then((m) => {
+      if (m !== this.mode) {
+        this.mode = m;
         this.render();
       }
     });
@@ -167,9 +167,11 @@ export class SettingsView implements View {
                 h("input", { type: "checkbox", checked: s.autoUpdate, onchange: (e: Event) => set({ autoUpdate: (e.target as HTMLInputElement).checked }) }),
                 " Vérifier automatiquement les nouvelles versions sur GitHub",
               ),
-              this.portable
+              this.mode === "portable"
                 ? h("p.sub", null, "Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.")
-                : null,
+                : this.mode !== "installer"
+                  ? h("p.sub", null, "Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).")
+                  : null,
               h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, "Vérifier maintenant")),
             )
           : null,

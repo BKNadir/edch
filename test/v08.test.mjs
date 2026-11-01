@@ -70,3 +70,20 @@ test("a fleet carrier's hold is rebuilt from transfers, fuel deposits and carrie
   assert.equal(c.items.tritium.count, 586);
   assert.equal(c.items.steel.count, 100, "a transfer after undocking doesn't count");
 });
+
+import { applyEvent as applyJournal, applyMarketFile, emptyState as emptyCmdr } from "../dist/js/journal.js";
+
+test("a carrier's market comes from Market.json and follows purchases made there", () => {
+  const s = emptyCmdr();
+  applyMarketFile(s, { timestamp: "2026-11-01T13:28:19Z", event: "Market", MarketID: 3708867072, StationName: "T7G-27Z", StationType: "FleetCarrier", Items: [
+    { Name: "$steel_name;", Name_Localised: "Steel", Stock: 1200, Demand: 0, BuyPrice: 5000, SellPrice: 0 },
+    { Name: "$aluminium_name;", Name_Localised: "Aluminium", Stock: 0, Demand: 800, BuyPrice: 0, SellPrice: 900 },
+  ] });
+  const m = s.carrierMarkets[3708867072];
+  assert.equal(m.selling.steel.count, 1200);
+  assert.equal(m.buying.aluminium.count, 800);
+  applyJournal(s, { timestamp: "2026-11-01T13:28:41Z", event: "MarketBuy", MarketID: 3708867072, Type: "steel", Count: 200, BuyPrice: 5000, TotalCost: 1000000 });
+  assert.equal(s.carrierMarkets[3708867072].selling.steel.count, 1000);
+  // A station that isn't a carrier is ignored.
+  assert.equal(applyMarketFile(s, { timestamp: "2026-11-01T14:00:00Z", MarketID: 128666762, StationType: "Coriolis", Items: [] }), false);
+});

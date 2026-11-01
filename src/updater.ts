@@ -1,7 +1,7 @@
 // Automatic updates: compares this build with the latest GitHub release, offers it in a
 // banner, downloads the installer on demand and restarts EDCH through it.
 
-import { isPortable, isRemote, isTauri, onUpdateProgress, openUrl, updateCheck, updateDownload, updateInstall, type UpdateInfo } from "./bridge.js";
+import { isRemote, isTauri, updateMode, onUpdateProgress, openUrl, updateCheck, updateDownload, updateInstall, type UpdateInfo } from "./bridge.js";
 import { h, replace, toast } from "./dom.js";
 import { locale } from "./i18n.js";
 import { log } from "./logger.js";
@@ -17,8 +17,9 @@ type Phase =
   | { kind: "failed"; info: UpdateInfo; message: string };
 
 let phase: Phase = { kind: "hidden" };
-/** Portable build: nothing is installed, "Update" opens the latest release page. */
-let portable = false;
+/** No installer (portable exe, Linux, macOS): "Update" opens the latest release page. */
+let mode = "installer";
+const selfInstall = () => mode === "installer";
 let showNotes = false;
 
 /** The release notes (CHANGELOG section, in English): bullet points before the install line. */
@@ -65,9 +66,9 @@ function render() {
         null,
         h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? "Masquer les nouveautés" : "Nouveautés"),
         close,
-        portable
-          ? h("button.primary.small", { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") }, "Télécharger la version portable")
-          : h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour"),
+        selfInstall()
+          ? h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour")
+          : h("button.primary.small", { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") }, mode === "portable" ? "Télécharger la version portable" : "Télécharger la nouvelle version"),
       ),
     );
   } else if (p.kind === "downloading") {
@@ -162,7 +163,7 @@ export async function checkForUpdate(manual = false): Promise<void> {
 export function startUpdateChecks(s: Store) {
   store = s;
   if (!isTauri()) return;
-  void isPortable().then((p) => (portable = p));
+  void updateMode().then((m) => (mode = m));
   const tick = () => {
     if (store?.state.settings.autoUpdate) void checkForUpdate(false);
   };

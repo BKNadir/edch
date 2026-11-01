@@ -52,6 +52,11 @@ export function eventDetail(ev: Record<string, any>): string | null {
   if (e === "Missions") return `${e} active=${(ev.Active ?? []).map((m: any) => m.MissionID).join(",")}`;
   if (e.startsWith("Mission")) return `${e} ${pick("MissionID", "Name", "Wing", "Faction", "DestinationSystem", "DestinationStation", "KillCount", "Count", "Expiry")}`;
   if (e.startsWith("Wing")) return `${e} ${pick("Name", "Others")}`;
+  if (e === "Docked" || e === "Market") return `${e} ${pick("StationName", "StationType", "MarketID", "StarSystem")}`;
+  if (e === "MarketBuy" || e === "MarketSell") return `${e} ${pick("MarketID", "Type", "Count", "BuyPrice", "SellPrice")}`;
+  if (e === "CargoTransfer") return `${e} ${JSON.stringify(ev.Transfers ?? [])}`;
+  if (e === "CarrierStats") return `${e} ${pick("CarrierID", "CarrierType", "Callsign")} cargo=${ev.SpaceUsage?.Cargo ?? "?"}`;
+  if (e.startsWith("Colonisation")) return `${e} ${pick("MarketID", "ConstructionProgress")}`;
   if (e === "Bounty" || e === "FactionKillBond") return `${e} ${pick("VictimFaction", "Faction", "AwardingFaction", "TotalReward", "Reward")}`;
   return null;
 }

@@ -2,7 +2,7 @@ import { LANGS, browserLang, guessLang, initI18n, saveLang, savedLang, watchTran
 import { installerLanguage, isTauri, onJournal, readAuxFile, startJournal, defaultJournalDir, type WatchStatus } from "./bridge.js";
 import { loadGame } from "./data.js";
 import { h, icon, replace } from "./dom.js";
-import { applyCargoFile, applyLines, applyLocker, applyStatus, emptyState } from "./journal.js";
+import { applyCargoFile, applyLines, applyLocker, applyMarketFile, applyStatus, emptyState } from "./journal.js";
 import { Uploaders } from "./uploaders.js";
 import { detectRemote, remoteLanguage, runRemoteClient, setupRemoteHost } from "./remote.js";
 import { MobileView } from "./views/mobile.js";
@@ -262,6 +262,14 @@ async function boot() {
           })
           .catch(() => undefined);
       }
+      // The Market event's goods are in Market.json: read it at once (a carrier's market is live data).
+      if (!b.replay && events.some((e) => e.event === "Market") && store.state.settings.journalDir) {
+        readAuxFile(store.state.settings.journalDir, "Market.json")
+          .then((text) => {
+            if (applyMarketFile(store.state.cmdr, JSON.parse(text))) store.notify();
+          })
+          .catch(() => undefined);
+      }
       // ShipLocker events often only say "look at ShipLocker.json".
       if (events.some((e) => e.event === "ShipLocker" && !e.Items) && store.state.settings.journalDir) {
         readAuxFile(store.state.settings.journalDir, "ShipLocker.json")
@@ -283,6 +291,13 @@ async function boot() {
       try {
         if (a.name === "Status.json") {
           if (applyStatus(store.state.cmdr, JSON.parse(a.content))) store.notify();
+          return;
+        }
+        if (a.name === "Market.json") {
+          if (applyMarketFile(store.state.cmdr, JSON.parse(a.content))) {
+            log.debug("carrier", "Carrier market read from Market.json");
+            store.notify();
+          }
           return;
         }
         if (a.name === "Cargo.json") {

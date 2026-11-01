@@ -290,7 +290,9 @@ struct RawAddress {
 const VPN_WORDS: [&str; 14] = [
     "vpn", "tap-windows", "tap adapter", "wireguard", "openvpn", "wintun", "nordlynx", "proton", "zerotier", "hamachi", "radmin", "forti", "anyconnect", "pangp",
 ];
-const HIDDEN_WORDS: [&str; 9] = ["hyper-v", "vethernet", "virtualbox", "vmware", "wsl", "docker", "loopback", "bluetooth", "default switch"];
+const HIDDEN_WORDS: [&str; 14] = [
+    "hyper-v", "vethernet", "virtualbox", "vmware", "wsl", "docker", "loopback", "bluetooth", "default switch", "virbr", "veth", "lxc", "vmnet", "br-",
+];
 
 /// Ethernet, Wi-Fi, Tailscale or VPN; None for what a phone can't use (Hyper-V, VirtualBox,
 /// WSL, Bluetooth…).
@@ -303,13 +305,15 @@ fn classify(a: &RawAddress) -> Option<&'static str> {
     if HIDDEN_WORDS.iter().any(|w| text.contains(w)) {
         return None;
     }
-    if VPN_WORDS.iter().any(|w| text.contains(w)) {
+    let lower_alias = a.alias.to_lowercase();
+    if VPN_WORDS.iter().any(|w| text.contains(w)) || lower_alias.starts_with("tun") || lower_alias.starts_with("wg") {
         return Some("vpn");
     }
-    if media.contains("802.11") || media.contains("wireless") || ["wi-fi", "wifi", "wlan", "wireless", "sans fil"].iter().any(|w| text.contains(w)) {
+    if media.contains("802.11") || media.contains("wireless") || ["wi-fi", "wifi", "wlan", "wireless", "sans fil", "wlp", "wlx"].iter().any(|w| text.contains(w)) {
         return Some("wifi");
     }
-    if media.contains("802.3") || text.contains("ethernet") {
+    let alias = a.alias.to_lowercase();
+    if media.contains("802.3") || text.contains("ethernet") || ["eth", "enp", "eno", "ens", "enx"].iter().any(|p| alias.starts_with(p)) {
         return Some("ethernet");
     }
     None

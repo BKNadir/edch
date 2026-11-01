@@ -969,5 +969,8 @@
 "{0} corps jamais envoyés à EDSM.": "{0} bodies never sent to EDSM.",
 "Corps intéressants": "Valuable bodies",
 "Valeur max": "Max value",
-"Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)": "Syncing your flight log, and what the community knows about the system you're in (Exploration)"
+"Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)": "Syncing your flight log, and what the community knows about the system you're in (Exploration)",
+"Télécharger la nouvelle version": "Download the new version",
+"Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).": "On Linux, updates aren't installed automatically: when a new version is out, EDCH opens the download page (AppImage, .deb, .rpm…).",
+"Marché (ton journal, {0})": "Market (your journal, {0})"
 }

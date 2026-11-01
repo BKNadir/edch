@@ -3,6 +3,12 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.9.1
+
+- Linux: each release now also has an AppImage, a .deb, an .rpm, a PKGBUILD for Arch Linux and an experimental Flatpak. EDCH finds the game's journal and options in Steam's Proton folder (native, Flatpak or Snap Steam, any Steam library). On Linux, updates open the release page.
+- Colonisation: a fleet carrier's market now comes first from your own journal: Market.json is read as soon as you open the carrier's market, and every purchase or sale there updates it at once. Spansh is only asked when your own data is more than 5 minutes old, and only used if it is newer.
+- Debug log: docking, market, trades at a carrier, transfers and carrier stats are logged with their details.
+
 ## 0.9.0
 
 - Exploration → Cartography: what EDSM knows about the system you're in: bodies already reported (and how many were never sent), who discovered the main star, the estimated value with and without mapping, and the most valuable bodies. A system EDSM has never seen is flagged: you may be the first.

@@ -1,4 +1,4 @@
-import { isPortable, isRemote, isTauri, logsOpen, openUrl } from "../bridge.js";
+import { isRemote, isTauri, logsOpen, openUrl, updateMode } from "../bridge.js";
 import { h, icon, replace, toast } from "../dom.js";
 import { SOFTWARE_VERSION } from "../eddn.js";
 import type { Ctx, View } from "../context.js";
@@ -131,9 +131,10 @@ export class AboutView implements View {
   private bugCard(): HTMLElement {
     const app = isTauri() && !isRemote();
     const newIssue = async () => {
-      const portable = await isPortable();
+      const mode = await updateMode();
+      const kind = mode === "installer" ? "Windows, installed" : mode === "portable" ? "Windows, portable" : mode === "linux" ? "Linux" : mode;
       const body = [
-        `**EDCH version:** ${SOFTWARE_VERSION} (${portable ? "portable" : "installed"})`,
+        `**EDCH version:** ${SOFTWARE_VERSION} (${kind})`,
         "",
         "**What I was doing**",
         "",

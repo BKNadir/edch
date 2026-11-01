@@ -1,0 +1,46 @@
+# Flatpak of EDCH, built by the release workflow from the .deb (experimental).
+id: io.github.bknadir.EDCH
+runtime: org.gnome.Platform
+runtime-version: "46"
+sdk: org.gnome.Sdk
+command: edch
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  # The game's journal and options, in Steam's Proton prefix (native, Flatpak and Snap Steam).
+  - --filesystem=~/.local/share/Steam
+  - --filesystem=~/.steam
+  - --filesystem=~/.var/app/com.valvesoftware.Steam
+  - --filesystem=~/snap/steam
+  # Config backups are written to ~/Documents/EDCH.
+  - --filesystem=xdg-documents
+modules:
+  - name: libxdo
+    buildsystem: simple
+    build-commands:
+      - make libxdo.so
+      - install -Dm755 libxdo.so /app/lib/libxdo.so.3
+      - ln -sf libxdo.so.3 /app/lib/libxdo.so
+    sources:
+      - type: git
+        url: https://github.com/jordansissel/xdotool.git
+        tag: v3.20211022.1
+  - name: edch
+    buildsystem: simple
+    sources:
+      - type: file
+        path: edch.deb
+    build-commands:
+      - ar -x edch.deb
+      - mkdir -p deb && tar -xf data.tar.* -C deb
+      - install -Dm755 deb/usr/bin/edch /app/bin/edch
+      - install -Dm644 deb/usr/share/applications/*.desktop /app/share/applications/io.github.bknadir.EDCH.desktop
+      - sed -i 's/^Icon=.*/Icon=io.github.bknadir.EDCH/' /app/share/applications/io.github.bknadir.EDCH.desktop
+      - |
+        for f in deb/usr/share/icons/hicolor/*/apps/*.png; do
+          size=$(basename "$(dirname "$(dirname "$f")")")
+          install -Dm644 "$f" "/app/share/icons/hicolor/${size}/apps/io.github.bknadir.EDCH.png"
+        done
