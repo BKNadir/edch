@@ -209,6 +209,21 @@ vaisseau (lance le jeu)
 FSD (modèle inconnu)
 masse à vide
 réservoir
+Réorganiser le menu, choisir les pages du téléphone
+Éditer le menu
+Ligne entre deux groupes : glisse-la pour changer les groupes
+Glisser pour déplacer
+Jamais sur le téléphone (réglages du PC)
+Affichée aussi sur le téléphone : clique pour la garder sur PC seulement
+PC seulement : clique pour l'afficher aussi sur le téléphone
+Toujours affichée
+Afficher cette page
+ allumé : la page s'affiche aussi sur le téléphone.
+ : afficher ou masquer la page.
+Glisse une page (ou une ligne) pour la déplacer.
+Terminé
+Ordre et groupes d'origine (les pages masquées et le téléphone ne changent pas)
+Ordre d'origine
 Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)
 EDDN (EDCD)
 Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.
@@ -288,7 +303,6 @@ Carrier de l'escadrille
 Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Le marché du carrier (ce qu'il vend avec son stock, ce qu'il achète) vient de Spansh, revérifié toutes les 5 minutes : il dépend des joueurs qui s'y sont dockés. Inara ne permet pas de lire la soute d'un carrier. Les marchandises demandées par tes chantiers sont surlignées.
 Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier.
 Dépôt #{0}
-Terminé
 Échoué
 Mis à jour {0}
 t utiles dans tes carriers
@@ -883,6 +897,7 @@ La dernière page ouverte
 Taille de l'interface
 Pages affichées dans le menu (décoche celles dont tu ne te sers pas) :
 Valable aussi sur le téléphone. Paramètres et À propos restent toujours visibles.
+Ordre des pages, groupes, et pages affichées sur le téléphone. Aussi par le bouton en bas du menu.
 Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer.
 Écouter
 Test de notification

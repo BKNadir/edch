@@ -11,6 +11,9 @@ import type { Store } from "./store.js";
 
 let store: Store | null = null;
 let focused = false;
+/** Opened as "this page alone" (second screen): every page stays reachable. */
+let openedAlone = false;
+export const openedAsSinglePage = () => openedAlone;
 let exitButton: HTMLElement | null = null;
 
 const KEY = "edc.navCollapsed";
@@ -26,6 +29,7 @@ export function initFocus(s: Store) {
   const m = /^#focus=([a-z0-9-]+)$/i.exec(location.hash);
   if (m) {
     s.state.view = m[1];
+    openedAlone = true;
     history.replaceState(null, "", location.pathname);
     setFocus(true);
   }

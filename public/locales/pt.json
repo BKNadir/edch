@@ -1190,5 +1190,21 @@
 "⛽ Faire le plein": "⛽ Reabastecer",
 "Étoile écopable (KGBFOAM)": "Estrela coletável (KGBFOAM)",
 "Écopable": "Coletável",
-"Format d'export de builds importé dans la wishlist, et les caractéristiques des réacteurs FSD pour l'itinéraire exact (coriolis-data)": "Formato de exportação de builds importado na lista de desejos, e os dados dos motores de distorção de fase para a rota exata (coriolis-data)"
+"Format d'export de builds importé dans la wishlist, et les caractéristiques des réacteurs FSD pour l'itinéraire exact (coriolis-data)": "Formato de exportação de builds importado na lista de desejos, e os dados dos motores de distorção de fase para a rota exata (coriolis-data)",
+"Éditer le menu": "Editar o menu",
+"Réorganiser le menu, choisir les pages du téléphone": "Reorganizar o menu, escolher as páginas do celular",
+"allumé : la page s'affiche aussi sur le téléphone.": "ligado: a página também aparece no celular.",
+": afficher ou masquer la page.": ": mostrar ou ocultar a página.",
+"Glisse une page (ou une ligne) pour la déplacer.": "Arraste uma página (ou uma linha) para movê-la.",
+"Ligne entre deux groupes : glisse-la pour changer les groupes": "Linha entre dois grupos: arraste-a para mudar os grupos",
+"Glisser pour déplacer": "Arraste para mover",
+"Jamais sur le téléphone (réglages du PC)": "Nunca no celular (configurações do PC)",
+"Affichée aussi sur le téléphone : clique pour la garder sur PC seulement": "Também no celular: clique para mantê-la só no PC",
+"PC seulement : clique pour l'afficher aussi sur le téléphone": "Só PC: clique para mostrá-la também no celular",
+"Toujours affichée": "Sempre visível",
+"Masquer cette page": "Ocultar esta página",
+"Afficher cette page": "Mostrar esta página",
+"Ordre d'origine": "Ordem original",
+"Ordre et groupes d'origine (les pages masquées et le téléphone ne changent pas)": "Ordem e grupos originais (páginas ocultas e celular não mudam)",
+"Ordre des pages, groupes, et pages affichées sur le téléphone. Aussi par le bouton en bas du menu.": "Ordem das páginas, grupos e páginas exibidas no celular. Também pelo botão no fim do menu."
 }

@@ -60,6 +60,10 @@ export interface Settings {
   navNotifyCopy: boolean;
   /** Navigation: exact route with fuel (Spansh Galaxy Plotter) rather than the quick neutron route. */
   navExact: boolean;
+  /** Menu order chosen in the menu's edit mode ("-" = a line between groups); empty = default. */
+  navOrder: string[];
+  /** Pages switched off for the phone in the menu's edit mode. */
+  phoneHidden: string[];
 }
 
 export interface EngineerSettings {
@@ -215,6 +219,8 @@ const DEFAULT_SETTINGS: Settings = {
   navAutoCopy: false,
   navNotifyCopy: true,
   navExact: true,
+  navOrder: [],
+  phoneHidden: [],
 };
 
 function load<T>(key: string, fallback: T): T {

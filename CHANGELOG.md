@@ -3,6 +3,12 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.4
+
+- The menu is now sorted by use in game, in groups separated by a line: Missions, Navigation, Search · Colonisation, Mining, Exploration, Powerplay, Community goals, Session · Wishlist, Engineers, Materials, Engineering, Odyssey · Controls, Remote access, Sync · About, Settings.
+- New "Edit menu" button at the bottom of the menu (also in Settings → Display): drag pages (or the lines between groups) to reorder them, switch each page on or off for the phone, hide or show it. "Original order" puts the groups back. Your choices are kept and followed by the phone.
+- Remote access, Sync, Settings and About never show on the phone: they manage the PC itself.
+
 ## 0.10.3
 
 - Navigation: new **exact route with fuel**, now the default (Spansh Galaxy Plotter). It is plotted with your ship as the journal describes it (drive and its engineering, masses, tanks, Guardian FSD Booster, cargo): every jump is possible with the fuel left, the route shows the fuel in the tank after each jump, the stars you can scoop, and where you **must refuel**. Options: priority (fewest jumps, follow the neutron route, fast calculation, save fuel), neutron stars, already supercharged, FSD Injection, avoid secondary stars, refuel at every scoopable star, and the Caspian's ×6. A warning shows when your ship has no Fuel Scoop. The quick neutron route is still one click away.

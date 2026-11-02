@@ -56,3 +56,29 @@ test("exact route: Spansh answer → jumps, refuels and neutrons", () => {
   assert.equal(r.jumps[1].mustRefuel, true);
   assert.equal(r.jumps[0].scoopable, true);
 });
+
+import { DEFAULT_ORDER, menuOrder, phoneHiddenPages, visibleNav } from "../dist/js/nav.js";
+
+const ids = (list) => list.map((n) => n.id).join(" ");
+
+test("menu: default order by groups, lines between them", () => {
+  assert.equal(ids(visibleNav([])), DEFAULT_ORDER.join(" "));
+});
+
+test("menu: a saved order is kept, and pages added later take their default place", () => {
+  // A player's order saved before a page existed: missions and navigation swapped, no "search".
+  const saved = DEFAULT_ORDER.filter((id) => id !== "search").map((id) => (id === "missions" ? "navigation" : id === "navigation" ? "missions" : id));
+  const order = menuOrder(saved);
+  assert.deepEqual(order.slice(0, 3), ["navigation", "search", "missions"]); // the player's swap kept, search back next to navigation
+  assert.equal(order.length, DEFAULT_ORDER.length);
+  for (const id of DEFAULT_ORDER.filter((x) => x !== "-")) assert.ok(order.includes(id), id);
+  assert.equal(order.indexOf("search"), order.indexOf("navigation") + 1); // after its nearest default neighbour
+});
+
+test("menu: the phone never shows PC pages nor those switched off, and no empty groups remain", () => {
+  const phone = ids(visibleNav([], phoneHiddenPages(["controls"])));
+  for (const id of ["mobile", "sync", "controls", "settings", "about"]) assert.ok(!phone.split(" ").includes(id), id);
+  // …while on the PC, Settings and About can't be hidden
+  assert.ok(ids(visibleNav(["settings", "about"])).includes("settings"));
+  assert.ok(!/(^|\s)-\s-(\s|$)/.test(phone) && !phone.startsWith("-") && !phone.endsWith("-"));
+});

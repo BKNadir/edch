@@ -9,6 +9,7 @@ import type { NotifySettings, Settings } from "../store.js";
 import { notify, playTone, TONES } from "../notifier.js";
 import { DEFAULT_THEME, PRESETS, type ThemeSettings } from "../theme.js";
 import { ALWAYS_SHOWN, NAV } from "../nav.js";
+import { startMenuEdit } from "../menuEdit.js";
 import { startGame } from "../desktop.js";
 import { showChangelog } from "../changelog.js";
 
@@ -500,6 +501,14 @@ export class SettingsView implements View {
         ),
       ),
       h("small.sub", null, "Valable aussi sur le téléphone. Paramètres et À propos restent toujours visibles."),
+      isRemote()
+        ? null
+        : h(
+            "div.row",
+            null,
+            h("button.ghost", { onclick: () => startMenuEdit(this.ctx.store) }, "Éditer le menu"),
+            h("small.sub", null, "Ordre des pages, groupes, et pages affichées sur le téléphone. Aussi par le bouton en bas du menu."),
+          ),
     );
   }
 

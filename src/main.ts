@@ -1,7 +1,8 @@
 import { bindTour } from "./tour.js";
 import { NAV, visibleNav } from "./nav.js";
 import { gameBadge, setupDesktop } from "./desktop.js";
-import { focusButtons, initFocus, toggleNav } from "./focus.js";
+import { focusButtons, initFocus, openedAsSinglePage, toggleNav } from "./focus.js";
+import { excludedHere, renderMenu } from "./menuEdit.js";
 import { setRemoteCopyHere } from "./bridge.js";
 import { changelogAfterUpdate } from "./changelog.js";
 import { bindAlerts, clearAlert, goTo, inStartup, startupAlert } from "./alerts.js";
@@ -152,20 +153,11 @@ async function boot() {
   const render = () => {
     const s = store.state;
     renderHeader(header, ctx);
-    replace(
-      nav,
-      visibleNav(s.settings.hiddenViews ?? [], remoteMode ? ["mobile"] : []).map((n) =>
-        n.id === "-" ? h("div.nav-sep") : h(
-          "button",
-          { class: s.view === n.id ? "active" : "", "data-nav": n.id, title: n.label, onclick: () => store.setView(n.id) },
-          navIcon(n.icon),
-          h("span", null, n.label),
-          n.id === "wishlist" && s.wishlist.length ? h("small.count", null, String(s.wishlist.length)) : null,
-        ),
-      ),
-    );
-    // A page hidden in Settings (or from an older menu) falls back to the first page shown.
-    const shown = visibleNav(s.settings.hiddenViews ?? [], remoteMode ? ["mobile"] : []);
+    const menu = { remote: Boolean(remoteMode), everything: openedAsSinglePage(), navIcon };
+    renderMenu(nav, store, menu);
+    // A page hidden in Settings, switched off for the phone, or from an older menu falls back to
+    // the first page shown.
+    const shown = visibleNav(s.settings.hiddenViews ?? [], excludedHere(store, menu), s.settings.navOrder);
     const hiddenNow = NAV.some((n) => n.id === s.view) && !shown.some((n) => n.id === s.view);
     const view = (remoteMode && s.view === "mobile" ? null : hiddenNow ? null : views[s.view]) ?? views[shown.find((n) => n.id !== "-")?.id ?? "materials"] ?? views.materials;
     if (mounted !== s.view) {

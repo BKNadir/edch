@@ -1190,5 +1190,21 @@
 "⛽ Faire le plein": "⛽ Auftanken",
 "Étoile écopable (KGBFOAM)": "Tankbarer Stern (KGBFOAM)",
 "Écopable": "Tankbar",
-"Format d'export de builds importé dans la wishlist, et les caractéristiques des réacteurs FSD pour l'itinéraire exact (coriolis-data)": "Build-Exportformat für die Wunschliste und die Werte der Frameshiftantriebe für die exakte Route (coriolis-data)"
+"Format d'export de builds importé dans la wishlist, et les caractéristiques des réacteurs FSD pour l'itinéraire exact (coriolis-data)": "Build-Exportformat für die Wunschliste und die Werte der Frameshiftantriebe für die exakte Route (coriolis-data)",
+"Éditer le menu": "Menü bearbeiten",
+"Réorganiser le menu, choisir les pages du téléphone": "Menü neu ordnen, Seiten fürs Handy wählen",
+"allumé : la page s'affiche aussi sur le téléphone.": "an: Die Seite erscheint auch auf dem Handy.",
+": afficher ou masquer la page.": ": Seite ein- oder ausblenden.",
+"Glisse une page (ou une ligne) pour la déplacer.": "Ziehe eine Seite (oder eine Linie), um sie zu verschieben.",
+"Ligne entre deux groupes : glisse-la pour changer les groupes": "Linie zwischen zwei Gruppen: Ziehe sie, um die Gruppen zu ändern",
+"Glisser pour déplacer": "Zum Verschieben ziehen",
+"Jamais sur le téléphone (réglages du PC)": "Nie auf dem Handy (PC-Einstellungen)",
+"Affichée aussi sur le téléphone : clique pour la garder sur PC seulement": "Auch auf dem Handy: Klicke, um sie nur am PC zu zeigen",
+"PC seulement : clique pour l'afficher aussi sur le téléphone": "Nur PC: Klicke, um sie auch auf dem Handy zu zeigen",
+"Toujours affichée": "Immer angezeigt",
+"Masquer cette page": "Diese Seite ausblenden",
+"Afficher cette page": "Diese Seite anzeigen",
+"Ordre d'origine": "Ursprüngliche Reihenfolge",
+"Ordre et groupes d'origine (les pages masquées et le téléphone ne changent pas)": "Ursprüngliche Reihenfolge und Gruppen (ausgeblendete Seiten und Handy-Auswahl bleiben)",
+"Ordre des pages, groupes, et pages affichées sur le téléphone. Aussi par le bouton en bas du menu.": "Reihenfolge, Gruppen und Seiten fürs Handy. Auch über die Schaltfläche unten im Menü."
 }
