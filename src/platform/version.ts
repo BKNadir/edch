@@ -4,4 +4,4 @@
 /** Name sent to EDDN, EDSM and Inara with the data. */
 export const SOFTWARE_NAME = "EDCH";
 
-export const SOFTWARE_VERSION = "0.10.4";
+export const SOFTWARE_VERSION = "0.10.5";
