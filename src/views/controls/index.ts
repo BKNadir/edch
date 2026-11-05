@@ -1,47 +1,34 @@
 import {
-  exportConfig,
-  importConfig,
-  isTauri,
-  listOptionFiles,
-  readOptionFile,
-  revealPath,
-  type OptionFile,
-} from "../../platform/bridge.js";
-import {
   actionName,
+  type Bind,
+  type BindsMeta,
   comboLabel,
   deviceInfo,
+  type DeviceTemplate,
   fileForPreset,
   groupOf,
   keyLabel,
-  padControl,
   parseBinds,
   parseStartPreset,
   presetLineFor,
   templateBox,
-  type Bind,
-  type BindsMeta,
-  type DeviceTemplate,
 } from "../../features/controls/binds.js";
-import { h, icon, replace, toast } from "../../ui/dom.js";
-import { fold, gameText, lang, t } from "../../platform/i18n.js";
-import type { Ctx, View } from "../../state/context.js";
 import { DEMO_BINDS } from "../../game/demo.js";
+import {
+  exportConfig,
+  importConfig,
+  isTauri,
+  listOptionFiles,
+  type OptionFile,
+  readOptionFile,
+  revealPath,
+} from "../../platform/bridge.js";
+import { fold, gameText, t } from "../../platform/i18n.js";
+import type { Ctx, View } from "../../state/context.js";
+import { h, icon, replace, toast } from "../../ui/dom.js";
+import { board, gamepad, GROUP_FR, groupClass, legendTable } from "./deviceBoard.js";
+import { keyboard } from "./keyboard.js";
 
-const GROUP_FR: Record<string, string> = {
-  Ship: t("common.ship"),
-  Fighter: t("controls.fighter"),
-  Scanners: t("common.scanners"),
-  Multicrew: t("controls.multicrew"),
-  SRV: "SRV",
-  OnFoot: t("common.foot"),
-  "Holo-Me": "Holo-Me",
-  "Galaxy map": t("controls.galaxyMap"),
-  UI: t("controls.interface"),
-  Camera: t("controls.camera"),
-  "Head look": t("controls.headLook"),
-  Misc: t("controls.misc"),
-};
 const MODES: [string, string, string[] | null][] = [
   ["all", t("controls.all"), null],
   ["ship", t("common.ship"), ["Ship", "Fighter", "Scanners", "Multicrew"]],
@@ -49,9 +36,9 @@ const MODES: [string, string, string[] | null][] = [
   ["foot", t("common.foot"), ["OnFoot", "Holo-Me"]],
   ["ui", t("controls.mapsUi"), ["Galaxy map", "UI", "Camera", "Head look", "Misc"]],
 ];
-const groupClass = (g: string) => `g-${g.toLowerCase().replace(/[^a-z]/g, "")}`;
 
 let metaPromise: Promise<BindsMeta> | undefined;
+
 const loadMeta = () =>
   (metaPromise ??= fetch("data/binds.json").then((r) => {
     if (!r.ok) throw new Error(`binds.json: HTTP ${r.status}`);
@@ -374,15 +361,23 @@ export class ControlsView implements View {
       picker,
     );
     let drawing: HTMLElement;
-    if (info.kind === "keyboard") drawing = this.keyboard(binds);
+    if (info.kind === "keyboard")
+      drawing = keyboard(
+        this.meta!,
+        this.ctx,
+        this.layout,
+        () => this.legendKey(),
+        () => this.render(),
+        binds,
+      );
     else if (tpl) drawing = this.templateView(device, tpl, binds, info.kind === "gamepad");
-    else if (info.kind === "gamepad") drawing = this.gamepad(device, binds);
-    else drawing = this.board(binds, info.kind === "mouse");
+    else if (info.kind === "gamepad") drawing = gamepad(this.meta!, () => this.legendKey(), device, binds);
+    else drawing = board(this.meta!, () => this.legendKey(), binds, info.kind === "mouse");
     return h("section.card.diagram", null, title, drawing);
   }
 
   /** EDRefCard picture of the device with each control's actions written in its box. */
-  private templateView(device: string, tpl: DeviceTemplate, binds: Bind[], gamepad: boolean): HTMLElement {
+  private templateView(device: string, tpl: DeviceTemplate, binds: Bind[], isGamepad: boolean): HTMLElement {
     const meta = this.meta!;
     const [w, hgt] = tpl.size;
     const placed = new Map<string, Bind[]>();
@@ -392,7 +387,10 @@ export class ControlsView implements View {
       if (box) placed.set(box, [...(placed.get(box) ?? []), b]);
       else unplaced.push(b);
     }
-    const fallback = () => (gamepad ? this.gamepad(device, binds) : this.board(binds, false));
+    const fallback = () =>
+      isGamepad
+        ? gamepad(this.meta!, () => this.legendKey(), device, binds)
+        : board(this.meta!, () => this.legendKey(), binds, false);
     const img = h("img.tpl-img", {
       src: `${meta.templateBase}${tpl.image}.jpg`,
       alt: tpl.name,
@@ -450,27 +448,12 @@ export class ControlsView implements View {
       h("p.sub.credits", null, t("controls.edrefcardTemplateMitPictureLoadedFrom")),
       this.legendKey(),
       unplaced.length
-        ? h("div", null, h("h4.sub", null, t("controls.noBoxTemplate")), this.legendTable(unplaced))
+        ? h("div", null, h("h4.sub", null, t("controls.noBoxTemplate")), legendTable(this.meta!, unplaced))
         : null,
     );
   }
 
   // ---------------- legend helpers ----------------
-
-  private chips(list: Bind[]): HTMLElement[] {
-    const meta = this.meta!;
-    return list.map((b) => {
-      const g = groupOf(meta, b.action);
-      const mod = b.modifiers.length ? `${b.modifiers.map((m) => keyLabel(meta, m.key)).join(" + ")} + ` : "";
-      return h(
-        `span.act.${groupClass(g)}`,
-        { title: `${GROUP_FR[g] ?? g} · ${b.action}${b.slot === "secondary" ? ` (${t("controls.secondary")})` : ""}` },
-        mod ? h("em", null, mod) : null,
-        actionName(meta, b.action),
-        b.inverted ? h("small", null, " " + t("controls.inverted")) : null,
-      );
-    });
-  }
 
   private legendKey(): HTMLElement {
     const used = new Set(this.visible().map((b) => groupOf(this.meta!, b.action)));
@@ -483,548 +466,12 @@ export class ControlsView implements View {
 
   // ---------------- keyboard ----------------
 
-  private keyboard(binds: Bind[]): HTMLElement {
-    const meta = this.meta!;
-    const byKey = new Map<string, Bind[]>();
-    for (const b of binds) byKey.set(b.key, [...(byKey.get(b.key) ?? []), b]);
-    // Modifier keys used in combos are highlighted too.
-    const modKeys = new Set(binds.flatMap((b) => b.modifiers.filter((m) => m.device === "Keyboard").map((m) => m.key)));
-    const drawn = new Set<string>();
-    /** A key; `ids` are the names the game may give it (the first that is bound wins the colour). */
-    const key = (ids: string | string[], label: string, w = 1, tail = false): HTMLElement => {
-      const all = Array.isArray(ids) ? ids : [ids];
-      for (const id of all) drawn.add(id);
-      const list = all.flatMap((id) => byKey.get(id) ?? []);
-      const g = list[0] ? groupOf(meta, list[0].action) : "";
-      return h(
-        `div.kb-key${list.length ? `.bound.${groupClass(g)}` : ""}${all.some((id) => modKeys.has(id)) ? ".modkey" : ""}${tail ? ".enter-tail" : ""}`,
-        {
-          style: { flexGrow: String(w), flexBasis: `${w * 44}px` },
-          title: list.length
-            ? list.map((b) => `${comboLabel(meta, b)} → ${actionName(meta, b.action)}`).join("\n")
-            : label,
-        },
-        tail ? null : h("span.kb-cap", null, label),
-        list.length && !tail ? h("span.kb-act", null, actionName(meta, list[0].action)) : null,
-        list.length > 1 && !tail ? h("span.kb-more", null, `+${list.length - 1}`) : null,
-      );
-    };
-    const gap = () => h("div.kb-gap");
-    // Where each key is: the game names keys after the layout written in the bindings file;
-    // the labels are those of the keyboard chosen here (by default, the same one).
-    const ids = KEY_IDS[layoutFamily(this.layout)];
-    const kb = this.keyboardChoice();
-    const caps = KEY_CAPS[kb.layout];
-    const iso = kb.format === "iso";
-    const at = (row: Id[], cap: string[]) => row.map((id, i) => key(id, cap[i] ?? ""));
-    const rows: HTMLElement[][] = [
-      [
-        key("Key_Escape", t("controls.esc")),
-        gap(),
-        ...[1, 2, 3, 4].map((n) => key(`Key_F${n}`, `F${n}`)),
-        gap(),
-        ...[5, 6, 7, 8].map((n) => key(`Key_F${n}`, `F${n}`)),
-        gap(),
-        ...[9, 10, 11, 12].map((n) => key(`Key_F${n}`, `F${n}`)),
-      ],
-      [...at(ids.num, caps.num), key("Key_Backspace", "⌫", 2)],
-      iso
-        ? [key("Key_Tab", "Tab", 1.5), ...at(ids.r1, caps.r1), key("Key_Enter", t("controls.enter"), 1.5)]
-        : [key("Key_Tab", "Tab", 1.5), ...at(ids.r1, caps.r1), key(ids.extra, caps.extra, 1.5)],
-      iso
-        ? [
-            key("Key_CapsLock", t("controls.capsLock"), 1.75),
-            ...at(ids.r2, caps.r2),
-            key(ids.extra, caps.extra),
-            key("Key_Enter", "", 1.25, true),
-          ]
-        : [
-            key("Key_CapsLock", t("controls.capsLock"), 1.75),
-            ...at(ids.r2, caps.r2),
-            key("Key_Enter", t("controls.enter"), 2.25),
-          ],
-      iso
-        ? [
-            key("Key_LeftShift", t("controls.lShift"), 1.25),
-            key(ids.iso, caps.iso),
-            ...at(ids.r3, caps.r3),
-            key("Key_RightShift", t("controls.rShift"), 2.75),
-          ]
-        : [
-            key("Key_LeftShift", t("controls.lShift"), 2.25),
-            ...at(ids.r3, caps.r3),
-            key("Key_RightShift", t("controls.rShift"), 2.75),
-          ],
-      [
-        key("Key_LeftControl", t("controls.lCtrl"), 1.5),
-        key("Key_LeftWin", "Win", 1.25),
-        key("Key_LeftAlt", "Alt", 1.25),
-        key("Key_Space", t("controls.space"), 6.25),
-        key("Key_RightAlt", "Alt Gr", 1.25),
-        key("Key_Apps", "Menu", 1.25),
-        key("Key_RightControl", t("controls.rCtrl"), 1.5),
-      ],
-    ];
-    const nav: HTMLElement[][] = [
-      [
-        key("Key_PrintScreen", t("controls.prtsc")),
-        key("Key_ScrollLock", t("controls.scrollLock")),
-        key("Key_Pause", "Pause"),
-      ],
-      [key("Key_Insert", t("controls.ins")), key("Key_Home", t("controls.home")), key("Key_PageUp", "Pg ↑")],
-      [key("Key_Delete", t("controls.del")), key("Key_End", t("common.end")), key("Key_PageDown", "Pg ↓")],
-      [h("div.kb-key.blank"), h("div.kb-key.blank"), h("div.kb-key.blank")],
-      [h("div.kb-key.blank"), key("Key_UpArrow", "↑"), h("div.kb-key.blank")],
-      [key("Key_LeftArrow", "←"), key("Key_DownArrow", "↓"), key("Key_RightArrow", "→")],
-    ];
-    const pad: HTMLElement[][] = [
-      [h("div.kb-key.blank"), h("div.kb-key.blank"), h("div.kb-key.blank"), h("div.kb-key.blank")],
-      [
-        key("Key_NumLock", t("controls.numLock")),
-        key("Key_Numpad_Divide", "/"),
-        key("Key_Numpad_Multiply", "*"),
-        key("Key_Numpad_Subtract", "-"),
-      ],
-      [key("Key_Numpad_7", "7"), key("Key_Numpad_8", "8"), key("Key_Numpad_9", "9"), key("Key_Numpad_Add", "+")],
-      [key("Key_Numpad_4", "4"), key("Key_Numpad_5", "5"), key("Key_Numpad_6", "6"), h("div.kb-key.blank")],
-      [
-        key("Key_Numpad_1", "1"),
-        key("Key_Numpad_2", "2"),
-        key("Key_Numpad_3", "3"),
-        key("Key_Numpad_Enter", t("controls.enter")),
-      ],
-      [key("Key_Numpad_0", "0", 2), key("Key_Numpad_Decimal", ".")],
-    ];
-    const block = (rs: HTMLElement[][], cls: string) =>
-      h(
-        `div.kb-block.${cls}`,
-        null,
-        rs.map((r) => h("div.kb-row", null, r)),
-      );
-    const others = binds.filter((b) => !drawn.has(b.key));
-    return h(
-      "div",
-      null,
-      this.keyboardSwitches(),
-      h("div.kb", null, block(rows, "main"), block(nav, "nav"), block(pad, "numpad")),
-      this.legendKey(),
-      others.length
-        ? h(
-            "p.sub",
-            null,
-            t("controls.keysNotDiagram", { value: [...new Set(others.map((b) => keyLabel(meta, b.key)))].join(", ") }),
-          )
-        : null,
-      this.legendTable(binds),
-    );
-  }
-
-  /** The keyboard to draw: chosen in EDCH, or guessed from the bindings file. */
-  private keyboardChoice(): { layout: Family; format: "iso" | "ansi" } {
-    const s = this.ctx.store.state.settings;
-    // Until one is chosen here: the usual keyboard for the app's language.
-    const code = lang().code;
-    const layout =
-      s.kbLayout === "auto" ? (code === "fr" ? "azerty" : code === "de" ? "qwertz" : "qwerty") : s.kbLayout;
-    // ANSI is the US keyboard (most English-speaking players); the rest of the world mostly uses ISO.
-    const format = s.kbFormat === "auto" ? (code === "en" ? "ansi" : "iso") : s.kbFormat;
-    return { layout, format };
-  }
-
-  private keyboardSwitches(): HTMLElement {
-    const kb = this.keyboardChoice();
-    const seg = <T extends string>(value: T, options: [T, string][], set: (v: T) => void) =>
-      h(
-        "div.segmented.small",
-        null,
-        options.map(([v, l]) =>
-          h("button", { class: value === v ? "active" : "", onclick: () => (set(v), this.render()) }, l),
-        ),
-      );
-    return h(
-      "div.kb-switches",
-      null,
-      h("span.sub", null, t("controls.myKeyboard")),
-      seg(
-        kb.layout,
-        [
-          ["azerty", "AZERTY"],
-          ["qwerty", "QWERTY"],
-          ["qwertz", "QWERTZ"],
-        ],
-        (v) => this.ctx.store.updateSettings({ kbLayout: v }),
-      ),
-      seg(
-        kb.format,
-        [
-          ["iso", "ISO"],
-          ["ansi", "ANSI"],
-        ],
-        (v) => this.ctx.store.updateSettings({ kbFormat: v }),
-      ),
-      h(
-        "span.sub",
-        { title: t("controls.isoLShapedEnterKeyOne") },
-        t("controls.bindingsSavedKeyboard", { layout: this.layout }),
-      ),
-    );
-  }
-
-  private legendTable(binds: Bind[]): HTMLElement {
-    const meta = this.meta!;
-    const byCombo = new Map<string, Bind[]>();
-    for (const b of binds) {
-      const k = comboLabel(meta, b);
-      byCombo.set(k, [...(byCombo.get(k) ?? []), b]);
-    }
-    const rows = [...byCombo.entries()].sort(([a], [b]) => a.localeCompare(b, "fr", { numeric: true }));
-    return h(
-      "div.legend-grid",
-      null,
-      rows.map(([combo, list]) =>
-        h("div.legend-row", null, h("kbd", null, combo), h("div.acts", null, this.chips(list))),
-      ),
-    );
-  }
-
   // ---------------- gamepad ----------------
 
-  private gamepad(device: string, binds: Bind[]): HTMLElement {
-    const ps = device === "DualShock4" || device === "Playstation3Controller";
-    const label: Record<string, string> = ps
-      ? {
-          A: "✕",
-          B: "○",
-          X: "□",
-          Y: "△",
-          LBumper: "L1",
-          RBumper: "R1",
-          LTrigger: "L2",
-          RTrigger: "R2",
-          Back: "Share",
-          Start: "Options",
-          LThumb: "L3",
-          RThumb: "R3",
-          Guide: "PS",
-          Touchpad: t("controls.touchpad"),
-        }
-      : {
-          A: "A",
-          B: "B",
-          X: "X",
-          Y: "Y",
-          LBumper: "LB",
-          RBumper: "RB",
-          LTrigger: "LT",
-          RTrigger: "RT",
-          Back: "View / Back",
-          Start: "Menu / Start",
-          LThumb: t("controls.l3LeftStickClick"),
-          RThumb: t("controls.r3RightStickClick"),
-          Guide: "Guide",
-          Touchpad: t("controls.pad"),
-        };
-    Object.assign(label, {
-      DPadUp: t("controls.dPad2"),
-      DPadDown: t("controls.dPad4"),
-      DPadLeft: t("controls.dPad"),
-      DPadRight: t("controls.dPad3"),
-      LStickX: t("controls.leftStick"),
-      LStickY: t("controls.leftStick2"),
-      RStickX: t("controls.rightStick"),
-      RStickY: t("controls.rightStick2"),
-    });
-    const POS: Record<string, [number, number]> = {
-      LTrigger: [200, 38],
-      RTrigger: [560, 38],
-      LBumper: [200, 82],
-      RBumper: [560, 82],
-      LStickX: [178, 170],
-      LStickY: [230, 222],
-      LThumb: [230, 170],
-      RStickX: [408, 250],
-      RStickY: [460, 302],
-      RThumb: [460, 250],
-      DPadUp: [300, 220],
-      DPadDown: [300, 280],
-      DPadLeft: [270, 250],
-      DPadRight: [330, 250],
-      Y: [540, 132],
-      X: [503, 170],
-      B: [577, 170],
-      A: [540, 208],
-      Back: [335, 150],
-      Start: [425, 150],
-      Guide: [380, 118],
-      Touchpad: [380, 185],
-    };
-    const byControl = new Map<string, Bind[]>();
-    const unknown: Bind[] = [];
-    for (const b of binds) {
-      const c = padControl(device, b.key)?.replace(/[+-]$/, "");
-      if (c && POS[c]) byControl.set(c, [...(byControl.get(c) ?? []), b]);
-      else unknown.push(b);
-    }
-    const order = Object.keys(POS).filter((c) => byControl.has(c));
-    const num = new Map(order.map((c, i) => [c, i + 1]));
-
-    const NS = "http://www.w3.org/2000/svg";
-    const el = (tag: string, attrs: Record<string, string | number>, text?: string) => {
-      const e = document.createElementNS(NS, tag);
-      for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, String(v));
-      if (text !== undefined) e.textContent = text;
-      return e;
-    };
-    const svg = el("svg", {
-      viewBox: "0 0 760 380",
-      class: "pad-svg",
-      role: "img",
-      "aria-label": t("controls.gamepadDiagram"),
-    });
-    // Body.
-    svg.append(
-      el("path", {
-        class: "pad-body",
-        d: "M210 95 Q380 70 550 95 Q640 105 670 190 L700 300 Q712 352 660 360 Q615 366 585 320 L545 270 Q380 262 215 270 L175 320 Q145 366 100 360 Q48 352 60 300 L90 190 Q120 105 210 95 Z",
-      }),
-      el("rect", { class: "pad-part", x: 165, y: 26, width: 70, height: 26, rx: 10 }),
-      el("rect", { class: "pad-part", x: 525, y: 26, width: 70, height: 26, rx: 10 }),
-      el("rect", { class: "pad-part", x: 160, y: 72, width: 80, height: 20, rx: 9 }),
-      el("rect", { class: "pad-part", x: 520, y: 72, width: 80, height: 20, rx: 9 }),
-      el("circle", { class: "pad-part", cx: 230, cy: 170, r: 36 }),
-      el("circle", { class: "pad-part", cx: 460, cy: 250, r: 36 }),
-      el("path", { class: "pad-part", d: "M288 208h24v30h30v24h-30v30h-24v-30h-30v-24h30z" }),
-      ...["Y", "X", "B", "A"].map((k) => el("circle", { class: "pad-part", cx: POS[k][0], cy: POS[k][1], r: 17 })),
-      el("rect", { class: "pad-part", x: 320, y: 140, width: 30, height: 20, rx: 8 }),
-      el("rect", { class: "pad-part", x: 410, y: 140, width: 30, height: 20, rx: 8 }),
-      el("circle", { class: "pad-part", cx: 380, cy: 118, r: 14 }),
-    );
-    for (const k of ["Y", "X", "B", "A"])
-      svg.append(el("text", { class: "pad-face", x: POS[k][0], y: POS[k][1] + 5 }, label[k]));
-    for (const c of order) {
-      const [x, y] = POS[c];
-      const g = groupOf(this.meta!, byControl.get(c)![0].action);
-      svg.append(
-        el("circle", { class: `pad-marker ${groupClass(g)}`, cx: x, cy: y, r: 13 }),
-        el("text", { class: "pad-num", x, y: y + 4.5 }, String(num.get(c))),
-      );
-    }
-    return h(
-      "div",
-      null,
-      h("div.pad-wrap", null, svg),
-      this.legendKey(),
-      h(
-        "div.legend-grid",
-        null,
-        order.map((c) =>
-          h(
-            "div.legend-row",
-            null,
-            h("kbd.num", null, h("b", null, String(num.get(c))), ` ${label[c] ?? c}`),
-            h("div.acts", null, this.chips(byControl.get(c)!)),
-          ),
-        ),
-        unknown.length
-          ? h("div.legend-row", null, h("kbd", null, t("controls.other")), h("div.acts", null, this.chips(unknown)))
-          : null,
-      ),
-    );
-  }
-
   // ---------------- joystick / HOTAS / mouse ----------------
-
-  private board(binds: Bind[], mouse: boolean): HTMLElement {
-    const meta = this.meta!;
-    const axes = new Map<string, Bind[]>();
-    const hats = new Map<string, Map<string, Bind[]>>();
-    const buttons = new Map<string, Bind[]>();
-    for (const b of binds) {
-      const k = b.key.replace(/^(Pos|Neg)_/, "");
-      const pov = /^Joy_POV(\d)(Up|Down|Left|Right)$/.exec(k);
-      if (pov) {
-        const m = hats.get(pov[1]) ?? new Map<string, Bind[]>();
-        m.set(pov[2], [...(m.get(pov[2]) ?? []), b]);
-        hats.set(pov[1], m);
-      } else if (/Axis$/.test(k)) axes.set(k, [...(axes.get(k) ?? []), b]);
-      else buttons.set(b.key, [...(buttons.get(b.key) ?? []), b]);
-    }
-    const n = (k: string) => Number(/(\d+)$/.exec(k)?.[1] ?? 999);
-    const tile = (label: string, list: Bind[]) => {
-      const g = groupOf(meta, list[0].action);
-      return h(
-        `div.btn-tile.${groupClass(g)}`,
-        null,
-        h("span.btn-label", null, label),
-        h("div.acts", null, this.chips(list)),
-      );
-    };
-    return h(
-      "div",
-      null,
-      this.legendKey(),
-      axes.size
-        ? h(
-            "div.board-section",
-            null,
-            h("h4", null, mouse ? t("controls.axesWheel") : t("controls.axes")),
-            h(
-              "div.axis-list",
-              null,
-              [...axes.entries()]
-                .sort(([a], [b]) => a.localeCompare(b))
-                .map(([k, list]) =>
-                  h(
-                    "div.axis-row",
-                    null,
-                    h("span.axis-name", null, keyLabel(meta, k)),
-                    h("span.axis-bar", null, h("span")),
-                    h("div.acts", null, this.chips(list)),
-                  ),
-                ),
-            ),
-          )
-        : null,
-      hats.size
-        ? h(
-            "div.board-section",
-            null,
-            h("h4", null, t("controls.hatsPov")),
-            h(
-              "div.hat-list",
-              null,
-              [...hats.entries()].map(([id, dirs]) => {
-                const cell = (d: string, arrow: string) => {
-                  const list = dirs.get(d);
-                  return h(
-                    `div.hat-cell.${d.toLowerCase()}${list ? ".bound" : ""}`,
-                    null,
-                    h("span.btn-label", null, arrow),
-                    list ? h("div.acts", null, this.chips(list)) : null,
-                  );
-                };
-                return h(
-                  "div.hat",
-                  null,
-                  h("span.hat-title", null, t("controls.hat", { id })),
-                  cell("Up", "↑"),
-                  cell("Left", "←"),
-                  h("div.hat-center"),
-                  cell("Right", "→"),
-                  cell("Down", "↓"),
-                );
-              }),
-            ),
-          )
-        : null,
-      buttons.size
-        ? h(
-            "div.board-section",
-            null,
-            h("h4", null, t("controls.buttons")),
-            h(
-              "div.btn-grid",
-              null,
-              [...buttons.entries()].sort(([a], [b]) => n(a) - n(b)).map(([k, list]) => tile(keyLabel(meta, k), list)),
-            ),
-          )
-        : null,
-    );
-  }
 }
 
 function rank(meta: BindsMeta, device: string): number {
   const kind = deviceInfo(meta, device).kind;
   return { joystick: 0, gamepad: 1, keyboard: 2, mouse: 3, vr: 4 }[kind];
 }
-
-/** Letter rows for the common layouts (Elite names keys after the layout's printed letters). */
-type Family = "qwerty" | "azerty" | "qwertz";
-type Id = string | string[];
-interface KeyRows<T> {
-  num: T[];
-  r1: T[];
-  r2: T[];
-  r3: T[];
-  /** ANSI: the key at the end of the Q row; ISO: the key left of Enter. */
-  extra: T;
-  /** ISO only: the key between left Shift and the first letter. */
-  iso: T;
-}
-
-/** The keyboard family of a layout code from the bindings file (fr-FR, de-DE, en-GB…). */
-export function layoutFamily(layout: string): Family {
-  const l = layout.toLowerCase();
-  if (/^(de|cs|sk|hu|sl|hr|bs|sr-latn|sq)\b|-ch$/.test(l)) return "qwertz";
-  if (/^(fr|nl-be)\b/.test(l)) return "azerty";
-  return "qwerty";
-}
-
-const letters = (s: string) => s.split("").map((c) => `Key_${c}`);
-const digits = "1234567890".split("").map((c) => `Key_${c}`);
-
-/**
- * The names the game gives the keys, position by position, for each family of layouts. Letters
- * follow the layout; for the other keys the usual name comes first, then the alternatives some
- * layouts use.
- */
-const KEY_IDS: Record<Family, KeyRows<Id>> = {
-  qwerty: {
-    num: ["Key_Grave", ...digits, "Key_Minus", "Key_Equals"],
-    r1: [...letters("QWERTYUIOP"), "Key_LeftBracket", "Key_RightBracket"],
-    r2: [...letters("ASDFGHJKL"), "Key_SemiColon", "Key_Apostrophe"],
-    r3: [...letters("ZXCVBNM"), "Key_Comma", "Key_Period", "Key_Slash"],
-    extra: ["Key_BackSlash", "Key_Hash"],
-    iso: ["Key_LessThan", "Key_OEM102"],
-  },
-  azerty: {
-    num: [["Key_Grave", "Key_Superscript_Two"], ...digits, ["Key_Minus", "Key_RightParenthesis"], "Key_Equals"],
-    r1: [...letters("AZERTYUIOP"), ["Key_LeftBracket", "Key_Circumflex"], ["Key_RightBracket", "Key_Dollar"]],
-    r2: [...letters("QSDFGHJKLM"), ["Key_Apostrophe", "Key_U_Grave"]],
-    r3: [
-      ...letters("WXCVBN"),
-      "Key_Comma",
-      "Key_SemiColon",
-      ["Key_Period", "Key_Colon"],
-      ["Key_Slash", "Key_Exclamation"],
-    ],
-    extra: ["Key_BackSlash", "Key_Hash", "Key_Asterisk"],
-    iso: ["Key_LessThan", "Key_OEM102"],
-  },
-  qwertz: {
-    num: [["Key_Grave", "Key_Circumflex"], ...digits, ["Key_Minus", "Key_SZ"], ["Key_Equals", "Key_Acute"]],
-    r1: [...letters("QWERTZUIOP"), ["Key_LeftBracket", "Key_U_Umlaut"], ["Key_RightBracket", "Key_Plus"]],
-    r2: [...letters("ASDFGHJKL"), ["Key_SemiColon", "Key_O_Umlaut"], ["Key_Apostrophe", "Key_A_Umlaut"]],
-    r3: [...letters("YXCVBNM"), "Key_Comma", "Key_Period", "Key_Slash"],
-    extra: ["Key_BackSlash", "Key_Hash"],
-    iso: ["Key_LessThan", "Key_OEM102"],
-  },
-};
-
-/** What is printed on the keys, for the keyboard chosen in EDCH. */
-const KEY_CAPS: Record<Family, KeyRows<string>> = {
-  qwerty: {
-    num: ["`", ..."1234567890".split(""), "-", "="],
-    r1: [..."QWERTYUIOP".split(""), "[", "]"],
-    r2: [..."ASDFGHJKL".split(""), ";", "'"],
-    r3: [..."ZXCVBNM".split(""), ",", ".", "/"],
-    extra: "\\",
-    iso: "\\",
-  },
-  azerty: {
-    num: ["²", "& 1", "é 2", '" 3', "' 4", "( 5", "- 6", "è 7", "_ 8", "ç 9", "à 0", ")", "="],
-    r1: [..."AZERTYUIOP".split(""), "^", "$"],
-    r2: [..."QSDFGHJKLM".split(""), "ù"],
-    r3: [..."WXCVBN".split(""), ",", ";", ":", "!"],
-    extra: "*",
-    iso: "<",
-  },
-  qwertz: {
-    num: ["^", ..."1234567890".split(""), "ß", "´"],
-    r1: [..."QWERTZUIOP".split(""), "Ü", "+"],
-    r2: [..."ASDFGHJKL".split(""), "Ö", "Ä"],
-    r3: [..."YXCVBNM".split(""), ",", ".", "-"],
-    extra: "#",
-    iso: "<",
-  },
-};
