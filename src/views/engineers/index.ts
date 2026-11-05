@@ -3,7 +3,7 @@ import { referenceOf, type Ctx, type View } from "../../state/context.js";
 import { distance, fmtLy, inaraSystem } from "../../services/spansh.js";
 import { openUrl } from "../../platform/bridge.js";
 import type { Engineer } from "../../game/types.js";
-import type { EngineerStatus } from "../../game/journal.js";
+import type { EngineerStatus } from "../../game/journal/state.js";
 import { moduleLink, openSystem } from "../shared/links.js";
 import { t } from "../../platform/i18n.js";
 

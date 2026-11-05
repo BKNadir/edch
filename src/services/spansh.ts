@@ -1,6 +1,6 @@
 import { locale, t } from "../platform/i18n.js";
 import { spanshPost } from "../platform/bridge.js";
-import type { Vec3 } from "../game/journal.js";
+import type { Vec3 } from "../game/journal/state.js";
 import type { Finder } from "../features/materials/sources.js";
 import type { Settings } from "../state/store.js";
 

@@ -6,7 +6,8 @@ import { commodityMessage, fssMessage, journalMessage, navrouteMessage, outfitti
 import { extractLoadout, importLoadout } from "../dist/js/features/materials/buildImporter.js";
 import { carrierEstimate, jumpModel } from "../dist/js/features/navigation/jumpRange.js";
 import { Game } from "../dist/js/game/data.js";
-import { applyLines, emptyState } from "../dist/js/game/journal.js";
+import { applyLines } from "../dist/js/game/journal/events.js";
+import { emptyState } from "../dist/js/game/journal/state.js";
 import { wishNeeds } from "../dist/js/state/store.js";
 
 const game = new Game(JSON.parse(readFileSync(new URL("../public/data/game.json", import.meta.url))));

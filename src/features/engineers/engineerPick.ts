@@ -3,7 +3,7 @@
 // Bubble and Colonia are 22 000 ly apart: engineers of the other region are left out.
 
 import { referenceOf, type Ctx } from "../../state/context.js";
-import type { EngineerStatus } from "../../game/journal.js";
+import type { EngineerStatus } from "../../game/journal/state.js";
 import { distance } from "../../services/spansh.js";
 import { blueprintGrades, type WishItem } from "../../state/store.js";
 import type { Blueprint, Engineer } from "../../game/types.js";

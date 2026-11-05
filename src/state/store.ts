@@ -3,7 +3,7 @@ import { type ThemeSettings } from "./themeSettings.js";
 import { DEFAULT_THEME } from "./themeSettings.js";
 import { emptyActivity, type ActivityState } from "../game/activity/state.js";
 import type { Game } from "../game/data.js";
-import { emptyState, type CommanderState } from "../game/journal.js";
+import { emptyState, type CommanderState } from "../game/journal/state.js";
 import type { Blueprint } from "../game/types.js";
 import type { WatchStatus } from "../platform/bridge.js";
 import { type SyncSettings } from "./syncSettings.js";

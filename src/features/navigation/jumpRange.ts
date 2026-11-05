@@ -1,7 +1,7 @@
 // Jump range maths. The game's own MaxJumpRange (Loadout event) is used as calibration, so
 // engineering and SCO drives are handled without needing every FSD stat table.
 
-import type { ShipLoadout } from "../../game/journal.js";
+import type { ShipLoadout } from "../../game/journal/state.js";
 
 /** Standard FSD max fuel per jump by class and rating (A..E), tonnes. */
 const MAX_FUEL: Record<number, Record<string, number>> = {

@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
-import { applyEvent, emptyState } from "../dist/js/game/journal.js";
+import { applyEvent } from "../dist/js/game/journal/events.js";
+import { emptyState } from "../dist/js/game/journal/state.js";
 
 test("a ship change is shown at once, without keeping the previous ship's name", () => {
   const s = emptyState();
@@ -73,7 +74,9 @@ test("a fleet carrier's hold is rebuilt from transfers, fuel deposits and carrie
   assert.equal(c.items.steel.count, 100, "a transfer after undocking doesn't count");
 });
 
-import { applyEvent as applyJournal, applyMarketFile, emptyState as emptyCmdr } from "../dist/js/game/journal.js";
+import { applyEvent as applyJournal } from "../dist/js/game/journal/events.js";
+import { applyMarketFile } from "../dist/js/game/journal/companionFiles.js";
+import { emptyState as emptyCmdr } from "../dist/js/game/journal/state.js";
 
 test("a carrier's market comes from Market.json and follows purchases made there", () => {
   const s = emptyCmdr();

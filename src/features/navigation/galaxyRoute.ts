@@ -4,7 +4,7 @@
 
 import { spanshJob } from "../../platform/bridge.js";
 import { FSD_DATA } from "./fsdData.js";
-import type { ShipLoadout } from "../../game/journal.js";
+import type { ShipLoadout } from "../../game/journal/state.js";
 import { boosterBonus, superchargeMultiplier } from "./jumpRange.js";
 import { t } from "../../platform/i18n.js";
 
