@@ -48,9 +48,5 @@
   color: var(--accent);
 }
 .field select {
-  background: var(--panel-2);
-  border: 1px solid var(--line-2);
-  border-radius: 6px;
-  padding: 6px 9px;
   max-width: 220px;
 }

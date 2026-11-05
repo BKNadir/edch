@@ -1,5 +1,65 @@
 /* Forms and shared controls: search box, segmented buttons, buttons, check boxes, callouts. */
 
+/* Form fields: one look everywhere (text, number and search inputs, selects, text areas).
+   :where() keeps these rules at zero specificity, so a page only sets layout (width, flex).
+   Two sizes: the normal one, and a compact one for fields inside lists, chips and toolbars. */
+:where(select, textarea, input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"])) {
+  background-color: var(--panel-2);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 6px 10px;
+  font-size: 13.5px;
+  line-height: 1.4;
+  min-height: 36px;
+}
+:where(select) {
+  appearance: none;
+  padding-right: 28px;
+  cursor: pointer;
+  /* The arrow, in the theme's muted colour. */
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    right 14px center,
+    right 9px center;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+:where(select option) {
+  background-color: var(--panel-2);
+  color: var(--text);
+}
+:where(textarea) {
+  min-height: 0;
+}
+:where(select, textarea, input):focus-visible {
+  outline: none;
+  border-color: var(--accent);
+}
+:where(select, textarea, input):disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+:where(input)::placeholder {
+  color: var(--muted);
+}
+/* Compact size. */
+:where(.wish-controls, .roll, .chip.edit, .chips, .tpl-picker, .controls-bar)
+  :where(select, input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], .search)) {
+  padding: 3px 8px;
+  font-size: 12.5px;
+  min-height: 28px;
+}
+:where(.wish-controls, .roll, .chip.edit, .chips, .tpl-picker, .controls-bar) :where(select) {
+  padding-right: 26px;
+}
+:where(.chip.edit) :where(input) {
+  padding: 1px 6px;
+  min-height: 22px;
+}
+
 /* ---------- controls ---------- */
 .search-wrap {
   display: flex;
@@ -48,9 +108,11 @@
 button.primary {
   background: var(--accent);
   color: var(--on-accent);
-  border: 0;
+  border: 1px solid transparent;
   border-radius: var(--radius);
-  padding: 8px 14px;
+  padding: 0 14px;
+  min-height: 36px;
+  font-size: 13.5px;
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -59,22 +121,28 @@ button.primary {
 button.primary:hover {
   filter: brightness(1.08);
 }
+/* Buttons and fields share two heights: 36px, and 28px for the small ones. */
 button.primary.small {
-  padding: 5px 10px;
+  padding: 0 10px;
+  min-height: 28px;
   font-size: 12.5px;
 }
 button.ghost {
   background: none;
   border: 1px solid var(--line-2);
   border-radius: var(--radius);
-  padding: 6px 12px;
+  padding: 0 12px;
+  min-height: 36px;
+  font-size: 13.5px;
   color: var(--text);
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 button.ghost.small {
-  padding: 2px 6px;
+  padding: 0 8px;
+  min-height: 28px;
+  font-size: 12.5px;
 }
 button.ghost:hover {
   border-color: var(--accent);

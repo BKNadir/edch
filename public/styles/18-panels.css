@@ -146,11 +146,6 @@
   grid-template-rows: 1fr 16px 16px;
 }
 .chips select {
-  background: var(--panel-2);
-  border: 1px solid var(--line-2);
-  border-radius: 16px;
-  padding: 3px 10px;
-  color: var(--text);
 }
 @media (min-width: 761px) {
   main.content {

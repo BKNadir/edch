@@ -8,6 +8,7 @@ and EDCH shows it in the update banner.
 - Menu: About and Settings now stay at the very bottom of the menu, apart from the pages you arrange.
 - Edit menu: "Add a line" adds a separating line (drag it between two pages), and the × next to a line removes it.
 - Edit menu: the phone and eye switches no longer get cut off at the right edge.
+- One look for every field and button: drop-down lists, text and number fields now look the same on every page (some were still drawn by Windows, grey and square, like the mineral list in Mining), and buttons and fields share the same heights.
 
 ## 0.10.4
 

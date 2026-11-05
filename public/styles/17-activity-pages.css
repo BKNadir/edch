@@ -45,11 +45,6 @@
 }
 .chip.edit input {
   width: 52px;
-  background: var(--panel);
-  border: 1px solid var(--line-2);
-  border-radius: 5px;
-  padding: 1px 4px;
-  color: var(--text);
 }
 .badge.ok {
   background: var(--ok-dim);

@@ -114,6 +114,10 @@ on desktop and phone).
 - Phone rules (`@media (max-width: 760px)`) go next to the rules they change, or in
   `15-phones.css` when they must win over most pages.
 - Colours always come from the CSS variables of `01-base.css` (set by the theme).
+- Form fields and buttons have one look, defined once in `03-forms.css`: fields (`select`, `input`,
+  `textarea`) get it automatically, buttons through `button.primary` / `button.ghost` (and
+  `.small`). Pages only set their layout (width, flex), never their own colours, borders or
+  sizes. Two heights exist: 36px, and 28px for compact places (lists, chips, toolbars).
 
 ## Backend (`src-tauri/src/`)
 

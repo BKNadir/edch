@@ -33,10 +33,6 @@
 }
 .wish-controls select,
 .wish-controls input {
-  background: var(--panel-2);
-  border: 1px solid var(--line-2);
-  border-radius: 6px;
-  padding: 2px 6px;
 }
 .wish-controls input {
   width: 52px;

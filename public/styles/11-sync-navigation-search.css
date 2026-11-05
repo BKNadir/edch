@@ -128,18 +128,7 @@
 .search-form input[type="text"],
 .search-form select,
 .import textarea {
-  background: var(--panel-2);
-  border: 1px solid var(--line-2);
-  border-radius: 6px;
-  padding: 7px 9px;
-  color: var(--text);
   width: 100%;
-}
-.form-grid input:focus,
-.search-form input:focus,
-.import textarea:focus {
-  outline: none;
-  border-color: var(--accent);
 }
 .range-table td {
   cursor: default;
@@ -213,8 +202,6 @@ p.notice {
 .search-form select.big {
   flex: 1;
   min-width: 280px;
-  font-size: 15px;
-  padding: 9px 12px;
   width: auto;
 }
 .search-form select {

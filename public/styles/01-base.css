@@ -45,9 +45,8 @@ body {
 body {
   overflow: hidden;
 }
-button,
-input,
-select {
+/* Zero specificity: the form field rules (03-forms.css) set their own size. */
+:where(button, input, select, textarea) {
   font: inherit;
   color: inherit;
 }
