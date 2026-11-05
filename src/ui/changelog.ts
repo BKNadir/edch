@@ -25,7 +25,12 @@ async function sections(): Promise<{ version: string; items: string[] }[]> {
     const [head, ...lines] = block.split("\n");
     const version = head.trim();
     if (!/^\d+\.\d+\.\d+$/.test(version)) continue;
-    out.push({ version, items: lines.filter((l) => /^[-*] /.test(l.trim())).map((l) => l.trim().slice(2).replace(/\*\*/g, "").replace(/`/g, "")) });
+    out.push({
+      version,
+      items: lines
+        .filter((l) => /^[-*] /.test(l.trim()))
+        .map((l) => l.trim().slice(2).replace(/\*\*/g, "").replace(/`/g, "")),
+    });
   }
   return out;
 }
@@ -33,11 +38,26 @@ async function sections(): Promise<{ version: string; items: string[] }[]> {
 /** Shows the news of every version after `since` up to this one (or only this one). */
 export async function showChangelog(since?: string) {
   const all = await sections().catch(() => []);
-  const list = all.filter((s) => !newer(s.version, SOFTWARE_VERSION) && (since ? newer(s.version, since) : s.version === SOFTWARE_VERSION)).slice(0, 8);
+  const list = all
+    .filter(
+      (s) => !newer(s.version, SOFTWARE_VERSION) && (since ? newer(s.version, since) : s.version === SOFTWARE_VERSION),
+    )
+    .slice(0, 8);
   if (!list.length) return;
   await dialog(
     t("changelog.whatSNewEdch", { SOFTWAREVERSION: SOFTWARE_VERSION }),
-    list.map((s) => h("section.changelog-version", null, h("h4", { "data-no-tr": "" }, s.version), h("ul.update-notes", { "data-no-tr": "" }, s.items.map((note) => h("li", null, note))))),
+    list.map((s) =>
+      h(
+        "section.changelog-version",
+        null,
+        h("h4", { "data-no-tr": "" }, s.version),
+        h(
+          "ul.update-notes",
+          { "data-no-tr": "" },
+          s.items.map((note) => h("li", null, note)),
+        ),
+      ),
+    ),
     [{ label: "OK", primary: true, value: "ok" }],
   );
 }

@@ -235,7 +235,21 @@ export type EventHandler = (st: ActivityState, ev: Json, at: string, ctx: Activi
 export type EventHandlers = Record<string, EventHandler>;
 
 export function emptySession(): Session {
-  return { bounties: 0, bonds: 0, trade: 0, exploration: 0, exobiology: 0, missions: 0, jumps: 0, distance: 0, kills: 0, deaths: 0, materials: 0, refined: 0, missionsDone: 0 };
+  return {
+    bounties: 0,
+    bonds: 0,
+    trade: 0,
+    exploration: 0,
+    exobiology: 0,
+    missions: 0,
+    jumps: 0,
+    distance: 0,
+    kills: 0,
+    deaths: 0,
+    materials: 0,
+    refined: 0,
+    missionsDone: 0,
+  };
 }
 
 export function emptyMining(): Mining {

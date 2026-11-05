@@ -54,7 +54,8 @@ function describeArgs(args?: Record<string, unknown>): string {
   return Object.entries(args)
     .map(([k, v]) => {
       if (Array.isArray(v)) return `${k}=[${v.length}]`;
-      if (typeof v === "string") return HIDDEN.test(k) ? `${k}=<${v.length} chars>` : `${k}=${v.length > 120 ? `${v.slice(0, 120)}…` : v}`;
+      if (typeof v === "string")
+        return HIDDEN.test(k) ? `${k}=<${v.length} chars>` : `${k}=${v.length > 120 ? `${v.slice(0, 120)}…` : v}`;
       if (v && typeof v === "object") return `${k}={…}`;
       return `${k}=${v}`;
     })
@@ -74,7 +75,12 @@ function tauriInvoke<T>(cmd: string, args?: Record<string, unknown>): Promise<T>
   if (QUIET.has(cmd)) return call.catch((err) => Promise.reject(translatedError(err)));
   return call.then(
     (value) => {
-      if (debugCalls) void rawLog("DEBUG", "call", `${cmd} ${describeArgs(args)} → ok (${Math.round(performance.now() - started)} ms)`);
+      if (debugCalls)
+        void rawLog(
+          "DEBUG",
+          "call",
+          `${cmd} ${describeArgs(args)} → ok (${Math.round(performance.now() - started)} ms)`,
+        );
       return value;
     },
     (err) => {
@@ -160,9 +166,18 @@ export interface HttpReply {
 }
 
 /** HTTP through Rust in the app (no CORS); plain fetch in a browser. Never throws on HTTP status. */
-export async function httpFetch(method: string, url: string, body?: string, contentType = "application/json"): Promise<HttpReply> {
+export async function httpFetch(
+  method: string,
+  url: string,
+  body?: string,
+  contentType = "application/json",
+): Promise<HttpReply> {
   if (remote) {
-    return remoteJson("/api/http", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ method, url, body: body ?? null, contentType }) });
+    return remoteJson("/api/http", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ method, url, body: body ?? null, contentType }),
+    });
   }
   if (isTauri()) {
     return tauriInvoke<HttpReply>("http_fetch", { method, url, body: body ?? null, contentType });
@@ -195,7 +210,8 @@ async function spanshFetch(method: string, url: string, body?: string, contentTy
 
 function parse(reply: HttpReply, what: string): any {
   if (reply.status === 429) throw new Error(t("bridge.tooManyRequestsTryAgainMoment", { what }));
-  if (TRANSIENT.has(reply.status)) throw new Error(t("bridge.temporarilyUnavailableErrorTryAgainMoment", { what, status: reply.status }));
+  if (TRANSIENT.has(reply.status))
+    throw new Error(t("bridge.temporarilyUnavailableErrorTryAgainMoment", { what, status: reply.status }));
   if (reply.status < 200 || reply.status >= 300) throw new Error(t("bridge.answered", { what, status: reply.status }));
   try {
     return JSON.parse(reply.body);
@@ -214,9 +230,16 @@ export async function spanshGet(path: string): Promise<any> {
 }
 
 /** Spansh route plotters: submit a form, then poll the job until it is done. */
-export async function spanshJob(endpoint: string, form: [string, string][], onWait?: (n: number) => void): Promise<any> {
+export async function spanshJob(
+  endpoint: string,
+  form: [string, string][],
+  onWait?: (n: number) => void,
+): Promise<any> {
   const encoded = form.map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join("&");
-  const submitted = parse(await httpFetch("POST", `https://spansh.co.uk/api/${endpoint}`, encoded, "application/x-www-form-urlencoded"), "Spansh");
+  const submitted = parse(
+    await httpFetch("POST", `https://spansh.co.uk/api/${endpoint}`, encoded, "application/x-www-form-urlencoded"),
+    "Spansh",
+  );
   if (submitted.error) throw new Error(String(submitted.error));
   const job = submitted.job;
   if (!job) throw new Error(t("bridge.spanshReturnedNoJobNumber"));
@@ -253,7 +276,8 @@ const invoke = <T>(cmd: string, args?: Record<string, unknown>) => {
 };
 
 export const optionsDir = () => invoke<string>("options_dir");
-export const listOptionFiles = (): Promise<OptionFile[]> => (remote ? remoteJson("/api/options") : invoke<OptionFile[]>("list_option_files"));
+export const listOptionFiles = (): Promise<OptionFile[]> =>
+  remote ? remoteJson("/api/options") : invoke<OptionFile[]>("list_option_files");
 export const readOptionFile = async (folder: string, name: string): Promise<string> => {
   if (!remote) return invoke<string>("read_option_file", { folder, name });
   const res = await remoteFetch(`/api/option?folder=${encodeURIComponent(folder)}&name=${encodeURIComponent(name)}`);
@@ -295,18 +319,28 @@ export async function remoteState(since: number): Promise<{ version: number; sta
   return remoteJson(`/api/state?since=${since}`);
 }
 export async function remoteAction(action: unknown): Promise<void> {
-  await remoteJson("/api/action", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(action) });
+  await remoteJson("/api/action", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(action),
+  });
 }
 
 /** Live link to a wing's ntfy topic (Rust keeps the connection open and pushes each line). */
 export const ntfySubscribe = (topic: string, since: string) => invoke<void>("ntfy_subscribe", { topic, since });
 /** The encrypted "leaving" message Rust sends when EDCH closes (null: nothing to send). */
-export const ntfySetFarewell = (topic: string, text: string | null) => invoke<void>("ntfy_set_farewell", { topic, text }).catch(() => undefined);
+export const ntfySetFarewell = (topic: string, text: string | null) =>
+  invoke<void>("ntfy_set_farewell", { topic, text }).catch(() => undefined);
 export const ntfyUnsubscribe = () => invoke<void>("ntfy_unsubscribe").catch(() => undefined);
-export async function onNtfy(line: (topic: string, text: string) => void, state: (topic: string, connected: boolean, message?: string | null) => void): Promise<() => void> {
+export async function onNtfy(
+  line: (topic: string, text: string) => void,
+  state: (topic: string, connected: boolean, message?: string | null) => void,
+): Promise<() => void> {
   const ev = window.__TAURI__!.event;
   const a = await ev.listen<{ topic: string; line: string }>("ntfy-line", (e) => line(e.payload.topic, e.payload.line));
-  const b = await ev.listen<{ topic: string; connected: boolean; message?: string | null }>("ntfy-state", (e) => state(e.payload.topic, e.payload.connected, e.payload.message));
+  const b = await ev.listen<{ topic: string; connected: boolean; message?: string | null }>("ntfy-state", (e) =>
+    state(e.payload.topic, e.payload.connected, e.payload.message),
+  );
   return () => {
     a();
     b();
@@ -321,16 +355,21 @@ export async function onConfirmClose(cb: () => void): Promise<void> {
   if (!isTauri() || remote) return;
   await window.__TAURI__!.event.listen("confirm-close", () => cb());
 }
-export const setFullscreen = (on: boolean) => (isTauri() && !remote ? invoke<void>("set_fullscreen", { on }).catch(() => undefined) : Promise.resolve());
+export const setFullscreen = (on: boolean) =>
+  isTauri() && !remote ? invoke<void>("set_fullscreen", { on }).catch(() => undefined) : Promise.resolve();
 export const openPageInBrowser = (view: string) => invoke<void>("open_page_in_browser", { view });
-export const logWrite = (level: string, source: string, message: string) => invoke<void>("log_write", { level, source, message });
+export const logWrite = (level: string, source: string, message: string) =>
+  invoke<void>("log_write", { level, source, message });
 export const logSetDebug = (on: boolean) => invoke<string | null>("log_set_debug", { on });
 export const logsOpen = () => invoke<string>("logs_open");
 /** Portable build (no installer): updates open the release page instead. */
 /** How updates are installed: "installer" (Windows setup) or not ("portable", "linux", "macos": the release page opens). */
-export const updateMode = () => (isTauri() && !isRemote() ? invoke<string>("update_mode").catch(() => "installer") : Promise.resolve("installer"));
-export const isPortable = () => (isTauri() && !isRemote() ? invoke<boolean>("is_portable").catch(() => false) : Promise.resolve(false));
-export const installerLanguage = () => (isTauri() ? invoke<number | null>("installer_language").catch(() => null) : Promise.resolve(null));
+export const updateMode = () =>
+  isTauri() && !isRemote() ? invoke<string>("update_mode").catch(() => "installer") : Promise.resolve("installer");
+export const isPortable = () =>
+  isTauri() && !isRemote() ? invoke<boolean>("is_portable").catch(() => false) : Promise.resolve(false);
+export const installerLanguage = () =>
+  isTauri() ? invoke<number | null>("installer_language").catch(() => null) : Promise.resolve(null);
 
 export async function openUrl(url: string): Promise<void> {
   if (isTauri() && !remote) {
@@ -398,7 +437,9 @@ export const updateDownload = (info: UpdateInfo) => invoke<string>("update_downl
 export const updateInstall = (path: string) => invoke<void>("update_install", { path });
 export async function onUpdateProgress(cb: (done: number, total: number) => void): Promise<() => void> {
   if (!isTauri()) return () => undefined;
-  return window.__TAURI__!.event.listen<{ done: number; total: number }>("update-progress", (e) => cb(e.payload.done, e.payload.total));
+  return window.__TAURI__!.event.listen<{ done: number; total: number }>("update-progress", (e) =>
+    cb(e.payload.done, e.payload.total),
+  );
 }
 
 /** Journal lines of the last `days` days for these events (start-up rebuild of the activity). */

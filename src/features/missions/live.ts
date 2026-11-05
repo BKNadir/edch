@@ -11,7 +11,15 @@ import { gameName, t } from "../../platform/i18n.js";
 import { mountSideTab, notify, recentAlerts, refresh as refreshTab } from "../../ui/notifier.js";
 import type { Store } from "../../state/store.js";
 import { hoursLeft, relTime } from "../../ui/format.js";
-import { sameMission, toWingMission, toWingMissions, wingRows, WingLink, type WingMember, type WingRow } from "../../services/wing.js";
+import {
+  sameMission,
+  toWingMission,
+  toWingMissions,
+  wingRows,
+  WingLink,
+  type WingMember,
+  type WingRow,
+} from "../../services/wing.js";
 
 type Json = Record<string, any>;
 
@@ -66,11 +74,22 @@ export function setShared(id: number, on: boolean) {
 
 export function wingMe(): WingMember {
   const s = store.state.settings.wing;
-  return { id: wingId(), name: s.name.trim() || store.state.cmdr.commander || "CMDR", at: new Date().toISOString(), missions: toWingMissions(activeMissions(), isShared) };
+  return {
+    id: wingId(),
+    name: s.name.trim() || store.state.cmdr.commander || "CMDR",
+    at: new Date().toISOString(),
+    missions: toWingMissions(activeMissions(), isShared),
+  };
 }
 
 /** The wing as the views see it (on a phone: as the PC last published it). */
-export function wingView(): { status: string; error: string; me: WingMember; members: WingMember[]; rows: WingRow[] } | null {
+export function wingView(): {
+  status: string;
+  error: string;
+  me: WingMember;
+  members: WingMember[];
+  rows: WingRow[];
+} | null {
   const remote = (store.state as Json).remoteWing;
   if (isRemote()) return remote ?? null;
   if (!link) return null;
@@ -177,10 +196,20 @@ function checkMining(ev: Json) {
   const m = store.state.settings.mining;
   if (!m.alert || ev.event !== "ProspectedAsteroid") return;
   const hits = (ev.Materials ?? [])
-    .map((x: Json) => ({ id: String(x.Name ?? "").toLowerCase(), label: String(x.Name_Localised ?? x.Name ?? ""), pct: Number(x.Proportion ?? 0) }))
+    .map((x: Json) => ({
+      id: String(x.Name ?? "").toLowerCase(),
+      label: String(x.Name_Localised ?? x.Name ?? ""),
+      pct: Number(x.Proportion ?? 0),
+    }))
     .filter((x: { id: string; pct: number }) => m.targets.some((target) => target.id === x.id && x.pct >= target.min));
-  if (ev.MotherlodeMaterial) notify(t("common.motherlode", { MotherlodeMaterialLocalised: gameName(String(ev.MotherlodeMaterial_Localised ?? ev.MotherlodeMaterial)) }));
-  else if (hits.length) notify(hits.map((x: { label: string; pct: number }) => `${gameName(x.label)} ${x.pct.toFixed(1)} %`).join(" · "));
+  if (ev.MotherlodeMaterial)
+    notify(
+      t("common.motherlode", {
+        MotherlodeMaterialLocalised: gameName(String(ev.MotherlodeMaterial_Localised ?? ev.MotherlodeMaterial)),
+      }),
+    );
+  else if (hits.length)
+    notify(hits.map((x: { label: string; pct: number }) => `${gameName(x.label)} ${x.pct.toFixed(1)} %`).join(" · "));
 }
 
 const lineKey = (ev: Json) => JSON.stringify(ev);
@@ -254,7 +283,14 @@ function panel(): (Node | null)[] {
   const missions = activeMissions();
   const wing = wingView();
   const alerts = recentAlerts();
-  const parts: (Node | null)[] = [h("div.side-head", null, h("strong", null, t("common.notifications")), h("span.sub", null, alerts.length ? t("live.recent", { count: alerts.length }) : t("live.none")))];
+  const parts: (Node | null)[] = [
+    h(
+      "div.side-head",
+      null,
+      h("strong", null, t("common.notifications")),
+      h("span.sub", null, alerts.length ? t("live.recent", { count: alerts.length }) : t("live.none")),
+    ),
+  ];
   // Every notification first (wing, mining, updates, start-up problems…), then the missions overview.
   parts.push(
     h(
@@ -262,7 +298,11 @@ function panel(): (Node | null)[] {
       null,
       h("h4", null, t("live.latestNotifications")),
       alerts.length
-        ? h("ul.side-list", null, alerts.slice(0, 10).map((a) => h("li", null, h("span", null, a.text), h("span.sub", null, relTime(a.at)))))
+        ? h(
+            "ul.side-list",
+            null,
+            alerts.slice(0, 10).map((a) => h("li", null, h("span", null, a.text), h("span.sub", null, relTime(a.at)))),
+          )
         : h("p.sub", null, t("live.nothingYet")),
     ),
   );
@@ -277,19 +317,25 @@ function panel(): (Node | null)[] {
           ? h(
               "ul.side-list",
               null,
-              wing.rows.slice(0, 8).map((r) =>
-                h(
-                  "li",
-                  null,
-                  h("span.side-title", null, r.mission.title),
-                  h("span.sub", null, r.mission.destSystem ?? "", r.mission.expiry ? ` · ${relTime(r.mission.expiry)}` : ""),
+              wing.rows
+                .slice(0, 8)
+                .map((r) =>
                   h(
-                    "span.side-holders",
+                    "li",
                     null,
-                    [...r.holders.map((id) => h("span.badge.ok", null, `✓ ${names.get(id) ?? "?"}`)), ...r.missing.map((id) => h("span.badge.muted", null, `… ${names.get(id) ?? "?"}`))],
+                    h("span.side-title", null, r.mission.title),
+                    h(
+                      "span.sub",
+                      null,
+                      r.mission.destSystem ?? "",
+                      r.mission.expiry ? ` · ${relTime(r.mission.expiry)}` : "",
+                    ),
+                    h("span.side-holders", null, [
+                      ...r.holders.map((id) => h("span.badge.ok", null, `✓ ${names.get(id) ?? "?"}`)),
+                      ...r.missing.map((id) => h("span.badge.muted", null, `… ${names.get(id) ?? "?"}`)),
+                    ]),
                   ),
                 ),
-              ),
             )
           : h("p.sub", null, t("live.noWingMissionsYet")),
       ),
@@ -304,14 +350,22 @@ function panel(): (Node | null)[] {
         h(
           "ul.side-list",
           null,
-          missions.slice(0, 6).map((m) =>
-            h(
-              "li",
-              { class: hoursLeft(m.expiry) < 6 ? "soon" : "" },
-              h("span.side-title", null, m.title),
-              h("span.sub", null, m.status === "redirected" ? (t("live.objectiveDone") + " ") : "", m.destSystem ?? "", m.expiry ? ` · ${relTime(m.expiry)}` : ""),
+          missions
+            .slice(0, 6)
+            .map((m) =>
+              h(
+                "li",
+                { class: hoursLeft(m.expiry) < 6 ? "soon" : "" },
+                h("span.side-title", null, m.title),
+                h(
+                  "span.sub",
+                  null,
+                  m.status === "redirected" ? t("live.objectiveDone") + " " : "",
+                  m.destSystem ?? "",
+                  m.expiry ? ` · ${relTime(m.expiry)}` : "",
+                ),
+              ),
             ),
-          ),
         ),
       ),
     );

@@ -23,4 +23,10 @@ export const PRESETS: { id: string; label: string; accent: string; cyan: string;
   { id: "day", label: t("theme.dayLight"), accent: "#d35f00", cyan: "#0a78a6", bg: "#eef1f5" },
 ];
 
-export const DEFAULT_THEME: ThemeSettings = { preset: "elite", accent: "#ff7a18", cyan: "#5cc8e8", bg: "#0a0c0f", oled: false };
+export const DEFAULT_THEME: ThemeSettings = {
+  preset: "elite",
+  accent: "#ff7a18",
+  cyan: "#5cc8e8",
+  bg: "#0a0c0f",
+  oled: false,
+};

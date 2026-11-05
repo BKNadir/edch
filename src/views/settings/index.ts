@@ -39,7 +39,10 @@ export function openSettingsTab(store: { setView(view: string): void }, tab: str
 
 export class SettingsView implements View {
   private root?: HTMLElement;
-  constructor(private ctx: Ctx, private restart: () => void) {}
+  constructor(
+    private ctx: Ctx,
+    private restart: () => void,
+  ) {}
 
   private mode = "installer";
   private debugPath: string | null = null;
@@ -80,141 +83,198 @@ export class SettingsView implements View {
     if (!this.root) return;
     const s = this.ctx.store.state.settings;
     const set = (patch: Partial<Settings>) => this.ctx.store.updateSettings(patch);
-    const number = (label: string, value: number, key: keyof Settings, help: string, attrs: Record<string, string> = {}) =>
+    const number = (
+      label: string,
+      value: number,
+      key: keyof Settings,
+      help: string,
+      attrs: Record<string, string> = {},
+    ) =>
       h(
         "label.field",
         null,
         h("span", null, label),
-        h("input", { type: "number", value: String(value), ...attrs, onchange: (e: Event) => set({ [key]: Number((e.target as HTMLInputElement).value) } as Partial<Settings>) }),
+        h("input", {
+          type: "number",
+          value: String(value),
+          ...attrs,
+          onchange: (e: Event) => set({ [key]: Number((e.target as HTMLInputElement).value) } as Partial<Settings>),
+        }),
         h("small", null, help),
       );
 
-    const dir = h("input", { type: "text", value: s.journalDir, placeholder: "C:\\Users\\…\\Saved Games\\Frontier Developments\\Elite Dangerous", spellcheck: false });
+    const dir = h("input", {
+      type: "text",
+      value: s.journalDir,
+      placeholder: "C:\\Users\\…\\Saved Games\\Frontier Developments\\Elite Dangerous",
+      spellcheck: false,
+    });
 
     const body = h(
-        "div.settings",
-        null,
-        isRemote()
-          ? null
-          : h(
-          "section.card",
-          { "data-tab": "general" },
-          h("h3", null, t("settings.language")),
-          h(
-            "label.field",
-            null,
-            h("span", null, t("settings.interfaceLanguage")),
+      "div.settings",
+      null,
+      isRemote()
+        ? null
+        : h(
+            "section.card",
+            { "data-tab": "general" },
+            h("h3", null, t("settings.language")),
             h(
-              "select",
-              {
-                "data-no-tr": "",
-                onchange: (e: Event) => {
-                  saveLang((e.target as HTMLSelectElement).value);
-                  location.reload();
-                },
-              },
-              LANGS.map((l) => h("option", { value: l.code, selected: l.code === lang().code }, l.label)),
-            ),
-            h("small", null, t("settings.materialModuleEffectNamesFollowGame")),
-          ),
-        ),
-        isTauri()
-          ? h(
-              "section.card",
-              { "data-tab": "general" },
-              h("h3", null, t("settings.updates")),
-              h("p.sub", null, t("common.installedVersion", { current: APP_VERSION })),
+              "label.field",
+              null,
+              h("span", null, t("settings.interfaceLanguage")),
               h(
-                "label.check",
-                null,
-                h("input", { type: "checkbox", checked: s.autoUpdate, onchange: (e: Event) => set({ autoUpdate: (e.target as HTMLInputElement).checked }) }),
-                (" " + t("settings.checkGithubNewVersionsAutomatically")),
+                "select",
+                {
+                  "data-no-tr": "",
+                  onchange: (e: Event) => {
+                    saveLang((e.target as HTMLSelectElement).value);
+                    location.reload();
+                  },
+                },
+                LANGS.map((l) => h("option", { value: l.code, selected: l.code === lang().code }, l.label)),
               ),
-              this.mode === "portable"
-                ? h("p.sub", null, t("settings.portableVersionUpdatesArenTInstalled"))
-                : this.mode !== "installer"
-                  ? h("p.sub", null, t("settings.linuxUpdatesArenTInstalledAutomatically"))
-                  : null,
-              h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, t("settings.checkNow"))),
-            )
-          : null,
-        isTauri() && !isRemote() ? this.appCard() : null,
-        isTauri() && !isRemote() ? this.launchCard() : null,
-        h(
-          "section.card",
-          { "data-tab": "game" },
-          h("h3", null, t("settings.gameJournal")),
-          h("p.sub.watch-status", null, this.statusText()),
-          h("label.field.wide", null, h("span", null, t("settings.journalFolder")), dir),
-          h(
-            "div.row",
-            null,
-            h(
-              "button.ghost",
-              {
-                disabled: !isTauri(),
-                onclick: async () => {
-                  const found = await defaultJournalDir();
-                  if (found) dir.value = found;
-                },
-              },
-              t("settings.detect"),
-            ),
-            h(
-              "button.primary",
-              {
-                disabled: !isTauri(),
-                onclick: async () => {
-                  set({ journalDir: dir.value.trim() });
-                  try {
-                    this.restart();
-                    await startJournal(dir.value.trim());
-                    toast(t("settings.journalReadingStarted"));
-                  } catch (e) {
-                    toast(String(e));
-                  }
-                },
-              },
-              t("settings.saveRead"),
+              h("small", null, t("settings.materialModuleEffectNamesFollowGame")),
             ),
           ),
+      isTauri()
+        ? h(
+            "section.card",
+            { "data-tab": "general" },
+            h("h3", null, t("settings.updates")),
+            h("p.sub", null, t("common.installedVersion", { current: APP_VERSION })),
+            h(
+              "label.check",
+              null,
+              h("input", {
+                type: "checkbox",
+                checked: s.autoUpdate,
+                onchange: (e: Event) => set({ autoUpdate: (e.target as HTMLInputElement).checked }),
+              }),
+              " " + t("settings.checkGithubNewVersionsAutomatically"),
+            ),
+            this.mode === "portable"
+              ? h("p.sub", null, t("settings.portableVersionUpdatesArenTInstalled"))
+              : this.mode !== "installer"
+                ? h("p.sub", null, t("settings.linuxUpdatesArenTInstalledAutomatically"))
+                : null,
+            h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, t("settings.checkNow"))),
+          )
+        : null,
+      isTauri() && !isRemote() ? this.appCard() : null,
+      isTauri() && !isRemote() ? this.launchCard() : null,
+      h(
+        "section.card",
+        { "data-tab": "game" },
+        h("h3", null, t("settings.gameJournal")),
+        h("p.sub.watch-status", null, this.statusText()),
+        h("label.field.wide", null, h("span", null, t("settings.journalFolder")), dir),
+        h(
+          "div.row",
+          null,
+          h(
+            "button.ghost",
+            {
+              disabled: !isTauri(),
+              onclick: async () => {
+                const found = await defaultJournalDir();
+                if (found) dir.value = found;
+              },
+            },
+            t("settings.detect"),
+          ),
+          h(
+            "button.primary",
+            {
+              disabled: !isTauri(),
+              onclick: async () => {
+                set({ journalDir: dir.value.trim() });
+                try {
+                  this.restart();
+                  await startJournal(dir.value.trim());
+                  toast(t("settings.journalReadingStarted"));
+                } catch (e) {
+                  toast(String(e));
+                }
+              },
+            },
+            t("settings.saveRead"),
+          ),
+        ),
+      ),
+      h(
+        "section.card",
+        { "data-tab": "game" },
+        h("h3", null, t("settings.systemSearchSpansh")),
+        number(t("settings.maxDistanceLy"), s.maxDistance, "maxDistance", t("settings.searchRadiusAroundLocation"), {
+          min: "10",
+          max: "5000",
+          step: "10",
+        }),
+        number(
+          t("settings.minPopulationHighGradeEmissions"),
+          s.hgeMinPopulation,
+          "hgeMinPopulation",
+          t("settings.highPopulation1000000Default"),
+          { min: "0", step: "100000" },
+        ),
+        number(
+          t("settings.maxBgsDataAgeDays"),
+          s.maxAgeDays,
+          "maxAgeDays",
+          t("settings.ignoresOlderFactionStatesBoomWar"),
+          { min: "0", max: "60" },
         ),
         h(
-          "section.card",
-          { "data-tab": "game" },
-          h("h3", null, t("settings.systemSearchSpansh")),
-          number(t("settings.maxDistanceLy"), s.maxDistance, "maxDistance", t("settings.searchRadiusAroundLocation"), { min: "10", max: "5000", step: "10" }),
-          number(t("settings.minPopulationHighGradeEmissions"), s.hgeMinPopulation, "hgeMinPopulation", t("settings.highPopulation1000000Default"), { min: "0", step: "100000" }),
-          number(t("settings.maxBgsDataAgeDays"), s.maxAgeDays, "maxAgeDays", t("settings.ignoresOlderFactionStatesBoomWar"), { min: "0", max: "60" }),
-          h(
-            "label.field",
-            null,
-            h("span", null, t("settings.fallbackSystem")),
-            h("input", { type: "text", value: s.fallbackSystem, onchange: (e: Event) => set({ fallbackSystem: (e.target as HTMLInputElement).value.trim() || "Sol" }) }),
-            h("small", null, t("settings.usedUntilGameReportsLocation")),
-          ),
-          h("label.check", null, h("input", { type: "checkbox", checked: s.largePadOnly, onchange: (e: Event) => set({ largePadOnly: (e.target as HTMLInputElement).checked }) }), (" " + t("settings.tradersLPadOnly"))),
-          h(
-            "label.check",
-            null,
-            h("input", { type: "checkbox", checked: s.systemOpensNav, onchange: (e: Event) => set({ systemOpensNav: (e.target as HTMLInputElement).checked }) }),
-            (" " + t("settings.clickingSystemAlsoOpensNavigationSystem")),
-          ),
-          h("small.sub", null, t("settings.nameAlwaysCopiedPcSClipboard")),
-          h(
-            "label.check",
-            null,
-            h("input", { type: "checkbox", checked: s.copyOnPhone, onchange: (e: Event) => set({ copyOnPhone: (e.target as HTMLInputElement).checked }) }),
-            (" " + t("settings.fromPhoneAlsoCopyPhoneS")),
-          ),
+          "label.field",
+          null,
+          h("span", null, t("settings.fallbackSystem")),
+          h("input", {
+            type: "text",
+            value: s.fallbackSystem,
+            onchange: (e: Event) => set({ fallbackSystem: (e.target as HTMLInputElement).value.trim() || "Sol" }),
+          }),
+          h("small", null, t("settings.usedUntilGameReportsLocation")),
         ),
-        this.navigationCard(),
-        this.engineersCard(),
-        this.notifyCard(),
-        this.pagesCard(),
-        this.appearance(),
-        isTauri() && !isRemote() ? this.logsCard() : null,
-      );
+        h(
+          "label.check",
+          null,
+          h("input", {
+            type: "checkbox",
+            checked: s.largePadOnly,
+            onchange: (e: Event) => set({ largePadOnly: (e.target as HTMLInputElement).checked }),
+          }),
+          " " + t("settings.tradersLPadOnly"),
+        ),
+        h(
+          "label.check",
+          null,
+          h("input", {
+            type: "checkbox",
+            checked: s.systemOpensNav,
+            onchange: (e: Event) => set({ systemOpensNav: (e.target as HTMLInputElement).checked }),
+          }),
+          " " + t("settings.clickingSystemAlsoOpensNavigationSystem"),
+        ),
+        h("small.sub", null, t("settings.nameAlwaysCopiedPcSClipboard")),
+        h(
+          "label.check",
+          null,
+          h("input", {
+            type: "checkbox",
+            checked: s.copyOnPhone,
+            onchange: (e: Event) => set({ copyOnPhone: (e.target as HTMLInputElement).checked }),
+          }),
+          " " + t("settings.fromPhoneAlsoCopyPhoneS"),
+        ),
+      ),
+      this.navigationCard(),
+      this.engineersCard(),
+      this.notifyCard(),
+      this.pagesCard(),
+      this.appearance(),
+      isTauri() && !isRemote() ? this.logsCard() : null,
+    );
     // Tabs: each card says which tab it belongs to (data-tab).
     const cards = [...body.children] as HTMLElement[];
     const tabOf = (card: HTMLElement) => card.dataset.tab ?? "general";
@@ -230,7 +290,9 @@ export class SettingsView implements View {
         h(
           "div.segmented.settings-tabs",
           null,
-          tabs.map(([id, label]) => h("button", { class: id === currentTab ? "active" : "", onclick: () => this.showTab(id) }, label)),
+          tabs.map(([id, label]) =>
+            h("button", { class: id === currentTab ? "active" : "", onclick: () => this.showTab(id) }, label),
+          ),
         ),
       ),
       body,
@@ -258,7 +320,12 @@ export class SettingsView implements View {
       h(
         "label",
         null,
-        h("input", { type: "color", value: theme[key], oninput: (e: Event) => setTheme({ [key]: (e.target as HTMLInputElement).value, preset: "custom" }, false), onchange: () => this.render() }),
+        h("input", {
+          type: "color",
+          value: theme[key],
+          oninput: (e: Event) => setTheme({ [key]: (e.target as HTMLInputElement).value, preset: "custom" }, false),
+          onchange: () => this.render(),
+        }),
         h("span", null, label),
       );
     return h(
@@ -273,19 +340,39 @@ export class SettingsView implements View {
           h(
             `button.theme-preset${theme.preset === p.id ? ".on" : ""}`,
             { onclick: () => setTheme({ preset: p.id, accent: p.accent, cyan: p.cyan, bg: p.bg }) },
-            h("span.theme-swatch", null, h("i", { style: { background: p.accent } }), h("i", { style: { background: p.cyan } }), h("i", { style: { background: p.bg } })),
+            h(
+              "span.theme-swatch",
+              null,
+              h("i", { style: { background: p.accent } }),
+              h("i", { style: { background: p.cyan } }),
+              h("i", { style: { background: p.bg } }),
+            ),
             p.label,
           ),
         ),
       ),
-      h("div.theme-colors", null, picker(t("settings.mainColour"), "accent"), picker(t("settings.secondaryColour"), "cyan"), picker(t("settings.background"), "bg")),
+      h(
+        "div.theme-colors",
+        null,
+        picker(t("settings.mainColour"), "accent"),
+        picker(t("settings.secondaryColour"), "cyan"),
+        picker(t("settings.background"), "bg"),
+      ),
       h(
         "label.check",
         null,
-        h("input", { type: "checkbox", checked: theme.oled, onchange: (e: Event) => setTheme({ oled: (e.target as HTMLInputElement).checked }) }),
-        (" " + t("settings.oledModePureBlackBackgroundSaves")),
+        h("input", {
+          type: "checkbox",
+          checked: theme.oled,
+          onchange: (e: Event) => setTheme({ oled: (e.target as HTMLInputElement).checked }),
+        }),
+        " " + t("settings.oledModePureBlackBackgroundSaves"),
       ),
-      h("div.row", null, h("button.ghost", { onclick: () => setTheme({ ...DEFAULT_THEME }) }, t("settings.restoreOriginalColours"))),
+      h(
+        "div.row",
+        null,
+        h("button.ghost", { onclick: () => setTheme({ ...DEFAULT_THEME }) }, t("settings.restoreOriginalColours")),
+      ),
     );
   }
 
@@ -293,24 +380,55 @@ export class SettingsView implements View {
     const store = this.ctx.store;
     const s = store.state.settings;
     const box = (checked: boolean, onchange: (on: boolean) => void, label: string) =>
-      h("label.check", null, h("input", { type: "checkbox", checked, onchange: (ev: Event) => onchange((ev.target as HTMLInputElement).checked) }), ` ${label}`);
+      h(
+        "label.check",
+        null,
+        h("input", {
+          type: "checkbox",
+          checked,
+          onchange: (ev: Event) => onchange((ev.target as HTMLInputElement).checked),
+        }),
+        ` ${label}`,
+      );
     return h(
       "section.card",
       { "data-tab": "game" },
       h("h3", null, t("common.navigation")),
       h("p.sub", null, t("settings.nextSystemCopiedPcSClipboard")),
-      box(s.navAutoCopy, (on) => store.updateSettings({ navAutoCopy: on }), t("settings.copyNextJumpAutomaticallyWhenI")),
-      box(s.engineers.autoCopyNext, (on) => store.updateSettings({ engineers: { ...store.state.settings.engineers, autoCopyNext: on } }), t("settings.copyNextJumpAutomaticallyWhenI2")),
-      box(s.navNotifyCopy, (on) => store.updateSettings({ navNotifyCopy: on }), t("settings.notifyMeWhenNextJumpCopied")),
+      box(
+        s.navAutoCopy,
+        (on) => store.updateSettings({ navAutoCopy: on }),
+        t("settings.copyNextJumpAutomaticallyWhenI"),
+      ),
+      box(
+        s.engineers.autoCopyNext,
+        (on) => store.updateSettings({ engineers: { ...store.state.settings.engineers, autoCopyNext: on } }),
+        t("settings.copyNextJumpAutomaticallyWhenI2"),
+      ),
+      box(
+        s.navNotifyCopy,
+        (on) => store.updateSettings({ navNotifyCopy: on }),
+        t("settings.notifyMeWhenNextJumpCopied"),
+      ),
     );
   }
 
   private engineersCard(): HTMLElement {
     const store = this.ctx.store;
     const e = store.state.settings.engineers;
-    const set = (patch: Partial<typeof e>) => store.updateSettings({ engineers: { ...store.state.settings.engineers, ...patch } });
+    const set = (patch: Partial<typeof e>) =>
+      store.updateSettings({ engineers: { ...store.state.settings.engineers, ...patch } });
     const check = (key: "autoPick" | "knownOnly" | "regionLimit" | "autoCopyNext" | "autoTick", label: string) =>
-      h("label.check", null, h("input", { type: "checkbox", checked: e[key], onchange: (ev: Event) => set({ [key]: (ev.target as HTMLInputElement).checked }) }), ` ${label}`);
+      h(
+        "label.check",
+        null,
+        h("input", {
+          type: "checkbox",
+          checked: e[key],
+          onchange: (ev: Event) => set({ [key]: (ev.target as HTMLInputElement).checked }),
+        }),
+        ` ${label}`,
+      );
     return h(
       "section.card",
       { "data-tab": "game" },
@@ -323,7 +441,15 @@ export class SettingsView implements View {
         "label.field",
         null,
         h("span", null, t("settings.maxTourDistanceLy")),
-        h("input", { type: "number", min: "100", max: "50000", step: "100", value: String(e.maxTourLy), onchange: (ev: Event) => set({ maxTourLy: Math.max(100, Number((ev.target as HTMLInputElement).value) || 2000) }) }),
+        h("input", {
+          type: "number",
+          min: "100",
+          max: "50000",
+          step: "100",
+          value: String(e.maxTourLy),
+          onchange: (ev: Event) =>
+            set({ maxTourLy: Math.max(100, Number((ev.target as HTMLInputElement).value) || 2000) }),
+        }),
         h("small", null, t("settings.totalStraightLineDistanceBetweenStops")),
       ),
       check("autoTick", t("settings.moveWishlistItselfWhenGameApplies")),
@@ -350,7 +476,7 @@ export class SettingsView implements View {
             this.render();
           },
         }),
-        (" " + t("settings.debugModeAlsoWritesDetailedLog")),
+        " " + t("settings.debugModeAlsoWritesDetailedLog"),
       ),
       h("p.sub", null, t("settings.debugLogContainsEverythingStandardLog")),
       on && this.debugPath ? h("p.sub", { "data-no-tr": "" }, this.debugPath) : null,
@@ -360,8 +486,7 @@ export class SettingsView implements View {
         h(
           "button.ghost",
           {
-            onclick: () =>
-              logsOpen().catch((e) => toast(t("common.canTOpenFolder", { e }))),
+            onclick: () => logsOpen().catch((e) => toast(t("common.canTOpenFolder", { e }))),
           },
           t("common.openLogsFolder"),
         ),
@@ -387,14 +512,25 @@ export class SettingsView implements View {
         "label.field",
         null,
         h("span", null, t("settings.windowSCloseButton")),
-        h("select", { onchange: (e: Event) => set({ closeBehavior: (e.target as HTMLSelectElement).value as Settings["closeBehavior"] }) }, options.map(([v, l]) => h("option", { value: v, selected: s.closeBehavior === v }, l))),
+        h(
+          "select",
+          {
+            onchange: (e: Event) =>
+              set({ closeBehavior: (e.target as HTMLSelectElement).value as Settings["closeBehavior"] }),
+          },
+          options.map(([v, l]) => h("option", { value: v, selected: s.closeBehavior === v }, l)),
+        ),
         h("small", null, t("settings.hiddenNotificationAreaEdchKeepsReading")),
       ),
       h(
         "label.check",
         null,
-        h("input", { type: "checkbox", checked: s.showChangelog, onchange: (e: Event) => set({ showChangelog: (e.target as HTMLInputElement).checked }) }),
-        (" " + t("settings.showWhatSNewAfterUpdate")),
+        h("input", {
+          type: "checkbox",
+          checked: s.showChangelog,
+          onchange: (e: Event) => set({ showChangelog: (e.target as HTMLInputElement).checked }),
+        }),
+        " " + t("settings.showWhatSNewAfterUpdate"),
       ),
       h("div.row", null, h("button.ghost", { onclick: () => showChangelog() }, t("settings.seeWhatSNewVersion"))),
       h("p.sub", null, t("settings.edchOnlyOpensOnceLaunchingAgain")),
@@ -418,13 +554,31 @@ export class SettingsView implements View {
       { "data-tab": "game" },
       h("h3", null, t("common.launchEliteDangerous")),
       h("p.sub", null, t("settings.launchEliteButtonTopScreenStarts")),
-      h("label.field", null, h("span", null, t("settings.launch")), h("select", { onchange: (e: Event) => set({ method: (e.target as HTMLSelectElement).value as Settings["gameLaunch"]["method"] }) }, methods.map(([v, l]) => h("option", { value: v, selected: g.method === v }, l)))),
+      h(
+        "label.field",
+        null,
+        h("span", null, t("settings.launch")),
+        h(
+          "select",
+          {
+            onchange: (e: Event) =>
+              set({ method: (e.target as HTMLSelectElement).value as Settings["gameLaunch"]["method"] }),
+          },
+          methods.map(([v, l]) => h("option", { value: v, selected: g.method === v }, l)),
+        ),
+      ),
       g.method === "exe"
         ? h(
             "label.field.wide",
             null,
             h("span", null, t("settings.launcherPath")),
-            h("input", { type: "text", value: g.path, placeholder: "C:\\Program Files (x86)\\Frontier\\EDLaunch\\EDLaunch.exe", spellcheck: false, onchange: (e: Event) => set({ path: (e.target as HTMLInputElement).value.trim() }) }),
+            h("input", {
+              type: "text",
+              value: g.path,
+              placeholder: "C:\\Program Files (x86)\\Frontier\\EDLaunch\\EDLaunch.exe",
+              spellcheck: false,
+              onchange: (e: Event) => set({ path: (e.target as HTMLInputElement).value.trim() }),
+            }),
             h("small", null, t("settings.exeLnkShortcutMinedlauncherTipRight")),
           )
         : null,
@@ -453,14 +607,22 @@ export class SettingsView implements View {
           "select",
           { onchange: (e: Event) => set({ startView: (e.target as HTMLSelectElement).value }) },
           h("option", { value: "", selected: !s.startView }, t("settings.lastPageOpened")),
-          pages.filter((p) => !hidden.has(p.id)).map((p) => h("option", { value: p.id, selected: s.startView === p.id }, p.label)),
+          pages
+            .filter((p) => !hidden.has(p.id))
+            .map((p) => h("option", { value: p.id, selected: s.startView === p.id }, p.label)),
         ),
       ),
       h(
         "label.field",
         null,
         h("span", null, t("settings.interfaceSize")),
-        h("select", { onchange: (e: Event) => set({ uiScale: Number((e.target as HTMLSelectElement).value) }) }, [80, 90, 100, 110, 125, 150].map((v) => h("option", { value: String(v), selected: (s.uiScale || 100) === v }, `${v} %`))),
+        h(
+          "select",
+          { onchange: (e: Event) => set({ uiScale: Number((e.target as HTMLSelectElement).value) }) },
+          [80, 90, 100, 110, 125, 150].map((v) =>
+            h("option", { value: String(v), selected: (s.uiScale || 100) === v }, `${v} %`),
+          ),
+        ),
       ),
       h("p.sub", null, t("settings.pagesShownMenuUntickOnesDon")),
       h(
@@ -501,12 +663,20 @@ export class SettingsView implements View {
   private notifyCard(): HTMLElement {
     const store = this.ctx.store;
     const n = store.state.settings.notify;
-    const set = (patch: Partial<NotifySettings>) => store.updateSettings({ notify: { ...store.state.settings.notify, ...patch } });
+    const set = (patch: Partial<NotifySettings>) =>
+      store.updateSettings({ notify: { ...store.state.settings.notify, ...patch } });
     const wingCheck = (key: "notifyNew" | "notifyAccept" | "notifyAll" | "notifyLeave", label: string) =>
       h(
         "label.check",
         null,
-        h("input", { type: "checkbox", checked: store.state.settings.wing[key], onchange: (e: Event) => store.updateSettings({ wing: { ...store.state.settings.wing, [key]: (e.target as HTMLInputElement).checked } }) }),
+        h("input", {
+          type: "checkbox",
+          checked: store.state.settings.wing[key],
+          onchange: (e: Event) =>
+            store.updateSettings({
+              wing: { ...store.state.settings.wing, [key]: (e.target as HTMLInputElement).checked },
+            }),
+        }),
         ` ${label}`,
       );
     return h(
@@ -517,23 +687,66 @@ export class SettingsView implements View {
       h(
         "div.notify-form",
         null,
-        h("label.check", null, h("input", { type: "checkbox", checked: n.sound, onchange: (e: Event) => set({ sound: (e.target as HTMLInputElement).checked }) }), (" " + t("settings.sound"))),
+        h(
+          "label.check",
+          null,
+          h("input", {
+            type: "checkbox",
+            checked: n.sound,
+            onchange: (e: Event) => set({ sound: (e.target as HTMLInputElement).checked }),
+          }),
+          " " + t("settings.sound"),
+        ),
         h(
           "select",
           { "data-no-tr": "", onchange: (e: Event) => set({ tone: (e.target as HTMLSelectElement).value }) },
           TONES.map(([v, l]) => h("option", { value: v, selected: v === n.tone }, l)),
         ),
-        h("input", { type: "range", min: "0", max: "1", step: "0.05", value: String(n.volume), title: t("settings.volume"), onchange: (e: Event) => set({ volume: Number((e.target as HTMLInputElement).value) }) }),
-        h("button.ghost.small", { onclick: () => playTone(store.state.settings.notify.tone, store.state.settings.notify.volume) }, t("settings.listen")),
+        h("input", {
+          type: "range",
+          min: "0",
+          max: "1",
+          step: "0.05",
+          value: String(n.volume),
+          title: t("settings.volume"),
+          onchange: (e: Event) => set({ volume: Number((e.target as HTMLInputElement).value) }),
+        }),
+        h(
+          "button.ghost.small",
+          { onclick: () => playTone(store.state.settings.notify.tone, store.state.settings.notify.volume) },
+          t("settings.listen"),
+        ),
       ),
       h(
         "div.notify-form",
         null,
-        h("label.check", null, h("input", { type: "checkbox", checked: n.color, onchange: (e: Event) => set({ color: (e.target as HTMLInputElement).checked }) }), (" " + t("settings.colour"))),
-        h("input", { type: "color", value: n.flash, onchange: (e: Event) => set({ flash: (e.target as HTMLInputElement).value }) }),
+        h(
+          "label.check",
+          null,
+          h("input", {
+            type: "checkbox",
+            checked: n.color,
+            onchange: (e: Event) => set({ color: (e.target as HTMLInputElement).checked }),
+          }),
+          " " + t("settings.colour"),
+        ),
+        h("input", {
+          type: "color",
+          value: n.flash,
+          onchange: (e: Event) => set({ flash: (e.target as HTMLInputElement).value }),
+        }),
         h("button.ghost.small", { onclick: () => notify(t("settings.testNotification")) }, t("settings.test")),
       ),
-      h("label.check", null, h("input", { type: "checkbox", checked: n.hideTab, onchange: (e: Event) => set({ hideTab: (e.target as HTMLInputElement).checked }) }), (" " + t("settings.hideTabSoundStaysIfTicked"))),
+      h(
+        "label.check",
+        null,
+        h("input", {
+          type: "checkbox",
+          checked: n.hideTab,
+          onchange: (e: Event) => set({ hideTab: (e.target as HTMLInputElement).checked }),
+        }),
+        " " + t("settings.hideTabSoundStaysIfTicked"),
+      ),
       h("h4.settings-sub", null, t("common.wing")),
       isRemote()
         ? h("p.sub", null, t("settings.theseAreSetPcTheyGo"))
@@ -547,8 +760,15 @@ export class SettingsView implements View {
       h(
         "label.check",
         null,
-        h("input", { type: "checkbox", checked: store.state.settings.mining.alert, onchange: (e: Event) => store.updateSettings({ mining: { ...store.state.settings.mining, alert: (e.target as HTMLInputElement).checked } }) }),
-        (" " + t("settings.tellMeWhenProspectorFindsTarget")),
+        h("input", {
+          type: "checkbox",
+          checked: store.state.settings.mining.alert,
+          onchange: (e: Event) =>
+            store.updateSettings({
+              mining: { ...store.state.settings.mining, alert: (e.target as HTMLInputElement).checked },
+            }),
+        }),
+        " " + t("settings.tellMeWhenProspectorFindsTarget"),
       ),
       h("small.sub", null, t("settings.targetsTheirPercentagesAreChosenMining")),
       h("h4.settings-sub", null, t("settings.application")),

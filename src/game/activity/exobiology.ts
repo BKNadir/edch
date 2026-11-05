@@ -17,9 +17,22 @@ export const EXOBIOLOGY_EVENTS: EventHandlers = {
       bodyId: ev.Body,
     };
     const sample = { at, lat: ctx.position?.lat, lon: ctx.position?.lon };
-    const same = st.sampling && st.sampling.symbol === symbol && st.sampling.address === find.address && st.sampling.bodyId === find.bodyId;
+    const same =
+      st.sampling &&
+      st.sampling.symbol === symbol &&
+      st.sampling.address === find.address &&
+      st.sampling.bodyId === find.bodyId;
     if (ev.ScanType === "Log" || !same) {
-      st.sampling = { symbol, genusSymbol, genus: find.genus, species: find.species, variant: find.variant, address: find.address, bodyId: find.bodyId, samples: [sample] };
+      st.sampling = {
+        symbol,
+        genusSymbol,
+        genus: find.genus,
+        species: find.species,
+        variant: find.variant,
+        address: find.address,
+        bodyId: find.bodyId,
+        samples: [sample],
+      };
     } else {
       st.sampling!.samples.push(sample);
     }

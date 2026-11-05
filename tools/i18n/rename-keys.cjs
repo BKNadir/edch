@@ -9,7 +9,12 @@ const ROOT = path.resolve(__dirname, "..", "..");
 const LOCALES = path.join(ROOT, "public", "locales");
 const pairs = process.argv.slice(2).map((a) => a.split("="));
 
-const sortDeep = (o) => Object.fromEntries(Object.keys(o).sort().map((k) => [k, typeof o[k] === "object" ? sortDeep(o[k]) : o[k]]));
+const sortDeep = (o) =>
+  Object.fromEntries(
+    Object.keys(o)
+      .sort()
+      .map((k) => [k, typeof o[k] === "object" ? sortDeep(o[k]) : o[k]]),
+  );
 
 for (const file of fs.readdirSync(LOCALES).filter((f) => /^[a-z]{2}\.json$/.test(f))) {
   const texts = JSON.parse(fs.readFileSync(path.join(LOCALES, file), "utf8"));
@@ -25,7 +30,12 @@ for (const file of fs.readdirSync(LOCALES).filter((f) => /^[a-z]{2}\.json$/.test
   fs.writeFileSync(path.join(LOCALES, file), JSON.stringify(sortDeep(texts), null, 2) + "\n");
 }
 
-const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name)) : e.name.endsWith(".ts") ? [path.join(dir, e.name)] : []));
+const walk = (dir) =>
+  fs
+    .readdirSync(dir, { withFileTypes: true })
+    .flatMap((e) =>
+      e.isDirectory() ? walk(path.join(dir, e.name)) : e.name.endsWith(".ts") ? [path.join(dir, e.name)] : [],
+    );
 for (const file of walk(path.join(ROOT, "src"))) {
   let src = fs.readFileSync(file, "utf8");
   const before = src;

@@ -17,12 +17,35 @@ import { publishNow, remoteRunning, setRemotePublisher, startRemote } from "../s
 import { wingView } from "../features/missions/live.js";
 
 /** Settings a phone can change (display only: never keys, paths or the PC's behaviour). */
-const PHONE_SETTINGS = ["theme", "hiddenViews", "uiScale", "startView", "systemOpensNav", "notify", "mining", "copyOnPhone", "kbLayout", "kbFormat", "engineers", "navAutoCopy", "navNotifyCopy", "navExact"] as const;
+const PHONE_SETTINGS = [
+  "theme",
+  "hiddenViews",
+  "uiScale",
+  "startView",
+  "systemOpensNav",
+  "notify",
+  "mining",
+  "copyOnPhone",
+  "kbLayout",
+  "kbFormat",
+  "engineers",
+  "navAutoCopy",
+  "navNotifyCopy",
+  "navExact",
+] as const;
 
 function snapshot(store: Store): string {
   const s = store.state;
   // Never share API keys, the secret itself or the PC's paths.
-  const { sync: _sync, remote: _remote, journalDir: _dir, wing: _wing, debugLog: _debug, gameLaunch: _launch, ...settings } = s.settings;
+  const {
+    sync: _sync,
+    remote: _remote,
+    journalDir: _dir,
+    wing: _wing,
+    debugLog: _debug,
+    gameLaunch: _launch,
+    ...settings
+  } = s.settings;
   // Activity without the body table (big for explorers): the phone gets the summaries it shows.
   const { bodies, ...activity } = s.activity;
   const here = s.activity.system?.address;
@@ -70,7 +93,12 @@ export async function setupRemoteHost(store: Store) {
     try {
       await startRemote(store);
     } catch (e) {
-      startupAlert("remote", t("remote.remoteAccessUnavailable"), String((e as Error)?.message ?? e), goTo("mobile", t("common.remoteAccess")));
+      startupAlert(
+        "remote",
+        t("remote.remoteAccessUnavailable"),
+        String((e as Error)?.message ?? e),
+        goTo("mobile", t("common.remoteAccess")),
+      );
     }
   }
 }

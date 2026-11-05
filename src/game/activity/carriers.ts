@@ -30,7 +30,15 @@ export const CARRIERS_EVENTS: EventHandlers = {
   CarrierStats: (st, ev, at) => {
     const id = Number(ev.CarrierID);
     if (!id) return false;
-    const c = (st.carriers[id] ??= { marketId: id, name: String(ev.Callsign ?? ""), mine: false, squadron: false, items: {}, since: at, updated: at });
+    const c = (st.carriers[id] ??= {
+      marketId: id,
+      name: String(ev.Callsign ?? ""),
+      mine: false,
+      squadron: false,
+      items: {},
+      since: at,
+      updated: at,
+    });
     c.mine = !/squadron/i.test(String(ev.CarrierType ?? ""));
     c.squadron = /squadron/i.test(String(ev.CarrierType ?? ""));
     c.name = [ev.Name, ev.Callsign].filter(Boolean).join(" · ") || c.name;

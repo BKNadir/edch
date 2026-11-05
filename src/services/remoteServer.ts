@@ -3,7 +3,14 @@
 // by the app (app/remote.ts registers it with setRemotePublisher), so this module only handles
 // the server itself.
 
-import { remoteAddresses, remotePublish, remoteStart, remoteStop, remoteTailscale, type RemoteInfo } from "../platform/bridge.js";
+import {
+  remoteAddresses,
+  remotePublish,
+  remoteStart,
+  remoteStop,
+  remoteTailscale,
+  type RemoteInfo,
+} from "../platform/bridge.js";
 import { newRemoteToken, type Store } from "../state/store.js";
 
 let running: RemoteInfo | null = null;
@@ -71,4 +78,3 @@ export async function rotateToken(store: Store) {
 }
 
 export const detectedAddresses = () => remoteAddresses().catch(() => [] as string[]);
-

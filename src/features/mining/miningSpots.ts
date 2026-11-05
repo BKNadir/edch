@@ -12,11 +12,46 @@ type Json = Record<string, any>;
 export type MiningMethod = "laser" | "core" | "subsurface";
 
 const LASER = new Set([
-  "Platinum", "Painite", "Osmium", "Palladium", "Gold", "Silver", "Bertrandite", "Indite", "Gallite", "Coltan", "Uraninite", "Lepidolite",
-  "Samarium", "Praseodymium", "Bauxite", "Rutile", "Cobalt", "Lithium Hydroxide", "Methane Clathrate", "Methanol Monohydrate Crystals",
-  "Liquid oxygen", "Water", "Hydrogen Peroxide", "Tritium", "Low Temperature Diamonds", "Bromellite",
+  "Platinum",
+  "Painite",
+  "Osmium",
+  "Palladium",
+  "Gold",
+  "Silver",
+  "Bertrandite",
+  "Indite",
+  "Gallite",
+  "Coltan",
+  "Uraninite",
+  "Lepidolite",
+  "Samarium",
+  "Praseodymium",
+  "Bauxite",
+  "Rutile",
+  "Cobalt",
+  "Lithium Hydroxide",
+  "Methane Clathrate",
+  "Methanol Monohydrate Crystals",
+  "Liquid oxygen",
+  "Water",
+  "Hydrogen Peroxide",
+  "Tritium",
+  "Low Temperature Diamonds",
+  "Bromellite",
 ]);
-const CORE = new Set(["Alexandrite", "Benitoite", "Bromellite", "Grandidierite", "Low Temperature Diamonds", "Monazite", "Musgravite", "Painite", "Rhodplumsite", "Serendibite", "Void Opal"]);
+const CORE = new Set([
+  "Alexandrite",
+  "Benitoite",
+  "Bromellite",
+  "Grandidierite",
+  "Low Temperature Diamonds",
+  "Monazite",
+  "Musgravite",
+  "Painite",
+  "Rhodplumsite",
+  "Serendibite",
+  "Void Opal",
+]);
 const SUBSURFACE = new Set([...CORE, "Platinum"]);
 
 export function miningMethods(mineral: string): MiningMethod[] {
@@ -34,8 +69,19 @@ export const METHOD_LABEL: Record<MiningMethod, string> = {
 };
 
 /** Ring types as the game names them. */
-export const RING_TYPE: Record<string, string> = { Metallic: t("miningSpots.metallic"), "Metal Rich": t("miningSpots.metalRich"), Rocky: t("miningSpots.rocky"), Icy: t("miningSpots.icy") };
-export const RESERVE: Record<string, string> = { Pristine: t("miningSpots.pristine"), Major: t("miningSpots.major"), Common: t("miningSpots.common"), Low: t("miningSpots.low"), Depleted: t("miningSpots.depleted") };
+export const RING_TYPE: Record<string, string> = {
+  Metallic: t("miningSpots.metallic"),
+  "Metal Rich": t("miningSpots.metalRich"),
+  Rocky: t("miningSpots.rocky"),
+  Icy: t("miningSpots.icy"),
+};
+export const RESERVE: Record<string, string> = {
+  Pristine: t("miningSpots.pristine"),
+  Major: t("miningSpots.major"),
+  Common: t("miningSpots.common"),
+  Low: t("miningSpots.low"),
+  Depleted: t("miningSpots.depleted"),
+};
 
 export interface RingSpot {
   mineral: string;
@@ -75,11 +121,17 @@ const radii = (start: number) => {
 
 const where = (ctx: Ctx) => {
   const ref = referenceOf(ctx);
-  return ref.coords ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } } : { reference_system: ref.system };
+  return ref.coords
+    ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } }
+    : { reference_system: ref.system };
 };
 
 /** Ring hotspots of `mineral`, nearest first; `radius` is the radius that gave results. */
-export async function findRingSpots(ctx: Ctx, mineral: string, extra: Json = {}): Promise<{ spots: RingSpot[]; radius: number; widened: boolean }> {
+export async function findRingSpots(
+  ctx: Ctx,
+  mineral: string,
+  extra: Json = {},
+): Promise<{ spots: RingSpot[]; radius: number; widened: boolean }> {
   const start = ctx.store.state.settings.maxDistance;
   for (const r of radii(start)) {
     const res = await spanshPost("bodies/search", {
@@ -92,7 +144,9 @@ export async function findRingSpots(ctx: Ctx, mineral: string, extra: Json = {})
     const spots: RingSpot[] = [];
     for (const b of (res?.results ?? []) as Json[]) {
       for (const ring of (b.rings ?? []) as Json[]) {
-        const sig = ((ring.signals ?? []) as Json[]).find((x) => String(x.name).toLowerCase() === mineral.toLowerCase());
+        const sig = ((ring.signals ?? []) as Json[]).find(
+          (x) => String(x.name).toLowerCase() === mineral.toLowerCase(),
+        );
         if (!sig) continue;
         spots.push({
           mineral,
@@ -115,11 +169,19 @@ export async function findRingSpots(ctx: Ctx, mineral: string, extra: Json = {})
 }
 
 /** Stations buying `mineral`, best price first; `radius` is the radius that gave results. */
-export async function findSellSpots(ctx: Ctx, mineral: string, extra: Json = {}): Promise<{ spots: SellSpot[]; radius: number; widened: boolean }> {
+export async function findSellSpots(
+  ctx: Ctx,
+  mineral: string,
+  extra: Json = {},
+): Promise<{ spots: SellSpot[]; radius: number; widened: boolean }> {
   const start = ctx.store.state.settings.maxDistance;
   for (const r of radii(start)) {
     const res = await spanshPost("stations/search", {
-      filters: { ...extra, distance: { min: "0", max: String(r) }, market: [{ name: mineral, demand: { value: ["1", "1000000000"], comparison: "<=>" } }] },
+      filters: {
+        ...extra,
+        distance: { min: "0", max: String(r) },
+        market: [{ name: mineral, demand: { value: ["1", "1000000000"], comparison: "<=>" } }],
+      },
       sort: [{ distance: { direction: "asc" } }],
       size: 100,
       page: 0,
@@ -127,7 +189,9 @@ export async function findSellSpots(ctx: Ctx, mineral: string, extra: Json = {})
     });
     const spots: SellSpot[] = [];
     for (const s of (res?.results ?? []) as Json[]) {
-      const quote = ((s.market ?? []) as Json[]).find((x) => String(x.commodity).toLowerCase() === mineral.toLowerCase());
+      const quote = ((s.market ?? []) as Json[]).find(
+        (x) => String(x.commodity).toLowerCase() === mineral.toLowerCase(),
+      );
       if (!quote || !quote.sell_price) continue;
       spots.push({
         mineral,

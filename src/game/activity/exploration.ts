@@ -65,14 +65,15 @@ export function pruneBodies(st: ActivityState) {
 
 /** FSSBodySignals, SAASignalsFound. */
 const onFSSBodySignals: EventHandler = (st, ev) => {
-    const b = getBody(st, ev);
-    for (const sig of ev.Signals ?? []) {
-      const signalType = String(sig.Type ?? "");
-      if (/Biological/i.test(signalType)) b.bio = num(sig.Count) ?? b.bio;
-      if (/Geological/i.test(signalType)) b.geo = num(sig.Count) ?? b.geo;
-    }
-    if (Array.isArray(ev.Genuses) && ev.Genuses.length) b.genera = ev.Genuses.map((g: Json) => String(g.Genus ?? "").toLowerCase());
-    return true;
+  const b = getBody(st, ev);
+  for (const sig of ev.Signals ?? []) {
+    const signalType = String(sig.Type ?? "");
+    if (/Biological/i.test(signalType)) b.bio = num(sig.Count) ?? b.bio;
+    if (/Geological/i.test(signalType)) b.geo = num(sig.Count) ?? b.geo;
+  }
+  if (Array.isArray(ev.Genuses) && ev.Genuses.length)
+    b.genera = ev.Genuses.map((g: Json) => String(g.Genus ?? "").toLowerCase());
+  return true;
 };
 
 /** Journal events of this domain. */
@@ -103,7 +104,10 @@ export const EXPLORATION_EVENTS: EventHandlers = {
   SAAScanComplete: (st, ev) => {
     const b = getBody(st, ev);
     b.mapped = true;
-    b.efficient = num(ev.ProbesUsed) !== undefined && num(ev.EfficiencyTarget) !== undefined && ev.ProbesUsed <= ev.EfficiencyTarget;
+    b.efficient =
+      num(ev.ProbesUsed) !== undefined &&
+      num(ev.EfficiencyTarget) !== undefined &&
+      ev.ProbesUsed <= ev.EfficiencyTarget;
     markUnsold(st, b);
     return true;
   },
@@ -118,7 +122,10 @@ export const EXPLORATION_EVENTS: EventHandlers = {
   MultiSellExplorationData: (st, ev) => {
     const session = st.session;
     session.exploration += num(ev.TotalEarnings) ?? (num(ev.BaseValue) ?? 0) + (num(ev.Bonus) ?? 0);
-    forgetSystems(st, (ev.Discovered ?? []).map((d: Json) => String(d.SystemName ?? "")));
+    forgetSystems(
+      st,
+      (ev.Discovered ?? []).map((d: Json) => String(d.SystemName ?? "")),
+    );
     return true;
   },
 };
@@ -167,7 +174,11 @@ export function bodyValue(b: BodyInfo, opts: { mapped?: boolean } = {}): number 
 }
 
 /** Great-circle distance between two surface points, metres. */
-export function surfaceDistance(a: { lat: number; lon: number }, b: { lat: number; lon: number }, radius: number): number {
+export function surfaceDistance(
+  a: { lat: number; lon: number },
+  b: { lat: number; lon: number },
+  radius: number,
+): number {
   const rad = Math.PI / 180;
   const dLat = (b.lat - a.lat) * rad;
   const dLon = (b.lon - a.lon) * rad;

@@ -12,7 +12,14 @@ let last = "";
 
 type Rgb = [number, number, number];
 const rgb = (hex: string): Rgb => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)) as Rgb;
-const toHex = (c: Rgb) => `#${c.map((v) => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, "0")).join("")}`;
+const toHex = (c: Rgb) =>
+  `#${c
+    .map((v) =>
+      Math.round(Math.max(0, Math.min(255, v)))
+        .toString(16)
+        .padStart(2, "0"),
+    )
+    .join("")}`;
 /** WCAG relative luminance (0 black … 1 white). */
 export function luminance(hex: string): number {
   const [r, g, b] = rgb(hex).map((v) => {
@@ -47,13 +54,17 @@ export function applyTheme(theme: ThemeSettings) {
   const panelBg = light ? toHex(rgb(bg).map((v) => v + (255 - v) * 0.6) as Rgb) : bg;
   const accent = readable(safe(theme.accent, DEFAULT_THEME.accent), panelBg, light ? 4.5 : 3);
   const cyan = readable(safe(theme.cyan, DEFAULT_THEME.cyan), panelBg, 4.5);
-  const mix = light ? (pct: number) => `color-mix(in srgb, ${bg}, #ffffff ${pct}%)` : (pct: number) => `color-mix(in srgb, ${bg}, #9fb4cc ${pct}%)`;
+  const mix = light
+    ? (pct: number) => `color-mix(in srgb, ${bg}, #ffffff ${pct}%)`
+    : (pct: number) => `color-mix(in srgb, ${bg}, #9fb4cc ${pct}%)`;
   const line = light ? (pct: number) => `color-mix(in srgb, ${bg}, #23344a ${pct}%)` : mix;
   const vars: Record<string, string> = {
     "--accent": accent,
     "--accent-dim": `color-mix(in srgb, ${accent} ${light ? 12 : 14}%, transparent)`,
     "--accent-line": `color-mix(in srgb, ${accent} 42%, transparent)`,
-    "--accent-soft": light ? `color-mix(in srgb, ${accent} 75%, #000000)` : `color-mix(in srgb, ${accent} 62%, #ffffff)`,
+    "--accent-soft": light
+      ? `color-mix(in srgb, ${accent} 75%, #000000)`
+      : `color-mix(in srgb, ${accent} 62%, #ffffff)`,
     // Text on an accent background: black or white, whichever reads better.
     "--on-accent": contrast(accent, "#000000") >= contrast(accent, "#ffffff") ? "#140a00" : "#ffffff",
     "--cyan": cyan,

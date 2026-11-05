@@ -1,7 +1,17 @@
 // Automatic updates: compares this build with the latest GitHub release, offers it in a
 // banner, downloads the installer on demand and restarts EDCH through it.
 
-import { isRemote, isTauri, updateMode, onUpdateProgress, openUrl, updateCheck, updateDownload, updateInstall, type UpdateInfo } from "../platform/bridge.js";
+import {
+  isRemote,
+  isTauri,
+  updateMode,
+  onUpdateProgress,
+  openUrl,
+  updateCheck,
+  updateDownload,
+  updateInstall,
+  type UpdateInfo,
+} from "../platform/bridge.js";
 import { h, replace, toast } from "./dom.js";
 import { locale, t } from "../platform/i18n.js";
 import { log } from "../platform/logger.js";
@@ -32,7 +42,11 @@ function notesList(notes: string): HTMLElement | null {
     .filter((l) => /^[-*] /.test(l))
     .map((l) => l.slice(2).replace(/\*\*/g, "").replace(/`/g, ""));
   if (!items.length) return null;
-  return h("ul.update-notes", { "data-no-tr": "" }, items.map((note) => h("li", null, note)));
+  return h(
+    "ul.update-notes",
+    { "data-no-tr": "" },
+    items.map((note) => h("li", null, note)),
+  );
 }
 let bar: HTMLElement | null = null;
 let store: Store | null = null;
@@ -60,16 +74,26 @@ function render() {
         h("strong", null, t("updater.edchAvailable", { version: p.info.version })),
         h("span.sub", null, t("common.installedVersion", { current: p.info.current })),
         showNotes ? notesList(p.info.notes) : null,
-        showNotes && p.info.page ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, t("updater.viewGithub")) : null,
+        showNotes && p.info.page
+          ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, t("updater.viewGithub"))
+          : null,
       ),
       h(
         "div.row",
         null,
-        h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? t("updater.hideWhatSNew") : t("updater.whatSNew")),
+        h(
+          "button.ghost.small",
+          { onclick: () => ((showNotes = !showNotes), render()) },
+          showNotes ? t("updater.hideWhatSNew") : t("updater.whatSNew"),
+        ),
         close,
         selfInstall()
           ? h("button.primary.small", { onclick: () => download(p.info) }, t("updater.update"))
-          : h("button.primary.small", { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") }, mode === "portable" ? t("updater.downloadPortableVersion") : t("updater.downloadNewVersion")),
+          : h(
+              "button.primary.small",
+              { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") },
+              mode === "portable" ? t("updater.downloadPortableVersion") : t("updater.downloadNewVersion"),
+            ),
       ),
     );
   } else if (p.kind === "downloading") {
@@ -80,14 +104,25 @@ function render() {
         "div.update-text",
         null,
         h("strong", null, t("updater.downloadingEdch", { version: p.info.version })),
-        h("span.sub", null, p.total > 0 ? t("updater.mb", { pct, mb: mb(p.done), mb2: mb(p.total) }) : t("updater.mb2", { mb: mb(p.done) })),
+        h(
+          "span.sub",
+          null,
+          p.total > 0
+            ? t("updater.mb", { pct, mb: mb(p.done), mb2: mb(p.total) })
+            : t("updater.mb2", { mb: mb(p.done) }),
+        ),
         h("div.update-progress", null, h("span", { style: { width: `${pct}%` } })),
       ),
     );
   } else if (p.kind === "ready") {
     replace(
       bar,
-      h("div.update-text", null, h("strong", null, t("updater.edchReady", { version: p.info.version })), h("span.sub", null, t("updater.restartAppFinishUpdateWillReopen"))),
+      h(
+        "div.update-text",
+        null,
+        h("strong", null, t("updater.edchReady", { version: p.info.version })),
+        h("span.sub", null, t("updater.restartAppFinishUpdateWillReopen")),
+      ),
       h("div.row", null, close, h("button.primary.small", { onclick: () => install(p) }, t("updater.restartNow"))),
     );
   } else {

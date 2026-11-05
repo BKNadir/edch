@@ -14,7 +14,8 @@ const SOL: Vec3 = [0, 0, 0];
 const COLONIA: Vec3 = [-9530.5, -910.28125, 19808.125];
 
 export type Region = "bubble" | "colonia";
-export const regionOf = (pos: Vec3): Region => ((distance(pos, COLONIA) ?? Infinity) < (distance(pos, SOL) ?? Infinity) ? "colonia" : "bubble");
+export const regionOf = (pos: Vec3): Region =>
+  (distance(pos, COLONIA) ?? Infinity) < (distance(pos, SOL) ?? Infinity) ? "colonia" : "bubble";
 
 /** Where distances are measured from (the commander, or Sol when the position is unknown). */
 export function origin(ctx: Ctx): Vec3 | undefined {

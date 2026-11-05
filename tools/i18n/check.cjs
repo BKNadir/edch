@@ -19,7 +19,11 @@ const flatten = (texts) => {
   return out;
 };
 const load = (lang) => flatten(JSON.parse(fs.readFileSync(path.join(LOCALES, `${lang}.json`), "utf8")));
-const variables = (text) => [...text.matchAll(/\{\{(\w+)\}\}/g)].map((m) => m[1]).sort().join(",");
+const variables = (text) =>
+  [...text.matchAll(/\{\{(\w+)\}\}/g)]
+    .map((m) => m[1])
+    .sort()
+    .join(",");
 const baseKey = (key) => key.replace(PLURAL, "");
 
 /** Keys used in the code: t("ns.key"…) and t(`binds.${…}`) style prefixes. */
@@ -32,7 +36,10 @@ function usedInCode() {
       if (e.isDirectory()) walk(p);
       else if (e.name.endsWith(".ts")) {
         // Comments are left out: they may show t() examples.
-        const src = fs.readFileSync(p, "utf8").replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+        const src = fs
+          .readFileSync(p, "utf8")
+          .replace(/\/\*[\s\S]*?\*\//g, "")
+          .replace(/^\s*\/\/.*$/gm, "");
         for (const m of src.matchAll(/\bt\(\s*"([a-z][A-Za-z0-9]*\.[A-Za-z0-9_]+)"/g)) used.add(m[1]);
         for (const m of src.matchAll(/\bt\(\s*`([a-z][A-Za-z0-9]*\.)\$\{/g)) prefixes.add(m[1]);
         // Rust error codes are looked up as "backend.<code>" (see backendMessage).
@@ -62,7 +69,8 @@ for (const lang of LANGS.filter((l) => l !== "en")) {
   for (const key of bases) if (!enBases.has(key)) problems.push(`not in en (${lang}): ${key}`);
   for (const [key, text] of texts) {
     const ref = en.get(key) ?? en.get(`${baseKey(key)}_other`) ?? en.get(baseKey(key));
-    if (ref !== undefined && variables(ref) !== variables(text)) problems.push(`variables differ in ${lang}: ${key} ({{${variables(text)}}} vs en {{${variables(ref)}}})`);
+    if (ref !== undefined && variables(ref) !== variables(text))
+      problems.push(`variables differ in ${lang}: ${key} ({{${variables(text)}}} vs en {{${variables(ref)}}})`);
   }
 }
 

@@ -45,7 +45,12 @@ export class EngineeringView implements View {
     });
     replace(
       root,
-      h("header.view-head", null, h("h1", null, t("common.engineering")), h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.tabs)),
+      h(
+        "header.view-head",
+        null,
+        h("h1", null, t("common.engineering")),
+        h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.tabs),
+      ),
       h("div.bp-layout", null, this.side, this.main),
     );
     this.update();
@@ -75,7 +80,13 @@ export class EngineeringView implements View {
     }
     replace(
       this.tabs,
-      KINDS.map((k, i) => h("button", { class: i === this.tab ? "active" : "", onclick: () => ((this.tab = i), (this.module = ""), this.update()) }, k.label)),
+      KINDS.map((k, i) =>
+        h(
+          "button",
+          { class: i === this.tab ? "active" : "", onclick: () => ((this.tab = i), (this.module = ""), this.update()) },
+          k.label,
+        ),
+      ),
     );
 
     const all = this.blueprints();
@@ -101,7 +112,9 @@ export class EngineeringView implements View {
     replace(
       this.main,
       h("h2", null, this.module || "—"),
-      names.map((name) => this.card(ofModule.filter((b) => b.name === name).sort((a, b) => (a.grade ?? 0) - (b.grade ?? 0)))),
+      names.map((name) =>
+        this.card(ofModule.filter((b) => b.name === name).sort((a, b) => (a.grade ?? 0) - (b.grade ?? 0))),
+      ),
     );
   }
 
@@ -114,7 +127,11 @@ export class EngineeringView implements View {
         const known = Boolean(this.ctx.game.material(id));
         return h(
           "button.mat-chip",
-          { class: !known ? "commodity" : have >= n ? "ok" : "short", onclick: () => (known ? this.ctx.store.select(id) : openCommodity(this.ctx.game.nameOf(id))), title: known ? t("engineering.owned", { have }) : t("engineering.commodityCargoWhereBuy") },
+          {
+            class: !known ? "commodity" : have >= n ? "ok" : "short",
+            onclick: () => (known ? this.ctx.store.select(id) : openCommodity(this.ctx.game.nameOf(id))),
+            title: known ? t("engineering.owned", { have }) : t("engineering.commodityCargoWhereBuy"),
+          },
           this.ctx.game.nameOf(id),
           h("small", null, known ? `${fmt(Math.min(have, n))}/${n}` : `×${n}`),
         );
@@ -132,16 +149,25 @@ export class EngineeringView implements View {
       h(
         "div.bp-head",
         null,
-        h("div", null, h("h3", null, first.name), h("p.sub", null, kindFr(first.kind), engineers.length ? [" · ", ...engineerLinks(engineers)] : "")),
+        h(
+          "div",
+          null,
+          h("h3", null, first.name),
+          h("p.sub", null, kindFr(first.kind), engineers.length ? [" · ", ...engineerLinks(engineers)] : ""),
+        ),
         h(
           "button.primary.small",
           { onclick: () => addToWishlist(this.ctx, max, first.kind === "modification" ? 1 : undefined, max.grade) },
           icon("plus"),
-          grades.length > 1 && first.kind === "modification" ? ` G1→G${max.grade}` : (" " + t("common.wishlist")),
+          grades.length > 1 && first.kind === "modification" ? ` G1→G${max.grade}` : " " + t("common.wishlist"),
         ),
       ),
       max.effects?.length
-        ? h("p.effects", null, max.effects.map((e) => h(`span.effect.${e.good ? "good" : "bad"}`, null, [e.label, " ", e.value])))
+        ? h(
+            "p.effects",
+            null,
+            max.effects.map((e) => h(`span.effect.${e.good ? "good" : "bad"}`, null, [e.label, " ", e.value])),
+          )
         : null,
       h(
         "div.grades",
@@ -154,7 +180,16 @@ export class EngineeringView implements View {
               "div.grade-title",
               null,
               bp.grade ? h("strong", null, t("common.grade", { grade: bp.grade })) : null,
-              grades.length > 1 ? h("button.ghost.small", { title: t("engineering.addGradeOnly"), onclick: () => addToWishlist(this.ctx, bp, bp.grade, bp.grade) }, icon("plus")) : null,
+              grades.length > 1
+                ? h(
+                    "button.ghost.small",
+                    {
+                      title: t("engineering.addGradeOnly"),
+                      onclick: () => addToWishlist(this.ctx, bp, bp.grade, bp.grade),
+                    },
+                    icon("plus"),
+                  )
+                : null,
             ),
             this.ingredients(bp),
           ),

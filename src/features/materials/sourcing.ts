@@ -31,13 +31,26 @@ export interface Hotspot {
 
 const BIG = "1000000000";
 const STATION_TYPES = [
-  "Asteroid base", "Coriolis Starport", "Dodec Starport", "Mega ship", "Ocellus Starport", "Orbis Starport", "Outpost",
-  "Planetary Construction Depot", "Planetary Outpost", "Planetary Port", "Settlement", "Space Construction Depot", "Surface Settlement",
+  "Asteroid base",
+  "Coriolis Starport",
+  "Dodec Starport",
+  "Mega ship",
+  "Ocellus Starport",
+  "Orbis Starport",
+  "Outpost",
+  "Planetary Construction Depot",
+  "Planetary Outpost",
+  "Planetary Port",
+  "Settlement",
+  "Space Construction Depot",
+  "Surface Settlement",
 ];
 
 function where(ctx: Ctx) {
   const ref = referenceOf(ctx);
-  return ref.coords ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } } : { reference_system: ref.system };
+  return ref.coords
+    ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } }
+    : { reference_system: ref.system };
 }
 
 /**
@@ -52,14 +65,25 @@ export async function findSupply(ctx: Ctx, commodity: string, need: number): Pro
     market: [{ name: commodity, supply: { value: [String(Math.max(1, need)), BIG], comparison: "<=>" } }],
   };
   if (s.largePadOnly) filters.has_large_pad = { value: ["true"] };
-  const res = await spanshPost("stations/search", { filters, sort: [{ distance: { direction: "asc" } }], size: 60, page: 0, ...where(ctx) });
+  const res = await spanshPost("stations/search", {
+    filters,
+    sort: [{ distance: { direction: "asc" } }],
+    size: 60,
+    page: 0,
+    ...where(ctx),
+  });
   const now = Date.now();
   const offers: Offer[] = [];
   for (const r of (res?.results ?? []) as Json[]) {
     const q = ((r.market ?? []) as Json[]).find((x) => String(x.commodity).toLowerCase() === commodity.toLowerCase());
     if (!q || !q.buy_price) continue;
     const updated = r.market_updated_at ?? r.updated_at;
-    const ageDays = updated ? Math.max(0, (now - Date.parse(String(updated).replace(" ", "T") + (String(updated).endsWith("Z") ? "" : "Z"))) / 86400000) : 30;
+    const ageDays = updated
+      ? Math.max(
+          0,
+          (now - Date.parse(String(updated).replace(" ", "T") + (String(updated).endsWith("Z") ? "" : "Z"))) / 86400000,
+        )
+      : 30;
     offers.push({
       station: r.name,
       system: r.system_name,
@@ -108,7 +132,13 @@ export async function findHotspots(ctx: Ctx, mineral: string): Promise<Hotspot[]
   for (const b of (res?.results ?? []) as Json[]) {
     for (const r of (b.rings ?? []) as Json[]) {
       const sig = ((r.signals ?? []) as Json[]).find((x) => String(x.name).toLowerCase() === mineral.toLowerCase());
-      if (sig) out.push({ system: b.system_name, ring: r.name, count: Number(sig.count ?? 1), distance: Number(b.distance ?? 0) });
+      if (sig)
+        out.push({
+          system: b.system_name,
+          ring: r.name,
+          count: Number(sig.count ?? 1),
+          distance: Number(b.distance ?? 0),
+        });
     }
   }
   return out.slice(0, 5);
@@ -116,10 +146,34 @@ export async function findHotspots(ctx: Ctx, mineral: string): Promise<Hotspot[]
 
 /** Minerals that rings can hold as hotspots (market name → hotspot name). */
 export const HOTSPOT_NAMES: Record<string, string> = {
-  platinum: "Platinum", painite: "Painite", lowtemperaturediamond: "Low Temperature Diamonds", opal: "Void Opal", monazite: "Monazite",
-  musgravite: "Musgravite", rhodplumsite: "Rhodplumsite", serendibite: "Serendibite", benitoite: "Benitoite", grandidierite: "Grandidierite",
-  alexandrite: "Alexandrite", bromellite: "Bromellite", tritium: "Tritium", bertrandite: "Bertrandite", indite: "Indite", gallite: "Gallite",
-  coltan: "Coltan", uraninite: "Uraninite", lepidolite: "Lepidolite", samarium: "Samarium", praseodymium: "Praseodymium", bauxite: "Bauxite",
-  rutile: "Rutile", cobalt: "Cobalt", lithiumhydroxide: "Lithium Hydroxide", methaneclathrate: "Methane Clathrate",
-  methanolmonohydratecrystals: "Methanol Monohydrate Crystals", liquidoxygen: "Liquid oxygen", water: "Water", hydrogenperoxide: "Hydrogen Peroxide",
+  platinum: "Platinum",
+  painite: "Painite",
+  lowtemperaturediamond: "Low Temperature Diamonds",
+  opal: "Void Opal",
+  monazite: "Monazite",
+  musgravite: "Musgravite",
+  rhodplumsite: "Rhodplumsite",
+  serendibite: "Serendibite",
+  benitoite: "Benitoite",
+  grandidierite: "Grandidierite",
+  alexandrite: "Alexandrite",
+  bromellite: "Bromellite",
+  tritium: "Tritium",
+  bertrandite: "Bertrandite",
+  indite: "Indite",
+  gallite: "Gallite",
+  coltan: "Coltan",
+  uraninite: "Uraninite",
+  lepidolite: "Lepidolite",
+  samarium: "Samarium",
+  praseodymium: "Praseodymium",
+  bauxite: "Bauxite",
+  rutile: "Rutile",
+  cobalt: "Cobalt",
+  lithiumhydroxide: "Lithium Hydroxide",
+  methaneclathrate: "Methane Clathrate",
+  methanolmonohydratecrystals: "Methanol Monohydrate Crystals",
+  liquidoxygen: "Liquid oxygen",
+  water: "Water",
+  hydrogenperoxide: "Hydrogen Peroxide",
 };

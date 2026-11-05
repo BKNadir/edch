@@ -4,7 +4,19 @@ import { log as appLog } from "../platform/logger.js";
 // only live events (never the startup replay), no retry on EDDN 400/426, ≥ 60 s before a retry.
 
 import { httpFetch, readAuxFile } from "../platform/bridge.js";
-import { EDDN_URL, commodityMessage, fssMessage, isBeta, journalMessage, navrouteMessage, outfittingMessage, shipyardMessage, trackSession, type EddnMessage, type GameSession } from "./eddn.js";
+import {
+  EDDN_URL,
+  commodityMessage,
+  fssMessage,
+  isBeta,
+  journalMessage,
+  navrouteMessage,
+  outfittingMessage,
+  shipyardMessage,
+  trackSession,
+  type EddnMessage,
+  type GameSession,
+} from "./eddn.js";
 import { SOFTWARE_NAME } from "../platform/version.js";
 import { SOFTWARE_VERSION } from "../platform/version.js";
 import { t } from "../platform/i18n.js";
@@ -62,7 +74,13 @@ export class Uploaders {
     else {
       appLog.warn(service, `${what}: ${detail ?? "error"}`);
       // A refused key or a service down right at start-up: say so.
-      if (inStartup()) startupAlert(`sync-${service}`, t("uploaders.uploadRefused", { service }), detail ?? "", goTo("sync", t("common.sync")));
+      if (inStartup())
+        startupAlert(
+          `sync-${service}`,
+          t("uploaders.uploadRefused", { service }),
+          detail ?? "",
+          goTo("sync", t("common.sync")),
+        );
     }
     const key = service;
     if (ok) this.stats.sent[key] = (this.stats.sent[key] ?? 0) + 1;
@@ -249,10 +267,20 @@ export class Uploaders {
       message: JSON.stringify(batch),
     });
     try {
-      const reply = await httpFetch("POST", "https://www.edsm.net/api-journal-v1", form.toString(), "application/x-www-form-urlencoded");
+      const reply = await httpFetch(
+        "POST",
+        "https://www.edsm.net/api-journal-v1",
+        form.toString(),
+        "application/x-www-form-urlencoded",
+      );
       const res = JSON.parse(reply.body || "{}");
       const ok = reply.status === 200 && Math.floor(Number(res.msgnum) / 100) === 1;
-      this.log("EDSM", t("uploaders.events", { count: batch.length }), ok, ok ? undefined : `${res.msgnum ?? reply.status} ${res.msg ?? ""}`);
+      this.log(
+        "EDSM",
+        t("uploaders.events", { count: batch.length }),
+        ok,
+        ok ? undefined : `${res.msgnum ?? reply.status} ${res.msg ?? ""}`,
+      );
       // 2xx msgnum = bad credentials or fatal: don't keep hammering.
       if (!ok && Math.floor(Number(res.msgnum) / 100) === 2) this.edsmPending = [];
     } catch (e) {
@@ -266,7 +294,8 @@ export class Uploaders {
   private ship: Json = {};
 
   private queueInara(ev: Json) {
-    const add = (eventName: string, eventData: unknown) => !this.inaraRefused && this.inaraEvents.push({ eventName, eventTimestamp: ev.timestamp, eventData });
+    const add = (eventName: string, eventData: unknown) =>
+      !this.inaraRefused && this.inaraEvents.push({ eventName, eventTimestamp: ev.timestamp, eventData });
     const ship = { shipType: this.ship.type, shipGameID: this.ship.id };
     switch (ev.event) {
       case "LoadGame":
@@ -288,22 +317,46 @@ export class Uploaders {
         }
         break;
       case "FSDJump":
-        add("addCommanderTravelFSDJump", { starsystemName: ev.StarSystem, starsystemCoords: ev.StarPos, jumpDistance: ev.JumpDist, ...ship });
+        add("addCommanderTravelFSDJump", {
+          starsystemName: ev.StarSystem,
+          starsystemCoords: ev.StarPos,
+          jumpDistance: ev.JumpDist,
+          ...ship,
+        });
         break;
       case "CarrierJump":
-        add("addCommanderTravelCarrierJump", { starsystemName: ev.StarSystem, starsystemCoords: ev.StarPos, stationName: ev.StationName, marketID: ev.MarketID, ...ship });
+        add("addCommanderTravelCarrierJump", {
+          starsystemName: ev.StarSystem,
+          starsystemCoords: ev.StarPos,
+          stationName: ev.StationName,
+          marketID: ev.MarketID,
+          ...ship,
+        });
         break;
       case "Docked":
-        add("addCommanderTravelDock", { starsystemName: ev.StarSystem, stationName: ev.StationName, marketID: ev.MarketID, ...ship });
+        add("addCommanderTravelDock", {
+          starsystemName: ev.StarSystem,
+          stationName: ev.StationName,
+          marketID: ev.MarketID,
+          ...ship,
+        });
         break;
       case "Location":
-        add("setCommanderTravelLocation", { starsystemName: ev.StarSystem, starsystemCoords: ev.StarPos, ...(ev.Docked ? { stationName: ev.StationName, marketID: ev.MarketID } : {}) });
+        add("setCommanderTravelLocation", {
+          starsystemName: ev.StarSystem,
+          starsystemCoords: ev.StarPos,
+          ...(ev.Docked ? { stationName: ev.StationName, marketID: ev.MarketID } : {}),
+        });
         break;
       case "EngineerProgress": {
         const list: Json[] = Array.isArray(ev.Engineers) ? ev.Engineers : [ev];
         const data = list
           .filter((e) => e.Engineer)
-          .map((e) => (e.Rank ? { engineerName: e.Engineer, rankValue: e.Rank } : { engineerName: e.Engineer, rankStage: e.Progress }));
+          .map((e) =>
+            e.Rank
+              ? { engineerName: e.Engineer, rankValue: e.Rank }
+              : { engineerName: e.Engineer, rankStage: e.Progress },
+          );
         if (data.length) add("setCommanderRankEngineer", data);
         break;
       }
@@ -326,7 +379,11 @@ export class Uploaders {
     if (this.inaraMaterials) {
       this.inaraMaterials = false;
       const mats = Object.entries(this.materials()).map(([itemName, itemCount]) => ({ itemName, itemCount }));
-      this.inaraEvents.push({ eventName: "setCommanderInventoryMaterials", eventTimestamp: new Date().toISOString().slice(0, 19) + "Z", eventData: mats });
+      this.inaraEvents.push({
+        eventName: "setCommanderInventoryMaterials",
+        eventTimestamp: new Date().toISOString().slice(0, 19) + "Z",
+        eventData: mats,
+      });
     }
     if (!this.inaraEvents.length) return;
     const events = this.inaraEvents.splice(0, 100);
@@ -352,10 +409,20 @@ export class Uploaders {
       if (status === 400 && /no access allowed/i.test(String(res?.header?.eventStatusText ?? ""))) {
         this.inaraRefused = true;
         this.inaraEvents = [];
-        this.log("Inara", t("uploaders.events", { count: events.length }), false, t("uploaders.inaraHasnTAuthorisedEdchYet"));
+        this.log(
+          "Inara",
+          t("uploaders.events", { count: events.length }),
+          false,
+          t("uploaders.inaraHasnTAuthorisedEdchYet"),
+        );
         return;
       }
-      this.log("Inara", t("uploaders.events", { count: events.length }), ok && !bad.length, ok && !bad.length ? undefined : `${status} ${res?.header?.eventStatusText ?? bad[0]?.eventStatusText ?? ""}`);
+      this.log(
+        "Inara",
+        t("uploaders.events", { count: events.length }),
+        ok && !bad.length,
+        ok && !bad.length ? undefined : `${status} ${res?.header?.eventStatusText ?? bad[0]?.eventStatusText ?? ""}`,
+      );
     } catch (e) {
       this.inaraEvents.unshift(...events);
       this.log("Inara", t("uploaders.events", { count: events.length }), false, String(e));

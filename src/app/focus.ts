@@ -59,7 +59,12 @@ export function setFocus(on: boolean) {
   void setFullscreen(on);
   log.debug("ui", `Focus mode ${on ? "on" : "off"}`);
   if (on && !exitButton) {
-    exitButton = h("button.focus-exit", { title: t("focus.exitFullScreenEsc"), onclick: () => setFocus(false) }, icon("close"), h("span", null, t("focus.exitFullScreen")));
+    exitButton = h(
+      "button.focus-exit",
+      { title: t("focus.exitFullScreenEsc"), onclick: () => setFocus(false) },
+      icon("close"),
+      h("span", null, t("focus.exitFullScreen")),
+    );
     document.body.append(exitButton);
   }
 }
@@ -83,7 +88,17 @@ export function focusButtons(): HTMLElement {
   return h(
     "div.focus-buttons",
     null,
-    h("button.icon-btn", { title: t("focus.fullScreenPageOnlyEscExit"), onclick: () => setFocus(true) }, icon("expand")),
-    isTauri() && !isRemote() && remoteRunning() ? h("button.icon-btn", { title: t("focus.openPageAloneBrowserSecondScreen"), onclick: () => openInBrowser() }, icon("link")) : null,
+    h(
+      "button.icon-btn",
+      { title: t("focus.fullScreenPageOnlyEscExit"), onclick: () => setFocus(true) },
+      icon("expand"),
+    ),
+    isTauri() && !isRemote() && remoteRunning()
+      ? h(
+          "button.icon-btn",
+          { title: t("focus.openPageAloneBrowserSecondScreen"), onclick: () => openInBrowser() },
+          icon("link"),
+        )
+      : null,
   );
 }

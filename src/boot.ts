@@ -74,7 +74,11 @@ function pickLanguage(app: HTMLElement, preselected: string): Promise<string> {
   return new Promise((resolve) => {
     let chosen = preselected;
     const buttons = LANGS.map((l) =>
-      h("button.lang-choice", { class: l.code === chosen ? "active" : "", "data-code": l.code, onclick: () => select(l.code) }, l.label),
+      h(
+        "button.lang-choice",
+        { class: l.code === chosen ? "active" : "", "data-code": l.code, onclick: () => select(l.code) },
+        l.label,
+      ),
     );
     const select = (c: string) => {
       chosen = c;
@@ -87,7 +91,11 @@ function pickLanguage(app: HTMLElement, preselected: string): Promise<string> {
         null,
         h("img", { src: "favicon.png", alt: "" }),
         h("h1", null, "EDCH"),
-        h("p.sub", null, "Choose your language · Choisis ta langue · Sprache wählen · Elige tu idioma · Escolha o idioma · Выберите язык"),
+        h(
+          "p.sub",
+          null,
+          "Choose your language · Choisis ta langue · Sprache wählen · Elige tu idioma · Escolha o idioma · Выберите язык",
+        ),
         h("div.lang-grid", null, buttons),
         h("button.primary", { onclick: () => resolve(chosen) }, "OK"),
       ),

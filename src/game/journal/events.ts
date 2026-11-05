@@ -147,7 +147,8 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
         controllingPower: ev.ControllingPower,
         powerState: ev.PowerplayState,
         powers: Array.isArray(ev.Powers) ? ev.Powers : undefined,
-        controlProgress: typeof ev.PowerplayStateControlProgress === "number" ? ev.PowerplayStateControlProgress : undefined,
+        controlProgress:
+          typeof ev.PowerplayStateControlProgress === "number" ? ev.PowerplayStateControlProgress : undefined,
         reinforcement: typeof ev.PowerplayStateReinforcement === "number" ? ev.PowerplayStateReinforcement : undefined,
         undermining: typeof ev.PowerplayStateUndermining === "number" ? ev.PowerplayStateUndermining : undefined,
       };
@@ -255,7 +256,11 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
 }
 
 /** Parses and applies raw journal lines; tolerant of junk lines. */
-export function applyLines(state: CommanderState, lines: string[], cap?: CapacityOf): { changed: boolean; events: Json[] } {
+export function applyLines(
+  state: CommanderState,
+  lines: string[],
+  cap?: CapacityOf,
+): { changed: boolean; events: Json[] } {
   let changed = false;
   const events: Json[] = [];
   for (const line of lines) {

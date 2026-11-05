@@ -18,7 +18,11 @@ const layerOf = (file) => {
 };
 
 const walk = (dir) =>
-  fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name)) : e.name.endsWith(".ts") ? [path.join(dir, e.name)] : []));
+  fs
+    .readdirSync(dir, { withFileTypes: true })
+    .flatMap((e) =>
+      e.isDirectory() ? walk(path.join(dir, e.name)) : e.name.endsWith(".ts") ? [path.join(dir, e.name)] : [],
+    );
 
 const problems = [];
 for (const file of walk(SRC)) {
@@ -34,7 +38,10 @@ for (const file of walk(SRC)) {
   for (const spec of specs) {
     const target = path.resolve(path.dirname(file), spec.replace(/\.js$/, ".ts"));
     const to = layerOf(target);
-    if (to > from) problems.push(`${path.relative(ROOT, file)} (${LAYERS[from] ?? "entry"}) imports ${path.relative(ROOT, target)} (${LAYERS[to] ?? "entry"})`);
+    if (to > from)
+      problems.push(
+        `${path.relative(ROOT, file)} (${LAYERS[from] ?? "entry"}) imports ${path.relative(ROOT, target)} (${LAYERS[to] ?? "entry"})`,
+      );
   }
 }
 

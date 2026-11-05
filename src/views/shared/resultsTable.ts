@@ -53,29 +53,55 @@ export function resultRow(r: ResultRow): HTMLElement {
       "div.result-meta",
       null,
       r.badges.map((b) => h(`span.badge${b.tone ? `.${b.tone}` : ""}`, null, b.text)),
-      r.sub.length ? h("span.sub", null, r.sub.flatMap((x, i) => (i ? [" · ", x] : [x]))) : null,
+      r.sub.length
+        ? h(
+            "span.sub",
+            null,
+            r.sub.flatMap((x, i) => (i ? [" · ", x] : [x])),
+          )
+        : null,
       (() => {
         const me = here();
         return me.system && me.system.toLowerCase() === r.system.toLowerCase()
-          ? h("span.badge.ok", { title: t("results.dataReadFromJournal") }, me.seenAt ? t("results.areHereSeen", { sinceText: sinceText(me.seenAt) }) : t("common.areHere"))
+          ? h(
+              "span.badge.ok",
+              { title: t("results.dataReadFromJournal") },
+              me.seenAt ? t("results.areHereSeen", { sinceText: sinceText(me.seenAt) }) : t("common.areHere"),
+            )
           : null;
       })(),
       r.updated ? h("span.sub.age", { title: t("results.whenSpanshLastUpdatedSystemData") }, ago(r.updated)) : null,
       h(
         "span.links",
         null,
-        r.links.map((l) => h("button.link", { title: t("results.open", { label: l.label }), onclick: () => openUrl(l.url) }, l.label, icon("link"))),
+        r.links.map((l) =>
+          h(
+            "button.link",
+            { title: t("results.open", { label: l.label }), onclick: () => openUrl(l.url) },
+            l.label,
+            icon("link"),
+          ),
+        ),
       ),
     ),
   );
 }
 
 /** A finder section that loads its Spansh results by itself. */
-export function finderSection(f: Finder, ref: Reference, settings: Settings, opts: { compact?: boolean } = {}): HTMLElement {
+export function finderSection(
+  f: Finder,
+  ref: Reference,
+  settings: Settings,
+  opts: { compact?: boolean } = {},
+): HTMLElement {
   const list = h("div.results");
   const status = h("span.status");
   let force = false;
-  const refresh = h("button.ghost.small", { title: t("results.runSearchAgainSkipping10Minute"), onclick: () => ((force = true), load()) }, t("common.refresh"));
+  const refresh = h(
+    "button.ghost.small",
+    { title: t("results.runSearchAgainSkipping10Minute"), onclick: () => ((force = true), load()) },
+    t("common.refresh"),
+  );
   const section = h(
     `section.finder.${f.type}`,
     null,
@@ -94,19 +120,33 @@ export function finderSection(f: Finder, ref: Reference, settings: Settings, opt
         status.replaceChildren();
         if (!res.rows.length) {
           list.replaceChildren(
-            h("p.empty", null, t("results.noResultsWithinLy", { maxDistance: settings.maxDistance }), (" " + t("results.increaseDistanceSettings"))),
+            h(
+              "p.empty",
+              null,
+              t("results.noResultsWithinLy", { maxDistance: settings.maxDistance }),
+              " " + t("results.increaseDistanceSettings"),
+            ),
           );
           return;
         }
         list.replaceChildren(...res.rows.map(resultRow));
         if (res.total > res.rows.length && f.type === "systems") {
-          status.replaceChildren(h("span.sub", null, t("results.matchingSystems", { locale: res.total.toLocaleString(locale()) })));
+          status.replaceChildren(
+            h("span.sub", null, t("results.matchingSystems", { locale: res.total.toLocaleString(locale()) })),
+          );
         }
       })
       .catch((err) => {
         status.replaceChildren();
         list.replaceChildren(
-          h("p.error", null, icon("warn"), ` ${String(err?.message ?? err)}`, " ", h("button.ghost", { onclick: load }, t("common.retry"))),
+          h(
+            "p.error",
+            null,
+            icon("warn"),
+            ` ${String(err?.message ?? err)}`,
+            " ",
+            h("button.ghost", { onclick: load }, t("common.retry")),
+          ),
         );
       });
   };

@@ -92,7 +92,6 @@ export const DEFAULT_ENGINEER_SETTINGS: EngineerSettings = {
   autoTick: true,
 };
 
-
 export interface NotifySettings {
   sound: boolean;
   color: boolean;
@@ -132,9 +131,34 @@ export interface MiningSettings {
   minerals: string[];
 }
 
-export const DEFAULT_NOTIFY: NotifySettings = { sound: true, color: true, tone: "chime", volume: 0.6, flash: "#ff7a18", hideTab: false };
-export const DEFAULT_WING: WingSettings = { enabled: false, code: "", name: "", notifyNew: true, notifyAll: true, notifyAccept: true, notifyLeave: true, autoShare: false, shared: [] };
-export const DEFAULT_MINING: MiningSettings = { targets: [{ id: "painite", min: 25 }, { id: "platinum", min: 20 }], alert: true, power: "", minerals: ["Platinum", "Painite", "Low Temperature Diamonds"] };
+export const DEFAULT_NOTIFY: NotifySettings = {
+  sound: true,
+  color: true,
+  tone: "chime",
+  volume: 0.6,
+  flash: "#ff7a18",
+  hideTab: false,
+};
+export const DEFAULT_WING: WingSettings = {
+  enabled: false,
+  code: "",
+  name: "",
+  notifyNew: true,
+  notifyAll: true,
+  notifyAccept: true,
+  notifyLeave: true,
+  autoShare: false,
+  shared: [],
+};
+export const DEFAULT_MINING: MiningSettings = {
+  targets: [
+    { id: "painite", min: 25 },
+    { id: "platinum", min: 20 },
+  ],
+  alert: true,
+  power: "",
+  minerals: ["Platinum", "Painite", "Low Temperature Diamonds"],
+};
 
 /** A wing code: 4 groups of 4 letters/digits (80 bits), easy to read out. */
 export function newWingCode(): string {
@@ -367,7 +391,7 @@ export function wishNeeds(game: Game, item: WishItem): Record<string, number> {
   for (let g = item.gradeFrom; g <= item.gradeTo; g++) {
     const bp = grades.get(g);
     if (!bp) continue;
-    const rolls = bp.kind === "modification" ? item.rolls[g] ?? defaultRolls(g) : 1;
+    const rolls = bp.kind === "modification" ? (item.rolls[g] ?? defaultRolls(g)) : 1;
     addAll(bp, rolls * item.count);
   }
   return needs;

@@ -69,12 +69,18 @@ export interface XmlNode {
 }
 
 const unescape = (s: string) =>
-  s.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, "&");
+  s
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, "&");
 
 export function parseXml(src: string): XmlNode {
   const root: XmlNode = { tag: "#doc", attrs: {}, children: [], text: "" };
   const stack: XmlNode[] = [root];
-  const re = /<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<!\[CDATA\[([\s\S]*?)\]\]>|<\/([^\s>]+)\s*>|<([^\s/>]+)((?:\s+[^\s=/>]+\s*=\s*(?:"[^"]*"|'[^']*'))*)\s*(\/?)>|([^<]+)/g;
+  const re =
+    /<!--[\s\S]*?-->|<\?[\s\S]*?\?>|<!\[CDATA\[([\s\S]*?)\]\]>|<\/([^\s>]+)\s*>|<([^\s/>]+)((?:\s+[^\s=/>]+\s*=\s*(?:"[^"]*"|'[^']*'))*)\s*(\/?)>|([^<]+)/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(src))) {
     const top = stack[stack.length - 1];
@@ -102,7 +108,9 @@ function readSlot(action: string, node: XmlNode, slot: Bind["slot"]): Bind | nul
   const device = node.attrs.Device ?? NO_DEVICE;
   const key = node.attrs.Key ?? "";
   if (device === NO_DEVICE || !key) return null;
-  const modifiers = node.children.filter((c) => c.tag === "Modifier").map((c) => ({ device: c.attrs.Device ?? "", key: c.attrs.Key ?? "" }));
+  const modifiers = node.children
+    .filter((c) => c.tag === "Modifier")
+    .map((c) => ({ device: c.attrs.Device ?? "", key: c.attrs.Key ?? "" }));
   return { action, slot, device, key, modifiers };
 }
 
@@ -136,7 +144,11 @@ export function parseBinds(xml: string): BindsFile {
 
 /** StartPreset(.4).start: one preset name per line (general, ship, SRV, on foot). */
 export function parseStartPreset(text: string): string[] {
-  return text.replace(/^﻿/, "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  return text
+    .replace(/^﻿/, "")
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
 }
 
 /** Which StartPreset line applies to a group of controls. */
@@ -149,10 +161,19 @@ export function presetLineFor(group: string): number {
 
 /** Newest file for a preset: Custom.4.2.binds beats Custom.4.1.binds and Custom.binds. */
 export function fileForPreset(preset: string, files: string[]): string | undefined {
-  const mine = files.filter((f) => f.toLowerCase().endsWith(".binds") && (f === `${preset}.binds` || f.startsWith(`${preset}.`)));
-  const version = (f: string) => f.slice(preset.length).replace(/\.binds$/i, "").split(".").filter(Boolean).map(Number);
+  const mine = files.filter(
+    (f) => f.toLowerCase().endsWith(".binds") && (f === `${preset}.binds` || f.startsWith(`${preset}.`)),
+  );
+  const version = (f: string) =>
+    f
+      .slice(preset.length)
+      .replace(/\.binds$/i, "")
+      .split(".")
+      .filter(Boolean)
+      .map(Number);
   return mine.sort((a, b) => {
-    const va = version(a), vb = version(b);
+    const va = version(a),
+      vb = version(b);
     for (let i = 0; i < Math.max(va.length, vb.length); i++) {
       const d = (vb[i] ?? -1) - (va[i] ?? -1);
       if (d) return d;
@@ -164,7 +185,9 @@ export function fileForPreset(preset: string, files: string[]): string | undefin
 // ---------------- names ----------------
 
 export function groupOf(meta: BindsMeta, action: string): string {
-  return meta.controls[action]?.g ?? (action.endsWith("_Buggy") ? "SRV" : action.startsWith("Humanoid") ? "OnFoot" : "Misc");
+  return (
+    meta.controls[action]?.g ?? (action.endsWith("_Buggy") ? "SRV" : action.startsWith("Humanoid") ? "OnFoot" : "Misc")
+  );
 }
 
 export function actionName(meta: BindsMeta, action: string): string {
@@ -174,13 +197,18 @@ export function actionName(meta: BindsMeta, action: string): string {
 export function deviceInfo(meta: BindsMeta, id: string): { label: string; kind: DeviceKind } {
   const tpl = meta.templates?.[id];
   const known = meta.devices[id];
-  if (tpl && !known) return { label: tpl.name, kind: /pad|ds4|dualshock|710|xb360/i.test(id + tpl.image) ? "gamepad" : "joystick" };
+  if (tpl && !known)
+    return { label: tpl.name, kind: /pad|ds4|dualshock|710|xb360/i.test(id + tpl.image) ? "gamepad" : "joystick" };
   if (known) return { label: deviceLabel(known), kind: known.kind };
   const mapped = meta.vidpid[id.toUpperCase()];
-  if (mapped && meta.devices[mapped]) return { label: deviceLabel(meta.devices[mapped]), kind: meta.devices[mapped].kind };
+  if (mapped && meta.devices[mapped])
+    return { label: deviceLabel(meta.devices[mapped]), kind: meta.devices[mapped].kind };
   if (/^[0-9A-F]{8}$/i.test(id)) {
     const vendor = meta.vendors[id.slice(0, 4).toUpperCase()];
-    return { label: vendor ? `${vendor} ${id.toUpperCase()}` : t("binds.deviceId", { id: id.toUpperCase() }), kind: "joystick" };
+    return {
+      label: vendor ? `${vendor} ${id.toUpperCase()}` : t("binds.deviceId", { id: id.toUpperCase() }),
+      kind: "joystick",
+    };
   }
   return { label: id, kind: "joystick" };
 }
@@ -197,24 +225,66 @@ export function padControl(device: string, key: string): string | null {
     return c + (sign && /Stick|Trigger/.test(c) && !/Trigger/.test(c) ? sign : "");
   }
   if (device === "DualShock4" || device === "Playstation3Controller") {
-    const ds4: Record<string, string> = { Joy_1: "X", Joy_2: "A", Joy_3: "B", Joy_4: "Y", Joy_5: "LBumper", Joy_6: "RBumper", Joy_7: "LTrigger", Joy_8: "RTrigger", Joy_9: "Back", Joy_10: "Start", Joy_11: "LThumb", Joy_12: "RThumb", Joy_13: "Guide", Joy_14: "Touchpad" };
+    const ds4: Record<string, string> = {
+      Joy_1: "X",
+      Joy_2: "A",
+      Joy_3: "B",
+      Joy_4: "Y",
+      Joy_5: "LBumper",
+      Joy_6: "RBumper",
+      Joy_7: "LTrigger",
+      Joy_8: "RTrigger",
+      Joy_9: "Back",
+      Joy_10: "Start",
+      Joy_11: "LThumb",
+      Joy_12: "RThumb",
+      Joy_13: "Guide",
+      Joy_14: "Touchpad",
+    };
     m = /^Joy_POV1(Up|Down|Left|Right)$/.exec(k);
     if (m) return `DPad${m[1]}`;
-    const axes: Record<string, string> = { Joy_XAxis: "LStickX", Joy_YAxis: "LStickY", Joy_ZAxis: "RStickX", Joy_RZAxis: "RStickY", Joy_RXAxis: "LTrigger", Joy_RYAxis: "RTrigger" };
+    const axes: Record<string, string> = {
+      Joy_XAxis: "LStickX",
+      Joy_YAxis: "LStickY",
+      Joy_ZAxis: "RStickX",
+      Joy_RZAxis: "RStickY",
+      Joy_RXAxis: "LTrigger",
+      Joy_RYAxis: "RTrigger",
+    };
     return ds4[k] ?? (axes[k] ? axes[k] + sign : null);
   }
   return null;
 }
 
-const MOUSE: Record<string, string> = { Mouse_1: t("binds.leftClick"), Mouse_2: t("binds.rightClick"), Mouse_3: t("binds.wheelClick"), Mouse_4: t("binds.button", { number: 4 }), Mouse_5: t("binds.button", { number: 5 }), Mouse_XAxis: t("binds.axis", { name: "X" }), Mouse_YAxis: t("binds.axis", { name: "Y" }), Mouse_ZAxis: t("binds.wheel") };
+const MOUSE: Record<string, string> = {
+  Mouse_1: t("binds.leftClick"),
+  Mouse_2: t("binds.rightClick"),
+  Mouse_3: t("binds.wheelClick"),
+  Mouse_4: t("binds.button", { number: 4 }),
+  Mouse_5: t("binds.button", { number: 5 }),
+  Mouse_XAxis: t("binds.axis", { name: "X" }),
+  Mouse_YAxis: t("binds.axis", { name: "Y" }),
+  Mouse_ZAxis: t("binds.wheel"),
+};
 
 export function keyLabel(meta: BindsMeta, key: string): string {
   if (meta.keymap[key]) return meta.keymap[key];
   const sign = key.startsWith("Pos_") ? " +" : key.startsWith("Neg_") ? " −" : "";
   const k = key.replace(/^(Pos|Neg)_/, "");
-  if (MOUSE[k]) return k === "Mouse_ZAxis" ? (sign === " +" ? t("binds.wheelUp") : sign ? t("binds.wheelDown") : t("binds.wheel")) : MOUSE[k] + sign;
+  if (MOUSE[k])
+    return k === "Mouse_ZAxis"
+      ? sign === " +"
+        ? t("binds.wheelUp")
+        : sign
+          ? t("binds.wheelDown")
+          : t("binds.wheel")
+      : MOUSE[k] + sign;
   let m = /^Key_(.+)$/.exec(k);
-  if (m) return m[1].replace(/Numpad_/, "Num ").replace(/Arrow$/, "").replace(/(?<=[a-z])(?=[A-Z])/g, " ");
+  if (m)
+    return m[1]
+      .replace(/Numpad_/, "Num ")
+      .replace(/Arrow$/, "")
+      .replace(/(?<=[a-z])(?=[A-Z])/g, " ");
   m = /^Joy_(\d+)$/.exec(k);
   if (m) return t("binds.button", { number: m[1] });
   m = /^Joy_POV(\d)(Up|Down|Left|Right)$/.exec(k);

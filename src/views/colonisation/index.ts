@@ -51,8 +51,15 @@ export class ColonisationView implements View {
     const remote = markets.get(marketId);
     const remoteNewer = remote?.updated && (!local || Date.parse(remote.updated) > Date.parse(local.at));
     if (local && !remoteNewer) {
-      const list = (book: Record<string, { label: string; count: number }>) => Object.entries(book).map(([id, v]) => ({ id, name: v.label, count: v.count }));
-      return { fetched: Date.now(), updated: local.at, selling: list(local.selling), buying: list(local.buying), source: "journal" };
+      const list = (book: Record<string, { label: string; count: number }>) =>
+        Object.entries(book).map(([id, v]) => ({ id, name: v.label, count: v.count }));
+      return {
+        fetched: Date.now(),
+        updated: local.at,
+        selling: list(local.selling),
+        buying: list(local.buying),
+        source: "journal",
+      };
     }
     return remote ? { ...remote, source: "spansh" } : undefined;
   }
@@ -72,7 +79,9 @@ export class ColonisationView implements View {
   }
 
   private async fetchMarket(marketId: number, callsign: string) {
-    const toId = (name: string) => this.ctx.game.data.commodities.find((x) => x.name.toLowerCase() === name.toLowerCase())?.id ?? name.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const toId = (name: string) =>
+      this.ctx.game.data.commodities.find((x) => x.name.toLowerCase() === name.toLowerCase())?.id ??
+      name.toLowerCase().replace(/[^a-z0-9]/g, "");
     try {
       // The station page by market id first; the name search as a fallback.
       let r: Record<string, any> | undefined;
@@ -83,21 +92,40 @@ export class ColonisationView implements View {
         r = undefined;
       }
       if (!r) {
-        const res = await spanshPost("stations/search", { filters: { name: { value: [callsign] } }, size: 10, page: 0, reference_system: "Sol" });
+        const res = await spanshPost("stations/search", {
+          filters: { name: { value: [callsign] } },
+          size: 10,
+          page: 0,
+          reference_system: "Sol",
+        });
         const rows: Record<string, any>[] = Array.isArray(res?.results) ? res.results : [];
-        r = rows.find((x) => Number(x.market_id) === marketId) ?? rows.find((x) => String(x.name ?? "").toUpperCase() === callsign);
+        r =
+          rows.find((x) => Number(x.market_id) === marketId) ??
+          rows.find((x) => String(x.name ?? "").toUpperCase() === callsign);
       }
       const market: Record<string, any>[] = Array.isArray(r?.market) ? r.market : [];
       markets.set(marketId, {
         fetched: Date.now(),
         updated: r?.market_updated_at,
-        selling: market.filter((m) => Number(m.supply) > 0).map((m) => ({ id: toId(String(m.commodity)), name: String(m.commodity), count: Number(m.supply) })),
-        buying: market.filter((m) => Number(m.demand) > 0).map((m) => ({ id: toId(String(m.commodity)), name: String(m.commodity), count: Number(m.demand) })),
+        selling: market
+          .filter((m) => Number(m.supply) > 0)
+          .map((m) => ({ id: toId(String(m.commodity)), name: String(m.commodity), count: Number(m.supply) })),
+        buying: market
+          .filter((m) => Number(m.demand) > 0)
+          .map((m) => ({ id: toId(String(m.commodity)), name: String(m.commodity), count: Number(m.demand) })),
         error: r ? undefined : t("colonisation.unknownSpansh"),
       });
-      log.debug("carrier", `${callsign}: Spansh market ${r ? `${market.length} line(s), updated ${r.market_updated_at ?? "?"}` : "not found"}`);
+      log.debug(
+        "carrier",
+        `${callsign}: Spansh market ${r ? `${market.length} line(s), updated ${r.market_updated_at ?? "?"}` : "not found"}`,
+      );
     } catch (e) {
-      markets.set(marketId, { fetched: Date.now(), selling: [], buying: [], error: String((e as Error)?.message ?? e) });
+      markets.set(marketId, {
+        fetched: Date.now(),
+        selling: [],
+        buying: [],
+        error: String((e as Error)?.message ?? e),
+      });
       log.warn("carrier", `${callsign}: Spansh ${String((e as Error)?.message ?? e)}`);
     }
     if (!busy(this.root)) this.render();
@@ -115,7 +143,9 @@ export class ColonisationView implements View {
   private render() {
     if (!this.root) return;
     const st = this.ctx.store.state;
-    const all = Object.values(st.activity.depots).sort((a, b) => Number(a.complete || a.failed) - Number(b.complete || b.failed) || b.updated.localeCompare(a.updated));
+    const all = Object.values(st.activity.depots).sort(
+      (a, b) => Number(a.complete || a.failed) - Number(b.complete || b.failed) || b.updated.localeCompare(a.updated),
+    );
     const shown = this.showDone ? all : all.filter((d) => !d.complete && !d.failed);
     const capacity = st.cmdr.loadout?.cargoCapacity ?? 0;
     replace(
@@ -123,16 +153,26 @@ export class ColonisationView implements View {
       h(
         "header.view-head",
         null,
-        h("div", null, h("h1", null, t("common.colonisation")), h("p.sub", null, t("colonisation.constructionSitesTrackedFromJournalWhat"))),
+        h(
+          "div",
+          null,
+          h("h1", null, t("common.colonisation")),
+          h("p.sub", null, t("colonisation.constructionSitesTrackedFromJournalWhat")),
+        ),
         all.some((d) => d.complete || d.failed)
-          ? h("label.check", null, h("input", { type: "checkbox", checked: this.showDone, onchange: (e: Event) => ((this.showDone = (e.target as HTMLInputElement).checked), this.render()) }), (" " + t("colonisation.showFinishedSites")))
+          ? h(
+              "label.check",
+              null,
+              h("input", {
+                type: "checkbox",
+                checked: this.showDone,
+                onchange: (e: Event) => ((this.showDone = (e.target as HTMLInputElement).checked), this.render()),
+              }),
+              " " + t("colonisation.showFinishedSites"),
+            )
           : null,
       ),
-      callout(
-        "info",
-        t("common.workProgress"),
-        t("colonisation.notEveryFeatureFullyWorkingYet"),
-      ),
+      callout("info", t("common.workProgress"), t("colonisation.notEveryFeatureFullyWorkingYet")),
       this.holds(shown, capacity),
       shown.length
         ? shown.map((d) => this.depot(d, capacity))
@@ -156,20 +196,35 @@ export class ColonisationView implements View {
   }
 
   /** What the carrier's market shows on Spansh: sell orders (stock) and buy orders. */
-  private marketBlock(marketId: number, needed: Set<string>, name: (id: string, label?: string) => string): HTMLElement | null {
+  private marketBlock(
+    marketId: number,
+    needed: Set<string>,
+    name: (id: string, label?: string) => string,
+  ): HTMLElement | null {
     const m = this.marketOf(marketId);
     if (!m) return null;
-    if (m.loading && !m.updated && !m.selling.length) return h("p.sub", null, h("span.spinner"), (" " + t("colonisation.carrierMarketSpansh")));
+    if (m.loading && !m.updated && !m.selling.length)
+      return h("p.sub", null, h("span.spinner"), " " + t("colonisation.carrierMarketSpansh"));
     if (m.error) return h("p.sub", null, t("colonisation.marketSpansh", { error: m.error }));
-    const line = (x: { id: string; name: string; count: number }) => h("li", { class: needed.has(x.id) ? "needed" : "" }, h("span", null, name(x.id, x.name)), h("strong", null, `${fmt(x.count)} t`));
+    const line = (x: { id: string; name: string; count: number }) =>
+      h(
+        "li",
+        { class: needed.has(x.id) ? "needed" : "" },
+        h("span", null, name(x.id, x.name)),
+        h("strong", null, `${fmt(x.count)} t`),
+      );
     return h(
       "div.carrier-market",
       null,
       m.source === "journal"
         ? h("p.sub", null, t("colonisation.marketJournal", { value: m.updated ? relTime(m.updated) : "?" }))
         : h("p.sub", null, t("colonisation.marketSpanshData", { value: m.updated ? relTime(m.updated) : "?" })),
-      m.selling.length ? [h("small.sub", null, t("colonisation.saleStock")), h("ul.hold-list", null, m.selling.map(line))] : null,
-      m.buying.length ? [h("small.sub", null, t("colonisation.buying")), h("ul.hold-list", null, m.buying.map(line))] : null,
+      m.selling.length
+        ? [h("small.sub", null, t("colonisation.saleStock")), h("ul.hold-list", null, m.selling.map(line))]
+        : null,
+      m.buying.length
+        ? [h("small.sub", null, t("colonisation.buying")), h("ul.hold-list", null, m.buying.map(line))]
+        : null,
       !m.selling.length && !m.buying.length ? h("p.empty", null, t("colonisation.noBuySellOrders")) : null,
     );
   }
@@ -186,7 +241,14 @@ export class ColonisationView implements View {
             null,
             items
               .sort((a, b) => Number(needed.has(b[0])) - Number(needed.has(a[0])) || b[1] - a[1])
-              .map(([id, n, label]) => h("li", { class: needed.has(id) ? "needed" : "" }, h("span", null, name(id, label)), h("strong", null, `${fmt(n)} t`))),
+              .map(([id, n, label]) =>
+                h(
+                  "li",
+                  { class: needed.has(id) ? "needed" : "" },
+                  h("span", null, name(id, label)),
+                  h("strong", null, `${fmt(n)} t`),
+                ),
+              ),
           )
         : h("p.empty", null, t("colonisation.empty"));
     const shipItems = Object.entries(cmdr.cargo ?? {}).filter(([, n]) => n > 0) as [string, number][];
@@ -196,8 +258,14 @@ export class ColonisationView implements View {
         "div.hold",
         null,
         h("h4", null, t("common.ship")),
-        h("p.sub", null, capacity ? t("colonisation.t", { shipUsed: fmt(shipUsed), capacity: fmt(capacity) }) : `${fmt(shipUsed)} t`),
-        capacity ? h("div.bar", null, h("span", { style: { width: `${Math.min(100, (shipUsed / capacity) * 100)}%` } })) : null,
+        h(
+          "p.sub",
+          null,
+          capacity ? t("colonisation.t", { shipUsed: fmt(shipUsed), capacity: fmt(capacity) }) : `${fmt(shipUsed)} t`,
+        ),
+        capacity
+          ? h("div.bar", null, h("span", { style: { width: `${Math.min(100, (shipUsed / capacity) * 100)}%` } }))
+          : null,
         list(shipItems),
       ),
     ];
@@ -211,7 +279,9 @@ export class ColonisationView implements View {
           null,
           h("h4", null, c.mine ? t("colonisation.myFleetCarrier") : t("colonisation.squadronCarrier")),
           h("p.sub", { "data-no-tr": "" }, c.name),
-          c.total !== undefined ? h("p.sub", null, t("colonisation.tGoodsGame", { total: fmt(c.total), relTime: relTime(c.totalAt) })) : null,
+          c.total !== undefined
+            ? h("p.sub", null, t("colonisation.tGoodsGame", { total: fmt(c.total), relTime: relTime(c.totalAt) }))
+            : null,
           list(items),
           unknown ? h("p.sub", null, t("colonisation.tNotIdentified", { unknown: fmt(unknown) })) : null,
           this.marketBlock(c.marketId, needed, name),
@@ -234,9 +304,15 @@ export class ColonisationView implements View {
     const remaining = d.resources.reduce((s, r) => s + Math.max(0, r.required - r.provided), 0);
     const required = d.resources.reduce((s, r) => s + r.required, 0);
     const pct = d.complete ? 100 : Math.round((d.progress || (required ? 1 - remaining / required : 0)) * 1000) / 10;
-    const inHold = d.resources.reduce((s, r) => s + Math.min(cargo[r.id] ?? 0, Math.max(0, r.required - r.provided)), 0);
+    const inHold = d.resources.reduce(
+      (s, r) => s + Math.min(cargo[r.id] ?? 0, Math.max(0, r.required - r.provided)),
+      0,
+    );
     const trips = capacity ? Math.ceil(Math.max(0, remaining - inHold) / capacity) : null;
-    const inCarrier = d.resources.reduce((s, r) => s + Math.min(this.inCarriers(r.id), Math.max(0, r.required - r.provided)), 0);
+    const inCarrier = d.resources.reduce(
+      (s, r) => s + Math.min(this.inCarriers(r.id), Math.max(0, r.required - r.provided)),
+      0,
+    );
     const showCarrier = this.carriers().length > 0;
     const rows = d.resources
       .map((r) => ({ ...r, left: Math.max(0, r.required - r.provided), hold: cargo[r.id] ?? 0 }))
@@ -247,8 +323,22 @@ export class ColonisationView implements View {
       h(
         "div.depot-head",
         null,
-        h("div", null, h("h3", null, d.station ?? t("colonisation.depot", { marketId: d.marketId })), d.system ? sys(d.system) : null),
-        h("div.badges", null, d.complete ? h("span.badge.ok", null, t("common.done")) : d.failed ? h("span.badge.warn", null, t("colonisation.failed")) : h("span.badge", null, `${pct} %`), h("span.sub", null, t("common.updated", { relTime: relTime(d.updated) }))),
+        h(
+          "div",
+          null,
+          h("h3", null, d.station ?? t("colonisation.depot", { marketId: d.marketId })),
+          d.system ? sys(d.system) : null,
+        ),
+        h(
+          "div.badges",
+          null,
+          d.complete
+            ? h("span.badge.ok", null, t("common.done"))
+            : d.failed
+              ? h("span.badge.warn", null, t("colonisation.failed"))
+              : h("span.badge", null, `${pct} %`),
+          h("span.sub", null, t("common.updated", { relTime: relTime(d.updated) })),
+        ),
       ),
       h("div.bar.big", null, h("span", { style: { width: `${pct}%` } })),
       h(
@@ -256,13 +346,41 @@ export class ColonisationView implements View {
         null,
         h("div.stat", null, h("strong", null, fmt(remaining)), h("span.sub", null, t("colonisation.tLeft"))),
         h("div.stat", null, h("strong", null, fmt(inHold)), h("span.sub", null, t("colonisation.usefulTHold"))),
-        inCarrier ? h("div.stat", null, h("strong", null, fmt(inCarrier)), h("span.sub", null, t("colonisation.tUsefulCarriers"))) : null,
-        trips !== null ? h("div.stat", null, h("strong", null, fmt(trips)), h("span.sub", null, t("colonisation.tripsTPerTrip", { capacity: fmt(capacity) }))) : null,
+        inCarrier
+          ? h(
+              "div.stat",
+              null,
+              h("strong", null, fmt(inCarrier)),
+              h("span.sub", null, t("colonisation.tUsefulCarriers")),
+            )
+          : null,
+        trips !== null
+          ? h(
+              "div.stat",
+              null,
+              h("strong", null, fmt(trips)),
+              h("span.sub", null, t("colonisation.tripsTPerTrip", { capacity: fmt(capacity) })),
+            )
+          : null,
       ),
       h(
         "table.table.depot-table",
         null,
-        h("thead", null, h("tr", null, h("th", null, t("colonisation.commodity")), h("th.num", null, t("colonisation.delivered")), h("th.num", null, t("colonisation.required")), h("th.num", null, t("common.left")), h("th.num", null, t("colonisation.hold")), showCarrier ? h("th.num", null, t("colonisation.carriers")) : null, h("th", null, ""))),
+        h(
+          "thead",
+          null,
+          h(
+            "tr",
+            null,
+            h("th", null, t("colonisation.commodity")),
+            h("th.num", null, t("colonisation.delivered")),
+            h("th.num", null, t("colonisation.required")),
+            h("th.num", null, t("common.left")),
+            h("th.num", null, t("colonisation.hold")),
+            showCarrier ? h("th.num", null, t("colonisation.carriers")) : null,
+            h("th", null, ""),
+          ),
+        ),
         h(
           "tbody",
           null,
@@ -291,7 +409,7 @@ export class ColonisationView implements View {
                         },
                       },
                       icon("search"),
-                      (" " + t("colonisation.buy")),
+                      " " + t("colonisation.buy"),
                     )
                   : null,
               ),

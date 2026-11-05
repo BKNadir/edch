@@ -1,0 +1,7 @@
+dist/
+vendor/
+src-tauri/
+public/data/
+packaging/
+tools/sources/
+*.md

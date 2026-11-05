@@ -1,12 +1,26 @@
 // Missions: accepted, redirected, finished, cargo deliveries, massacre kills, and the combat
 // rewards counted in the session.
 
-import { num, symbolId, type ActivityState, type EventHandler, type EventHandlers, type Json, type Mission } from "./state.js";
+import {
+  num,
+  symbolId,
+  type ActivityState,
+  type EventHandler,
+  type EventHandlers,
+  type Json,
+  type Mission,
+} from "./state.js";
 import { t } from "../../platform/i18n.js";
 
 /** "Mission_Delivery_Boom_Wing_name" → "Delivery Boom Wing" (when the game gave no localised title). */
 export function missionTitle(symbol: string): string {
-  return symbol.replace(/^Mission_/i, "").replace(/_name$/i, "").replace(/_/g, " ").trim() || t("common.mission");
+  return (
+    symbol
+      .replace(/^Mission_/i, "")
+      .replace(/_name$/i, "")
+      .replace(/_/g, " ")
+      .trim() || t("common.mission")
+  );
 }
 
 /** One kill against `victimFaction`: counts for the oldest unfinished mission of each issuer. */
@@ -22,18 +36,21 @@ function massacreKill(st: ActivityState, victimFaction: string) {
 /** MissionCompleted, MissionFailed, MissionAbandoned. */
 const onMissionCompleted: EventHandler = (st, ev, at) => {
   const session = st.session;
-    const id = Number(ev.MissionID);
-    const known = Boolean(st.missions[id]);
-    delete st.missions[id];
-    st.finished[id] = { status: ev.event === "MissionCompleted" ? "done" : ev.event === "MissionFailed" ? "failed" : "abandoned", at };
-    if (ev.event === "MissionCompleted") {
-      session.missions += num(ev.Reward) ?? 0;
-      session.missionsDone += 1;
-    }
-    // Keep the list of finished missions short.
-    const ids = Object.keys(st.finished);
-    if (ids.length > 200) for (const old of ids.slice(0, ids.length - 200)) delete st.finished[Number(old)];
-    return known || ev.event === "MissionCompleted";
+  const id = Number(ev.MissionID);
+  const known = Boolean(st.missions[id]);
+  delete st.missions[id];
+  st.finished[id] = {
+    status: ev.event === "MissionCompleted" ? "done" : ev.event === "MissionFailed" ? "failed" : "abandoned",
+    at,
+  };
+  if (ev.event === "MissionCompleted") {
+    session.missions += num(ev.Reward) ?? 0;
+    session.missionsDone += 1;
+  }
+  // Keep the list of finished missions short.
+  const ids = Object.keys(st.finished);
+  if (ids.length > 200) for (const old of ids.slice(0, ids.length - 200)) delete st.finished[Number(old)];
+  return known || ev.event === "MissionCompleted";
 };
 
 /** Journal events of this domain. */
@@ -54,7 +71,8 @@ export const MISSIONS_EVENTS: EventHandlers = {
         title: missionTitle(name),
         faction: "",
         accepted: at,
-        expiry: typeof m.Expires === "number" && at ? new Date(Date.parse(at) + m.Expires * 1000).toISOString() : undefined,
+        expiry:
+          typeof m.Expires === "number" && at ? new Date(Date.parse(at) + m.Expires * 1000).toISOString() : undefined,
         wing: /wing/i.test(name),
         kills: 0,
         status: "active",
@@ -104,7 +122,16 @@ export const MISSIONS_EVENTS: EventHandlers = {
   CargoDepot: (st, ev, at) => {
     const id = Number(ev.MissionID);
     if (!st.missions[id] && id && !st.finished[id]) {
-      st.missions[id] = { id, name: "Mission_Delivery_Wing", title: missionTitle(`Mission_Delivery_${ev.CargoType ?? ""}`), faction: "", accepted: at, wing: true, kills: 0, status: "active" };
+      st.missions[id] = {
+        id,
+        name: "Mission_Delivery_Wing",
+        title: missionTitle(`Mission_Delivery_${ev.CargoType ?? ""}`),
+        faction: "",
+        accepted: at,
+        wing: true,
+        kills: 0,
+        status: "active",
+      };
     }
     const m = st.missions[id];
     if (!m) return false;
@@ -135,11 +162,20 @@ export const MISSIONS_EVENTS: EventHandlers = {
 };
 
 /** Massacre stacks: per target faction, kills still needed (the largest per-issuer remainder). */
-export function massacreStacks(missions: Mission[]): { target: string; needed: number; done: number; issuers: { faction: string; kills: number; total: number; missions: number; reward: number }[] }[] {
+export function massacreStacks(missions: Mission[]): {
+  target: string;
+  needed: number;
+  done: number;
+  issuers: { faction: string; kills: number; total: number; missions: number; reward: number }[];
+}[] {
   const byTarget = new Map<string, Mission[]>();
-  for (const m of missions) if (m.killCount && m.targetFaction) byTarget.set(m.targetFaction, [...(byTarget.get(m.targetFaction) ?? []), m]);
+  for (const m of missions)
+    if (m.killCount && m.targetFaction) byTarget.set(m.targetFaction, [...(byTarget.get(m.targetFaction) ?? []), m]);
   return [...byTarget.entries()].map(([target, list]) => {
-    const issuers = new Map<string, { faction: string; kills: number; total: number; missions: number; reward: number }>();
+    const issuers = new Map<
+      string,
+      { faction: string; kills: number; total: number; missions: number; reward: number }
+    >();
     for (const m of list) {
       const i = issuers.get(m.faction) ?? { faction: m.faction, kills: 0, total: 0, missions: 0, reward: 0 };
       i.kills += Math.min(m.kills, m.killCount!);

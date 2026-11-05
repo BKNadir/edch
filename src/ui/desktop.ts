@@ -1,7 +1,16 @@
 // Desktop side: is Elite Dangerous running, launch it from EDCH (also from the phone), and
 // what closing the window does.
 
-import { appQuit, gameRunning, isRemote, isTauri, launchGame, onConfirmClose, remoteAction, setCloseBehavior } from "../platform/bridge.js";
+import {
+  appQuit,
+  gameRunning,
+  isRemote,
+  isTauri,
+  launchGame,
+  onConfirmClose,
+  remoteAction,
+  setCloseBehavior,
+} from "../platform/bridge.js";
 import { dialog } from "./dialog.js";
 import { h, icon, toast } from "./dom.js";
 import { log } from "../platform/logger.js";
@@ -17,7 +26,10 @@ export function setupDesktop(s: Store) {
   const poll = async () => {
     const state = await gameRunning();
     if (state !== store!.state.game) {
-      log.info("game", state ? `Elite Dangerous ${state === "game" ? "running" : "launcher open"}` : "Elite Dangerous not running");
+      log.info(
+        "game",
+        state ? `Elite Dangerous ${state === "game" ? "running" : "launcher open"}` : "Elite Dangerous not running",
+      );
       store!.state.game = state;
       store!.notify();
     }
@@ -34,10 +46,14 @@ export function setupDesktop(s: Store) {
   applyClose();
   s.subscribe(applyClose);
   void onConfirmClose(async () => {
-    const answer = await dialog(t("desktop.closeEdch"), [h("p", null, t("desktop.edchStopsReadingGameJournalRemote"))], [
-      { label: t("desktop.cancel"), value: "no" },
-      { label: t("common.close"), primary: true, value: "yes" },
-    ]);
+    const answer = await dialog(
+      t("desktop.closeEdch"),
+      [h("p", null, t("desktop.edchStopsReadingGameJournalRemote"))],
+      [
+        { label: t("desktop.cancel"), value: "no" },
+        { label: t("common.close"), primary: true, value: "yes" },
+      ],
+    );
     if (answer === "yes") void appQuit();
   });
 }
@@ -57,7 +73,13 @@ export async function startGame() {
   const g = store.state.settings.gameLaunch;
   try {
     await launchGame(g.method, g.path);
-    toast(g.method === "steam" ? t("desktop.launchingThroughSteam") : g.method === "epic" ? t("desktop.launchingThroughEpicGames") : t("desktop.launchingGame"));
+    toast(
+      g.method === "steam"
+        ? t("desktop.launchingThroughSteam")
+        : g.method === "epic"
+          ? t("desktop.launchingThroughEpicGames")
+          : t("desktop.launchingGame"),
+    );
     store.state.game = "launcher";
     store.notify();
   } catch (e) {
@@ -69,7 +91,24 @@ export async function startGame() {
 /** The game's state and the launch button, for the top bar. */
 export function gameBadge(game: string | undefined): HTMLElement | null {
   if (game === undefined) return null;
-  if (game === "game") return h("div.game-state.on", { title: t("desktop.eliteDangerousRunning") }, h("span.dot"), t("desktop.eliteRunning"));
-  if (game === "launcher") return h("div.game-state.wait", { title: t("desktop.eliteDangerousLauncherOpen") }, h("span.dot"), t("desktop.launcherOpen"));
-  return h("button.game-launch", { title: t("common.launchEliteDangerous"), onclick: () => startGame() }, icon("play"), (" " + t("desktop.launchElite")));
+  if (game === "game")
+    return h(
+      "div.game-state.on",
+      { title: t("desktop.eliteDangerousRunning") },
+      h("span.dot"),
+      t("desktop.eliteRunning"),
+    );
+  if (game === "launcher")
+    return h(
+      "div.game-state.wait",
+      { title: t("desktop.eliteDangerousLauncherOpen") },
+      h("span.dot"),
+      t("desktop.launcherOpen"),
+    );
+  return h(
+    "button.game-launch",
+    { title: t("common.launchEliteDangerous"), onclick: () => startGame() },
+    icon("play"),
+    " " + t("desktop.launchElite"),
+  );
 }

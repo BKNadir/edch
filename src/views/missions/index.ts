@@ -8,12 +8,19 @@ import { isActive, type LeaveReason, type WingMember } from "../../services/wing
 import { newWingCode, type WingSettings } from "../../state/store.js";
 import { credits, hoursLeft, relTime } from "../../ui/format.js";
 import type { Ctx, View } from "../../state/context.js";
-import { findHotspots, findSupply, HOTSPOT_NAMES, type Hotspot, type Offer } from "../../features/materials/sourcing.js";
+import {
+  findHotspots,
+  findSupply,
+  HOTSPOT_NAMES,
+  type Hotspot,
+  type Offer,
+} from "../../features/materials/sourcing.js";
 import { gameName, t } from "../../platform/i18n.js";
 import { commodityLink, systemLink } from "../shared/links.js";
 
 /** Missions where the commander has to get the goods: sourcing, mining, donations. */
-export const needsSourcing = (m: Mission) => Boolean(m.commodityId) && !/delivery|courier|passenger|sightseeing/i.test(m.name);
+export const needsSourcing = (m: Mission) =>
+  Boolean(m.commodityId) && !/delivery|courier|passenger|sightseeing/i.test(m.name);
 
 interface Sourcing {
   loading: boolean;
@@ -39,11 +46,21 @@ function kindOf(m: Mission): string {
 function progressOf(m: Mission): HTMLElement | null {
   if (m.killCount) {
     const pct = Math.min(100, (m.kills / m.killCount) * 100);
-    return h("div.mission-progress", null, h("div.bar", null, h("span", { style: { width: `${pct}%` } })), h("span.sub", null, t("missions.kills", { kills: m.kills, killCount: m.killCount })));
+    return h(
+      "div.mission-progress",
+      null,
+      h("div.bar", null, h("span", { style: { width: `${pct}%` } })),
+      h("span.sub", null, t("missions.kills", { kills: m.kills, killCount: m.killCount })),
+    );
   }
   if (m.total) {
     const done = m.delivered ?? 0;
-    return h("div.mission-progress", null, h("div.bar", null, h("span", { style: { width: `${Math.min(100, (done / m.total) * 100)}%` } })), h("span.sub", null, t("missions.delivered", { done: fmt(done), total: fmt(m.total) })));
+    return h(
+      "div.mission-progress",
+      null,
+      h("div.bar", null, h("span", { style: { width: `${Math.min(100, (done / m.total) * 100)}%` } })),
+      h("span.sub", null, t("missions.delivered", { done: fmt(done), total: fmt(m.total) })),
+    );
   }
   return null;
 }
@@ -56,12 +73,18 @@ export function busy(root?: HTMLElement): boolean {
 
 export const sys = (name?: string) => systemLink(name);
 
-const LEFT_LABEL: Record<LeaveReason, string> = { closed: t("missions.edchClosed"), wing: t("missions.leftWing"), off: t("missions.sharingStopped") };
+const LEFT_LABEL: Record<LeaveReason, string> = {
+  closed: t("missions.edchClosed"),
+  wing: t("missions.leftWing"),
+  off: t("missions.sharingStopped"),
+};
 
 /** Members to show: active ones, and those who left or went quiet less than 10 minutes ago. */
 function shownMembers(members: WingMember[]): WingMember[] {
   const now = Date.now();
-  return members.filter((m) => (isActive(m, now) ? true : now - Date.parse(m.at) < 10 * 60 * 1000 + (m.left ? 0 : 45 * 60 * 1000)));
+  return members.filter((m) =>
+    isActive(m, now) ? true : now - Date.parse(m.at) < 10 * 60 * 1000 + (m.left ? 0 : 45 * 60 * 1000),
+  );
 }
 
 export class MissionsView implements View {
@@ -84,12 +107,17 @@ export class MissionsView implements View {
     const wingCount = missions.filter((m) => m.wing).length;
     replace(
       this.root,
-      h("header.view-head", null, h("div", null, h("h1", null, t("common.missions")), h("p.sub", null, t("missions.activeMissionsWing", { count: missions.length, wingCount })))),
-      callout(
-        "info",
-        t("common.workProgress"),
-        t("missions.notEveryFeatureFullyWorkingYet"),
+      h(
+        "header.view-head",
+        null,
+        h(
+          "div",
+          null,
+          h("h1", null, t("common.missions")),
+          h("p.sub", null, t("missions.activeMissionsWing", { count: missions.length, wingCount })),
+        ),
       ),
+      callout("info", t("common.workProgress"), t("missions.notEveryFeatureFullyWorkingYet")),
       this.massacre(missions),
       this.list(missions),
       this.wing(),
@@ -121,18 +149,38 @@ export class MissionsView implements View {
           ),
           h("p.sub", null, m.faction),
           m.status === "redirected"
-            ? h("p.mission-dest", null, h("span", null, (t("missions.return") + " ")), m.destStation ? h("strong", null, m.destStation) : null, m.destStation && m.destSystem ? " · " : null, sys(m.destSystem))
+            ? h(
+                "p.mission-dest",
+                null,
+                h("span", null, t("missions.return") + " "),
+                m.destStation ? h("strong", null, m.destStation) : null,
+                m.destStation && m.destSystem ? " · " : null,
+                sys(m.destSystem),
+              )
             : m.destSystem || m.destStation
-              ? h("p.mission-dest", null, h("span", null, (t("missions.destination") + " ")), m.destStation ? h("strong", null, m.destStation) : null, m.destStation && m.destSystem ? " · " : null, sys(m.destSystem))
+              ? h(
+                  "p.mission-dest",
+                  null,
+                  h("span", null, t("missions.destination") + " "),
+                  m.destStation ? h("strong", null, m.destStation) : null,
+                  m.destStation && m.destSystem ? " · " : null,
+                  sys(m.destSystem),
+                )
               : null,
-          m.killCount && m.targetFaction ? h("p.sub", null, t("missions.target", { targetFaction: m.targetFaction })) : null,
-          m.commodity && m.count ? h("p.sub", null, `${fmt(m.count)} × `, commodityLink(m.commodity, m.commodity)) : null,
+          m.killCount && m.targetFaction
+            ? h("p.sub", null, t("missions.target", { targetFaction: m.targetFaction }))
+            : null,
+          m.commodity && m.count
+            ? h("p.sub", null, `${fmt(m.count)} × `, commodityLink(m.commodity, m.commodity))
+            : null,
           progressOf(m),
           needsSourcing(m) ? this.sourcingBlock(m) : null,
           h(
             "div.mission-foot",
             null,
-            m.expiry ? h("span", { class: left < 6 ? "warn" : "" }, t("missions.expires2", { relTime: relTime(m.expiry) })) : null,
+            m.expiry
+              ? h("span", { class: left < 6 ? "warn" : "" }, t("missions.expires2", { relTime: relTime(m.expiry) }))
+              : null,
             m.reward ? h("span", null, `${credits(m.reward)} Cr`) : null,
             m.influence ? h("span.sub", null, t("missions.influence", { influence: m.influence })) : null,
           ),
@@ -148,7 +196,10 @@ export class MissionsView implements View {
 
   private async loadSourcing(m: Mission) {
     const name = this.commodityName(m);
-    const need = Math.max(1, (m.count ?? 1) - (m.delivered ?? 0) - (this.ctx.store.state.cmdr.cargo[m.commodityId ?? ""] ?? 0));
+    const need = Math.max(
+      1,
+      (m.count ?? 1) - (m.delivered ?? 0) - (this.ctx.store.state.cmdr.cargo[m.commodityId ?? ""] ?? 0),
+    );
     const state: Sourcing = { loading: true };
     this.sourcing.set(m.id, state);
     this.render();
@@ -165,15 +216,25 @@ export class MissionsView implements View {
 
   private sourcingBlock(m: Mission): HTMLElement {
     const st = this.sourcing.get(m.id);
-    const tagLabel: Record<string, string> = { best: t("missions.bestOverall"), cheapest: t("missions.cheapest"), nearest: t("missions.nearest"), freshest: t("missions.freshestPrice") };
+    const tagLabel: Record<string, string> = {
+      best: t("missions.bestOverall"),
+      cheapest: t("missions.cheapest"),
+      nearest: t("missions.nearest"),
+      freshest: t("missions.freshestPrice"),
+    };
     const need = Math.max(0, (m.count ?? 0) - (m.delivered ?? 0));
     if (!st)
       return h(
         "div.mission-source",
         null,
-        h("button.ghost.small", { onclick: () => this.loadSourcing(m) }, icon("search"), /mining/i.test(m.name) ? (" " + t("missions.whereGetBuyMine")) : (" " + t("common.whereBuy"))),
+        h(
+          "button.ghost.small",
+          { onclick: () => this.loadSourcing(m) },
+          icon("search"),
+          /mining/i.test(m.name) ? " " + t("missions.whereGetBuyMine") : " " + t("common.whereBuy"),
+        ),
       );
-    if (st.loading) return h("div.mission-source", null, h("span.spinner"), (" " + t("common.searchingSpansh")));
+    if (st.loading) return h("div.mission-source", null, h("span.spinner"), " " + t("common.searchingSpansh"));
     return h(
       "div.mission-source",
       null,
@@ -187,7 +248,15 @@ export class MissionsView implements View {
               return h(
                 "li",
                 { class: o.tags.includes("best") ? "best" : "" },
-                h("div.offer-head", null, h("strong", null, o.station), " · ", sys(o.system), o.largePad ? h("span.badge.muted", null, "L") : null, ...o.tags.map((tag) => h("span.badge.hit", null, tagLabel[tag]))),
+                h(
+                  "div.offer-head",
+                  null,
+                  h("strong", null, o.station),
+                  " · ",
+                  sys(o.system),
+                  o.largePad ? h("span.badge.muted", null, "L") : null,
+                  ...o.tags.map((tag) => h("span.badge.hit", null, tagLabel[tag])),
+                ),
                 h(
                   "div.offer-line",
                   null,
@@ -195,21 +264,60 @@ export class MissionsView implements View {
                   h("span.sub", null, t("missions.stock", { supply: fmt(o.supply) })),
                   h("span.sub", null, t("common.ly", { locale: fmt(Math.round(o.distance)) })),
                   o.arrival ? h("span.sub", null, t("common.ls", { locale: fmt(Math.round(o.arrival)) })) : null,
-                  o.updated ? h("span.sub", null, t("missions.price", { relTime: relTime(new Date(Date.now() - o.ageDays * 86400000).toISOString()) })) : null,
-                  profit !== null ? h("span", { class: profit > 0 ? "ok" : "warn" }, t("missions.profitCr", { profit: credits(profit) })) : null,
+                  o.updated
+                    ? h(
+                        "span.sub",
+                        null,
+                        t("missions.price", {
+                          relTime: relTime(new Date(Date.now() - o.ageDays * 86400000).toISOString()),
+                        }),
+                      )
+                    : null,
+                  profit !== null
+                    ? h(
+                        "span",
+                        { class: profit > 0 ? "ok" : "warn" },
+                        t("missions.profitCr", { profit: credits(profit) }),
+                      )
+                    : null,
                 ),
               );
             }),
           )
         : !st.error
-          ? h("p.sub", null, t("missions.noStationSellsWithinChosenRadius", { commodityName: gameName(this.commodityName(m)) }))
+          ? h(
+              "p.sub",
+              null,
+              t("missions.noStationSellsWithinChosenRadius", { commodityName: gameName(this.commodityName(m)) }),
+            )
           : null,
       st.hotspots?.length
         ? h(
             "div",
             null,
             h("h4", null, t("missions.nearestMiningHotspots")),
-            h("ul.offers", null, st.hotspots.map((x) => h("li", null, h("div.offer-head", null, h("strong", null, x.ring), " · ", sys(x.system), h("span.sub", null, (" " + t("missions.distanceHotspots", { distance: fmt(Math.round(x.distance)), count: x.count }))))))),
+            h(
+              "ul.offers",
+              null,
+              st.hotspots.map((x) =>
+                h(
+                  "li",
+                  null,
+                  h(
+                    "div.offer-head",
+                    null,
+                    h("strong", null, x.ring),
+                    " · ",
+                    sys(x.system),
+                    h(
+                      "span.sub",
+                      null,
+                      " " + t("missions.distanceHotspots", { distance: fmt(Math.round(x.distance)), count: x.count }),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           )
         : null,
       h("button.ghost.small", { onclick: () => this.loadSourcing(m) }, t("common.refresh")),
@@ -226,7 +334,17 @@ export class MissionsView implements View {
     return h(
       "div.mission-share",
       null,
-      shared ? h("span.badge.ok", null, auto ? (w.autoShare && m.wing ? t("missions.sharedAutomatically") : t("missions.sharedWingSMission")) : t("missions.sharedWing2")) : null,
+      shared
+        ? h(
+            "span.badge.ok",
+            null,
+            auto
+              ? w.autoShare && m.wing
+                ? t("missions.sharedAutomatically")
+                : t("missions.sharedWingSMission")
+              : t("missions.sharedWing2"),
+          )
+        : null,
       manual
         ? h("button.ghost.small", { onclick: () => (setShared(m.id, false), this.render()) }, t("missions.stopSharing"))
         : !shared
@@ -247,15 +365,41 @@ export class MissionsView implements View {
         h(
           "div.stack",
           null,
-          h("div.stack-head", null, h("strong", null, s.target), h("span", null, t("missions.kills", { kills: s.done, killCount: s.needed })), h("div.bar", null, h("span", { style: { width: `${s.needed ? (s.done / s.needed) * 100 : 0}%` } }))),
+          h(
+            "div.stack-head",
+            null,
+            h("strong", null, s.target),
+            h("span", null, t("missions.kills", { kills: s.done, killCount: s.needed })),
+            h("div.bar", null, h("span", { style: { width: `${s.needed ? (s.done / s.needed) * 100 : 0}%` } })),
+          ),
           h(
             "table.table",
             null,
-            h("thead", null, h("tr", null, h("th", null, t("missions.issuingFaction")), h("th", null, t("common.missions")), h("th", null, t("missions.kills2")), h("th", null, t("missions.reward")))),
+            h(
+              "thead",
+              null,
+              h(
+                "tr",
+                null,
+                h("th", null, t("missions.issuingFaction")),
+                h("th", null, t("common.missions")),
+                h("th", null, t("missions.kills2")),
+                h("th", null, t("missions.reward")),
+              ),
+            ),
             h(
               "tbody",
               null,
-              s.issuers.map((i) => h("tr", null, h("td", null, i.faction), h("td", null, String(i.missions)), h("td", null, `${i.kills} / ${i.total}`), h("td", null, `${credits(i.reward)} Cr`))),
+              s.issuers.map((i) =>
+                h(
+                  "tr",
+                  null,
+                  h("td", null, i.faction),
+                  h("td", null, String(i.missions)),
+                  h("td", null, `${i.kills} / ${i.total}`),
+                  h("td", null, `${credits(i.reward)} Cr`),
+                ),
+              ),
             ),
           ),
         ),
@@ -273,17 +417,28 @@ export class MissionsView implements View {
     const view = wingView();
     const parts: (HTMLElement | null)[] = [h("h3", null, t("missions.sharedWing"))];
     if (!isRemote()) {
-      const code = h("input", { type: "text", value: s.code, placeholder: "XXXX-XXXX-XXXX-XXXX", spellcheck: false, autocomplete: "off" }) as HTMLInputElement;
+      const code = h("input", {
+        type: "text",
+        value: s.code,
+        placeholder: "XXXX-XXXX-XXXX-XXXX",
+        spellcheck: false,
+        autocomplete: "off",
+      }) as HTMLInputElement;
       parts.push(
-        h(
-          "p.sub",
-          null,
-          t("missions.everyWingMemberUsingEdchEnters"),
-        ),
+        h("p.sub", null, t("missions.everyWingMemberUsingEdchEnters")),
         h(
           "div.wing-form",
           null,
-          h("label.check", null, h("input", { type: "checkbox", checked: s.enabled, onchange: (e: Event) => set({ enabled: (e.target as HTMLInputElement).checked }) }), (" " + t("missions.enableSharing"))),
+          h(
+            "label.check",
+            null,
+            h("input", {
+              type: "checkbox",
+              checked: s.enabled,
+              onchange: (e: Event) => set({ enabled: (e.target as HTMLInputElement).checked }),
+            }),
+            " " + t("missions.enableSharing"),
+          ),
           h(
             "label.field",
             null,
@@ -311,24 +466,85 @@ export class MissionsView implements View {
             "label.field",
             null,
             h("span", null, t("missions.displayName")),
-            h("input", { type: "text", value: s.name, placeholder: store.state.cmdr.commander ?? "CMDR", onchange: (e: Event) => set({ name: (e.target as HTMLInputElement).value }) }),
+            h("input", {
+              type: "text",
+              value: s.name,
+              placeholder: store.state.cmdr.commander ?? "CMDR",
+              onchange: (e: Event) => set({ name: (e.target as HTMLInputElement).value }),
+            }),
           ),
-          h("p.sub", null, (t("missions.whatNotifiesNewMissionAcceptanceMember") + " "), h("button.inline-link", { onclick: () => openSettingsTab(store, "notifications") }, t("common.settingsNotifications")), "."),
-          h("label.check", null, h("input", { type: "checkbox", checked: s.autoShare, onchange: (e: Event) => set({ autoShare: (e.target as HTMLInputElement).checked }) }), (" " + t("missions.shareAllMyWingMissionsAutomatically"))),
+          h(
+            "p.sub",
+            null,
+            t("missions.whatNotifiesNewMissionAcceptanceMember") + " ",
+            h(
+              "button.inline-link",
+              { onclick: () => openSettingsTab(store, "notifications") },
+              t("common.settingsNotifications"),
+            ),
+            ".",
+          ),
+          h(
+            "label.check",
+            null,
+            h("input", {
+              type: "checkbox",
+              checked: s.autoShare,
+              onchange: (e: Event) => set({ autoShare: (e.target as HTMLInputElement).checked }),
+            }),
+            " " + t("missions.shareAllMyWingMissionsAutomatically"),
+          ),
           h("p.sub", null, t("missions.otherwiseShareEachMissionShareWing")),
         ),
       );
     }
     if (view) {
-      const names = new Map<string, string>([[view.me.id, view.me.name], ...view.members.map((m) => [m.id, m.name] as [string, string])]);
-      const status = view.status === "ok" ? h("span.badge.ok", null, t("common.connected")) : view.status === "error" ? h("span.badge.warn", null, view.error || t("common.error")) : h("span.badge", null, t("missions.connecting"));
+      const names = new Map<string, string>([
+        [view.me.id, view.me.name],
+        ...view.members.map((m) => [m.id, m.name] as [string, string]),
+      ]);
+      const status =
+        view.status === "ok"
+          ? h("span.badge.ok", null, t("common.connected"))
+          : view.status === "error"
+            ? h("span.badge.warn", null, view.error || t("common.error"))
+            : h("span.badge", null, t("missions.connecting"));
       parts.push(
-        h("div.wing-members", null, status, h("span.badge.hit", null, view.me.name, (" " + t("missions.you"))), shownMembers(view.members).map((m) => h(`span.badge${m.left || !isActive(m) ? ".muted" : ""}`, null, m.name, m.left ? [" (", h("span", null, LEFT_LABEL[m.reason ?? "off"]), ")"] : !isActive(m) ? [" (", h("span", null, t("missions.inactive")), ")"] : null, ` · ${relTime(m.at)}`))),
+        h(
+          "div.wing-members",
+          null,
+          status,
+          h("span.badge.hit", null, view.me.name, " " + t("missions.you")),
+          shownMembers(view.members).map((m) =>
+            h(
+              `span.badge${m.left || !isActive(m) ? ".muted" : ""}`,
+              null,
+              m.name,
+              m.left
+                ? [" (", h("span", null, LEFT_LABEL[m.reason ?? "off"]), ")"]
+                : !isActive(m)
+                  ? [" (", h("span", null, t("missions.inactive")), ")"]
+                  : null,
+              ` · ${relTime(m.at)}`,
+            ),
+          ),
+        ),
         view.rows.length
           ? h(
               "table.table.wing-table",
               null,
-              h("thead", null, h("tr", null, h("th", null, t("common.mission")), h("th", null, t("common.destination")), h("th", null, t("missions.expires")), h("th", null, t("missions.accepted")))),
+              h(
+                "thead",
+                null,
+                h(
+                  "tr",
+                  null,
+                  h("th", null, t("common.mission")),
+                  h("th", null, t("common.destination")),
+                  h("th", null, t("missions.expires")),
+                  h("th", null, t("missions.accepted")),
+                ),
+              ),
               h(
                 "tbody",
                 null,
@@ -345,12 +561,32 @@ export class MissionsView implements View {
                         ? h(
                             "div.mission-progress",
                             null,
-                            h("div.bar", null, h("span", { style: { width: `${Math.min(100, ((r.mission.delivered ?? 0) / r.mission.total) * 100)}%` } })),
-                            h("span.sub", null, t("missions.delivered", { done: fmt(r.mission.delivered ?? 0), total: fmt(r.mission.total) })),
+                            h(
+                              "div.bar",
+                              null,
+                              h("span", {
+                                style: {
+                                  width: `${Math.min(100, ((r.mission.delivered ?? 0) / r.mission.total) * 100)}%`,
+                                },
+                              }),
+                            ),
+                            h(
+                              "span.sub",
+                              null,
+                              t("missions.delivered", {
+                                done: fmt(r.mission.delivered ?? 0),
+                                total: fmt(r.mission.total),
+                              }),
+                            ),
                           )
                         : null,
                     ),
-                    h("td", null, r.mission.destStation ? `${r.mission.destStation} · ` : "", sys(r.mission.destSystem)),
+                    h(
+                      "td",
+                      null,
+                      r.mission.destStation ? `${r.mission.destStation} · ` : "",
+                      sys(r.mission.destSystem),
+                    ),
                     h("td", null, relTime(r.mission.expiry)),
                     h(
                       "td",
@@ -369,5 +605,4 @@ export class MissionsView implements View {
     }
     return h("section.card.wing", null, parts);
   }
-
 }

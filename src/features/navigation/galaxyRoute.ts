@@ -98,7 +98,11 @@ export const defaultSupercharge = (l?: ShipLoadout) => superchargeMultiplier(l?.
 const flag = (b: boolean) => (b ? "1" : "0");
 
 /** Asks Spansh for the exact route. */
-export async function plotGalaxy(ship: ShipParams, o: GalaxyOptions, onWait?: (n: number) => void): Promise<GalaxyRoute> {
+export async function plotGalaxy(
+  ship: ShipParams,
+  o: GalaxyOptions,
+  onWait?: (n: number) => void,
+): Promise<GalaxyRoute> {
   const form: [string, string][] = [
     ["source", o.from],
     ["destination", o.to],

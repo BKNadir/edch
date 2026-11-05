@@ -92,7 +92,21 @@ function stripLocalised(v: any): any {
   return v;
 }
 
-const PERSONAL = ["ActiveFine", "CockpitBreach", "BoostUsed", "FuelLevel", "FuelUsed", "JumpDist", "Latitude", "Longitude", "Wanted", "IsNewEntry", "NewTraitsDiscovered", "Traits", "VoucherAmount"];
+const PERSONAL = [
+  "ActiveFine",
+  "CockpitBreach",
+  "BoostUsed",
+  "FuelLevel",
+  "FuelUsed",
+  "JumpDist",
+  "Latitude",
+  "Longitude",
+  "Wanted",
+  "IsNewEntry",
+  "NewTraitsDiscovered",
+  "Traits",
+  "VoucherAmount",
+];
 const PERSONAL_FACTION = ["HappiestSystem", "HomeSystem", "MyReputation", "SquadronFaction"];
 const JOURNAL_EVENTS = new Set(["Docked", "FSDJump", "Scan", "Location", "SAASignalsFound", "CarrierJump"]);
 
@@ -130,7 +144,11 @@ export function journalMessage(s: GameSession, ev: Json): EddnMessage | null {
   return envelope(s, "journal/1", flags(s, m));
 }
 
-const canonical = (name: string) => name.replace(/^\$/, "").replace(/_name;$/i, "").toLowerCase();
+const canonical = (name: string) =>
+  name
+    .replace(/^\$/, "")
+    .replace(/_name;$/i, "")
+    .toLowerCase();
 
 /** commodity/3 from Market.json (read when the Market event fires). */
 export function commodityMessage(s: GameSession, market: Json): EddnMessage | null {
@@ -149,14 +167,24 @@ export function commodityMessage(s: GameSession, market: Json): EddnMessage | nu
       demandBracket: i.DemandBracket,
     }))
     .sort((a, b) => a.name.localeCompare(b.name));
-  const m: Json = { timestamp: market.timestamp, systemName: market.StarSystem, stationName: market.StationName, marketId: market.MarketID, commodities };
+  const m: Json = {
+    timestamp: market.timestamp,
+    systemName: market.StarSystem,
+    stationName: market.StationName,
+    marketId: market.MarketID,
+    commodities,
+  };
   if (market.StationType) m.stationType = market.StationType;
   if (market.CarrierDockingAccess) m.carrierDockingAccess = market.CarrierDockingAccess;
   return envelope(s, "commodity/3", flags(s, m));
 }
 
 const MODULE_OK = /(^hpt_|^int_|_armour_)/i;
-const normaliseModule = (n: string) => n.replace(/^hpt_/i, "Hpt_").replace(/^int_/i, "Int_").replace(/_armour_/i, "_Armour_");
+const normaliseModule = (n: string) =>
+  n
+    .replace(/^hpt_/i, "Hpt_")
+    .replace(/^int_/i, "Int_")
+    .replace(/_armour_/i, "_Armour_");
 
 /** outfitting/2 from Outfitting.json. */
 export function outfittingMessage(s: GameSession, outfitting: Json): EddnMessage | null {
@@ -166,16 +194,30 @@ export function outfittingMessage(s: GameSession, outfitting: Json): EddnMessage
     .map(normaliseModule)
     .sort();
   if (!names.length) return null;
-  const m = { timestamp: outfitting.timestamp, systemName: outfitting.StarSystem, stationName: outfitting.StationName, marketId: outfitting.MarketID, modules: names };
+  const m = {
+    timestamp: outfitting.timestamp,
+    systemName: outfitting.StarSystem,
+    stationName: outfitting.StationName,
+    marketId: outfitting.MarketID,
+    modules: names,
+  };
   return envelope(s, "outfitting/2", flags(s, m));
 }
 
 /** shipyard/2 from Shipyard.json. */
 export function shipyardMessage(s: GameSession, shipyard: Json): EddnMessage | null {
   if (!shipyard?.MarketID) return null;
-  const ships = [...new Set<string>((shipyard.PriceList ?? []).map((p: Json) => String(p.ShipType ?? "")).filter(Boolean))].sort();
+  const ships = [
+    ...new Set<string>((shipyard.PriceList ?? []).map((p: Json) => String(p.ShipType ?? "")).filter(Boolean)),
+  ].sort();
   if (!ships.length) return null;
-  const m: Json = { timestamp: shipyard.timestamp, systemName: shipyard.StarSystem, stationName: shipyard.StationName, marketId: shipyard.MarketID, ships };
+  const m: Json = {
+    timestamp: shipyard.timestamp,
+    systemName: shipyard.StarSystem,
+    stationName: shipyard.StationName,
+    marketId: shipyard.MarketID,
+    ships,
+  };
   if (typeof shipyard.AllowCobraMkIV === "boolean") m.allowCobraMkIV = shipyard.AllowCobraMkIV;
   return envelope(s, "shipyard/2", flags(s, m));
 }
@@ -184,14 +226,24 @@ export function shipyardMessage(s: GameSession, shipyard: Json): EddnMessage | n
 export function navrouteMessage(s: GameSession, nav: Json): EddnMessage | null {
   const route: Json[] = Array.isArray(nav?.Route) ? nav.Route : [];
   if (!route.length) return null;
-  const Route = route.map((r) => ({ StarSystem: r.StarSystem, SystemAddress: r.SystemAddress, StarPos: r.StarPos, StarClass: r.StarClass }));
+  const Route = route.map((r) => ({
+    StarSystem: r.StarSystem,
+    SystemAddress: r.SystemAddress,
+    StarPos: r.StarPos,
+    StarClass: r.StarClass,
+  }));
   return envelope(s, "navroute/1", flags(s, { timestamp: nav.timestamp, event: "NavRoute", Route }));
 }
 
 /** fssdiscoveryscan/1 and fssallbodiesfound/1. */
 export function fssMessage(s: GameSession, ev: Json): EddnMessage | null {
   if (ev.event !== "FSSDiscoveryScan" && ev.event !== "FSSAllBodiesFound") return null;
-  const m: Json = { timestamp: ev.timestamp, event: ev.event, SystemName: ev.SystemName, SystemAddress: ev.SystemAddress };
+  const m: Json = {
+    timestamp: ev.timestamp,
+    event: ev.event,
+    SystemName: ev.SystemName,
+    SystemAddress: ev.SystemAddress,
+  };
   if (ev.event === "FSSDiscoveryScan") Object.assign(m, { BodyCount: ev.BodyCount, NonBodyCount: ev.NonBodyCount });
   else m.Count = ev.Count;
   if (!augmentLocation(s, m, "SystemName", false)) return null;

@@ -53,8 +53,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
           key: `hge:${hge[1].toLowerCase()}`,
           type: "systems",
           title: t("sources.highGradeEmissionsPopulatedSystems", { fr: rule.fr }),
-          hint:
-            t("sources.highGradeEmissionsSignalSourcesSupercruise"),
+          hint: t("sources.highGradeEmissionsSignalSourcesSupercruise"),
           filters,
           states: rule.states,
           fresh: Boolean(rule.states),
@@ -63,7 +62,11 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
     }
   }
 
-  if (o.startsWith("signal source (high security)") || o.startsWith("signal source (low security)") || o.startsWith("signal source (anarchy)")) {
+  if (
+    o.startsWith("signal source (high security)") ||
+    o.startsWith("signal source (low security)") ||
+    o.startsWith("signal source (anarchy)")
+  ) {
     const level = o.includes("high") ? "High" : o.includes("low") ? "Low" : "Anarchy";
     const fr = level === "High" ? t("sources.high") : level === "Low" ? t("sources.low") : t("sources.anarchy");
     return [
@@ -92,14 +95,14 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
   }
 
   if (o.startsWith("high wake scanning")) {
-    if (o.includes("thargoid")) return [info(t("sources.scanThargoidInterceptorWakes"), t("sources.useWakeScannerThargoidInterceptorJumps"))];
+    if (o.includes("thargoid"))
+      return [info(t("sources.scanThargoidInterceptorWakes"), t("sources.useWakeScannerThargoidInterceptorJumps"))];
     return [
       {
         key: "wake",
         type: "systems",
         title: t("sources.scanHighEnergyWakesBusySystems"),
-        hint:
-          t("sources.fitFrameShiftWakeScannerScan"),
+        hint: t("sources.fitFrameShiftWakeScannerScan"),
         filters: { population: atLeast(1_000_000_000) },
       },
     ];
@@ -161,8 +164,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
         key: "thargoid",
         type: "bodies",
         title: t("sources.thargoidSurfaceSites"),
-        hint:
-          t("sources.thargoidWrecksStructuresBarnaclesInterceptorsSco"),
+        hint: t("sources.thargoidWrecksStructuresBarnaclesInterceptorsSco"),
         filters: { signals: { name: choice("Thargoid") } },
       },
     ];
@@ -189,7 +191,9 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "traffic",
         type: "systems",
-        title: scan ? t("sources.scanHaulersHighlyPopulatedSystemsLots") : t("sources.haulerSalvageHighlyPopulatedSystemsLots"),
+        title: scan
+          ? t("sources.scanHaulersHighlyPopulatedSystemsLots")
+          : t("sources.haulerSalvageHighlyPopulatedSystemsLots"),
         hint: scan
           ? t("sources.scanTransportShipsNearStationsTrade")
           : t("sources.destroyedHaulersMissionsPiratesResDrop"),
@@ -271,13 +275,15 @@ function odysseyFinders(m: Material): Finder[] {
     });
   }
   const where: string[] = [];
-  if (m.buildings?.length) where.push(t("sources.buildings", { value: m.buildings.map((b) => BUILDING_FR[b] ?? b).join(", ") }));
+  if (m.buildings?.length)
+    where.push(t("sources.buildings", { value: m.buildings.map((b) => BUILDING_FR[b] ?? b).join(", ") }));
   if (m.containers?.length) where.push(t("sources.containers", { value: m.containers.join(", ") }));
   if (where.length) out.push(info(t("sources.whereLookSettlement"), where.join(" · ")));
   for (const origin of m.origins) {
     const o = origin.toLowerCase();
     if (o.includes("mission")) out.push(info(t("sources.missionReward"), t("sources.offeredOdysseyMissionReward")));
-    else if (o.includes("bartender") || o.includes("bar")) out.push(info(t("sources.stationBarBartender"), t("sources.canBoughtFromBartenderOdysseyStations")));
+    else if (o.includes("bartender") || o.includes("bar"))
+      out.push(info(t("sources.stationBarBartender"), t("sources.canBoughtFromBartenderOdysseyStations")));
     else if (!o.includes("settlement")) out.push(info(origin, ""));
   }
   return out;
@@ -300,7 +306,14 @@ export function traderFinder(m: Material, settings: Settings): Finder | null {
   return {
     key: `trader:${m.category}${settings.largePadOnly ? ":L" : ""}`,
     type: "stations",
-    title: t("sources.nearestMaterialTrader", { value: m.category === "Raw" ? t("sources.raw") : m.category === "Encoded" ? t("sources.encoded") : t("sources.manufactured") }),
+    title: t("sources.nearestMaterialTrader", {
+      value:
+        m.category === "Raw"
+          ? t("sources.raw")
+          : m.category === "Encoded"
+            ? t("sources.encoded")
+            : t("sources.manufactured"),
+    }),
     filters,
     size: 3,
   };

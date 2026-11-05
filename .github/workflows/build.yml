@@ -92,7 +92,7 @@ jobs:
           file="EDCH_${version}_x64-portable.exe"
           cp src-tauri/target/release/edch.exe "$file"
           echo "file=$file" >> "$GITHUB_OUTPUT"
-          
+
       - name: Attach the portable exe to the release
         if: steps.tauri.outputs.releaseId != ''
         shell: bash
@@ -131,7 +131,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
       - run: npm install
-
       - name: Release notes
         id: notes
         shell: bash
@@ -240,4 +239,3 @@ jobs:
           if ! command -v gh >/dev/null; then dnf install -y gh || (curl -sL https://github.com/cli/cli/releases/download/v2.62.0/gh_2.62.0_linux_amd64.tar.gz | tar xz && cp gh_*/bin/gh /usr/local/bin/); fi
           cp EDCH.flatpak "EDCH_${version}_x86_64.flatpak"
           gh release upload "v${version}" "EDCH_${version}_x86_64.flatpak" --clobber -R "${{ github.repository }}"
-

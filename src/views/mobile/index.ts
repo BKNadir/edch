@@ -1,10 +1,22 @@
 import { copyText, isRemote, isTauri, remoteInterfaces, remoteQr, type NetAddress } from "../../platform/bridge.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
 import type { Ctx, View } from "../../state/context.js";
-import { pairingHost, pairingUrl, remoteRunning, rotateToken, startRemote, stopRemote } from "../../services/remoteServer.js";
+import {
+  pairingHost,
+  pairingUrl,
+  remoteRunning,
+  rotateToken,
+  startRemote,
+  stopRemote,
+} from "../../services/remoteServer.js";
 import { t } from "../../platform/i18n.js";
 
-const KIND_LABEL: Record<NetAddress["kind"], string> = { ethernet: "Ethernet", wifi: "Wi-Fi", tailscale: "Tailscale", vpn: "VPN" };
+const KIND_LABEL: Record<NetAddress["kind"], string> = {
+  ethernet: "Ethernet",
+  wifi: "Wi-Fi",
+  tailscale: "Tailscale",
+  vpn: "VPN",
+};
 
 /** "Mobile access": QR code to open EDCH on a phone/tablet through the PC's local server. */
 export class MobileView implements View {
@@ -16,7 +28,20 @@ export class MobileView implements View {
 
   async mount(root: HTMLElement) {
     this.root = root;
-    replace(root, h("header.view-head", null, h("div", null, h("h1", null, t("common.remoteAccess")), h("p.sub", null, t("mobile.openEdchPhoneTabletAnotherScreen")))), this.body);
+    replace(
+      root,
+      h(
+        "header.view-head",
+        null,
+        h(
+          "div",
+          null,
+          h("h1", null, t("common.remoteAccess")),
+          h("p.sub", null, t("mobile.openEdchPhoneTabletAnotherScreen")),
+        ),
+      ),
+      this.body,
+    );
     await this.render();
   }
 
@@ -28,7 +53,15 @@ export class MobileView implements View {
     if (!this.root) return;
     const store = this.ctx.store;
     if (isRemote()) {
-      replace(this.body, h("section.card", null, h("h3", null, t("common.connected")), h("p", null, icon("check"), (" " + t("mobile.deviceConnectedEdchPcDataUpdates")))));
+      replace(
+        this.body,
+        h(
+          "section.card",
+          null,
+          h("h3", null, t("common.connected")),
+          h("p", null, icon("check"), " " + t("mobile.deviceConnectedEdchPcDataUpdates")),
+        ),
+      );
       return;
     }
     if (!isTauri()) {
@@ -36,35 +69,51 @@ export class MobileView implements View {
       return;
     }
     const r = store.state.settings.remote;
-    const set = (patch: Partial<typeof r>) => store.updateSettings({ remote: { ...store.state.settings.remote, ...patch } });
+    const set = (patch: Partial<typeof r>) =>
+      store.updateSettings({ remote: { ...store.state.settings.remote, ...patch } });
     const running = remoteRunning();
     const nets = await remoteInterfaces();
     const known = nets.map((n) => n.ip);
     const ts = nets.find((n) => n.kind === "tailscale")?.ip ?? null;
 
-    const toggle = h("label.switch", null, h("input", {
-      type: "checkbox",
-      checked: r.enabled && Boolean(running),
-      onchange: async (e: Event) => {
-        const on = (e.target as HTMLInputElement).checked;
-        set({ enabled: on });
-        this.error = "";
-        try {
-          if (on) await startRemote(store);
-          else await stopRemote();
-        } catch (err) {
-          this.error = String((err as Error).message ?? err);
-          set({ enabled: false });
-        }
-        await this.render();
-      },
-    }), h("span"));
+    const toggle = h(
+      "label.switch",
+      null,
+      h("input", {
+        type: "checkbox",
+        checked: r.enabled && Boolean(running),
+        onchange: async (e: Event) => {
+          const on = (e.target as HTMLInputElement).checked;
+          set({ enabled: on });
+          this.error = "";
+          try {
+            if (on) await startRemote(store);
+            else await stopRemote();
+          } catch (err) {
+            this.error = String((err as Error).message ?? err);
+            set({ enabled: false });
+          }
+          await this.render();
+        },
+      }),
+      h("span"),
+    );
 
     const parts: HTMLElement[] = [
       h(
         "section.card",
         null,
-        h("div.sync-head", null, h("div", null, h("h3", null, t("mobile.remoteAccessServer")), h("p.sub", null, t("mobile.offDefaultAlsoServesOpenBrowser"))), toggle),
+        h(
+          "div.sync-head",
+          null,
+          h(
+            "div",
+            null,
+            h("h3", null, t("mobile.remoteAccessServer")),
+            h("p.sub", null, t("mobile.offDefaultAlsoServesOpenBrowser")),
+          ),
+          toggle,
+        ),
         this.error ? h("p.error", null, icon("warn"), ` ${this.error}`) : null,
       ),
     ];
@@ -79,7 +128,9 @@ export class MobileView implements View {
           qr.innerHTML = svg;
         })
         .catch((e) => replace(qr, h("p.error", null, String(e))));
-      const options: NetAddress[] = nets.length ? nets : running.addresses.map((ip) => ({ ip, kind: "ethernet" as const, network: "", adapter: "" }));
+      const options: NetAddress[] = nets.length
+        ? nets
+        : running.addresses.map((ip) => ({ ip, kind: "ethernet" as const, network: "", adapter: "" }));
       // "Wi-Fi (ASUS)": the network's name tells two connections apart; a VPN shows its adapter.
       const optionLabel = (n: NetAddress) => {
         const kind = KIND_LABEL[n.kind];
@@ -108,7 +159,17 @@ export class MobileView implements View {
               "div.pair-link",
               null,
               h("code", { "data-no-tr": "" }, url),
-              h("button.ghost.small", { onclick: async () => toast((await copyText(url)) ? t("mobile.linkCopiedContainsSecretCodeOnly") : t("common.couldnTCopy")) }, icon("copy"), (" " + t("mobile.copyLink"))),
+              h(
+                "button.ghost.small",
+                {
+                  onclick: async () =>
+                    toast(
+                      (await copyText(url)) ? t("mobile.linkCopiedContainsSecretCodeOnly") : t("common.couldnTCopy"),
+                    ),
+                },
+                icon("copy"),
+                " " + t("mobile.copyLink"),
+              ),
             ),
             h(
               "label.field",
@@ -122,7 +183,9 @@ export class MobileView implements View {
                     await this.render();
                   },
                 },
-                options.map((n) => h("option", { value: n.ip, selected: n.ip === host, "data-no-tr": "" }, optionLabel(n))),
+                options.map((n) =>
+                  h("option", { value: n.ip, selected: n.ip === host, "data-no-tr": "" }, optionLabel(n)),
+                ),
               ),
               h("small", null, t("mobile.pickConnectionPhoneUsesReachPc")),
             ),
@@ -185,7 +248,12 @@ export class MobileView implements View {
           h(
             "div.sync-head",
             null,
-            h("div", null, h("h3", null, t("mobile.accessAwayFromHome")), h("p.sub", null, t("mobile.tailscaleEncryptedPrivateNetworkBetweenOwn"))),
+            h(
+              "div",
+              null,
+              h("h3", null, t("mobile.accessAwayFromHome")),
+              h("p.sub", null, t("mobile.tailscaleEncryptedPrivateNetworkBetweenOwn")),
+            ),
             h("button.ghost", { onclick: () => this.ctx.store.setView("guide-remote") }, t("mobile.stepStepGuide")),
           ),
           ts

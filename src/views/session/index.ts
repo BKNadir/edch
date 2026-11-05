@@ -35,20 +35,44 @@ export class SessionView implements View {
       h(
         "header.view-head",
         null,
-        h("div", null, h("h1", null, t("session.sessionSummary")), h("p.sub", null, s.start ? t("session.sinceGameStarted", { relTime: relTime(s.start), duration: duration(elapsed) }) : t("session.startEliteDangerousSummaryBeginsWhen"))),
+        h(
+          "div",
+          null,
+          h("h1", null, t("session.sessionSummary")),
+          h(
+            "p.sub",
+            null,
+            s.start
+              ? t("session.sinceGameStarted", { relTime: relTime(s.start), duration: duration(elapsed) })
+              : t("session.startEliteDangerousSummaryBeginsWhen"),
+          ),
+        ),
       ),
       h(
         "section.card",
         null,
-        h("div.sync-head", null, h("h3", null, t("session.creditsEarned")), h("strong.big-number", null, `${credits(total)} Cr`)),
+        h(
+          "div.sync-head",
+          null,
+          h("h3", null, t("session.creditsEarned")),
+          h("strong.big-number", null, `${credits(total)} Cr`),
+        ),
         h(
           "div.earn-bars",
           null,
           earned.map(([label, v]) =>
-            h("div.earn-row", null, h("span", null, label), h("div.bar", null, h("span", { style: { width: `${(Math.abs(v) / max) * 100}%` } })), h("strong", null, `${credits(v)} Cr`)),
+            h(
+              "div.earn-row",
+              null,
+              h("span", null, label),
+              h("div.bar", null, h("span", { style: { width: `${(Math.abs(v) / max) * 100}%` } })),
+              h("strong", null, `${credits(v)} Cr`),
+            ),
           ),
         ),
-        elapsed > 10 * 60000 && total > 0 ? h("p.sub", null, t("session.crPerHour", { value: credits((total / elapsed) * 3600000) })) : null,
+        elapsed > 10 * 60000 && total > 0
+          ? h("p.sub", null, t("session.crPerHour", { value: credits((total / elapsed) * 3600000) }))
+          : null,
       ),
       h(
         "section.card",
@@ -58,12 +82,29 @@ export class SessionView implements View {
           "div.stats",
           null,
           h("div.stat", null, h("strong", null, fmt(s.jumps)), h("span.sub", null, t("session.jumps"))),
-          h("div.stat", null, h("strong", null, fmt(Math.round(s.distance))), h("span.sub", null, t("session.lyTravelled"))),
-          h("div.stat", null, h("strong", null, fmt(s.missionsDone)), h("span.sub", null, t("session.missionsCompleted"))),
+          h(
+            "div.stat",
+            null,
+            h("strong", null, fmt(Math.round(s.distance))),
+            h("span.sub", null, t("session.lyTravelled")),
+          ),
+          h(
+            "div.stat",
+            null,
+            h("strong", null, fmt(s.missionsDone)),
+            h("span.sub", null, t("session.missionsCompleted")),
+          ),
           h("div.stat", null, h("strong", null, fmt(s.kills)), h("span.sub", null, t("session.kills"))),
-          h("div.stat", null, h("strong", null, fmt(s.materials)), h("span.sub", null, t("session.materialsCollected"))),
+          h(
+            "div.stat",
+            null,
+            h("strong", null, fmt(s.materials)),
+            h("span.sub", null, t("session.materialsCollected")),
+          ),
           h("div.stat", null, h("strong", null, fmt(s.refined)), h("span.sub", null, t("session.tMined"))),
-          s.deaths ? h("div.stat.bad", null, h("strong", null, fmt(s.deaths)), h("span.sub", null, t("session.deaths"))) : null,
+          s.deaths
+            ? h("div.stat.bad", null, h("strong", null, fmt(s.deaths)), h("span.sub", null, t("session.deaths")))
+            : null,
         ),
       ),
     );

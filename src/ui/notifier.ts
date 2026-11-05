@@ -18,7 +18,15 @@ function ctx(): AudioContext | null {
   }
 }
 
-function note(ac: AudioContext, start: number, freq: number, dur: number, volume: number, type: OscillatorType = "sine", to?: number) {
+function note(
+  ac: AudioContext,
+  start: number,
+  freq: number,
+  dur: number,
+  volume: number,
+  type: OscillatorType = "sine",
+  to?: number,
+) {
   const osc = ac.createOscillator();
   const gain = ac.createGain();
   osc.type = type;
@@ -130,7 +138,12 @@ export function mountSideTab(s: Store, render: () => (Node | null)[]) {
   store = s;
   renderPanel = render;
   badge = h("span.side-tab-badge", { hidden: true });
-  tab = h("button.side-tab", { title: t("notifier.overview"), onclick: toggle }, h("span.side-tab-label", null, label), badge);
+  tab = h(
+    "button.side-tab",
+    { title: t("notifier.overview"), onclick: toggle },
+    h("span.side-tab-label", null, label),
+    badge,
+  );
   panel = h("div.side-panel", { onclick: (e: Event) => e.stopPropagation() });
   document.body.append(tab, panel);
   document.addEventListener("click", close);

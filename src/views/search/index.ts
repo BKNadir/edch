@@ -11,8 +11,19 @@ type Json = Record<string, any>;
 type Tab = "buy" | "sell" | "ship" | "module" | "service";
 
 const STATION_TYPES = [
-  "Asteroid base", "Coriolis Starport", "Dodec Starport", "Mega ship", "Ocellus Starport", "Orbis Starport", "Outpost",
-  "Planetary Construction Depot", "Planetary Outpost", "Planetary Port", "Settlement", "Space Construction Depot", "Surface Settlement",
+  "Asteroid base",
+  "Coriolis Starport",
+  "Dodec Starport",
+  "Mega ship",
+  "Ocellus Starport",
+  "Orbis Starport",
+  "Outpost",
+  "Planetary Construction Depot",
+  "Planetary Outpost",
+  "Planetary Port",
+  "Settlement",
+  "Space Construction Depot",
+  "Surface Settlement",
 ];
 const CARRIER = "Drake-Class Carrier";
 const SERVICES: [string, string][] = [
@@ -65,11 +76,29 @@ export class SearchView implements View {
     const lists = h(
       "div",
       { style: { display: "none" } },
-      h("datalist#dl-commodities", null, g.commodities.map((c) => h("option", { value: gameName(c.name) }, gameName(c.category)))),
-      h("datalist#dl-ships", null, g.ships.map((s) => h("option", { value: s }))),
-      h("datalist#dl-modules", null, g.modules.map((s) => h("option", { value: gameName(s) }))),
+      h(
+        "datalist#dl-commodities",
+        null,
+        g.commodities.map((c) => h("option", { value: gameName(c.name) }, gameName(c.category))),
+      ),
+      h(
+        "datalist#dl-ships",
+        null,
+        g.ships.map((s) => h("option", { value: s })),
+      ),
+      h(
+        "datalist#dl-modules",
+        null,
+        g.modules.map((s) => h("option", { value: gameName(s) })),
+      ),
     );
-    replace(root, h("header.view-head", null, h("h1", null, t("common.search2")), this.tabs), lists, h("section.card", null, this.form), this.out);
+    replace(
+      root,
+      h("header.view-head", null, h("h1", null, t("common.search2")), this.tabs),
+      lists,
+      h("section.card", null, this.form),
+      this.out,
+    );
     if (pending) {
       this.tab = pending.tab;
       this.values[pending.tab] = gameName(pending.value);
@@ -86,7 +115,11 @@ export class SearchView implements View {
     // Results are explicit (button); only the "around X" line follows the commander.
     if (!this.root) return;
     const where = this.form.querySelector(".opts .sub");
-    if (where) where.textContent = t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: this.ctx.store.state.settings.maxDistance });
+    if (where)
+      where.textContent = t("common.aroundLyMax", {
+        label: referenceOf(this.ctx).label,
+        maxDistance: this.ctx.store.state.settings.maxDistance,
+      });
   }
 
   private renderTabs() {
@@ -99,7 +132,16 @@ export class SearchView implements View {
     ];
     replace(
       this.tabs,
-      labels.map(([tab, l]) => h("button", { class: this.tab === tab ? "active" : "", onclick: () => ((this.tab = tab), this.renderTabs(), this.renderForm(), replace(this.out)) }, l)),
+      labels.map(([tab, l]) =>
+        h(
+          "button",
+          {
+            class: this.tab === tab ? "active" : "",
+            onclick: () => ((this.tab = tab), this.renderTabs(), this.renderForm(), replace(this.out)),
+          },
+          l,
+        ),
+      ),
     );
   }
 
@@ -116,7 +158,16 @@ export class SearchView implements View {
         onkeydown: (e: KeyboardEvent) => e.key === "Enter" && this.run(),
       });
     const check = (key: "largePad" | "carriers" | "planetary" | "sortPrice", label: string) =>
-      h("label.check", null, h("input", { type: "checkbox", checked: this.opts[key], onchange: (e: Event) => (this.opts[key] = (e.target as HTMLInputElement).checked) }), ` ${label}`);
+      h(
+        "label.check",
+        null,
+        h("input", {
+          type: "checkbox",
+          checked: this.opts[key],
+          onchange: (e: Event) => (this.opts[key] = (e.target as HTMLInputElement).checked),
+        }),
+        ` ${label}`,
+      );
 
     let main: HTMLElement;
     if (tab === "buy" || tab === "sell") main = input("dl-commodities", t("search.commodityEGTritiumGoldLow"));
@@ -126,8 +177,30 @@ export class SearchView implements View {
         "div.row",
         null,
         input("dl-modules", t("search.moduleEGFrameShiftDrive")),
-        h("select", { title: t("search.moduleClass"), onchange: (e: Event) => (this.cls = (e.target as HTMLSelectElement).value) }, CLASSES.map((c) => h("option", { value: c, selected: c === this.cls }, c ? t("search.class", { c }) : t("search.anyClass")))),
-        h("select", { title: t("search.moduleRating"), onchange: (e: Event) => (this.rating = (e.target as HTMLSelectElement).value) }, RATINGS.map((r) => h("option", { value: r, selected: r === this.rating }, r ? t("search.rating", { r }) : t("search.anyRating")))),
+        h(
+          "select",
+          {
+            title: t("search.moduleClass"),
+            onchange: (e: Event) => (this.cls = (e.target as HTMLSelectElement).value),
+          },
+          CLASSES.map((c) =>
+            h("option", { value: c, selected: c === this.cls }, c ? t("search.class", { c }) : t("search.anyClass")),
+          ),
+        ),
+        h(
+          "select",
+          {
+            title: t("search.moduleRating"),
+            onchange: (e: Event) => (this.rating = (e.target as HTMLSelectElement).value),
+          },
+          RATINGS.map((r) =>
+            h(
+              "option",
+              { value: r, selected: r === this.rating },
+              r ? t("search.rating", { r }) : t("search.anyRating"),
+            ),
+          ),
+        ),
       );
     else
       main = h(
@@ -138,15 +211,29 @@ export class SearchView implements View {
 
     replace(
       this.form,
-      h("div.row", null, main, h("button.primary", { onclick: () => this.run() }, icon("search"), (" " + t("common.search")))),
+      h(
+        "div.row",
+        null,
+        main,
+        h("button.primary", { onclick: () => this.run() }, icon("search"), " " + t("common.search")),
+      ),
       h(
         "div.row.opts",
         null,
         check("largePad", t("search.lPadOnly")),
         check("carriers", t("search.includeFleetCarriers")),
         check("planetary", t("search.includePlanetaryPorts")),
-        tab === "buy" || tab === "sell" ? check("sortPrice", tab === "buy" ? t("search.sortLowestPrice") : t("search.sortBestPrice")) : null,
-        h("span.sub", null, t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: this.ctx.store.state.settings.maxDistance })),
+        tab === "buy" || tab === "sell"
+          ? check("sortPrice", tab === "buy" ? t("search.sortLowestPrice") : t("search.sortBestPrice"))
+          : null,
+        h(
+          "span.sub",
+          null,
+          t("common.aroundLyMax", {
+            label: referenceOf(this.ctx).label,
+            maxDistance: this.ctx.store.state.settings.maxDistance,
+          }),
+        ),
       ),
     );
   }
@@ -193,7 +280,14 @@ export class SearchView implements View {
               ` ${several(typed)} `,
               r.suggestions.flatMap((sug, i) => [
                 i ? " · " : "",
-                h("button.inline-link.ref-link", { "data-no-tr": "", onclick: () => ((this.values[tab] = gameName(sug)), this.renderForm(), this.run()) }, gameName(sug)),
+                h(
+                  "button.inline-link.ref-link",
+                  {
+                    "data-no-tr": "",
+                    onclick: () => ((this.values[tab] = gameName(sug)), this.renderForm(), this.run()),
+                  },
+                  gameName(sug),
+                ),
               ]),
             )
           : h("p.empty", null, t("search.noKnownNameMatchesPickOne", { typed })),
@@ -201,10 +295,18 @@ export class SearchView implements View {
       return null;
     };
     if (tab === "buy" || tab === "sell") {
-      const found = pick(g.commodities.map((c) => c.name), (x) => t("search.severalCommoditiesMatch", { x }));
+      const found = pick(
+        g.commodities.map((c) => c.name),
+        (x) => t("search.severalCommoditiesMatch", { x }),
+      );
       if (!found) return;
       name = found;
-      f.market = [{ name, [tab === "buy" ? "supply" : "demand"]: { value: [String(this.opts.minQty), "1000000000"], comparison: "<=>" } }];
+      f.market = [
+        {
+          name,
+          [tab === "buy" ? "supply" : "demand"]: { value: [String(this.opts.minQty), "1000000000"], comparison: "<=>" },
+        },
+      ];
     } else if (tab === "ship") {
       const found = pick(g.ships, (x) => t("search.severalShipsMatch", { x }));
       if (!found) return;
@@ -228,9 +330,11 @@ export class SearchView implements View {
       sort: [{ distance: { direction: "asc" } }],
       size: tab === "buy" || tab === "sell" ? 50 : 20,
       page: 0,
-      ...(ref.coords ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } } : { reference_system: ref.system }),
+      ...(ref.coords
+        ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } }
+        : { reference_system: ref.system }),
     };
-    replace(this.out, h("p.sub", null, h("span.spinner"), (" " + t("common.searchingSpansh"))));
+    replace(this.out, h("p.sub", null, h("span.spinner"), " " + t("common.searchingSpansh")));
     const id = ++this.runId;
     try {
       const res = await spanshPost("stations/search", body);
@@ -241,15 +345,30 @@ export class SearchView implements View {
           const m = (r.market ?? []).find((x: Json) => String(x.commodity).toLowerCase() === name.toLowerCase());
           return m ? Number(tab === "buy" ? m.buy_price : m.sell_price) : NaN;
         };
-        rows = rows.filter((r) => !Number.isNaN(price(r))).sort((a, b) => (tab === "buy" ? price(a) - price(b) : price(b) - price(a)));
+        rows = rows
+          .filter((r) => !Number.isNaN(price(r)))
+          .sort((a, b) => (tab === "buy" ? price(a) - price(b) : price(b) - price(a)));
       }
       if (!rows.length) {
-        replace(this.out, h("p.empty", null, t("search.nothingFoundWithinLyIncreaseDistance", { maxDistance: this.ctx.store.state.settings.maxDistance })));
+        replace(
+          this.out,
+          h(
+            "p.empty",
+            null,
+            t("search.nothingFoundWithinLyIncreaseDistance", {
+              maxDistance: this.ctx.store.state.settings.maxDistance,
+            }),
+          ),
+        );
         return;
       }
       replace(
         this.out,
-        h("p.sub", null, t("search.matchingStationsShown", { count: fmt(Number(res.count ?? rows.length)), count2: rows.length })),
+        h(
+          "p.sub",
+          null,
+          t("search.matchingStationsShown", { count: fmt(Number(res.count ?? rows.length)), count2: rows.length }),
+        ),
         h(
           "table.table.search-table",
           null,
@@ -261,12 +380,26 @@ export class SearchView implements View {
               null,
               h("th", null, t("common.station")),
               h("th.num", null, t("common.distance")),
-              h("th", null, tab === "buy" ? t("search.buyPriceStock") : tab === "sell" ? t("search.sellPriceDemand") : tab === "service" ? t("common.type") : t("search.details")),
+              h(
+                "th",
+                null,
+                tab === "buy"
+                  ? t("search.buyPriceStock")
+                  : tab === "sell"
+                    ? t("search.sellPriceDemand")
+                    : tab === "service"
+                      ? t("common.type")
+                      : t("search.details"),
+              ),
               h("th", null, t("search.padArrival")),
               h("th", null, t("search.updated")),
             ),
           ),
-          h("tbody", null, rows.map((r) => this.row(r, tab, name))),
+          h(
+            "tbody",
+            null,
+            rows.map((r) => this.row(r, tab, name)),
+          ),
         ),
       );
     } catch (e) {
@@ -279,13 +412,32 @@ export class SearchView implements View {
     let detail: (string | HTMLElement)[] = [];
     if (tab === "buy" || tab === "sell") {
       const m = (r.market ?? []).find((x: Json) => String(x.commodity).toLowerCase() === name.toLowerCase());
-      if (m) detail = tab === "buy" ? [h("strong", null, t("search.cr", { buyPrice: fmt(m.buy_price) })), (" " + t("search.stock", { supply: fmt(m.supply) }))] : [h("strong", null, t("search.cr", { buyPrice: fmt(m.sell_price) })), (" " + t("search.demand", { demand: fmt(m.demand) }))];
+      if (m)
+        detail =
+          tab === "buy"
+            ? [
+                h("strong", null, t("search.cr", { buyPrice: fmt(m.buy_price) })),
+                " " + t("search.stock", { supply: fmt(m.supply) }),
+              ]
+            : [
+                h("strong", null, t("search.cr", { buyPrice: fmt(m.sell_price) })),
+                " " + t("search.demand", { demand: fmt(m.demand) }),
+              ];
     } else if (tab === "ship") {
       const s = (r.ships ?? []).find((x: Json) => String(x.name).toLowerCase() === name.toLowerCase());
       detail = [s?.price ? h("strong", null, t("search.cr", { buyPrice: fmt(s.price) })) : t("search.sale")];
     } else if (tab === "module") {
-      const mods = (r.modules ?? []).filter((x: Json) => String(x.name).toLowerCase() === name.toLowerCase() || (this.ctx.game.data.moduleAliases[name] ?? []).some((a) => a.toLowerCase() === String(x.name).toLowerCase()));
-      detail = [mods.slice(0, 6).map((x: Json) => `${x.class ?? ""}${x.rating ?? ""}`).join(" · ") || t("search.available")];
+      const mods = (r.modules ?? []).filter(
+        (x: Json) =>
+          String(x.name).toLowerCase() === name.toLowerCase() ||
+          (this.ctx.game.data.moduleAliases[name] ?? []).some((a) => a.toLowerCase() === String(x.name).toLowerCase()),
+      );
+      detail = [
+        mods
+          .slice(0, 6)
+          .map((x: Json) => `${x.class ?? ""}${x.rating ?? ""}`)
+          .join(" · ") || t("search.available"),
+      ];
     } else detail = [r.type ?? ""];
     const pad = r.has_large_pad ? "L" : r.medium_pads > 0 ? "M" : r.small_pads > 0 ? "S" : "?";
     const age = r.market_updated_at ?? r.outfitting_updated_at ?? r.shipyard_updated_at ?? r.updated_at;
@@ -295,13 +447,31 @@ export class SearchView implements View {
       h(
         "td",
         null,
-        h("button.sys", { title: t("common.copy", { name: r.system_name }), onclick: () => copySystem(r.system_name) }, icon("copy"), h("span", null, `${r.name} | ${r.system_name}`)),
-        h("button.link", { title: t("search.openInara"), onclick: () => openUrl(inaraSystem(r.system_name)) }, "Inara", icon("link")),
+        h(
+          "button.sys",
+          { title: t("common.copy", { name: r.system_name }), onclick: () => copySystem(r.system_name) },
+          icon("copy"),
+          h("span", null, `${r.name} | ${r.system_name}`),
+        ),
+        h(
+          "button.link",
+          { title: t("search.openInara"), onclick: () => openUrl(inaraSystem(r.system_name)) },
+          "Inara",
+          icon("link"),
+        ),
       ),
       h("td.num", null, fmtLy(Number(r.distance))),
       h("td", null, detail),
-      h("td", null, `${pad} · ${r.distance_to_arrival !== undefined ? t("common.ls", { locale: fmt(Math.round(Number(r.distance_to_arrival))) }) : "?"}`),
-      h("td.sub", null, age ? new Date(age.endsWith("Z") || age.includes("+") ? age : `${age}Z`).toLocaleDateString(locale()) : ""),
+      h(
+        "td",
+        null,
+        `${pad} · ${r.distance_to_arrival !== undefined ? t("common.ls", { locale: fmt(Math.round(Number(r.distance_to_arrival))) }) : "?"}`,
+      ),
+      h(
+        "td.sub",
+        null,
+        age ? new Date(age.endsWith("Z") || age.includes("+") ? age : `${age}Z`).toLocaleDateString(locale()) : "",
+      ),
     );
   }
 }

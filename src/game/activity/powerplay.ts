@@ -24,14 +24,19 @@ export function meritsThisWeek(pp: Powerplay, now = new Date()): number {
 
 /** PowerplayJoin, PowerplayDefect. */
 const onPowerplayJoin: EventHandler = (st, ev) => {
-    st.powerplay = { power: ev.Power ?? ev.ToPower, rank: 1, merits: 0, gains: [] };
-    return true;
+  st.powerplay = { power: ev.Power ?? ev.ToPower, rank: 1, merits: 0, gains: [] };
+  return true;
 };
 
 /** Journal events of this domain. */
 export const POWERPLAY_EVENTS: EventHandlers = {
   Powerplay: (st, ev) => {
-    Object.assign(st.powerplay, { power: ev.Power, rank: num(ev.Rank), merits: num(ev.Merits), timePledged: num(ev.TimePledged) });
+    Object.assign(st.powerplay, {
+      power: ev.Power,
+      rank: num(ev.Rank),
+      merits: num(ev.Merits),
+      timePledged: num(ev.TimePledged),
+    });
     return true;
   },
   PowerplayMerits: (st, ev, at) => {

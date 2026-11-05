@@ -32,7 +32,8 @@ const cache = new Map<string, EdsmSystem>();
 const pending = new Map<string, Promise<EdsmSystem>>();
 const TTL = 10 * 60 * 1000;
 
-export const edsmSystemUrl = (system: string) => `https://www.edsm.net/en/system?systemName=${encodeURIComponent(system)}`;
+export const edsmSystemUrl = (system: string) =>
+  `https://www.edsm.net/en/system?systemName=${encodeURIComponent(system)}`;
 
 /** Cached copy (or undefined: not asked yet). */
 export const edsmCached = (system: string) => cache.get(system.toLowerCase());
@@ -54,7 +55,10 @@ export function edsmSystem(system: string): Promise<EdsmSystem> {
   if (running) return running;
   const q = encodeURIComponent(system);
   const job = (async () => {
-    const [bodies, value] = await Promise.all([get(`api-system-v1/bodies?systemName=${q}`), get(`api-system-v1/estimated-value?systemName=${q}`)]);
+    const [bodies, value] = await Promise.all([
+      get(`api-system-v1/bodies?systemName=${q}`),
+      get(`api-system-v1/estimated-value?systemName=${q}`),
+    ]);
     const list: any[] = Array.isArray(bodies?.bodies) ? bodies.bodies : [];
     const out: EdsmSystem = {
       system,
@@ -66,16 +70,24 @@ export function edsmSystem(system: string): Promise<EdsmSystem> {
         distance: typeof b.distanceToArrival === "number" ? b.distanceToArrival : undefined,
         discoveredBy: b.discovery?.commander ? String(b.discovery.commander) : undefined,
         discoveredAt: b.discovery?.date ? String(b.discovery.date) : undefined,
-        terraformable: /terraform/i.test(String(b.terraformingState ?? "")) && !/not/i.test(String(b.terraformingState ?? "")),
+        terraformable:
+          /terraform/i.test(String(b.terraformingState ?? "")) && !/not/i.test(String(b.terraformingState ?? "")),
       })),
       value: typeof value?.estimatedValue === "number" ? value.estimatedValue : undefined,
       valueMapped: typeof value?.estimatedValueMapped === "number" ? value.estimatedValueMapped : undefined,
-      valuable: (Array.isArray(value?.valuableBodies) ? value.valuableBodies : []).map((v: any) => ({ name: String(v.bodyName ?? ""), distance: typeof v.distance === "number" ? v.distance : undefined, value: Number(v.valueMax ?? 0) })),
+      valuable: (Array.isArray(value?.valuableBodies) ? value.valuableBodies : []).map((v: any) => ({
+        name: String(v.bodyName ?? ""),
+        distance: typeof v.distance === "number" ? v.distance : undefined,
+        value: Number(v.valueMax ?? 0),
+      })),
       unknown: !bodies?.id && !list.length,
       fetched: Date.now(),
     };
     cache.set(key, out);
-    log.debug("edsm", `${system}: ${out.unknown ? "unknown" : `${out.bodies.length}/${out.bodyCount ?? "?"} bodies, value ${out.value ?? "?"}`}`);
+    log.debug(
+      "edsm",
+      `${system}: ${out.unknown ? "unknown" : `${out.bodies.length}/${out.bodyCount ?? "?"} bodies, value ${out.value ?? "?"}`}`,
+    );
     return out;
   })().finally(() => pending.delete(key));
   pending.set(key, job);

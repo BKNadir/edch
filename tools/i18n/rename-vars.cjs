@@ -19,7 +19,12 @@ for (const file of fs.readdirSync(LOCALES).filter((f) => /^[a-z]{2}\.json$/.test
   fs.writeFileSync(path.join(LOCALES, file), JSON.stringify(texts, null, 2) + "\n");
 }
 
-const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name)) : e.name.endsWith(".ts") ? [path.join(dir, e.name)] : []));
+const walk = (dir) =>
+  fs
+    .readdirSync(dir, { withFileTypes: true })
+    .flatMap((e) =>
+      e.isDirectory() ? walk(path.join(dir, e.name)) : e.name.endsWith(".ts") ? [path.join(dir, e.name)] : [],
+    );
 const call = new RegExp(`t\\("${fullKey.replace(".", "\\.")}", \\{([^}]*)\\}`, "g");
 for (const file of walk(path.join(ROOT, "src"))) {
   const src = fs.readFileSync(file, "utf8");
@@ -27,7 +32,9 @@ for (const file of walk(path.join(ROOT, "src"))) {
     let p = props;
     for (const [from, to] of renames) {
       // "from: expr" → "to: expr"; shorthand "from" → "to: from".
-      p = p.replace(new RegExp(`(^|,)(\\s*)${from}(\\s*):`), `$1$2${to}$3:`).replace(new RegExp(`(^|,)(\\s*)${from}(\\s*)(?=,|$)`), `$1$2${to}: ${from}$3`);
+      p = p
+        .replace(new RegExp(`(^|,)(\\s*)${from}(\\s*):`), `$1$2${to}$3:`)
+        .replace(new RegExp(`(^|,)(\\s*)${from}(\\s*)(?=,|$)`), `$1$2${to}: ${from}$3`);
     }
     return `t("${fullKey}", {${p}}`;
   });

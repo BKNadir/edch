@@ -1,21 +1,42 @@
-import { plotGalaxy, shipParams, type GalaxyAlgorithm, type GalaxyOptions, type GalaxyRoute } from "../../features/navigation/galaxyRoute.js";
+import {
+  plotGalaxy,
+  shipParams,
+  type GalaxyAlgorithm,
+  type GalaxyOptions,
+  type GalaxyRoute,
+} from "../../features/navigation/galaxyRoute.js";
 import { setNavRoute } from "../../features/engineers/tour.js";
 import { locale, t } from "../../platform/i18n.js";
 import { spanshGet, spanshJob, spanshPost } from "../../platform/bridge.js";
 import { h, icon, fmt, replace, toast } from "../../ui/dom.js";
 import type { Ctx, View } from "../../state/context.js";
-import { CARRIER_MAX_JUMP, carrierEstimate, fsdInfo, jumpModel, superchargeMultiplier } from "../../features/navigation/jumpRange.js";
+import {
+  CARRIER_MAX_JUMP,
+  carrierEstimate,
+  fsdInfo,
+  jumpModel,
+  superchargeMultiplier,
+} from "../../features/navigation/jumpRange.js";
 import { fmtLy } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
 
 type Json = Record<string, any>;
 
 const fmt1 = (n: number) => n.toLocaleString(locale(), { maximumFractionDigits: 2 });
-const hours = (min: number) => (min >= 60 ? t("common.h", { h: Math.floor(min / 60), padStart: String(Math.round(min % 60)).padStart(2, "0") }) : t("common.min", { min: Math.round(min) }));
+const hours = (min: number) =>
+  min >= 60
+    ? t("common.h", { h: Math.floor(min / 60), padStart: String(Math.round(min % 60)).padStart(2, "0") })
+    : t("common.min", { min: Math.round(min) });
 
 /** Coordinates of a system by name (Spansh). */
 async function coordsOf(name: string): Promise<[number, number, number] | null> {
-  const res = await spanshPost("systems/search", { filters: { distance: { min: "0", max: "1" } }, sort: [{ distance: { direction: "asc" } }], size: 1, page: 0, reference_system: name });
+  const res = await spanshPost("systems/search", {
+    filters: { distance: { min: "0", max: "1" } },
+    sort: [{ distance: { direction: "asc" } }],
+    size: 1,
+    page: 0,
+    reference_system: name,
+  });
   const r = res?.reference ?? res?.results?.[0];
   return r && typeof r.x === "number" ? [r.x, r.y, r.z] : null;
 }
@@ -44,7 +65,10 @@ function systemInput(id: string, value: string, placeholder: string): HTMLInputE
         try {
           const res = await spanshGet(`systems/field_values/system_names?q=${encodeURIComponent(q)}`);
           const values: string[] = Array.isArray(res?.values) ? res.values : Array.isArray(res) ? res : [];
-          replace(list, values.slice(0, 12).map((v) => h("option", { value: v })));
+          replace(
+            list,
+            values.slice(0, 12).map((v) => h("option", { value: v })),
+          );
         } catch {
           /* autocomplete is a nicety */
         }
@@ -75,7 +99,13 @@ export class NavigationView implements View {
     const dest = pendingDestination ?? "";
     pendingDestination = null;
     const to = systemInput("nav-to", dest, t("common.destination"));
-    const range = h("input", { type: "number", step: "0.01", min: "1", value: this.defaultRange() ? String(this.defaultRange()) : "", placeholder: t("common.lyUnit") });
+    const range = h("input", {
+      type: "number",
+      step: "0.01",
+      min: "1",
+      value: this.defaultRange() ? String(this.defaultRange()) : "",
+      placeholder: t("common.lyUnit"),
+    });
     const eff = h("input", { type: "number", min: "1", max: "100", value: "60" });
     // The Caspian Explorer's Mk II drive gets x6 from neutron stars instead of x4: ticked when the
     // current ship has it, and it can be unticked (to plot for another ship).
@@ -85,13 +115,15 @@ export class NavigationView implements View {
     const algo = h(
       "select",
       null,
-      ([
-        ["optimistic", t("navigation.fewestJumpsFavoursNeutronStars")],
-        ["guided", t("navigation.followUsualNeutronRoute")],
-        ["pessimistic", t("navigation.fastCalculationSlightlyWorseRoute")],
-        ["fuel", t("navigation.saveFuelNoScoopingNoNeutrons")],
-        ["fuel_jumps", t("navigation.saveFuelThenFewerJumps")],
-      ] as [GalaxyAlgorithm, string][]).map(([v, l]) => h("option", { value: v }, l)),
+      (
+        [
+          ["optimistic", t("navigation.fewestJumpsFavoursNeutronStars")],
+          ["guided", t("navigation.followUsualNeutronRoute")],
+          ["pessimistic", t("navigation.fastCalculationSlightlyWorseRoute")],
+          ["fuel", t("navigation.saveFuelNoScoopingNoNeutrons")],
+          ["fuel_jumps", t("navigation.saveFuelThenFewerJumps")],
+        ] as [GalaxyAlgorithm, string][]
+      ).map(([v, l]) => h("option", { value: v }, l)),
     );
     const opt = (checked: boolean) => h("input", { type: "checkbox", checked });
     const useNeutrons = opt(true);
@@ -137,7 +169,13 @@ export class NavigationView implements View {
       cargo.value = String(Math.round(now.cargoMass ?? 0));
       x6.checked = superchargeMultiplier(now.loadout.fsd) === 6;
       this.renderShipLine(shipLine);
-      toast(t("navigation.rangeNeutronBoost", { type: now.ship?.type ?? t("common.ship"), value: r ? fmtLy(r) : "?", value2: x6.checked ? 6 : 4 }));
+      toast(
+        t("navigation.rangeNeutronBoost", {
+          type: now.ship?.type ?? t("common.ship"),
+          value: r ? fmtLy(r) : "?",
+          value2: x6.checked ? 6 : 4,
+        }),
+      );
     };
 
     const shipLine = h("p.sub.nav-shipline");
@@ -187,26 +225,63 @@ export class NavigationView implements View {
             h("label", null, t("navigation.from"), from),
             h("label", null, t("common.destination"), to),
             h("label.quick-only", null, t("navigation.rangeLy"), range),
-            h("label.quick-only", { title: t("navigation.higherCloserRouteSticksStraightLine") }, t("navigation.efficiency"), eff),
+            h(
+              "label.quick-only",
+              { title: t("navigation.higherCloserRouteSticksStraightLine") },
+              t("navigation.efficiency"),
+              eff,
+            ),
             h("label.exact-only", null, t("navigation.cargoT"), cargo),
             h("label.exact-only", null, t("navigation.priority"), algo),
           ),
           h(
             "div.nav-options.exact-only",
             null,
-            h("label.check", null, useNeutrons, (" " + t("navigation.useNeutronStars"))),
-            h("label.check", { title: t("navigation.frameShiftDriveAlreadySuperchargedWhen") }, supercharged, (" " + t("navigation.alreadySuperchargedWhenLeaving"))),
-            h("label.check", { title: t("navigation.fsdInjectionSynthesisCostsMaterials") }, injections, (" " + t("navigation.useFsdInjectionSynthesis"))),
-            h("label.check", { title: t("navigation.avoidsJumpsSystemSSecondaryStar") }, noSecondary, (" " + t("navigation.avoidSecondaryStars"))),
-            h("label.check", null, refuelAll, (" " + t("navigation.refuelEveryScoopableStar"))),
+            h("label.check", null, useNeutrons, " " + t("navigation.useNeutronStars")),
+            h(
+              "label.check",
+              { title: t("navigation.frameShiftDriveAlreadySuperchargedWhen") },
+              supercharged,
+              " " + t("navigation.alreadySuperchargedWhenLeaving"),
+            ),
+            h(
+              "label.check",
+              { title: t("navigation.fsdInjectionSynthesisCostsMaterials") },
+              injections,
+              " " + t("navigation.useFsdInjectionSynthesis"),
+            ),
+            h(
+              "label.check",
+              { title: t("navigation.avoidsJumpsSystemSSecondaryStar") },
+              noSecondary,
+              " " + t("navigation.avoidSecondaryStars"),
+            ),
+            h("label.check", null, refuelAll, " " + t("navigation.refuelEveryScoopableStar")),
           ),
           h(
             "div.row.nav-ship",
             null,
-            h("label.check", { title: t("navigation.caspianExplorerSMkIiFsd") }, x6, (" " + t("navigation.neutronBoost6CaspianExplorerS"))),
-            h("button.ghost.small", { onclick: fromShip }, icon("play"), (" " + t("navigation.useMyCurrentShip"))),
+            h(
+              "label.check",
+              { title: t("navigation.caspianExplorerSMkIiFsd") },
+              x6,
+              " " + t("navigation.neutronBoost6CaspianExplorerS"),
+            ),
+            h("button.ghost.small", { onclick: fromShip }, icon("play"), " " + t("navigation.useMyCurrentShip")),
           ),
-          h("div.row", null, h("button.primary", { onclick: plot }, t("navigation.plotRoute")), h("button.ghost.quick-only", { onclick: () => this.estimateShip(from.value.trim(), to.value.trim(), Number(range.value) || this.defaultRange()) }, t("navigation.quickEstimate"))),
+          h(
+            "div.row",
+            null,
+            h("button.primary", { onclick: plot }, t("navigation.plotRoute")),
+            h(
+              "button.ghost.quick-only",
+              {
+                onclick: () =>
+                  this.estimateShip(from.value.trim(), to.value.trim(), Number(range.value) || this.defaultRange()),
+              },
+              t("navigation.quickEstimate"),
+            ),
+          ),
           this.routeOut,
         ),
         h(
@@ -226,8 +301,34 @@ export class NavigationView implements View {
           h(
             "div.row",
             null,
-            h("button.primary", { onclick: () => this.plotCarrier(cFrom.value.trim(), cTo.value.trim(), Number(used.value) || 0, Number(tank.value) || 0, Number(hold.value) || 0) }, t("navigation.plotSpansh")),
-            h("button.ghost", { onclick: () => this.estimateCarrier(cFrom.value.trim(), cTo.value.trim(), Number(used.value) || 0, Number(tank.value) || 0, Number(hold.value) || 0) }, t("navigation.quickEstimate")),
+            h(
+              "button.primary",
+              {
+                onclick: () =>
+                  this.plotCarrier(
+                    cFrom.value.trim(),
+                    cTo.value.trim(),
+                    Number(used.value) || 0,
+                    Number(tank.value) || 0,
+                    Number(hold.value) || 0,
+                  ),
+              },
+              t("navigation.plotSpansh"),
+            ),
+            h(
+              "button.ghost",
+              {
+                onclick: () =>
+                  this.estimateCarrier(
+                    cFrom.value.trim(),
+                    cTo.value.trim(),
+                    Number(used.value) || 0,
+                    Number(tank.value) || 0,
+                    Number(hold.value) || 0,
+                  ),
+              },
+              t("navigation.quickEstimate"),
+            ),
           ),
           this.carrierOut,
         ),
@@ -244,7 +345,7 @@ export class NavigationView implements View {
     const cmdr = this.ctx.store.state.cmdr;
     const { params, missing, hasScoop } = shipParams(cmdr.loadout);
     if (!params) {
-      replace(el, icon("warn"), (" " + t("navigation.exactRouteNotPossibleYetStart", { value: missing.join(", ") })));
+      replace(el, icon("warn"), " " + t("navigation.exactRouteNotPossibleYetStart", { value: missing.join(", ") }));
       el.classList.add("warn");
       return;
     }
@@ -253,9 +354,14 @@ export class NavigationView implements View {
     replace(
       el,
       h("strong", { "data-no-tr": "" }, cmdr.ship?.type ?? ""),
-      (" " + t("navigation.fsdOptimalMassTTMax", { value: fsd ? `${fsd.size}${fsd.rating}` : "?", optimalMass: fmt(Math.round(params.optimal_mass)), maxFuelPerJump: fmt(params.max_fuel_per_jump) })),
-      (" " + t("navigation.tankT", { tankSize: fmt(params.tank_size) })),
-      params.range_boost ? (" " + t("navigation.guardianFsdBoosterLy", { rangeBoost: fmt(params.range_boost) })) : "",
+      " " +
+        t("navigation.fsdOptimalMassTTMax", {
+          value: fsd ? `${fsd.size}${fsd.rating}` : "?",
+          optimalMass: fmt(Math.round(params.optimal_mass)),
+          maxFuelPerJump: fmt(params.max_fuel_per_jump),
+        }),
+      " " + t("navigation.tankT", { tankSize: fmt(params.tank_size) }),
+      params.range_boost ? " " + t("navigation.guardianFsdBoosterLy", { rangeBoost: fmt(params.range_boost) }) : "",
       " · ",
       hasScoop ? h("span", null, t("navigation.fuelScoopYes")) : h("span.bad-text", null, t("navigation.noFuelScoop")),
     );
@@ -269,20 +375,48 @@ export class NavigationView implements View {
     if (this.plottingExact) return;
     const { params, missing, hasScoop } = shipParams(this.ctx.store.state.cmdr.loadout);
     if (!params) {
-      replace(this.routeOut, h("p.error", null, icon("warn"), (" " + t("navigation.exactRouteNotPossibleUseQuick", { value: missing.join(", ") }))));
+      replace(
+        this.routeOut,
+        h(
+          "p.error",
+          null,
+          icon("warn"),
+          " " + t("navigation.exactRouteNotPossibleUseQuick", { value: missing.join(", ") }),
+        ),
+      );
       return;
     }
     this.plottingExact = true;
-    replace(this.routeOut, h("p.sub", null, h("span.spinner"), (" " + t("navigation.spanshPlottingExactRouteFuelIncluded"))));
+    replace(
+      this.routeOut,
+      h("p.sub", null, h("span.spinner"), " " + t("navigation.spanshPlottingExactRouteFuelIncluded")),
+    );
     try {
       const r = await plotGalaxy(params, o, (n) => {
-        if (n % 4 === 3) replace(this.routeOut, h("p.sub", null, h("span.spinner"), (" " + t("navigation.spanshPlottingExactRouteFuelIncluded2", { value: Math.round((n + 1) * 1.5) }))));
+        if (n % 4 === 3)
+          replace(
+            this.routeOut,
+            h(
+              "p.sub",
+              null,
+              h("span.spinner"),
+              " " + t("navigation.spanshPlottingExactRouteFuelIncluded2", { value: Math.round((n + 1) * 1.5) }),
+            ),
+          );
       });
       setNavRoute(r.jumps.map((j) => j.system));
       this.renderExact(r, params.tank_size, hasScoop);
     } catch (e) {
       const msg = String((e as Error).message ?? e);
-      replace(this.routeOut, h("p.error", null, icon("warn"), /unable to find route/i.test(msg) ? (" " + t("navigation.spanshFoundNoRouteShipNot")) : ` ${msg}`));
+      replace(
+        this.routeOut,
+        h(
+          "p.error",
+          null,
+          icon("warn"),
+          /unable to find route/i.test(msg) ? " " + t("navigation.spanshFoundNoRouteShipNot") : ` ${msg}`,
+        ),
+      );
     } finally {
       this.plottingExact = false;
     }
@@ -302,12 +436,29 @@ export class NavigationView implements View {
         stat(t("navigation.neutronStars"), fmt(r.neutrons)),
         stat(t("navigation.duration"), `≈ ${hours((Math.max(1, jumps.length - 1) * 50 + r.refuels * 40) / 60)}`),
       ),
-      !hasScoop && r.refuels ? h("p.notice.danger", null, icon("warn"), (" " + t("navigation.shipHasNoFuelScoopPlanned"))) : null,
-      h("p.sub", null, auto ? t("navigation.autoCopyNextSystemArrival") : t("navigation.autoCopyNextSystemOffSettings")),
+      !hasScoop && r.refuels
+        ? h("p.notice.danger", null, icon("warn"), " " + t("navigation.shipHasNoFuelScoopPlanned"))
+        : null,
+      h(
+        "p.sub",
+        null,
+        auto ? t("navigation.autoCopyNextSystemArrival") : t("navigation.autoCopyNextSystemOffSettings"),
+      ),
       h(
         "table.table.route.exact",
         null,
-        h("thead", null, h("tr", null, h("th", null, t("common.system")), h("th.num", null, t("navigation.jump")), h("th.num", null, t("common.left")), h("th", null, t("navigation.fuel")))),
+        h(
+          "thead",
+          null,
+          h(
+            "tr",
+            null,
+            h("th", null, t("common.system")),
+            h("th.num", null, t("navigation.jump")),
+            h("th.num", null, t("common.left")),
+            h("th", null, t("navigation.fuel")),
+          ),
+        ),
         h(
           "tbody",
           null,
@@ -320,14 +471,24 @@ export class NavigationView implements View {
                 null,
                 h("button.sys", { onclick: () => copySystem(j.system) }, icon("copy"), h("span", null, j.system)),
                 j.neutron ? h("span.badge.hit", null, "Neutron") : null,
-                j.mustRefuel ? h("span.badge.warn", { title: t("navigation.scoopHereFuelIsnTEnough") }, t("navigation.refuel")) : j.scoopable ? h("span.badge.muted", { title: t("navigation.scoopableStarKgbfoam") }, t("navigation.scoopable")) : null,
+                j.mustRefuel
+                  ? h("span.badge.warn", { title: t("navigation.scoopHereFuelIsnTEnough") }, t("navigation.refuel"))
+                  : j.scoopable
+                    ? h("span.badge.muted", { title: t("navigation.scoopableStarKgbfoam") }, t("navigation.scoopable"))
+                    : null,
               ),
               h("td.num", null, j.distance ? fmtLy(j.distance) : ""),
               h("td.num", null, fmtLy(j.toGo)),
               h(
                 "td.fuel",
                 null,
-                h("div.bar.small", null, h("span", { style: { width: `${Math.max(0, Math.min(100, (j.fuelInTank / Math.max(1, tank)) * 100))}%` } })),
+                h(
+                  "div.bar.small",
+                  null,
+                  h("span", {
+                    style: { width: `${Math.max(0, Math.min(100, (j.fuelInTank / Math.max(1, tank)) * 100))}%` },
+                  }),
+                ),
                 h("small", null, `${fmt(Math.round(j.fuelInTank * 10) / 10)} t`),
               ),
             ),
@@ -359,13 +520,21 @@ export class NavigationView implements View {
     const cmdr = this.ctx.store.state.cmdr;
     // The ship is read from the journal after the page opened, or you changed ships: refresh the
     // line saying what the exact route will use (and the ×6 box for the Caspian's drive).
-    const shipSig = JSON.stringify([cmdr.loadout?.shipId, cmdr.loadout?.fsd, cmdr.loadout?.fsdOptimalMass, cmdr.loadout?.unladenMass, cmdr.loadout?.fuelMain, cmdr.ship?.type]);
+    const shipSig = JSON.stringify([
+      cmdr.loadout?.shipId,
+      cmdr.loadout?.fsd,
+      cmdr.loadout?.fsdOptimalMass,
+      cmdr.loadout?.unladenMass,
+      cmdr.loadout?.fuelMain,
+      cmdr.ship?.type,
+    ]);
     // The position arrived after the page opened: fill an empty departure.
     const here = cmdr.location?.system;
-    if (here) for (const id of ["nav-from", "fc-from"]) {
-      const input = this.root.querySelector<HTMLInputElement>(`#${id}`);
-      if (input && !input.value && document.activeElement !== input) input.value = here;
-    }
+    if (here)
+      for (const id of ["nav-from", "fc-from"]) {
+        const input = this.root.querySelector<HTMLInputElement>(`#${id}`);
+        if (input && !input.value && document.activeElement !== input) input.value = here;
+      }
     if (this.shipLine && shipSig !== this.shipSig) {
       const first = this.shipSig === "" || this.shipSig === JSON.stringify([null, null, null, null, null, null]);
       this.shipSig = shipSig;
@@ -373,13 +542,27 @@ export class NavigationView implements View {
       const x6 = this.root.querySelector<HTMLInputElement>(".nav-ship input[type=checkbox]");
       if (x6 && cmdr.loadout && first) x6.checked = superchargeMultiplier(cmdr.loadout.fsd) === 6;
     }
-    const sig = JSON.stringify([cmdr.ship?.type, cmdr.ship?.name, cmdr.loadout?.shipId, cmdr.loadout?.ship, cmdr.loadout?.maxJumpRange, cmdr.loadout?.unladenMass, cmdr.fuel?.main, cmdr.cargoMass, this.cargo]);
+    const sig = JSON.stringify([
+      cmdr.ship?.type,
+      cmdr.ship?.name,
+      cmdr.loadout?.shipId,
+      cmdr.loadout?.ship,
+      cmdr.loadout?.maxJumpRange,
+      cmdr.loadout?.unladenMass,
+      cmdr.fuel?.main,
+      cmdr.cargoMass,
+      this.cargo,
+    ]);
     if (sig === this.signature) return;
     this.signature = sig;
     const l = cmdr.loadout;
     const m = jumpModel(l);
     if (!l || !m) {
-      replace(this.rangeCard, h("h3", null, t("navigation.jumpRange")), h("p.sub", null, t("navigation.gameHasnTSentShipS")));
+      replace(
+        this.rangeCard,
+        h("h3", null, t("navigation.jumpRange")),
+        h("p.sub", null, t("navigation.gameHasnTSentShipS")),
+      );
       return;
     }
     const fsd = fsdInfo(l.fsd);
@@ -387,9 +570,21 @@ export class NavigationView implements View {
     const fuelNow = cmdr.fuel ? cmdr.fuel.main + cmdr.fuel.reserve : m.fuel + m.reserve;
     const rows: [string, number, string][] = [
       [t("navigation.maximumEmptyFuel1Jump"), m.maxJumpRange, t("navigation.gameValue")],
-      [t("navigation.fullTankEmptyHold"), m.rangeAt(m.unladen + m.fuel + m.reserve), t("navigation.tFuel", { fmt1: fmt1(m.fuel) })],
-      [t("navigation.fullTankFullHold"), m.rangeAt(m.unladen + m.fuel + m.reserve + m.cargoCapacity), t("navigation.tCargo", { cargoCapacity: fmt(m.cargoCapacity) })],
-      [t("navigation.now"), m.rangeAt(m.unladen + fuelNow + cargoNow), t("navigation.tFuelTCargo", { fmt1: fmt1(fuelNow), cargoNow: fmt(cargoNow) })],
+      [
+        t("navigation.fullTankEmptyHold"),
+        m.rangeAt(m.unladen + m.fuel + m.reserve),
+        t("navigation.tFuel", { fmt1: fmt1(m.fuel) }),
+      ],
+      [
+        t("navigation.fullTankFullHold"),
+        m.rangeAt(m.unladen + m.fuel + m.reserve + m.cargoCapacity),
+        t("navigation.tCargo", { cargoCapacity: fmt(m.cargoCapacity) }),
+      ],
+      [
+        t("navigation.now"),
+        m.rangeAt(m.unladen + fuelNow + cargoNow),
+        t("navigation.tFuelTCargo", { fmt1: fmt1(fuelNow), cargoNow: fmt(cargoNow) }),
+      ],
     ];
     const cargoInput = h("input", {
       type: "range",
@@ -414,17 +609,39 @@ export class NavigationView implements View {
         " · ",
         t("navigation.tUnladen", { fmt1: fmt1(m.unladen) }),
       ),
-      h("table.table.range-table", null, h("tbody", null, rows.map(([label, value, note]) => h("tr", null, h("td", null, label, h("small.sub", null, ` ${note}`)), h("td.num", null, h("strong", null, fmtLy(value))))))),
+      h(
+        "table.table.range-table",
+        null,
+        h(
+          "tbody",
+          null,
+          rows.map(([label, value, note]) =>
+            h(
+              "tr",
+              null,
+              h("td", null, label, h("small.sub", null, ` ${note}`)),
+              h("td.num", null, h("strong", null, fmtLy(value))),
+            ),
+          ),
+        ),
+      ),
       m.cargoCapacity
-        ? h("label.cargo-slider", null, t("navigation.simulatedCargoT", { cargoNow: fmt(cargoNow) }), cargoInput, h("strong", null, fmtLy(m.rangeAt(m.unladen + m.fuel + m.reserve + cargoNow))))
+        ? h(
+            "label.cargo-slider",
+            null,
+            t("navigation.simulatedCargoT", { cargoNow: fmt(cargoNow) }),
+            cargoInput,
+            h("strong", null, fmtLy(m.rangeAt(m.unladen + m.fuel + m.reserve + cargoNow))),
+          )
         : null,
       h("p.sub", null, t("navigation.intermediateRangesAreCalculatedFromGame")),
     );
   }
 
   private async estimateShip(from: string, to: string, range: number) {
-    if (!from || !to || !range) return replace(this.routeOut, h("p.error", null, t("navigation.enterStartDestinationRange")));
-    replace(this.routeOut, h("p.sub", null, h("span.spinner"), (" " + t("navigation.lookingUpCoordinates"))));
+    if (!from || !to || !range)
+      return replace(this.routeOut, h("p.error", null, t("navigation.enterStartDestinationRange")));
+    replace(this.routeOut, h("p.sub", null, h("span.spinner"), " " + t("navigation.lookingUpCoordinates")));
     try {
       const [a, b] = await Promise.all([coordsOf(from), coordsOf(to)]);
       if (!a || !b) throw new Error(t("navigation.systemNotFoundSpansh"));
@@ -432,7 +649,13 @@ export class NavigationView implements View {
       const jumps = Math.ceil(d / range);
       replace(
         this.routeOut,
-        h("div.estimate", null, stat(t("common.distance"), fmtLy(d)), stat(t("navigation.jumpsStraightLine"), `≥ ${fmt(jumps)}`), stat(t("navigation.duration"), `≈ ${hours((jumps * 50) / 60)}`)),
+        h(
+          "div.estimate",
+          null,
+          stat(t("common.distance"), fmtLy(d)),
+          stat(t("navigation.jumpsStraightLine"), `≥ ${fmt(jumps)}`),
+          stat(t("navigation.duration"), `≈ ${hours((jumps * 50) / 60)}`),
+        ),
         h("p.sub", null, t("navigation.theoreticalMinimumWithoutNeutronBoostsReal")),
       );
     } catch (e) {
@@ -454,7 +677,7 @@ export class NavigationView implements View {
   }
 
   private async plotShipNow(from: string, to: string, range: number, efficiency: number, supercharge: 4 | 6) {
-    replace(this.routeOut, h("p.sub", null, h("span.spinner"), (" " + t("common.spanshPlottingRoute"))));
+    replace(this.routeOut, h("p.sub", null, h("span.spinner"), " " + t("common.spanshPlottingRoute")));
     try {
       const res: Json = await spanshJob("route", [
         ["from", from],
@@ -470,12 +693,34 @@ export class NavigationView implements View {
       const auto = this.ctx.store.state.settings.navAutoCopy;
       replace(
         this.routeOut,
-        h("div.estimate", null, stat(t("common.distance"), fmtLy(Number(res.distance ?? 0))), stat(t("navigation.jumps"), fmt(total || Number(res.total_jumps ?? 0))), stat(t("navigation.waypoints"), fmt(jumps.length)), stat(t("navigation.duration"), `≈ ${hours(((total || jumps.length) * 50) / 60)}`)),
-        h("p.sub", null, auto ? t("navigation.autoCopyNextSystemArrival") : t("navigation.autoCopyNextSystemOffSettings")),
+        h(
+          "div.estimate",
+          null,
+          stat(t("common.distance"), fmtLy(Number(res.distance ?? 0))),
+          stat(t("navigation.jumps"), fmt(total || Number(res.total_jumps ?? 0))),
+          stat(t("navigation.waypoints"), fmt(jumps.length)),
+          stat(t("navigation.duration"), `≈ ${hours(((total || jumps.length) * 50) / 60)}`),
+        ),
+        h(
+          "p.sub",
+          null,
+          auto ? t("navigation.autoCopyNextSystemArrival") : t("navigation.autoCopyNextSystemOffSettings"),
+        ),
         h(
           "table.table.route",
           null,
-          h("thead", null, h("tr", null, h("th", null, t("common.system")), h("th.num", null, t("common.distance")), h("th.num", null, t("common.left")), h("th.num", null, t("navigation.jumps")))),
+          h(
+            "thead",
+            null,
+            h(
+              "tr",
+              null,
+              h("th", null, t("common.system")),
+              h("th.num", null, t("common.distance")),
+              h("th.num", null, t("common.left")),
+              h("th.num", null, t("navigation.jumps")),
+            ),
+          ),
           h(
             "tbody",
             null,
@@ -483,7 +728,12 @@ export class NavigationView implements View {
               h(
                 "tr",
                 null,
-                h("td", null, h("button.sys", { onclick: () => copySystem(j.system) }, icon("copy"), h("span", null, j.system)), j.neutron_star ? h("span.badge.hit", null, "Neutron") : null),
+                h(
+                  "td",
+                  null,
+                  h("button.sys", { onclick: () => copySystem(j.system) }, icon("copy"), h("span", null, j.system)),
+                  j.neutron_star ? h("span.badge.hit", null, "Neutron") : null,
+                ),
                 h("td.num", null, fmtLy(Number(j.distance_jumped ?? 0))),
                 h("td.num", null, fmtLy(Number(j.distance_left ?? 0))),
                 h("td.num", null, String(j.jumps ?? "")),
@@ -499,7 +749,7 @@ export class NavigationView implements View {
 
   private async estimateCarrier(from: string, to: string, used: number, tank: number, hold: number) {
     if (!from || !to) return replace(this.carrierOut, h("p.error", null, t("navigation.enterStartDestination")));
-    replace(this.carrierOut, h("p.sub", null, h("span.spinner"), (" " + t("navigation.lookingUpCoordinates"))));
+    replace(this.carrierOut, h("p.sub", null, h("span.spinner"), " " + t("navigation.lookingUpCoordinates")));
     try {
       const [a, b] = await Promise.all([coordsOf(from), coordsOf(to)]);
       if (!a || !b) throw new Error(t("navigation.systemNotFoundSpansh"));
@@ -508,8 +758,17 @@ export class NavigationView implements View {
       const missing = Math.max(0, est.fuel - tank - hold);
       replace(
         this.carrierOut,
-        h("div.estimate", null, stat(t("common.distance"), fmtLy(d)), stat(t("navigation.jumps"), fmt(est.jumps)), stat(t("common.tritium"), `≈ ${fmt(est.fuel)} t`), stat(t("navigation.duration"), `≈ ${hours(est.minutes)}`)),
-        missing ? h("p.notice", null, icon("warn"), (" " + t("navigation.reAboutTTritiumShortTank", { missing: fmt(missing) }))) : h("p.sub", null, t("navigation.tritiumTankHoldEnoughEstimate")),
+        h(
+          "div.estimate",
+          null,
+          stat(t("common.distance"), fmtLy(d)),
+          stat(t("navigation.jumps"), fmt(est.jumps)),
+          stat(t("common.tritium"), `≈ ${fmt(est.fuel)} t`),
+          stat(t("navigation.duration"), `≈ ${hours(est.minutes)}`),
+        ),
+        missing
+          ? h("p.notice", null, icon("warn"), " " + t("navigation.reAboutTTritiumShortTank", { missing: fmt(missing) }))
+          : h("p.sub", null, t("navigation.tritiumTankHoldEnoughEstimate")),
         h("p.sub", null, t("navigation.communityEstimate5Distance25Used")),
       );
     } catch (e) {
@@ -531,7 +790,7 @@ export class NavigationView implements View {
   }
 
   private async plotCarrierNow(from: string, to: string, used: number, tank: number, hold: number) {
-    replace(this.carrierOut, h("p.sub", null, h("span.spinner"), (" " + t("navigation.spanshPlottingCarrierRoute"))));
+    replace(this.carrierOut, h("p.sub", null, h("span.spinner"), " " + t("navigation.spanshPlottingCarrierRoute")));
     try {
       const res: Json = await spanshJob("fleetcarrier/route", [
         ["source", from],
@@ -547,12 +806,32 @@ export class NavigationView implements View {
       const restock = jumps.filter((j) => j.must_restock);
       replace(
         this.carrierOut,
-        h("div.estimate", null, stat(t("navigation.jumps"), fmt(Math.max(0, jumps.length - 1))), stat(t("common.tritium"), `${fmt(fuel)} t`), stat(t("navigation.duration"), `≈ ${hours(Math.max(0, jumps.length - 1) * 20)}`)),
-        restock.length ? h("p.notice", null, icon("warn"), (" " + t("navigation.refuelStops", { count: restock.length }))) : null,
+        h(
+          "div.estimate",
+          null,
+          stat(t("navigation.jumps"), fmt(Math.max(0, jumps.length - 1))),
+          stat(t("common.tritium"), `${fmt(fuel)} t`),
+          stat(t("navigation.duration"), `≈ ${hours(Math.max(0, jumps.length - 1) * 20)}`),
+        ),
+        restock.length
+          ? h("p.notice", null, icon("warn"), " " + t("navigation.refuelStops", { count: restock.length }))
+          : null,
         h(
           "table.table.route",
           null,
-          h("thead", null, h("tr", null, h("th", null, t("common.system")), h("th.num", null, t("navigation.jump")), h("th.num", null, t("common.left")), h("th.num", null, t("common.tritium")), h("th.num", null, t("navigation.tank")))),
+          h(
+            "thead",
+            null,
+            h(
+              "tr",
+              null,
+              h("th", null, t("common.system")),
+              h("th.num", null, t("navigation.jump")),
+              h("th.num", null, t("common.left")),
+              h("th.num", null, t("common.tritium")),
+              h("th.num", null, t("navigation.tank")),
+            ),
+          ),
           h(
             "tbody",
             null,
@@ -560,7 +839,25 @@ export class NavigationView implements View {
               h(
                 "tr",
                 { class: j.must_restock ? "short" : "" },
-                h("td", null, h("button.sys", { onclick: () => copySystem(j.name) }, icon("copy"), h("span", null, j.name)), j.has_icy_ring ? h("span.badge.muted", null, j.is_system_pristine ? t("navigation.pristineIcyRing") : t("navigation.icyRing")) : null, j.must_restock ? h("span.badge.warn", null, t("navigation.restockT", { restockAmount: fmt(Number(j.restock_amount ?? 0)) })) : null),
+                h(
+                  "td",
+                  null,
+                  h("button.sys", { onclick: () => copySystem(j.name) }, icon("copy"), h("span", null, j.name)),
+                  j.has_icy_ring
+                    ? h(
+                        "span.badge.muted",
+                        null,
+                        j.is_system_pristine ? t("navigation.pristineIcyRing") : t("navigation.icyRing"),
+                      )
+                    : null,
+                  j.must_restock
+                    ? h(
+                        "span.badge.warn",
+                        null,
+                        t("navigation.restockT", { restockAmount: fmt(Number(j.restock_amount ?? 0)) }),
+                      )
+                    : null,
+                ),
                 h("td.num", null, fmtLy(Number(j.distance ?? 0))),
                 h("td.num", null, fmtLy(Number(j.distance_to_destination ?? 0))),
                 h("td.num", null, fmt(Number(j.fuel_used ?? 0))),

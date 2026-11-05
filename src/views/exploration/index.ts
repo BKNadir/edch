@@ -12,7 +12,6 @@ import { t } from "../../platform/i18n.js";
 
 type Tab = "bio" | "carto";
 
-
 export class ExplorationView implements View {
   private root?: HTMLElement;
   private tab: Tab = "bio";
@@ -32,14 +31,28 @@ export class ExplorationView implements View {
     const tabs = h(
       "div.segmented",
       null,
-      ([
-        ["bio", t("common.exobiology")],
-        ["carto", t("exploration.cartography")],
-      ] as [Tab, string][]).map(([tab, l]) => h("button", { class: this.tab === tab ? "active" : "", onclick: () => ((this.tab = tab), this.render()) }, l)),
+      (
+        [
+          ["bio", t("common.exobiology")],
+          ["carto", t("exploration.cartography")],
+        ] as [Tab, string][]
+      ).map(([tab, l]) =>
+        h("button", { class: this.tab === tab ? "active" : "", onclick: () => ((this.tab = tab), this.render()) }, l),
+      ),
     );
     replace(
       this.root,
-      h("header.view-head", null, h("div", null, h("h1", null, t("common.exploration")), h("p.sub", null, t("exploration.whatUnsoldDataWorthHelpBiological"))), tabs),
+      h(
+        "header.view-head",
+        null,
+        h(
+          "div",
+          null,
+          h("h1", null, t("common.exploration")),
+          h("p.sub", null, t("exploration.whatUnsoldDataWorthHelpBiological")),
+        ),
+        tabs,
+      ),
       ...(this.tab === "bio" ? this.bio() : this.carto()),
     );
   }
@@ -57,12 +70,28 @@ export class ExplorationView implements View {
       h(
         "section.card",
         null,
-        h("div.sync-head", null, h("h3", null, t("exploration.analysesSellVistaGenomics")), h("strong", null, `${credits(total)} Cr`)),
+        h(
+          "div.sync-head",
+          null,
+          h("h3", null, t("exploration.analysesSellVistaGenomics")),
+          h("strong", null, `${credits(total)} Cr`),
+        ),
         found.length
           ? h(
               "table.table",
               null,
-              h("thead", null, h("tr", null, h("th", null, t("exploration.species")), h("th", null, t("common.location")), h("th.num", null, t("exploration.value")), h("th", null, ""))),
+              h(
+                "thead",
+                null,
+                h(
+                  "tr",
+                  null,
+                  h("th", null, t("exploration.species")),
+                  h("th", null, t("common.location")),
+                  h("th.num", null, t("exploration.value")),
+                  h("th", null, ""),
+                ),
+              ),
               h(
                 "tbody",
                 null,
@@ -74,7 +103,17 @@ export class ExplorationView implements View {
                     h("td", null, h("strong", null, o.species), o.variant ? h("div.sub", null, o.variant) : null),
                     h("td", null, o.body ?? o.system ?? ""),
                     h("td.num", null, `${credits(this.value(o))} Cr`),
-                    h("td", null, b?.wasFootfalled === false ? h("span.badge.hit", { title: t("exploration.firstFootfallPlanetFirstDiscoveryBonus") }, t("exploration.n5Possible")) : null),
+                    h(
+                      "td",
+                      null,
+                      b?.wasFootfalled === false
+                        ? h(
+                            "span.badge.hit",
+                            { title: t("exploration.firstFootfallPlanetFirstDiscoveryBonus") },
+                            t("exploration.n5Possible"),
+                          )
+                        : null,
+                    ),
                   );
                 }),
               ),
@@ -95,20 +134,47 @@ export class ExplorationView implements View {
     const surface = this.ctx.store.state.cmdr.surface;
     const here = surface ? { lat: surface.lat, lon: surface.lon } : null;
     const radius = surface?.radius;
-    const distances = s.samples.map((p) => (here && radius && p.lat !== undefined && p.lon !== undefined ? surfaceDistance(here, { lat: p.lat, lon: p.lon }, radius) : null));
+    const distances = s.samples.map((p) =>
+      here && radius && p.lat !== undefined && p.lon !== undefined
+        ? surfaceDistance(here, { lat: p.lat, lon: p.lon }, radius)
+        : null,
+    );
     const known = distances.filter((d): d is number => d !== null);
     const nearest = known.length ? Math.min(...known) : null;
     const farEnough = ccr !== undefined && nearest !== null ? nearest >= ccr : null;
     return h(
       "section.card.sampling",
       { class: farEnough === true ? "far" : farEnough === false ? "near" : "" },
-      h("div.sync-head", null, h("div", null, h("h3", null, s.species), h("p.sub", null, s.variant ?? s.genus)), value ? h("strong", null, `${credits(value)} Cr`) : null),
-      h("div.samples", null, [0, 1, 2].map((i) => h("span.sample", { class: i < s.samples.length ? "done" : "" }, String(i + 1)))),
+      h(
+        "div.sync-head",
+        null,
+        h("div", null, h("h3", null, s.species), h("p.sub", null, s.variant ?? s.genus)),
+        value ? h("strong", null, `${credits(value)} Cr`) : null,
+      ),
+      h(
+        "div.samples",
+        null,
+        [0, 1, 2].map((i) => h("span.sample", { class: i < s.samples.length ? "done" : "" }, String(i + 1))),
+      ),
       h(
         "div.stats",
         null,
-        ccr !== undefined ? h("div.stat", null, h("strong", null, `${fmt(ccr)} m`), h("span.sub", null, t("exploration.minimumDistanceBetweenSamples"))) : null,
-        nearest !== null ? h("div.stat", null, h("strong", null, `${fmt(Math.round(nearest))} m`), h("span.sub", null, t("exploration.fromNearestSample"))) : null,
+        ccr !== undefined
+          ? h(
+              "div.stat",
+              null,
+              h("strong", null, `${fmt(ccr)} m`),
+              h("span.sub", null, t("exploration.minimumDistanceBetweenSamples")),
+            )
+          : null,
+        nearest !== null
+          ? h(
+              "div.stat",
+              null,
+              h("strong", null, `${fmt(Math.round(nearest))} m`),
+              h("span.sub", null, t("exploration.fromNearestSample")),
+            )
+          : null,
       ),
       farEnough === null
         ? h("p.sub", null, t("exploration.distanceShowsWhenReSurfaceEdch"))
@@ -141,16 +207,36 @@ export class ExplorationView implements View {
           h(
             "div.sync-head",
             null,
-            h("div", null, h("strong", null, b.name), h("span.sub", null, (" " + t("exploration.bioSignalCount", { count: b.bio }))), b.wasFootfalled === false ? h("span.badge.hit", null, t("exploration.firstFootfall5")) : null),
-            estimate ? h("span", { title: t("exploration.estimateBestPossibleSpeciesEachGenus") }, t("exploration.upCr", { estimate: credits(estimate) })) : null,
+            h(
+              "div",
+              null,
+              h("strong", null, b.name),
+              h("span.sub", null, " " + t("exploration.bioSignalCount", { count: b.bio })),
+              b.wasFootfalled === false ? h("span.badge.hit", null, t("exploration.firstFootfall5")) : null,
+            ),
+            estimate
+              ? h(
+                  "span",
+                  { title: t("exploration.estimateBestPossibleSpeciesEachGenus") },
+                  t("exploration.upCr", { estimate: credits(estimate) }),
+                )
+              : null,
           ),
           possible.length
             ? h(
                 "div.chips",
                 null,
-                possible.slice(0, 10).map((sp) => h("span.chip", { title: `${fmt(sp.v)} Cr` }, `${sp.n} · ${credits(sp.v)}`)),
+                possible
+                  .slice(0, 10)
+                  .map((sp) => h("span.chip", { title: `${fmt(sp.v)} Cr` }, `${sp.n} · ${credits(sp.v)}`)),
               )
-            : h("p.sub", null, b.gravity === undefined ? t("exploration.scanPlanetFssDetailedScanSee") : t("exploration.noKnownSpeciesMatchesMayRare")),
+            : h(
+                "p.sub",
+                null,
+                b.gravity === undefined
+                  ? t("exploration.scanPlanetFssDetailedScanSee")
+                  : t("exploration.noKnownSpeciesMatchesMayRare"),
+              ),
         );
       }),
       h("p.sub", null, t("exploration.possibleSpeciesFromPlanetTypeAtmosphere")),
@@ -180,11 +266,24 @@ export class ExplorationView implements View {
       "div.sync-head",
       null,
       h("h3", null, t("exploration.currentSystemEdsm")),
-      h("button.link", { title: t("exploration.openSystemSPageEdsm"), onclick: () => openUrl(edsmSystemUrl(system)) }, "EDSM", icon("link")),
+      h(
+        "button.link",
+        { title: t("exploration.openSystemSPageEdsm"), onclick: () => openUrl(edsmSystemUrl(system)) },
+        "EDSM",
+        icon("link"),
+      ),
     );
     if (!data) {
       const err = this.edsmError?.startsWith(`${system}:`) ? this.edsmError.slice(system.length + 2) : "";
-      return h("section.card.edsm", null, head, sys(system), err ? h("p.sub", null, t("exploration.edsmUnavailable", { err })) : h("p.sub", null, h("span.spinner"), (" " + t("exploration.searchingEdsm"))));
+      return h(
+        "section.card.edsm",
+        null,
+        head,
+        sys(system),
+        err
+          ? h("p.sub", null, t("exploration.edsmUnavailable", { err }))
+          : h("p.sub", null, h("span.spinner"), " " + t("exploration.searchingEdsm")),
+      );
     }
     return h("section.card.edsm", null, head, sys(system), ...this.edsmBody(data));
   }
@@ -192,29 +291,92 @@ export class ExplorationView implements View {
   private edsmFailedAt = 0;
 
   private edsmBody(d: EdsmSystem): (HTMLElement | null)[] {
-    if (d.unknown) return [h("p", null, h("span.badge.hit", null, t("exploration.unknownEdsm")), (" " + t("exploration.nobodyHasSentSystemEdsmYet")))];
+    if (d.unknown)
+      return [
+        h(
+          "p",
+          null,
+          h("span.badge.hit", null, t("exploration.unknownEdsm")),
+          " " + t("exploration.nobodyHasSentSystemEdsmYet"),
+        ),
+      ];
     const firsts = new Map<string, number>();
     for (const b of d.bodies) if (b.discoveredBy) firsts.set(b.discoveredBy, (firsts.get(b.discoveredBy) ?? 0) + 1);
-    const star = d.bodies.find((b) => b.type === "Star" && (b.distance ?? 0) === 0) ?? d.bodies.find((b) => b.type === "Star");
+    const star =
+      d.bodies.find((b) => b.type === "Star" && (b.distance ?? 0) === 0) ?? d.bodies.find((b) => b.type === "Star");
     return [
       h(
         "div.stats",
         null,
-        h("div.stat", null, h("strong", null, d.bodyCount ? `${fmt(d.bodies.length)} / ${fmt(d.bodyCount)}` : fmt(d.bodies.length)), h("span.sub", null, t("exploration.bodiesKnownEdsm"))),
-        d.value !== undefined ? h("div.stat", null, h("strong", null, `${credits(d.value)} Cr`), h("span.sub", null, t("exploration.estimatedValueScan"))) : null,
-        d.valueMapped !== undefined ? h("div.stat", null, h("strong", null, `${credits(d.valueMapped)} Cr`), h("span.sub", null, t("exploration.mapping"))) : null,
+        h(
+          "div.stat",
+          null,
+          h("strong", null, d.bodyCount ? `${fmt(d.bodies.length)} / ${fmt(d.bodyCount)}` : fmt(d.bodies.length)),
+          h("span.sub", null, t("exploration.bodiesKnownEdsm")),
+        ),
+        d.value !== undefined
+          ? h(
+              "div.stat",
+              null,
+              h("strong", null, `${credits(d.value)} Cr`),
+              h("span.sub", null, t("exploration.estimatedValueScan")),
+            )
+          : null,
+        d.valueMapped !== undefined
+          ? h(
+              "div.stat",
+              null,
+              h("strong", null, `${credits(d.valueMapped)} Cr`),
+              h("span.sub", null, t("exploration.mapping")),
+            )
+          : null,
       ),
-      star?.discoveredBy ? h("p.sub", null, t("exploration.discovered", { discoveredBy: star.discoveredBy, value: star.discoveredAt ? ` (${star.discoveredAt.slice(0, 10)})` : "" })) : h("p.sub", null, t("exploration.edsmKnowsNoDiscovererMainStar")),
-      d.bodyCount && d.bodies.length < d.bodyCount ? h("p.sub", null, t("exploration.bodiesNeverSentEdsm", { value: fmt(d.bodyCount - d.bodies.length) })) : null,
+      star?.discoveredBy
+        ? h(
+            "p.sub",
+            null,
+            t("exploration.discovered", {
+              discoveredBy: star.discoveredBy,
+              value: star.discoveredAt ? ` (${star.discoveredAt.slice(0, 10)})` : "",
+            }),
+          )
+        : h("p.sub", null, t("exploration.edsmKnowsNoDiscovererMainStar")),
+      d.bodyCount && d.bodies.length < d.bodyCount
+        ? h("p.sub", null, t("exploration.bodiesNeverSentEdsm", { value: fmt(d.bodyCount - d.bodies.length) }))
+        : null,
       d.valuable.length
         ? h(
             "table.table",
             null,
-            h("thead", null, h("tr", null, h("th", null, t("exploration.valuableBodies")), h("th.num", null, t("common.distance")), h("th.num", null, t("exploration.maxValue")))),
+            h(
+              "thead",
+              null,
+              h(
+                "tr",
+                null,
+                h("th", null, t("exploration.valuableBodies")),
+                h("th.num", null, t("common.distance")),
+                h("th.num", null, t("exploration.maxValue")),
+              ),
+            ),
             h(
               "tbody",
               null,
-              d.valuable.slice(0, 8).map((v) => h("tr", null, h("td", null, v.name), h("td.num", null, v.distance !== undefined ? t("common.ls", { locale: fmt(Math.round(v.distance)) }) : ""), h("td.num", null, `${credits(v.value)} Cr`))),
+              d.valuable
+                .slice(0, 8)
+                .map((v) =>
+                  h(
+                    "tr",
+                    null,
+                    h("td", null, v.name),
+                    h(
+                      "td.num",
+                      null,
+                      v.distance !== undefined ? t("common.ls", { locale: fmt(Math.round(v.distance)) }) : "",
+                    ),
+                    h("td.num", null, `${credits(v.value)} Cr`),
+                  ),
+                ),
             ),
           )
         : null,
@@ -222,7 +384,9 @@ export class ExplorationView implements View {
   }
 
   private carto(): (HTMLElement | null)[] {
-    const a = this.ctx.store.state.activity as typeof this.ctx.store.state.activity & { unsold?: ReturnType<typeof unsoldSummary> };
+    const a = this.ctx.store.state.activity as typeof this.ctx.store.state.activity & {
+      unsold?: ReturnType<typeof unsoldSummary>;
+    };
     const list = a.unsold ?? unsoldSummary(a.bodies, a.unsoldSystems);
     const total = list.reduce((s, x) => s + x.value, 0);
     return [
@@ -230,17 +394,44 @@ export class ExplorationView implements View {
       h(
         "section.card",
         null,
-        h("div.sync-head", null, h("h3", null, t("exploration.cartographicDataSell")), h("strong", null, t("exploration.cr", { total: credits(total) }))),
+        h(
+          "div.sync-head",
+          null,
+          h("h3", null, t("exploration.cartographicDataSell")),
+          h("strong", null, t("exploration.cr", { total: credits(total) })),
+        ),
         list.length
           ? h(
               "table.table",
               null,
-              h("thead", null, h("tr", null, h("th", null, t("common.system")), h("th.num", null, t("exploration.bodies")), h("th.num", null, t("exploration.firstDiscoveries")), h("th.num", null, t("exploration.mapped")), h("th.num", null, t("exploration.estimatedValue")), h("th", null, t("exploration.scanned")))),
+              h(
+                "thead",
+                null,
+                h(
+                  "tr",
+                  null,
+                  h("th", null, t("common.system")),
+                  h("th.num", null, t("exploration.bodies")),
+                  h("th.num", null, t("exploration.firstDiscoveries")),
+                  h("th.num", null, t("exploration.mapped")),
+                  h("th.num", null, t("exploration.estimatedValue")),
+                  h("th", null, t("exploration.scanned")),
+                ),
+              ),
               h(
                 "tbody",
                 null,
                 list.map((x) =>
-                  h("tr", null, h("td", null, sys(x.system)), h("td.num", null, fmt(x.bodies)), h("td.num", null, x.first ? fmt(x.first) : ""), h("td.num", null, x.mapped ? fmt(x.mapped) : ""), h("td.num", null, `${credits(x.value)} Cr`), h("td", null, relTime(x.at))),
+                  h(
+                    "tr",
+                    null,
+                    h("td", null, sys(x.system)),
+                    h("td.num", null, fmt(x.bodies)),
+                    h("td.num", null, x.first ? fmt(x.first) : ""),
+                    h("td.num", null, x.mapped ? fmt(x.mapped) : ""),
+                    h("td.num", null, `${credits(x.value)} Cr`),
+                    h("td", null, relTime(x.at)),
+                  ),
                 ),
               ),
             )
@@ -250,4 +441,3 @@ export class ExplorationView implements View {
     ];
   }
 }
-

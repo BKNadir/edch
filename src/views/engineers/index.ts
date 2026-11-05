@@ -34,7 +34,7 @@ function checkOf(ctx: Ctx, test: string, text: string): Check | null {
   }
   if (parts[0] === "contribution" && parts.length >= 4) {
     const sym = parts[2].toLowerCase();
-    const have = parts[1] === "Commodity" ? cmdr.cargo[sym] ?? 0 : cmdr.materials[sym] ?? cmdr.locker[sym] ?? 0;
+    const have = parts[1] === "Commodity" ? (cmdr.cargo[sym] ?? 0) : (cmdr.materials[sym] ?? cmdr.locker[sym] ?? 0);
     return { label: text, have, need: Number(parts[3]) };
   }
   return { label: text };
@@ -64,28 +64,69 @@ export class EngineersView implements View {
     const list = all
       .map((e) => ({ e, d: distance(ref.coords, e.pos), st: this.statusOf(e) }))
       .filter(({ st }) => this.filter === "all" || (this.filter === "unlocked") === (st?.progress === "Unlocked"))
-      .sort((a, b) => Number(b.st?.progress === "Unlocked") - Number(a.st?.progress === "Unlocked") || (a.d ?? 0) - (b.d ?? 0));
+      .sort(
+        (a, b) =>
+          Number(b.st?.progress === "Unlocked") - Number(a.st?.progress === "Unlocked") || (a.d ?? 0) - (b.d ?? 0),
+      );
 
     const seg = <T extends string>(value: T, options: [T, string][], set: (v: T) => void) =>
-      h("div.segmented", null, options.map(([v, l]) => h("button", { class: value === v ? "active" : "", onclick: () => (set(v), this.update()) }, l)));
+      h(
+        "div.segmented",
+        null,
+        options.map(([v, l]) =>
+          h("button", { class: value === v ? "active" : "", onclick: () => (set(v), this.update()) }, l),
+        ),
+      );
 
     replace(
       this.root,
       h(
         "header.view-head",
         null,
-        h("div", null, h("h1", null, t("common.engineers")), h("p.sub", null, t("engineers.unlockedStatusReadFromJournalEngineerprogress", { unlockedCount, count: all.length, label: ref.label }))),
+        h(
+          "div",
+          null,
+          h("h1", null, t("common.engineers")),
+          h(
+            "p.sub",
+            null,
+            t("engineers.unlockedStatusReadFromJournalEngineerprogress", {
+              unlockedCount,
+              count: all.length,
+              label: ref.label,
+            }),
+          ),
+        ),
         h(
           "div.toolbar",
           null,
-          seg(this.mode, [["ship", t("common.ship")], ["foot", t("engineers.footOdyssey")]], (v) => (this.mode = v)),
-          seg(this.filter, [["all", t("common.all")], ["unlocked", t("engineers.unlocked2")], ["todo", t("engineers.unlock")]], (v) => (this.filter = v)),
+          seg(
+            this.mode,
+            [
+              ["ship", t("common.ship")],
+              ["foot", t("engineers.footOdyssey")],
+            ],
+            (v) => (this.mode = v),
+          ),
+          seg(
+            this.filter,
+            [
+              ["all", t("common.all")],
+              ["unlocked", t("engineers.unlocked2")],
+              ["todo", t("engineers.unlock")],
+            ],
+            (v) => (this.filter = v),
+          ),
         ),
       ),
       Object.keys(this.ctx.store.state.cmdr.engineers).length
         ? null
-        : h("div.notice", null, icon("warn"), (" " + t("engineers.statusesUnknownTheyComeEngineerprogressEvent"))),
-      h("div.eng-grid", null, list.map(({ e, d, st }) => this.card(e, d, st))),
+        : h("div.notice", null, icon("warn"), " " + t("engineers.statusesUnknownTheyComeEngineerprogressEvent")),
+      h(
+        "div.eng-grid",
+        null,
+        list.map(({ e, d, st }) => this.card(e, d, st)),
+      ),
     );
   }
 
@@ -93,7 +134,9 @@ export class EngineersView implements View {
     const unlocked = st?.progress === "Unlocked";
     const referrer = e.referredBy ? this.ctx.game.data.engineers.find((x) => x.name === e.referredBy) : undefined;
     const refStatus = referrer ? this.statusOf(referrer) : undefined;
-    const checks = [checkOf(this.ctx, e.meetingTest, e.meeting), checkOf(this.ctx, e.unlockTest, e.unlock)].filter(Boolean) as Check[];
+    const checks = [checkOf(this.ctx, e.meetingTest, e.meeting), checkOf(this.ctx, e.unlockTest, e.unlock)].filter(
+      Boolean,
+    ) as Check[];
     const rank = st?.rank ?? 0;
 
     return h(
@@ -102,7 +145,24 @@ export class EngineersView implements View {
       h(
         "div.eng-head",
         null,
-        h("div", null, h("h3", null, h("button.eng-name", { title: t("common.copySSystem", { name: e.name, system: e.system }), "data-no-tr": "", onclick: () => openSystem(e.system) }, e.name)), h("p.sub", null, e.body ? t("engineers.stationBody", { station: e.station, body: e.body }) : e.station)),
+        h(
+          "div",
+          null,
+          h(
+            "h3",
+            null,
+            h(
+              "button.eng-name",
+              {
+                title: t("common.copySSystem", { name: e.name, system: e.system }),
+                "data-no-tr": "",
+                onclick: () => openSystem(e.system),
+              },
+              e.name,
+            ),
+          ),
+          h("p.sub", null, e.body ? t("engineers.stationBody", { station: e.station, body: e.body }) : e.station),
+        ),
         st
           ? h(`span.badge${unlocked ? ".hit" : ""}`, null, PROGRESS_FR[st.progress] ?? st.progress)
           : h("span.badge.muted", null, t("engineers.notMetYet")),
@@ -110,19 +170,47 @@ export class EngineersView implements View {
       h(
         "div.result-main",
         null,
-        h("button.sys", { title: t("common.copy", { name: e.system }), onclick: () => openSystem(e.system) }, icon("copy"), h("span", null, e.system)),
+        h(
+          "button.sys",
+          { title: t("common.copy", { name: e.system }), onclick: () => openSystem(e.system) },
+          icon("copy"),
+          h("span", null, e.system),
+        ),
         h("span.dist", null, fmtLy(d)),
-        h("button.link", { title: t("engineers.viewSystemInara"), onclick: () => openUrl(inaraSystem(e.system)) }, "Inara", icon("link")),
+        h(
+          "button.link",
+          { title: t("engineers.viewSystemInara"), onclick: () => openUrl(inaraSystem(e.system)) },
+          "Inara",
+          icon("link"),
+        ),
       ),
       unlocked && !e.odyssey
         ? h(
             "div.rank",
             null,
-            h("div.rank-pips", null, [1, 2, 3, 4, 5].map((n) => h("span", { class: n <= rank ? "on" : "" }))),
-            h("span.sub", null, rank >= 5 ? t("engineers.maxRank") : st?.rankProgress !== undefined ? t("engineers.rankProgress", { rank, progress: st.rankProgress, next: rank + 1 }) : t("engineers.rankNumber", { rank })),
+            h(
+              "div.rank-pips",
+              null,
+              [1, 2, 3, 4, 5].map((n) => h("span", { class: n <= rank ? "on" : "" })),
+            ),
+            h(
+              "span.sub",
+              null,
+              rank >= 5
+                ? t("engineers.maxRank")
+                : st?.rankProgress !== undefined
+                  ? t("engineers.rankProgress", { rank, progress: st.rankProgress, next: rank + 1 })
+                  : t("engineers.rankNumber", { rank }),
+            ),
           )
         : null,
-      h("div.specs", null, e.specialities.map((s) => h("span.spec", null, moduleLink(s.name, s.name), s.grade ? h("small", null, ` G${s.grade}`) : null))),
+      h(
+        "div.specs",
+        null,
+        e.specialities.map((s) =>
+          h("span.spec", null, moduleLink(s.name, s.name), s.grade ? h("small", null, ` G${s.grade}`) : null),
+        ),
+      ),
       !unlocked
         ? h(
             "div.unlock",
@@ -130,10 +218,15 @@ export class EngineersView implements View {
             referrer
               ? h(
                   "p.check-line",
-                  { class: refStatus?.progress === "Unlocked" && (refStatus.rank ?? 0) >= (e.referralGrade ?? 0) ? "ok" : "" },
-                  refStatus?.progress === "Unlocked" && (refStatus.rank ?? 0) >= (e.referralGrade ?? 0) ? icon("check") : h("span.dot"),
+                  {
+                    class:
+                      refStatus?.progress === "Unlocked" && (refStatus.rank ?? 0) >= (e.referralGrade ?? 0) ? "ok" : "",
+                  },
+                  refStatus?.progress === "Unlocked" && (refStatus.rank ?? 0) >= (e.referralGrade ?? 0)
+                    ? icon("check")
+                    : h("span.dot"),
                   " " + t("common.referredBy", { name: referrer.name }),
-                  e.referralGrade ? (" " + t("engineers.rank", { referralGrade: e.referralGrade })) : "",
+                  e.referralGrade ? " " + t("engineers.rank", { referralGrade: e.referralGrade }) : "",
                 )
               : e.discovery
                 ? h("p.check-line", null, h("span.dot"), ` ${e.discovery}`)
@@ -145,7 +238,9 @@ export class EngineersView implements View {
                 { class: done ? "ok" : "" },
                 done ? icon("check") : h("span.dot"),
                 ` ${c.label}`,
-                c.need !== undefined ? h("small.sub", null, ` (${fmt(Math.min(c.have ?? 0, c.need))}/${fmt(c.need)})`) : null,
+                c.need !== undefined
+                  ? h("small.sub", null, ` (${fmt(Math.min(c.have ?? 0, c.need))}/${fmt(c.need)})`)
+                  : null,
               );
             }),
           )

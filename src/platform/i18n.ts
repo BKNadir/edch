@@ -199,7 +199,7 @@ export function resolveGameName(typed: string, candidates: string[]): { name?: s
 export function gameText(text: string): string {
   if (!game.size || !text) return text;
   const m = /^(\s*)([\s\S]*?)(\s*)$/.exec(text)!;
-  const hit = m[2] ? game.get(m[2]) ?? gameLower.get(m[2].toLowerCase()) : undefined;
+  const hit = m[2] ? (game.get(m[2]) ?? gameLower.get(m[2].toLowerCase())) : undefined;
   return hit === undefined ? text : m[1] + hit + m[3];
 }
 
@@ -217,7 +217,8 @@ function translateNode(node: Node) {
   }
   if (node.nodeType !== Node.ELEMENT_NODE) return;
   const el = node as Element;
-  if (el.tagName === "SCRIPT" || el.tagName === "STYLE" || el.tagName === "TEXTAREA" || el.closest("[data-no-tr]")) return;
+  if (el.tagName === "SCRIPT" || el.tagName === "STYLE" || el.tagName === "TEXTAREA" || el.closest("[data-no-tr]"))
+    return;
   for (const a of ATTRS) {
     const v = el.getAttribute(a);
     if (v) {

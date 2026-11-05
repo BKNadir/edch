@@ -10,4 +10,11 @@ export interface SyncSettings {
   inaraKey: string;
 }
 
-export const DEFAULT_SYNC: SyncSettings = { eddn: true, edsm: false, edsmCommander: "", edsmKey: "", inara: false, inaraKey: "" };
+export const DEFAULT_SYNC: SyncSettings = {
+  eddn: true,
+  edsm: false,
+  edsmCommander: "",
+  edsmKey: "",
+  inara: false,
+  inaraKey: "",
+};

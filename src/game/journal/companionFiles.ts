@@ -37,12 +37,19 @@ export function applyMarketFile(state: CommanderState, file: Json): boolean {
   if (!file || !Array.isArray(file.Items) || !/carrier/i.test(String(file.StationType ?? ""))) return false;
   const id = Number(file.MarketID);
   if (!id) return false;
-  const snap: CarrierMarketSnapshot = { at: String(file.timestamp ?? new Date().toISOString()), station: String(file.StationName ?? ""), selling: {}, buying: {} };
+  const snap: CarrierMarketSnapshot = {
+    at: String(file.timestamp ?? new Date().toISOString()),
+    station: String(file.StationName ?? ""),
+    selling: {},
+    buying: {},
+  };
   for (const it of file.Items) {
     const key = commodityKey(it.Name);
     const label = String(it.Name_Localised ?? key);
-    if (Number(it.Stock) > 0) snap.selling[key] = { label, count: Number(it.Stock), price: Number(it.BuyPrice) || undefined };
-    if (Number(it.Demand) > 0) snap.buying[key] = { label, count: Number(it.Demand), price: Number(it.SellPrice) || undefined };
+    if (Number(it.Stock) > 0)
+      snap.selling[key] = { label, count: Number(it.Stock), price: Number(it.BuyPrice) || undefined };
+    if (Number(it.Demand) > 0)
+      snap.buying[key] = { label, count: Number(it.Demand), price: Number(it.SellPrice) || undefined };
   }
   const prev = state.carrierMarkets?.[id];
   if (prev && prev.at > snap.at) return false;
@@ -75,7 +82,12 @@ export function applyStatus(state: CommanderState, status: Json): boolean {
     state.fuel = fuel;
   }
   if (typeof status.Latitude === "number" && typeof status.Longitude === "number") {
-    const surface = { lat: status.Latitude, lon: status.Longitude, radius: typeof status.PlanetRadius === "number" ? status.PlanetRadius : undefined, body: status.BodyName };
+    const surface = {
+      lat: status.Latitude,
+      lon: status.Longitude,
+      radius: typeof status.PlanetRadius === "number" ? status.PlanetRadius : undefined,
+      body: status.BodyName,
+    };
     if (state.surface?.lat !== surface.lat || state.surface?.lon !== surface.lon) changed = true;
     state.surface = surface;
   } else if (state.surface) {

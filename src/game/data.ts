@@ -58,7 +58,7 @@ export class Game {
   }
 
   lineName(line?: string): string {
-    return line ? this.data.lines[line] ?? line : "";
+    return line ? (this.data.lines[line] ?? line) : "";
   }
 
   /** Trader lines of one ship category, in a stable order. */

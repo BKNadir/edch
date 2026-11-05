@@ -82,7 +82,9 @@ const fromB64 = (text: string) => Uint8Array.from(atob(text), (c) => c.charCodeA
 
 export async function seal(key: CryptoKey, packet: Packet): Promise<string> {
   const iv = crypto.getRandomValues(new Uint8Array(12));
-  const data = new Uint8Array(await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(JSON.stringify(packet))));
+  const data = new Uint8Array(
+    await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(JSON.stringify(packet))),
+  );
   const out = new Uint8Array(iv.length + data.length);
   out.set(iv);
   out.set(data, iv.length);
@@ -138,7 +140,8 @@ export function sameMission(a: WingMission, b: WingMission): boolean {
   // A field only one side knows (a mission seen only in the login list has no faction or
   // destination) doesn't count against the match.
   const differ = (x?: string, y?: string) => Boolean(norm(x) && norm(y) && norm(x) !== norm(y));
-  if (differ(a.faction, b.faction) || differ(a.destSystem, b.destSystem) || differ(a.destStation, b.destStation)) return false;
+  if (differ(a.faction, b.faction) || differ(a.destSystem, b.destSystem) || differ(a.destStation, b.destStation))
+    return false;
   if (a.expiry && b.expiry && Math.abs(Date.parse(a.expiry) - Date.parse(b.expiry)) > 3 * 3600000) return false;
   if (a.name && b.name) return norm(a.name).replace(/_name$/, "") === norm(b.name).replace(/_name$/, "");
   return a.title === b.title;
@@ -151,7 +154,8 @@ export function sameMission(a: WingMission, b: WingMission): boolean {
 export function mergeMission(a: WingMission, b: WingMission): WingMission {
   const out: WingMission = { ...a };
   for (const k of ["name", "faction", "destSystem", "destStation", "expiry", "reward", "commodity", "count"] as const) {
-    if ((out[k] === undefined || out[k] === "") && b[k] !== undefined && b[k] !== "") (out as unknown as Record<string, unknown>)[k] = b[k];
+    if ((out[k] === undefined || out[k] === "") && b[k] !== undefined && b[k] !== "")
+      (out as unknown as Record<string, unknown>)[k] = b[k];
   }
   if (!out.title || /^Mission_/.test(out.title)) out.title = b.title || out.title;
   if (b.total && (b.delivered ?? 0) >= (out.delivered ?? 0)) {
@@ -280,7 +284,15 @@ export class WingLink {
     }
     try {
       const me = this.me();
-      await this.send({ v: 1, from: me.id, name: me.name, at: new Date().toISOString(), missions: [], bye: true, reason: "off" });
+      await this.send({
+        v: 1,
+        from: me.id,
+        name: me.name,
+        at: new Date().toISOString(),
+        missions: [],
+        bye: true,
+        reason: "off",
+      });
     } catch {
       /* leaving quietly is fine */
     }
@@ -295,7 +307,15 @@ export class WingLink {
     if (isTauri()) void ntfySetFarewell(this.topic, null);
     try {
       const me = this.me();
-      await this.send({ v: 1, from: me.id, name: me.name, at: new Date().toISOString(), missions: [], bye: true, reason: "wing" });
+      await this.send({
+        v: 1,
+        from: me.id,
+        name: me.name,
+        at: new Date().toISOString(),
+        missions: [],
+        bye: true,
+        reason: "wing",
+      });
       this.lastSent = "";
     } catch (e) {
       this.fail(e);
@@ -312,7 +332,15 @@ export class WingLink {
   private async armFarewell() {
     if (!isTauri() || this.stopped || this.away) return;
     const me = this.me();
-    const text = await seal(this.key, { v: 1, from: me.id, name: me.name, at: new Date(Date.now() + 1000).toISOString(), missions: [], bye: true, reason: "closed" });
+    const text = await seal(this.key, {
+      v: 1,
+      from: me.id,
+      name: me.name,
+      at: new Date(Date.now() + 1000).toISOString(),
+      missions: [],
+      bye: true,
+      reason: "closed",
+    });
     void ntfySetFarewell(this.topic, text);
   }
 
@@ -359,7 +387,8 @@ export class WingLink {
     if (this.stopped || !this.key) return;
     try {
       const reply = await httpFetch("GET", `${NTFY}${this.topic}/json?poll=1&since=${encodeURIComponent(this.since)}`);
-      if (reply.status < 200 || reply.status >= 300) throw new Error(t("wing.ntfyShAnswered", { status: reply.status }));
+      if (reply.status < 200 || reply.status >= 300)
+        throw new Error(t("wing.ntfyShAnswered", { status: reply.status }));
       await this.handleLines(reply.body.split("\n"));
     } catch (e) {
       this.fail(e);
@@ -392,8 +421,18 @@ export class WingLink {
       const prev = this.members.get(p.from);
       if (prev && prev.at > p.at) continue;
       if (p.bye && prev && !prev.left && this.primed) this.on.left(p.name || prev.name || "CMDR", p.reason);
-      this.members.set(p.from, { id: p.from, name: p.name || "CMDR", at: p.at, missions: p.bye ? [] : p.missions ?? [], left: p.bye, reason: p.bye ? p.reason : undefined });
-      log.debug("wing", `${p.name || "CMDR"}: ${p.bye ? "left" : `${(p.missions ?? []).length} mission(s)`} ${(p.missions ?? []).map((m) => `#${m.id}${m.total ? ` ${m.delivered ?? 0}/${m.total}` : ""}`).join(" ")}`);
+      this.members.set(p.from, {
+        id: p.from,
+        name: p.name || "CMDR",
+        at: p.at,
+        missions: p.bye ? [] : (p.missions ?? []),
+        left: p.bye,
+        reason: p.bye ? p.reason : undefined,
+      });
+      log.debug(
+        "wing",
+        `${p.name || "CMDR"}: ${p.bye ? "left" : `${(p.missions ?? []).length} mission(s)`} ${(p.missions ?? []).map((m) => `#${m.id}${m.total ? ` ${m.delivered ?? 0}/${m.total}` : ""}`).join(" ")}`,
+      );
       changed = true;
     }
     this.ok();
@@ -407,7 +446,8 @@ export class WingLink {
     const me = this.me();
     const others = [...this.members.values()];
     const rows = wingRows(me, others);
-    const key = (r: WingRow) => `${norm(r.mission.name) || r.mission.title}|${norm(r.mission.faction)}|${norm(r.mission.destSystem)}|${(r.mission.expiry ?? "").slice(0, 13)}`;
+    const key = (r: WingRow) =>
+      `${norm(r.mission.name) || r.mission.title}|${norm(r.mission.faction)}|${norm(r.mission.destSystem)}|${(r.mission.expiry ?? "").slice(0, 13)}`;
     const activeCount = 1 + others.filter((o) => isActive(o)).length;
     for (const r of rows) {
       const k = key(r);

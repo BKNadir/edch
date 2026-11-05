@@ -68,14 +68,21 @@ function render() {
       h(
         "div.alert-item",
         null,
-        h("div.alert-text", null, h("strong", null, icon("warn"), " ", h("span", null, a.title)), h("span.sub", null, a.detail)),
+        h(
+          "div.alert-text",
+          null,
+          h("strong", null, icon("warn"), " ", h("span", null, a.title)),
+          h("span.sub", null, a.detail),
+        ),
         h(
           "div.row",
           null,
           isTauri()
             ? h("button.ghost.small", { onclick: () => logsOpen().catch((e) => toast(String(e))) }, t("alerts.logs"))
             : null,
-          a.action ? h("button.primary.small", { onclick: () => (a.action!.run(), clearAlert(a.key)) }, a.action.label) : null,
+          a.action
+            ? h("button.primary.small", { onclick: () => (a.action!.run(), clearAlert(a.key)) }, a.action.label)
+            : null,
           h("button.ghost.small", { title: t("common.close"), onclick: () => clearAlert(a.key) }, icon("close")),
         ),
       ),

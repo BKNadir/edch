@@ -55,7 +55,8 @@ export function planTour(ctx: Ctx): TourPlan {
   while (left.length) {
     let best = 0;
     left.forEach((s, i) => {
-      if ((distance(at, s.pick.engineer.pos) ?? Infinity) < (distance(at, left[best].pick.engineer.pos) ?? Infinity)) best = i;
+      if ((distance(at, s.pick.engineer.pos) ?? Infinity) < (distance(at, left[best].pick.engineer.pos) ?? Infinity))
+        best = i;
     });
     const s = left.splice(best, 1)[0];
     s.leg = distance(at, s.pick.engineer.pos);
@@ -128,7 +129,13 @@ function saveRoute(r: TourRoute | null) {
 export const clearRoute = () => saveRoute(null);
 
 /** Plots every leg with Spansh, one after the other. */
-export async function plotTour(from: string, stops: Stop[], range: number, onProgress: (leg: number, of: number) => void, supercharge: 4 | 6 = 4): Promise<TourRoute> {
+export async function plotTour(
+  from: string,
+  stops: Stop[],
+  range: number,
+  onProgress: (leg: number, of: number) => void,
+  supercharge: 4 | 6 = 4,
+): Promise<TourRoute> {
   const jumps: RouteJump[] = [{ system: from }];
   let total = 0;
   let dist = 0;
@@ -226,7 +233,13 @@ export function tourEvent(ev: Json) {
     } else if (s.autoCopyNext && route) {
       const { next, index } = nextJump(ev.StarSystem);
       if (index >= 0) {
-        if (next) copyNext(next.system, next.engineer ? t("tour.nextJumpCopied", { system: next.system, engineer: next.engineer }) : t("common.nextJumpCopied", { next: next.system }));
+        if (next)
+          copyNext(
+            next.system,
+            next.engineer
+              ? t("tour.nextJumpCopied", { system: next.system, engineer: next.engineer })
+              : t("common.nextJumpCopied", { next: next.system }),
+          );
         else toast(t("tour.lastStopEngineerTour"));
       }
     }
@@ -259,19 +272,31 @@ function tick(ev: Json) {
     }
   } else if (blueprint && level) {
     const item =
-      list.find((w) => kindOf(w) === "modification" && symbolsOf(w).includes(blueprint) && level >= w.gradeFrom && level <= w.gradeTo) ??
-      list.find((w) => kindOf(w) === "modification" && symbolsOf(w).includes(blueprint));
+      list.find(
+        (w) =>
+          kindOf(w) === "modification" &&
+          symbolsOf(w).includes(blueprint) &&
+          level >= w.gradeFrom &&
+          level <= w.gradeTo,
+      ) ?? list.find((w) => kindOf(w) === "modification" && symbolsOf(w).includes(blueprint));
     if (!item) return;
     const name = gameName(item.bp.split("|")[2] ?? "");
     const left = Math.max(0, (item.rolls[level] ?? defaultRolls(level)) - 1);
     let updated: WishItem | null = { ...item, rolls: { ...item.rolls, [level]: left } };
     if (left === 0 && level >= item.gradeTo) {
       // One module done at the top grade.
-      if (item.count > 1) updated = { ...item, count: item.count - 1, rolls: { ...item.rolls, [level]: defaultRolls(level) } };
+      if (item.count > 1)
+        updated = { ...item, count: item.count - 1, rolls: { ...item.rolls, [level]: defaultRolls(level) } };
       else updated = null;
-      message = updated ? t("tour.gDoneGo", { name, level, value: item.count - 1 }) : t("tour.gDoneRemovedFromWishlist", { name, level });
+      message = updated
+        ? t("tour.gDoneGo", { name, level, value: item.count - 1 })
+        : t("tour.gDoneRemovedFromWishlist", { name, level });
     } else {
-      if (item.count === 1) updated = { ...updated, gradeFrom: left === 0 ? Math.min(level + 1, item.gradeTo) : Math.max(item.gradeFrom, level) };
+      if (item.count === 1)
+        updated = {
+          ...updated,
+          gradeFrom: left === 0 ? Math.min(level + 1, item.gradeTo) : Math.max(item.gradeFrom, level),
+        };
       message = t("tour.gRollCounted", { name, level });
     }
     next = updated ? list.map((w) => (w.id === item.id ? updated! : w)) : list.filter((w) => w.id !== item.id);

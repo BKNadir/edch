@@ -33,7 +33,7 @@ export function superchargeMultiplier(item?: string): 4 | 6 {
 
 export function boosterBonus(item?: string): number {
   const m = /size(\d)/.exec(item ?? "");
-  return m ? BOOSTER[Number(m[1])] ?? 0 : 0;
+  return m ? (BOOSTER[Number(m[1])] ?? 0) : 0;
 }
 
 export interface JumpModel {

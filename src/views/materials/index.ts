@@ -30,7 +30,12 @@ export class MaterialsView implements View {
     this.tabs = h("div.segmented");
     replace(
       root,
-      h("header.view-head", null, h("h1", null, t("materials.engineeringMaterials")), h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.tabs)),
+      h(
+        "header.view-head",
+        null,
+        h("h1", null, t("materials.engineeringMaterials")),
+        h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.tabs),
+      ),
       this.list,
     );
     this.update();
@@ -51,12 +56,27 @@ export class MaterialsView implements View {
     return h(
       "button.mat",
       {
-        class: [selected ? "selected" : "", short ? "short" : "", need > 0 && !short ? "covered" : "", owned === 0 ? "zero" : "", owned >= cap ? "full" : "", hidden ? "dim" : ""].filter(Boolean).join(" "),
+        class: [
+          selected ? "selected" : "",
+          short ? "short" : "",
+          need > 0 && !short ? "covered" : "",
+          owned === 0 ? "zero" : "",
+          owned >= cap ? "full" : "",
+          hidden ? "dim" : "",
+        ]
+          .filter(Boolean)
+          .join(" "),
         title: m.origins.map(gameName).join("\n"),
         onclick: () => this.ctx.store.select(selected ? undefined : m.id),
       },
       h("span.mat-name", null, m.name),
-      h("span.mat-count", null, h("strong", null, fmt(owned)), h("small", null, `/${cap}`), need ? h("em", null, (" " + t("common.needed", { need: fmt(need) }))) : null),
+      h(
+        "span.mat-count",
+        null,
+        h("strong", null, fmt(owned)),
+        h("small", null, `/${cap}`),
+        need ? h("em", null, " " + t("common.needed", { need: fmt(need) })) : null,
+      ),
       h("span.bar", null, h("span", { style: { width: `${Math.min(100, (owned / cap) * 100)}%` } })),
     );
   }
@@ -80,7 +100,9 @@ export class MaterialsView implements View {
 
     const sections = (["Raw", "Manufactured", "Encoded"] as const).map((cat) => {
       const lines = game.linesOf(cat);
-      const total = game.data.materials.filter((m) => m.category === cat && m.ledger === "ship").reduce((sum, m) => sum + (owned[m.id] ?? 0), 0);
+      const total = game.data.materials
+        .filter((m) => m.category === cat && m.ledger === "ship")
+        .reduce((sum, m) => sum + (owned[m.id] ?? 0), 0);
       const rows = lines
         .map((line) => {
           const mats = game.byLine.get(line)!;
@@ -104,17 +126,30 @@ export class MaterialsView implements View {
       return h(
         "section.mat-section",
         null,
-        h("h2", null, CATEGORY_FR[cat], h("span.sub", null, (" " + t("materials.units", { total: fmt(total) })))),
+        h("h2", null, CATEGORY_FR[cat], h("span.sub", null, " " + t("materials.units", { total: fmt(total) }))),
         rows.length
-          ? h("div.grade-head", null, h("span"), [1, 2, 3, 4, 5].map((g) => h("span", null, t("common.grade", { grade: g }))))
+          ? h(
+              "div.grade-head",
+              null,
+              h("span"),
+              [1, 2, 3, 4, 5].map((g) => h("span", null, t("common.grade", { grade: g }))),
+            )
           : null,
         rows,
         others.length
           ? h(
               "div.others",
               null,
-              h("h3", null, cat === "Encoded" ? t("materials.guardianThargoidData") : t("materials.guardianThargoidNotTradeable")),
-              h("div.other-grid", null, others.map((m) => this.cell(m, owned[m.id] ?? 0, needs[m.id] ?? 0))),
+              h(
+                "h3",
+                null,
+                cat === "Encoded" ? t("materials.guardianThargoidData") : t("materials.guardianThargoidNotTradeable"),
+              ),
+              h(
+                "div.other-grid",
+                null,
+                others.map((m) => this.cell(m, owned[m.id] ?? 0, needs[m.id] ?? 0)),
+              ),
             )
           : null,
       );
@@ -123,9 +158,7 @@ export class MaterialsView implements View {
     const visible = sections.filter(Boolean);
     replace(this.list, visible.length ? visible : h("p.empty", null, t("materials.noMatchingMaterial")));
     if (!Object.keys(owned).length) {
-      this.list.prepend(
-        h("div.notice", null, icon("warn"), (" " + t("materials.noInventoryYetStartEliteDangerous"))),
-      );
+      this.list.prepend(h("div.notice", null, icon("warn"), " " + t("materials.noInventoryYetStartEliteDangerous")));
     }
   }
 }

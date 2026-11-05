@@ -4,7 +4,11 @@ import { locale } from "../platform/i18n.js";
 type Child = Node | string | number | null | undefined | false | Child[];
 type Props = Record<string, any> | null | undefined;
 
-export function h<K extends keyof HTMLElementTagNameMap>(spec: K | `${K}.${string}` | `${K}#${string}`, props?: Props, ...children: Child[]): HTMLElementTagNameMap[K];
+export function h<K extends keyof HTMLElementTagNameMap>(
+  spec: K | `${K}.${string}` | `${K}#${string}`,
+  props?: Props,
+  ...children: Child[]
+): HTMLElementTagNameMap[K];
 export function h(spec: string, props?: Props, ...children: Child[]): HTMLElement {
   const [tagAndId, ...classes] = spec.split(".");
   const [tag, id] = tagAndId.split("#");
@@ -55,7 +59,9 @@ export function toast(message: string) {
 export const fmt = (n: number) => n.toLocaleString(locale());
 
 /** Small inline SVG icons. */
-export function icon(name: "copy" | "link" | "search" | "star" | "close" | "plus" | "check" | "warn" | "pin" | "play" | "expand"): SVGSVGElement {
+export function icon(
+  name: "copy" | "link" | "search" | "star" | "close" | "plus" | "check" | "warn" | "pin" | "play" | "expand",
+): SVGSVGElement {
   const paths: Record<string, string> = {
     copy: "M8 8h11v11H8zM5 16V5h11",
     link: "M10 14l10-10M14 4h6v6M20 14v6H4V4h6",

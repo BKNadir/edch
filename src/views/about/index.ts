@@ -9,21 +9,58 @@ const REPO = "https://github.com/BKNadir/edch";
 
 /** The projects EDCH relies on: name, what they bring, links (site first, then repository). */
 const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
-  { name: "Spansh", what: t("about.everySystemStationCommoditySearchRoutes"), links: [["spansh.co.uk", "https://spansh.co.uk"]] },
-  { name: "EDDN (EDCD)", what: t("about.networkSharesGameDataBetweenPlayers"), links: [["github.com/EDCD/EDDN", "https://github.com/EDCD/EDDN"]] },
-  { name: "EDCD / FDevIDs", what: t("about.gameSOfficialIdentifiersNames"), links: [["github.com/EDCD/FDevIDs", "https://github.com/EDCD/FDevIDs"]] },
+  {
+    name: "Spansh",
+    what: t("about.everySystemStationCommoditySearchRoutes"),
+    links: [["spansh.co.uk", "https://spansh.co.uk"]],
+  },
+  {
+    name: "EDDN (EDCD)",
+    what: t("about.networkSharesGameDataBetweenPlayers"),
+    links: [["github.com/EDCD/EDDN", "https://github.com/EDCD/EDDN"]],
+  },
+  {
+    name: "EDCD / FDevIDs",
+    what: t("about.gameSOfficialIdentifiersNames"),
+    links: [["github.com/EDCD/FDevIDs", "https://github.com/EDCD/FDevIDs"]],
+  },
   { name: "EDSM", what: t("about.syncingFlightLogWhatCommunityKnows"), links: [["edsm.net", "https://www.edsm.net"]] },
   { name: "Inara", what: t("about.syncingCommanderProfile"), links: [["inara.cz", "https://inara.cz"]] },
-  { name: "EDEngineer (msarilar)", what: t("about.engineeringRecipesMaterialOriginsPartTranslation"), links: [["github.com/msarilar/EDEngineer", "https://github.com/msarilar/EDEngineer"]] },
-  { name: "d47 (dseelinger)", what: t("about.edengineerSEngineersDataGatheredCorrected"), links: [["github.com/dseelinger/d47", "https://github.com/dseelinger/d47"]] },
+  {
+    name: "EDEngineer (msarilar)",
+    what: t("about.engineeringRecipesMaterialOriginsPartTranslation"),
+    links: [["github.com/msarilar/EDEngineer", "https://github.com/msarilar/EDEngineer"]],
+  },
+  {
+    name: "d47 (dseelinger)",
+    what: t("about.edengineerSEngineersDataGatheredCorrected"),
+    links: [["github.com/dseelinger/d47", "https://github.com/dseelinger/d47"]],
+  },
   {
     name: "Elite Dangerous Almanac",
     what: t("about.gameSOfficialTranslatedNamesMaterials"),
-    links: [["github.com/Elite-Dangerous-Almanac/Almanac-Core", "https://github.com/Elite-Dangerous-Almanac/Almanac-Core"]],
+    links: [
+      ["github.com/Elite-Dangerous-Almanac/Almanac-Core", "https://github.com/Elite-Dangerous-Almanac/Almanac-Core"],
+    ],
   },
-  { name: "EDR (lekeno)", what: t("about.exobiologySpeciesNamesJournalWritesThem"), links: [["github.com/lekeno/edr", "https://github.com/lekeno/edr"]] },
-  { name: "ntfy.sh", what: t("about.freeRelayCarriesWingSEncrypted"), links: [["ntfy.sh", "https://ntfy.sh"], ["github.com/binwiederhier/ntfy", "https://github.com/binwiederhier/ntfy"]] },
-  { name: "EDRefCard (Richard Buckle)", what: t("about.controlNamesPicturesHotasJoysticksPads"), links: [["github.com/richardbuckle/EDRefCard", "https://github.com/richardbuckle/EDRefCard"]] },
+  {
+    name: "EDR (lekeno)",
+    what: t("about.exobiologySpeciesNamesJournalWritesThem"),
+    links: [["github.com/lekeno/edr", "https://github.com/lekeno/edr"]],
+  },
+  {
+    name: "ntfy.sh",
+    what: t("about.freeRelayCarriesWingSEncrypted"),
+    links: [
+      ["ntfy.sh", "https://ntfy.sh"],
+      ["github.com/binwiederhier/ntfy", "https://github.com/binwiederhier/ntfy"],
+    ],
+  },
+  {
+    name: "EDRefCard (Richard Buckle)",
+    what: t("about.controlNamesPicturesHotasJoysticksPads"),
+    links: [["github.com/richardbuckle/EDRefCard", "https://github.com/richardbuckle/EDRefCard"]],
+  },
   {
     name: "EDSY",
     what: t("about.buildExportFormatImportedIntoWishlist"),
@@ -41,7 +78,11 @@ const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
       ["github.com/EDCD/coriolis-data", "https://github.com/EDCD/coriolis-data"],
     ],
   },
-  { name: "EDMarketConnector (EDCD)", what: t("about.inspirationEddnEdsmInaraSync"), links: [["github.com/EDCD/EDMarketConnector", "https://github.com/EDCD/EDMarketConnector"]] },
+  {
+    name: "EDMarketConnector (EDCD)",
+    what: t("about.inspirationEddnEdsmInaraSync"),
+    links: [["github.com/EDCD/EDMarketConnector", "https://github.com/EDCD/EDMarketConnector"]],
+  },
   {
     name: "Odyssey Materials Helper (Jixxed)",
     what: t("about.originalInspirationEdch"),
@@ -57,7 +98,8 @@ const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
   },
 ];
 
-const link = (label: string, url: string) => h("button.inline-link", { "data-no-tr": "", onclick: () => openUrl(url) }, label);
+const link = (label: string, url: string) =>
+  h("button.inline-link", { "data-no-tr": "", onclick: () => openUrl(url) }, label);
 
 export class AboutView implements View {
   constructor(private ctx: Ctx) {}
@@ -66,7 +108,16 @@ export class AboutView implements View {
     void this.ctx;
     replace(
       root,
-      h("header.view-head", null, h("div", null, h("h1", null, t("about.aboutEdch")), h("p.sub", null, t("about.version", { SOFTWAREVERSION: SOFTWARE_VERSION })))),
+      h(
+        "header.view-head",
+        null,
+        h(
+          "div",
+          null,
+          h("h1", null, t("about.aboutEdch")),
+          h("p.sub", null, t("about.version", { SOFTWAREVERSION: SOFTWARE_VERSION })),
+        ),
+      ),
       h(
         "div.about",
         null,
@@ -80,7 +131,7 @@ export class AboutView implements View {
           "section.card.about-author",
           null,
           h("h3", null, t("about.author")),
-          h("p", null, (t("about.dreamtUpFlown") + " "), h("strong", { "data-no-tr": "" }, "CMDR MDLuffy"), "."),
+          h("p", null, t("about.dreamtUpFlown") + " ", h("strong", { "data-no-tr": "" }, "CMDR MDLuffy"), "."),
           h("p.sub", null, t("about.thanksUsingEdchIfCrossPaths")),
         ),
         h(
@@ -91,8 +142,24 @@ export class AboutView implements View {
             "ul.about-links",
             null,
             h("li", null, "📦 ", h("span", null, t("about.sourceCode")), " ", link("github.com/BKNadir/edch", REPO)),
-            h("li", null, "💡 ", h("span", null, t("about.suggestIdea")), " ", h("button.inline-link", { onclick: () => openUrl(`${REPO}/issues/new`) }, t("about.openIssue"))),
-            h("li", null, "📝 ", h("span", null, t("about.whatSNewEachVersion")), " ", h("button.inline-link", { onclick: () => showChangelog() }, t("about.version2")), " · ", h("button.inline-link", { onclick: () => openUrl(`${REPO}/releases`) }, "Releases")),
+            h(
+              "li",
+              null,
+              "💡 ",
+              h("span", null, t("about.suggestIdea")),
+              " ",
+              h("button.inline-link", { onclick: () => openUrl(`${REPO}/issues/new`) }, t("about.openIssue")),
+            ),
+            h(
+              "li",
+              null,
+              "📝 ",
+              h("span", null, t("about.whatSNewEachVersion")),
+              " ",
+              h("button.inline-link", { onclick: () => showChangelog() }, t("about.version2")),
+              " · ",
+              h("button.inline-link", { onclick: () => openUrl(`${REPO}/releases`) }, "Releases"),
+            ),
           ),
         ),
         this.bugCard(),
@@ -122,7 +189,11 @@ export class AboutView implements View {
                 null,
                 h("strong", { "data-no-tr": "" }, p.name),
                 h("span.sub", null, p.what),
-                h("span.thanks-links", null, p.links.flatMap(([label, url], i) => (i ? [" · ", link(label, url)] : [link(label, url)]))),
+                h(
+                  "span.thanks-links",
+                  null,
+                  p.links.flatMap(([label, url], i) => (i ? [" · ", link(label, url)] : [link(label, url)])),
+                ),
               ),
             ),
           ),
@@ -131,7 +202,7 @@ export class AboutView implements View {
           "section.card",
           null,
           h("p.sub", null, t("about.eliteDangerousTrademarkFrontierDevelopmentsPlc")),
-          h("p.sub", null, (t("about.licencesDetails") + " "), link("NOTICE", `${REPO}/blob/main/NOTICE`)),
+          h("p.sub", null, t("about.licencesDetails") + " ", link("NOTICE", `${REPO}/blob/main/NOTICE`)),
         ),
       ),
     );
@@ -142,7 +213,14 @@ export class AboutView implements View {
     const app = isTauri() && !isRemote();
     const newIssue = async () => {
       const mode = await updateMode();
-      const kind = mode === "installer" ? "Windows, installed" : mode === "portable" ? "Windows, portable" : mode === "linux" ? "Linux" : mode;
+      const kind =
+        mode === "installer"
+          ? "Windows, installed"
+          : mode === "portable"
+            ? "Windows, portable"
+            : mode === "linux"
+              ? "Linux"
+              : mode;
       const body = [
         `**EDCH version:** ${SOFTWARE_VERSION} (${kind})`,
         "",
@@ -155,7 +233,9 @@ export class AboutView implements View {
         "**Debug log**",
         "(drag the newest edch-debug_….log here, and edch-error_….log if there is one)",
       ].join("\n");
-      void openUrl(`${REPO}/issues/new?labels=bug&title=${encodeURIComponent("[Bug] ")}&body=${encodeURIComponent(body)}`);
+      void openUrl(
+        `${REPO}/issues/new?labels=bug&title=${encodeURIComponent("[Bug] ")}&body=${encodeURIComponent(body)}`,
+      );
     };
     return h(
       "section.card.bug-card",
@@ -174,8 +254,14 @@ export class AboutView implements View {
       h(
         "div.row",
         null,
-        app ? h("button.ghost", { onclick: () => logsOpen().catch((e) => toast(t("common.canTOpenFolder", { e }))) }, t("common.openLogsFolder")) : null,
-        h("button.primary", { onclick: newIssue }, icon("link"), (" " + t("about.openIssueGithub"))),
+        app
+          ? h(
+              "button.ghost",
+              { onclick: () => logsOpen().catch((e) => toast(t("common.canTOpenFolder", { e }))) },
+              t("common.openLogsFolder"),
+            )
+          : null,
+        h("button.primary", { onclick: newIssue }, icon("link"), " " + t("about.openIssueGithub")),
       ),
       h(
         "div.privacy",

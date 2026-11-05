@@ -10,7 +10,8 @@ export const GOALS_EVENTS: EventHandlers = {
       const prev = st.goals[id];
       const contribution = num(g.PlayerContribution) ?? 0;
       const history = prev?.history ?? [];
-      if (!history.length || history[history.length - 1].contribution !== contribution) history.push({ at, contribution });
+      if (!history.length || history[history.length - 1].contribution !== contribution)
+        history.push({ at, contribution });
       st.goals[id] = {
         id,
         title: String(g.Title ?? ""),

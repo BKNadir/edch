@@ -47,7 +47,10 @@ export function genusOf(genusSymbol: string): string | undefined {
 /** Catalogue entry for a journal species symbol, else its English name. */
 export function speciesOf(symbol: string, englishName?: string): Species | undefined {
   const name = data?.symbols[symbol.toLowerCase()];
-  return (name ? byName.get(name.toLowerCase()) : undefined) ?? (englishName ? byName.get(englishName.toLowerCase()) : undefined);
+  return (
+    (name ? byName.get(name.toLowerCase()) : undefined) ??
+    (englishName ? byName.get(englishName.toLowerCase()) : undefined)
+  );
 }
 
 /** Base value; for a species the catalogue doesn't know, the genus value when all its species share it. */
@@ -66,8 +69,11 @@ export function colonyDistance(genusSymbol: string): number | undefined {
   return genus ? data?.genera[genus] : undefined;
 }
 
-const letters = (s: string) => (s.toLowerCase().match(/[a-z]+/g) ?? []);
-const planetType = (raw?: string) => letters(raw ?? "").map((w) => (w === "world" ? "body" : w)).join("");
+const letters = (s: string) => s.toLowerCase().match(/[a-z]+/g) ?? [];
+const planetType = (raw?: string) =>
+  letters(raw ?? "")
+    .map((w) => (w === "world" ? "body" : w))
+    .join("");
 function atmosphere(raw?: string): string {
   const normalized = (raw ?? "").trim().toLowerCase();
   if (!normalized || normalized === "no atmosphere") return "none";
@@ -78,7 +84,9 @@ function atmosphere(raw?: string): string {
 function volcanism(raw?: string): string {
   const normalized = (raw ?? "").trim().toLowerCase();
   if (!normalized || normalized === "no volcanism") return "none";
-  return letters(normalized).filter((w) => w !== "volcanism").join("");
+  return letters(normalized)
+    .filter((w) => w !== "volcanism")
+    .join("");
 }
 const within = (v: number, lo: number, hi: number) => {
   const m = (hi - lo) * 0.02;

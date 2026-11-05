@@ -28,7 +28,16 @@ export class OdysseyView implements View {
         this.update();
       },
     });
-    replace(root, h("header.view-head", null, h("h1", null, t("odyssey.odysseyShipLocker")), h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.head)), this.body);
+    replace(
+      root,
+      h(
+        "header.view-head",
+        null,
+        h("h1", null, t("odyssey.odysseyShipLocker")),
+        h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.head),
+      ),
+      this.body,
+    );
     this.update();
   }
 
@@ -44,14 +53,33 @@ export class OdysseyView implements View {
         "div.segmented",
         null,
         CATS.map((c) => {
-          const count = game.data.materials.filter((m) => m.category === c).reduce((s, m) => s + (locker[m.id] ?? 0), 0);
-          return h("button", { class: this.cat === c ? "active" : "", onclick: () => ((this.cat = c), this.update()) }, CATEGORY_FR[c], h("small", null, ` ${fmt(count)}`));
+          const count = game.data.materials
+            .filter((m) => m.category === c)
+            .reduce((s, m) => s + (locker[m.id] ?? 0), 0);
+          return h(
+            "button",
+            { class: this.cat === c ? "active" : "", onclick: () => ((this.cat = c), this.update()) },
+            CATEGORY_FR[c],
+            h("small", null, ` ${fmt(count)}`),
+          );
         }),
       ),
-      h("label.check", null, h("input", { type: "checkbox", checked: this.ownedOnly, onchange: (e: Event) => ((this.ownedOnly = (e.target as HTMLInputElement).checked), this.update()) }), (" " + t("odyssey.ownedOnly"))),
+      h(
+        "label.check",
+        null,
+        h("input", {
+          type: "checkbox",
+          checked: this.ownedOnly,
+          onchange: (e: Event) => ((this.ownedOnly = (e.target as HTMLInputElement).checked), this.update()),
+        }),
+        " " + t("odyssey.ownedOnly"),
+      ),
     );
 
-    const usedBy = (m: Material) => (game.usedIn.get(m.id) ?? []).filter((b) => ["suit", "weapon", "merchant", "unlock", "bartender"].includes(b.kind));
+    const usedBy = (m: Material) =>
+      (game.usedIn.get(m.id) ?? []).filter((b) =>
+        ["suit", "weapon", "merchant", "unlock", "bartender"].includes(b.kind),
+      );
     const mats = game.data.materials
       .filter((m) => m.ledger === "locker" && m.category === this.cat)
       .filter((m) => !this.ownedOnly || (locker[m.id] ?? 0) > 0)
@@ -61,7 +89,7 @@ export class OdysseyView implements View {
     const empty = !Object.keys(locker).length;
     replace(
       this.body,
-      empty ? h("div.notice", null, icon("warn"), (" " + t("odyssey.lockerEmptyNotReadYetFills"))) : null,
+      empty ? h("div.notice", null, icon("warn"), " " + t("odyssey.lockerEmptyNotReadYetFills")) : null,
       h(
         "div.locker-grid",
         null,
@@ -72,12 +100,28 @@ export class OdysseyView implements View {
           return h(
             "button.locker-item",
             {
-              class: [store.state.selected === m.id ? "selected" : "", owned ? "" : "zero", need > owned ? "short" : need ? "covered" : ""].filter(Boolean).join(" "),
+              class: [
+                store.state.selected === m.id ? "selected" : "",
+                owned ? "" : "zero",
+                need > owned ? "short" : need ? "covered" : "",
+              ]
+                .filter(Boolean)
+                .join(" "),
               onclick: () => store.select(store.state.selected === m.id ? undefined : m.id),
             },
             h("span.mat-name", null, m.name),
-            h("span.mat-count", null, h("strong", null, fmt(owned)), need ? h("em", null, (" " + t("common.needed", { need }))) : null),
-            h("span.sub", null, uses ? t("odyssey.recipes", { count: uses }) : t("odyssey.noRecipe"), m.barter ? (" " + t("odyssey.barter", { barter: m.barter })) : ""),
+            h(
+              "span.mat-count",
+              null,
+              h("strong", null, fmt(owned)),
+              need ? h("em", null, " " + t("common.needed", { need })) : null,
+            ),
+            h(
+              "span.sub",
+              null,
+              uses ? t("odyssey.recipes", { count: uses }) : t("odyssey.noRecipe"),
+              m.barter ? " " + t("odyssey.barter", { barter: m.barter }) : "",
+            ),
           );
         }),
       ),

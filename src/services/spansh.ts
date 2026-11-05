@@ -31,9 +31,20 @@ const TTL = 10 * 60 * 1000;
 
 const num = (n: unknown) => (typeof n === "number" ? n : Number(n ?? NaN));
 const fmtPop = (n: number) =>
-  n >= 1e9 ? t("spansh.bnPop", { value: (n / 1e9).toFixed(1) }) : n >= 1e6 ? t("spansh.mPop", { value: (n / 1e6).toFixed(1) }) : n >= 1e3 ? t("spansh.kPop", { value: Math.round(n / 1e3) }) : t("spansh.pop", { n });
+  n >= 1e9
+    ? t("spansh.bnPop", { value: (n / 1e9).toFixed(1) })
+    : n >= 1e6
+      ? t("spansh.mPop", { value: (n / 1e6).toFixed(1) })
+      : n >= 1e3
+        ? t("spansh.kPop", { value: Math.round(n / 1e3) })
+        : t("spansh.pop", { n });
 
-const SECURITY_FR: Record<string, string> = { High: t("common.highSecurity"), Medium: t("common.mediumSecurity"), Low: t("common.lowSecurity"), Anarchy: t("common.anarchy") };
+const SECURITY_FR: Record<string, string> = {
+  High: t("common.highSecurity"),
+  Medium: t("common.mediumSecurity"),
+  Low: t("common.lowSecurity"),
+  Anarchy: t("common.anarchy"),
+};
 
 export const inaraSystem = (name: string) => `https://inara.cz/elite/starsystem/?search=${encodeURIComponent(name)}`;
 
@@ -69,12 +80,19 @@ function systemRow(r: any, f: Finder): ResultRow {
   if (wanted.size) {
     const hits = new Map<string, string[]>();
     for (const p of presences) {
-      const all = new Set<string>([p.state, ...(Array.isArray(p.active_states) ? p.active_states : [])].filter(Boolean));
+      const all = new Set<string>(
+        [p.state, ...(Array.isArray(p.active_states) ? p.active_states : [])].filter(Boolean),
+      );
       for (const st of all) if (wanted.has(st)) hits.set(st, [...(hits.get(st) ?? []), p.name]);
     }
-    for (const [st, names] of hits) badges.push({ text: `${st} · ${names.length > 1 ? `${names.length} factions` : names[0]}`, tone: "hit" });
+    for (const [st, names] of hits)
+      badges.push({ text: `${st} · ${names.length > 1 ? `${names.length} factions` : names[0]}`, tone: "hit" });
   }
-  if (r.controlling_minor_faction_state && !wanted.has(r.controlling_minor_faction_state) && r.controlling_minor_faction_state !== "None") {
+  if (
+    r.controlling_minor_faction_state &&
+    !wanted.has(r.controlling_minor_faction_state) &&
+    r.controlling_minor_faction_state !== "None"
+  ) {
     badges.push({ text: r.controlling_minor_faction_state, tone: "muted" });
   }
   const sub: string[] = [];
@@ -98,11 +116,14 @@ function systemRow(r: any, f: Finder): ResultRow {
 
 function bodyRow(r: any, f: Finder): ResultRow & { share: number } {
   const mats: any[] = Array.isArray(r.materials) ? r.materials : [];
-  const hit = f.materialName ? mats.find((x) => String(x.name).toLowerCase() === f.materialName!.toLowerCase()) : undefined;
+  const hit = f.materialName
+    ? mats.find((x) => String(x.name).toLowerCase() === f.materialName!.toLowerCase())
+    : undefined;
   const share = hit ? num(hit.share) : 0;
   const sub: string[] = [];
   if (r.subtype) sub.push(r.subtype);
-  if (r.distance_to_arrival !== undefined) sub.push(t("spansh.lsFromArrival", { locale: Math.round(num(r.distance_to_arrival)).toLocaleString(locale()) }));
+  if (r.distance_to_arrival !== undefined)
+    sub.push(t("spansh.lsFromArrival", { locale: Math.round(num(r.distance_to_arrival)).toLocaleString(locale()) }));
   if (r.gravity !== undefined && r.is_landable) sub.push(`${num(r.gravity).toFixed(2)} g`);
   const badges: ResultRow["badges"] = [];
   if (hit) badges.push({ text: `${f.materialName} ${share.toFixed(1)} %`, tone: "hit" });
@@ -111,7 +132,8 @@ function bodyRow(r: any, f: Finder): ResultRow & { share: number } {
     badges.push({ text: [...new Set(r.rings.map((x: any) => x.type))].join(", "), tone: "muted" });
   }
   if (Array.isArray(r.signals) && f.filters && "signals" in f.filters) {
-    for (const sig of r.signals) if (/guardian|thargoid/i.test(sig.name)) badges.push({ text: `${sig.name} ×${sig.count}`, tone: "hit" });
+    for (const sig of r.signals)
+      if (/guardian|thargoid/i.test(sig.name)) badges.push({ text: `${sig.name} ×${sig.count}`, tone: "hit" });
   }
   return {
     system: r.system_name,
@@ -131,7 +153,8 @@ function bodyRow(r: any, f: Finder): ResultRow & { share: number } {
 function stationRow(r: any): ResultRow {
   const sub: string[] = [];
   if (r.type) sub.push(r.type);
-  if (r.distance_to_arrival !== undefined) sub.push(t("common.ls", { locale: Math.round(num(r.distance_to_arrival)).toLocaleString(locale()) }));
+  if (r.distance_to_arrival !== undefined)
+    sub.push(t("common.ls", { locale: Math.round(num(r.distance_to_arrival)).toLocaleString(locale()) }));
   const badges: ResultRow["badges"] = [];
   if (r.has_large_pad === true) badges.push({ text: t("spansh.lPad") });
   else if (r.medium_pads > 0) badges.push({ text: t("spansh.mPad"), tone: "muted" });
@@ -181,4 +204,7 @@ export function distance(a?: Vec3, b?: Vec3 | null): number | undefined {
   return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 }
 
-export const fmtLy = (n?: number) => (n === undefined || Number.isNaN(n) ? "" : t("common.ly", { locale: n.toLocaleString(locale(), { maximumFractionDigits: n < 100 ? 2 : 1 }) }));
+export const fmtLy = (n?: number) =>
+  n === undefined || Number.isNaN(n)
+    ? ""
+    : t("common.ly", { locale: n.toLocaleString(locale(), { maximumFractionDigits: n < 100 ? 2 : 1 }) });

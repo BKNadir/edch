@@ -6,16 +6,19 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/clean.mjs && tsc -p . && node scripts/copy-static.mjs",
-    "test": "npm run build && node tools/check-layers.cjs && node tools/i18n/check.cjs && node --test test/*.test.mjs",
+    "test": "npm run build && npm run lint && node --test test/*.test.mjs",
     "i18n:check": "node tools/i18n/check.cjs",
     "demo": "npm run build && npx --yes serve dist",
     "tauri": "tauri",
     "app:dev": "tauri dev",
-    "app:build": "tauri build"
+    "app:build": "tauri build",
+    "format": "prettier --write .",
+    "lint": "prettier --check . && node tools/check-layers.cjs && node tools/i18n/check.cjs"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.0.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "prettier": "^3.6.0"
   },
   "imports": {
     "#i18next": "./vendor/i18next/index.js"

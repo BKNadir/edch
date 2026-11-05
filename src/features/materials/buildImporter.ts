@@ -98,7 +98,8 @@ export function importLoadout(game: Game, loadout: Json): ImportResult {
     const level = Math.max(1, Math.min(5, Number(eng.Level ?? 1)));
     const grades = pick(game, "modification", symbol, module);
     if (grades.length) {
-      const top = grades.filter((g) => (g.grade ?? 0) <= level).sort((a, b) => (b.grade ?? 0) - (a.grade ?? 0))[0] ?? grades[0];
+      const top =
+        grades.filter((g) => (g.grade ?? 0) <= level).sort((a, b) => (b.grade ?? 0) - (a.grade ?? 0))[0] ?? grades[0];
       add(top, 1, Math.min(level, top.grade ?? level));
     } else {
       skipped.push(`${m.Slot}: ${eng.BlueprintName}`);
@@ -120,5 +121,9 @@ export function importLoadout(game: Game, loadout: Json): ImportResult {
     count: c.count,
     note: loadout.ShipName || loadout.Ship,
   }));
-  return { items, ship: [loadout.Ship, loadout.ShipName].filter(Boolean).join(" « ") + (loadout.ShipName ? " »" : ""), skipped };
+  return {
+    items,
+    ship: [loadout.Ship, loadout.ShipName].filter(Boolean).join(" « ") + (loadout.ShipName ? " »" : ""),
+    skipped,
+  };
 }

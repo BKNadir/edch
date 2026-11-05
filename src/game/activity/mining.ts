@@ -19,7 +19,11 @@ export const MINING_EVENTS: EventHandlers = {
     m.last.unshift({
       at,
       materials: (ev.Materials ?? [])
-        .map((x: Json) => ({ name: symbolId(x.Name), label: String(x.Name_Localised ?? x.Name ?? ""), pct: num(x.Proportion) ?? 0 }))
+        .map((x: Json) => ({
+          name: symbolId(x.Name),
+          label: String(x.Name_Localised ?? x.Name ?? ""),
+          pct: num(x.Proportion) ?? 0,
+        }))
         .sort((a: { pct: number }, b: { pct: number }) => b.pct - a.pct),
       content: ev.Content_Localised ?? ev.Content,
       motherlode: ev.MotherlodeMaterial_Localised ?? ev.MotherlodeMaterial,

@@ -24,9 +24,13 @@ export function duration(ms: number): string {
   return t("common.h", { h, padStart: String(m).padStart(2, "0") });
 }
 
-export const hoursLeft = (iso: string | undefined, now = Date.now()) => (iso ? (Date.parse(iso) - now) / 3600000 : Infinity);
+export const hoursLeft = (iso: string | undefined, now = Date.now()) =>
+  iso ? (Date.parse(iso) - now) / 3600000 : Infinity;
 
 /** Short credit amounts in the app's language: 1.2M, 1,2 Mio., 950K… */
 export function credits(n: number): string {
-  return new Intl.NumberFormat(locale(), { notation: "compact", maximumFractionDigits: Math.abs(n) >= 1e6 ? 1 : 0 }).format(n);
+  return new Intl.NumberFormat(locale(), {
+    notation: "compact",
+    maximumFractionDigits: Math.abs(n) >= 1e6 ? 1 : 0,
+  }).format(n);
 }

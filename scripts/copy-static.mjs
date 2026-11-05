@@ -11,6 +11,7 @@ copyFileSync(join(root, "CHANGELOG.md"), join(root, "dist", "CHANGELOG.md"));
 // Vendored libraries (plain ES modules), loaded through the import map in index.html.
 mkdirSync(join(root, "dist", "vendor", "i18next"), { recursive: true });
 for (const file of readdirSync(join(root, "vendor", "i18next"))) {
-  if (file.endsWith(".js")) copyFileSync(join(root, "vendor", "i18next", file), join(root, "dist", "vendor", "i18next", file));
+  if (file.endsWith(".js"))
+    copyFileSync(join(root, "vendor", "i18next", file), join(root, "dist", "vendor", "i18next", file));
 }
 console.log("static files copied to dist/");

@@ -53,7 +53,14 @@ export class DetailPanel {
     root.classList.add("open");
     const ref = referenceOf(this.ctx);
     const s = this.ctx.store.state.settings;
-    const sig = JSON.stringify([m.id, ref.coords ?? ref.system, s.maxDistance, s.maxAgeDays, s.hgeMinPopulation, s.largePadOnly]);
+    const sig = JSON.stringify([
+      m.id,
+      ref.coords ?? ref.system,
+      s.maxDistance,
+      s.maxAgeDays,
+      s.hgeMinPopulation,
+      s.largePadOnly,
+    ]);
     if (sig !== this.signature) {
       this.signature = sig;
       replace(root, this.head, this.trades, this.body);
@@ -74,16 +81,41 @@ export class DetailPanel {
       h(
         "div.detail-title",
         null,
-        h("div", null, h("h2", null, m.name), h("p.sub", null, [CATEGORY_FR[m.category] ?? m.category, m.grade ? t("common.grade", { grade: m.grade }) : null, this.ctx.game.lineName(m.line)].filter(Boolean).flatMap((x, i) => (i ? [" · ", x as string] : [x as string])))),
-        h("button.icon-btn", { title: t("common.close"), onclick: () => this.ctx.store.select(undefined) }, icon("close")),
+        h(
+          "div",
+          null,
+          h("h2", null, m.name),
+          h(
+            "p.sub",
+            null,
+            [
+              CATEGORY_FR[m.category] ?? m.category,
+              m.grade ? t("common.grade", { grade: m.grade }) : null,
+              this.ctx.game.lineName(m.line),
+            ]
+              .filter(Boolean)
+              .flatMap((x, i) => (i ? [" · ", x as string] : [x as string])),
+          ),
+        ),
+        h(
+          "button.icon-btn",
+          { title: t("common.close"), onclick: () => this.ctx.store.select(undefined) },
+          icon("close"),
+        ),
       ),
       h(
         "div.stock",
         null,
-        h("div.stock-numbers", null, h("strong", null, fmt(owned)), cap ? ` / ${cap}` : "", need ? h("span.badge.warn", null, t("detail.neededWishlist", { need: fmt(need) })) : null),
+        h(
+          "div.stock-numbers",
+          null,
+          h("strong", null, fmt(owned)),
+          cap ? ` / ${cap}` : "",
+          need ? h("span.badge.warn", null, t("detail.neededWishlist", { need: fmt(need) })) : null,
+        ),
         cap ? h("div.bar", null, h("span", { style: { width: `${Math.min(100, (owned / cap) * 100)}%` } })) : null,
       ),
-      h("p.sub.ref", null, icon("pin"), (" " + t("detail.searchingAround", { label: ref.label }))),
+      h("p.sub.ref", null, icon("pin"), " " + t("detail.searchingAround", { label: ref.label })),
     );
   }
 
@@ -110,13 +142,24 @@ export class DetailPanel {
                 "li",
                 { class: trade.from.line === m.line ? "same-line" : "" },
                 h("span.arrow", null, trade.from.grade! > m.grade! ? "↓" : trade.from.grade! < m.grade! ? "↑" : "⇄"),
-                (" " + t("detail.receive") + " "),
+                " " + t("detail.receive") + " ",
                 h("strong", null, fmt(trade.receive)),
-                (" " + t("detail.for") + " "),
+                " " + t("detail.for") + " ",
                 h("strong", null, fmt(trade.pay)),
                 " ",
                 h("button.inline-link", { onclick: () => this.ctx.store.select(trade.from.id) }, trade.from.name),
-                h("span.sub", null, (" " + t("detail.ownedReservedUsedRate", { owned: fmt(trade.owned), reserved: fmt(trade.reserved), value: cap ? Math.round((trade.owned / cap) * 100) : 0, paid: trade.rate.paid, received: trade.rate.received }))),
+                h(
+                  "span.sub",
+                  null,
+                  " " +
+                    t("detail.ownedReservedUsedRate", {
+                      owned: fmt(trade.owned),
+                      reserved: fmt(trade.reserved),
+                      value: cap ? Math.round((trade.owned / cap) * 100) : 0,
+                      paid: trade.rate.paid,
+                      received: trade.rate.received,
+                    }),
+                ),
               );
             }),
           )
@@ -151,14 +194,21 @@ export class DetailPanel {
                 h(
                   "div.result-main",
                   null,
-                  h("button.sys", { title: t("common.copy", { name: site.system }), onclick: () => copySystem(site.system) }, icon("copy"), h("span", null, `${site.system} ${site.body}`)),
+                  h(
+                    "button.sys",
+                    { title: t("common.copy", { name: site.system }), onclick: () => copySystem(site.system) },
+                    icon("copy"),
+                    h("span", null, `${site.system} ${site.body}`),
+                  ),
                   h("span.dist", null, fmtLy(d)),
                 ),
                 h(
                   "div.result-meta",
                   null,
                   h("span.badge.hit", null, site.what),
-                  site.lat !== undefined ? h("span.sub", null, t("detail.latLon", { lat: site.lat, lon: site.lon })) : null,
+                  site.lat !== undefined
+                    ? h("span.sub", null, t("detail.latLon", { lat: site.lat, lon: site.lon }))
+                    : null,
                 ),
               ),
             ),
@@ -178,7 +228,8 @@ export class DetailPanel {
 
   private usedIn(m: Material): HTMLElement {
     const list = this.ctx.game.usedIn.get(m.id) ?? [];
-    if (!list.length) return h("section.used", null, h("h3", null, t("detail.used")), h("p.empty", null, t("detail.noKnownRecipe")));
+    if (!list.length)
+      return h("section.used", null, h("h3", null, t("detail.used")), h("p.empty", null, t("detail.noKnownRecipe")));
     const groups = new Map<string, Map<string, Blueprint[]>>();
     for (const bp of list) {
       const byModule = groups.get(bp.kind) ?? new Map<string, Blueprint[]>();
@@ -213,7 +264,13 @@ export class DetailPanel {
                       .map((bp) =>
                         h(
                           "button.grade-chip",
-                          { title: t("detail.addWishlist", { ingredients: bp.ingredients[m.id], name: gameName(m.name) }), onclick: () => addToWishlist(this.ctx, bp) },
+                          {
+                            title: t("detail.addWishlist", {
+                              ingredients: bp.ingredients[m.id],
+                              name: gameName(m.name),
+                            }),
+                            onclick: () => addToWishlist(this.ctx, bp),
+                          },
                           bp.grade ? `G${bp.grade}` : "+",
                           h("small", null, `×${bp.ingredients[m.id]}`),
                         ),
