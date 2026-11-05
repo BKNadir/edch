@@ -2,7 +2,8 @@ name: Build
 
 on:
   push:
-    branches: [main]
+    # prerelease/*: test builds, published as GitHub pre-releases (see "Release tag").
+    branches: [main, "prerelease/**"]
     tags: ["v*"]
   pull_request:
   workflow_dispatch:
@@ -47,18 +48,39 @@ jobs:
             echo "EDCH_NOTES_END"
           } >> "$GITHUB_OUTPUT"
 
-      # Builds the installers. A v* tag, or a push to main whose commit message contains
-      # "[release]", also publishes a GitHub release (tag v<version from tauri.conf.json>),
-      # which installed copies of EDCH pick up as an update.
+      # Which release this run publishes, if any:
+      #  - a v* tag: that tag;
+      #  - main with "[release]" in the commit message: v<version from tauri.conf.json>;
+      #  - a prerelease/* branch: v<version>-pre.<run number>, as a GitHub pre-release. EDCH's
+      #    update check asks for the latest release, which never is a pre-release, so installed
+      #    copies are not offered these test builds.
+      - name: Release tag
+        id: rel
+        shell: bash
+        env:
+          MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          version=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          tag=""; pre=false
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then tag="$GITHUB_REF_NAME"
+          elif [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/main && "$MESSAGE" == *"[release]"* ]]; then tag="v$version"
+          elif [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/prerelease/* ]]; then tag="v$version-pre.$GITHUB_RUN_NUMBER"; pre=true
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "pre=$pre" >> "$GITHUB_OUTPUT"
+          echo "Release: ${tag:-none} (pre-release: $pre)"
+
+      # Builds the installers, and publishes them when "Release tag" names a release.
       - uses: tauri-apps/tauri-action@v0
         id: tauri
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ (startsWith(github.ref, 'refs/tags/') && github.ref_name) || (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]') && 'v__VERSION__') || '' }}
-          releaseName: "EDCH v__VERSION__"
+          tagName: ${{ steps.rel.outputs.tag }}
+          releaseName: ${{ steps.rel.outputs.pre == 'true' && format('EDCH {0} (test build)', steps.rel.outputs.tag) || 'EDCH v__VERSION__' }}
           releaseBody: ${{ steps.notes.outputs.body }}
           releaseDraft: false
+          prerelease: ${{ steps.rel.outputs.pre == 'true' }}
 
       # Portable version: the same exe, named so EDCH knows it isn't installed (its updates
       # open the release page instead of running an installer).
@@ -70,14 +92,13 @@ jobs:
           file="EDCH_${version}_x64-portable.exe"
           cp src-tauri/target/release/edch.exe "$file"
           echo "file=$file" >> "$GITHUB_OUTPUT"
-          echo "tag=v$version" >> "$GITHUB_OUTPUT"
-
+          
       - name: Attach the portable exe to the release
         if: steps.tauri.outputs.releaseId != ''
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "${{ steps.portable.outputs.tag }}" "${{ steps.portable.outputs.file }}" --clobber -R "${{ github.repository }}"
+        run: gh release upload "${{ steps.rel.outputs.tag }}" "${{ steps.portable.outputs.file }}" --clobber -R "${{ github.repository }}"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -125,15 +146,38 @@ jobs:
             echo "EDCH_NOTES_END"
           } >> "$GITHUB_OUTPUT"
 
+      # Which release this run publishes, if any:
+      #  - a v* tag: that tag;
+      #  - main with "[release]" in the commit message: v<version from tauri.conf.json>;
+      #  - a prerelease/* branch: v<version>-pre.<run number>, as a GitHub pre-release. EDCH's
+      #    update check asks for the latest release, which never is a pre-release, so installed
+      #    copies are not offered these test builds.
+      - name: Release tag
+        id: rel
+        shell: bash
+        env:
+          MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          version=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          tag=""; pre=false
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then tag="$GITHUB_REF_NAME"
+          elif [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/main && "$MESSAGE" == *"[release]"* ]]; then tag="v$version"
+          elif [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/prerelease/* ]]; then tag="v$version-pre.$GITHUB_RUN_NUMBER"; pre=true
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "pre=$pre" >> "$GITHUB_OUTPUT"
+          echo "Release: ${tag:-none} (pre-release: $pre)"
+
       - uses: tauri-apps/tauri-action@v0
         id: tauri
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ (startsWith(github.ref, 'refs/tags/') && github.ref_name) || (github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]') && 'v__VERSION__') || '' }}
-          releaseName: "EDCH v__VERSION__"
+          tagName: ${{ steps.rel.outputs.tag }}
+          releaseName: ${{ steps.rel.outputs.pre == 'true' && format('EDCH {0} (test build)', steps.rel.outputs.tag) || 'EDCH v__VERSION__' }}
           releaseBody: ${{ steps.notes.outputs.body }}
           releaseDraft: false
+          prerelease: ${{ steps.rel.outputs.pre == 'true' }}
 
       - name: Arch Linux PKGBUILD
         id: arch
@@ -150,7 +194,7 @@ jobs:
         if: steps.tauri.outputs.releaseId != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "v${{ steps.notes.outputs.version }}" PKGBUILD --clobber -R "${{ github.repository }}"
+        run: gh release upload "${{ steps.rel.outputs.tag }}" PKGBUILD --clobber -R "${{ github.repository }}"
 
       - uses: actions/upload-artifact@v4
         with:
