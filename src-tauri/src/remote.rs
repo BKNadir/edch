@@ -63,7 +63,9 @@ fn percent_decode(s: &str) -> String {
         if b == b'+' {
             out.push(b' ');
         } else if b == b'%' && i + 3 <= bytes.len() {
-            let hex = std::str::from_utf8(&bytes[i + 1..i + 3]).ok().and_then(|h| u8::from_str_radix(h, 16).ok());
+            let hex = std::str::from_utf8(&bytes[i + 1..i + 3])
+                .ok()
+                .and_then(|h| u8::from_str_radix(h, 16).ok());
             match hex {
                 Some(v) => {
                     out.push(v);
@@ -90,7 +92,13 @@ fn cookie_token(req: &Request) -> Option<String> {
     req.headers()
         .iter()
         .filter(|h| h.field.equiv("Cookie"))
-        .flat_map(|h| h.value.as_str().split(';').map(|c| c.trim().to_string()).collect::<Vec<_>>())
+        .flat_map(|h| {
+            h.value
+                .as_str()
+                .split(';')
+                .map(|c| c.trim().to_string())
+                .collect::<Vec<_>>()
+        })
         .find_map(|c| c.strip_prefix("edch_t=").map(|v| v.to_string()))
 }
 
@@ -103,7 +111,11 @@ fn respond(req: Request, status: u16, content_type: &str, body: Vec<u8>, extra: 
         ("Referrer-Policy", "no-referrer".to_string()),
         ("X-Frame-Options", "DENY".to_string()),
     ];
-    for (k, v) in base.iter().map(|(k, v)| (*k, v.clone())).chain(extra.iter().map(|(k, v)| (*k, v.clone()))) {
+    for (k, v) in base
+        .iter()
+        .map(|(k, v)| (*k, v.clone()))
+        .chain(extra.iter().map(|(k, v)| (*k, v.clone())))
+    {
         if let Ok(h) = Header::from_bytes(k.as_bytes(), v.as_bytes()) {
             response.add_header(h);
         }
@@ -120,7 +132,11 @@ fn json<T: Serialize>(req: Request, value: &T) {
 /// that drop the cookie) and then opens the app with a fresh, same-origin navigation.
 fn pair_page(token: &str, go: &str) -> String {
     // Where to go once paired: a page name only (letters, digits, dashes), opened full screen.
-    let target = if !go.is_empty() && go.len() <= 32 && go.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') { format!("/#focus={go}") } else { "/".to_string() };
+    let target = if !go.is_empty() && go.len() <= 32 && go.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') {
+        format!("/#focus={go}")
+    } else {
+        "/".to_string()
+    };
     format!(
         r#"<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EDCH</title>
 <style>body{{font-family:system-ui,sans-serif;background:#0a0c0f;color:#e7e9ec;display:grid;place-items:center;min-height:100vh;margin:0}}a{{color:#ff7a18}}</style></head>
@@ -163,9 +179,21 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
         if same_secret(&given, &token) {
             let cookie = format!("edch_t={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000");
             let go = query_param(&query, "go").unwrap_or_default();
-            respond(req, 200, "text/html; charset=utf-8", pair_page(&token, &go).into_bytes(), &[("Set-Cookie", cookie)]);
+            respond(
+                req,
+                200,
+                "text/html; charset=utf-8",
+                pair_page(&token, &go).into_bytes(),
+                &[("Set-Cookie", cookie)],
+            );
         } else {
-            respond(req, 302, "text/plain", b"Expired".to_vec(), &[("Location", "/#expired".to_string())]);
+            respond(
+                req,
+                302,
+                "text/plain",
+                b"Expired".to_vec(),
+                &[("Location", "/#expired".to_string())],
+            );
         }
         return;
     }
@@ -201,17 +229,22 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
     }
 
     if is_get && path == "/api/hello" {
-        json(req, &serde_json::json!({ "remote": true, "paired": authorised, "version": env!("CARGO_PKG_VERSION") }));
+        json(
+            req,
+            &serde_json::json!({ "remote": true, "paired": authorised, "version": env!("CARGO_PKG_VERSION") }),
+        );
         return;
     }
     if !authorised {
-        crate::logs::warn("remote", &format!("Refused {path}: device not paired (old or missing code)"));
+        crate::logs::warn(
+            "remote",
+            &format!("Refused {path}: device not paired (old or missing code)"),
+        );
         respond(req, 401, "application/json", br#"{"error":"not paired"}"#.to_vec(), &[]);
         return;
     }
 
     match (is_get, path.as_str()) {
-
         (true, "/api/state") => {
             let since: u64 = query_param(&query, "since").and_then(|v| v.parse().ok()).unwrap_or(0);
             let guard = lock(&shared.snapshot);
@@ -235,7 +268,7 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
                 let url = v["url"].as_str().unwrap_or("").to_string();
                 let payload = v["body"].as_str().map(|s| s.to_string());
                 let content_type = v["contentType"].as_str().map(|s| s.to_string());
-                crate::blocking_http(&method, &url, payload.as_deref(), content_type.as_deref())
+                crate::http::blocking_http(&method, &url, payload.as_deref(), content_type.as_deref())
             });
             match reply {
                 Ok(r) => json(req, &r),
@@ -243,7 +276,9 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
             }
         }
 
-        (false, "/api/action") => match read_body(&mut req).and_then(|b| serde_json::from_str::<serde_json::Value>(&b).map_err(|e| e.to_string())) {
+        (false, "/api/action") => match read_body(&mut req)
+            .and_then(|b| serde_json::from_str::<serde_json::Value>(&b).map_err(|e| e.to_string()))
+        {
             Ok(value) => {
                 let _ = app.emit("remote-action", value);
                 respond(req, 204, "text/plain", Vec::new(), &[]);
@@ -251,7 +286,7 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
             Err(e) => respond(req, 400, "text/plain; charset=utf-8", e.into_bytes(), &[]),
         },
 
-        (true, "/api/options") => match crate::list_option_files() {
+        (true, "/api/options") => match crate::options::list_option_files() {
             Ok(files) => json(req, &files),
             Err(e) => respond(req, 500, "text/plain; charset=utf-8", e.into_bytes(), &[]),
         },
@@ -259,7 +294,7 @@ fn handle(app: AppHandle, shared: Arc<Shared>, mut req: Request) {
         (true, "/api/option") => {
             let folder = query_param(&query, "folder").unwrap_or_default();
             let name = query_param(&query, "name").unwrap_or_default();
-            match crate::read_option_file(folder, name) {
+            match crate::options::read_option_file(folder, name) {
                 Ok(text) => respond(req, 200, "text/plain; charset=utf-8", text.into_bytes(), &[]),
                 Err(e) => respond(req, 404, "text/plain; charset=utf-8", e.into_bytes(), &[]),
             }
@@ -291,10 +326,36 @@ struct RawAddress {
 }
 
 const VPN_WORDS: [&str; 14] = [
-    "vpn", "tap-windows", "tap adapter", "wireguard", "openvpn", "wintun", "nordlynx", "proton", "zerotier", "hamachi", "radmin", "forti", "anyconnect", "pangp",
+    "vpn",
+    "tap-windows",
+    "tap adapter",
+    "wireguard",
+    "openvpn",
+    "wintun",
+    "nordlynx",
+    "proton",
+    "zerotier",
+    "hamachi",
+    "radmin",
+    "forti",
+    "anyconnect",
+    "pangp",
 ];
 const HIDDEN_WORDS: [&str; 14] = [
-    "hyper-v", "vethernet", "virtualbox", "vmware", "wsl", "docker", "loopback", "bluetooth", "default switch", "virbr", "veth", "lxc", "vmnet", "br-",
+    "hyper-v",
+    "vethernet",
+    "virtualbox",
+    "vmware",
+    "wsl",
+    "docker",
+    "loopback",
+    "bluetooth",
+    "default switch",
+    "virbr",
+    "veth",
+    "lxc",
+    "vmnet",
+    "br-",
 ];
 
 /// Ethernet, Wi-Fi, Tailscale or VPN; None for what a phone can't use (Hyper-V, VirtualBox,
@@ -312,11 +373,19 @@ fn classify(a: &RawAddress) -> Option<&'static str> {
     if VPN_WORDS.iter().any(|w| text.contains(w)) || lower_alias.starts_with("tun") || lower_alias.starts_with("wg") {
         return Some("vpn");
     }
-    if media.contains("802.11") || media.contains("wireless") || ["wi-fi", "wifi", "wlan", "wireless", "sans fil", "wlp", "wlx"].iter().any(|w| text.contains(w)) {
+    if media.contains("802.11")
+        || media.contains("wireless")
+        || ["wi-fi", "wifi", "wlan", "wireless", "sans fil", "wlp", "wlx"]
+            .iter()
+            .any(|w| text.contains(w))
+    {
         return Some("wifi");
     }
     let alias = a.alias.to_lowercase();
-    if media.contains("802.3") || text.contains("ethernet") || ["eth", "enp", "eno", "ens", "enx"].iter().any(|p| alias.starts_with(p)) {
+    if media.contains("802.3")
+        || text.contains("ethernet")
+        || ["eth", "enp", "eno", "ens", "enx"].iter().any(|p| alias.starts_with(p))
+    {
         return Some("ethernet");
     }
     None
@@ -334,7 +403,14 @@ fn windows_addresses() -> Option<Vec<RawAddress>> {
   [pscustomobject]@{ ip = $_.IPAddress; alias = $_.InterfaceAlias; description = [string]$a.InterfaceDescription; media = [string]$a.PhysicalMediaType; network = [string]$p.Name }
 }) | ConvertTo-Json -Compress"#;
     let out = std::process::Command::new("powershell")
-        .args(["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", script])
+        .args([
+            "-NoProfile",
+            "-NonInteractive",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-Command",
+            script,
+        ])
         .creation_flags(CREATE_NO_WINDOW)
         .output()
         .ok()?;
@@ -371,7 +447,13 @@ fn basic_addresses() -> Vec<RawAddress> {
     local_ip_address::list_afinet_netifas()
         .unwrap_or_default()
         .into_iter()
-        .map(|(alias, ip)| RawAddress { ip, alias, description: String::new(), media: String::new(), network: String::new() })
+        .map(|(alias, ip)| RawAddress {
+            ip,
+            alias,
+            description: String::new(),
+            media: String::new(),
+            network: String::new(),
+        })
         .collect()
 }
 
@@ -387,7 +469,12 @@ fn primary_address() -> Option<std::net::IpAddr> {
 /// `detailed`: ask Windows for media types and network names (PowerShell, about half a second).
 fn list_addresses(detailed: bool) -> Vec<NetAddress> {
     let primary = primary_address();
-    let raw = if detailed { windows_addresses().filter(|l| !l.is_empty()) } else { None }.unwrap_or_else(basic_addresses);
+    let raw = if detailed {
+        windows_addresses().filter(|l| !l.is_empty())
+    } else {
+        None
+    }
+    .unwrap_or_else(basic_addresses);
     let mut out: Vec<NetAddress> = Vec::new();
     for a in &raw {
         let std::net::IpAddr::V4(v4) = a.ip else { continue };
@@ -399,12 +486,22 @@ fn list_addresses(detailed: bool) -> Vec<NetAddress> {
         if out.iter().any(|o| o.ip == ip) {
             continue;
         }
-        out.push(NetAddress { ip, kind: kind.to_string(), network: a.network.clone(), adapter: a.alias.clone() });
+        out.push(NetAddress {
+            ip,
+            kind: kind.to_string(),
+            network: a.network.clone(),
+            adapter: a.alias.clone(),
+        });
     }
     // Nothing recognised: at least the address used for Internet.
     if out.is_empty() {
         if let Some(ip) = primary.filter(|ip| !ip.is_loopback()) {
-            out.push(NetAddress { ip: ip.to_string(), kind: "ethernet".into(), network: String::new(), adapter: String::new() });
+            out.push(NetAddress {
+                ip: ip.to_string(),
+                kind: "ethernet".into(),
+                network: String::new(),
+                adapter: String::new(),
+            });
         }
     }
     let rank = |a: &NetAddress| match a.kind.as_str() {
@@ -416,19 +513,37 @@ fn list_addresses(detailed: bool) -> Vec<NetAddress> {
     };
     out.sort_by_key(rank);
     // Network and adapter names are not logged (a Wi-Fi name can identify a home).
-    crate::logs::debug("remote", &format!("Addresses: {}", out.iter().map(|a| format!("{} {}{}", a.kind, a.ip, if a.network.is_empty() { "" } else { " (named)" })).collect::<Vec<_>>().join(", ")));
+    crate::logs::debug(
+        "remote",
+        &format!(
+            "Addresses: {}",
+            out.iter()
+                .map(|a| format!(
+                    "{} {}{}",
+                    a.kind,
+                    a.ip,
+                    if a.network.is_empty() { "" } else { " (named)" }
+                ))
+                .collect::<Vec<_>>()
+                .join(", ")
+        ),
+    );
     out
 }
 
 #[tauri::command]
 pub async fn remote_interfaces() -> Vec<NetAddress> {
-    tauri::async_runtime::spawn_blocking(|| list_addresses(true)).await.unwrap_or_default()
+    tauri::async_runtime::spawn_blocking(|| list_addresses(true))
+        .await
+        .unwrap_or_default()
 }
 
 /// Just the addresses, best first (what the QR code uses when none was chosen).
 #[tauri::command]
 pub async fn remote_addresses() -> Vec<String> {
-    tauri::async_runtime::spawn_blocking(fast_addresses).await.unwrap_or_default()
+    tauri::async_runtime::spawn_blocking(fast_addresses)
+        .await
+        .unwrap_or_default()
 }
 
 /// Without asking PowerShell (adapter names only): quick enough for starting the server.
@@ -458,7 +573,12 @@ pub fn remote_tailscale() -> Option<String> {
 }
 
 #[tauri::command]
-pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String, port: u16) -> Result<RemoteInfo, String> {
+pub fn remote_start(
+    app: AppHandle,
+    state: State<'_, RemoteState>,
+    token: String,
+    port: u16,
+) -> Result<RemoteInfo, String> {
     if token.len() < 32 || !token.chars().all(|c| c.is_ascii_alphanumeric()) {
         return Err("invalidToken".into());
     }
@@ -469,7 +589,10 @@ pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String
         let mut current = lock(&shared.server);
         if let Some(server) = current.as_ref() {
             if server.server_addr().to_ip().map(|a| a.port()) == Some(port) {
-                return Ok(RemoteInfo { port, addresses: fast_addresses() });
+                return Ok(RemoteInfo {
+                    port,
+                    addresses: fast_addresses(),
+                });
             }
         }
         current.take()
@@ -481,7 +604,10 @@ pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String
     *lock(&shared.server) = Some(server.clone());
     let loop_shared = shared.clone();
     thread::spawn(move || loop {
-        let still_current = lock(&loop_shared.server).as_ref().map(|s| Arc::ptr_eq(s, &server)).unwrap_or(false);
+        let still_current = lock(&loop_shared.server)
+            .as_ref()
+            .map(|s| Arc::ptr_eq(s, &server))
+            .unwrap_or(false);
         if !still_current {
             break;
         }
@@ -495,7 +621,10 @@ pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String
         }
     });
     crate::logs::info("remote", &format!("Local server started on port {port}"));
-    Ok(RemoteInfo { port, addresses: fast_addresses() })
+    Ok(RemoteInfo {
+        port,
+        addresses: fast_addresses(),
+    })
 }
 
 #[tauri::command]
@@ -579,7 +708,10 @@ pub fn open_page_in_browser(state: State<'_, RemoteState>, view: String) -> Resu
         return Err("unknownPage".into());
     }
     let shared = state.inner.clone();
-    let port = lock(&shared.server).as_ref().and_then(|s| s.server_addr().to_ip()).map(|a| a.port());
+    let port = lock(&shared.server)
+        .as_ref()
+        .and_then(|s| s.server_addr().to_ip())
+        .map(|a| a.port());
     let token = lock(&shared.token).clone();
     let Some(port) = port.filter(|_| !token.is_empty()) else {
         return Err("local-server-off".into());

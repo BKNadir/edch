@@ -69,12 +69,15 @@
     "invalidToken": "Invalid token",
     "launcherNotFound": "Launcher not found: choose the file in Settings",
     "network": "Network: {{detail}}",
+    "noJournalFiles": "No Journal.*.log file in this folder yet.",
     "nothingToExport": "No settings file found to export",
+    "optionsFolderNotFound": "The game's options folder wasn't found",
     "portUnavailable": "Port unavailable: {{detail}}",
     "textTooLong": "Text too long",
     "unexpectedFile": "Unexpected file",
     "unknownLaunchMethod": "Unknown launch method",
     "unknownPage": "Unknown page",
+    "unreadableZip": "Unreadable zip: {{detail}}",
     "zipWithoutSettings": "This zip has no Bindings/*.binds or Graphics/*.xml file"
   },
   "binds": {

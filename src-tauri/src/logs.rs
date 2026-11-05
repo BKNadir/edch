@@ -40,12 +40,16 @@ pub fn dir() -> PathBuf {
     if let Ok(base) = std::env::var("LOCALAPPDATA") {
         return PathBuf::from(base).join("EDCompanionHelper").join("logs");
     }
-    let home = std::env::var("HOME").map(PathBuf::from).unwrap_or_else(|_| std::env::temp_dir());
+    let home = std::env::var("HOME")
+        .map(PathBuf::from)
+        .unwrap_or_else(|_| std::env::temp_dir());
     if cfg!(target_os = "macos") {
         return home.join("Library").join("Logs").join("EDCompanionHelper");
     }
     // Linux: $XDG_DATA_HOME (usually ~/.local/share).
-    let data = std::env::var("XDG_DATA_HOME").map(PathBuf::from).unwrap_or_else(|_| home.join(".local").join("share"));
+    let data = std::env::var("XDG_DATA_HOME")
+        .map(PathBuf::from)
+        .unwrap_or_else(|_| home.join(".local").join("share"));
     data.join("EDCompanionHelper").join("logs")
 }
 
@@ -62,7 +66,14 @@ fn civil(secs: u64) -> (i64, u32, u32, u32, u32, u32) {
     let d = (doy - (153 * mp + 2) / 5 + 1) as u32;
     let m = if mp < 10 { mp + 3 } else { mp - 9 } as u32;
     let y = yoe + era * 400 + if m <= 2 { 1 } else { 0 };
-    (y, m, d, (rem / 3600) as u32, ((rem % 3600) / 60) as u32, (rem % 60) as u32)
+    (
+        y,
+        m,
+        d,
+        (rem / 3600) as u32,
+        ((rem % 3600) / 60) as u32,
+        (rem % 60) as u32,
+    )
 }
 
 fn now() -> Duration {
@@ -145,7 +156,13 @@ pub fn init(portable: bool) {
 pub fn write(level: &str, source: &str, message: &str) {
     let Some(l) = LOGGER.get() else { return };
     let level = level.to_uppercase();
-    let text = format!("{} [{:<5}] {}: {}\n", line_stamp(), level, source, sanitize(&message.replace('\n', " ⏎ ")));
+    let text = format!(
+        "{} [{:<5}] {}: {}\n",
+        line_stamp(),
+        level,
+        source,
+        sanitize(&message.replace('\n', " ⏎ "))
+    );
     if level != "DEBUG" {
         if let Ok(mut f) = l.standard.lock() {
             if let Some(f) = f.as_mut() {
@@ -200,7 +217,11 @@ pub fn debug_enabled() -> bool {
 pub fn sanitize(text: &str) -> String {
     let mut out = text.to_string();
     // User folder first (longest), then the bare user name.
-    let mut homes: Vec<String> = ["USERPROFILE", "HOME"].iter().filter_map(|v| std::env::var(v).ok()).filter(|h| h.len() > 3).collect();
+    let mut homes: Vec<String> = ["USERPROFILE", "HOME"]
+        .iter()
+        .filter_map(|v| std::env::var(v).ok())
+        .filter(|h| h.len() > 3)
+        .collect();
     homes.sort_by_key(|h| std::cmp::Reverse(h.len()));
     for home in homes {
         out = replace_ci(&out, &home, "%USERPROFILE%");
@@ -260,7 +281,11 @@ fn mask_word(word: &str) -> String {
     // IPv4 (possibly followed by a sentence's full stop).
     let trimmed = word.trim_end_matches('.');
     let parts: Vec<&str> = trimmed.split('.').collect();
-    if parts.len() == 4 && parts.iter().all(|p| !p.is_empty() && p.len() <= 3 && p.chars().all(|c| c.is_ascii_digit())) {
+    if parts.len() == 4
+        && parts
+            .iter()
+            .all(|p| !p.is_empty() && p.len() <= 3 && p.chars().all(|c| c.is_ascii_digit()))
+    {
         return format!("{}.{}.x.x{}", parts[0], parts[1], &word[trimmed.len()..]);
     }
     // Frontier id: F followed by 6+ digits.
@@ -270,7 +295,10 @@ fn mask_word(word: &str) -> String {
     // Secrets: 24+ characters of hex, or 24+ mixed letters and digits (pairing code, wing topic…).
     let core = word.trim_start_matches("edch_");
     let hexish = core.len() >= 24 && core.chars().all(|c| c.is_ascii_hexdigit());
-    let tokenish = core.len() >= 24 && core.chars().all(|c| c.is_ascii_alphanumeric()) && core.chars().any(|c| c.is_ascii_digit()) && core.chars().any(|c| c.is_ascii_alphabetic());
+    let tokenish = core.len() >= 24
+        && core.chars().all(|c| c.is_ascii_alphanumeric())
+        && core.chars().any(|c| c.is_ascii_digit())
+        && core.chars().any(|c| c.is_ascii_alphabetic());
     if hexish || tokenish {
         return format!("{}***", &word[..word.len() - core.len()]);
     }
@@ -279,11 +307,15 @@ fn mask_word(word: &str) -> String {
 
 /// Hides secrets in URLs before they reach a log (API keys, tokens).
 pub fn redact(url: &str) -> String {
-    let Some((base, query)) = url.split_once('?') else { return url.to_string() };
+    let Some((base, query)) = url.split_once('?') else {
+        return url.to_string();
+    };
     let parts: Vec<String> = query
         .split('&')
         .map(|p| match p.split_once('=') {
-            Some((k, _)) if ["apikey", "key", "token", "commanderfrontierid"].contains(&k.to_lowercase().as_str()) => format!("{k}=***"),
+            Some((k, _)) if ["apikey", "key", "token", "commanderfrontierid"].contains(&k.to_lowercase().as_str()) => {
+                format!("{k}=***")
+            }
             _ => p.to_string(),
         })
         .collect();
@@ -301,7 +333,12 @@ pub fn log_set_debug(on: bool) -> Option<String> {
     let l = LOGGER.get()?;
     let was = l.debug_on.load(Ordering::Relaxed);
     if on == was {
-        return on.then(|| l.dir.join(format!("{DEBUG}{}.log", l.stamp)).to_string_lossy().to_string());
+        return on.then(|| {
+            l.dir
+                .join(format!("{DEBUG}{}.log", l.stamp))
+                .to_string_lossy()
+                .to_string()
+        });
     }
     if on {
         let path = l.dir.join(format!("{DEBUG}{}.log", l.stamp));
@@ -309,7 +346,10 @@ pub fn log_set_debug(on: bool) -> Option<String> {
         let mut file = open(&path);
         // A new debug log starts with what the standard log already holds for this run.
         if fresh {
-            if let (Some(f), Ok(earlier)) = (file.as_mut(), fs::read(l.dir.join(format!("{STANDARD}{}.log", l.stamp)))) {
+            if let (Some(f), Ok(earlier)) = (
+                file.as_mut(),
+                fs::read(l.dir.join(format!("{STANDARD}{}.log", l.stamp))),
+            ) {
                 let _ = f.write_all(&earlier);
             }
         }
@@ -358,17 +398,35 @@ mod tests {
     #[test]
     fn private_data_is_removed() {
         use super::sanitize;
-        assert_eq!(sanitize("from 192.168.50.200 and 100.113.82.26."), "from 192.168.x.x and 100.113.x.x.");
-        assert_eq!(sanitize("GET https://ntfy.sh/edch_0e143513d9dc2a6934d0fb36a28bb6ae/json?poll=1"), "GET https://ntfy.sh/edch_***/json?poll=1");
-        assert_eq!(sanitize("pair?t=8fa8ba55c0934d4e2895683173ca68f66eb5e35c05a8312d"), "pair?t=***");
+        assert_eq!(
+            sanitize("from 192.168.50.200 and 100.113.82.26."),
+            "from 192.168.x.x and 100.113.x.x."
+        );
+        assert_eq!(
+            sanitize("GET https://ntfy.sh/edch_0e143513d9dc2a6934d0fb36a28bb6ae/json?poll=1"),
+            "GET https://ntfy.sh/edch_***/json?poll=1"
+        );
+        assert_eq!(
+            sanitize("pair?t=8fa8ba55c0934d4e2895683173ca68f66eb5e35c05a8312d"),
+            "pair?t=***"
+        );
         assert_eq!(sanitize("FID F13288383 ok"), "FID F*** ok");
-        assert_eq!(sanitize("EDCH 0.8.9 (installed) MissionID=1070079228"), "EDCH 0.8.9 (installed) MissionID=1070079228");
-        assert_eq!(sanitize("Journal.2026-11-01T080133.01.log"), "Journal.2026-11-01T080133.01.log");
+        assert_eq!(
+            sanitize("EDCH 0.8.9 (installed) MissionID=1070079228"),
+            "EDCH 0.8.9 (installed) MissionID=1070079228"
+        );
+        assert_eq!(
+            sanitize("Journal.2026-11-01T080133.01.log"),
+            "Journal.2026-11-01T080133.01.log"
+        );
     }
 
     #[test]
     fn secrets() {
-        assert_eq!(redact("https://x/api?commanderName=A&apiKey=123"), "https://x/api?commanderName=A&apiKey=***");
+        assert_eq!(
+            redact("https://x/api?commanderName=A&apiKey=123"),
+            "https://x/api?commanderName=A&apiKey=***"
+        );
         assert_eq!(redact("https://x/api"), "https://x/api");
     }
 }

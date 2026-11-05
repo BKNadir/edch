@@ -101,15 +101,7 @@ npm run demo        # solo la interfaz en un navegador, con un diario de ejemplo
 
 Estructura:
 
-- `src-tauri/`: backend en Rust (lectura del diario, archivos JSON del juego, llamadas HTTP, archivos de opciones y zips, apertura de enlaces). No contiene lógica del juego.
-- `src/`: interfaz en TypeScript sin framework.
-  - `journal.ts`: estado del comandante a partir de los eventos del diario.
-  - `sources.ts`: condiciones de aparición convertidas en búsquedas.
-  - `spansh.ts`: llamadas y presentación de resultados.
-  - `trade.ts`: tasas del comerciante de materiales.
-  - `eddn.ts`, `uploaders.ts`: mensajes de EDDN, EDSM e Inara.
-  - `binds.ts`: archivos `.binds` y nombres de dispositivos.
-  - `i18n.ts`: capa de traducción.
+- `src/`: interfaz TypeScript sin framework, por capas (platform, game, state, ui, services, features, views, app); `src-tauri/`: backend en Rust (diario, HTTP, archivos de opciones, servidor de acceso remoto, actualizaciones), sin lógica de juego. Consulta [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) y [CONTRIBUTING.md](CONTRIBUTING.md) (en inglés).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: regeneran los datos de `public/` (ver NOTICE).
 
 Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.10.4`: se publica la Release y las copias instaladas ofrecen la actualización.

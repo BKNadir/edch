@@ -9,6 +9,9 @@ and EDCH shows it in the update banner.
 - New "Edit menu" button at the bottom of the menu (also in Settings → Display): drag pages (or the lines between groups) to reorder them, switch each page on or off for the phone, hide or show it. "Original order" puts the groups back. Your choices are kept and followed by the phone.
 - Remote access, Sync, Settings and About never show on the phone: they manage the PC itself.
 - Translations rebuilt on i18next: every text now has a stable key and its own entry in each language (English is the reference and the fallback), with real plurals ("1 event", "2 events"). Texts that stayed in French in other languages are now translated: device names, mouse buttons and axes, engineer ranks, "Referred by", error messages from the app's core (network, download, files) and a few others. See docs/TRANSLATING.md to help translate.
+- Faster "is the game running?" check: on Windows it reads the process list directly instead of starting tasklist every 10 seconds; on Linux it stops at the first match.
+- The last messages still in French in other languages are translated (journal folder empty, unreadable zip, game options folder not found).
+- Code reorganised for contributors (no visible change): the UI in layers with one folder per page, the stylesheet and the Rust backend split into modules, automatic checks for formatting, layers and translations, and docs/ARCHITECTURE.md and CONTRIBUTING.md.
 
 ## 0.10.3
 

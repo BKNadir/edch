@@ -27,6 +27,10 @@ arboard = { version = "3", default-features = false }
 tauri-plugin-window-state = "2"
 tauri-plugin-single-instance = "2"
 
+# Windows only: the process list for "is the game running?" (no tasklist.exe).
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_System_Diagnostics_ToolHelp"] }
+
 [profile.release]
 codegen-units = 1
 lto = true

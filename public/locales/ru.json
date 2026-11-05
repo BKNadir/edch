@@ -69,12 +69,15 @@
     "invalidToken": "Недействительный токен",
     "launcherNotFound": "Лаунчер не найден: выберите файл в настройках",
     "network": "Сеть: {{detail}}",
+    "noJournalFiles": "В этой папке пока нет файлов Journal.*.log.",
     "nothingToExport": "Не найдено файлов настроек для экспорта",
+    "optionsFolderNotFound": "Папка настроек игры не найдена",
     "portUnavailable": "Порт недоступен: {{detail}}",
     "textTooLong": "Слишком длинный текст",
     "unexpectedFile": "Неожиданный файл",
     "unknownLaunchMethod": "Неизвестный способ запуска",
     "unknownPage": "Неизвестная страница",
+    "unreadableZip": "Не удаётся прочитать zip: {{detail}}",
     "zipWithoutSettings": "В этом zip нет файлов Bindings/*.binds или Graphics/*.xml"
   },
   "binds": {

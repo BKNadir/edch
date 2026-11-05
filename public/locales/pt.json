@@ -69,12 +69,15 @@
     "invalidToken": "Token inválido",
     "launcherNotFound": "Inicializador não encontrado: escolha o arquivo nas Configurações",
     "network": "Rede: {{detail}}",
+    "noJournalFiles": "Ainda não há nenhum arquivo Journal.*.log nesta pasta.",
     "nothingToExport": "Nenhum arquivo de configuração encontrado para exportar",
+    "optionsFolderNotFound": "A pasta de opções do jogo não foi encontrada",
     "portUnavailable": "Porta indisponível: {{detail}}",
     "textTooLong": "Texto longo demais",
     "unexpectedFile": "Arquivo inesperado",
     "unknownLaunchMethod": "Método de inicialização desconhecido",
     "unknownPage": "Página desconhecida",
+    "unreadableZip": "Zip ilegível: {{detail}}",
     "zipWithoutSettings": "Este zip não contém nenhum arquivo Bindings/*.binds nem Graphics/*.xml"
   },
   "binds": {

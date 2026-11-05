@@ -3,7 +3,7 @@
 // ShipLocker). Live events also go to the data sharing services and to the live features.
 
 import { readAuxFile, startJournal, defaultJournalDir, onJournal, type WatchStatus } from "../platform/bridge.js";
-import { t } from "../platform/i18n.js";
+import { backendMessage, t } from "../platform/i18n.js";
 import { eventDetail, log } from "../platform/logger.js";
 import { applyCargoFile, applyMarketFile, applyStatus } from "../game/journal/companionFiles.js";
 import { applyLines, applyLocker } from "../game/journal/events.js";
@@ -27,7 +27,9 @@ export function replayJournal(store: Store) {
 }
 
 /** Shows the journal's status, with a banner when it can't be read. */
-export function setWatch(store: Store, w: WatchStatus) {
+export function setWatch(store: Store, status: WatchStatus) {
+  // The backend sends codes ("noJournalFiles"): shown in the app's language.
+  const w = status.message ? { ...status, message: backendMessage(status.message) } : status;
   store.state.watch = w;
   if (w.state === "live") clearAlert("journal");
   else if (w.state === "error")

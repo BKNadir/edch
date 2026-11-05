@@ -69,12 +69,15 @@
     "invalidToken": "Token no válido",
     "launcherNotFound": "No se encuentra el lanzador: elige el archivo en Ajustes",
     "network": "Red: {{detail}}",
+    "noJournalFiles": "Todavía no hay ningún archivo Journal.*.log en esta carpeta.",
     "nothingToExport": "No se encontró ningún archivo de configuración para exportar",
+    "optionsFolderNotFound": "No se encuentra la carpeta de opciones del juego",
     "portUnavailable": "Puerto no disponible: {{detail}}",
     "textTooLong": "Texto demasiado largo",
     "unexpectedFile": "Archivo inesperado",
     "unknownLaunchMethod": "Método de inicio desconocido",
     "unknownPage": "Página desconocida",
+    "unreadableZip": "Zip ilegible: {{detail}}",
     "zipWithoutSettings": "Este zip no contiene ningún archivo Bindings/*.binds ni Graphics/*.xml"
   },
   "binds": {

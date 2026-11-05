@@ -50,7 +50,14 @@ fn stream(app: AppHandle, topic: String, mut since: String, generation: u64) {
         match agent.get(&url).call() {
             Ok(response) => {
                 logs::info("wing", "Live link to ntfy.sh open");
-                let _ = app.emit("ntfy-state", NtfyState { topic: topic.clone(), connected: true, message: None });
+                let _ = app.emit(
+                    "ntfy-state",
+                    NtfyState {
+                        topic: topic.clone(),
+                        connected: true,
+                        message: None,
+                    },
+                );
                 wait = 2;
                 let reader = BufReader::new(response.into_reader());
                 for line in reader.lines() {
@@ -71,13 +78,26 @@ fn stream(app: AppHandle, topic: String, mut since: String, generation: u64) {
                             logs::debug("wing", "ntfy message received");
                         }
                     }
-                    let _ = app.emit("ntfy-line", NtfyLine { topic: topic.clone(), line });
+                    let _ = app.emit(
+                        "ntfy-line",
+                        NtfyLine {
+                            topic: topic.clone(),
+                            line,
+                        },
+                    );
                 }
                 logs::info("wing", "Live link to ntfy.sh closed, reconnecting");
             }
             Err(e) => {
                 logs::warn("wing", &format!("ntfy.sh: {e}"));
-                let _ = app.emit("ntfy-state", NtfyState { topic: topic.clone(), connected: false, message: Some(e.to_string()) });
+                let _ = app.emit(
+                    "ntfy-state",
+                    NtfyState {
+                        topic: topic.clone(),
+                        connected: false,
+                        message: Some(e.to_string()),
+                    },
+                );
             }
         }
         if GENERATION.load(Ordering::SeqCst) != generation {
@@ -122,12 +142,18 @@ pub fn ntfy_set_farewell(topic: String, text: Option<String>) -> Result<(), Stri
 
 /// Called when the app exits: tells the wing we're gone (a few seconds at most).
 pub fn send_farewell() {
-    let Some((topic, text)) = FAREWELL.lock().ok().and_then(|mut f| f.take()) else { return };
+    let Some((topic, text)) = FAREWELL.lock().ok().and_then(|mut f| f.take()) else {
+        return;
+    };
     let agent = ureq::AgentBuilder::new()
         .timeout(Duration::from_secs(3))
         .user_agent(concat!("EDCH/", env!("CARGO_PKG_VERSION")))
         .build();
-    match agent.post(&format!("https://ntfy.sh/{topic}")).set("Content-Type", "text/plain").send_string(&text) {
+    match agent
+        .post(&format!("https://ntfy.sh/{topic}"))
+        .set("Content-Type", "text/plain")
+        .send_string(&text)
+    {
         Ok(_) => logs::info("wing", "Told the wing EDCH is closing"),
         Err(e) => logs::warn("wing", &format!("Couldn't tell the wing EDCH is closing: {e}")),
     }

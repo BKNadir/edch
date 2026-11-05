@@ -47,7 +47,11 @@ fn agent() -> ureq::Agent {
 fn parse_version(v: &str) -> Option<(u64, u64, u64)> {
     let core = v.trim().trim_start_matches(['v', 'V']).split(['-', '+']).next()?;
     let mut parts = core.split('.').map(|p| p.parse::<u64>().ok());
-    Some((parts.next()??, parts.next().flatten().unwrap_or(0), parts.next().flatten().unwrap_or(0)))
+    Some((
+        parts.next()??,
+        parts.next().flatten().unwrap_or(0),
+        parts.next().flatten().unwrap_or(0),
+    ))
 }
 
 fn update_dir() -> PathBuf {
@@ -76,11 +80,11 @@ pub fn update_check() -> Result<Option<UpdateInfo>, String> {
     if latest <= mine {
         return Ok(None);
     }
-    let asset = release["assets"]
-        .as_array()
-        .into_iter()
-        .flatten()
-        .find(|a| a["name"].as_str().is_some_and(|n| n.to_lowercase().ends_with("-setup.exe")));
+    let asset = release["assets"].as_array().into_iter().flatten().find(|a| {
+        a["name"]
+            .as_str()
+            .is_some_and(|n| n.to_lowercase().ends_with("-setup.exe"))
+    });
     let Some(asset) = asset else {
         return Ok(None); // release without a Windows installer (yet)
     };
@@ -137,7 +141,13 @@ fn download(app: &AppHandle, info: &UpdateInfo) -> Result<PathBuf, String> {
     }
     file.flush().map_err(|e| e.to_string())?;
     drop(file);
-    let _ = app.emit("update-progress", Progress { done, total: total.max(done) });
+    let _ = app.emit(
+        "update-progress",
+        Progress {
+            done,
+            total: total.max(done),
+        },
+    );
 
     if info.size > 0 && done != info.size {
         let _ = fs::remove_file(&partial);

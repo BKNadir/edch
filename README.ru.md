@@ -101,15 +101,7 @@ npm run demo        # только интерфейс в браузере, с п
 
 Структура:
 
-- `src-tauri/`: бэкенд на Rust (чтение журнала, JSON-файлы игры, HTTP-запросы, файлы настроек и zip, открытие ссылок). Игровой логики в нём нет.
-- `src/`: интерфейс на TypeScript без фреймворка.
-  - `journal.ts`: состояние командира по событиям журнала.
-  - `sources.ts`: условия появления, превращённые в поиск.
-  - `spansh.ts`: запросы и оформление результатов.
-  - `trade.ts`: курсы торговца материалами.
-  - `eddn.ts`, `uploaders.ts`: сообщения EDDN, EDSM и Inara.
-  - `binds.ts`: файлы `.binds` и названия устройств.
-  - `i18n.ts`: слой перевода.
+- `src/`: интерфейс на TypeScript без фреймворка, по слоям (platform, game, state, ui, services, features, views, app); `src-tauri/`: бэкенд на Rust (журнал, HTTP, файлы настроек, сервер удалённого доступа, обновления), без игровой логики. См. [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) и [CONTRIBUTING.md](CONTRIBUTING.md) (на английском).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: заново создают данные в `public/` (см. NOTICE).
 
 Сборка для Windows запускается при каждом push в `main`. Чтобы выпустить версию, отправьте тег, например `v0.10.4`: Release будет опубликован, а установленные копии предложат обновление.

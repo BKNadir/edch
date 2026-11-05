@@ -69,12 +69,15 @@
     "invalidToken": "Jeton invalide",
     "launcherNotFound": "Lanceur introuvable : choisis le fichier dans les Paramètres",
     "network": "Réseau : {{detail}}",
+    "noJournalFiles": "Aucun fichier Journal.*.log dans ce dossier pour l'instant.",
     "nothingToExport": "Aucun fichier de configuration trouvé à exporter",
+    "optionsFolderNotFound": "Dossier des options du jeu introuvable",
     "portUnavailable": "Port indisponible : {{detail}}",
     "textTooLong": "Texte trop long",
     "unexpectedFile": "Fichier inattendu",
     "unknownLaunchMethod": "Méthode de lancement inconnue",
     "unknownPage": "Page inconnue",
+    "unreadableZip": "Zip illisible : {{detail}}",
     "zipWithoutSettings": "Ce zip ne contient aucun fichier Bindings/*.binds ni Graphics/*.xml"
   },
   "binds": {

@@ -101,15 +101,7 @@ npm run demo        # interface seule dans un navigateur, avec un journal d'exem
 
 Structure :
 
-- `src-tauri/` : backend Rust (lecture du journal, fichiers JSON du jeu, appels HTTP, fichiers d'options et zips, ouverture de liens). Il ne contient aucune logique de jeu.
-- `src/` : interface en TypeScript sans framework.
-  - `journal.ts` : état du commandant à partir des événements du journal.
-  - `sources.ts` : conditions d'apparition transformées en recherches.
-  - `spansh.ts` : appels et mise en forme des résultats.
-  - `trade.ts` : taux du trader de matériaux.
-  - `eddn.ts`, `uploaders.ts` : messages EDDN, EDSM et Inara.
-  - `binds.ts` : fichiers `.binds` et noms des périphériques.
-  - `i18n.ts` : couche de traduction.
+- `src/` : interface TypeScript sans framework, en couches (platform, game, state, ui, services, features, views, app) ; `src-tauri/` : backend Rust (journal, HTTP, fichiers d'options, serveur d'accès distant, mises à jour), sans logique de jeu. Voir [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) et [CONTRIBUTING.md](CONTRIBUTING.md) (en anglais).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
 Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.10.4` : la Release est publiée et les copies installées proposent la mise à jour.

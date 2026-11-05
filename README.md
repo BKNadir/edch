@@ -101,15 +101,7 @@ npm run demo        # UI only, in a browser, with a sample journal
 
 Layout:
 
-- `src-tauri/`: Rust backend (journal reading, game JSON files, HTTP calls, option files and zips, opening links). It contains no game logic.
-- `src/`: framework-free TypeScript UI.
-  - `journal.ts`: commander state from journal events.
-  - `sources.ts`: spawn conditions turned into searches.
-  - `spansh.ts`: calls and result formatting.
-  - `trade.ts`: material trader rates.
-  - `eddn.ts`, `uploaders.ts`: EDDN messages, EDSM and Inara.
-  - `binds.ts`: `.binds` files and device names.
-  - `i18n.ts`: translation layer.
+- `src/`: framework-free TypeScript UI, in layers (platform, game, state, ui, services, features, views, app); `src-tauri/`: Rust backend (journal, HTTP, option files, remote access server, updates), with no game logic. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: regenerate the data in `public/` (see NOTICE).
 
 A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.10.4` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.

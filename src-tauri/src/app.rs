@@ -19,38 +19,89 @@ pub async fn game_running() -> String {
     tauri::async_runtime::spawn_blocking(detect).await.unwrap_or_default()
 }
 
+/// Windows: the running processes' executable names, read from a process snapshot (no external
+/// program is started, so this costs a few milliseconds).
 #[cfg(target_os = "windows")]
 fn detect() -> String {
-    use std::os::windows::process::CommandExt;
-    const CREATE_NO_WINDOW: u32 = 0x0800_0000;
-    let Ok(out) = std::process::Command::new("tasklist").args(["/FO", "CSV", "/NH"]).creation_flags(CREATE_NO_WINDOW).output() else {
-        return String::new();
+    use windows_sys::Win32::Foundation::{CloseHandle, INVALID_HANDLE_VALUE};
+    use windows_sys::Win32::System::Diagnostics::ToolHelp::{
+        CreateToolhelp32Snapshot, Process32FirstW, Process32NextW, PROCESSENTRY32W, TH32CS_SNAPPROCESS,
     };
-    classify(&String::from_utf8_lossy(&out.stdout).to_lowercase())
-}
-
-#[cfg(not(target_os = "windows"))]
-fn detect() -> String {
-    // Linux (Proton): the Windows exe names show up in the processes' command lines.
-    let mut all = String::new();
-    if let Ok(entries) = std::fs::read_dir("/proc") {
-        for e in entries.flatten() {
-            if let Ok(cmd) = std::fs::read(e.path().join("cmdline")) {
-                all.push_str(&String::from_utf8_lossy(&cmd).to_lowercase());
-                all.push('\n');
-            }
+    let mut launcher = false;
+    // SAFETY: the snapshot handle is checked before use and closed once; PROCESSENTRY32W is a plain
+    // C struct whose size is set as the API requires before the first call.
+    unsafe {
+        let snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        if snapshot == INVALID_HANDLE_VALUE {
+            return String::new();
         }
+        let mut entry: PROCESSENTRY32W = std::mem::zeroed();
+        entry.dwSize = std::mem::size_of::<PROCESSENTRY32W>() as u32;
+        let mut more = Process32FirstW(snapshot, &mut entry) != 0;
+        while more {
+            let len = entry
+                .szExeFile
+                .iter()
+                .position(|&c| c == 0)
+                .unwrap_or(entry.szExeFile.len());
+            let name = String::from_utf16_lossy(&entry.szExeFile[..len]).to_lowercase();
+            match classify(&name) {
+                Running::Game => {
+                    CloseHandle(snapshot);
+                    return "game".into();
+                }
+                Running::Launcher => launcher = true,
+                Running::Nothing => {}
+            }
+            more = Process32NextW(snapshot, &mut entry) != 0;
+        }
+        CloseHandle(snapshot);
     }
-    classify(&all)
-}
-
-fn classify(list: &str) -> String {
-    if list.contains(GAME_EXES[0]) {
-        "game".into()
-    } else if list.contains(GAME_EXES[1]) || list.contains(GAME_EXES[2]) {
+    if launcher {
         "launcher".into()
     } else {
         String::new()
+    }
+}
+
+/// Linux (Proton): the Windows exe names show up in the processes' command lines. Stops at the
+/// first process that is the game.
+#[cfg(not(target_os = "windows"))]
+fn detect() -> String {
+    let mut launcher = false;
+    if let Ok(entries) = std::fs::read_dir("/proc") {
+        for entry in entries.flatten() {
+            let Ok(cmdline) = std::fs::read(entry.path().join("cmdline")) else {
+                continue;
+            };
+            match classify(&String::from_utf8_lossy(&cmdline).to_lowercase()) {
+                Running::Game => return "game".into(),
+                Running::Launcher => launcher = true,
+                Running::Nothing => {}
+            }
+        }
+    }
+    if launcher {
+        "launcher".into()
+    } else {
+        String::new()
+    }
+}
+
+/// What one process (its lower-case name or command line) is.
+enum Running {
+    Game,
+    Launcher,
+    Nothing,
+}
+
+fn classify(process: &str) -> Running {
+    if process.contains(GAME_EXES[0]) {
+        Running::Game
+    } else if process.contains(GAME_EXES[1]) || process.contains(GAME_EXES[2]) {
+        Running::Launcher
+    } else {
+        Running::Nothing
     }
 }
 
@@ -60,11 +111,18 @@ fn classify(list: &str) -> String {
 pub fn launch_game(method: String, path: String) -> Result<(), String> {
     let target = match method.as_str() {
         "steam" => "steam://rungameid/359320".to_string(),
-        "epic" => "com.epicgames.launcher://apps/9c203b6ed35846e8a4a9ff1e314f6593?action=launch&silent=true".to_string(),
+        "epic" => {
+            "com.epicgames.launcher://apps/9c203b6ed35846e8a4a9ff1e314f6593?action=launch&silent=true".to_string()
+        }
         "exe" => {
             let p = std::path::Path::new(&path);
-            let ok_ext = p.extension().map(|e| e.eq_ignore_ascii_case("exe") || e.eq_ignore_ascii_case("sh") || e.eq_ignore_ascii_case("lnk")).unwrap_or(false)
-                || p.file_name().map(|n| n.to_string_lossy().to_lowercase().contains("minedlauncher")).unwrap_or(false);
+            let ok_ext = p
+                .extension()
+                .map(|e| e.eq_ignore_ascii_case("exe") || e.eq_ignore_ascii_case("sh") || e.eq_ignore_ascii_case("lnk"))
+                .unwrap_or(false)
+                || p.file_name()
+                    .map(|n| n.to_string_lossy().to_lowercase().contains("minedlauncher"))
+                    .unwrap_or(false);
             if !p.is_file() || !ok_ext {
                 return Err("launcherNotFound".into());
             }
@@ -74,7 +132,11 @@ pub fn launch_game(method: String, path: String) -> Result<(), String> {
             if p.extension().map(|e| e.eq_ignore_ascii_case("lnk")).unwrap_or(false) {
                 return open_uri(&p.to_string_lossy());
             }
-            return std::process::Command::new(p).current_dir(dir).spawn().map(|_| ()).map_err(|e| e.to_string());
+            return std::process::Command::new(p)
+                .current_dir(dir)
+                .spawn()
+                .map(|_| ())
+                .map_err(|e| e.to_string());
         }
         _ => return Err("unknownLaunchMethod".into()),
     };
@@ -86,7 +148,11 @@ pub fn open_uri(uri: &str) -> Result<(), String> {
     #[cfg(target_os = "windows")]
     let result = {
         use std::os::windows::process::CommandExt;
-        std::process::Command::new("rundll32").arg("url.dll,FileProtocolHandler").arg(uri).creation_flags(0x0800_0000).spawn()
+        std::process::Command::new("rundll32")
+            .arg("url.dll,FileProtocolHandler")
+            .arg(uri)
+            .creation_flags(0x0800_0000)
+            .spawn()
     };
     #[cfg(target_os = "macos")]
     let result = std::process::Command::new("open").arg(uri).spawn();
@@ -145,7 +211,11 @@ fn create_tray(app: &AppHandle) -> tauri::Result<()> {
         _ => {}
     })
     .on_tray_icon_event(|tray, event| {
-        if let TrayIconEvent::DoubleClick { button: MouseButton::Left, .. } = event {
+        if let TrayIconEvent::DoubleClick {
+            button: MouseButton::Left,
+            ..
+        } = event
+        {
             show_main(tray.app_handle());
         }
     })
@@ -155,7 +225,9 @@ fn create_tray(app: &AppHandle) -> tauri::Result<()> {
 
 /// The main window's close button, following the chosen behaviour.
 pub fn on_window_event(window: &tauri::Window, event: &WindowEvent) {
-    let WindowEvent::CloseRequested { api, .. } = event else { return };
+    let WindowEvent::CloseRequested { api, .. } = event else {
+        return;
+    };
     let mode = CLOSE_MODE.lock().map(|m| m.clone()).unwrap_or_default();
     match mode.as_str() {
         "minimize" => {
