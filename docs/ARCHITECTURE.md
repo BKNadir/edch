@@ -91,7 +91,7 @@ DOM is built with `h()` from `ui/dom.ts`: `h("button.primary", { onclick }, icon
 
 **To add a page:** create `views/<page>/index.ts`, add it to `createViews()` in `app/shell.ts`
 and to `NAV` (with its group and icon) in `ui/menu/pages.ts`, add its texts to the locale files
-(see [TRANSLATING.md](TRANSLATING.md)), and its styles to a stylesheet (below).
+(see [TRANSLATING.md](TRANSLATING.md)), and its styles to `public/styles.css` (below).
 
 ### Translations
 
@@ -101,23 +101,24 @@ and to `NAV` (with its group and icon) in `ui/menu/pages.ts`, add its texts to t
 `public/locales/game.<lang>.json`. Errors from the Rust side are codes translated by
 `backendMessage()`. Details: [TRANSLATING.md](TRANSLATING.md).
 
-### Styles (`public/styles/`)
+### Styles (`public/styles.css`)
 
-The stylesheet is split into numbered files loaded in that order by `public/index.html`. **The
-order matters**: when two rules of the same specificity set the same property, the later one
-wins, and several rules rely on that. The files were cut from the original single stylesheet
-without reordering anything (checked pixel by pixel on every page, in the dark and day themes,
-on desktop and phone).
+All the styles are in **one file**, `public/styles.css` (the root of the page, next to
+`index.html`, which is the only place that loads it). It is cut into sections, each starting with a
+`/* ==== NAME ==== */` banner: base (colours, element defaults), layout, forms, then the pages,
+phones, panels, banners, menu.
 
-- Styles for one page go to that page's file (`04-materials.css`, `12-controls.css`…), at the end.
-- Shared components go to `03-forms.css` (controls) or `18-panels.css` (panels, banners).
-- Phone rules (`@media (max-width: 760px)`) go next to the rules they change, or in
-  `15-phones.css` when they must win over most pages.
-- Colours always come from the CSS variables of `01-base.css` (set by the theme).
-- Form fields and buttons have one look, defined once in `03-forms.css`: fields (`select`, `input`,
-  `textarea`) get it automatically, buttons through `button.primary` / `button.ghost` (and
-  `.small`). Pages only set their layout (width, flex), never their own colours, borders or
-  sizes. Two heights exist: 36px, and 28px for compact places (lists, chips, toolbars).
+**The order matters**: when two rules of the same specificity set the same property, the later one
+wins, and several rules rely on that. Don't move existing rules around.
+
+- Styles for one page go to that page's section, at its end.
+- Phone rules (`@media (max-width: 760px)`) go next to the rules they change, or in the PHONES
+  section when they must win over most pages.
+- Colours always come from the CSS variables of the BASE section (set by the theme).
+- Form fields and buttons have one look, defined once in the FORMS section: fields (`select`,
+  `input`, `textarea`) get it automatically, buttons through `button.primary` / `button.ghost` (and
+  `.small`). Pages only set their layout (width, flex), never their own colours, borders or sizes.
+  Two heights exist: 36px, and 28px for compact places (lists, chips, toolbars).
 
 ## Backend (`src-tauri/src/`)
 
