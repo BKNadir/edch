@@ -8,7 +8,7 @@ import { t } from "../platform/i18n.js";
 
 let audio: AudioContext | null = null;
 
-function ctx(): AudioContext | null {
+function audioContext(): AudioContext | null {
   try {
     audio ??= new AudioContext();
     if (audio.state === "suspended") void audio.resume();
@@ -48,7 +48,7 @@ export const TONES: [string, string][] = [
 ];
 
 export function playTone(tone: string, volume: number) {
-  const ac = ctx();
+  const ac = audioContext();
   if (!ac) return;
   const v = Math.max(0, Math.min(1, volume)) * 0.35;
   const startAt = ac.currentTime + 0.02;

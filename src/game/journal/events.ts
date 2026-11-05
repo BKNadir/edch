@@ -3,7 +3,15 @@
 
 import { tradeAtCarrier } from "./companionFiles.js";
 import { readLoadout, setShip } from "./ship.js";
-import { add, type CapacityOf, type CommanderState, type FactionInfo, type Json, key, type Vec3 } from "./state.js";
+import {
+  addToBag,
+  type CapacityOf,
+  type CommanderState,
+  type FactionInfo,
+  type Json,
+  normalizedName,
+  type Vec3,
+} from "./state.js";
 
 function security(ev: Json): string | undefined {
   const raw: string = ev.SystemSecurity ?? "";
@@ -27,11 +35,14 @@ function readFactions(ev: Json): FactionInfo[] {
 
 function readList(list: unknown): { name: string; count: number }[] {
   if (Array.isArray(list)) {
-    return list.map((x: Json) => ({ name: key(x.Name ?? x.Material), count: Number(x.Count ?? x.Quantity ?? 0) }));
+    return list.map((x: Json) => ({
+      name: normalizedName(x.Name ?? x.Material),
+      count: Number(x.Count ?? x.Quantity ?? 0),
+    }));
   }
   // Very old journals wrote ingredients as an object map.
   if (list && typeof list === "object") {
-    return Object.entries(list as Json).map(([name, count]) => ({ name: key(name), count: Number(count) }));
+    return Object.entries(list as Json).map(([name, count]) => ({ name: normalizedName(name), count: Number(count) }));
   }
   return [];
 }
@@ -43,7 +54,7 @@ export function applyLocker(state: CommanderState, ev: Json): boolean {
   const locker: Record<string, number> = {};
   for (const g of groups) {
     for (const x of ev[g] ?? []) {
-      const id = key(x.Name);
+      const id = normalizedName(x.Name);
       if (id) locker[id] = (locker[id] ?? 0) + Number(x.Count ?? 0);
     }
   }
@@ -108,7 +119,7 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
     case "Cargo":
       if (Array.isArray(ev.Inventory) && (ev.Vessel ?? "Ship") === "Ship") {
         state.cargo = {};
-        for (const c of ev.Inventory) state.cargo[key(c.Name)] = Number(c.Count ?? 0);
+        for (const c of ev.Inventory) state.cargo[normalizedName(c.Name)] = Number(c.Count ?? 0);
         return true;
       }
       return false;
@@ -192,20 +203,20 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
     }
 
     case "MaterialCollected":
-      add(state.materials, ev.Name, Number(ev.Count ?? 1), cap);
+      addToBag(state.materials, ev.Name, Number(ev.Count ?? 1), cap);
       return true;
 
     case "MaterialDiscarded":
-      add(state.materials, ev.Name, -Number(ev.Count ?? 1));
+      addToBag(state.materials, ev.Name, -Number(ev.Count ?? 1));
       return true;
 
     case "MaterialTrade":
-      if (ev.Paid) add(state.materials, ev.Paid.Material, -Number(ev.Paid.Quantity ?? 0));
-      if (ev.Received) add(state.materials, ev.Received.Material, Number(ev.Received.Quantity ?? 0), cap);
+      if (ev.Paid) addToBag(state.materials, ev.Paid.Material, -Number(ev.Paid.Quantity ?? 0));
+      if (ev.Received) addToBag(state.materials, ev.Received.Material, Number(ev.Received.Quantity ?? 0), cap);
       return true;
 
     case "EngineerCraft":
-      for (const m of readList(ev.Ingredients)) add(state.materials, m.name, -m.count);
+      for (const m of readList(ev.Ingredients)) addToBag(state.materials, m.name, -m.count);
       if (ev.Engineer) {
         const e = state.engineers[ev.Engineer];
         state.engineers[ev.Engineer] = { ...e, progress: "Unlocked" };
@@ -213,23 +224,23 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
       return true;
 
     case "Synthesis":
-      for (const m of readList(ev.Materials)) add(state.materials, m.name, -m.count);
+      for (const m of readList(ev.Materials)) addToBag(state.materials, m.name, -m.count);
       return true;
 
     case "TechnologyBroker":
-      for (const m of readList(ev.Materials)) add(state.materials, m.name, -m.count);
+      for (const m of readList(ev.Materials)) addToBag(state.materials, m.name, -m.count);
       return true;
 
     case "MissionCompleted":
-      for (const m of readList(ev.MaterialsReward)) add(state.materials, m.name, m.count, cap);
+      for (const m of readList(ev.MaterialsReward)) addToBag(state.materials, m.name, m.count, cap);
       return Boolean(ev.MaterialsReward);
 
     case "EngineerContribution":
-      if (ev.Type === "Materials" && ev.Material) add(state.materials, ev.Material, -Number(ev.Quantity ?? 0));
+      if (ev.Type === "Materials" && ev.Material) addToBag(state.materials, ev.Material, -Number(ev.Quantity ?? 0));
       return ev.Type === "Materials";
 
     case "ScientificResearch":
-      add(state.materials, ev.Name, -Number(ev.Count ?? 0));
+      addToBag(state.materials, ev.Name, -Number(ev.Count ?? 0));
       return true;
 
     case "EngineerProgress": {

@@ -13,7 +13,7 @@ import {
 import { t } from "../../platform/i18n.js";
 import { h } from "../../ui/dom.js";
 
-export const GROUP_FR: Record<string, string> = {
+export const GROUP_LABELS: Record<string, string> = {
   Ship: t("common.ship"),
   Fighter: t("controls.fighter"),
   Scanners: t("common.scanners"),
@@ -36,7 +36,9 @@ export function chips(meta: BindsMeta, list: Bind[]): HTMLElement[] {
     const mod = b.modifiers.length ? `${b.modifiers.map((m) => keyLabel(meta, m.key)).join(" + ")} + ` : "";
     return h(
       `span.act.${groupClass(g)}`,
-      { title: `${GROUP_FR[g] ?? g} · ${b.action}${b.slot === "secondary" ? ` (${t("controls.secondary")})` : ""}` },
+      {
+        title: `${GROUP_LABELS[g] ?? g} · ${b.action}${b.slot === "secondary" ? ` (${t("controls.secondary")})` : ""}`,
+      },
       mod ? h("em", null, mod) : null,
       actionName(meta, b.action),
       b.inverted ? h("small", null, " " + t("controls.inverted")) : null,

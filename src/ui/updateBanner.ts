@@ -51,7 +51,7 @@ function notesList(notes: string): HTMLElement | null {
 let bar: HTMLElement | null = null;
 let store: Store | null = null;
 
-const mb = (n: number) => (n / 1048576).toLocaleString(locale(), { maximumFractionDigits: 1 });
+const megabytes = (n: number) => (n / 1048576).toLocaleString(locale(), { maximumFractionDigits: 1 });
 
 function render() {
   if (!bar) {
@@ -108,8 +108,8 @@ function render() {
           "span.sub",
           null,
           p.total > 0
-            ? t("updater.mb", { pct, mb: mb(p.done), mb2: mb(p.total) })
-            : t("updater.mb2", { mb: mb(p.done) }),
+            ? t("updater.mb", { pct, mb: megabytes(p.done), mb2: megabytes(p.total) })
+            : t("updater.mb2", { mb: megabytes(p.done) }),
         ),
         h("div.update-progress", null, h("span", { style: { width: `${pct}%` } })),
       ),

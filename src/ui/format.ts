@@ -1,3 +1,5 @@
+// Time and money formats: relative times ("5 min ago"), durations, hours left, credits.
+
 import { locale, t } from "../platform/i18n.js";
 
 /** "in 3 hours", "2 days ago"… in the app's language. */

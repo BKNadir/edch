@@ -1,3 +1,6 @@
+// Controls page: reads the game's bindings (.binds) and shows, per device, what each key, button
+// and axis does (keyboard, gamepad, joystick and mouse pictures), with search, filters and backup.
+
 import {
   actionName,
   type Bind,
@@ -26,7 +29,7 @@ import {
 import { fold, gameText, t } from "../../platform/i18n.js";
 import type { Ctx, View } from "../../state/context.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
-import { board, gamepad, GROUP_FR, groupClass, legendTable } from "./deviceBoard.js";
+import { board, gamepad, GROUP_LABELS, groupClass, legendTable } from "./deviceBoard.js";
 import { keyboard } from "./keyboard.js";
 
 const MODES: [string, string, string[] | null][] = [
@@ -228,7 +231,7 @@ export class ControlsView implements View {
       if (!q) return true;
       const name = actionName(meta, b.action);
       const combo = comboLabel(meta, b);
-      return [name, gameText(name), combo, gameText(combo), b.action, GROUP_FR[g] ?? g].some((candidate) =>
+      return [name, gameText(name), combo, gameText(combo), b.action, GROUP_LABELS[g] ?? g].some((candidate) =>
         fold(candidate).includes(q),
       );
     });
@@ -460,7 +463,7 @@ export class ControlsView implements View {
     return h(
       "div.legend-key",
       null,
-      [...used].map((g) => h(`span.act.${groupClass(g)}`, null, GROUP_FR[g] ?? g)),
+      [...used].map((g) => h(`span.act.${groupClass(g)}`, null, GROUP_LABELS[g] ?? g)),
     );
   }
 

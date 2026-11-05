@@ -1,3 +1,6 @@
+// What every page receives (Ctx: game data, store, sync), the View interface pages implement,
+// and helpers on the commander's position and owned materials.
+
 import type { Game } from "../game/data.js";
 import type { Reference } from "../services/spansh.js";
 import { totalNeeds, type Store } from "./store.js";

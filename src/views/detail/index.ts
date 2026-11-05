@@ -1,5 +1,8 @@
+// Detail panel (right side): the selected material, blueprint or engineer, with where to find it,
+// the recipes using it, trades and the wishlist actions.
+
 import { gameName, t } from "../../platform/i18n.js";
-import { CATEGORY_FR } from "../../game/data.js";
+import { CATEGORY_LABELS } from "../../game/data.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { ownedOf, referenceOf, reserved, type Ctx } from "../../state/context.js";
 import { distance, fmtLy } from "../../services/spansh.js";
@@ -10,7 +13,7 @@ import { copySystem, finderSection } from "../shared/resultsTable.js";
 import { addToWishlist } from "../wishlist/index.js";
 import { moduleLink } from "../shared/links.js";
 
-const KIND_FR: Record<string, string> = {
+const KIND_LABELS: Record<string, string> = {
   modification: t("detail.modifications"),
   experimental: t("detail.experimentalEffects"),
   synthesis: t("common.synthesis"),
@@ -21,7 +24,7 @@ const KIND_FR: Record<string, string> = {
   unlock: t("detail.engineerUnlocks"),
   bartender: t("common.bartender"),
 };
-export const kindFr = (k: string) => KIND_FR[k] ?? k;
+export const kindFr = (k: string) => KIND_LABELS[k] ?? k;
 
 /** Right-hand panel for one material. Rebuilds its Spansh sections only when needed. */
 export class DetailPanel {
@@ -89,7 +92,7 @@ export class DetailPanel {
             "p.sub",
             null,
             [
-              CATEGORY_FR[m.category] ?? m.category,
+              CATEGORY_LABELS[m.category] ?? m.category,
               m.grade ? t("common.grade", { grade: m.grade }) : null,
               this.ctx.game.lineName(m.line),
             ]

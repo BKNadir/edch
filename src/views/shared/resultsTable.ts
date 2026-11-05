@@ -1,3 +1,6 @@
+// Result rows shared by several pages: a system, station or body with its distance and the data
+// age, clickable to copy the system; and the "where to find" sections built from Spansh results.
+
 import { locale, t } from "../../platform/i18n.js";
 import { openUrl } from "../../platform/bridge.js";
 import { openSystem } from "./links.js";

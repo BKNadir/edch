@@ -1,3 +1,6 @@
+// Remote access page: starts the local server and shows the QR code and link to pair a phone,
+// tablet or second screen.
+
 import { copyText, isRemote, isTauri, remoteInterfaces, remoteQr, type NetAddress } from "../../platform/bridge.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
 import type { Ctx, View } from "../../state/context.js";

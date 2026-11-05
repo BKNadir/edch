@@ -1,6 +1,6 @@
-import { locale } from "../platform/i18n.js";
 // Tiny DOM helper: h("div.card", { onclick }, child, "text").
 
+import { locale } from "../platform/i18n.js";
 type Child = Node | string | number | null | undefined | false | Child[];
 type Props = Record<string, any> | null | undefined;
 

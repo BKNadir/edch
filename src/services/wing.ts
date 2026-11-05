@@ -52,13 +52,13 @@ interface Packet {
 }
 
 const NTFY = "https://ntfy.sh/";
-const enc = new TextEncoder();
-const dec = new TextDecoder();
+const textEncoder = new TextEncoder();
+const textDecoder = new TextDecoder();
 
 export const normaliseCode = (code: string) => code.toUpperCase().replace(/[^A-Z0-9]/g, "");
 
 async function sha256Hex(text: string): Promise<string> {
-  const digest = await crypto.subtle.digest("SHA-256", enc.encode(text));
+  const digest = await crypto.subtle.digest("SHA-256", textEncoder.encode(text));
   return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
@@ -67,9 +67,11 @@ export async function topicFor(code: string): Promise<string> {
 }
 
 async function keyFor(code: string): Promise<CryptoKey> {
-  const base = await crypto.subtle.importKey("raw", enc.encode(normaliseCode(code)), "PBKDF2", false, ["deriveKey"]);
+  const base = await crypto.subtle.importKey("raw", textEncoder.encode(normaliseCode(code)), "PBKDF2", false, [
+    "deriveKey",
+  ]);
   return crypto.subtle.deriveKey(
-    { name: "PBKDF2", salt: enc.encode("edch-wing-v1"), iterations: 150_000, hash: "SHA-256" },
+    { name: "PBKDF2", salt: textEncoder.encode("edch-wing-v1"), iterations: 150_000, hash: "SHA-256" },
     base,
     { name: "AES-GCM", length: 256 },
     false,
@@ -83,7 +85,7 @@ const fromB64 = (text: string) => Uint8Array.from(atob(text), (c) => c.charCodeA
 export async function seal(key: CryptoKey, packet: Packet): Promise<string> {
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const data = new Uint8Array(
-    await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(JSON.stringify(packet))),
+    await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, textEncoder.encode(JSON.stringify(packet))),
   );
   const out = new Uint8Array(iv.length + data.length);
   out.set(iv);
@@ -96,7 +98,7 @@ export async function open(key: CryptoKey, text: string): Promise<Packet | null>
   try {
     const raw = fromB64(text.slice(6));
     const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: raw.slice(0, 12) }, key, raw.slice(12));
-    const p = JSON.parse(dec.decode(plain));
+    const p = JSON.parse(textDecoder.decode(plain));
     return p && p.v === 1 && typeof p.from === "string" ? (p as Packet) : null;
   } catch {
     return null; // another wing's message on a colliding topic, or tampered: ignore

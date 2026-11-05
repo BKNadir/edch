@@ -1,3 +1,6 @@
+// Community goals page: the goals the commander takes part in (from the journal) and the current
+// ones from Inara.
+
 import type { CommunityGoal } from "../../game/activity/state.js";
 import { httpFetch, openUrl } from "../../platform/bridge.js";
 import { fmt, h, replace } from "../../ui/dom.js";

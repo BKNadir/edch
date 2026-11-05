@@ -118,10 +118,10 @@ export type Json = Record<string, any>;
 
 export type CapacityOf = (id: string) => number | undefined;
 
-export const key = (name: unknown) => String(name ?? "").toLowerCase();
+export const normalizedName = (name: unknown) => String(name ?? "").toLowerCase();
 
-export function add(bag: Record<string, number>, name: unknown, delta: number, cap?: CapacityOf) {
-  const id = key(name);
+export function addToBag(bag: Record<string, number>, name: unknown, delta: number, cap?: CapacityOf) {
+  const id = normalizedName(name);
   if (!id) return;
   let next = (bag[id] ?? 0) + delta;
   const limit = cap?.(id);

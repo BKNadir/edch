@@ -1,5 +1,8 @@
+// Odyssey page: the ship locker (on-foot goods, assets and data from ShipLocker.json), with how
+// many recipes use each item and its barter value.
+
 import { nameMatches, t } from "../../platform/i18n.js";
-import { CATEGORY_FR } from "../../game/data.js";
+import { CATEGORY_LABELS } from "../../game/data.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { reserved, type Ctx, type View } from "../../state/context.js";
 import type { Material } from "../../game/types.js";
@@ -59,7 +62,7 @@ export class OdysseyView implements View {
           return h(
             "button",
             { class: this.cat === c ? "active" : "", onclick: () => ((this.cat = c), this.update()) },
-            CATEGORY_FR[c],
+            CATEGORY_LABELS[c],
             h("small", null, ` ${fmt(count)}`),
           );
         }),

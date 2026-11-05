@@ -1,8 +1,8 @@
-import { gameName, t } from "../../platform/i18n.js";
 // "Where to find" rules: each origin string from the data becomes a readable French
 // hint and, when the condition can be searched, a Spansh query that lists real
 // systems / bodies / stations near you.
 
+import { gameName, t } from "../../platform/i18n.js";
 import type { Material } from "../../game/types.js";
 import type { Settings } from "../../state/store.js";
 
@@ -28,13 +28,13 @@ const choice = (...values: string[]) => ({ value: values });
 const atLeast = (n: number) => ({ comparison: "<=>", value: [String(n), BIG] });
 const states = (...values: string[]) => [{ state: { value: values } }];
 
-const HGE_LABEL: Record<string, { fr: string; states?: string[]; allegiance?: string }> = {
-  boom: { fr: t("sources.boomExpansion"), states: ["Boom", "Expansion"] },
-  "war/civil war": { fr: t("sources.warCivilWar"), states: ["War", "Civil War"] },
-  "civil unrest": { fr: t("sources.civilUnrest"), states: ["Civil Unrest"] },
-  outbreak: { fr: t("sources.outbreak"), states: ["Outbreak"] },
-  "federation systems": { fr: t("sources.federation"), allegiance: "Federation" },
-  "empire systems": { fr: t("sources.empire"), allegiance: "Empire" },
+const HGE_LABEL: Record<string, { label: string; states?: string[]; allegiance?: string }> = {
+  boom: { label: t("sources.boomExpansion"), states: ["Boom", "Expansion"] },
+  "war/civil war": { label: t("sources.warCivilWar"), states: ["War", "Civil War"] },
+  "civil unrest": { label: t("sources.civilUnrest"), states: ["Civil Unrest"] },
+  outbreak: { label: t("sources.outbreak"), states: ["Outbreak"] },
+  "federation systems": { label: t("sources.federation"), allegiance: "Federation" },
+  "empire systems": { label: t("sources.empire"), allegiance: "Empire" },
 };
 
 /** Finders for one origin string; most give one, some none. */
@@ -52,7 +52,7 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
         {
           key: `hge:${hge[1].toLowerCase()}`,
           type: "systems",
-          title: t("sources.highGradeEmissionsPopulatedSystems", { fr: rule.fr }),
+          title: t("sources.highGradeEmissionsPopulatedSystems", { fr: rule.label }),
           hint: t("sources.highGradeEmissionsSignalSourcesSupercruise"),
           filters,
           states: rule.states,
@@ -237,7 +237,7 @@ const ECONOMY: Record<string, string> = {
   research: "High Tech",
 };
 
-export const BUILDING_FR: Record<string, string> = {
+export const BUILDING_LABELS: Record<string, string> = {
   AGRI: t("sources.agriculture"),
   CMD: t("sources.command"),
   EXT: t("sources.extraction"),
@@ -276,7 +276,7 @@ function odysseyFinders(m: Material): Finder[] {
   }
   const where: string[] = [];
   if (m.buildings?.length)
-    where.push(t("sources.buildings", { value: m.buildings.map((b) => BUILDING_FR[b] ?? b).join(", ") }));
+    where.push(t("sources.buildings", { value: m.buildings.map((b) => BUILDING_LABELS[b] ?? b).join(", ") }));
   if (m.containers?.length) where.push(t("sources.containers", { value: m.containers.join(", ") }));
   if (where.length) out.push(info(t("sources.whereLookSettlement"), where.join(" · ")));
   for (const origin of m.origins) {

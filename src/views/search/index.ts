@@ -1,3 +1,6 @@
+// Search page: systems, stations, commodities, ships, modules and services near you (Spansh),
+// with the results as tables.
+
 import { fold, gameEnglish, gameName, resolveGameName, t } from "../../platform/i18n.js";
 import { locale } from "../../platform/i18n.js";
 import { spanshPost } from "../../platform/bridge.js";

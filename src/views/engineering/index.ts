@@ -1,3 +1,6 @@
+// Engineering page: blueprints and experimental effects by module, with their materials, the
+// engineers who apply them, and adding them to the wishlist.
+
 import { nameMatches, t } from "../../platform/i18n.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { ownedOf, type Ctx, type View } from "../../state/context.js";

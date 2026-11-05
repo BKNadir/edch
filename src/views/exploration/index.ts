@@ -1,3 +1,6 @@
+// Exploration page: the current system's bodies (value, first discovery), unsold cartographic data
+// per system, and exobiology (possible species, samples and the distance between them).
+
 import { type OrganicFind, type Sampling } from "../../game/activity/state.js";
 import { surfaceDistance, unsoldSummary } from "../../game/activity/exploration.js";
 import { fmt, h, replace } from "../../ui/dom.js";

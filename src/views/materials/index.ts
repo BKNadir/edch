@@ -1,5 +1,8 @@
+// Materials page: every engineering material by type and grade, with the owned count, the
+// wishlist needs and a filter.
+
 import { gameName, nameMatches, t } from "../../platform/i18n.js";
-import { CATEGORY_FR } from "../../game/data.js";
+import { CATEGORY_LABELS } from "../../game/data.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { reserved, type Ctx, type View } from "../../state/context.js";
 import type { Material } from "../../game/types.js";
@@ -126,7 +129,7 @@ export class MaterialsView implements View {
       return h(
         "section.mat-section",
         null,
-        h("h2", null, CATEGORY_FR[cat], h("span.sub", null, " " + t("materials.units", { total: fmt(total) }))),
+        h("h2", null, CATEGORY_LABELS[cat], h("span.sub", null, " " + t("materials.units", { total: fmt(total) }))),
         rows.length
           ? h(
               "div.grade-head",

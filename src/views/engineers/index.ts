@@ -1,3 +1,6 @@
+// Engineers page: every engineer with their rank, unlock progress, specialities and distance, and
+// what it takes to unlock the ones not known yet.
+
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { referenceOf, type Ctx, type View } from "../../state/context.js";
 import { distance, fmtLy, inaraSystem } from "../../services/spansh.js";
@@ -7,7 +10,7 @@ import type { EngineerStatus } from "../../game/journal/state.js";
 import { moduleLink, openSystem } from "../shared/links.js";
 import { t } from "../../platform/i18n.js";
 
-const PROGRESS_FR: Record<string, string> = {
+const PROGRESS_LABELS: Record<string, string> = {
   Unlocked: t("engineers.unlocked"),
   Invited: t("engineers.invited"),
   Acquainted: t("engineers.acquainted"),
@@ -164,7 +167,7 @@ export class EngineersView implements View {
           h("p.sub", null, e.body ? t("engineers.stationBody", { station: e.station, body: e.body }) : e.station),
         ),
         st
-          ? h(`span.badge${unlocked ? ".hit" : ""}`, null, PROGRESS_FR[st.progress] ?? st.progress)
+          ? h(`span.badge${unlocked ? ".hit" : ""}`, null, PROGRESS_LABELS[st.progress] ?? st.progress)
           : h("span.badge.muted", null, t("engineers.notMetYet")),
       ),
       h(

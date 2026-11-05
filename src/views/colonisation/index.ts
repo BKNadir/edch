@@ -1,3 +1,6 @@
+// Colonisation page: construction sites tracked from the journal, what each still needs, the
+// commander's and their carriers' cargo, and where to buy the missing commodities.
+
 import type { CarrierHold, Depot } from "../../game/activity/state.js";
 import { callout, fmt, h, icon, replace } from "../../ui/dom.js";
 import { gameName, t } from "../../platform/i18n.js";

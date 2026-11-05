@@ -1,3 +1,6 @@
+// Settings page: the tabs (General, Game and search, Display, Notifications, Advanced) and the
+// cards that are not in cards/ (language, updates, journal folder, Spansh search).
+
 import { defaultJournalDir, isRemote, isTauri, logsOpen, startJournal, updateMode } from "../../platform/bridge.js";
 import { lang, LANGS, saveLang, t } from "../../platform/i18n.js";
 import { setDebugLog } from "../../platform/logger.js";

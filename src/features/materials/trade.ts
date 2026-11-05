@@ -1,3 +1,6 @@
+// Material traders: exchange rates between grades (and between material lines), and trade
+// suggestions to get a missing material from the surplus of others.
+
 import type { Game } from "../../game/data.js";
 import type { Material } from "../../game/types.js";
 

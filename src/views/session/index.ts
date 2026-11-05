@@ -1,3 +1,5 @@
+// Session page: what the current game session earned (bounties, trade, exploration…) and did.
+
 import { fmt, h, replace } from "../../ui/dom.js";
 import { credits, duration, relTime } from "../../ui/format.js";
 import type { Ctx, View } from "../../state/context.js";

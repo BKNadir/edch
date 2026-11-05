@@ -1,3 +1,6 @@
+// Sync page: sharing the journal with EDDN, EDSM and Inara (what is sent, keys, counters and the
+// last exchanges).
+
 import { locale, t } from "../../platform/i18n.js";
 import { openUrl } from "../../platform/bridge.js";
 import { h, icon, replace } from "../../ui/dom.js";

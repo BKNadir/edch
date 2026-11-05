@@ -1,3 +1,6 @@
+// Missions page: active missions with their progress, massacre stacks, where to source the
+// commodities asked, and missions shared with the wing.
+
 import { openSettingsTab } from "../settings/index.js";
 import { massacreStacks } from "../../game/activity/missions.js";
 import { type Mission } from "../../game/activity/state.js";

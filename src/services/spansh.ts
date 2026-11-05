@@ -1,3 +1,6 @@
+// Spansh search API: turns a "where to find" rule into a Spansh query near the reference
+// system, runs it (with a short cache) and returns systems, bodies or stations with their distance.
+
 import { locale, t } from "../platform/i18n.js";
 import { spanshPost } from "../platform/bridge.js";
 import type { Vec3 } from "../game/journal/state.js";
@@ -39,7 +42,7 @@ const fmtPop = (n: number) =>
         ? t("spansh.kPop", { value: Math.round(n / 1e3) })
         : t("spansh.pop", { n });
 
-const SECURITY_FR: Record<string, string> = {
+const SECURITY_LABELS: Record<string, string> = {
   High: t("common.highSecurity"),
   Medium: t("common.mediumSecurity"),
   Low: t("common.lowSecurity"),
@@ -98,7 +101,7 @@ function systemRow(r: any, f: Finder): ResultRow {
   const sub: string[] = [];
   if (r.population) sub.push(fmtPop(num(r.population)));
   if (r.allegiance) sub.push(r.allegiance);
-  if (r.security) sub.push(SECURITY_FR[r.security] ?? r.security);
+  if (r.security) sub.push(SECURITY_LABELS[r.security] ?? r.security);
   if (r.primary_economy) sub.push(r.primary_economy);
   return {
     system: r.name,

@@ -1,8 +1,8 @@
-import { goTo, inStartup, startupAlert } from "../ui/alerts.js";
-import { log as appLog } from "../platform/logger.js";
 // Sends live game data to EDDN, EDSM and Inara (what EDMC does), with each service's rules:
 // only live events (never the startup replay), no retry on EDDN 400/426, ≥ 60 s before a retry.
 
+import { goTo, inStartup, startupAlert } from "../ui/alerts.js";
+import { log as appLog } from "../platform/logger.js";
 import { httpFetch, readAuxFile } from "../platform/bridge.js";
 import {
   EDDN_URL,

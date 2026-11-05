@@ -1,10 +1,13 @@
+// Game data (public/data/game.json): materials, blueprints, engineers, modules and their
+// categories, loaded once at start-up into a Game object with lookups.
+
 import type { Blueprint, GameData, Material } from "./types.js";
 import { t } from "../platform/i18n.js";
 
 /** Storage cap of a ship material by grade (game rule). */
 export const CAPACITY: Record<number, number> = { 1: 300, 2: 250, 3: 200, 4: 150, 5: 100 };
 
-export const CATEGORY_FR: Record<string, string> = {
+export const CATEGORY_LABELS: Record<string, string> = {
   Raw: t("data.raw"),
   Manufactured: t("data.manufactured"),
   Encoded: t("data.encodedData"),

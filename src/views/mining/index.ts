@@ -1,3 +1,6 @@
+// Mining page: prospecting results with alerts for target minerals, where to mine and sell them
+// (Spansh), and the Powerplay "Merit Miner" search.
+
 import { findRingSpots, findSellSpots, type RingSpot, type SellSpot } from "../../features/mining/miningSpots.js";
 import { gameName, t } from "../../platform/i18n.js";
 import { type Ctx, referenceOf, type View } from "../../state/context.js";

@@ -1,3 +1,6 @@
+// Wishlist page: the blueprints wanted with their grades and materials, build import (Coriolis,
+// EDSY), the engineer for each line, and the engineer tour route.
+
 import { pickEngineer } from "../../features/engineers/engineerPick.js";
 import {
   clearRoute,

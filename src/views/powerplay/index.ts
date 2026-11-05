@@ -1,3 +1,6 @@
+// Powerplay page: the commander's merits (this week, recent) and the Powerplay state of the
+// current system.
+
 import { meritsSince, meritsThisWeek, weekStart } from "../../game/activity/powerplay.js";
 import { fmt, h, replace } from "../../ui/dom.js";
 import { locale, t } from "../../platform/i18n.js";

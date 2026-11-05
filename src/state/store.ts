@@ -1,3 +1,6 @@
+// The app's state: settings, wishlist, current page and selection, the commander's state from
+// the journal and the activity, saved in localStorage. Pages subscribe to it and redraw.
+
 import { log } from "../platform/logger.js";
 import { type ThemeSettings } from "./themeSettings.js";
 import { DEFAULT_THEME } from "./themeSettings.js";

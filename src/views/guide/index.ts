@@ -1,3 +1,5 @@
+// Guide page: how to reach EDCH away from home with Tailscale, step by step.
+
 import { openUrl } from "../../platform/bridge.js";
 import { callout, h, icon, replace } from "../../ui/dom.js";
 import type { Ctx, View } from "../../state/context.js";

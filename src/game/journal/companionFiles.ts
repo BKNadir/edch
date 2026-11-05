@@ -1,7 +1,7 @@
 // The game's companion files next to the journal: Cargo.json, Market.json and Status.json
 // (fuel, cargo, position on a planet…), read whenever the game rewrites them.
 
-import { type CommanderState, type Json, key } from "./state.js";
+import { type CommanderState, type Json, normalizedName } from "./state.js";
 
 /** Applies Status.json (fuel, cargo mass). */
 /**
@@ -11,7 +11,8 @@ import { type CommanderState, type Json, key } from "./state.js";
 export function applyCargoFile(state: CommanderState, file: Json): boolean {
   if (!file || (file.Vessel ?? "Ship") !== "Ship" || !Array.isArray(file.Inventory)) return false;
   const next: Record<string, number> = {};
-  for (const c of file.Inventory) next[key(c.Name)] = (next[key(c.Name)] ?? 0) + Number(c.Count ?? 0);
+  for (const c of file.Inventory)
+    next[normalizedName(c.Name)] = (next[normalizedName(c.Name)] ?? 0) + Number(c.Count ?? 0);
   if (JSON.stringify(next) === JSON.stringify(state.cargo)) return false;
   state.cargo = next;
   return true;

@@ -1,3 +1,6 @@
+// Navigation page: the ship route (exact with fuel, or quick with neutron stars), the fleet
+// carrier route, the ship's jump range, and copying the next system when you arrive.
+
 import { setNavRoute } from "../../features/engineers/tour.js";
 import {
   type GalaxyAlgorithm,

@@ -1,3 +1,6 @@
+// About page: version, credits and licences of the data and tools EDCH uses, how to report a bug
+// (with what a debug log contains and never contains), and a word from the author.
+
 import { isRemote, isTauri, logsOpen, openUrl, updateMode } from "../../platform/bridge.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
 import { SOFTWARE_VERSION } from "../../platform/version.js";
