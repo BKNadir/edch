@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import "./i18n-setup.mjs";
 import { superchargeMultiplier } from "../dist/js/jump.js";
 import { fold, nameMatches } from "../dist/js/i18n.js";
 

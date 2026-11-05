@@ -65,9 +65,9 @@ pub fn update_check() -> Result<Option<UpdateInfo>, String> {
         Err(ureq::Error::Status(404, _)) => return Ok(None), // no release published yet
         Err(ureq::Error::Status(code, _)) => {
             crate::logs::warn("update", &format!("GitHub answered {code}"));
-            return Err(format!("GitHub a répondu {code}"));
+            return Err(format!("githubStatus: {code}"));
         }
-        Err(e) => return Err(format!("Réseau : {e}")),
+        Err(e) => return Err(format!("network: {e}")),
     };
     let tag = release["tag_name"].as_str().unwrap_or_default();
     let (Some(latest), Some(mine)) = (parse_version(tag), parse_version(&current)) else {
@@ -99,11 +99,11 @@ pub fn update_check() -> Result<Option<UpdateInfo>, String> {
 fn download(app: &AppHandle, info: &UpdateInfo) -> Result<PathBuf, String> {
     let prefix = format!("https://github.com/{REPO}/releases/download/");
     if !info.url.starts_with(&prefix) {
-        return Err(format!("Adresse refusée : {}", info.url));
+        return Err(format!("addressRefused: {}", info.url));
     }
     let name = info.asset.replace(['/', '\\'], "_");
     if !name.to_lowercase().ends_with(".exe") {
-        return Err("Fichier inattendu".into());
+        return Err("unexpectedFile".into());
     }
     let dir = update_dir();
     let _ = fs::remove_dir_all(&dir); // old downloads
@@ -111,7 +111,7 @@ fn download(app: &AppHandle, info: &UpdateInfo) -> Result<PathBuf, String> {
     let target = dir.join(&name);
     let partial = dir.join(format!("{name}.part"));
 
-    let response = agent().get(&info.url).call().map_err(|e| format!("Téléchargement : {e}"))?;
+    let response = agent().get(&info.url).call().map_err(|e| format!("download: {e}"))?;
     let total = response
         .header("Content-Length")
         .and_then(|v| v.parse::<u64>().ok())
@@ -123,7 +123,7 @@ fn download(app: &AppHandle, info: &UpdateInfo) -> Result<PathBuf, String> {
     let mut done: u64 = 0;
     let mut last_emit: u64 = 0;
     loop {
-        let n = reader.read(&mut buf).map_err(|e| format!("Téléchargement : {e}"))?;
+        let n = reader.read(&mut buf).map_err(|e| format!("download: {e}"))?;
         if n == 0 {
             break;
         }
@@ -141,13 +141,13 @@ fn download(app: &AppHandle, info: &UpdateInfo) -> Result<PathBuf, String> {
 
     if info.size > 0 && done != info.size {
         let _ = fs::remove_file(&partial);
-        return Err("Téléchargement incomplet, réessaie".into());
+        return Err("incompleteDownload".into());
     }
     if let Some(expected) = info.digest.as_deref().and_then(|d| d.strip_prefix("sha256:")) {
         let got: String = hasher.finalize().iter().map(|b| format!("{b:02x}")).collect();
         if !got.eq_ignore_ascii_case(expected) {
             let _ = fs::remove_file(&partial);
-            return Err("Le fichier téléchargé ne correspond pas à la version publiée (somme de contrôle)".into());
+            return Err("checksumMismatch".into());
         }
     }
     fs::rename(&partial, &target).map_err(|e| e.to_string())?;
@@ -169,13 +169,13 @@ pub fn update_install(app: AppHandle, path: String) -> Result<(), String> {
     let inside = path.parent().map(|p| p == dir).unwrap_or(false);
     let is_exe = path.extension().map(|e| e.eq_ignore_ascii_case("exe")).unwrap_or(false);
     if !inside || !is_exe || !path.is_file() {
-        return Err("Installateur introuvable, relance le téléchargement".into());
+        return Err("installerNotFound".into());
     }
     crate::logs::info("update", &format!("Running installer {}", path.display()));
     std::process::Command::new(&path)
         .args(["/UPDATE", "/P", "/R"])
         .spawn()
-        .map_err(|e| format!("Impossible de lancer l'installation : {e}"))?;
+        .map_err(|e| format!("installFailed: {e}"))?;
     app.exit(0);
     Ok(())
 }

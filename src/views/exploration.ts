@@ -7,6 +7,7 @@ import { busy, sys } from "./missions.js";
 import { openUrl } from "../bridge.js";
 import { icon } from "../dom.js";
 import { edsmCached, edsmSystem, edsmSystemUrl, type EdsmSystem } from "../edsm.js";
+import { t } from "../i18n.js";
 
 type Tab = "bio" | "carto";
 
@@ -47,13 +48,13 @@ export class ExplorationView implements View {
       "div.segmented",
       null,
       ([
-        ["bio", "Exobiologie"],
-        ["carto", "Cartographie"],
-      ] as [Tab, string][]).map(([t, l]) => h("button", { class: this.tab === t ? "active" : "", onclick: () => ((this.tab = t), this.render()) }, l)),
+        ["bio", t("common.exobiology")],
+        ["carto", t("exploration.cartography")],
+      ] as [Tab, string][]).map(([tab, l]) => h("button", { class: this.tab === tab ? "active" : "", onclick: () => ((this.tab = tab), this.render()) }, l)),
     );
     replace(
       this.root,
-      h("header.view-head", null, h("div", null, h("h1", null, "Exploration"), h("p.sub", null, "Ce que valent tes données pas encore vendues, et l'aide aux prélèvements biologiques.")), tabs),
+      h("header.view-head", null, h("div", null, h("h1", null, t("common.exploration")), h("p.sub", null, t("exploration.whatUnsoldDataWorthHelpBiological"))), tabs),
       ...(this.tab === "bio" ? this.bio() : this.carto()),
     );
   }
@@ -71,12 +72,12 @@ export class ExplorationView implements View {
       h(
         "section.card",
         null,
-        h("div.sync-head", null, h("h3", null, "Analyses à vendre (Vista Genomics)"), h("strong", null, `${credits(total)} Cr`)),
+        h("div.sync-head", null, h("h3", null, t("exploration.analysesSellVistaGenomics")), h("strong", null, `${credits(total)} Cr`)),
         found.length
           ? h(
               "table.table",
               null,
-              h("thead", null, h("tr", null, h("th", null, "Espèce"), h("th", null, "Lieu"), h("th.num", null, "Valeur"), h("th", null, ""))),
+              h("thead", null, h("tr", null, h("th", null, t("exploration.species")), h("th", null, t("common.location")), h("th.num", null, t("exploration.value")), h("th", null, ""))),
               h(
                 "tbody",
                 null,
@@ -88,13 +89,13 @@ export class ExplorationView implements View {
                     h("td", null, h("strong", null, o.species), o.variant ? h("div.sub", null, o.variant) : null),
                     h("td", null, o.body ?? o.system ?? ""),
                     h("td.num", null, `${credits(this.value(o))} Cr`),
-                    h("td", null, b?.wasFootfalled === false ? h("span.badge.hit", { title: "Premier pas sur cette planète : le bonus de première découverte multiplie la valeur par 5" }, "×5 possible") : null),
+                    h("td", null, b?.wasFootfalled === false ? h("span.badge.hit", { title: t("exploration.firstFootfallPlanetFirstDiscoveryBonus") }, t("exploration.n5Possible")) : null),
                   );
                 }),
               ),
             )
-          : h("p.empty", null, "Aucune analyse en attente. Les espèces analysées (3 prélèvements) s'ajoutent ici jusqu'à leur vente."),
-        found.length ? h("p.sub.warn", null, "Attention : une destruction fait perdre toutes les analyses non vendues.") : null,
+          : h("p.empty", null, t("exploration.noAnalysesWaitingAnalysedSpecies3")),
+        found.length ? h("p.sub.warn", null, t("exploration.carefulBeingDestroyedLosesEveryUnsold")) : null,
       ),
     ];
   }
@@ -121,14 +122,14 @@ export class ExplorationView implements View {
       h(
         "div.stats",
         null,
-        ccr !== undefined ? h("div.stat", null, h("strong", null, `${fmt(ccr)} m`), h("span.sub", null, "distance minimale entre prélèvements")) : null,
-        nearest !== null ? h("div.stat", null, h("strong", null, `${fmt(Math.round(nearest))} m`), h("span.sub", null, "du prélèvement le plus proche")) : null,
+        ccr !== undefined ? h("div.stat", null, h("strong", null, `${fmt(ccr)} m`), h("span.sub", null, t("exploration.minimumDistanceBetweenSamples"))) : null,
+        nearest !== null ? h("div.stat", null, h("strong", null, `${fmt(Math.round(nearest))} m`), h("span.sub", null, t("exploration.fromNearestSample"))) : null,
       ),
       farEnough === null
-        ? h("p.sub", null, "La distance s'affiche quand tu es à la surface (EDCH lit ta position dans Status.json).")
+        ? h("p.sub", null, t("exploration.distanceShowsWhenReSurfaceEdch"))
         : farEnough
-          ? h("p.ok", null, "Assez loin : tu peux faire le prélèvement suivant.")
-          : h("p.warn", null, `Trop près : éloigne-toi encore de ${fmt(Math.ceil(ccr! - nearest!))} m.`),
+          ? h("p.ok", null, t("exploration.farEnoughCanTakeNextSample"))
+          : h("p.warn", null, t("exploration.tooCloseMoveAnotherMAway", { value: fmt(Math.ceil(ccr! - nearest!)) })),
     );
   }
 
@@ -142,7 +143,7 @@ export class ExplorationView implements View {
     return h(
       "section.card",
       null,
-      h("h3", null, `Signaux biologiques dans ${a.system?.name ?? st.cmdr.location?.system ?? ""}`),
+      h("h3", null, t("exploration.biologicalSignals", { name: a.system?.name ?? st.cmdr.location?.system ?? "" })),
       bodies.map((b) => {
         const possible = possibleSpecies(b, b.genera);
         const genera = new Map<string, number>();
@@ -155,8 +156,8 @@ export class ExplorationView implements View {
           h(
             "div.sync-head",
             null,
-            h("div", null, h("strong", null, b.name), h("span.sub", null, ` · ${b.bio} signal(s) biologique(s)`), b.wasFootfalled === false ? h("span.badge.hit", null, "Premier pas ×5") : null),
-            estimate ? h("span", { title: "Estimation : meilleure espèce possible de chaque genre" }, `jusqu'à ${credits(estimate)} Cr`) : null,
+            h("div", null, h("strong", null, b.name), h("span.sub", null, (" " + t("exploration.bioSignalCount", { count: b.bio }))), b.wasFootfalled === false ? h("span.badge.hit", null, t("exploration.firstFootfall5")) : null),
+            estimate ? h("span", { title: t("exploration.estimateBestPossibleSpeciesEachGenus") }, t("exploration.upCr", { estimate: credits(estimate) })) : null,
           ),
           possible.length
             ? h(
@@ -164,10 +165,10 @@ export class ExplorationView implements View {
                 null,
                 possible.slice(0, 10).map((sp) => h("span.chip", { title: `${fmt(sp.v)} Cr` }, `${sp.n} · ${credits(sp.v)}`)),
               )
-            : h("p.sub", null, b.gravity === undefined ? "Scanne la planète (FSS ou scan détaillé) pour voir les espèces possibles." : "Aucune espèce connue ne correspond : elle est peut-être rare ou de région."),
+            : h("p.sub", null, b.gravity === undefined ? t("exploration.scanPlanetFssDetailedScanSee") : t("exploration.noKnownSpeciesMatchesMayRare")),
         );
       }),
-      h("p.sub", null, "Espèces possibles d'après le type de planète, l'atmosphère, la gravité, la température et la pression. La région galactique n'est pas vérifiée."),
+      h("p.sub", null, t("exploration.possibleSpeciesFromPlanetTypeAtmosphere")),
     );
   }
 
@@ -193,12 +194,12 @@ export class ExplorationView implements View {
     const head = h(
       "div.sync-head",
       null,
-      h("h3", null, "Système actuel sur EDSM"),
-      h("button.link", { title: "Ouvrir la page du système sur EDSM", onclick: () => openUrl(edsmSystemUrl(system)) }, "EDSM", icon("link")),
+      h("h3", null, t("exploration.currentSystemEdsm")),
+      h("button.link", { title: t("exploration.openSystemSPageEdsm"), onclick: () => openUrl(edsmSystemUrl(system)) }, "EDSM", icon("link")),
     );
     if (!data) {
       const err = this.edsmError?.startsWith(`${system}:`) ? this.edsmError.slice(system.length + 2) : "";
-      return h("section.card.edsm", null, head, sys(system), err ? h("p.sub", null, `EDSM indisponible : ${err}`) : h("p.sub", null, h("span.spinner"), " Recherche sur EDSM…"));
+      return h("section.card.edsm", null, head, sys(system), err ? h("p.sub", null, t("exploration.edsmUnavailable", { err })) : h("p.sub", null, h("span.spinner"), (" " + t("exploration.searchingEdsm"))));
     }
     return h("section.card.edsm", null, head, sys(system), ...this.edsmBody(data));
   }
@@ -206,7 +207,7 @@ export class ExplorationView implements View {
   private edsmFailedAt = 0;
 
   private edsmBody(d: EdsmSystem): (HTMLElement | null)[] {
-    if (d.unknown) return [h("p", null, h("span.badge.hit", null, "Inconnu d'EDSM"), " Personne n'a encore envoyé ce système à EDSM : tu es peut-être le premier à l'explorer.")];
+    if (d.unknown) return [h("p", null, h("span.badge.hit", null, t("exploration.unknownEdsm")), (" " + t("exploration.nobodyHasSentSystemEdsmYet")))];
     const firsts = new Map<string, number>();
     for (const b of d.bodies) if (b.discoveredBy) firsts.set(b.discoveredBy, (firsts.get(b.discoveredBy) ?? 0) + 1);
     const star = d.bodies.find((b) => b.type === "Star" && (b.distance ?? 0) === 0) ?? d.bodies.find((b) => b.type === "Star");
@@ -214,21 +215,21 @@ export class ExplorationView implements View {
       h(
         "div.stats",
         null,
-        h("div.stat", null, h("strong", null, d.bodyCount ? `${fmt(d.bodies.length)} / ${fmt(d.bodyCount)}` : fmt(d.bodies.length)), h("span.sub", null, "corps connus d'EDSM")),
-        d.value !== undefined ? h("div.stat", null, h("strong", null, `${credits(d.value)} Cr`), h("span.sub", null, "valeur estimée (scan)")) : null,
-        d.valueMapped !== undefined ? h("div.stat", null, h("strong", null, `${credits(d.valueMapped)} Cr`), h("span.sub", null, "avec cartographie")) : null,
+        h("div.stat", null, h("strong", null, d.bodyCount ? `${fmt(d.bodies.length)} / ${fmt(d.bodyCount)}` : fmt(d.bodies.length)), h("span.sub", null, t("exploration.bodiesKnownEdsm"))),
+        d.value !== undefined ? h("div.stat", null, h("strong", null, `${credits(d.value)} Cr`), h("span.sub", null, t("exploration.estimatedValueScan"))) : null,
+        d.valueMapped !== undefined ? h("div.stat", null, h("strong", null, `${credits(d.valueMapped)} Cr`), h("span.sub", null, t("exploration.mapping"))) : null,
       ),
-      star?.discoveredBy ? h("p.sub", null, `Découvert par ${star.discoveredBy}${star.discoveredAt ? ` (${star.discoveredAt.slice(0, 10)})` : ""}`) : h("p.sub", null, "Aucun découvreur connu d'EDSM pour l'étoile principale."),
-      d.bodyCount && d.bodies.length < d.bodyCount ? h("p.sub", null, `${fmt(d.bodyCount - d.bodies.length)} corps jamais envoyés à EDSM.`) : null,
+      star?.discoveredBy ? h("p.sub", null, t("exploration.discovered", { discoveredBy: star.discoveredBy, value: star.discoveredAt ? ` (${star.discoveredAt.slice(0, 10)})` : "" })) : h("p.sub", null, t("exploration.edsmKnowsNoDiscovererMainStar")),
+      d.bodyCount && d.bodies.length < d.bodyCount ? h("p.sub", null, t("exploration.bodiesNeverSentEdsm", { value: fmt(d.bodyCount - d.bodies.length) })) : null,
       d.valuable.length
         ? h(
             "table.table",
             null,
-            h("thead", null, h("tr", null, h("th", null, "Corps intéressants"), h("th.num", null, "Distance"), h("th.num", null, "Valeur max"))),
+            h("thead", null, h("tr", null, h("th", null, t("exploration.valuableBodies")), h("th.num", null, t("common.distance")), h("th.num", null, t("exploration.maxValue")))),
             h(
               "tbody",
               null,
-              d.valuable.slice(0, 8).map((v) => h("tr", null, h("td", null, v.name), h("td.num", null, v.distance !== undefined ? `${fmt(Math.round(v.distance))} ls` : ""), h("td.num", null, `${credits(v.value)} Cr`))),
+              d.valuable.slice(0, 8).map((v) => h("tr", null, h("td", null, v.name), h("td.num", null, v.distance !== undefined ? t("common.ls", { locale: fmt(Math.round(v.distance)) }) : ""), h("td.num", null, `${credits(v.value)} Cr`))),
             ),
           )
         : null,
@@ -244,12 +245,12 @@ export class ExplorationView implements View {
       h(
         "section.card",
         null,
-        h("div.sync-head", null, h("h3", null, "Données cartographiques à vendre"), h("strong", null, `≈ ${credits(total)} Cr`)),
+        h("div.sync-head", null, h("h3", null, t("exploration.cartographicDataSell")), h("strong", null, t("exploration.cr", { total: credits(total) }))),
         list.length
           ? h(
               "table.table",
               null,
-              h("thead", null, h("tr", null, h("th", null, "Système"), h("th.num", null, "Corps"), h("th.num", null, "Premières découvertes"), h("th.num", null, "Cartographiés"), h("th.num", null, "Valeur estimée"), h("th", null, "Scanné"))),
+              h("thead", null, h("tr", null, h("th", null, t("common.system")), h("th.num", null, t("exploration.bodies")), h("th.num", null, t("exploration.firstDiscoveries")), h("th.num", null, t("exploration.mapped")), h("th.num", null, t("exploration.estimatedValue")), h("th", null, t("exploration.scanned")))),
               h(
                 "tbody",
                 null,
@@ -258,8 +259,8 @@ export class ExplorationView implements View {
                 ),
               ),
             )
-          : h("p.empty", null, "Rien à vendre. Les corps scannés (FSS, scan détaillé, cartographie) s'ajoutent ici jusqu'à leur vente à Universal Cartographics."),
-        h("p.sub", null, "Valeurs estimées avec la formule communautaire (à quelques % près), bonus de première découverte et de cartographie compris. Une destruction fait tout perdre."),
+          : h("p.empty", null, t("exploration.nothingSellScannedBodiesFssDetailed")),
+        h("p.sub", null, t("exploration.valuesEstimatedCommunityFormulaWithinFew")),
       ),
     ];
   }

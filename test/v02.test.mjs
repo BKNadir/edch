@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import "./i18n-setup.mjs";
 import { readFileSync } from "node:fs";
 import { commodityMessage, fssMessage, journalMessage, navrouteMessage, outfittingMessage, shipyardMessage, trackSession } from "../dist/js/eddn.js";
 import { extractLoadout, importLoadout } from "../dist/js/importer.js";

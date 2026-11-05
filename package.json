@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p . && node scripts/copy-static.mjs",
-    "test": "npm run build && node --test test/*.test.mjs",
+    "test": "npm run build && node tools/i18n/check.cjs && node --test test/*.test.mjs",
+    "i18n:check": "node tools/i18n/check.cjs",
     "demo": "npm run build && npx --yes serve dist",
     "tauri": "tauri",
     "app:dev": "tauri dev",

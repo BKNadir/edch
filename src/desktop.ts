@@ -6,6 +6,7 @@ import { dialog } from "./dialog.js";
 import { h, icon, toast } from "./dom.js";
 import { log } from "./logger.js";
 import type { Store } from "./store.js";
+import { t } from "./i18n.js";
 
 let store: Store | null = null;
 
@@ -33,9 +34,9 @@ export function setupDesktop(s: Store) {
   applyClose();
   s.subscribe(applyClose);
   void onConfirmClose(async () => {
-    const answer = await dialog("Fermer EDCH ?", [h("p", null, "EDCH arrête de lire le journal du jeu et l'accès distant se coupe.")], [
-      { label: "Annuler", value: "no" },
-      { label: "Fermer", primary: true, value: "yes" },
+    const answer = await dialog(t("desktop.closeEdch"), [h("p", null, t("desktop.edchStopsReadingGameJournalRemote"))], [
+      { label: t("desktop.cancel"), value: "no" },
+      { label: t("common.close"), primary: true, value: "yes" },
     ]);
     if (answer === "yes") void appQuit();
   });
@@ -47,16 +48,16 @@ export async function startGame() {
   if (isRemote()) {
     try {
       await remoteAction({ type: "launch" });
-      toast("Lancement demandé au PC");
+      toast(t("desktop.launchRequestedPc"));
     } catch {
-      toast("PC injoignable");
+      toast(t("common.pcUnreachable"));
     }
     return;
   }
   const g = store.state.settings.gameLaunch;
   try {
     await launchGame(g.method, g.path);
-    toast(g.method === "steam" ? "Lancement via Steam…" : g.method === "epic" ? "Lancement via Epic Games…" : "Lancement du jeu…");
+    toast(g.method === "steam" ? t("desktop.launchingThroughSteam") : g.method === "epic" ? t("desktop.launchingThroughEpicGames") : t("desktop.launchingGame"));
     store.state.game = "launcher";
     store.notify();
   } catch (e) {
@@ -68,7 +69,7 @@ export async function startGame() {
 /** The game's state and the launch button, for the top bar. */
 export function gameBadge(game: string | undefined): HTMLElement | null {
   if (game === undefined) return null;
-  if (game === "game") return h("div.game-state.on", { title: "Elite Dangerous est lancé" }, h("span.dot"), "Elite lancé");
-  if (game === "launcher") return h("div.game-state.wait", { title: "Le lanceur d'Elite Dangerous est ouvert" }, h("span.dot"), "Lanceur ouvert");
-  return h("button.game-launch", { title: "Lancer Elite Dangerous", onclick: () => startGame() }, icon("play"), " Lancer Elite");
+  if (game === "game") return h("div.game-state.on", { title: t("desktop.eliteDangerousRunning") }, h("span.dot"), t("desktop.eliteRunning"));
+  if (game === "launcher") return h("div.game-state.wait", { title: t("desktop.eliteDangerousLauncherOpen") }, h("span.dot"), t("desktop.launcherOpen"));
+  return h("button.game-launch", { title: t("common.launchEliteDangerous"), onclick: () => startGame() }, icon("play"), (" " + t("desktop.launchElite")));
 }

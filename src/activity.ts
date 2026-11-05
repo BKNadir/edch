@@ -3,6 +3,7 @@
 // mining. Rebuilt at start-up from the last weeks of journal (scan_history), then kept up to date
 // by live events. Pure functions, like journal.ts.
 
+import { t } from "./i18n.js";
 type Json = Record<string, any>;
 
 export interface Mission {
@@ -369,7 +370,7 @@ export { weekStart };
 
 /** "Mission_Delivery_Boom_Wing_name" → "Delivery Boom Wing" (when the game gave no localised title). */
 export function missionTitle(symbol: string): string {
-  return symbol.replace(/^Mission_/i, "").replace(/_name$/i, "").replace(/_/g, " ").trim() || "Mission";
+  return symbol.replace(/^Mission_/i, "").replace(/_name$/i, "").replace(/_/g, " ").trim() || t("common.mission");
 }
 
 function massacreKill(st: ActivityState, victimFaction: string) {
@@ -640,9 +641,9 @@ export function applyActivity(st: ActivityState, ev: Json, ctx: ActivityContext 
     case "SAASignalsFound": {
       const b = getBody(st, ev);
       for (const sig of ev.Signals ?? []) {
-        const t = String(sig.Type ?? "");
-        if (/Biological/i.test(t)) b.bio = num(sig.Count) ?? b.bio;
-        if (/Geological/i.test(t)) b.geo = num(sig.Count) ?? b.geo;
+        const signalType = String(sig.Type ?? "");
+        if (/Biological/i.test(signalType)) b.bio = num(sig.Count) ?? b.bio;
+        if (/Geological/i.test(signalType)) b.geo = num(sig.Count) ?? b.geo;
       }
       if (Array.isArray(ev.Genuses) && ev.Genuses.length) b.genera = ev.Genuses.map((g: Json) => String(g.Genus ?? "").toLowerCase());
       return true;
@@ -696,11 +697,11 @@ export function applyActivity(st: ActivityState, ev: Json, ctx: ActivityContext 
     case "CargoTransfer": {
       const c = st.docked?.carrier ? st.carriers[st.docked.marketId] : undefined;
       if (!c) return false;
-      for (const t of ev.Transfers ?? []) {
-        const dir = String(t.Direction ?? "").toLowerCase();
-        const n = num(t.Count) ?? 0;
-        if (dir === "tocarrier") carrierAdd(c, t.Type, t.Type_Localised, n);
-        else if (dir === "toship" || dir === "tosrv") carrierAdd(c, t.Type, t.Type_Localised, -n);
+      for (const transfer of ev.Transfers ?? []) {
+        const dir = String(transfer.Direction ?? "").toLowerCase();
+        const n = num(transfer.Count) ?? 0;
+        if (dir === "tocarrier") carrierAdd(c, transfer.Type, transfer.Type_Localised, n);
+        else if (dir === "toship" || dir === "tosrv") carrierAdd(c, transfer.Type, transfer.Type_Localised, -n);
       }
       c.updated = at;
       return true;
@@ -825,9 +826,9 @@ export function bodyValue(b: BodyInfo, opts: { mapped?: boolean } = {}): number 
   const firstDiscovery = b.wasDiscovered === false;
   if (b.star !== undefined && b.planetClass === undefined) {
     let k = 1200;
-    const t = b.star ?? "";
-    if (t === "N" || t === "H" || t === "SupermassiveBlackHole") k = 22628;
-    else if (t.startsWith("D")) k = 14057;
+    const starType = b.star ?? "";
+    if (starType === "N" || starType === "H" || starType === "SupermassiveBlackHole") k = 22628;
+    else if (starType.startsWith("D")) k = 14057;
     const value = k + ((b.stellarMass ?? 1) * k) / 66.25;
     return Math.round(value * (firstDiscovery ? 2.6 : 1));
   }

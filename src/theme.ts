@@ -3,6 +3,7 @@
 // colours are darkened (or lightened) by themselves until text written with them stays readable.
 // Applied as CSS variables on <html>; the phone receives the same settings from the PC.
 
+import { t } from "./i18n.js";
 export interface ThemeSettings {
   /** Preset id, or "custom" once a colour was picked by hand. */
   preset: string;
@@ -14,13 +15,13 @@ export interface ThemeSettings {
 }
 
 export const PRESETS: { id: string; label: string; accent: string; cyan: string; bg: string }[] = [
-  { id: "elite", label: "Elite (d'origine)", accent: "#ff7a18", cyan: "#5cc8e8", bg: "#0a0c0f" },
-  { id: "blue", label: "Bleu", accent: "#4da3ff", cyan: "#7fe0d2", bg: "#090c12" },
-  { id: "green", label: "Vert", accent: "#3ddc84", cyan: "#5cc8e8", bg: "#090d0b" },
-  { id: "purple", label: "Violet", accent: "#b07cff", cyan: "#ff7ad9", bg: "#0c0a10" },
-  { id: "red", label: "Rouge", accent: "#ff4d4d", cyan: "#ffb347", bg: "#0f0909" },
-  { id: "contrast", label: "Contraste élevé", accent: "#ffd400", cyan: "#00e5ff", bg: "#000000" },
-  { id: "day", label: "Jour (clair)", accent: "#d35f00", cyan: "#0a78a6", bg: "#eef1f5" },
+  { id: "elite", label: t("theme.eliteOriginal"), accent: "#ff7a18", cyan: "#5cc8e8", bg: "#0a0c0f" },
+  { id: "blue", label: t("theme.blue"), accent: "#4da3ff", cyan: "#7fe0d2", bg: "#090c12" },
+  { id: "green", label: t("theme.green"), accent: "#3ddc84", cyan: "#5cc8e8", bg: "#090d0b" },
+  { id: "purple", label: t("theme.purple"), accent: "#b07cff", cyan: "#ff7ad9", bg: "#0c0a10" },
+  { id: "red", label: t("theme.red"), accent: "#ff4d4d", cyan: "#ffb347", bg: "#0f0909" },
+  { id: "contrast", label: t("theme.highContrast"), accent: "#ffd400", cyan: "#00e5ff", bg: "#000000" },
+  { id: "day", label: t("theme.dayLight"), accent: "#d35f00", cyan: "#0a78a6", bg: "#eef1f5" },
 ];
 
 export const DEFAULT_THEME: ThemeSettings = { preset: "elite", accent: "#ff7a18", cyan: "#5cc8e8", bg: "#0a0c0f", oled: false };
@@ -49,24 +50,24 @@ export const contrast = (a: string, b: string) => {
 export function readable(color: string, bg: string, min = 4.5): string {
   const target: Rgb = luminance(bg) > 0.4 ? [0, 0, 0] : [255, 255, 255];
   const from = rgb(color);
-  for (let t = 0; t <= 1.0001; t += 0.05) {
-    const c = toHex(from.map((v, i) => v + (target[i] - v) * t) as Rgb);
+  for (let step = 0; step <= 1.0001; step += 0.05) {
+    const c = toHex(from.map((v, i) => v + (target[i] - v) * step) as Rgb);
     if (contrast(c, bg) >= min) return c;
   }
   return toHex(target);
 }
 
-export function applyTheme(t: ThemeSettings) {
-  const key = JSON.stringify(t);
+export function applyTheme(theme: ThemeSettings) {
+  const key = JSON.stringify(theme);
   if (key === last) return;
   last = key;
-  const bg = t.oled ? "#000000" : safe(t.bg, DEFAULT_THEME.bg);
+  const bg = theme.oled ? "#000000" : safe(theme.bg, DEFAULT_THEME.bg);
   const light = luminance(bg) > 0.4;
   // Panels are a little lighter than the background in both modes; text written in the accent
   // colours sits on those panels, so readability is checked against them.
   const panelBg = light ? toHex(rgb(bg).map((v) => v + (255 - v) * 0.6) as Rgb) : bg;
-  const accent = readable(safe(t.accent, DEFAULT_THEME.accent), panelBg, light ? 4.5 : 3);
-  const cyan = readable(safe(t.cyan, DEFAULT_THEME.cyan), panelBg, 4.5);
+  const accent = readable(safe(theme.accent, DEFAULT_THEME.accent), panelBg, light ? 4.5 : 3);
+  const cyan = readable(safe(theme.cyan, DEFAULT_THEME.cyan), panelBg, 4.5);
   const mix = light ? (pct: number) => `color-mix(in srgb, ${bg}, #ffffff ${pct}%)` : (pct: number) => `color-mix(in srgb, ${bg}, #9fb4cc ${pct}%)`;
   const line = light ? (pct: number) => `color-mix(in srgb, ${bg}, #23344a ${pct}%)` : mix;
   const vars: Record<string, string> = {
@@ -79,11 +80,11 @@ export function applyTheme(t: ThemeSettings) {
     "--cyan": cyan,
     "--cyan-dim": `color-mix(in srgb, ${cyan} 12%, transparent)`,
     "--bg": bg,
-    "--panel": t.oled ? "#000000" : light ? mix(60) : mix(5),
-    "--panel-inset": t.oled ? "#000000" : light ? mix(35) : mix(3),
-    "--panel-2": t.oled ? "#07080a" : light ? mix(80) : mix(8),
-    "--line": t.oled ? "#1a1e24" : light ? line(14) : mix(14),
-    "--line-2": t.oled ? "#252b33" : light ? line(22) : mix(19),
+    "--panel": theme.oled ? "#000000" : light ? mix(60) : mix(5),
+    "--panel-inset": theme.oled ? "#000000" : light ? mix(35) : mix(3),
+    "--panel-2": theme.oled ? "#07080a" : light ? mix(80) : mix(8),
+    "--line": theme.oled ? "#1a1e24" : light ? line(14) : mix(14),
+    "--line-2": theme.oled ? "#252b33" : light ? line(22) : mix(19),
     "--text": light ? "#1b2129" : "#e7e9ec",
     "--muted": light ? "#5b6573" : "#8a94a2",
     "--text-soft": light ? "#39424d" : "#c6ccd4",
@@ -98,7 +99,7 @@ export function applyTheme(t: ThemeSettings) {
   const root = document.documentElement;
   for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v);
   root.style.setProperty("color-scheme", light ? "light" : "dark");
-  root.classList.toggle("oled", t.oled);
+  root.classList.toggle("oled", theme.oled);
   root.classList.toggle("light", light);
   document.querySelector('meta[name="theme-color"]')?.setAttribute("content", bg);
 }

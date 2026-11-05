@@ -4,7 +4,7 @@
 
 import { copyText, isRemote } from "./bridge.js";
 import { h, icon, toast } from "./dom.js";
-import { gameEnglish, gameName } from "./i18n.js";
+import { gameEnglish, gameName, t } from "./i18n.js";
 import { log } from "./logger.js";
 import type { Store } from "./store.js";
 import { focusModule } from "./views/engineering.js";
@@ -32,7 +32,7 @@ export async function openSystem(system: string, opts: { navigate?: boolean } = 
   const ok = await copyEverywhere(system);
   const toNav = (opts.navigate ?? true) && Boolean(store?.state.settings.systemOpensNav);
   log.debug("link", `system "${system}"${toNav ? " → navigation" : ""}`);
-  toast(ok ? (isRemote() ? `« ${system} » copié sur le PC — colle-le dans la carte galactique` : `« ${system} » copié — colle-le dans la carte galactique`) : isRemote() ? "PC injoignable : rien n'a été copié" : "Copie impossible");
+  toast(ok ? (isRemote() ? t("links.copiedPcPasteGalaxyMap", { system }) : t("links.copiedPasteGalaxyMap", { system })) : isRemote() ? t("links.pcUnreachableNothingWasCopied") : t("common.couldnTCopy"));
   if (toNav && store) {
     setDestination(system);
     store.setView("navigation");
@@ -63,7 +63,7 @@ export function openMaterial(id: string) {
 }
 
 export const systemLink = (name?: string, opts: { navigate?: boolean; title?: string; text?: string } = {}) =>
-  name ? h("button.sys", { title: opts.title ?? `Copier « ${name} »`, onclick: () => openSystem(name, opts) }, icon("copy"), h("span", null, opts.text ?? name)) : null;
+  name ? h("button.sys", { title: opts.title ?? t("common.copy", { name }), onclick: () => openSystem(name, opts) }, icon("copy"), h("span", null, opts.text ?? name)) : null;
 
 /** An engineer was clicked: copy the system of their workshop (like a system link). */
 export function openEngineer(name: string) {
@@ -76,7 +76,7 @@ export function openEngineer(name: string) {
 export const engineerLink = (name: string) => {
   const system = engineerSystems.get(name);
   return system
-    ? h("button.inline-link.ref-link", { title: `Copier le système de ${name} (${system})`, "data-no-tr": "", onclick: (e: Event) => (e.stopPropagation(), openEngineer(name)) }, name)
+    ? h("button.inline-link.ref-link", { title: t("common.copySSystem", { name, system }), "data-no-tr": "", onclick: (e: Event) => (e.stopPropagation(), openEngineer(name)) }, name)
     : h("span", { "data-no-tr": "" }, name);
 };
 
@@ -84,7 +84,7 @@ export const engineerLink = (name: string) => {
 export const engineerLinks = (names: string[]) => names.flatMap((n, i) => [i ? ", " : "", engineerLink(n)]);
 
 export const moduleLink = (module: string, label = gameName(module)) =>
-  h("button.inline-link.ref-link", { title: "Voir les modifications de ce module", onclick: (e: Event) => (e.stopPropagation(), openModule(module)) }, label);
+  h("button.inline-link.ref-link", { title: t("links.seeModuleSModifications"), onclick: (e: Event) => (e.stopPropagation(), openModule(module)) }, label);
 
 export const commodityLink = (name: string, label = gameName(name)) =>
-  h("button.inline-link.ref-link", { title: "Où l'acheter", onclick: (e: Event) => (e.stopPropagation(), openCommodity(name)) }, label);
+  h("button.inline-link.ref-link", { title: t("common.whereBuy"), onclick: (e: Event) => (e.stopPropagation(), openCommodity(name)) }, label);

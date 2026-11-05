@@ -2,6 +2,7 @@ import { copyText, isRemote, isTauri, remoteInterfaces, remoteQr, type NetAddres
 import { h, icon, replace, toast } from "../dom.js";
 import type { Ctx, View } from "../context.js";
 import { pairingHost, pairingUrl, remoteRunning, rotateToken, startRemote, stopRemote } from "../remote.js";
+import { t } from "../i18n.js";
 
 const KIND_LABEL: Record<NetAddress["kind"], string> = { ethernet: "Ethernet", wifi: "Wi-Fi", tailscale: "Tailscale", vpn: "VPN" };
 
@@ -15,7 +16,7 @@ export class MobileView implements View {
 
   async mount(root: HTMLElement) {
     this.root = root;
-    replace(root, h("header.view-head", null, h("div", null, h("h1", null, "Accès distant"), h("p.sub", null, "Ouvre EDCH sur ton téléphone, ta tablette ou un autre écran (navigateur), sur le même réseau que ce PC."))), this.body);
+    replace(root, h("header.view-head", null, h("div", null, h("h1", null, t("common.remoteAccess")), h("p.sub", null, t("mobile.openEdchPhoneTabletAnotherScreen")))), this.body);
     await this.render();
   }
 
@@ -27,11 +28,11 @@ export class MobileView implements View {
     if (!this.root) return;
     const store = this.ctx.store;
     if (isRemote()) {
-      replace(this.body, h("section.card", null, h("h3", null, "Connecté"), h("p", null, icon("check"), " Cet appareil est connecté à EDCH sur ton PC. Les données se mettent à jour toutes seules.")));
+      replace(this.body, h("section.card", null, h("h3", null, t("common.connected")), h("p", null, icon("check"), (" " + t("mobile.deviceConnectedEdchPcDataUpdates")))));
       return;
     }
     if (!isTauri()) {
-      replace(this.body, h("section.card", null, h("p.sub", null, "Disponible dans l'application (pas en mode démo).")));
+      replace(this.body, h("section.card", null, h("p.sub", null, t("common.availableAppNotDemoMode"))));
       return;
     }
     const r = store.state.settings.remote;
@@ -63,7 +64,7 @@ export class MobileView implements View {
       h(
         "section.card",
         null,
-        h("div.sync-head", null, h("div", null, h("h3", null, "Serveur d'accès distant"), h("p.sub", null, "Désactivé par défaut. Il sert aussi la page « Ouvrir dans le navigateur ». Seuls les appareils qui ont scanné le QR code peuvent ouvrir la page : connaître l'adresse du PC ne suffit pas.")), toggle),
+        h("div.sync-head", null, h("div", null, h("h3", null, t("mobile.remoteAccessServer")), h("p.sub", null, t("mobile.offDefaultAlsoServesOpenBrowser"))), toggle),
         this.error ? h("p.error", null, icon("warn"), ` ${this.error}`) : null,
       ),
     ];
@@ -93,26 +94,26 @@ export class MobileView implements View {
           h(
             "div.qr-side",
             null,
-            h("h3", null, "Scanne avec l'appareil photo"),
+            h("h3", null, t("mobile.scanCamera")),
             h(
               "ol.steps",
               null,
               viaTailscale
-                ? h("li", null, "Active Tailscale sur le téléphone (même compte que sur ce PC). Wi-Fi ou données mobiles, peu importe.")
-                : h("li", null, "Connecte le téléphone au même Wi-Fi que ce PC."),
-              h("li", null, "Scanne le QR code : EDCH s'ouvre dans le navigateur et l'appareil reste autorisé."),
-              h("li", null, "Ajoute la page à l'écran d'accueil pour l'ouvrir comme une appli."),
+                ? h("li", null, t("mobile.turnTailscalePhoneSameAccountPc"))
+                : h("li", null, t("mobile.connectPhoneSameWiFiPc")),
+              h("li", null, t("mobile.scanQrCodeEdchOpensBrowser")),
+              h("li", null, t("mobile.addPageHomeScreenOpenLike")),
             ),
             h(
               "div.pair-link",
               null,
               h("code", { "data-no-tr": "" }, url),
-              h("button.ghost.small", { onclick: async () => toast((await copyText(url)) ? "Lien copié : il contient le code secret, ne le partage qu'avec tes appareils" : "Copie impossible") }, icon("copy"), " Copier le lien"),
+              h("button.ghost.small", { onclick: async () => toast((await copyText(url)) ? t("mobile.linkCopiedContainsSecretCodeOnly") : t("common.couldnTCopy")) }, icon("copy"), (" " + t("mobile.copyLink"))),
             ),
             h(
               "label.field",
               null,
-              h("span", null, "Adresse du PC"),
+              h("span", null, t("mobile.pcAddress")),
               h(
                 "select",
                 {
@@ -123,12 +124,12 @@ export class MobileView implements View {
                 },
                 options.map((n) => h("option", { value: n.ip, selected: n.ip === host, "data-no-tr": "" }, optionLabel(n))),
               ),
-              h("small", null, "Choisis la connexion par laquelle le téléphone joint ce PC : Wi-Fi ou Ethernet à la maison, Tailscale depuis l'extérieur. Le QR code et le lien suivent ton choix."),
+              h("small", null, t("mobile.pickConnectionPhoneUsesReachPc")),
             ),
             h(
               "label.field",
               null,
-              h("span", null, "Port"),
+              h("span", null, t("mobile.port")),
               h("input", {
                 type: "number",
                 min: "1024",
@@ -155,11 +156,11 @@ export class MobileView implements View {
                 {
                   onclick: async () => {
                     await rotateToken(store);
-                    toast("Nouveau code : les appareils connectés doivent rescanner");
+                    toast(t("mobile.newCodeConnectedDevicesMustScan"));
                     await this.render();
                   },
                 },
-                "Nouveau code",
+                t("mobile.newCode"),
               ),
             ),
           ),
@@ -167,15 +168,15 @@ export class MobileView implements View {
         h(
           "section.card",
           null,
-          h("h3", null, "Bon à savoir"),
+          h("h3", null, t("mobile.goodKnow")),
           h(
             "ul.notes",
             null,
-            h("li", null, "Windows peut demander d'autoriser EDCH sur le pare-feu : accepte pour les réseaux privés."),
-            h("li", null, "« Nouveau code » déconnecte tous les appareils déjà autorisés."),
-            h("li", null, "La connexion locale n'est pas chiffrée (HTTP) : utilise-la sur ton réseau domestique, pas sur un Wi-Fi public. Hors de chez toi ou sur un Wi-Fi public, passe par Tailscale (chiffré)."),
-            h("li", null, "Le lien contient le code secret, comme le QR code : ne le partage qu'avec tes propres appareils."),
-            h("li", null, "Sur le téléphone, la wishlist se modifie et se synchronise avec le PC. Les exports, imports et la synchro EDDN restent sur le PC."),
+            h("li", null, t("mobile.windowsMayAskAllowEdchThrough")),
+            h("li", null, t("mobile.newCodeDisconnectsEveryDeviceAlready")),
+            h("li", null, t("mobile.localConnectionIsnTEncryptedHttp")),
+            h("li", null, t("mobile.linkContainsSecretCodeLikeQr")),
+            h("li", null, t("mobile.phoneWishlistCanEditedSyncsPc")),
           ),
         ),
         h(
@@ -184,12 +185,12 @@ export class MobileView implements View {
           h(
             "div.sync-head",
             null,
-            h("div", null, h("h3", null, "Accès hors de chez moi"), h("p.sub", null, "Avec Tailscale, un réseau privé chiffré entre tes propres appareils, gratuit pour un usage personnel.")),
-            h("button.ghost", { onclick: () => this.ctx.store.setView("guide-remote") }, "Guide pas à pas"),
+            h("div", null, h("h3", null, t("mobile.accessAwayFromHome")), h("p.sub", null, t("mobile.tailscaleEncryptedPrivateNetworkBetweenOwn"))),
+            h("button.ghost", { onclick: () => this.ctx.store.setView("guide-remote") }, t("mobile.stepStepGuide")),
           ),
           ts
-            ? h("p.sub", null, `Tailscale est actif sur ce PC (${ts}). Pour l'utiliser, choisis « Tailscale » dans la liste « Adresse du PC » ci-dessus.`)
-            : h("p.sub", null, "Tailscale n'est pas détecté sur ce PC. Suis le guide pour l'installer, puis reviens sur cette page."),
+            ? h("p.sub", null, t("mobile.tailscaleRunningPcUsePickTailscale", { ts }))
+            : h("p.sub", null, t("mobile.tailscaleIsnTDetectedPcFollow")),
         ),
       );
     }

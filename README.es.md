@@ -73,7 +73,7 @@ No se recoge ni se envía nada más. Tus ajustes, claves y lista de deseos se gu
 
 EDCH está disponible en los seis idiomas del juego: inglés (predeterminado), francés, alemán, español, portugués (Brasil) y ruso. El instalador pregunta el idioma y la aplicación lo usa en el primer inicio. Puedes cambiarlo cuando quieras en **Ajustes → Idioma**. Los nombres de materiales, módulos, planos y efectos siguen la traducción del juego; los nombres de los controles se mantienen como en el juego en inglés.
 
-Para añadir o corregir una traducción, edita `tools/translations_*.txt` (una línea por texto: `fr ¦ en ¦ de ¦ es ¦ pt ¦ ru`) y luego ejecuta `python3 tools/gen_locales.py`.
+Para añadir o corregir una traducción, edita `public/locales/<idioma>.json` (el inglés es la referencia); consulta [docs/TRANSLATING.md](docs/TRANSLATING.md). `npm run i18n:check` lista los textos que faltan.
 
 ## Instalación
 
@@ -110,7 +110,7 @@ Estructura:
   - `eddn.ts`, `uploaders.ts`: mensajes de EDDN, EDSM e Inara.
   - `binds.ts`: archivos `.binds` y nombres de dispositivos.
   - `i18n.ts`: capa de traducción.
-- `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regeneran los datos de `public/` (ver NOTICE).
+- `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: regeneran los datos de `public/` (ver NOTICE).
 
 Con cada push a `main` se lanza una compilación para Windows. Para publicar una versión, sube una etiqueta como `v0.10.4`: se publica la Release y las copias instaladas ofrecen la actualización.
 

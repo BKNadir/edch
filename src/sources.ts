@@ -1,4 +1,4 @@
-import { gameName } from "./i18n.js";
+import { gameName, t } from "./i18n.js";
 // "Where to find" rules: each origin string from the data becomes a readable French
 // hint and, when the condition can be searched, a Spansh query that lists real
 // systems / bodies / stations near you.
@@ -29,12 +29,12 @@ const atLeast = (n: number) => ({ comparison: "<=>", value: [String(n), BIG] });
 const states = (...values: string[]) => [{ state: { value: values } }];
 
 const HGE_LABEL: Record<string, { fr: string; states?: string[]; allegiance?: string }> = {
-  boom: { fr: "en Boom ou Expansion", states: ["Boom", "Expansion"] },
-  "war/civil war": { fr: "en Guerre ou Guerre civile", states: ["War", "Civil War"] },
-  "civil unrest": { fr: "en Troubles civils", states: ["Civil Unrest"] },
-  outbreak: { fr: "en Épidémie", states: ["Outbreak"] },
-  "federation systems": { fr: "de la Fédération", allegiance: "Federation" },
-  "empire systems": { fr: "de l'Empire", allegiance: "Empire" },
+  boom: { fr: t("sources.boomExpansion"), states: ["Boom", "Expansion"] },
+  "war/civil war": { fr: t("sources.warCivilWar"), states: ["War", "Civil War"] },
+  "civil unrest": { fr: t("sources.civilUnrest"), states: ["Civil Unrest"] },
+  outbreak: { fr: t("sources.outbreak"), states: ["Outbreak"] },
+  "federation systems": { fr: t("sources.federation"), allegiance: "Federation" },
+  "empire systems": { fr: t("sources.empire"), allegiance: "Empire" },
 };
 
 /** Finders for one origin string; most give one, some none. */
@@ -52,9 +52,9 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
         {
           key: `hge:${hge[1].toLowerCase()}`,
           type: "systems",
-          title: `Émissions d'intensité élevée — systèmes peuplés ${rule.fr}`,
+          title: t("sources.highGradeEmissionsPopulatedSystems", { fr: rule.fr }),
           hint:
-            "Sources de signal « Émissions d'intensité élevée » en supercroisière. Plus fréquentes dans les systèmes très peuplés, surtout Alliance et Indépendants. Elles disparaissent après quelques minutes : reste en supercroisière et surveille le radar.",
+            t("sources.highGradeEmissionsSignalSourcesSupercruise"),
           filters,
           states: rule.states,
           fresh: Boolean(rule.states),
@@ -65,13 +65,13 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
 
   if (o.startsWith("signal source (high security)") || o.startsWith("signal source (low security)") || o.startsWith("signal source (anarchy)")) {
     const level = o.includes("high") ? "High" : o.includes("low") ? "Low" : "Anarchy";
-    const fr = level === "High" ? "haute" : level === "Low" ? "basse" : "anarchie";
+    const fr = level === "High" ? t("sources.high") : level === "Low" ? t("sources.low") : t("sources.anarchy");
     return [
       {
         key: `uss:${level}`,
         type: "systems",
-        title: `Émissions codées — systèmes à sécurité ${fr}`,
-        hint: "Sources de signal « Émissions codées » : scanne les épaves et les balises dans le signal.",
+        title: t("sources.encodedEmissionsSecuritySystems", { fr }),
+        hint: t("sources.encodedEmissionsSignalSourcesScanWrecks"),
         filters: { security: choice(level), population: atLeast(1) },
       },
     ];
@@ -82,8 +82,8 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "cz",
         type: "systems",
-        title: "Zones de conflit — systèmes en Guerre / Guerre civile",
-        hint: "Détruis des vaisseaux militaires ou d'autorité dans les zones de conflit et récupère leurs matériaux.",
+        title: t("sources.conflictZonesSystemsWarCivilWar"),
+        hint: t("sources.destroyMilitaryAuthorityShipsConflictZones"),
         filters: { minor_faction_presences: states("War", "Civil War"), population: atLeast(1) },
         states: ["War", "Civil War"],
         fresh: true,
@@ -92,14 +92,14 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
   }
 
   if (o.startsWith("high wake scanning")) {
-    if (o.includes("thargoid")) return [info("Scanner les sillages d'intercepteurs Thargoid", "Utilise un scanner de sillage sur un intercepteur Thargoid qui saute.")];
+    if (o.includes("thargoid")) return [info(t("sources.scanThargoidInterceptorWakes"), t("sources.useWakeScannerThargoidInterceptorJumps"))];
     return [
       {
         key: "wake",
         type: "systems",
-        title: "Scanner les sillages haute énergie — systèmes très fréquentés",
+        title: t("sources.scanHighEnergyWakesBusySystems"),
         hint:
-          "Installe un scanner de sillage et scanne les sillages à haute énergie près des stations. Les systèmes très peuplés (et ceux en Famine) ont beaucoup de trafic.",
+          t("sources.fitFrameShiftWakeScannerScan"),
         filters: { population: atLeast(1_000_000_000) },
       },
     ];
@@ -110,8 +110,8 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: `surface:${m.id}`,
         type: "bodies",
-        title: `Prospection en surface — planètes riches en ${gameName(m.name)}`,
-        hint: "Pose-toi, prends le SRV et tire sur les roches et affleurements minéraux. Plus le % est élevé, plus le matériau sort souvent.",
+        title: t("sources.surfaceProspectingPlanetsRich", { name: gameName(m.name) }),
+        hint: t("sources.landTakeSrvShootMineralRocks"),
         filters: { materials: { name: choice(m.name) }, is_landable: choice("true") },
         materialName: m.name,
         size: 60,
@@ -124,8 +124,8 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "rings:icy",
         type: "bodies",
-        title: "Minage — anneaux de glace",
-        hint: "Mine les astéroïdes des anneaux glacés : les matériaux bruts tombent avec les fragments.",
+        title: t("sources.miningIcyRings"),
+        hint: t("sources.mineAsteroidsIcyRingsRawMaterials"),
         filters: { rings: choice("Icy") },
       },
     ];
@@ -136,8 +136,8 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "rings:pristine",
         type: "bodies",
-        title: "Minage — anneaux vierges",
-        hint: "Les anneaux aux réserves « vierges » donnent plus de fragments, donc plus de matériaux bruts.",
+        title: t("sources.miningPristineRings"),
+        hint: t("sources.ringsPristineReservesGiveMoreFragments"),
         filters: { reserve_level: choice("Pristine"), rings: choice("Metallic", "Metal Rich", "Rocky", "Icy") },
       },
     ];
@@ -148,8 +148,8 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "guardian",
         type: "bodies",
-        title: "Sites Gardiens (ruines et structures)",
-        hint: "Scanne les obélisques et tire sur les panneaux/sentinelles. Les sites sont surtout dans les nébuleuses Gardiennes (Regor, Vela…).",
+        title: t("sources.guardianSitesRuinsStructures"),
+        hint: t("sources.scanObelisksShootPanelsSentinelsSites"),
         filters: { signals: { name: choice("Guardian") } },
       },
     ];
@@ -160,9 +160,9 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "thargoid",
         type: "bodies",
-        title: "Sites Thargoid au sol",
+        title: t("sources.thargoidSurfaceSites"),
         hint:
-          "Épaves, structures et barnacles Thargoid. Les intercepteurs et éclaireurs se rencontrent aussi autour des zones de guerre Thargoid.",
+          t("sources.thargoidWrecksStructuresBarnaclesInterceptorsSco"),
         filters: { signals: { name: choice("Thargoid") } },
       },
     ];
@@ -174,10 +174,10 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "res",
         type: "systems",
-        title: scan ? "Scanner des vaisseaux de combat — systèmes à pirates (sécurité basse / anarchie)" : "Débris de vaisseaux de combat — RES des systèmes à pirates",
+        title: scan ? t("sources.scanCombatShipsPirateSystemsLow") : t("sources.combatShipSalvageResPirateSystems"),
         hint: scan
-          ? "Scanne les vaisseaux en combat dans les sites d'extraction de ressources des anneaux et dans les zones de conflit (aucun scanner spécial n'est nécessaire)."
-          : "Détruis des pirates dans les sites d'extraction de ressources (RES), autour des anneaux, puis ramasse les matériaux qu'ils lâchent.",
+          ? t("sources.scanShipsCombatRingResourceExtraction")
+          : t("sources.destroyPiratesResourceExtractionSitesRes"),
         filters: { security: choice("Low", "Anarchy"), population: atLeast(1) },
       },
     ];
@@ -189,10 +189,10 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "traffic",
         type: "systems",
-        title: scan ? "Scanner des cargos — systèmes très peuplés (beaucoup de trafic)" : "Débris de cargos — systèmes très peuplés (beaucoup de trafic)",
+        title: scan ? t("sources.scanHaulersHighlyPopulatedSystemsLots") : t("sources.haulerSalvageHighlyPopulatedSystemsLots"),
         hint: scan
-          ? "Scanne les vaisseaux de transport près des stations et sur les routes commerciales."
-          : "Les cargos détruits (missions, pirates, RES) lâchent ces matériaux.",
+          ? t("sources.scanTransportShipsNearStationsTrade")
+          : t("sources.destroyedHaulersMissionsPiratesResDrop"),
         filters: { population: atLeast(100_000_000) },
       },
     ];
@@ -203,8 +203,8 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
       {
         key: "settlements",
         type: "stations",
-        title: "Installations planétaires — points de données à scanner",
-        hint: "Pose-toi près d'une installation et scanne ses points de données (scanner de données du SRV ou à pied).",
+        title: t("sources.planetarySettlementsDataPointsScan"),
+        hint: t("sources.landNearSettlementScanDataPoints"),
         filters: { type: choice("Settlement", "Surface Settlement") },
         size: 6,
       },
@@ -213,10 +213,10 @@ function fromOrigin(origin: string, m: Material, s: Settings): Finder[] {
 
   // Not searchable: give a clear hint instead.
   const hints: [RegExp, string, string][] = [
-    [/^mission reward/, "Récompense de mission", "Choisis ce matériau comme récompense de mission (tableau des missions)."],
-    [/^surface poi/, "Points d'intérêt au sol", "Épaves et sites d'intérêt en surface."],
-    [/^deep space data beacon/, "Balises de données en espace profond", "Balises dans les sources de signal en espace profond."],
-    [/^signal source$/, "Sources de signal non identifiées", "Sources de signal non identifiées en supercroisière."],
+    [/^mission reward/, t("sources.missionReward"), t("sources.pickMaterialMissionRewardMissionBoard")],
+    [/^surface poi/, t("sources.surfacePointsInterest"), t("sources.wrecksPointsInterestSurface")],
+    [/^deep space data beacon/, t("sources.deepSpaceDataBeacons"), t("sources.beaconsDeepSpaceSignalSources")],
+    [/^signal source$/, t("sources.unidentifiedSignalSources"), t("sources.unidentifiedSignalSourcesSupercruise")],
   ];
   for (const [re, title, hint] of hints) if (re.test(o)) return [info(title, hint)];
   return [info(origin, "")];
@@ -234,18 +234,18 @@ const ECONOMY: Record<string, string> = {
 };
 
 export const BUILDING_FR: Record<string, string> = {
-  AGRI: "Agriculture",
-  CMD: "Commandement",
-  EXT: "Extraction",
-  HAB: "Habitation",
-  IND: "Industriel",
-  LAB: "Laboratoire",
-  MED: "Médical",
-  PROC: "Traitement",
-  PWR: "Centrale",
-  RES: "Résidentiel",
-  SEC: "Sécurité",
-  STO: "Entrepôt",
+  AGRI: t("sources.agriculture"),
+  CMD: t("sources.command"),
+  EXT: t("sources.extraction"),
+  HAB: t("sources.habitation"),
+  IND: t("sources.industrial"),
+  LAB: t("sources.laboratory"),
+  MED: t("sources.medical"),
+  PROC: t("sources.processing"),
+  PWR: t("sources.power"),
+  RES: t("sources.residential"),
+  SEC: t("common.security"),
+  STO: t("sources.storage"),
 };
 
 function odysseyFinders(m: Material): Finder[] {
@@ -255,8 +255,8 @@ function odysseyFinders(m: Material): Finder[] {
     out.push({
       key: `settlement:${eco.join(",")}`,
       type: "stations",
-      title: `Installations au sol (${[...new Set(m.settlements)].join(", ")})`,
-      hint: "Fouille les casiers et terminaux des installations Odyssey de ce type.",
+      title: t("sources.surfaceSettlements", { value: [...new Set(m.settlements)].join(", ") }),
+      hint: t("sources.searchLockersTerminalsOdysseySettlementsType"),
       filters: { type: choice("Settlement"), primary_economy: choice(...new Set(eco)) },
       size: 8,
     });
@@ -264,20 +264,20 @@ function odysseyFinders(m: Material): Finder[] {
     out.push({
       key: "settlement:any",
       type: "stations",
-      title: "Installations au sol (Odyssey) les plus proches",
-      hint: "Fouille les terminaux et casiers des bâtiments indiqués ci-dessous. Les installations abandonnées et celles en conflit n'ont pas besoin de permis.",
+      title: t("sources.nearestSurfaceSettlementsOdyssey"),
+      hint: t("sources.searchTerminalsLockersBuildingsListedBelow"),
       filters: { type: choice("Settlement") },
       size: 8,
     });
   }
   const where: string[] = [];
-  if (m.buildings?.length) where.push(`Bâtiments : ${m.buildings.map((b) => BUILDING_FR[b] ?? b).join(", ")}`);
-  if (m.containers?.length) where.push(`Conteneurs : ${m.containers.join(", ")}`);
-  if (where.length) out.push(info("Où chercher dans l'installation", where.join(" · ")));
+  if (m.buildings?.length) where.push(t("sources.buildings", { value: m.buildings.map((b) => BUILDING_FR[b] ?? b).join(", ") }));
+  if (m.containers?.length) where.push(t("sources.containers", { value: m.containers.join(", ") }));
+  if (where.length) out.push(info(t("sources.whereLookSettlement"), where.join(" · ")));
   for (const origin of m.origins) {
     const o = origin.toLowerCase();
-    if (o.includes("mission")) out.push(info("Récompense de mission", "Proposé en récompense de missions Odyssey."));
-    else if (o.includes("bartender") || o.includes("bar")) out.push(info("Bar des stations (barman)", "Achetable chez le barman des stations Odyssey."));
+    if (o.includes("mission")) out.push(info(t("sources.missionReward"), t("sources.offeredOdysseyMissionReward")));
+    else if (o.includes("bartender") || o.includes("bar")) out.push(info(t("sources.stationBarBartender"), t("sources.canBoughtFromBartenderOdysseyStations")));
     else if (!o.includes("settlement")) out.push(info(origin, ""));
   }
   return out;
@@ -286,7 +286,7 @@ function odysseyFinders(m: Material): Finder[] {
 /** Every finder for a material, searchable ones first, duplicates removed. */
 export function findersFor(m: Material, settings: Settings): Finder[] {
   const list = m.ledger === "locker" ? odysseyFinders(m) : m.origins.flatMap((o) => fromOrigin(o, m, settings));
-  if (!list.length) list.push(info("Source non documentée", "La communauté n'a pas encore de source fiable pour ce matériau (souvent lié aux Thargoids)."));
+  if (!list.length) list.push(info(t("sources.undocumentedSource"), t("sources.communityHasNoReliableSourceMaterial")));
   const seen = new Set<string>();
   const unique = list.filter((f) => (seen.has(f.key) ? false : (seen.add(f.key), true)));
   return unique.sort((a, b) => Number(a.type === "info") - Number(b.type === "info"));
@@ -300,7 +300,7 @@ export function traderFinder(m: Material, settings: Settings): Finder | null {
   return {
     key: `trader:${m.category}${settings.largePadOnly ? ":L" : ""}`,
     type: "stations",
-    title: `Trader de matériaux ${m.category === "Raw" ? "bruts" : m.category === "Encoded" ? "encodés" : "manufacturés"} le plus proche`,
+    title: t("sources.nearestMaterialTrader", { value: m.category === "Raw" ? t("sources.raw") : m.category === "Encoded" ? t("sources.encoded") : t("sources.manufactured") }),
     filters,
     size: 3,
   };

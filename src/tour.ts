@@ -7,7 +7,7 @@ import { copyText, spanshJob } from "./bridge.js";
 import type { Ctx } from "./context.js";
 import { ownedOf } from "./context.js";
 import { toast } from "./dom.js";
-import { gameName } from "./i18n.js";
+import { gameName, t } from "./i18n.js";
 import { jumpModel } from "./jump.js";
 import { log } from "./logger.js";
 import { notify } from "./notifier.js";
@@ -221,13 +221,13 @@ export function tourEvent(ev: Json) {
     const i = store.state.settings.navAutoCopy ? navRoute.findIndex((x) => x.toLowerCase() === here) : -1;
     if (i >= 0) {
       const next = navRoute[i + 1];
-      if (next) copyNext(next, `Prochain saut copié : ${next}`);
-      else toast("Destination de l'itinéraire atteinte");
+      if (next) copyNext(next, t("common.nextJumpCopied", { next }));
+      else toast(t("tour.routeDestinationReached"));
     } else if (s.autoCopyNext && route) {
       const { next, index } = nextJump(ev.StarSystem);
       if (index >= 0) {
-        if (next) copyNext(next.system, next.engineer ? `Prochain saut copié : ${next.system} (${next.engineer})` : `Prochain saut copié : ${next.system}`);
-        else toast("Dernière étape de la tournée des ingénieurs");
+        if (next) copyNext(next.system, next.engineer ? t("tour.nextJumpCopied", { system: next.system, engineer: next.engineer }) : t("common.nextJumpCopied", { next: next.system }));
+        else toast(t("tour.lastStopEngineerTour"));
       }
     }
   }
@@ -252,10 +252,10 @@ function tick(ev: Json) {
     const name = gameName(item.bp.split("|")[2] ?? "");
     if (item.count > 1) {
       next = list.map((w) => (w.id === item.id ? { ...w, count: w.count - 1 } : w));
-      message = `Effet appliqué : ${name} (encore ${item.count - 1})`;
+      message = t("tour.effectAppliedGo", { name, value: item.count - 1 });
     } else {
       next = list.filter((w) => w.id !== item.id);
-      message = `Effet appliqué : ${name} — retiré de la wishlist`;
+      message = t("tour.effectAppliedRemovedFromWishlist", { name });
     }
   } else if (blueprint && level) {
     const item =
@@ -269,10 +269,10 @@ function tick(ev: Json) {
       // One module done at the top grade.
       if (item.count > 1) updated = { ...item, count: item.count - 1, rolls: { ...item.rolls, [level]: defaultRolls(level) } };
       else updated = null;
-      message = updated ? `${name} G${level} terminé (encore ${item.count - 1})` : `${name} G${level} terminé — retiré de la wishlist`;
+      message = updated ? t("tour.gDoneGo", { name, level, value: item.count - 1 }) : t("tour.gDoneRemovedFromWishlist", { name, level });
     } else {
       if (item.count === 1) updated = { ...updated, gradeFrom: left === 0 ? Math.min(level + 1, item.gradeTo) : Math.max(item.gradeFrom, level) };
-      message = `${name} G${level} : jet compté`;
+      message = t("tour.gRollCounted", { name, level });
     }
     next = updated ? list.map((w) => (w.id === item.id ? updated! : w)) : list.filter((w) => w.id !== item.id);
   }

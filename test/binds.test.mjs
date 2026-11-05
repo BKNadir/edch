@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import "./i18n-setup.mjs";
 import { readFileSync } from "node:fs";
 import { comboLabel, deviceInfo, fileForPreset, groupOf, padControl, parseBinds, parseStartPreset, presetLineFor } from "../dist/js/binds.js";
 import { DEMO_BINDS } from "../dist/js/demo.js";

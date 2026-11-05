@@ -6,7 +6,7 @@ import { applyActivity, emptyActivity, HISTORY_DAYS, HISTORY_EVENTS, type Missio
 import { isRemote, scanHistory } from "./bridge.js";
 import { h } from "./dom.js";
 import { log } from "./logger.js";
-import { gameName } from "./i18n.js";
+import { gameName, t } from "./i18n.js";
 import { mountSideTab, notify, recentAlerts, refresh as refreshTab } from "./notifier.js";
 import type { Store } from "./store.js";
 import { hoursLeft, relTime } from "./time.js";
@@ -97,20 +97,20 @@ export async function syncWing() {
   log.info("wing", "Wing link started");
   link = new WingLink(want, wingMe, {
     newMission: (row, by) => {
-      if (store.state.settings.wing.notifyNew) notify(`${by} : nouvelle mission d'escadrille « ${row.mission.title} »`);
+      if (store.state.settings.wing.notifyNew) notify(t("live.newWingMission", { by, title: row.mission.title }));
     },
     everyone: (row) => {
-      if (store.state.settings.wing.notifyAll) notify(`Toute l'escadrille a accepté « ${row.mission.title} »`);
+      if (store.state.settings.wing.notifyAll) notify(t("live.wholeWingAccepted", { title: row.mission.title }));
     },
     accepted: (row, by) => {
-      if (store.state.settings.wing.notifyAccept) notify(`${by} a accepté « ${row.mission.title} »`);
+      if (store.state.settings.wing.notifyAccept) notify(t("live.accepted", { by, title: row.mission.title }));
     },
     left: (name, reason) => {
       log.info("wing", `${name} left (${reason ?? "?"})`);
       if (!store.state.settings.wing.notifyLeave) return;
-      if (reason === "closed") notify(`${name} a fermé EDCH`);
-      else if (reason === "wing") notify(`${name} a quitté l'escadrille en jeu`);
-      else notify(`${name} a arrêté le partage d'escadrille`);
+      if (reason === "closed") notify(t("live.closedEdch", { name }));
+      else if (reason === "wing") notify(t("live.leftWingGame", { name }));
+      else notify(t("live.stoppedWingSharing", { name }));
     },
     changed: () => {
       enrichFromWing();
@@ -119,7 +119,7 @@ export async function syncWing() {
       store.notify();
     },
     error: (message) => {
-      if (inStartup()) startupAlert("wing", "Escadrille : connexion impossible", message, goTo("missions", "Missions"));
+      if (inStartup()) startupAlert("wing", t("live.wingCanTConnect"), message, goTo("missions", t("common.missions")));
     },
   });
   store.notify();
@@ -177,8 +177,8 @@ function checkMining(ev: Json) {
   if (!m.alert || ev.event !== "ProspectedAsteroid") return;
   const hits = (ev.Materials ?? [])
     .map((x: Json) => ({ id: String(x.Name ?? "").toLowerCase(), label: String(x.Name_Localised ?? x.Name ?? ""), pct: Number(x.Proportion ?? 0) }))
-    .filter((x: { id: string; pct: number }) => m.targets.some((t) => t.id === x.id && x.pct >= t.min));
-  if (ev.MotherlodeMaterial) notify(`Cœur : ${gameName(String(ev.MotherlodeMaterial_Localised ?? ev.MotherlodeMaterial))}`);
+    .filter((x: { id: string; pct: number }) => m.targets.some((target) => target.id === x.id && x.pct >= target.min));
+  if (ev.MotherlodeMaterial) notify(t("common.motherlode", { MotherlodeMaterialLocalised: gameName(String(ev.MotherlodeMaterial_Localised ?? ev.MotherlodeMaterial)) }));
   else if (hits.length) notify(hits.map((x: { label: string; pct: number }) => `${gameName(x.label)} ${x.pct.toFixed(1)} %`).join(" · "));
 }
 
@@ -222,7 +222,7 @@ export async function loadHistory(dir: string) {
     lines = await scanHistory(dir, HISTORY_DAYS, HISTORY_EVENTS);
   } catch (e) {
     log.warn("history", `Journal archive unreadable: ${String((e as Error)?.message ?? e)}`);
-    startupAlert("history", "Historique du journal illisible", "Missions, colonisation et exploration ne montreront que la session en cours.");
+    startupAlert("history", t("live.journalHistoryUnreadable"), t("live.missionsColonisationExplorationWillOnlyShow"));
     return;
   }
   log.info("history", `${lines.length} archived journal line(s) read`);
@@ -253,16 +253,16 @@ function panel(): (Node | null)[] {
   const missions = activeMissions();
   const wing = wingView();
   const alerts = recentAlerts();
-  const parts: (Node | null)[] = [h("div.side-head", null, h("strong", null, "Notifications"), h("span.sub", null, alerts.length ? `${alerts.length} récente(s)` : "aucune"))];
+  const parts: (Node | null)[] = [h("div.side-head", null, h("strong", null, t("common.notifications")), h("span.sub", null, alerts.length ? t("live.recent", { count: alerts.length }) : t("live.none")))];
   // Every notification first (wing, mining, updates, start-up problems…), then the missions overview.
   parts.push(
     h(
       "section.side-section",
       null,
-      h("h4", null, "Dernières notifications"),
+      h("h4", null, t("live.latestNotifications")),
       alerts.length
         ? h("ul.side-list", null, alerts.slice(0, 10).map((a) => h("li", null, h("span", null, a.text), h("span.sub", null, relTime(a.at)))))
-        : h("p.sub", null, "Rien pour l'instant."),
+        : h("p.sub", null, t("live.nothingYet")),
     ),
   );
   if (wing) {
@@ -271,7 +271,7 @@ function panel(): (Node | null)[] {
       h(
         "section.side-section",
         null,
-        h("h4", null, "Escadrille"),
+        h("h4", null, t("common.wing")),
         wing.rows.length
           ? h(
               "ul.side-list",
@@ -290,7 +290,7 @@ function panel(): (Node | null)[] {
                 ),
               ),
             )
-          : h("p.sub", null, "Aucune mission d'escadrille pour l'instant."),
+          : h("p.sub", null, t("live.noWingMissionsYet")),
       ),
     );
   }
@@ -299,7 +299,7 @@ function panel(): (Node | null)[] {
       h(
         "section.side-section",
         null,
-        h("h4", null, "Prochaines échéances"),
+        h("h4", null, t("live.nextDeadlines")),
         h(
           "ul.side-list",
           null,
@@ -308,7 +308,7 @@ function panel(): (Node | null)[] {
               "li",
               { class: hoursLeft(m.expiry) < 6 ? "soon" : "" },
               h("span.side-title", null, m.title),
-              h("span.sub", null, m.status === "redirected" ? "Objectif atteint · " : "", m.destSystem ?? "", m.expiry ? ` · ${relTime(m.expiry)}` : ""),
+              h("span.sub", null, m.status === "redirected" ? (t("live.objectiveDone") + " ") : "", m.destSystem ?? "", m.expiry ? ` · ${relTime(m.expiry)}` : ""),
             ),
           ),
         ),
@@ -319,8 +319,8 @@ function panel(): (Node | null)[] {
     h(
       "div.row",
       null,
-      h("button.ghost.small", { onclick: () => store.setView("missions") }, "Missions"),
-      h("button.ghost.small", { onclick: () => store.setView("settings") }, "Réglages des notifications"),
+      h("button.ghost.small", { onclick: () => store.setView("missions") }, t("common.missions")),
+      h("button.ghost.small", { onclick: () => store.setView("settings") }, t("live.notificationSettings")),
     ),
   );
   return parts;

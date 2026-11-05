@@ -2,6 +2,7 @@
 // other commanders, who discovered them, and the system's estimated cartographic value.
 
 import { httpFetch } from "./bridge.js";
+import { t } from "./i18n.js";
 import { log } from "./logger.js";
 
 export interface EdsmBody {
@@ -38,7 +39,7 @@ export const edsmCached = (system: string) => cache.get(system.toLowerCase());
 
 async function get(path: string): Promise<any> {
   const reply = await httpFetch("GET", `https://www.edsm.net/${path}`);
-  if (reply.status < 200 || reply.status >= 300) throw new Error(`EDSM a répondu ${reply.status}`);
+  if (reply.status < 200 || reply.status >= 300) throw new Error(t("edsm.replied", { status: reply.status }));
   const text = reply.body.trim();
   // EDSM answers [] or {} for a system it doesn't know.
   return text ? JSON.parse(text) : {};

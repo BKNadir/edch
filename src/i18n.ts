@@ -1,7 +1,13 @@
-// Translation layer. The UI is written in French; for other languages every text node and
-// a few attributes are translated as they are rendered, from public/locales/<lang>.json
-// (French text → translation). Entries may contain {0}, {1}… placeholders; captured values
-// are translated too when they have their own entry.
+// Translation layer, built on i18next.
+//  - App texts: t("namespace.key", { variables }) with the texts in public/locales/<lang>.json
+//    (English is the reference and the fallback for any missing text).
+//  - Game names (materials, modules, blueprints…): the data is in English; gameName() gives the
+//    name the localized game shows, from public/locales/game.<lang>.json. Text nodes that are
+//    exactly a game name are also translated as they are rendered (watchGameNames).
+// The language is chosen before the app's modules load (see boot.ts), so module-level constants
+// may call t(). Changing the language reloads the page.
+
+import i18next from "#i18next";
 
 export interface Lang {
   code: string;
@@ -20,28 +26,40 @@ export const LANGS: Lang[] = [
   { code: "ru", label: "Русский", locale: "ru-RU", langid: [1049] },
 ];
 
-/** The UI is written in French; this is the language that needs no dictionary. */
-const SOURCE = "fr";
-/** Used when nothing was chosen (no installer choice). */
+/** Used when nothing was chosen (no installer choice), and for texts missing in a language. */
 export const DEFAULT_LANG = "en";
 
-const KEY = "edch.lang";
-let current: Lang = LANGS.find((l) => l.code === SOURCE)!;
-const exact = new Map<string, string>();
+const STORAGE_KEY = "edch.lang";
+let current: Lang = LANGS.find((l) => l.code === DEFAULT_LANG)!;
 /** The game's own names (English in the data) as the localized game shows them. */
 const game = new Map<string, string>();
 const gameLower = new Map<string, string>();
 /** Translated game name (lower case) → English, for searches typed in the app's language. */
 const gameBack = new Map<string, string>();
-const patterns: { re: RegExp; out: string }[] = [];
 
 export const lang = () => current;
 /** BCP 47 locale for numbers and dates. */
 export const locale = () => current.locale;
 
+/** Translated text for `key` ("namespace.key"), with {{variables}} filled in. */
+export function t(key: string, variables?: Record<string, unknown>): string {
+  return i18next.t(key, variables as any) as string;
+}
+
+/**
+ * Errors from the Rust side are codes, alone or followed by a detail ("fileNotFound",
+ * "network: timed out"): their text in the app's language (see "backend" in the locale files).
+ * Anything else is returned unchanged.
+ */
+export function backendMessage(message: string): string {
+  const m = /^([a-z][A-Za-z]+)(?::\s([\s\S]*))?$/.exec(message);
+  if (!m || !i18next.exists(`backend.${m[1]}`)) return message;
+  return t(`backend.${m[1]}`, { detail: m[2] ?? "" });
+}
+
 export function savedLang(): string | null {
   try {
-    return localStorage.getItem(KEY);
+    return localStorage.getItem(STORAGE_KEY);
   } catch {
     return null;
   }
@@ -49,7 +67,7 @@ export function savedLang(): string | null {
 
 export function saveLang(code: string) {
   try {
-    localStorage.setItem(KEY, code);
+    localStorage.setItem(STORAGE_KEY, code);
   } catch {
     /* falls back to the default next time */
   }
@@ -74,47 +92,54 @@ export function browserLang(): string {
   return DEFAULT_LANG;
 }
 
-const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+type Texts = Record<string, Record<string, string>>;
 
-export async function initI18n(code: string) {
+async function fetchJson<T>(url: string): Promise<T | null> {
+  try {
+    const res = await fetch(url);
+    return res.ok ? ((await res.json()) as T) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Starts i18next with the given texts (used directly by the tests). */
+export async function initTexts(code: string, texts: Record<string, Texts>) {
   current = LANGS.find((l) => l.code === code) ?? LANGS.find((l) => l.code === DEFAULT_LANG)!;
-  document.documentElement.lang = current.code;
-  exact.clear();
+  await i18next.init({
+    lng: current.code,
+    fallbackLng: DEFAULT_LANG,
+    resources: Object.fromEntries(Object.entries(texts).map(([l, tr]) => [l, { translation: tr }])),
+    // Texts end up in text nodes and attributes, never in innerHTML: no HTML escaping.
+    interpolation: { escapeValue: false },
+    returnNull: false,
+    initAsync: false,
+  } as any);
+}
+
+/** Loads the app texts and the game names for `code`. */
+export async function initI18n(code: string) {
+  const wanted = LANGS.some((l) => l.code === code) ? code : DEFAULT_LANG;
+  const texts: Record<string, Texts> = {};
+  const [reference, own] = await Promise.all([
+    fetchJson<Texts>(`locales/${DEFAULT_LANG}.json`),
+    wanted === DEFAULT_LANG ? null : fetchJson<Texts>(`locales/${wanted}.json`),
+  ]);
+  if (reference) texts[DEFAULT_LANG] = reference;
+  if (own) texts[wanted] = own;
+  await initTexts(wanted, texts);
+  if (typeof document !== "undefined") document.documentElement.lang = current.code;
+
   game.clear();
   gameLower.clear();
   gameBack.clear();
-  patterns.length = 0;
   if (current.code !== "en") {
-    try {
-      const res = await fetch(`locales/game.${current.code}.json`);
-      const dict: Record<string, string> = await res.json();
-      for (const [en, out] of Object.entries(dict)) {
-        game.set(en, out);
-        gameLower.set(en.toLowerCase(), out);
-        if (!gameBack.has(out.toLowerCase())) gameBack.set(out.toLowerCase(), en);
-      }
-    } catch {
-      /* game names stay in English */
+    const names = await fetchJson<Record<string, string>>(`locales/game.${current.code}.json`);
+    for (const [en, out] of Object.entries(names ?? {})) {
+      game.set(en, out);
+      gameLower.set(en.toLowerCase(), out);
+      if (!gameBack.has(out.toLowerCase())) gameBack.set(out.toLowerCase(), en);
     }
-  }
-  if (current.code === SOURCE) return;
-  try {
-    const res = await fetch(`locales/${current.code}.json`);
-    const dict: Record<string, string> = await res.json();
-    for (const [fr, out] of Object.entries(dict)) {
-      if (!out) continue;
-      if (/\{\d+\}/.test(fr)) {
-        const re = new RegExp(`^${fr.split(/(\{\d+\})/).map((p) => (/^\{\d+\}$/.test(p) ? "([\\s\\S]*?)" : escapeRe(p))).join("")}$`);
-        const order = [...fr.matchAll(/\{(\d+)\}/g)].map((m) => Number(m[1]));
-        // Rewrite the output's {n} to the capture group index of that placeholder.
-        const remapped = out.replace(/\{(\d+)\}/g, (_, n) => `{${order.indexOf(Number(n))}}`);
-        patterns.push({ re, out: remapped });
-      } else exact.set(fr, out);
-    }
-    // Longer patterns first: more specific.
-    patterns.sort((a, b) => b.re.source.length - a.re.source.length);
-  } catch {
-    current = LANGS.find((l) => l.code === SOURCE)!; // no dictionary: show the source text rather than half-translated
   }
 }
 
@@ -170,19 +195,12 @@ export function resolveGameName(typed: string, candidates: string[]): { name?: s
   return { suggestions: [] };
 }
 
-/** Translates one string (trimmed match, surrounding whitespace kept). */
-export function tr(text: string): string {
-  if (!text || (current.code === SOURCE && !game.size)) return text;
+/** A text that is exactly a game name, translated (surrounding whitespace kept); other texts unchanged. */
+export function gameText(text: string): string {
+  if (!game.size || !text) return text;
   const m = /^(\s*)([\s\S]*?)(\s*)$/.exec(text)!;
-  const core = m[2];
-  if (!core) return text;
-  const hit = exact.get(core) ?? game.get(core) ?? gameLower.get(core.toLowerCase());
-  if (hit !== undefined) return m[1] + hit + m[3];
-  for (const p of patterns) {
-    const r = p.re.exec(core);
-    if (r) return m[1] + p.out.replace(/\{(\d+)\}/g, (_, i) => tr(r[Number(i) + 1] ?? "")) + m[3];
-  }
-  return text;
+  const hit = m[2] ? game.get(m[2]) ?? gameLower.get(m[2].toLowerCase()) : undefined;
+  return hit === undefined ? text : m[1] + hit + m[3];
 }
 
 const ATTRS = ["title", "placeholder", "aria-label", "alt"];
@@ -190,11 +208,11 @@ const done = new WeakMap<Node, string>();
 
 function translateNode(node: Node) {
   if (node.nodeType === Node.TEXT_NODE) {
-    const t = node as Text;
-    if (done.get(t) === t.data) return;
-    const out = tr(t.data);
-    if (out !== t.data) t.data = out;
-    done.set(t, t.data);
+    const text = node as Text;
+    if (done.get(text) === text.data) return;
+    const out = gameText(text.data);
+    if (out !== text.data) text.data = out;
+    done.set(text, text.data);
     return;
   }
   if (node.nodeType !== Node.ELEMENT_NODE) return;
@@ -203,21 +221,24 @@ function translateNode(node: Node) {
   for (const a of ATTRS) {
     const v = el.getAttribute(a);
     if (v) {
-      const out = tr(v);
+      const out = gameText(v);
       if (out !== v) el.setAttribute(a, out);
     }
   }
   for (const child of Array.from(el.childNodes)) translateNode(child);
 }
 
-/** Translates everything under `root` now and whenever it changes. */
-export function watchTranslations(root: Node) {
-  if (current.code === SOURCE && !game.size) return;
+/**
+ * Shows game names (English in the data) as the localized game does, under `root`, now and
+ * whenever it changes. Only texts that are exactly a known game name are touched; app texts go
+ * through t(). Nothing to do in English. `data-no-tr` keeps a subtree as it is.
+ */
+export function watchGameNames(root: Node) {
+  if (!game.size) return;
   translateNode(root);
   new MutationObserver((records) => {
     for (const r of records) {
-      if (r.type === "characterData") translateNode(r.target);
-      else if (r.type === "attributes") translateNode(r.target);
+      if (r.type === "characterData" || r.type === "attributes") translateNode(r.target);
       else r.addedNodes.forEach(translateNode);
     }
   }).observe(root, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATTRS });

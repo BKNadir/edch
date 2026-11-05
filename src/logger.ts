@@ -2,7 +2,6 @@
 // DEBUG lines only reach the debug log, which exists while debug mode is on in Settings.
 
 import { isRemote, isTauri, logSetDebug, logWrite, setCallLogging } from "./bridge.js";
-
 type Level = "DEBUG" | "INFO" | "WARN" | "ERROR";
 
 let debugOn = false;
@@ -63,7 +62,7 @@ export function eventDetail(ev: Record<string, any>): string | null {
 
 // ---------------- what the user does, what the user is shown ----------------
 
-const clean = (t: string | null | undefined) => (t ?? "").replace(/\s+/g, " ").trim().slice(0, 80);
+const clean = (raw: string | null | undefined) => (raw ?? "").replace(/\s+/g, " ").trim().slice(0, 80);
 
 /** A readable name for a control: its text, label, title or placeholder. */
 function controlName(el: Element): string {
@@ -127,13 +126,13 @@ export function captureActions() {
 export function captureShownErrors(root: HTMLElement = document.body) {
   const recent = new Map<string, number>();
   const report = (level: "WARN" | "INFO", source: string, text: string) => {
-    const t = clean(text);
-    if (!t) return;
+    const cleaned = clean(text);
+    if (!cleaned) return;
     const now = Date.now();
-    if ((recent.get(t) ?? 0) > now - 10_000) return;
-    recent.set(t, now);
+    if ((recent.get(cleaned) ?? 0) > now - 10_000) return;
+    recent.set(cleaned, now);
     if (recent.size > 200) recent.clear();
-    write(level, source, `[${view()}] ${t}`);
+    write(level, source, `[${view()}] ${cleaned}`);
   };
   const scan = (node: Node) => {
     if (!(node instanceof Element)) return;

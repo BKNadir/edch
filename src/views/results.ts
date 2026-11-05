@@ -1,4 +1,4 @@
-import { locale } from "../i18n.js";
+import { locale, t } from "../i18n.js";
 import { openUrl } from "../bridge.js";
 import { openSystem } from "../links.js";
 import { h, icon } from "../dom.js";
@@ -18,20 +18,20 @@ export function setHere(fn: typeof here) {
 function sinceText(iso?: string): string {
   if (!iso) return "";
   const min = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 60000));
-  if (min < 1) return "à l'instant";
-  if (min < 60) return `il y a ${min} min`;
-  if (min < 48 * 60) return `il y a ${Math.round(min / 60)} h`;
-  return `il y a ${Math.round(min / 1440)} j`;
+  if (min < 1) return t("results.justNow");
+  if (min < 60) return t("results.minAgo", { min });
+  if (min < 48 * 60) return t("results.hAgo", { value: Math.round(min / 60) });
+  return t("results.dAgo", { value: Math.round(min / 1440) });
 }
 
 function ago(iso?: string): string {
   if (!iso) return "";
-  const t = Date.parse(iso.endsWith("Z") || iso.includes("+") ? iso : `${iso}Z`);
-  if (Number.isNaN(t)) return "";
-  const hours = (Date.now() - t) / 3600_000;
-  if (hours < 1) return "màj < 1 h";
-  if (hours < 48) return `màj il y a ${Math.round(hours)} h`;
-  return `màj il y a ${Math.round(hours / 24)} j`;
+  const ms = Date.parse(iso.endsWith("Z") || iso.includes("+") ? iso : `${iso}Z`);
+  if (Number.isNaN(ms)) return "";
+  const hours = (Date.now() - ms) / 3600_000;
+  if (hours < 1) return t("results.updated1HAgo");
+  if (hours < 48) return t("results.updatedHAgo", { hours: Math.round(hours) });
+  return t("results.updatedDAgo", { value: Math.round(hours / 24) });
 }
 
 export function resultRow(r: ResultRow): HTMLElement {
@@ -43,7 +43,7 @@ export function resultRow(r: ResultRow): HTMLElement {
       null,
       h(
         "button.sys",
-        { title: `Copier « ${r.system} »`, onclick: () => copySystem(r.system) },
+        { title: t("common.copy", { name: r.system }), onclick: () => copySystem(r.system) },
         icon("copy"),
         h("span", null, r.title),
       ),
@@ -57,14 +57,14 @@ export function resultRow(r: ResultRow): HTMLElement {
       (() => {
         const me = here();
         return me.system && me.system.toLowerCase() === r.system.toLowerCase()
-          ? h("span.badge.ok", { title: "Données lues dans ton journal" }, me.seenAt ? `Tu es ici · vu ${sinceText(me.seenAt)}` : "Tu es ici")
+          ? h("span.badge.ok", { title: t("results.dataReadFromJournal") }, me.seenAt ? t("results.areHereSeen", { sinceText: sinceText(me.seenAt) }) : t("common.areHere"))
           : null;
       })(),
-      r.updated ? h("span.sub.age", { title: "Date de la dernière mise à jour de ce système chez Spansh (données envoyées par les joueurs via EDDN)" }, ago(r.updated)) : null,
+      r.updated ? h("span.sub.age", { title: t("results.whenSpanshLastUpdatedSystemData") }, ago(r.updated)) : null,
       h(
         "span.links",
         null,
-        r.links.map((l) => h("button.link", { title: `Ouvrir sur ${l.label}`, onclick: () => openUrl(l.url) }, l.label, icon("link"))),
+        r.links.map((l) => h("button.link", { title: t("results.open", { label: l.label }), onclick: () => openUrl(l.url) }, l.label, icon("link"))),
       ),
     ),
   );
@@ -75,7 +75,7 @@ export function finderSection(f: Finder, ref: Reference, settings: Settings, opt
   const list = h("div.results");
   const status = h("span.status");
   let force = false;
-  const refresh = h("button.ghost.small", { title: "Relancer la recherche sans le cache (10 min)", onclick: () => ((force = true), load()) }, "Actualiser");
+  const refresh = h("button.ghost.small", { title: t("results.runSearchAgainSkipping10Minute"), onclick: () => ((force = true), load()) }, t("common.refresh"));
   const section = h(
     `section.finder.${f.type}`,
     null,
@@ -86,7 +86,7 @@ export function finderSection(f: Finder, ref: Reference, settings: Settings, opt
   if (f.type === "info") return section;
 
   const load = () => {
-    status.replaceChildren(h("span.spinner"), "Recherche Spansh…");
+    status.replaceChildren(h("span.spinner"), t("common.searchingSpansh"));
     list.replaceChildren();
     runFinder(f, ref, settings, force)
       .then((res) => {
@@ -94,19 +94,19 @@ export function finderSection(f: Finder, ref: Reference, settings: Settings, opt
         status.replaceChildren();
         if (!res.rows.length) {
           list.replaceChildren(
-            h("p.empty", null, `Aucun résultat à moins de ${settings.maxDistance} al.`, " Augmente la distance dans les Paramètres."),
+            h("p.empty", null, t("results.noResultsWithinLy", { maxDistance: settings.maxDistance }), (" " + t("results.increaseDistanceSettings"))),
           );
           return;
         }
         list.replaceChildren(...res.rows.map(resultRow));
         if (res.total > res.rows.length && f.type === "systems") {
-          status.replaceChildren(h("span.sub", null, `${res.total.toLocaleString(locale())} systèmes correspondent`));
+          status.replaceChildren(h("span.sub", null, t("results.matchingSystems", { locale: res.total.toLocaleString(locale()) })));
         }
       })
       .catch((err) => {
         status.replaceChildren();
         list.replaceChildren(
-          h("p.error", null, icon("warn"), ` ${String(err?.message ?? err)}`, " ", h("button.ghost", { onclick: load }, "Réessayer")),
+          h("p.error", null, icon("warn"), ` ${String(err?.message ?? err)}`, " ", h("button.ghost", { onclick: load }, t("common.retry"))),
         );
       });
   };

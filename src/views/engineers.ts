@@ -5,13 +5,14 @@ import { openUrl } from "../bridge.js";
 import type { Engineer } from "../types.js";
 import type { EngineerStatus } from "../journal.js";
 import { moduleLink, openSystem } from "../links.js";
+import { t } from "../i18n.js";
 
 const PROGRESS_FR: Record<string, string> = {
-  Unlocked: "Débloqué",
-  Invited: "Invité",
-  Acquainted: "Rencontré",
-  Known: "Connu",
-  Barred: "Interdit",
+  Unlocked: t("engineers.unlocked"),
+  Invited: t("engineers.invited"),
+  Acquainted: t("engineers.acquainted"),
+  Known: t("engineers.known"),
+  Barred: t("engineers.barred"),
 };
 
 type Filter = "all" | "unlocked" | "todo";
@@ -73,17 +74,17 @@ export class EngineersView implements View {
       h(
         "header.view-head",
         null,
-        h("div", null, h("h1", null, "Ingénieurs"), h("p.sub", null, `${unlockedCount}/${all.length} débloqués · statut lu dans ton journal (EngineerProgress), triés par distance depuis ${ref.label}`)),
+        h("div", null, h("h1", null, t("common.engineers")), h("p.sub", null, t("engineers.unlockedStatusReadFromJournalEngineerprogress", { unlockedCount, count: all.length, label: ref.label }))),
         h(
           "div.toolbar",
           null,
-          seg(this.mode, [["ship", "Vaisseau"], ["foot", "À pied (Odyssey)"]], (v) => (this.mode = v)),
-          seg(this.filter, [["all", "Tous"], ["unlocked", "Débloqués"], ["todo", "À débloquer"]], (v) => (this.filter = v)),
+          seg(this.mode, [["ship", t("common.ship")], ["foot", t("engineers.footOdyssey")]], (v) => (this.mode = v)),
+          seg(this.filter, [["all", t("common.all")], ["unlocked", t("engineers.unlocked2")], ["todo", t("engineers.unlock")]], (v) => (this.filter = v)),
         ),
       ),
       Object.keys(this.ctx.store.state.cmdr.engineers).length
         ? null
-        : h("div.notice", null, icon("warn"), " Statuts inconnus : ils arrivent avec l'événement EngineerProgress écrit à chaque connexion au jeu."),
+        : h("div.notice", null, icon("warn"), (" " + t("engineers.statusesUnknownTheyComeEngineerprogressEvent"))),
       h("div.eng-grid", null, list.map(({ e, d, st }) => this.card(e, d, st))),
     );
   }
@@ -101,24 +102,24 @@ export class EngineersView implements View {
       h(
         "div.eng-head",
         null,
-        h("div", null, h("h3", null, h("button.eng-name", { title: `Copier le système de ${e.name} (${e.system})`, "data-no-tr": "", onclick: () => openSystem(e.system) }, e.name)), h("p.sub", null, `${e.station}${e.body ? ` · corps ${e.body}` : ""}`)),
+        h("div", null, h("h3", null, h("button.eng-name", { title: t("common.copySSystem", { name: e.name, system: e.system }), "data-no-tr": "", onclick: () => openSystem(e.system) }, e.name)), h("p.sub", null, e.body ? t("engineers.stationBody", { station: e.station, body: e.body }) : e.station)),
         st
           ? h(`span.badge${unlocked ? ".hit" : ""}`, null, PROGRESS_FR[st.progress] ?? st.progress)
-          : h("span.badge.muted", null, "Pas encore rencontré"),
+          : h("span.badge.muted", null, t("engineers.notMetYet")),
       ),
       h(
         "div.result-main",
         null,
-        h("button.sys", { title: `Copier « ${e.system} »`, onclick: () => openSystem(e.system) }, icon("copy"), h("span", null, e.system)),
+        h("button.sys", { title: t("common.copy", { name: e.system }), onclick: () => openSystem(e.system) }, icon("copy"), h("span", null, e.system)),
         h("span.dist", null, fmtLy(d)),
-        h("button.link", { title: "Voir le système sur Inara", onclick: () => openUrl(inaraSystem(e.system)) }, "Inara", icon("link")),
+        h("button.link", { title: t("engineers.viewSystemInara"), onclick: () => openUrl(inaraSystem(e.system)) }, "Inara", icon("link")),
       ),
       unlocked && !e.odyssey
         ? h(
             "div.rank",
             null,
             h("div.rank-pips", null, [1, 2, 3, 4, 5].map((n) => h("span", { class: n <= rank ? "on" : "" }))),
-            h("span.sub", null, rank >= 5 ? "Rang max" : `Rang ${rank}${st?.rankProgress !== undefined ? ` · ${st.rankProgress} % vers ${rank + 1}` : ""}`),
+            h("span.sub", null, rank >= 5 ? t("engineers.maxRank") : st?.rankProgress !== undefined ? t("engineers.rankProgress", { rank, progress: st.rankProgress, next: rank + 1 }) : t("engineers.rankNumber", { rank })),
           )
         : null,
       h("div.specs", null, e.specialities.map((s) => h("span.spec", null, moduleLink(s.name, s.name), s.grade ? h("small", null, ` G${s.grade}`) : null))),
@@ -131,8 +132,8 @@ export class EngineersView implements View {
                   "p.check-line",
                   { class: refStatus?.progress === "Unlocked" && (refStatus.rank ?? 0) >= (e.referralGrade ?? 0) ? "ok" : "" },
                   refStatus?.progress === "Unlocked" && (refStatus.rank ?? 0) >= (e.referralGrade ?? 0) ? icon("check") : h("span.dot"),
-                  ` Recommandé par ${referrer.name}`,
-                  e.referralGrade ? ` (rang ${e.referralGrade})` : "",
+                  " " + t("common.referredBy", { name: referrer.name }),
+                  e.referralGrade ? (" " + t("engineers.rank", { referralGrade: e.referralGrade })) : "",
                 )
               : e.discovery
                 ? h("p.check-line", null, h("span.dot"), ` ${e.discovery}`)

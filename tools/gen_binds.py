@@ -42,29 +42,31 @@ def humanize(name: str) -> str:
 GAMEPADS = {"GamePad", "XB360 Pad", "DualShock4", "Playstation3Controller", "Logitech710WirelessGamepad",
             "GioteckPS3WiredController", "SaitekP2500RumbleForce", "SaitekP2600RumbleForce", "XterminatorDualControl",
             "SaitekCyborgEvoWireless"}
+# Display names. Generic devices get a translation key (named in the app's language); for
+# sticks and throttles sold as a pair, "part" adds "(stick)" / "(throttle)" in that language.
 NICE = {
-    "GamePad": "Manette (Xbox / XInput)",
-    "XB360 Pad": "Manette Xbox 360",
-    "DualShock4": "Manette PlayStation 4",
-    "Playstation3Controller": "Manette PlayStation 3",
-    "Keyboard": "Clavier",
-    "Mouse": "Souris",
-    "OculusTouch": "Oculus Touch",
-    "T16000M": "Thrustmaster T.16000M",
-    "T16000MTHROTTLE": "Thrustmaster TWCS Throttle",
-    "T16000MFCS": "Thrustmaster T.16000M FCS",
-    "ThrustMasterWarthogJoystick": "Thrustmaster Warthog (manche)",
-    "ThrustMasterWarthogThrottle": "Thrustmaster Warthog (manette des gaz)",
-    "ThrustMasterHOTAS4": "Thrustmaster T.Flight HOTAS 4",
-    "ThrustMasterTFlightHOTASX": "Thrustmaster T.Flight HOTAS X",
-    "TFlightHotasOne": "Thrustmaster T.Flight HOTAS One",
-    "SaitekX52": "Saitek X52",
-    "SaitekX52Pro": "Saitek X52 Pro",
-    "SaitekX55Joystick": "Saitek X55 (manche)",
-    "SaitekX55Throttle": "Saitek X55 (manette des gaz)",
-    "SaitekX56Joystick": "Logitech/Saitek X56 (manche)",
-    "SaitekX56Throttle": "Logitech/Saitek X56 (manette des gaz)",
-    "LogitechExtreme3DPro": "Logitech Extreme 3D Pro",
+    "GamePad": {"nameKey": "gamepad"},
+    "XB360 Pad": {"nameKey": "xbox360Pad"},
+    "DualShock4": {"nameKey": "ps4Pad"},
+    "Playstation3Controller": {"nameKey": "ps3Pad"},
+    "Keyboard": {"nameKey": "keyboard"},
+    "Mouse": {"nameKey": "mouse"},
+    "OculusTouch": {"label": "Oculus Touch"},
+    "T16000M": {"label": "Thrustmaster T.16000M"},
+    "T16000MTHROTTLE": {"label": "Thrustmaster TWCS Throttle"},
+    "T16000MFCS": {"label": "Thrustmaster T.16000M FCS"},
+    "ThrustMasterWarthogJoystick": {"label": "Thrustmaster Warthog", "part": "stick"},
+    "ThrustMasterWarthogThrottle": {"label": "Thrustmaster Warthog", "part": "throttle"},
+    "ThrustMasterHOTAS4": {"label": "Thrustmaster T.Flight HOTAS 4"},
+    "ThrustMasterTFlightHOTASX": {"label": "Thrustmaster T.Flight HOTAS X"},
+    "TFlightHotasOne": {"label": "Thrustmaster T.Flight HOTAS One"},
+    "SaitekX52": {"label": "Saitek X52"},
+    "SaitekX52Pro": {"label": "Saitek X52 Pro"},
+    "SaitekX55Joystick": {"label": "Saitek X55", "part": "stick"},
+    "SaitekX55Throttle": {"label": "Saitek X55", "part": "throttle"},
+    "SaitekX56Joystick": {"label": "Logitech/Saitek X56", "part": "stick"},
+    "SaitekX56Throttle": {"label": "Logitech/Saitek X56", "part": "throttle"},
+    "LogitechExtreme3DPro": {"label": "Logitech Extreme 3D Pro"},
 }
 # Vendor IDs for devices the game doesn't name (it writes VID+PID, e.g. 231D0200).
 VENDORS = {"231D": "VKB", "3344": "Virpil", "044F": "Thrustmaster", "06A3": "Saitek", "0738": "Mad Catz / Saitek",
@@ -100,7 +102,7 @@ def main() -> None:
     devices = {}
     for n in names:
         kind = "keyboard" if n == "Keyboard" else "mouse" if n == "Mouse" else "gamepad" if n in GAMEPADS else "vr" if n == "OculusTouch" else "joystick"
-        devices[n] = {"label": NICE.get(n, humanize(n)), "kind": kind}
+        devices[n] = {"label": humanize(n), **NICE.get(n, {}), "kind": kind}
     # Device templates (EDRefCard): which picture a device uses and where each control's
     # legend box sits on it. Pictures are loaded at runtime from EDRefCard's GitHub, not bundled.
     sizes = {"vkb-kosmosima-scg-left": [3879, 2182], "x45": [5120, 2880]}
@@ -126,7 +128,6 @@ def main() -> None:
         "devices": devices,
         "vidpid": vidpid,
         "vendors": VENDORS,
-        "credits": "Noms des commandes : EDRefCard (Richard Buckle, MIT). Correspondance des périphériques : DeviceMappings.xml du jeu.",
     }
     OUT.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"controls={len(controls)} devices={len(devices)} vidpid={len(vidpid)} -> {OUT}")

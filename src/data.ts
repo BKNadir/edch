@@ -1,16 +1,17 @@
 import type { Blueprint, GameData, Material } from "./types.js";
+import { t } from "./i18n.js";
 
 /** Storage cap of a ship material by grade (game rule). */
 export const CAPACITY: Record<number, number> = { 1: 300, 2: 250, 3: 200, 4: 150, 5: 100 };
 
 export const CATEGORY_FR: Record<string, string> = {
-  Raw: "Brut",
-  Manufactured: "Manufacturé",
-  Encoded: "Données encodées",
-  Item: "Objets",
-  Component: "Composants",
-  Data: "Données",
-  Consumable: "Consommables",
+  Raw: t("data.raw"),
+  Manufactured: t("data.manufactured"),
+  Encoded: t("data.encodedData"),
+  Item: t("data.items"),
+  Component: t("data.components"),
+  Data: t("data.data"),
+  Consumable: t("data.consumables"),
 };
 
 export class Game {

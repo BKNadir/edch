@@ -73,7 +73,7 @@ Nothing else is collected or sent. Your settings, keys and wishlist are stored i
 
 EDCH is available in the game's six languages: English (default), French, German, Spanish, Portuguese (Brazil) and Russian. The installer asks for the language and the app picks it up on first launch. You can change it at any time in **Settings → Language**. Material, module, blueprint and effect names follow the game's own translation; control names stay as in the English game.
 
-To add or fix a translation, edit `tools/translations_*.txt` (one line per text: `fr ¦ en ¦ de ¦ es ¦ pt ¦ ru`), then run `python3 tools/gen_locales.py`.
+To add or fix a translation, edit `public/locales/<language>.json` (English is the reference); see [docs/TRANSLATING.md](docs/TRANSLATING.md). `npm run i18n:check` lists missing texts.
 
 ## Install
 
@@ -110,7 +110,7 @@ Layout:
   - `eddn.ts`, `uploaders.ts`: EDDN messages, EDSM and Inara.
   - `binds.ts`: `.binds` files and device names.
   - `i18n.ts`: translation layer.
-- `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_locales.py`: regenerate the data in `public/` (see NOTICE).
+- `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: regenerate the data in `public/` (see NOTICE).
 
 A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.10.4` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
 

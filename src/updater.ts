@@ -3,7 +3,7 @@
 
 import { isRemote, isTauri, updateMode, onUpdateProgress, openUrl, updateCheck, updateDownload, updateInstall, type UpdateInfo } from "./bridge.js";
 import { h, replace, toast } from "./dom.js";
-import { locale } from "./i18n.js";
+import { locale, t } from "./i18n.js";
 import { log } from "./logger.js";
 import { notify } from "./notifier.js";
 import type { Store } from "./store.js";
@@ -32,7 +32,7 @@ function notesList(notes: string): HTMLElement | null {
     .filter((l) => /^[-*] /.test(l))
     .map((l) => l.slice(2).replace(/\*\*/g, "").replace(/`/g, ""));
   if (!items.length) return null;
-  return h("ul.update-notes", { "data-no-tr": "" }, items.map((t) => h("li", null, t)));
+  return h("ul.update-notes", { "data-no-tr": "" }, items.map((note) => h("li", null, note)));
 }
 let bar: HTMLElement | null = null;
 let store: Store | null = null;
@@ -50,26 +50,26 @@ function render() {
   }
   bar.classList.add("show");
   const p = phase;
-  const close = h("button.ghost.small", { title: "Plus tard", onclick: () => later() }, "Plus tard");
+  const close = h("button.ghost.small", { title: t("updater.later"), onclick: () => later() }, t("updater.later"));
   if (p.kind === "available") {
     replace(
       bar,
       h(
         "div.update-text",
         null,
-        h("strong", null, `EDCH ${p.info.version} est disponible`),
-        h("span.sub", null, `Version installée : ${p.info.current}`),
+        h("strong", null, t("updater.edchAvailable", { version: p.info.version })),
+        h("span.sub", null, t("common.installedVersion", { current: p.info.current })),
         showNotes ? notesList(p.info.notes) : null,
-        showNotes && p.info.page ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, "Voir sur GitHub") : null,
+        showNotes && p.info.page ? h("button.inline-link", { onclick: () => openUrl(p.info.page) }, t("updater.viewGithub")) : null,
       ),
       h(
         "div.row",
         null,
-        h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? "Masquer les nouveautés" : "Nouveautés"),
+        h("button.ghost.small", { onclick: () => ((showNotes = !showNotes), render()) }, showNotes ? t("updater.hideWhatSNew") : t("updater.whatSNew")),
         close,
         selfInstall()
-          ? h("button.primary.small", { onclick: () => download(p.info) }, "Mettre à jour")
-          : h("button.primary.small", { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") }, mode === "portable" ? "Télécharger la version portable" : "Télécharger la nouvelle version"),
+          ? h("button.primary.small", { onclick: () => download(p.info) }, t("updater.update"))
+          : h("button.primary.small", { onclick: () => openUrl(p.info.page || "https://github.com/BKNadir/edch/releases/latest") }, mode === "portable" ? t("updater.downloadPortableVersion") : t("updater.downloadNewVersion")),
       ),
     );
   } else if (p.kind === "downloading") {
@@ -79,22 +79,22 @@ function render() {
       h(
         "div.update-text",
         null,
-        h("strong", null, `Téléchargement de EDCH ${p.info.version}…`),
-        h("span.sub", null, p.total > 0 ? `${pct} % · ${mb(p.done)} / ${mb(p.total)} Mo` : `${mb(p.done)} Mo`),
+        h("strong", null, t("updater.downloadingEdch", { version: p.info.version })),
+        h("span.sub", null, p.total > 0 ? t("updater.mb", { pct, mb: mb(p.done), mb2: mb(p.total) }) : t("updater.mb2", { mb: mb(p.done) })),
         h("div.update-progress", null, h("span", { style: { width: `${pct}%` } })),
       ),
     );
   } else if (p.kind === "ready") {
     replace(
       bar,
-      h("div.update-text", null, h("strong", null, `EDCH ${p.info.version} est prêt`), h("span.sub", null, "Relance l'application pour terminer la mise à jour. Elle se rouvrira toute seule.")),
-      h("div.row", null, close, h("button.primary.small", { onclick: () => install(p) }, "Relancer maintenant")),
+      h("div.update-text", null, h("strong", null, t("updater.edchReady", { version: p.info.version })), h("span.sub", null, t("updater.restartAppFinishUpdateWillReopen"))),
+      h("div.row", null, close, h("button.primary.small", { onclick: () => install(p) }, t("updater.restartNow"))),
     );
   } else {
     replace(
       bar,
-      h("div.update-text", null, h("strong", null, "La mise à jour a échoué"), h("span.sub", null, p.message)),
-      h("div.row", null, close, h("button.primary.small", { onclick: () => download(p.info) }, "Réessayer")),
+      h("div.update-text", null, h("strong", null, t("updater.updateFailed")), h("span.sub", null, p.message)),
+      h("div.row", null, close, h("button.primary.small", { onclick: () => download(p.info) }, t("common.retry"))),
     );
   }
 }
@@ -147,17 +147,17 @@ export async function checkForUpdate(manual = false): Promise<void> {
   try {
     const info = await updateCheck();
     if (!info) {
-      if (manual) toast("EDCH est à jour");
+      if (manual) toast(t("updater.edchUpDate"));
       return;
     }
     log.info("update", `Version ${info.version} available (installed ${info.current})`);
     if (!manual && info.version === store.state.settings.skippedVersion) return;
     phase = { kind: "available", info };
-    if (!manual) notify(`EDCH ${info.version} est disponible`, { sound: false });
+    if (!manual) notify(t("updater.edchAvailable", { version: info.version }), { sound: false });
     render();
   } catch (e) {
     log.warn("update", `Check failed: ${String((e as Error)?.message ?? e)}`);
-    if (manual) toast(`Vérification impossible : ${String((e as Error)?.message ?? e)}`);
+    if (manual) toast(t("updater.couldnTCheck", { message: String((e as Error)?.message ?? e) }));
   }
 }
 

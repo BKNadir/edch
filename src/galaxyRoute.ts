@@ -6,6 +6,7 @@ import { spanshJob } from "./bridge.js";
 import { FSD_DATA } from "./fsdData.js";
 import type { ShipLoadout } from "./journal.js";
 import { boosterBonus, superchargeMultiplier } from "./jump.js";
+import { t } from "./i18n.js";
 
 type Json = Record<string, any>;
 
@@ -66,11 +67,11 @@ export interface GalaxyRoute {
 /** The ship's drive and masses from the journal, or what is missing. */
 export function shipParams(l: ShipLoadout | undefined): { params?: ShipParams; missing: string[]; hasScoop: boolean } {
   const missing: string[] = [];
-  if (!l) return { missing: ["vaisseau (lance le jeu)"], hasScoop: false };
+  if (!l) return { missing: [t("galaxyRoute.shipStartGame")], hasScoop: false };
   const base = l.fsd ? FSD_DATA[l.fsd.toLowerCase()] : undefined;
-  if (!base) missing.push("FSD (modèle inconnu)");
-  if (!l.unladenMass) missing.push("masse à vide");
-  if (!l.fuelMain) missing.push("réservoir");
+  if (!base) missing.push(t("galaxyRoute.fsdUnknownModel"));
+  if (!l.unladenMass) missing.push(t("galaxyRoute.unladenMass"));
+  if (!l.fuelMain) missing.push(t("galaxyRoute.fuelTank"));
   const hasScoop = l.modules.some((m) => m.item.startsWith("int_fuelscoop"));
   if (missing.length || !base) return { missing, hasScoop };
   const [optMass, maxFuel, fuelMul, fuelPower] = base;

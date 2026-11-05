@@ -3,29 +3,30 @@ import { h, icon, replace, toast } from "../dom.js";
 import { SOFTWARE_VERSION } from "../eddn.js";
 import { showChangelog } from "../changelog.js";
 import type { Ctx, View } from "../context.js";
+import { t } from "../i18n.js";
 
 const REPO = "https://github.com/BKNadir/edch";
 
 /** The projects EDCH relies on: name, what they bring, links (site first, then repository). */
 const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
-  { name: "Spansh", what: "Toutes les recherches de systèmes, stations, marchandises et les itinéraires (neutrons, porte-vaisseaux)", links: [["spansh.co.uk", "https://spansh.co.uk"]] },
-  { name: "EDDN (EDCD)", what: "Le réseau qui partage les données du jeu entre joueurs. EDCH y contribue.", links: [["github.com/EDCD/EDDN", "https://github.com/EDCD/EDDN"]] },
-  { name: "EDCD / FDevIDs", what: "Les identifiants et noms officiels du jeu", links: [["github.com/EDCD/FDevIDs", "https://github.com/EDCD/FDevIDs"]] },
-  { name: "EDSM", what: "Synchronisation de ton journal de vol, et ce que la communauté sait du système où tu es (Exploration)", links: [["edsm.net", "https://www.edsm.net"]] },
-  { name: "Inara", what: "Synchronisation de ton profil de commandant", links: [["inara.cz", "https://inara.cz"]] },
-  { name: "EDEngineer (msarilar)", what: "Recettes d'ingénierie, origines des matériaux et une partie des traductions", links: [["github.com/msarilar/EDEngineer", "https://github.com/msarilar/EDEngineer"]] },
-  { name: "d47 (dseelinger)", what: "Les données d'EDEngineer et des ingénieurs, réunies et corrigées, et le catalogue d'exobiologie", links: [["github.com/dseelinger/d47", "https://github.com/dseelinger/d47"]] },
+  { name: "Spansh", what: t("about.everySystemStationCommoditySearchRoutes"), links: [["spansh.co.uk", "https://spansh.co.uk"]] },
+  { name: "EDDN (EDCD)", what: t("about.networkSharesGameDataBetweenPlayers"), links: [["github.com/EDCD/EDDN", "https://github.com/EDCD/EDDN"]] },
+  { name: "EDCD / FDevIDs", what: t("about.gameSOfficialIdentifiersNames"), links: [["github.com/EDCD/FDevIDs", "https://github.com/EDCD/FDevIDs"]] },
+  { name: "EDSM", what: t("about.syncingFlightLogWhatCommunityKnows"), links: [["edsm.net", "https://www.edsm.net"]] },
+  { name: "Inara", what: t("about.syncingCommanderProfile"), links: [["inara.cz", "https://inara.cz"]] },
+  { name: "EDEngineer (msarilar)", what: t("about.engineeringRecipesMaterialOriginsPartTranslation"), links: [["github.com/msarilar/EDEngineer", "https://github.com/msarilar/EDEngineer"]] },
+  { name: "d47 (dseelinger)", what: t("about.edengineerSEngineersDataGatheredCorrected"), links: [["github.com/dseelinger/d47", "https://github.com/dseelinger/d47"]] },
   {
     name: "Elite Dangerous Almanac",
-    what: "Les noms officiels traduits du jeu (matériaux, marchandises, modules…)",
+    what: t("about.gameSOfficialTranslatedNamesMaterials"),
     links: [["github.com/Elite-Dangerous-Almanac/Almanac-Core", "https://github.com/Elite-Dangerous-Almanac/Almanac-Core"]],
   },
-  { name: "EDR (lekeno)", what: "Les noms des espèces d'exobiologie tels que le journal les écrit", links: [["github.com/lekeno/edr", "https://github.com/lekeno/edr"]] },
-  { name: "ntfy.sh", what: "Le relais gratuit qui transporte les messages chiffrés de l'escadrille", links: [["ntfy.sh", "https://ntfy.sh"], ["github.com/binwiederhier/ntfy", "https://github.com/binwiederhier/ntfy"]] },
-  { name: "EDRefCard (Richard Buckle)", what: "Noms des commandes et schémas des HOTAS, joysticks et manettes", links: [["github.com/richardbuckle/EDRefCard", "https://github.com/richardbuckle/EDRefCard"]] },
+  { name: "EDR (lekeno)", what: t("about.exobiologySpeciesNamesJournalWritesThem"), links: [["github.com/lekeno/edr", "https://github.com/lekeno/edr"]] },
+  { name: "ntfy.sh", what: t("about.freeRelayCarriesWingSEncrypted"), links: [["ntfy.sh", "https://ntfy.sh"], ["github.com/binwiederhier/ntfy", "https://github.com/binwiederhier/ntfy"]] },
+  { name: "EDRefCard (Richard Buckle)", what: t("about.controlNamesPicturesHotasJoysticksPads"), links: [["github.com/richardbuckle/EDRefCard", "https://github.com/richardbuckle/EDRefCard"]] },
   {
     name: "EDSY",
-    what: "Format d'export de builds importé dans la wishlist",
+    what: t("about.buildExportFormatImportedIntoWishlist"),
     links: [
       ["edsy.org", "https://edsy.org"],
       ["github.com/taleden/EDSY", "https://github.com/taleden/EDSY"],
@@ -33,22 +34,22 @@ const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
   },
   {
     name: "Coriolis (EDCD)",
-    what: "Format d'export de builds importé dans la wishlist, et les caractéristiques des réacteurs FSD pour l'itinéraire exact (coriolis-data)",
+    what: t("about.buildExportFormatImportedIntoWishlist2"),
     links: [
       ["coriolis.io", "https://coriolis.io"],
       ["github.com/EDCD/coriolis", "https://github.com/EDCD/coriolis"],
       ["github.com/EDCD/coriolis-data", "https://github.com/EDCD/coriolis-data"],
     ],
   },
-  { name: "EDMarketConnector (EDCD)", what: "L'inspiration pour la synchro EDDN, EDSM et Inara", links: [["github.com/EDCD/EDMarketConnector", "https://github.com/EDCD/EDMarketConnector"]] },
+  { name: "EDMarketConnector (EDCD)", what: t("about.inspirationEddnEdsmInaraSync"), links: [["github.com/EDCD/EDMarketConnector", "https://github.com/EDCD/EDMarketConnector"]] },
   {
     name: "Odyssey Materials Helper (Jixxed)",
-    what: "L'inspiration de départ pour EDCH",
+    what: t("about.originalInspirationEdch"),
     links: [["github.com/jixxed/ed-odyssey-materials-helper", "https://github.com/jixxed/ed-odyssey-materials-helper"]],
   },
   {
     name: "Tauri",
-    what: "Le cadre qui fait tourner l'application sur Windows",
+    what: t("about.frameworkRunsAppWindows"),
     links: [
       ["tauri.app", "https://tauri.app"],
       ["github.com/tauri-apps/tauri", "https://github.com/tauri-apps/tauri"],
@@ -65,7 +66,7 @@ export class AboutView implements View {
     void this.ctx;
     replace(
       root,
-      h("header.view-head", null, h("div", null, h("h1", null, "À propos d'EDCH"), h("p.sub", null, `Version ${SOFTWARE_VERSION}`))),
+      h("header.view-head", null, h("div", null, h("h1", null, t("about.aboutEdch")), h("p.sub", null, t("about.version", { SOFTWAREVERSION: SOFTWARE_VERSION })))),
       h(
         "div.about",
         null,
@@ -73,45 +74,45 @@ export class AboutView implements View {
           "section.card",
           null,
           h("h3", null, "EDCH — Elite Dangerous Companion Helper"),
-          h("p", null, "Un compagnon léger pour Elite Dangerous : inventaire en direct, où trouver chaque matériau, ingénieurs, recherches, navigation, commandes et synchro."),
+          h("p", null, t("about.lightweightCompanionEliteDangerousLiveInventory")),
         ),
         h(
           "section.card.about-author",
           null,
-          h("h3", null, "L'auteur"),
-          h("p", null, "Imaginé et piloté par ", h("strong", { "data-no-tr": "" }, "CMDR MDLuffy"), "."),
-          h("p.sub", null, "Merci d'utiliser EDCH ! Si tu croises MDLuffy dans le noir, un petit o7 fait toujours plaisir. Bon vol, Commandant, et que tes réservoirs soient toujours pleins."),
+          h("h3", null, t("about.author")),
+          h("p", null, (t("about.dreamtUpFlown") + " "), h("strong", { "data-no-tr": "" }, "CMDR MDLuffy"), "."),
+          h("p.sub", null, t("about.thanksUsingEdchIfCrossPaths")),
         ),
         h(
           "section.card",
           null,
-          h("h3", null, "Liens utiles"),
+          h("h3", null, t("about.usefulLinks")),
           h(
             "ul.about-links",
             null,
-            h("li", null, "📦 ", h("span", null, "Code source :"), " ", link("github.com/BKNadir/edch", REPO)),
-            h("li", null, "💡 ", h("span", null, "Proposer une idée :"), " ", h("button.inline-link", { onclick: () => openUrl(`${REPO}/issues/new`) }, "ouvrir une issue")),
-            h("li", null, "📝 ", h("span", null, "Nouveautés de chaque version :"), " ", h("button.inline-link", { onclick: () => showChangelog() }, "cette version"), " · ", h("button.inline-link", { onclick: () => openUrl(`${REPO}/releases`) }, "Releases")),
+            h("li", null, "📦 ", h("span", null, t("about.sourceCode")), " ", link("github.com/BKNadir/edch", REPO)),
+            h("li", null, "💡 ", h("span", null, t("about.suggestIdea")), " ", h("button.inline-link", { onclick: () => openUrl(`${REPO}/issues/new`) }, t("about.openIssue"))),
+            h("li", null, "📝 ", h("span", null, t("about.whatSNewEachVersion")), " ", h("button.inline-link", { onclick: () => showChangelog() }, t("about.version2")), " · ", h("button.inline-link", { onclick: () => openUrl(`${REPO}/releases`) }, "Releases")),
           ),
         ),
         this.bugCard(),
         h(
           "section.card",
           null,
-          h("h3", null, "À savoir"),
+          h("h3", null, t("about.goodKnow")),
           h(
             "ul.notes",
             null,
-            h("li", null, "EDCH ne remplace pas les autres outils de la communauté. C'est un projet indépendant, sans lien avec les projets cités ci-dessous ni avec Frontier Developments."),
-            h("li", null, "Il a été codé en grande partie par une IA (Claude, d'Anthropic), avec le suivi d'un développeur qui définit les fonctionnalités, teste et valide chaque version. Il peut donc être incomplet ou contenir des bugs."),
-            h("li", null, "Outil communautaire gratuit, non officiel et non commercial."),
+            h("li", null, t("about.edchNotReplacementCommunitySOther")),
+            h("li", null, t("about.wasLargelyWrittenAiClaudeAnthropic")),
+            h("li", null, t("about.freeUnofficialNonCommercialCommunityTool")),
           ),
         ),
         h(
           "section.card",
           null,
-          h("h3", null, "Merci à eux 🙏"),
-          h("p", null, "EDCH ne fonctionnerait pas sans ces projets, créés et maintenus par des membres de la communauté. Merci à chacun d'eux. S'ils te sont utiles, pense à les soutenir."),
+          h("h3", null, t("about.thank")),
+          h("p", null, t("about.edchWouldNotWorkWithoutThese")),
           h(
             "div.thanks",
             null,
@@ -129,8 +130,8 @@ export class AboutView implements View {
         h(
           "section.card",
           null,
-          h("p.sub", null, "Elite Dangerous est une marque de Frontier Developments plc. Les noms et données du jeu leur appartiennent."),
-          h("p.sub", null, "Licences et détails : ", link("NOTICE", `${REPO}/blob/main/NOTICE`)),
+          h("p.sub", null, t("about.eliteDangerousTrademarkFrontierDevelopmentsPlc")),
+          h("p.sub", null, (t("about.licencesDetails") + " "), link("NOTICE", `${REPO}/blob/main/NOTICE`)),
         ),
       ),
     );
@@ -159,33 +160,33 @@ export class AboutView implements View {
     return h(
       "section.card.bug-card",
       null,
-      h("h3", null, "Signaler un bug"),
-      h("p", null, "Les bugs se signalent sur GitHub, avec le log debug : c'est lui qui permet de comprendre ce qui s'est passé."),
+      h("h3", null, t("about.reportBug")),
+      h("p", null, t("about.bugsAreReportedGithubDebugLog")),
       h(
         "ol.steps",
         null,
-        h("li", null, "Paramètres → Logs de l'application : coche « Mode debug »."),
-        h("li", null, "Refais ce qui pose problème."),
-        h("li", null, "Ouvre le dossier des logs et prends le fichier « edch-debug_… » le plus récent (et « edch-error_… » s'il y en a un)."),
-        h("li", null, "Ouvre une issue sur GitHub : explique ce que tu faisais et ce qui s'est passé, puis glisse le fichier dans le message."),
-        h("li", null, "Décoche ensuite le mode debug : le fichier grossit vite."),
+        h("li", null, t("about.settingsApplicationLogsTickDebugMode")),
+        h("li", null, t("about.doThingGoesWrongAgain")),
+        h("li", null, t("about.openLogsFolderTakeNewestEdch")),
+        h("li", null, t("about.openIssueGithubExplainWhatWere")),
+        h("li", null, t("about.thenUntickDebugModeFileGrows")),
       ),
       h(
         "div.row",
         null,
-        app ? h("button.ghost", { onclick: () => logsOpen().catch((e) => toast(`Impossible d'ouvrir le dossier : ${e}`)) }, "Ouvrir le dossier des logs") : null,
-        h("button.primary", { onclick: newIssue }, icon("link"), " Ouvrir une issue sur GitHub"),
+        app ? h("button.ghost", { onclick: () => logsOpen().catch((e) => toast(t("common.canTOpenFolder", { e }))) }, t("common.openLogsFolder")) : null,
+        h("button.primary", { onclick: newIssue }, icon("link"), (" " + t("about.openIssueGithub"))),
       ),
       h(
         "div.privacy",
         null,
-        h("strong", null, "Ce que contient un log (et ce qu'il ne contient jamais)"),
+        h("strong", null, t("about.whatLogContainsNeverContains")),
         h(
           "ul.notes",
           null,
-          h("li", null, "Jamais : tes clés API (EDSM, Inara), le code du QR code, le code d'escadrille, ton nom d'utilisateur Windows ni le chemin de ton dossier personnel, tes adresses IP complètes, le nom de ton Wi-Fi, ni le texte que tu tapes. EDCH les retire automatiquement de chaque ligne, avant l'écriture."),
-          h("li", null, "Oui : la version d'EDCH, les pages ouvertes et les boutons cliqués, les erreurs, les événements du jeu (systèmes, stations, missions, marchandises), et les noms de commandant (le tien et ceux de ton escadrille)."),
-          h("li", null, "Un log est un simple fichier texte : tu peux le relire, et retirer ce que tu ne veux pas partager, avant de l'envoyer. Une issue GitHub est publique."),
+          h("li", null, t("about.neverApiKeysEdsmInaraQr")),
+          h("li", null, t("about.yesEdchSVersionPagesOpened")),
+          h("li", null, t("about.logPlainTextFileCanRead")),
         ),
       ),
     );

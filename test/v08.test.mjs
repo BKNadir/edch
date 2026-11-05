@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import "./i18n-setup.mjs";
 import { applyEvent, emptyState } from "../dist/js/journal.js";
 
 test("a ship change is shown at once, without keeping the previous ship's name", () => {

@@ -1,4 +1,4 @@
-import { gameName, nameMatches } from "../i18n.js";
+import { gameName, nameMatches, t } from "../i18n.js";
 import { CATEGORY_FR } from "../data.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import { reserved, type Ctx, type View } from "../context.js";
@@ -20,7 +20,7 @@ export class MaterialsView implements View {
     this.root = root;
     const search = h("input.search", {
       type: "search",
-      placeholder: "Chercher un matériau…  (Ctrl+F)",
+      placeholder: t("materials.searchMaterialCtrlF"),
       value: this.query,
       oninput: (e: Event) => {
         this.query = (e.target as HTMLInputElement).value.trim().toLowerCase();
@@ -30,7 +30,7 @@ export class MaterialsView implements View {
     this.tabs = h("div.segmented");
     replace(
       root,
-      h("header.view-head", null, h("h1", null, "Matériaux d'ingénierie"), h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.tabs)),
+      h("header.view-head", null, h("h1", null, t("materials.engineeringMaterials")), h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.tabs)),
       this.list,
     );
     this.update();
@@ -56,7 +56,7 @@ export class MaterialsView implements View {
         onclick: () => this.ctx.store.select(selected ? undefined : m.id),
       },
       h("span.mat-name", null, m.name),
-      h("span.mat-count", null, h("strong", null, fmt(owned)), h("small", null, `/${cap}`), need ? h("em", null, ` · ${fmt(need)} requis`) : null),
+      h("span.mat-count", null, h("strong", null, fmt(owned)), h("small", null, `/${cap}`), need ? h("em", null, (" " + t("common.needed", { need: fmt(need) }))) : null),
       h("span.bar", null, h("span", { style: { width: `${Math.min(100, (owned / cap) * 100)}%` } })),
     );
   }
@@ -73,7 +73,7 @@ export class MaterialsView implements View {
         h(
           "button",
           { class: this.filter === f ? "active" : "", onclick: () => ((this.filter = f), this.update()) },
-          f === "all" ? "Tous" : f === "owned" ? "Possédés" : "Wishlist",
+          f === "all" ? t("common.all") : f === "owned" ? t("materials.owned") : t("common.wishlist"),
         ),
       ),
     );
@@ -104,16 +104,16 @@ export class MaterialsView implements View {
       return h(
         "section.mat-section",
         null,
-        h("h2", null, CATEGORY_FR[cat], h("span.sub", null, ` ${fmt(total)} unités`)),
+        h("h2", null, CATEGORY_FR[cat], h("span.sub", null, (" " + t("materials.units", { total: fmt(total) })))),
         rows.length
-          ? h("div.grade-head", null, h("span"), [1, 2, 3, 4, 5].map((g) => h("span", null, `Grade ${g}`)))
+          ? h("div.grade-head", null, h("span"), [1, 2, 3, 4, 5].map((g) => h("span", null, t("common.grade", { grade: g }))))
           : null,
         rows,
         others.length
           ? h(
               "div.others",
               null,
-              h("h3", null, cat === "Encoded" ? "Données Gardiens / Thargoid" : "Gardiens / Thargoid (non échangeables)"),
+              h("h3", null, cat === "Encoded" ? t("materials.guardianThargoidData") : t("materials.guardianThargoidNotTradeable")),
               h("div.other-grid", null, others.map((m) => this.cell(m, owned[m.id] ?? 0, needs[m.id] ?? 0))),
             )
           : null,
@@ -121,10 +121,10 @@ export class MaterialsView implements View {
     });
 
     const visible = sections.filter(Boolean);
-    replace(this.list, visible.length ? visible : h("p.empty", null, "Aucun matériau ne correspond."));
+    replace(this.list, visible.length ? visible : h("p.empty", null, t("materials.noMatchingMaterial")));
     if (!Object.keys(owned).length) {
       this.list.prepend(
-        h("div.notice", null, icon("warn"), " Pas encore d'inventaire : lance Elite Dangerous (ou vérifie le dossier du journal dans les Paramètres). L'inventaire arrive avec l'événement de connexion du jeu."),
+        h("div.notice", null, icon("warn"), (" " + t("materials.noInventoryYetStartEliteDangerous"))),
       );
     }
   }

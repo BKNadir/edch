@@ -324,7 +324,7 @@ fn default_journal_dir() -> Option<String> {
 fn start_journal(app: AppHandle, dir: String) -> Result<(), String> {
     let path = PathBuf::from(&dir);
     if !path.is_dir() {
-        return Err(format!("Dossier introuvable : {dir}"));
+        return Err(format!("folderNotFound: {dir}"));
     }
     let state = app.state::<Arc<WatchState>>().inner().clone();
     let generation = state.generation.fetch_add(1, Ordering::SeqCst) + 1;
@@ -336,7 +336,7 @@ fn start_journal(app: AppHandle, dir: String) -> Result<(), String> {
 #[tauri::command]
 fn read_aux_file(dir: String, name: String) -> Result<String, String> {
     if name.contains('/') || name.contains('\\') || !name.ends_with(".json") {
-        return Err("Nom de fichier refusé".into());
+        return Err("fileNameRefused".into());
     }
     fs::read_to_string(Path::new(&dir).join(&name)).map_err(|e| e.to_string())
 }
@@ -367,7 +367,7 @@ fn blocking_http(
     content_type: Option<&str>,
 ) -> Result<HttpReply, String> {
     if !ALLOWED_HOSTS.iter().any(|h| url.starts_with(h)) {
-        return Err(format!("Adresse refusée : {url}"));
+        return Err(format!("addressRefused: {url}"));
     }
     let agent = ureq::AgentBuilder::new()
         .timeout(Duration::from_secs(30))
@@ -390,7 +390,7 @@ fn blocking_http(
             status,
             body: response.into_string().unwrap_or_default(),
         }),
-        Err(error) => Err(format!("Réseau : {error}")),
+        Err(error) => Err(format!("network: {error}")),
     }
 }
 
@@ -432,7 +432,7 @@ fn portable() -> bool {
 #[tauri::command]
 async fn clipboard_write(text: String) -> Result<(), String> {
     if text.len() > 2000 {
-        return Err("Texte trop long".into());
+        return Err("textTooLong".into());
     }
     tauri::async_runtime::spawn_blocking(move || {
         let mut clipboard = arboard::Clipboard::new().map_err(|e| e.to_string())?;
@@ -450,7 +450,7 @@ fn is_portable() -> bool {
 #[tauri::command]
 fn open_url(url: String) -> Result<(), String> {
     if !url.starts_with("https://") {
-        return Err("Seuls les liens https sont ouverts".into());
+        return Err("httpsOnly".into());
     }
     #[cfg(target_os = "windows")]
     let result = {
@@ -630,7 +630,7 @@ fn list_option_files() -> Result<Vec<OptionFile>, String> {
 #[tauri::command]
 fn read_option_file(folder: String, name: String) -> Result<String, String> {
     if !OPTION_FOLDERS.contains(&folder.as_str()) || !allowed_option_file(&folder, &name) {
-        return Err("Fichier refusé".into());
+        return Err("fileRefused".into());
     }
     let bytes = fs::read(options_root()?.join(&folder).join(&name)).map_err(|e| e.to_string())?;
     // .binds files start with a UTF-8 BOM.
@@ -684,7 +684,7 @@ fn export_config(include_graphics: bool) -> Result<String, String> {
     let count = write_zip(&target, &folders)?;
     if count == 0 {
         let _ = fs::remove_file(&target);
-        return Err("Aucun fichier de configuration trouvé à exporter".into());
+        return Err("nothingToExport".into());
     }
     Ok(target.to_string_lossy().to_string())
 }
@@ -722,7 +722,7 @@ fn import_config(data: Vec<u8>) -> Result<ImportReport, String> {
         }
     }
     if files.is_empty() {
-        return Err("Ce zip ne contient aucun fichier Bindings/*.binds ni Graphics/*.xml".into());
+        return Err("zipWithoutSettings".into());
     }
     let backup = documents_dir()
         .join("sauvegardes")
@@ -749,7 +749,7 @@ fn import_config(data: Vec<u8>) -> Result<ImportReport, String> {
 fn reveal_path(path: String) -> Result<(), String> {
     let p = PathBuf::from(&path);
     if !p.exists() {
-        return Err("Fichier introuvable".into());
+        return Err("fileNotFound".into());
     }
     #[cfg(target_os = "windows")]
     let result = std::process::Command::new("explorer")

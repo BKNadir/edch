@@ -1,6 +1,7 @@
 // Talks to the Rust side when running inside Tauri; falls back to a demo mode in a
 // plain browser so the UI can be developed and checked without the game.
 
+import { backendMessage, t } from "./i18n.js";
 interface TauriGlobal {
   core: { invoke<T>(cmd: string, args?: Record<string, unknown>): Promise<T> };
   event: { listen<T>(name: string, cb: (e: { payload: T }) => void): Promise<() => void> };
@@ -60,18 +61,26 @@ function describeArgs(args?: Record<string, unknown>): string {
     .join(" ");
 }
 
+/** A Rust error (an error code, see backendMessage) as text in the app's language. */
+function translatedError(err: unknown): unknown {
+  if (typeof err === "string") return backendMessage(err);
+  if (err instanceof Error) err.message = backendMessage(err.message);
+  return err;
+}
+
 function tauriInvoke<T>(cmd: string, args?: Record<string, unknown>): Promise<T> {
   const started = performance.now();
   const call = window.__TAURI__!.core.invoke<T>(cmd, args);
-  if (QUIET.has(cmd)) return call;
+  if (QUIET.has(cmd)) return call.catch((err) => Promise.reject(translatedError(err)));
   return call.then(
     (value) => {
       if (debugCalls) void rawLog("DEBUG", "call", `${cmd} ${describeArgs(args)} → ok (${Math.round(performance.now() - started)} ms)`);
       return value;
     },
     (err) => {
+      // Logged as the code (English, the same in every language), shown translated.
       void rawLog("WARN", "call", `${cmd} ${describeArgs(args)} → ${String((err as Error)?.message ?? err)}`);
-      throw err;
+      throw translatedError(err);
     },
   );
 }
@@ -114,7 +123,7 @@ export function remoteFetch(path: string, init: RequestInit = {}): Promise<Respo
 
 async function remoteJson(path: string, init?: RequestInit): Promise<any> {
   const res = await remoteFetch(path, init);
-  if (!res.ok) throw new Error(`EDCH (PC) a répondu ${res.status}`);
+  if (!res.ok) throw new Error(t("bridge.edchPcAnswered", { status: res.status }));
   return res.status === 204 ? null : res.json();
 }
 
@@ -185,13 +194,13 @@ async function spanshFetch(method: string, url: string, body?: string, contentTy
 }
 
 function parse(reply: HttpReply, what: string): any {
-  if (reply.status === 429) throw new Error(`${what} : trop de requêtes, réessaie dans un instant`);
-  if (TRANSIENT.has(reply.status)) throw new Error(`${what} est momentanément indisponible (erreur ${reply.status}), réessaie dans un instant`);
-  if (reply.status < 200 || reply.status >= 300) throw new Error(`${what} a répondu ${reply.status}`);
+  if (reply.status === 429) throw new Error(t("bridge.tooManyRequestsTryAgainMoment", { what }));
+  if (TRANSIENT.has(reply.status)) throw new Error(t("bridge.temporarilyUnavailableErrorTryAgainMoment", { what, status: reply.status }));
+  if (reply.status < 200 || reply.status >= 300) throw new Error(t("bridge.answered", { what, status: reply.status }));
   try {
     return JSON.parse(reply.body);
   } catch {
-    throw new Error(`${what} : réponse illisible`);
+    throw new Error(t("bridge.unreadableAnswer", { what }));
   }
 }
 
@@ -210,7 +219,7 @@ export async function spanshJob(endpoint: string, form: [string, string][], onWa
   const submitted = parse(await httpFetch("POST", `https://spansh.co.uk/api/${endpoint}`, encoded, "application/x-www-form-urlencoded"), "Spansh");
   if (submitted.error) throw new Error(String(submitted.error));
   const job = submitted.job;
-  if (!job) throw new Error("Spansh n'a pas donné de numéro de calcul");
+  if (!job) throw new Error(t("bridge.spanshReturnedNoJobNumber"));
   for (let i = 0; i < 120; i++) {
     await new Promise((r) => setTimeout(r, 1500));
     onWait?.(i);
@@ -219,9 +228,9 @@ export async function spanshJob(endpoint: string, form: [string, string][], onWa
     // The exact (galaxy) plotter also says "state": still running until it is "completed".
     if (res.status === "ok" && res.state && res.state !== "completed" && !res.result) continue;
     if (res.status === "ok" && res.result) return res.result;
-    throw new Error(String(res.error ?? `calcul ${res.status ?? "échoué"}`));
+    throw new Error(String(res.error ?? t("bridge.spanshPlotFailed", { status: res.status ?? "?" })));
   }
-  throw new Error("Spansh calcule encore après 3 minutes, réessaie plus tard");
+  throw new Error(t("bridge.spanshStillPlottingAfter3Minutes"));
 }
 
 export interface OptionFile {
@@ -238,8 +247,8 @@ export interface ImportReport {
 }
 
 const invoke = <T>(cmd: string, args?: Record<string, unknown>) => {
-  if (remote) return Promise.reject(new Error("Disponible seulement sur le PC"));
-  if (!isTauri()) return Promise.reject(new Error("Disponible dans l'application (pas en mode démo)"));
+  if (remote) return Promise.reject(new Error(t("bridge.onlyAvailablePc")));
+  if (!isTauri()) return Promise.reject(new Error(t("bridge.availableAppNotDemoMode")));
   return tauriInvoke<T>(cmd, args);
 };
 

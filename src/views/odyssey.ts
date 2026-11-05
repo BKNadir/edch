@@ -1,4 +1,4 @@
-import { nameMatches } from "../i18n.js";
+import { nameMatches, t } from "../i18n.js";
 import { CATEGORY_FR } from "../data.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import { reserved, type Ctx, type View } from "../context.js";
@@ -21,14 +21,14 @@ export class OdysseyView implements View {
     this.root = root;
     const search = h("input.search", {
       type: "search",
-      placeholder: "Chercher…",
+      placeholder: t("odyssey.search"),
       value: this.query,
       oninput: (e: Event) => {
         this.query = (e.target as HTMLInputElement).value.trim().toLowerCase();
         this.update();
       },
     });
-    replace(root, h("header.view-head", null, h("h1", null, "Odyssey — casier du vaisseau"), h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.head)), this.body);
+    replace(root, h("header.view-head", null, h("h1", null, t("odyssey.odysseyShipLocker")), h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.head)), this.body);
     this.update();
   }
 
@@ -48,7 +48,7 @@ export class OdysseyView implements View {
           return h("button", { class: this.cat === c ? "active" : "", onclick: () => ((this.cat = c), this.update()) }, CATEGORY_FR[c], h("small", null, ` ${fmt(count)}`));
         }),
       ),
-      h("label.check", null, h("input", { type: "checkbox", checked: this.ownedOnly, onchange: (e: Event) => ((this.ownedOnly = (e.target as HTMLInputElement).checked), this.update()) }), " Possédés seulement"),
+      h("label.check", null, h("input", { type: "checkbox", checked: this.ownedOnly, onchange: (e: Event) => ((this.ownedOnly = (e.target as HTMLInputElement).checked), this.update()) }), (" " + t("odyssey.ownedOnly"))),
     );
 
     const usedBy = (m: Material) => (game.usedIn.get(m.id) ?? []).filter((b) => ["suit", "weapon", "merchant", "unlock", "bartender"].includes(b.kind));
@@ -61,7 +61,7 @@ export class OdysseyView implements View {
     const empty = !Object.keys(locker).length;
     replace(
       this.body,
-      empty ? h("div.notice", null, icon("warn"), " Casier vide ou pas encore lu : il se remplit quand le jeu écrit ShipLocker.json (en jeu, à bord ou à pied).") : null,
+      empty ? h("div.notice", null, icon("warn"), (" " + t("odyssey.lockerEmptyNotReadYetFills"))) : null,
       h(
         "div.locker-grid",
         null,
@@ -76,8 +76,8 @@ export class OdysseyView implements View {
               onclick: () => store.select(store.state.selected === m.id ? undefined : m.id),
             },
             h("span.mat-name", null, m.name),
-            h("span.mat-count", null, h("strong", null, fmt(owned)), need ? h("em", null, ` · ${need} requis`) : null),
-            h("span.sub", null, uses ? `${uses} recette${uses > 1 ? "s" : ""}` : "Aucune recette", m.barter ? ` · troc ${m.barter}` : ""),
+            h("span.mat-count", null, h("strong", null, fmt(owned)), need ? h("em", null, (" " + t("common.needed", { need }))) : null),
+            h("span.sub", null, uses ? t("odyssey.recipes", { count: uses }) : t("odyssey.noRecipe"), m.barter ? (" " + t("odyssey.barter", { barter: m.barter })) : ""),
           );
         }),
       ),

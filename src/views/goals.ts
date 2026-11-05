@@ -5,6 +5,7 @@ import { SOFTWARE_NAME, SOFTWARE_VERSION } from "../eddn.js";
 import { relTime } from "../time.js";
 import type { Ctx, View } from "../context.js";
 import { busy, sys } from "./missions.js";
+import { t } from "../i18n.js";
 
 interface InaraGoal {
   communitygoalGameID: number;
@@ -43,7 +44,7 @@ export class GoalsView implements View {
     const st = this.ctx.store.state;
     const key = st.settings.sync.inaraKey;
     if (!key) {
-      this.inaraError = "Ajoute ta clé API Inara dans Synchro pour voir tous les objectifs en cours.";
+      this.inaraError = t("goals.addInaraApiKeySyncSee");
       this.render();
       return;
     }
@@ -74,10 +75,10 @@ export class GoalsView implements View {
     const past = goals.filter((g) => !live.includes(g));
     replace(
       this.root,
-      h("header.view-head", null, h("div", null, h("h1", null, "Objectifs communautaires"), h("p.sub", null, "Ta participation, lue dans le journal du jeu."))),
-      live.length ? h("div.goal-grid", null, live.map((g) => this.goal(g))) : h("section.card", null, h("p.empty", null, "Aucun objectif communautaire suivi. Inscris-toi à un objectif en jeu (ou ouvre son panneau) : il apparaîtra ici.")),
+      h("header.view-head", null, h("div", null, h("h1", null, t("common.communityGoals")), h("p.sub", null, t("goals.participationReadFromGameJournal")))),
+      live.length ? h("div.goal-grid", null, live.map((g) => this.goal(g))) : h("section.card", null, h("p.empty", null, t("goals.noCommunityGoalTrackedSignUp"))),
       this.inaraSection(),
-      past.length ? h("section.card", null, h("h3", null, "Objectifs passés"), h("ul.plain", null, past.slice(0, 10).map((g) => h("li", null, h("strong", null, g.title), h("span.sub", null, " · ", sys(g.system), ` · ${g.tierReached ?? ""} · ${fmt(g.contribution ?? 0)}`))))) : null,
+      past.length ? h("section.card", null, h("h3", null, t("goals.pastGoals")), h("ul.plain", null, past.slice(0, 10).map((g) => h("li", null, h("strong", null, g.title), h("span.sub", null, " · ", sys(g.system), ` · ${g.tierReached ?? ""} · ${fmt(g.contribution ?? 0)}`))))) : null,
     );
   }
 
@@ -91,13 +92,13 @@ export class GoalsView implements View {
       h(
         "div.stats",
         null,
-        h("div.stat", null, h("strong", null, fmt(g.contribution ?? 0)), h("span.sub", null, "ta contribution")),
-        g.percentile !== undefined ? h("div.stat", null, h("strong", null, `Top ${g.percentile} %`), h("span.sub", null, "ta tranche de récompense")) : null,
-        g.tierReached ? h("div.stat", null, h("strong", null, g.tierReached), h("span.sub", null, g.topTier ? `sur ${g.topTier.name}` : "palier atteint")) : null,
-        g.contributors !== undefined ? h("div.stat", null, h("strong", null, fmt(g.contributors)), h("span.sub", null, "participants")) : null,
+        h("div.stat", null, h("strong", null, fmt(g.contribution ?? 0)), h("span.sub", null, t("goals.contribution"))),
+        g.percentile !== undefined ? h("div.stat", null, h("strong", null, t("goals.top", { percentile: g.percentile })), h("span.sub", null, t("goals.rewardBand"))) : null,
+        g.tierReached ? h("div.stat", null, h("strong", null, g.tierReached), h("span.sub", null, g.topTier ? t("goals.of", { name: g.topTier.name }) : t("goals.tierReached"))) : null,
+        g.contributors !== undefined ? h("div.stat", null, h("strong", null, fmt(g.contributors)), h("span.sub", null, t("goals.contributors2"))) : null,
       ),
-      g.inTopRank ? h("p.ok", null, `Tu es dans le top ${g.topRankSize ?? ""} des contributeurs.`) : null,
-      h("div.mission-foot", null, h("span", { class: left < 86400000 ? "warn" : "" }, `Se termine ${relTime(g.expiry)}`), g.total !== undefined ? h("span.sub", null, `Total : ${fmt(g.total)}`) : null, h("span.sub", null, `Mis à jour ${relTime(g.updated)}`)),
+      g.inTopRank ? h("p.ok", null, t("goals.areTopContributors", { topRankSize: g.topRankSize ?? "" })) : null,
+      h("div.mission-foot", null, h("span", { class: left < 86400000 ? "warn" : "" }, t("goals.ends", { relTime: relTime(g.expiry) })), g.total !== undefined ? h("span.sub", null, t("goals.total", { total: fmt(g.total) })) : null, h("span.sub", null, t("common.updated", { relTime: relTime(g.updated) }))),
     );
   }
 
@@ -106,14 +107,14 @@ export class GoalsView implements View {
     return h(
       "section.card",
       null,
-      h("div.sync-head", null, h("div", null, h("h3", null, "Tous les objectifs en cours"), h("p.sub", null, "Via Inara, avec ta clé API (page Synchro).")), h("button.ghost", { onclick: () => this.loadInara(), disabled: this.loading }, this.loading ? "Chargement…" : "Charger")),
+      h("div.sync-head", null, h("div", null, h("h3", null, t("goals.allCurrentGoals")), h("p.sub", null, t("goals.throughInaraApiKeySyncPage"))), h("button.ghost", { onclick: () => this.loadInara(), disabled: this.loading }, this.loading ? t("goals.loading") : t("goals.load"))),
       this.inaraError ? h("p.error", null, this.inaraError) : null,
       this.inara
         ? list.length
           ? h(
               "table.table",
               null,
-              h("thead", null, h("tr", null, h("th", null, "Objectif"), h("th", null, "Lieu"), h("th.num", null, "Palier"), h("th.num", null, "Participants"), h("th", null, "Fin"), h("th", null, ""))),
+              h("thead", null, h("tr", null, h("th", null, t("goals.goal")), h("th", null, t("common.location")), h("th.num", null, t("goals.tier")), h("th.num", null, t("goals.contributors")), h("th", null, t("common.end")), h("th", null, ""))),
               h(
                 "tbody",
                 null,
@@ -131,7 +132,7 @@ export class GoalsView implements View {
                 ),
               ),
             )
-          : h("p.empty", null, "Aucun objectif en cours sur Inara.")
+          : h("p.empty", null, t("goals.noCurrentGoalsInara"))
         : null,
     );
   }

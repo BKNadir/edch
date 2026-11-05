@@ -4,6 +4,7 @@
 import { h, replace } from "./dom.js";
 import { log } from "./logger.js";
 import type { Store } from "./store.js";
+import { t } from "./i18n.js";
 
 let audio: AudioContext | null = null;
 
@@ -32,28 +33,28 @@ function note(ac: AudioContext, start: number, freq: number, dur: number, volume
 }
 
 export const TONES: [string, string][] = [
-  ["chime", "Carillon"],
-  ["beep", "Bip"],
-  ["radar", "Radar"],
-  ["soft", "Doux"],
+  ["chime", t("notifier.chime")],
+  ["beep", t("notifier.beep")],
+  ["radar", t("notifier.radar")],
+  ["soft", t("notifier.soft")],
 ];
 
 export function playTone(tone: string, volume: number) {
   const ac = ctx();
   if (!ac) return;
   const v = Math.max(0, Math.min(1, volume)) * 0.35;
-  const t = ac.currentTime + 0.02;
+  const startAt = ac.currentTime + 0.02;
   if (tone === "beep") {
-    note(ac, t, 1000, 0.09, v * 0.6, "square");
-    note(ac, t + 0.14, 1000, 0.09, v * 0.6, "square");
+    note(ac, startAt, 1000, 0.09, v * 0.6, "square");
+    note(ac, startAt + 0.14, 1000, 0.09, v * 0.6, "square");
   } else if (tone === "radar") {
-    note(ac, t, 420, 0.45, v, "sine", 1250);
+    note(ac, startAt, 420, 0.45, v, "sine", 1250);
   } else if (tone === "soft") {
-    note(ac, t, 523, 0.35, v * 0.8, "triangle");
-    note(ac, t + 0.18, 659, 0.45, v * 0.8, "triangle");
+    note(ac, startAt, 523, 0.35, v * 0.8, "triangle");
+    note(ac, startAt + 0.18, 659, 0.45, v * 0.8, "triangle");
   } else {
-    note(ac, t, 880, 0.25, v);
-    note(ac, t + 0.16, 1320, 0.4, v);
+    note(ac, startAt, 880, 0.25, v);
+    note(ac, startAt + 0.16, 1320, 0.4, v);
   }
 }
 
@@ -67,7 +68,7 @@ let tab: HTMLElement | null = null;
 let panel: HTMLElement | null = null;
 let badge: HTMLElement | null = null;
 let renderPanel: () => (Node | null)[] = () => [];
-let label = "Notifications";
+let label = t("common.notifications");
 const alerts: Alert[] = [];
 let unseen = 0;
 
@@ -129,7 +130,7 @@ export function mountSideTab(s: Store, render: () => (Node | null)[]) {
   store = s;
   renderPanel = render;
   badge = h("span.side-tab-badge", { hidden: true });
-  tab = h("button.side-tab", { title: "Aperçu", onclick: toggle }, h("span.side-tab-label", null, label), badge);
+  tab = h("button.side-tab", { title: t("notifier.overview"), onclick: toggle }, h("span.side-tab-label", null, label), badge);
   panel = h("div.side-panel", { onclick: (e: Event) => e.stopPropagation() });
   document.body.append(tab, panel);
   document.addEventListener("click", close);

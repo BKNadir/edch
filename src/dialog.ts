@@ -1,6 +1,7 @@
 // A small in-app dialog (no Windows pop-up): a title, content and buttons.
 
 import { h, icon } from "./dom.js";
+import { t } from "./i18n.js";
 
 export function dialog(title: string, body: (Node | string | null)[], buttons: { label: string; primary?: boolean; value: string }[]): Promise<string | null> {
   return new Promise((resolve) => {
@@ -18,7 +19,7 @@ export function dialog(title: string, body: (Node | string | null)[], buttons: {
       h(
         "div.dialog",
         { role: "dialog", "aria-modal": "true" },
-        h("div.dialog-head", null, h("h3", null, title), h("button.icon-btn", { title: "Fermer", onclick: () => close(null) }, icon("close"))),
+        h("div.dialog-head", null, h("h3", null, title), h("button.icon-btn", { title: t("common.close"), onclick: () => close(null) }, icon("close"))),
         h("div.dialog-body", null, ...body),
         h(
           "div.dialog-actions",

@@ -2,7 +2,7 @@ import { openSettingsTab } from "./settings.js";
 import { openUrl } from "../bridge.js";
 import { findRingSpots, findSellSpots, MAX_RADIUS, METHOD_LABEL, miningMethods, RESERVE, RING_TYPE, spanshBodyUrl, type RingSpot, type SellSpot } from "../miningSpots.js";
 import { fmt, h, icon, replace } from "../dom.js";
-import { gameName } from "../i18n.js";
+import { gameName, t } from "../i18n.js";
 import { referenceOf, type Ctx, type View } from "../context.js";
 import type { MiningSettings } from "../store.js";
 import { duration, relTime } from "../time.js";
@@ -71,13 +71,13 @@ export class MiningView implements View {
       "div.segmented",
       null,
       ([
-        ["prospect", "Prospection"],
-        ["merit", "Merit Miner"],
-      ] as [Tab, string][]).map(([t, l]) => h("button", { class: this.tab === t ? "active" : "", onclick: () => ((this.tab = t), this.render()) }, l)),
+        ["prospect", t("mining.prospecting")],
+        ["merit", t("mining.meritMiner")],
+      ] as [Tab, string][]).map(([tab, l]) => h("button", { class: this.tab === tab ? "active" : "", onclick: () => ((this.tab = tab), this.render()) }, l)),
     );
     replace(
       this.root,
-      h("header.view-head", null, h("div", null, h("h1", null, "Minage"), h("p.sub", null, "Résultats des prospecteurs en direct, et où miner et vendre pour gagner des mérites Powerplay.")), tabs),
+      h("header.view-head", null, h("div", null, h("h1", null, t("common.mining")), h("p.sub", null, t("mining.liveProspectorResultsWhereMineSell"))), tabs),
       ...(this.tab === "prospect" ? this.prospect() : this.merit()),
     );
   }
@@ -88,11 +88,11 @@ export class MiningView implements View {
     const st = this.ctx.store.state;
     const m = st.activity.mining;
     const s = st.settings.mining;
-    const targets = new Map(s.targets.map((t) => [t.id, t.min]));
+    const targets = new Map(s.targets.map((target) => [target.id, target.min]));
     const last = m.last[0];
     const elapsed = m.started ? Date.now() - Date.parse(m.started) : 0;
     const refined = Object.entries(m.refined).sort((a, b) => b[1].count - a[1].count);
-    const totalRefined = refined.reduce((t, [, r]) => t + r.count, 0);
+    const totalRefined = refined.reduce((sum, [, r]) => sum + r.count, 0);
     const perHour = elapsed > 5 * 60000 ? (totalRefined / elapsed) * 3600000 : null;
 
     const materialBars = (p: (typeof m.last)[number], big: boolean) =>
@@ -115,26 +115,26 @@ export class MiningView implements View {
     const targetEditor = h(
       "div.chips",
       null,
-      s.targets.map((t, i) =>
+      s.targets.map((target, i) =>
         h(
           "span.chip.edit",
           null,
-          gameName(MINERALS.find(([n]) => symbolOf(n) === t.id)?.[0] ?? t.id),
+          gameName(MINERALS.find(([n]) => symbolOf(n) === target.id)?.[0] ?? target.id),
           " ≥ ",
           h("input", {
             type: "number",
             min: "0",
             max: "100",
             step: "1",
-            value: String(t.min),
+            value: String(target.min),
             onchange: (e: Event) => {
               const targetsNext = [...s.targets];
-              targetsNext[i] = { ...t, min: Number((e.target as HTMLInputElement).value) || 0 };
+              targetsNext[i] = { ...target, min: Number((e.target as HTMLInputElement).value) || 0 };
               this.set({ targets: targetsNext });
             },
           }),
           " %",
-          h("button.ghost.small", { title: "Retirer", onclick: () => (this.set({ targets: s.targets.filter((_, j) => j !== i) }), this.render()) }, icon("close")),
+          h("button.ghost.small", { title: t("common.remove"), onclick: () => (this.set({ targets: s.targets.filter((_, j) => j !== i) }), this.render()) }, icon("close")),
         ),
       ),
       h(
@@ -142,11 +142,11 @@ export class MiningView implements View {
         {
           onchange: (e: Event) => {
             const v = (e.target as HTMLSelectElement).value;
-            if (v && !s.targets.some((t) => t.id === symbolOf(v))) this.set({ targets: [...s.targets, { id: symbolOf(v), min: 10 }] });
+            if (v && !s.targets.some((target) => target.id === symbolOf(v))) this.set({ targets: [...s.targets, { id: symbolOf(v), min: 10 }] });
             this.render();
           },
         },
-        h("option", { value: "" }, "+ Ajouter une cible"),
+        h("option", { value: "" }, t("mining.addTarget")),
         MINERALS.map(([n]) => h("option", { value: n }, gameName(n))),
       ),
     );
@@ -155,12 +155,12 @@ export class MiningView implements View {
       h(
         "section.card",
         null,
-        h("h3", null, "Cibles"),
-        h("p.sub", null, "Quand un prospecteur trouve une de ces cibles au-dessus du pourcentage choisi (ou un cœur pour le minage profond), EDCH te prévient avec le son et la couleur choisis dans Paramètres → Notifications."),
+        h("h3", null, t("mining.targets")),
+        h("p.sub", null, t("mining.whenProspectorFindsOneTheseTargets")),
         targetEditor,
-        h("p.sub", null, s.alert ? "Alerte activée · " : "Alerte désactivée · ", h("button.inline-link", { onclick: () => openSettingsTab(this.ctx.store, "notifications") }, "Paramètres → Notifications")),
+        h("p.sub", null, s.alert ? (t("mining.alert") + " ") : (t("mining.alertOff") + " "), h("button.inline-link", { onclick: () => openSettingsTab(this.ctx.store, "notifications") }, t("common.settingsNotifications"))),
       ),
-      this.finder(s.targets.map((t) => MINERALS.find(([n]) => symbolOf(n) === t.id)?.[0]).filter(Boolean) as string[]),
+      this.finder(s.targets.map((target) => MINERALS.find(([n]) => symbolOf(n) === target.id)?.[0]).filter(Boolean) as string[]),
       last
         ? h(
             "section.card.prospect",
@@ -168,34 +168,34 @@ export class MiningView implements View {
             h(
               "div.sync-head",
               null,
-              h("h3", null, "Dernier astéroïde"),
-              h("div.badges", null, last.content ? h("span.badge", null, `Contenu : ${last.content}`) : null, last.motherlode ? h("span.badge.hit", null, `Cœur : ${gameName(last.motherlode)}`) : null, last.remaining !== undefined && last.remaining < 100 ? h("span.badge.muted", null, `Restant ${fmt(last.remaining)} %`) : null, h("span.sub", null, relTime(last.at))),
+              h("h3", null, t("mining.lastAsteroid")),
+              h("div.badges", null, last.content ? h("span.badge", null, t("mining.content", { content: last.content })) : null, last.motherlode ? h("span.badge.hit", null, t("common.motherlode", { MotherlodeMaterialLocalised: gameName(last.motherlode) })) : null, last.remaining !== undefined && last.remaining < 100 ? h("span.badge.muted", null, t("mining.left", { remaining: fmt(last.remaining) })) : null, h("span.sub", null, relTime(last.at))),
             ),
             materialBars(last, true),
             m.last.length > 1
               ? h(
                   "div.prospect-history",
                   null,
-                  h("h4", null, "Précédents"),
+                  h("h4", null, t("mining.previous")),
                   m.last.slice(1, 8).map((p) => h("div.prospect-row", null, h("span.sub", null, relTime(p.at)), p.motherlode ? h("span.badge.hit", null, gameName(p.motherlode)) : null, materialBars(p, false))),
                 )
               : null,
           )
-        : h("section.card", null, h("p.empty", null, "Lance un drone prospecteur sur un astéroïde : sa composition s'affichera ici.")),
+        : h("section.card", null, h("p.empty", null, t("mining.fireProspectorLimpetAsteroidCompositionWill"))),
       h(
         "section.card",
         null,
-        h("h3", null, "Cette session"),
+        h("h3", null, t("mining.session")),
         h(
           "div.stats",
           null,
-          h("div.stat", null, h("strong", null, fmt(totalRefined)), h("span.sub", null, "t raffinées")),
-          perHour !== null ? h("div.stat", null, h("strong", null, fmt(Math.round(perHour))), h("span.sub", null, "t / heure")) : null,
-          h("div.stat", null, h("strong", null, fmt(m.prospected)), h("span.sub", null, "astéroïdes prospectés")),
-          h("div.stat", null, h("strong", null, fmt(m.prospectors)), h("span.sub", null, "prospecteurs")),
-          h("div.stat", null, h("strong", null, fmt(m.collectors)), h("span.sub", null, "collecteurs")),
-          m.cracked ? h("div.stat", null, h("strong", null, fmt(m.cracked)), h("span.sub", null, "cœurs fracturés")) : null,
-          m.started ? h("div.stat", null, h("strong", null, duration(elapsed)), h("span.sub", null, "de minage")) : null,
+          h("div.stat", null, h("strong", null, fmt(totalRefined)), h("span.sub", null, t("mining.tRefined"))),
+          perHour !== null ? h("div.stat", null, h("strong", null, fmt(Math.round(perHour))), h("span.sub", null, t("mining.tHour"))) : null,
+          h("div.stat", null, h("strong", null, fmt(m.prospected)), h("span.sub", null, t("mining.asteroidsProspected"))),
+          h("div.stat", null, h("strong", null, fmt(m.prospectors)), h("span.sub", null, t("mining.prospectors"))),
+          h("div.stat", null, h("strong", null, fmt(m.collectors)), h("span.sub", null, t("mining.collectors"))),
+          m.cracked ? h("div.stat", null, h("strong", null, fmt(m.cracked)), h("span.sub", null, t("mining.coresCracked"))) : null,
+          m.started ? h("div.stat", null, h("strong", null, duration(elapsed)), h("span.sub", null, t("mining.mining"))) : null,
         ),
         refined.length ? h("div.chips", null, refined.map(([, r]) => h("span.chip", null, `${gameName(r.label)} · ${fmt(r.count)} t`))) : null,
       ),
@@ -223,8 +223,8 @@ export class MiningView implements View {
       h(
         "section.card",
         null,
-        h("h3", null, "Où miner"),
-        h("p.sub", null, `Les anneaux avec un point chaud du minerai choisi, les plus proches d'abord, puis où le vendre au meilleur prix. Rayon : ${fmt(this.ctx.store.state.settings.maxDistance)} al, élargi automatiquement si rien n'est trouvé. Données Spansh.`),
+        h("h3", null, t("mining.whereMine")),
+        h("p.sub", null, t("mining.ringsHotspotChosenMineralNearestFirst", { maxDistance: fmt(this.ctx.store.state.settings.maxDistance) })),
         h(
           "div.row",
           null,
@@ -233,12 +233,12 @@ export class MiningView implements View {
             { onchange: (e: Event) => ((this.findMineral = (e.target as HTMLSelectElement).value), (this.found = null), this.render()) },
             MINERALS.map(([n]) => h("option", { value: n, selected: n === this.findMineral }, gameName(n))),
           ),
-          h("button.primary", { disabled: this.finding, onclick: run }, this.finding ? "Recherche…" : "Chercher"),
-          h("span.sub", null, `Autour de ${referenceOf(this.ctx).label}`),
+          h("button.primary", { disabled: this.finding, onclick: run }, this.finding ? t("mining.searching") : t("common.search")),
+          h("span.sub", null, t("mining.around", { place: referenceOf(this.ctx).label })),
         ),
         this.error && this.tab === "prospect" ? h("p.error", null, this.error) : null,
       ),
-      this.found ? this.spotResults(this.found, { mine: "Où miner", sell: "Où vendre" }) : null,
+      this.found ? this.spotResults(this.found, { mine: t("mining.whereMine"), sell: t("mining.whereSell") }) : null,
     );
   }
 
@@ -253,11 +253,11 @@ export class MiningView implements View {
       h(
         "section.card",
         null,
-        h("h3", null, "Où miner et vendre dans les systèmes de ta puissance"),
+        h("h3", null, t("mining.whereMineSellPowerSSystems")),
         h(
           "p.sub",
           null,
-          "Cherche les stations des systèmes contrôlés par la puissance choisie (exploités, fortifiés ou bastions) qui achètent le minerai, triées par prix, et les anneaux avec un point chaud de ce minerai dans ces systèmes. Vendre dans un système de ta puissance des minerais minés dans ce même système rapporte des mérites. Données Spansh.",
+          t("mining.findsStationsSystemsControlledChosenPower"),
         ),
         h(
           "div.merit-form",
@@ -265,11 +265,11 @@ export class MiningView implements View {
           h(
             "label.field",
             null,
-            h("span", null, "Puissance"),
+            h("span", null, t("mining.power")),
             h(
               "select",
               { onchange: (e: Event) => this.set({ power: (e.target as HTMLSelectElement).value }) },
-              h("option", { value: "", selected: !s.power }, pledged ? `${pledged} (ta puissance)` : "—"),
+              h("option", { value: "", selected: !s.power }, pledged ? t("mining.power2", { pledged }) : "—"),
               POWERS.map((p) => h("option", { value: p, selected: s.power === p }, p)),
             ),
           ),
@@ -294,8 +294,8 @@ export class MiningView implements View {
           h(
             "div.row",
             null,
-            h("button.primary", { disabled: this.running || !power || !s.minerals.length, onclick: () => this.search(power, s.minerals) }, this.running ? "Recherche…" : "Chercher"),
-            h("span.sub", null, `Autour de ${referenceOf(this.ctx).label}, ${st.settings.maxDistance} al max`),
+            h("button.primary", { disabled: this.running || !power || !s.minerals.length, onclick: () => this.search(power, s.minerals) }, this.running ? t("mining.searching") : t("common.search")),
+            h("span.sub", null, t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: st.settings.maxDistance })),
           ),
         ),
         this.error ? h("p.error", null, this.error) : null,
@@ -333,17 +333,17 @@ export class MiningView implements View {
 
   /** Where to mine (green) first, then where to sell (blue). */
   private spotResults(r: SpotResults, title: { mine: string; sell: string }): HTMLElement[] {
-    const tooFar = (radius: number, widened: boolean, found: boolean, what: string) =>
+    const tooFar = (radius: number, widened: boolean, found: boolean, what: "hotspot" | "buyer") =>
       !found
         ? h(
             "p.notice.danger",
             null,
             icon("warn"),
             " ",
-            h("span", null, what === "point chaud" ? `Aucun point chaud connu à moins de ${fmt(MAX_RADIUS)} al. Il faudra aller plus loin, en fleet carrier par exemple.` : `Aucun acheteur connu à moins de ${fmt(MAX_RADIUS)} al. Il faudra aller plus loin, en fleet carrier par exemple.`),
+            h("span", null, what === "hotspot" ? t("mining.noKnownHotspotWithinLyLl", { MAXRADIUS: fmt(MAX_RADIUS) }) : t("mining.noKnownBuyerWithinLyLl", { MAXRADIUS: fmt(MAX_RADIUS) })),
           )
         : widened
-          ? h("p.notice", null, icon("warn"), " ", h("span", null, `Rien à moins de ${fmt(r.start)} al : rayon élargi à ${fmt(radius)} al. Prévois un long trajet, ou déplace ton fleet carrier.`))
+          ? h("p.notice", null, icon("warn"), " ", h("span", null, t("mining.nothingWithinLyRadiusWidenedLy", { start: fmt(r.start), radius: fmt(radius) })))
           : null;
     const mineCard = h(
       "section.card.mine-zone",
@@ -360,14 +360,14 @@ export class MiningView implements View {
             h("div.chips", null, miningMethods(m.mineral).map((x) => h("span.chip.method", null, METHOD_LABEL[x]))),
           ),
           !m.ringable
-            ? h("p.sub", null, "Pas de point chaud pour ce minerai : il se mine au laser dans les anneaux du bon type (métallique pour les métaux), sans point chaud.")
+            ? h("p.sub", null, t("mining.noHotspotsMineralSMinedLasers"))
             : [
-                tooFar(m.radius, m.widened, m.spots.length > 0, "point chaud"),
+                tooFar(m.radius, m.widened, m.spots.length > 0, "hotspot"),
                 m.spots.length
                   ? h(
                       "table.table.spot-table",
                       null,
-                      h("thead", null, h("tr", null, h("th", null, "Planète · anneau"), h("th", null, "Type d'anneau"), h("th", null, "Réserve"), h("th.num", null, "Points chauds"), h("th", null, "Système"), h("th.num", null, "Distance"), h("th.num", null, "Arrivée"))),
+                      h("thead", null, h("tr", null, h("th", null, t("mining.planetRing")), h("th", null, t("mining.ringType")), h("th", null, t("mining.reserve")), h("th.num", null, t("mining.hotspots")), h("th", null, t("common.system")), h("th.num", null, t("common.distance")), h("th.num", null, t("mining.fromArrival")))),
                       h(
                         "tbody",
                         null,
@@ -378,15 +378,15 @@ export class MiningView implements View {
                             h(
                               "td",
                               null,
-                              x.bodyId64 ? h("button.inline-link", { title: "Ouvrir la planète sur Spansh", "data-no-tr": "", onclick: () => openUrl(spanshBodyUrl(x.bodyId64!)) }, x.body) : h("span", { "data-no-tr": "" }, x.body),
+                              x.bodyId64 ? h("button.inline-link", { title: t("mining.openPlanetSpansh"), "data-no-tr": "", onclick: () => openUrl(spanshBodyUrl(x.bodyId64!)) }, x.body) : h("span", { "data-no-tr": "" }, x.body),
                               h("div.sub", { "data-no-tr": "" }, x.ring),
                             ),
                             h("td", null, x.ringType ? RING_TYPE[x.ringType] ?? x.ringType : ""),
                             h("td", null, x.reserve ? RESERVE[x.reserve] ?? x.reserve : ""),
                             h("td.num", null, h("strong", null, String(x.count))),
                             h("td", null, sys(x.system), x.state ? h("div.sub", null, x.state) : null),
-                            h("td.num", null, x.distance !== undefined ? `${fmt(Math.round(x.distance))} al` : ""),
-                            h("td.num", null, x.arrival !== undefined ? `${fmt(Math.round(x.arrival))} ls` : ""),
+                            h("td.num", null, x.distance !== undefined ? t("common.ly", { locale: fmt(Math.round(x.distance)) }) : ""),
+                            h("td.num", null, x.arrival !== undefined ? t("common.ls", { locale: fmt(Math.round(x.arrival)) }) : ""),
                           ),
                         ),
                       ),
@@ -406,12 +406,12 @@ export class MiningView implements View {
           "div.mine-block",
           null,
           h("h4", null, gameName(m.mineral)),
-          tooFar(m.radius, m.widened, m.spots.length > 0, "acheteur"),
+          tooFar(m.radius, m.widened, m.spots.length > 0, "buyer"),
           m.spots.length
             ? h(
                 "table.table.spot-table",
                 null,
-                h("thead", null, h("tr", null, h("th.num", null, "Prix"), h("th.num", null, "Demande"), h("th", null, "Station"), h("th", null, "Système"), h("th.num", null, "Distance"), h("th", null, "État"))),
+                h("thead", null, h("tr", null, h("th.num", null, t("mining.price")), h("th.num", null, t("mining.demand")), h("th", null, t("common.station")), h("th", null, t("common.system")), h("th.num", null, t("common.distance")), h("th", null, t("mining.state")))),
                 h(
                   "tbody",
                   null,
@@ -422,8 +422,8 @@ export class MiningView implements View {
                       h("td.num", null, h("strong", null, `${fmt(x.price)} Cr`)),
                       h("td.num", null, fmt(x.demand)),
                       h("td", null, x.station, x.largePad ? h("span.badge.muted", null, "L") : null, x.updated ? h("div.sub", null, relTime(x.updated)) : null),
-                      h("td", null, sys(x.system), hot.has(x.system) ? h("span.badge.ok", null, "point chaud ici") : null),
-                      h("td.num", null, x.distance !== undefined ? `${fmt(Math.round(x.distance))} al` : ""),
+                      h("td", null, sys(x.system), hot.has(x.system) ? h("span.badge.ok", null, t("mining.hotspotHere")) : null),
+                      h("td.num", null, x.distance !== undefined ? t("common.ly", { locale: fmt(Math.round(x.distance)) }) : ""),
                       h("td", null, x.state ?? ""),
                     ),
                   ),
@@ -438,6 +438,6 @@ export class MiningView implements View {
 
   private meritResults(): HTMLElement {
     const r = this.results!;
-    return h("div.spot-results", null, this.spotResults(r, { mine: `Où miner (systèmes de ${r.power})`, sell: `Où vendre (${r.power})` }));
+    return h("div.spot-results", null, this.spotResults(r, { mine: t("mining.whereMineSystems", { power: r.power }), sell: t("mining.whereSell2", { power: r.power }) }));
   }
 }

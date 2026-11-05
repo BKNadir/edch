@@ -8,6 +8,7 @@ and EDCH shows it in the update banner.
 - The menu is now sorted by use in game, in groups separated by a line: Missions, Navigation, Search · Colonisation, Mining, Exploration, Powerplay, Community goals, Session · Wishlist, Engineers, Materials, Engineering, Odyssey · Controls, Remote access, Sync · About, Settings.
 - New "Edit menu" button at the bottom of the menu (also in Settings → Display): drag pages (or the lines between groups) to reorder them, switch each page on or off for the phone, hide or show it. "Original order" puts the groups back. Your choices are kept and followed by the phone.
 - Remote access, Sync, Settings and About never show on the phone: they manage the PC itself.
+- Translations rebuilt on i18next: every text now has a stable key and its own entry in each language (English is the reference and the fallback), with real plurals ("1 event", "2 events"). Texts that stayed in French in other languages are now translated: device names, mouse buttons and axes, engineer ranks, "Referred by", error messages from the app's core (network, download, files) and a few others. See docs/TRANSLATING.md to help translate.
 
 ## 0.10.3
 

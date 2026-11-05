@@ -5,6 +5,7 @@ import { h } from "./dom.js";
 import { dialog } from "./dialog.js";
 import { SOFTWARE_VERSION } from "./eddn.js";
 import type { Store } from "./store.js";
+import { t } from "./i18n.js";
 
 const parse = (v: string) => v.split(".").map((n) => Number(n) || 0);
 const newer = (a: string, b: string) => {
@@ -35,8 +36,8 @@ export async function showChangelog(since?: string) {
   const list = all.filter((s) => !newer(s.version, SOFTWARE_VERSION) && (since ? newer(s.version, since) : s.version === SOFTWARE_VERSION)).slice(0, 8);
   if (!list.length) return;
   await dialog(
-    `Nouveautés d'EDCH ${SOFTWARE_VERSION}`,
-    list.map((s) => h("section.changelog-version", null, h("h4", { "data-no-tr": "" }, s.version), h("ul.update-notes", { "data-no-tr": "" }, s.items.map((t) => h("li", null, t))))),
+    t("changelog.whatSNewEdch", { SOFTWAREVERSION: SOFTWARE_VERSION }),
+    list.map((s) => h("section.changelog-version", null, h("h4", { "data-no-tr": "" }, s.version), h("ul.update-notes", { "data-no-tr": "" }, s.items.map((note) => h("li", null, note))))),
     [{ label: "OK", primary: true, value: "ok" }],
   );
 }

@@ -69,16 +69,16 @@ export function colonyDistance(genusSymbol: string): number | undefined {
 const letters = (s: string) => (s.toLowerCase().match(/[a-z]+/g) ?? []);
 const planetType = (raw?: string) => letters(raw ?? "").map((w) => (w === "world" ? "body" : w)).join("");
 function atmosphere(raw?: string): string {
-  const t = (raw ?? "").trim().toLowerCase();
-  if (!t || t === "no atmosphere") return "none";
-  return letters(t.replace(/sulphur/g, "sulfur"))
+  const normalized = (raw ?? "").trim().toLowerCase();
+  if (!normalized || normalized === "no atmosphere") return "none";
+  return letters(normalized.replace(/sulphur/g, "sulfur"))
     .filter((w) => !["thin", "thick", "hot", "atmosphere"].includes(w))
     .join("");
 }
 function volcanism(raw?: string): string {
-  const t = (raw ?? "").trim().toLowerCase();
-  if (!t || t === "no volcanism") return "none";
-  return letters(t).filter((w) => w !== "volcanism").join("");
+  const normalized = (raw ?? "").trim().toLowerCase();
+  if (!normalized || normalized === "no volcanism") return "none";
+  return letters(normalized).filter((w) => w !== "volcanism").join("");
 }
 const within = (v: number, lo: number, hi: number) => {
   const m = (hi - lo) * 0.02;

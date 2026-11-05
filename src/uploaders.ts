@@ -19,6 +19,7 @@ import {
   type EddnMessage,
   type GameSession,
 } from "./eddn.js";
+import { t } from "./i18n.js";
 
 type Json = Record<string, any>;
 
@@ -83,7 +84,7 @@ export class Uploaders {
     else {
       appLog.warn(service, `${what}: ${detail ?? "error"}`);
       // A refused key or a service down right at start-up: say so.
-      if (inStartup()) startupAlert(`sync-${service}`, `${service} : envoi refusé`, detail ?? "", goTo("sync", "Synchro"));
+      if (inStartup()) startupAlert(`sync-${service}`, t("uploaders.uploadRefused", { service }), detail ?? "", goTo("sync", t("common.sync")));
     }
     const key = service;
     if (ok) this.stats.sent[key] = (this.stats.sent[key] ?? 0) + 1;
@@ -191,7 +192,7 @@ export class Uploaders {
         } else if (status === 400 || status === 426 || p.tries >= 2) {
           // Never retry a rejected message: no data is better than bad data.
           this.eddnQueue = this.eddnQueue.filter((x) => x !== p);
-          this.log("EDDN", what, false, `${status || "réseau"} ${detail}`.trim());
+          this.log("EDDN", what, false, `${status || t("uploaders.network")} ${detail}`.trim());
         } else {
           p.tries += 1;
           p.notBefore = Date.now() + 90_000;
@@ -206,34 +207,34 @@ export class Uploaders {
 
   /** Context EDSM wants added to each event (as EDMC does). */
   private trackTransient(ev: Json) {
-    const t = this.transient;
+    const transient = this.transient;
     switch (ev.event) {
       case "Location":
       case "FSDJump":
       case "CarrierJump":
-        t._systemAddress = ev.SystemAddress;
-        t._systemName = ev.StarSystem;
-        t._systemCoordinates = ev.StarPos;
+        transient._systemAddress = ev.SystemAddress;
+        transient._systemName = ev.StarSystem;
+        transient._systemCoordinates = ev.StarPos;
         if (ev.event !== "FSDJump" && ev.Docked) {
-          t._marketId = ev.MarketID;
-          t._stationName = ev.StationName;
+          transient._marketId = ev.MarketID;
+          transient._stationName = ev.StationName;
         } else {
-          delete t._marketId;
-          delete t._stationName;
+          delete transient._marketId;
+          delete transient._stationName;
         }
         break;
       case "Docked":
-        t._marketId = ev.MarketID;
-        t._stationName = ev.StationName;
+        transient._marketId = ev.MarketID;
+        transient._stationName = ev.StationName;
         break;
       case "Undocked":
-        delete t._marketId;
-        delete t._stationName;
+        delete transient._marketId;
+        delete transient._stationName;
         break;
       case "LoadGame":
       case "Loadout":
       case "ShipyardSwap":
-        if (ev.ShipID !== undefined) t._shipId = ev.ShipID;
+        if (ev.ShipID !== undefined) transient._shipId = ev.ShipID;
         break;
     }
   }
@@ -273,12 +274,12 @@ export class Uploaders {
       const reply = await httpFetch("POST", "https://www.edsm.net/api-journal-v1", form.toString(), "application/x-www-form-urlencoded");
       const res = JSON.parse(reply.body || "{}");
       const ok = reply.status === 200 && Math.floor(Number(res.msgnum) / 100) === 1;
-      this.log("EDSM", `${batch.length} événement(s)`, ok, ok ? undefined : `${res.msgnum ?? reply.status} ${res.msg ?? ""}`);
+      this.log("EDSM", t("uploaders.events", { count: batch.length }), ok, ok ? undefined : `${res.msgnum ?? reply.status} ${res.msg ?? ""}`);
       // 2xx msgnum = bad credentials or fatal: don't keep hammering.
       if (!ok && Math.floor(Number(res.msgnum) / 100) === 2) this.edsmPending = [];
     } catch (e) {
       this.edsmPending.unshift(...batch);
-      this.log("EDSM", `${batch.length} événement(s)`, false, String(e));
+      this.log("EDSM", t("uploaders.events", { count: batch.length }), false, String(e));
     }
   }
 
@@ -373,13 +374,13 @@ export class Uploaders {
       if (status === 400 && /no access allowed/i.test(String(res?.header?.eventStatusText ?? ""))) {
         this.inaraRefused = true;
         this.inaraEvents = [];
-        this.log("Inara", `${events.length} événement(s)`, false, "Inara n'a pas encore autorisé EDCH (validation de l'application en attente). Envoi vers Inara suspendu jusqu'au prochain démarrage.");
+        this.log("Inara", t("uploaders.events", { count: events.length }), false, t("uploaders.inaraHasnTAuthorisedEdchYet"));
         return;
       }
-      this.log("Inara", `${events.length} événement(s)`, ok && !bad.length, ok && !bad.length ? undefined : `${status} ${res?.header?.eventStatusText ?? bad[0]?.eventStatusText ?? ""}`);
+      this.log("Inara", t("uploaders.events", { count: events.length }), ok && !bad.length, ok && !bad.length ? undefined : `${status} ${res?.header?.eventStatusText ?? bad[0]?.eventStatusText ?? ""}`);
     } catch (e) {
       this.inaraEvents.unshift(...events);
-      this.log("Inara", `${events.length} événement(s)`, false, String(e));
+      this.log("Inara", t("uploaders.events", { count: events.length }), false, String(e));
     }
   }
 

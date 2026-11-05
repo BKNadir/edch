@@ -3,7 +3,7 @@ import { setDebugLog } from "../logger.js";
 import { h, replace, toast } from "../dom.js";
 import { checkForUpdate } from "../updater.js";
 import { SOFTWARE_VERSION as APP_VERSION } from "../eddn.js";
-import { LANGS, lang, saveLang } from "../i18n.js";
+import { lang, LANGS, saveLang, t } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
 import type { NotifySettings, Settings } from "../store.js";
 import { notify, playTone, TONES } from "../notifier.js";
@@ -14,28 +14,12 @@ import { startGame } from "../desktop.js";
 import { showChangelog } from "../changelog.js";
 
 const TABS: [string, string][] = [
-  ["general", "Général"],
-  ["game", "Jeu et recherche"],
-  ["display", "Affichage"],
-  ["notifications", "Notifications"],
-  ["advanced", "Avancé"],
+  ["general", t("settings.general")],
+  ["game", t("settings.gameSearch")],
+  ["display", t("settings.display")],
+  ["notifications", t("common.notifications")],
+  ["advanced", t("settings.advanced")],
 ];
-
-/** Which tab each card goes to, by its (French) title. */
-const CARD_TAB: Record<string, string> = {
-  Langue: "general",
-  "Mises à jour": "general",
-  Application: "general",
-  "Lancer Elite Dangerous": "game",
-  "Journal du jeu": "game",
-  "Recherche de systèmes (Spansh)": "game",
-  Ingénieurs: "game",
-  Navigation: "game",
-  "Pages et affichage": "display",
-  Apparence: "display",
-  Notifications: "notifications",
-  "Logs de l'application": "advanced",
-};
 
 let currentTab = (() => {
   try {
@@ -83,11 +67,11 @@ export class SettingsView implements View {
 
   private statusText(): string {
     const w = this.ctx.store.state.watch;
-    if (w.state === "live") return `Lecture en direct : ${w.file ?? ""}`;
-    if (w.state === "waiting") return w.message ?? "En attente du jeu…";
-    if (w.state === "error") return `Erreur : ${w.message ?? ""}`;
-    if (w.state === "demo") return "Mode démo (navigateur) : journal d'exemple";
-    return "Lecture arrêtée";
+    if (w.state === "live") return t("settings.readingLive", { file: w.file ?? "" });
+    if (w.state === "waiting") return w.message ?? t("settings.waitingGame");
+    if (w.state === "error") return t("settings.error", { message: w.message ?? "" });
+    if (w.state === "demo") return t("settings.demoModeBrowserSampleJournal");
+    return t("settings.readingStopped");
   }
 
   private render() {
@@ -112,12 +96,12 @@ export class SettingsView implements View {
           ? null
           : h(
           "section.card",
-          null,
-          h("h3", null, "Langue"),
+          { "data-tab": "general" },
+          h("h3", null, t("settings.language")),
           h(
             "label.field",
             null,
-            h("span", null, "Langue de l'interface"),
+            h("span", null, t("settings.interfaceLanguage")),
             h(
               "select",
               {
@@ -129,37 +113,37 @@ export class SettingsView implements View {
               },
               LANGS.map((l) => h("option", { value: l.code, selected: l.code === lang().code }, l.label)),
             ),
-            h("small", null, "Les noms des matériaux, modules et effets suivent la traduction du jeu ; les noms des commandes restent ceux du jeu en anglais."),
+            h("small", null, t("settings.materialModuleEffectNamesFollowGame")),
           ),
         ),
         isTauri()
           ? h(
               "section.card",
-              null,
-              h("h3", null, "Mises à jour"),
-              h("p.sub", null, `Version installée : ${APP_VERSION}`),
+              { "data-tab": "general" },
+              h("h3", null, t("settings.updates")),
+              h("p.sub", null, t("common.installedVersion", { current: APP_VERSION })),
               h(
                 "label.check",
                 null,
                 h("input", { type: "checkbox", checked: s.autoUpdate, onchange: (e: Event) => set({ autoUpdate: (e.target as HTMLInputElement).checked }) }),
-                " Vérifier automatiquement les nouvelles versions sur GitHub",
+                (" " + t("settings.checkGithubNewVersionsAutomatically")),
               ),
               this.mode === "portable"
-                ? h("p.sub", null, "Version portable : les mises à jour ne s'installent pas automatiquement. Quand une nouvelle version sort, EDCH ouvre la page de téléchargement.")
+                ? h("p.sub", null, t("settings.portableVersionUpdatesArenTInstalled"))
                 : this.mode !== "installer"
-                  ? h("p.sub", null, "Sur Linux, les mises à jour ne s'installent pas automatiquement : quand une nouvelle version sort, EDCH ouvre la page de téléchargement (AppImage, .deb, .rpm…).")
+                  ? h("p.sub", null, t("settings.linuxUpdatesArenTInstalledAutomatically"))
                   : null,
-              h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, "Vérifier maintenant")),
+              h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, t("settings.checkNow"))),
             )
           : null,
         isTauri() && !isRemote() ? this.appCard() : null,
         isTauri() && !isRemote() ? this.launchCard() : null,
         h(
           "section.card",
-          null,
-          h("h3", null, "Journal du jeu"),
+          { "data-tab": "game" },
+          h("h3", null, t("settings.gameJournal")),
           h("p.sub.watch-status", null, this.statusText()),
-          h("label.field.wide", null, h("span", null, "Dossier du journal"), dir),
+          h("label.field.wide", null, h("span", null, t("settings.journalFolder")), dir),
           h(
             "div.row",
             null,
@@ -172,7 +156,7 @@ export class SettingsView implements View {
                   if (found) dir.value = found;
                 },
               },
-              "Détecter",
+              t("settings.detect"),
             ),
             h(
               "button.primary",
@@ -183,43 +167,43 @@ export class SettingsView implements View {
                   try {
                     this.restart();
                     await startJournal(dir.value.trim());
-                    toast("Lecture du journal démarrée");
+                    toast(t("settings.journalReadingStarted"));
                   } catch (e) {
                     toast(String(e));
                   }
                 },
               },
-              "Enregistrer et lire",
+              t("settings.saveRead"),
             ),
           ),
         ),
         h(
           "section.card",
-          null,
-          h("h3", null, "Recherche de systèmes (Spansh)"),
-          number("Distance max (al)", s.maxDistance, "maxDistance", "Rayon de recherche autour de ta position.", { min: "10", max: "5000", step: "10" }),
-          number("Population min. pour les émissions d'intensité élevée", s.hgeMinPopulation, "hgeMinPopulation", "« Haute population » : 1 000 000 par défaut.", { min: "0", step: "100000" }),
-          number("Données BGS max. (jours)", s.maxAgeDays, "maxAgeDays", "Ignore les états de faction plus vieux (Boom, Guerre…). 0 = pas de limite.", { min: "0", max: "60" }),
+          { "data-tab": "game" },
+          h("h3", null, t("settings.systemSearchSpansh")),
+          number(t("settings.maxDistanceLy"), s.maxDistance, "maxDistance", t("settings.searchRadiusAroundLocation"), { min: "10", max: "5000", step: "10" }),
+          number(t("settings.minPopulationHighGradeEmissions"), s.hgeMinPopulation, "hgeMinPopulation", t("settings.highPopulation1000000Default"), { min: "0", step: "100000" }),
+          number(t("settings.maxBgsDataAgeDays"), s.maxAgeDays, "maxAgeDays", t("settings.ignoresOlderFactionStatesBoomWar"), { min: "0", max: "60" }),
           h(
             "label.field",
             null,
-            h("span", null, "Système de repli"),
+            h("span", null, t("settings.fallbackSystem")),
             h("input", { type: "text", value: s.fallbackSystem, onchange: (e: Event) => set({ fallbackSystem: (e.target as HTMLInputElement).value.trim() || "Sol" }) }),
-            h("small", null, "Utilisé tant que le jeu n'a pas donné ta position."),
+            h("small", null, t("settings.usedUntilGameReportsLocation")),
           ),
-          h("label.check", null, h("input", { type: "checkbox", checked: s.largePadOnly, onchange: (e: Event) => set({ largePadOnly: (e.target as HTMLInputElement).checked }) }), " Traders avec pad L seulement"),
+          h("label.check", null, h("input", { type: "checkbox", checked: s.largePadOnly, onchange: (e: Event) => set({ largePadOnly: (e.target as HTMLInputElement).checked }) }), (" " + t("settings.tradersLPadOnly"))),
           h(
             "label.check",
             null,
             h("input", { type: "checkbox", checked: s.systemOpensNav, onchange: (e: Event) => set({ systemOpensNav: (e.target as HTMLInputElement).checked }) }),
-            " Cliquer sur un système ouvre aussi la Navigation, avec ce système en destination",
+            (" " + t("settings.clickingSystemAlsoOpensNavigationSystem")),
           ),
-          h("small.sub", null, "Le nom est toujours copié dans le presse-papiers du PC, même quand tu cliques depuis le téléphone."),
+          h("small.sub", null, t("settings.nameAlwaysCopiedPcSClipboard")),
           h(
             "label.check",
             null,
             h("input", { type: "checkbox", checked: s.copyOnPhone, onchange: (e: Event) => set({ copyOnPhone: (e.target as HTMLInputElement).checked }) }),
-            " Depuis le téléphone, copier aussi dans le presse-papiers du téléphone",
+            (" " + t("settings.fromPhoneAlsoCopyPhoneS")),
           ),
         ),
         this.navigationCard(),
@@ -229,9 +213,9 @@ export class SettingsView implements View {
         this.appearance(),
         isTauri() && !isRemote() ? this.logsCard() : null,
       );
-    // Tabs: each card goes to the tab of its title (titles are compared before translation).
+    // Tabs: each card says which tab it belongs to (data-tab).
     const cards = [...body.children] as HTMLElement[];
-    const tabOf = (card: HTMLElement) => CARD_TAB[card.querySelector("h3")?.textContent?.trim() ?? ""] ?? "general";
+    const tabOf = (card: HTMLElement) => card.dataset.tab ?? "general";
     const tabs = TABS.filter(([id]) => cards.some((c) => tabOf(c) === id));
     if (!tabs.some(([id]) => id === currentTab)) currentTab = tabs[0]?.[0] ?? "general";
     for (const c of cards) c.hidden = tabOf(c) !== currentTab;
@@ -240,7 +224,7 @@ export class SettingsView implements View {
       h(
         "header.view-head",
         null,
-        h("h1", null, "Paramètres"),
+        h("h1", null, t("common.settings")),
         h(
           "div.segmented.settings-tabs",
           null,
@@ -263,7 +247,7 @@ export class SettingsView implements View {
   }
 
   private appearance(): HTMLElement {
-    const t = this.ctx.store.state.settings.theme;
+    const theme = this.ctx.store.state.settings.theme;
     const setTheme = (patch: Partial<ThemeSettings>, rerender = true) => {
       this.ctx.store.updateSettings({ theme: { ...this.ctx.store.state.settings.theme, ...patch } });
       if (rerender) this.render();
@@ -272,34 +256,34 @@ export class SettingsView implements View {
       h(
         "label",
         null,
-        h("input", { type: "color", value: t[key], oninput: (e: Event) => setTheme({ [key]: (e.target as HTMLInputElement).value, preset: "custom" }, false), onchange: () => this.render() }),
+        h("input", { type: "color", value: theme[key], oninput: (e: Event) => setTheme({ [key]: (e.target as HTMLInputElement).value, preset: "custom" }, false), onchange: () => this.render() }),
         h("span", null, label),
       );
     return h(
       "section.card",
-      null,
-      h("h3", null, "Apparence"),
-      h("p.sub", null, "Choisis un thème ou tes propres couleurs. Le téléphone connecté utilise les mêmes réglages."),
+      { "data-tab": "display" },
+      h("h3", null, t("settings.appearance")),
+      h("p.sub", null, t("settings.pickThemeOwnColoursConnectedPhone")),
       h(
         "div.theme-presets",
         null,
         PRESETS.map((p) =>
           h(
-            `button.theme-preset${t.preset === p.id ? ".on" : ""}`,
+            `button.theme-preset${theme.preset === p.id ? ".on" : ""}`,
             { onclick: () => setTheme({ preset: p.id, accent: p.accent, cyan: p.cyan, bg: p.bg }) },
             h("span.theme-swatch", null, h("i", { style: { background: p.accent } }), h("i", { style: { background: p.cyan } }), h("i", { style: { background: p.bg } })),
             p.label,
           ),
         ),
       ),
-      h("div.theme-colors", null, picker("Couleur principale", "accent"), picker("Couleur secondaire", "cyan"), picker("Fond", "bg")),
+      h("div.theme-colors", null, picker(t("settings.mainColour"), "accent"), picker(t("settings.secondaryColour"), "cyan"), picker(t("settings.background"), "bg")),
       h(
         "label.check",
         null,
-        h("input", { type: "checkbox", checked: t.oled, onchange: (e: Event) => setTheme({ oled: (e.target as HTMLInputElement).checked }) }),
-        " Mode OLED : fond noir pur (économise la batterie des écrans OLED)",
+        h("input", { type: "checkbox", checked: theme.oled, onchange: (e: Event) => setTheme({ oled: (e.target as HTMLInputElement).checked }) }),
+        (" " + t("settings.oledModePureBlackBackgroundSaves")),
       ),
-      h("div.row", null, h("button.ghost", { onclick: () => setTheme({ ...DEFAULT_THEME }) }, "Rétablir les couleurs d'origine")),
+      h("div.row", null, h("button.ghost", { onclick: () => setTheme({ ...DEFAULT_THEME }) }, t("settings.restoreOriginalColours"))),
     );
   }
 
@@ -310,12 +294,12 @@ export class SettingsView implements View {
       h("label.check", null, h("input", { type: "checkbox", checked, onchange: (ev: Event) => onchange((ev.target as HTMLInputElement).checked) }), ` ${label}`);
     return h(
       "section.card",
-      null,
-      h("h3", null, "Navigation"),
-      h("p.sub", null, "Le système suivant est copié dans le presse-papiers du PC, prêt à coller dans la carte galactique."),
-      box(s.navAutoCopy, (on) => store.updateSettings({ navAutoCopy: on }), "Copier automatiquement le prochain saut quand j'arrive dans un système de l'itinéraire (page Navigation)"),
-      box(s.engineers.autoCopyNext, (on) => store.updateSettings({ engineers: { ...store.state.settings.engineers, autoCopyNext: on } }), "Copier automatiquement le prochain saut quand j'arrive dans un système de la tournée des ingénieurs (wishlist)"),
-      box(s.navNotifyCopy, (on) => store.updateSettings({ navNotifyCopy: on }), "Me notifier quand le prochain saut est copié (onglet Notifications, avec le son s'il est activé)"),
+      { "data-tab": "game" },
+      h("h3", null, t("common.navigation")),
+      h("p.sub", null, t("settings.nextSystemCopiedPcSClipboard")),
+      box(s.navAutoCopy, (on) => store.updateSettings({ navAutoCopy: on }), t("settings.copyNextJumpAutomaticallyWhenI")),
+      box(s.engineers.autoCopyNext, (on) => store.updateSettings({ engineers: { ...store.state.settings.engineers, autoCopyNext: on } }), t("settings.copyNextJumpAutomaticallyWhenI2")),
+      box(s.navNotifyCopy, (on) => store.updateSettings({ navNotifyCopy: on }), t("settings.notifyMeWhenNextJumpCopied")),
     );
   }
 
@@ -327,20 +311,20 @@ export class SettingsView implements View {
       h("label.check", null, h("input", { type: "checkbox", checked: e[key], onchange: (ev: Event) => set({ [key]: (ev.target as HTMLInputElement).checked }) }), ` ${label}`);
     return h(
       "section.card",
-      null,
-      h("h3", null, "Ingénieurs"),
-      h("p.sub", null, "Pour la wishlist et la tournée des ingénieurs."),
-      check("autoPick", "Choisir l'ingénieur le plus proche pour chaque ligne de la wishlist (sinon, tous les ingénieurs sont listés)"),
-      check("knownOnly", "Seulement les ingénieurs déjà connus (rencontrés, invités ou débloqués)"),
-      check("regionLimit", "Rester dans ma région : pas d'ingénieurs de Colonia quand je suis dans la Bulle, et inversement"),
+      { "data-tab": "game" },
+      h("h3", null, t("common.engineers")),
+      h("p.sub", null, t("settings.wishlistEngineerTour")),
+      check("autoPick", t("settings.pickNearestEngineerEachWishlistLine")),
+      check("knownOnly", t("settings.onlyEngineersAlreadyKnowMetInvited")),
+      check("regionLimit", t("settings.stayMyRegionNoColoniaEngineers")),
       h(
         "label.field",
         null,
-        h("span", null, "Distance max. de la tournée (al)"),
+        h("span", null, t("settings.maxTourDistanceLy")),
         h("input", { type: "number", min: "100", max: "50000", step: "100", value: String(e.maxTourLy), onchange: (ev: Event) => set({ maxTourLy: Math.max(100, Number((ev.target as HTMLInputElement).value) || 2000) }) }),
-        h("small", null, "Total en ligne droite entre les arrêts. Au-delà, EDCH ne propose pas l'itinéraire."),
+        h("small", null, t("settings.totalStraightLineDistanceBetweenStops")),
       ),
-      check("autoTick", "Avancer la wishlist toute seule quand le jeu applique une modification"),
+      check("autoTick", t("settings.moveWishlistItselfWhenGameApplies")),
     );
   }
 
@@ -348,9 +332,9 @@ export class SettingsView implements View {
     const on = this.ctx.store.state.settings.debugLog;
     return h(
       "section.card",
-      null,
-      h("h3", null, "Logs de l'application"),
-      h("p.sub", null, "EDCH note toujours ce qu'il fait dans un log standard (un fichier par démarrage). Les avertissements et les erreurs sont aussi copiés dans un log d'erreurs séparé, créé seulement en cas de problème. Les logs de plus d'une semaine sont supprimés automatiquement, mais les 5 derniers de chaque type sont toujours gardés."),
+      { "data-tab": "advanced" },
+      h("h3", null, t("settings.applicationLogs")),
+      h("p.sub", null, t("settings.edchAlwaysRecordsWhatDoesStandard")),
       h(
         "label.check",
         null,
@@ -364,9 +348,9 @@ export class SettingsView implements View {
             this.render();
           },
         }),
-        " Mode debug : enregistre aussi un log détaillé, dans un fichier séparé",
+        (" " + t("settings.debugModeAlsoWritesDetailedLog")),
       ),
-      h("p.sub", null, "Le log debug contient tout : le log standard, les erreurs, et chaque action (clics, réglages modifiés, pages ouvertes, échanges avec le jeu et les services). Active-le pour signaler un problème, puis désactive-le : il grossit vite. Les clés API et le texte tapé ne sont jamais écrits dans les logs."),
+      h("p.sub", null, t("settings.debugLogContainsEverythingStandardLog")),
       on && this.debugPath ? h("p.sub", { "data-no-tr": "" }, this.debugPath) : null,
       h(
         "div.row",
@@ -375,9 +359,9 @@ export class SettingsView implements View {
           "button.ghost",
           {
             onclick: () =>
-              logsOpen().catch((e) => toast(`Impossible d'ouvrir le dossier : ${e}`)),
+              logsOpen().catch((e) => toast(t("common.canTOpenFolder", { e }))),
           },
-          "Ouvrir le dossier des logs",
+          t("common.openLogsFolder"),
         ),
       ),
     );
@@ -388,30 +372,30 @@ export class SettingsView implements View {
     const s = this.ctx.store.state.settings;
     const set = (patch: Partial<Settings>) => this.ctx.store.updateSettings(patch);
     const options: [Settings["closeBehavior"], string][] = [
-      ["quit", "Quitter EDCH"],
-      ["minimize", "Réduire dans la barre des tâches"],
-      ["tray", "Masquer dans la zone de notification (à côté de l'horloge)"],
-      ["ask", "Demander avant de quitter"],
+      ["quit", t("settings.quitEdch")],
+      ["minimize", t("settings.minimiseTaskbar")],
+      ["tray", t("settings.hideNotificationAreaNextClock")],
+      ["ask", t("settings.askBeforeQuitting")],
     ];
     return h(
       "section.card",
-      null,
-      h("h3", null, "Application"),
+      { "data-tab": "general" },
+      h("h3", null, t("settings.application")),
       h(
         "label.field",
         null,
-        h("span", null, "Bouton de fermeture de la fenêtre"),
+        h("span", null, t("settings.windowSCloseButton")),
         h("select", { onchange: (e: Event) => set({ closeBehavior: (e.target as HTMLSelectElement).value as Settings["closeBehavior"] }) }, options.map(([v, l]) => h("option", { value: v, selected: s.closeBehavior === v }, l))),
-        h("small", null, "Masqué dans la zone de notification, EDCH continue de lire le journal : double-clique sur son icône pour le rouvrir, ou clic droit → Quitter."),
+        h("small", null, t("settings.hiddenNotificationAreaEdchKeepsReading")),
       ),
       h(
         "label.check",
         null,
         h("input", { type: "checkbox", checked: s.showChangelog, onchange: (e: Event) => set({ showChangelog: (e.target as HTMLInputElement).checked }) }),
-        " Afficher les nouveautés après une mise à jour",
+        (" " + t("settings.showWhatSNewAfterUpdate")),
       ),
-      h("div.row", null, h("button.ghost", { onclick: () => showChangelog() }, "Voir les nouveautés de cette version")),
-      h("p.sub", null, "EDCH ne s'ouvre qu'une fois : le relancer ramène la fenêtre déjà ouverte au premier plan. La fenêtre se rouvre là où tu l'as laissée."),
+      h("div.row", null, h("button.ghost", { onclick: () => showChangelog() }, t("settings.seeWhatSNewVersion"))),
+      h("p.sub", null, t("settings.edchOnlyOpensOnceLaunchingAgain")),
     );
   }
 
@@ -424,25 +408,25 @@ export class SettingsView implements View {
     };
     const methods: [Settings["gameLaunch"]["method"], string][] = [
       ["steam", "Steam"],
-      ["epic", "Epic Games"],
-      ["exe", "Un lanceur au choix (Frontier, MinEdLauncher…)"],
+      ["epic", t("settings.epicGames")],
+      ["exe", t("settings.launcherChoiceFrontierMinedlauncher")],
     ];
     return h(
       "section.card",
-      null,
-      h("h3", null, "Lancer Elite Dangerous"),
-      h("p.sub", null, "Le bouton « Lancer Elite » en haut de l'écran démarre le jeu, et indique quand il tourne. Il marche aussi depuis le téléphone."),
-      h("label.field", null, h("span", null, "Lancer avec"), h("select", { onchange: (e: Event) => set({ method: (e.target as HTMLSelectElement).value as Settings["gameLaunch"]["method"] }) }, methods.map(([v, l]) => h("option", { value: v, selected: g.method === v }, l)))),
+      { "data-tab": "game" },
+      h("h3", null, t("common.launchEliteDangerous")),
+      h("p.sub", null, t("settings.launchEliteButtonTopScreenStarts")),
+      h("label.field", null, h("span", null, t("settings.launch")), h("select", { onchange: (e: Event) => set({ method: (e.target as HTMLSelectElement).value as Settings["gameLaunch"]["method"] }) }, methods.map(([v, l]) => h("option", { value: v, selected: g.method === v }, l)))),
       g.method === "exe"
         ? h(
             "label.field.wide",
             null,
-            h("span", null, "Chemin du lanceur"),
+            h("span", null, t("settings.launcherPath")),
             h("input", { type: "text", value: g.path, placeholder: "C:\\Program Files (x86)\\Frontier\\EDLaunch\\EDLaunch.exe", spellcheck: false, onchange: (e: Event) => set({ path: (e.target as HTMLInputElement).value.trim() }) }),
-            h("small", null, "Un .exe, un raccourci .lnk, ou MinEdLauncher. Astuce : clic droit sur le fichier → « Copier en tant que chemin d'accès », puis colle ici (sans les guillemets)."),
+            h("small", null, t("settings.exeLnkShortcutMinedlauncherTipRight")),
           )
         : null,
-      h("div.row", null, h("button.ghost", { onclick: () => startGame() }, "Lancer maintenant")),
+      h("div.row", null, h("button.ghost", { onclick: () => startGame() }, t("settings.launchNow"))),
     );
   }
 
@@ -457,26 +441,26 @@ export class SettingsView implements View {
     const hidden = new Set(s.hiddenViews ?? []);
     return h(
       "section.card",
-      null,
-      h("h3", null, "Pages et affichage"),
+      { "data-tab": "display" },
+      h("h3", null, t("settings.pagesDisplay")),
       h(
         "label.field",
         null,
-        h("span", null, "Page au démarrage"),
+        h("span", null, t("settings.startPage")),
         h(
           "select",
           { onchange: (e: Event) => set({ startView: (e.target as HTMLSelectElement).value }) },
-          h("option", { value: "", selected: !s.startView }, "La dernière page ouverte"),
+          h("option", { value: "", selected: !s.startView }, t("settings.lastPageOpened")),
           pages.filter((p) => !hidden.has(p.id)).map((p) => h("option", { value: p.id, selected: s.startView === p.id }, p.label)),
         ),
       ),
       h(
         "label.field",
         null,
-        h("span", null, "Taille de l'interface"),
+        h("span", null, t("settings.interfaceSize")),
         h("select", { onchange: (e: Event) => set({ uiScale: Number((e.target as HTMLSelectElement).value) }) }, [80, 90, 100, 110, 125, 150].map((v) => h("option", { value: String(v), selected: (s.uiScale || 100) === v }, `${v} %`))),
       ),
-      h("p.sub", null, "Pages affichées dans le menu (décoche celles dont tu ne te sers pas) :"),
+      h("p.sub", null, t("settings.pagesShownMenuUntickOnesDon")),
       h(
         "div.page-toggles",
         null,
@@ -500,14 +484,14 @@ export class SettingsView implements View {
           ),
         ),
       ),
-      h("small.sub", null, "Valable aussi sur le téléphone. Paramètres et À propos restent toujours visibles."),
+      h("small.sub", null, t("settings.appliesPhoneTooSettingsAboutAlways")),
       isRemote()
         ? null
         : h(
             "div.row",
             null,
-            h("button.ghost", { onclick: () => startMenuEdit(this.ctx.store) }, "Éditer le menu"),
-            h("small.sub", null, "Ordre des pages, groupes, et pages affichées sur le téléphone. Aussi par le bouton en bas du menu."),
+            h("button.ghost", { onclick: () => startMenuEdit(this.ctx.store) }, t("common.editMenu")),
+            h("small.sub", null, t("settings.pageOrderGroupsPagesShownPhone")),
           ),
     );
   }
@@ -525,48 +509,48 @@ export class SettingsView implements View {
       );
     return h(
       "section.card",
-      null,
-      h("h3", null, "Notifications"),
-      h("p.sub", null, "Pas de fenêtre Windows : un son et/ou la languette « Notifications » sur le bord droit qui clignote. Elle regroupe toutes les notifications : escadrille, minage, mises à jour, problèmes au démarrage… Clique dessus pour les voir, clique ailleurs pour refermer."),
+      { "data-tab": "notifications" },
+      h("h3", null, t("common.notifications")),
+      h("p.sub", null, t("settings.noWindowsPopUpSoundNotifications")),
       h(
         "div.notify-form",
         null,
-        h("label.check", null, h("input", { type: "checkbox", checked: n.sound, onchange: (e: Event) => set({ sound: (e.target as HTMLInputElement).checked }) }), " Son"),
+        h("label.check", null, h("input", { type: "checkbox", checked: n.sound, onchange: (e: Event) => set({ sound: (e.target as HTMLInputElement).checked }) }), (" " + t("settings.sound"))),
         h(
           "select",
           { "data-no-tr": "", onchange: (e: Event) => set({ tone: (e.target as HTMLSelectElement).value }) },
           TONES.map(([v, l]) => h("option", { value: v, selected: v === n.tone }, l)),
         ),
-        h("input", { type: "range", min: "0", max: "1", step: "0.05", value: String(n.volume), title: "Volume", onchange: (e: Event) => set({ volume: Number((e.target as HTMLInputElement).value) }) }),
-        h("button.ghost.small", { onclick: () => playTone(store.state.settings.notify.tone, store.state.settings.notify.volume) }, "Écouter"),
+        h("input", { type: "range", min: "0", max: "1", step: "0.05", value: String(n.volume), title: t("settings.volume"), onchange: (e: Event) => set({ volume: Number((e.target as HTMLInputElement).value) }) }),
+        h("button.ghost.small", { onclick: () => playTone(store.state.settings.notify.tone, store.state.settings.notify.volume) }, t("settings.listen")),
       ),
       h(
         "div.notify-form",
         null,
-        h("label.check", null, h("input", { type: "checkbox", checked: n.color, onchange: (e: Event) => set({ color: (e.target as HTMLInputElement).checked }) }), " Couleur"),
+        h("label.check", null, h("input", { type: "checkbox", checked: n.color, onchange: (e: Event) => set({ color: (e.target as HTMLInputElement).checked }) }), (" " + t("settings.colour"))),
         h("input", { type: "color", value: n.flash, onchange: (e: Event) => set({ flash: (e.target as HTMLInputElement).value }) }),
-        h("button.ghost.small", { onclick: () => notify("Test de notification") }, "Tester"),
+        h("button.ghost.small", { onclick: () => notify(t("settings.testNotification")) }, t("settings.test")),
       ),
-      h("label.check", null, h("input", { type: "checkbox", checked: n.hideTab, onchange: (e: Event) => set({ hideTab: (e.target as HTMLInputElement).checked }) }), " Masquer la languette (le son reste actif s'il est coché)"),
-      h("h4.settings-sub", null, "Escadrille"),
+      h("label.check", null, h("input", { type: "checkbox", checked: n.hideTab, onchange: (e: Event) => set({ hideTab: (e.target as HTMLInputElement).checked }) }), (" " + t("settings.hideTabSoundStaysIfTicked"))),
+      h("h4.settings-sub", null, t("common.wing")),
       isRemote()
-        ? h("p.sub", null, "Ces réglages se font sur le PC (ils vont avec le code d'escadrille).")
+        ? h("p.sub", null, t("settings.theseAreSetPcTheyGo"))
         : [
-            wingCheck("notifyNew", "Prévenir quand un membre a une mission d'escadrille que je n'ai pas"),
-            wingCheck("notifyAccept", "Prévenir quand un membre accepte une mission que je partage"),
-            wingCheck("notifyAll", "Prévenir quand toute l'escadrille a accepté une mission"),
-            wingCheck("notifyLeave", "Prévenir quand un membre ferme EDCH ou quitte l'escadrille en jeu"),
+            wingCheck("notifyNew", t("settings.notifyMeWhenMemberHasWing")),
+            wingCheck("notifyAccept", t("settings.notifyMeWhenMemberAcceptsMission")),
+            wingCheck("notifyAll", t("settings.notifyMeWhenWholeWingHas")),
+            wingCheck("notifyLeave", t("settings.tellMeWhenMemberClosesEdch")),
           ],
-      h("h4.settings-sub", null, "Minage"),
+      h("h4.settings-sub", null, t("common.mining")),
       h(
         "label.check",
         null,
         h("input", { type: "checkbox", checked: store.state.settings.mining.alert, onchange: (e: Event) => store.updateSettings({ mining: { ...store.state.settings.mining, alert: (e.target as HTMLInputElement).checked } }) }),
-        " Prévenir quand un prospecteur trouve une cible ou un cœur",
+        (" " + t("settings.tellMeWhenProspectorFindsTarget")),
       ),
-      h("small.sub", null, "Les cibles et leurs pourcentages se choisissent sur la page Minage."),
-      h("h4.settings-sub", null, "Application"),
-      h("p.sub", null, "Les nouvelles versions et les problèmes au démarrage apparaissent aussi dans la languette, sans son."),
+      h("small.sub", null, t("settings.targetsTheirPercentagesAreChosenMining")),
+      h("h4.settings-sub", null, t("settings.application")),
+      h("p.sub", null, t("settings.newVersionsStartUpProblemsAlso")),
     );
   }
 }

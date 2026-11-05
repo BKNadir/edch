@@ -1,6 +1,6 @@
 import { meritsSince, meritsThisWeek, weekStart } from "../activity.js";
 import { fmt, h, replace } from "../dom.js";
-import { locale } from "../i18n.js";
+import { locale, t } from "../i18n.js";
 import { duration } from "../time.js";
 import type { Ctx, View } from "../context.js";
 
@@ -37,7 +37,7 @@ export class PowerplayView implements View {
 
     replace(
       this.root,
-      h("header.view-head", null, h("div", null, h("h1", null, "Powerplay"), h("p.sub", null, "Tes mérites et l'état Powerplay du système où tu es."))),
+      h("header.view-head", null, h("div", null, h("h1", null, t("common.powerplay")), h("p.sub", null, t("powerplay.meritsPowerplayStateSystemRe")))),
       pp.power
         ? h(
             "section.card",
@@ -46,41 +46,41 @@ export class PowerplayView implements View {
             h(
               "div.stats",
               null,
-              pp.rank !== undefined ? h("div.stat", null, h("strong", null, fmt(pp.rank)), h("span.sub", null, "rang")) : null,
-              pp.merits !== undefined ? h("div.stat", null, h("strong", null, fmt(pp.merits)), h("span.sub", null, "mérites au total")) : null,
-              h("div.stat", null, h("strong", null, fmt(meritsThisWeek(pp, now))), h("span.sub", null, "mérites cette semaine")),
-              h("div.stat", null, h("strong", null, fmt(session)), h("span.sub", null, "mérites cette session")),
-              pp.timePledged ? h("div.stat", null, h("strong", null, duration(pp.timePledged * 1000)), h("span.sub", null, "d'engagement")) : null,
+              pp.rank !== undefined ? h("div.stat", null, h("strong", null, fmt(pp.rank)), h("span.sub", null, t("powerplay.rank"))) : null,
+              pp.merits !== undefined ? h("div.stat", null, h("strong", null, fmt(pp.merits)), h("span.sub", null, t("powerplay.totalMerits"))) : null,
+              h("div.stat", null, h("strong", null, fmt(meritsThisWeek(pp, now))), h("span.sub", null, t("powerplay.meritsWeek"))),
+              h("div.stat", null, h("strong", null, fmt(session)), h("span.sub", null, t("powerplay.meritsSession"))),
+              pp.timePledged ? h("div.stat", null, h("strong", null, duration(pp.timePledged * 1000)), h("span.sub", null, t("powerplay.pledged"))) : null,
             ),
             h(
               "div.day-bars",
               null,
               days.map((d) => h("div.day-bar", { title: fmt(d.merits) }, h("span", { style: { height: `${(d.merits / max) * 100}%` } }), h("small", null, dayFmt.format(d.start)), h("small.sub", null, d.merits ? fmt(d.merits) : ""))),
             ),
-            h("p.sub", null, `Nouveau cycle ${new Intl.DateTimeFormat(locale(), { weekday: "long", hour: "2-digit", minute: "2-digit" }).format(nextWeek)}.`),
+            h("p.sub", null, t("powerplay.newCycle", { nextWeek: new Intl.DateTimeFormat(locale(), { weekday: "long", hour: "2-digit", minute: "2-digit" }).format(nextWeek) })),
           )
-        : h("section.card", null, h("p.empty", null, "Tu n'es engagé auprès d'aucune puissance (ou le jeu ne l'a pas encore écrit dans le journal). Engage-toi en jeu, puis reconnecte-toi.")),
+        : h("section.card", null, h("p.empty", null, t("powerplay.reNotPledgedAnyPowerGame"))),
       loc
         ? h(
             "section.card",
             null,
-            h("h3", null, `Système actuel : ${loc.system}`),
+            h("h3", null, t("powerplay.currentSystem", { system: loc.system })),
             loc.controllingPower
               ? h(
                   "div.stats",
                   null,
-                  h("div.stat", null, h("strong", { "data-no-tr": "" }, loc.controllingPower), h("span.sub", null, "puissance qui contrôle")),
-                  loc.powerState ? h("div.stat", null, h("strong", null, loc.powerState), h("span.sub", null, "état")) : null,
-                  loc.controlProgress !== undefined ? h("div.stat", null, h("strong", null, `${(loc.controlProgress * 100).toLocaleString(locale(), { maximumFractionDigits: 1 })} %`), h("span.sub", null, "progression du contrôle")) : null,
-                  loc.reinforcement !== undefined ? h("div.stat", null, h("strong", null, fmt(loc.reinforcement)), h("span.sub", null, "renforcement")) : null,
-                  loc.undermining !== undefined ? h("div.stat", null, h("strong", null, fmt(loc.undermining)), h("span.sub", null, "sape")) : null,
+                  h("div.stat", null, h("strong", { "data-no-tr": "" }, loc.controllingPower), h("span.sub", null, t("powerplay.controllingPower"))),
+                  loc.powerState ? h("div.stat", null, h("strong", null, loc.powerState), h("span.sub", null, t("powerplay.state"))) : null,
+                  loc.controlProgress !== undefined ? h("div.stat", null, h("strong", null, `${(loc.controlProgress * 100).toLocaleString(locale(), { maximumFractionDigits: 1 })} %`), h("span.sub", null, t("powerplay.controlProgress"))) : null,
+                  loc.reinforcement !== undefined ? h("div.stat", null, h("strong", null, fmt(loc.reinforcement)), h("span.sub", null, t("powerplay.reinforcement"))) : null,
+                  loc.undermining !== undefined ? h("div.stat", null, h("strong", null, fmt(loc.undermining)), h("span.sub", null, t("powerplay.undermining"))) : null,
                 )
-              : h("p.sub", null, loc.powerState ? loc.powerState : "Aucune puissance ne contrôle ce système."),
-            loc.powers?.length ? h("p.sub", null, "Puissances présentes : ", h("span", { "data-no-tr": "" }, loc.powers.join(", "))) : null,
+              : h("p.sub", null, loc.powerState ? loc.powerState : t("powerplay.noPowerControlsSystem")),
+            loc.powers?.length ? h("p.sub", null, (t("powerplay.powersPresent") + " "), h("span", { "data-no-tr": "" }, loc.powers.join(", "))) : null,
             pp.power && loc.controllingPower
               ? loc.controllingPower === pp.power
-                ? h("p.ok", null, "Système de ta puissance : renforce-le (commerce, minage, missions, combat) pour gagner des mérites.")
-                : h("p.sub", null, "Système d'une autre puissance : tu peux le saper pour gagner des mérites.")
+                ? h("p.ok", null, t("powerplay.powerSSystemReinforceTradeMining"))
+                : h("p.sub", null, t("powerplay.anotherPowerSSystemCanUndermine"))
               : null,
           )
         : null,

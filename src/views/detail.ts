@@ -1,4 +1,4 @@
-import { gameName } from "../i18n.js";
+import { gameName, t } from "../i18n.js";
 import { CATEGORY_FR } from "../data.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import { ownedOf, referenceOf, reserved, type Ctx } from "../context.js";
@@ -11,15 +11,15 @@ import { addToWishlist } from "./wishlist.js";
 import { moduleLink } from "../links.js";
 
 const KIND_FR: Record<string, string> = {
-  modification: "Modifications",
-  experimental: "Effets expérimentaux",
-  synthesis: "Synthèse",
-  "tech-broker": "Courtier technologique",
-  suit: "Mods de combinaison",
-  weapon: "Mods d'arme",
-  merchant: "Améliorations (grade)",
-  unlock: "Déblocage d'ingénieurs",
-  bartender: "Barman",
+  modification: t("detail.modifications"),
+  experimental: t("detail.experimentalEffects"),
+  synthesis: t("common.synthesis"),
+  "tech-broker": t("common.technologyBroker"),
+  suit: t("detail.suitMods"),
+  weapon: t("detail.weaponMods"),
+  merchant: t("detail.upgradesGrade"),
+  unlock: t("detail.engineerUnlocks"),
+  bartender: t("common.bartender"),
 };
 export const kindFr = (k: string) => KIND_FR[k] ?? k;
 
@@ -74,16 +74,16 @@ export class DetailPanel {
       h(
         "div.detail-title",
         null,
-        h("div", null, h("h2", null, m.name), h("p.sub", null, [CATEGORY_FR[m.category] ?? m.category, m.grade ? `Grade ${m.grade}` : null, this.ctx.game.lineName(m.line)].filter(Boolean).flatMap((x, i) => (i ? [" · ", x as string] : [x as string])))),
-        h("button.icon-btn", { title: "Fermer", onclick: () => this.ctx.store.select(undefined) }, icon("close")),
+        h("div", null, h("h2", null, m.name), h("p.sub", null, [CATEGORY_FR[m.category] ?? m.category, m.grade ? t("common.grade", { grade: m.grade }) : null, this.ctx.game.lineName(m.line)].filter(Boolean).flatMap((x, i) => (i ? [" · ", x as string] : [x as string])))),
+        h("button.icon-btn", { title: t("common.close"), onclick: () => this.ctx.store.select(undefined) }, icon("close")),
       ),
       h(
         "div.stock",
         null,
-        h("div.stock-numbers", null, h("strong", null, fmt(owned)), cap ? ` / ${cap}` : "", need ? h("span.badge.warn", null, `${fmt(need)} requis par la wishlist`) : null),
+        h("div.stock-numbers", null, h("strong", null, fmt(owned)), cap ? ` / ${cap}` : "", need ? h("span.badge.warn", null, t("detail.neededWishlist", { need: fmt(need) })) : null),
         cap ? h("div.bar", null, h("span", { style: { width: `${Math.min(100, (owned / cap) * 100)}%` } })) : null,
       ),
-      h("p.sub.ref", null, icon("pin"), ` Recherches autour de ${ref.label}`),
+      h("p.sub.ref", null, icon("pin"), (" " + t("detail.searchingAround", { label: ref.label }))),
     );
   }
 
@@ -99,28 +99,28 @@ export class DetailPanel {
     }
     replace(
       this.trades,
-      h("h3", null, "Suggestions d'échange"),
+      h("h3", null, t("detail.tradeSuggestions")),
       list.length
         ? h(
             "ul.trades",
             null,
-            list.map((t) => {
-              const cap = this.ctx.game.capacityOf(t.from.id) ?? 0;
+            list.map((trade) => {
+              const cap = this.ctx.game.capacityOf(trade.from.id) ?? 0;
               return h(
                 "li",
-                { class: t.from.line === m.line ? "same-line" : "" },
-                h("span.arrow", null, t.from.grade! > m.grade! ? "↓" : t.from.grade! < m.grade! ? "↑" : "⇄"),
-                " Recevoir ",
-                h("strong", null, fmt(t.receive)),
-                " contre ",
-                h("strong", null, fmt(t.pay)),
+                { class: trade.from.line === m.line ? "same-line" : "" },
+                h("span.arrow", null, trade.from.grade! > m.grade! ? "↓" : trade.from.grade! < m.grade! ? "↑" : "⇄"),
+                (" " + t("detail.receive") + " "),
+                h("strong", null, fmt(trade.receive)),
+                (" " + t("detail.for") + " "),
+                h("strong", null, fmt(trade.pay)),
                 " ",
-                h("button.inline-link", { onclick: () => this.ctx.store.select(t.from.id) }, t.from.name),
-                h("span.sub", null, ` (${fmt(t.owned)} possédés, ${fmt(t.reserved)} réservés, ${cap ? Math.round((t.owned / cap) * 100) : 0} % utilisé · taux ${t.rate.paid}:${t.rate.received})`),
+                h("button.inline-link", { onclick: () => this.ctx.store.select(trade.from.id) }, trade.from.name),
+                h("span.sub", null, (" " + t("detail.ownedReservedUsedRate", { owned: fmt(trade.owned), reserved: fmt(trade.reserved), value: cap ? Math.round((trade.owned / cap) * 100) : 0, paid: trade.rate.paid, received: trade.rate.received }))),
               );
             }),
           )
-        : h("p.empty", null, "Rien d'échangeable en surplus pour l'instant."),
+        : h("p.empty", null, t("detail.nothingSpareTradeRightNow")),
     );
   }
 
@@ -140,7 +140,7 @@ export class DetailPanel {
         h(
           "section.finder",
           null,
-          h("div.finder-head", null, h("h4", null, "Sites de farm connus")),
+          h("div.finder-head", null, h("h4", null, t("detail.knownFarmingSites"))),
           h(
             "div.results",
             null,
@@ -151,14 +151,14 @@ export class DetailPanel {
                 h(
                   "div.result-main",
                   null,
-                  h("button.sys", { title: `Copier « ${site.system} »`, onclick: () => copySystem(site.system) }, icon("copy"), h("span", null, `${site.system} ${site.body}`)),
+                  h("button.sys", { title: t("common.copy", { name: site.system }), onclick: () => copySystem(site.system) }, icon("copy"), h("span", null, `${site.system} ${site.body}`)),
                   h("span.dist", null, fmtLy(d)),
                 ),
                 h(
                   "div.result-meta",
                   null,
                   h("span.badge.hit", null, site.what),
-                  site.lat !== undefined ? h("span.sub", null, `Lat ${site.lat} / Lon ${site.lon}`) : null,
+                  site.lat !== undefined ? h("span.sub", null, t("detail.latLon", { lat: site.lat, lon: site.lon })) : null,
                 ),
               ),
             ),
@@ -173,12 +173,12 @@ export class DetailPanel {
     if (trader) parts.push(finderSection(trader, ref, s, { compact: true }));
 
     parts.push(this.usedIn(m));
-    replace(this.body, h("h3", null, "Où le trouver"), parts);
+    replace(this.body, h("h3", null, t("detail.whereFind")), parts);
   }
 
   private usedIn(m: Material): HTMLElement {
     const list = this.ctx.game.usedIn.get(m.id) ?? [];
-    if (!list.length) return h("section.used", null, h("h3", null, "Utilisé dans"), h("p.empty", null, "Aucune recette connue."));
+    if (!list.length) return h("section.used", null, h("h3", null, t("detail.used")), h("p.empty", null, t("detail.noKnownRecipe")));
     const groups = new Map<string, Map<string, Blueprint[]>>();
     for (const bp of list) {
       const byModule = groups.get(bp.kind) ?? new Map<string, Blueprint[]>();
@@ -189,7 +189,7 @@ export class DetailPanel {
     return h(
       "section.used",
       null,
-      h("h3", null, list.length === 1 ? "Utilisé dans 1 recette" : `Utilisé dans ${list.length} recettes`),
+      h("h3", null, list.length === 1 ? t("detail.used1Recipe") : t("detail.usedRecipes", { count: list.length })),
       [...groups.entries()].map(([kind, byModule]) =>
         h(
           "details",
@@ -213,7 +213,7 @@ export class DetailPanel {
                       .map((bp) =>
                         h(
                           "button.grade-chip",
-                          { title: `Ajouter à la wishlist (${bp.ingredients[m.id]} × ${gameName(m.name)})`, onclick: () => addToWishlist(this.ctx, bp) },
+                          { title: t("detail.addWishlist", { ingredients: bp.ingredients[m.id], name: gameName(m.name) }), onclick: () => addToWishlist(this.ctx, bp) },
                           bp.grade ? `G${bp.grade}` : "+",
                           h("small", null, `×${bp.ingredients[m.id]}`),
                         ),

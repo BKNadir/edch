@@ -4,6 +4,7 @@
 
 import { spanshPost } from "./bridge.js";
 import { referenceOf, type Ctx } from "./context.js";
+import { t } from "./i18n.js";
 
 type Json = Record<string, any>;
 
@@ -27,14 +28,14 @@ export function miningMethods(mineral: string): MiningMethod[] {
 }
 
 export const METHOD_LABEL: Record<MiningMethod, string> = {
-  laser: "Laser (surface)",
-  subsurface: "Sous-surface (missiles d'abrasion)",
-  core: "Cœur (charges sismiques)",
+  laser: t("miningSpots.laserSurface"),
+  subsurface: t("miningSpots.subsurfaceDisplacementMissiles"),
+  core: t("miningSpots.coreSeismicCharges"),
 };
 
 /** Ring types as the game names them. */
-export const RING_TYPE: Record<string, string> = { Metallic: "Métallique", "Metal Rich": "Riche en métaux", Rocky: "Rocheux", Icy: "Glacé" };
-export const RESERVE: Record<string, string> = { Pristine: "Vierge", Major: "Abondant", Common: "Commun", Low: "Faible", Depleted: "Épuisé" };
+export const RING_TYPE: Record<string, string> = { Metallic: t("miningSpots.metallic"), "Metal Rich": t("miningSpots.metalRich"), Rocky: t("miningSpots.rocky"), Icy: t("miningSpots.icy") };
+export const RESERVE: Record<string, string> = { Pristine: t("miningSpots.pristine"), Major: t("miningSpots.major"), Common: t("miningSpots.common"), Low: t("miningSpots.low"), Depleted: t("miningSpots.depleted") };
 
 export interface RingSpot {
   mineral: string;

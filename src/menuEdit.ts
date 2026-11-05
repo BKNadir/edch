@@ -6,6 +6,7 @@ import { h, replace } from "./dom.js";
 import { log } from "./logger.js";
 import { ALWAYS_SHOWN, DEFAULT_ORDER, NEVER_ON_PHONE, menuOrder, navItem, phoneHiddenPages, visibleNav } from "./nav.js";
 import type { Store } from "./store.js";
+import { t } from "./i18n.js";
 
 let editing = false;
 export const menuEditing = () => editing;
@@ -61,7 +62,7 @@ export function renderMenu(nav: HTMLElement, store: Store, o: MenuOptions) {
             n.id === "wishlist" && s.wishlist.length ? h("small.count", null, String(s.wishlist.length)) : null,
           ),
     ),
-    o.remote ? null : h("button.nav-edit", { title: "Réorganiser le menu, choisir les pages du téléphone", onclick: () => setEditing(store, true) }, svgIcon(PEN), h("span", null, "Éditer le menu")),
+    o.remote ? null : h("button.nav-edit", { title: t("menuEdit.reorderMenuChoosePhoneSPages"), onclick: () => setEditing(store, true) }, svgIcon(PEN), h("span", null, t("common.editMenu"))),
   );
 }
 
@@ -88,7 +89,7 @@ function renderEditing(nav: HTMLElement, store: Store, o: MenuOptions) {
   const rows = order.map((id, index) => {
     const n = navItem(id)!;
     if (id === "-") {
-      return h("div.nav-edit-row.sep", { "data-index": String(index), title: "Ligne entre deux groupes : glisse-la pour changer les groupes" }, h("span.grip", null, svgIcon(GRIP)), h("span.sep-line"));
+      return h("div.nav-edit-row.sep", { "data-index": String(index), title: t("menuEdit.lineBetweenTwoGroupsDragChange") }, h("span.grip", null, svgIcon(GRIP)), h("span.sep-line"));
     }
     const never = NEVER_ON_PHONE.has(id);
     const onPhone = !never && !phoneOff.has(id);
@@ -96,7 +97,7 @@ function renderEditing(nav: HTMLElement, store: Store, o: MenuOptions) {
     return h(
       "div.nav-edit-row",
       { "data-index": String(index), class: shown ? "" : "is-hidden" },
-      h("span.grip", { title: "Glisser pour déplacer" }, svgIcon(GRIP)),
+      h("span.grip", { title: t("menuEdit.dragMove") }, svgIcon(GRIP)),
       o.navIcon(n.icon),
       h("span.label", null, n.label),
       h(
@@ -104,7 +105,7 @@ function renderEditing(nav: HTMLElement, store: Store, o: MenuOptions) {
         {
           class: onPhone ? "on" : "",
           disabled: never,
-          title: never ? "Jamais sur le téléphone (réglages du PC)" : onPhone ? "Affichée aussi sur le téléphone : clique pour la garder sur PC seulement" : "PC seulement : clique pour l'afficher aussi sur le téléphone",
+          title: never ? t("menuEdit.neverPhonePcSettings") : onPhone ? t("menuEdit.alsoShownPhoneClickKeepPc") : t("menuEdit.pcOnlyClickAlsoShowPhone"),
           onclick: () => {
             const next = new Set(store.state.settings.phoneHidden ?? []);
             if (next.has(id)) next.delete(id);
@@ -119,7 +120,7 @@ function renderEditing(nav: HTMLElement, store: Store, o: MenuOptions) {
         {
           class: shown ? "on" : "",
           disabled: ALWAYS_SHOWN.has(id),
-          title: ALWAYS_SHOWN.has(id) ? "Toujours affichée" : shown ? "Masquer cette page" : "Afficher cette page",
+          title: ALWAYS_SHOWN.has(id) ? t("menuEdit.alwaysShown") : shown ? t("menuEdit.hidePage") : t("menuEdit.showPage"),
           onclick: () => {
             const next = new Set(store.state.settings.hiddenViews ?? []);
             if (next.has(id)) next.delete(id);
@@ -139,17 +140,17 @@ function renderEditing(nav: HTMLElement, store: Store, o: MenuOptions) {
     h(
       "div.nav-edit-help",
       null,
-      h("p", null, h("strong", null, "Éditer le menu")),
-      h("p", null, svgIcon(PHONE, "icon inline"), " allumé : la page s'affiche aussi sur le téléphone."),
-      h("p", null, svgIcon(EYE, "icon inline"), " : afficher ou masquer la page."),
-      h("p", null, "Glisse une page (ou une ligne) pour la déplacer."),
+      h("p", null, h("strong", null, t("common.editMenu"))),
+      h("p", null, svgIcon(PHONE, "icon inline"), (" " + t("menuEdit.pageAlsoShowsPhone"))),
+      h("p", null, svgIcon(EYE, "icon inline"), (" " + t("menuEdit.showHidePage"))),
+      h("p", null, t("menuEdit.dragPageLineMove")),
     ),
     list,
     h(
       "div.nav-edit-actions",
       null,
-      h("button.primary.small", { onclick: () => setEditing(store, false) }, "Terminé"),
-      h("button.ghost.small", { title: "Ordre et groupes d'origine (les pages masquées et le téléphone ne changent pas)", onclick: () => store.updateSettings({ navOrder: [...DEFAULT_ORDER] }) }, "Ordre d'origine"),
+      h("button.primary.small", { onclick: () => setEditing(store, false) }, t("common.done")),
+      h("button.ghost.small", { title: t("menuEdit.originalOrderGroupsHiddenPagesPhone"), onclick: () => store.updateSettings({ navOrder: [...DEFAULT_ORDER] }) }, t("menuEdit.originalOrder")),
     ),
   );
 }

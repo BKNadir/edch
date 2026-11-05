@@ -6,13 +6,13 @@ import { excludedHere, renderMenu } from "./menuEdit.js";
 import { setRemoteCopyHere } from "./bridge.js";
 import { changelogAfterUpdate } from "./changelog.js";
 import { bindAlerts, clearAlert, goTo, inStartup, startupAlert } from "./alerts.js";
-import { LANGS, browserLang, guessLang, initI18n, saveLang, savedLang, watchTranslations } from "./i18n.js";
-import { installerLanguage, isTauri, onJournal, readAuxFile, startJournal, defaultJournalDir, type WatchStatus } from "./bridge.js";
+import { t, watchGameNames } from "./i18n.js";
+import { isTauri, onJournal, readAuxFile, startJournal, defaultJournalDir, type WatchStatus } from "./bridge.js";
 import { loadGame } from "./data.js";
 import { h, icon, replace } from "./dom.js";
 import { applyCargoFile, applyLines, applyLocker, applyMarketFile, applyStatus, emptyState } from "./journal.js";
 import { Uploaders } from "./uploaders.js";
-import { detectRemote, remoteLanguage, runRemoteClient, setupRemoteHost } from "./remote.js";
+import { runRemoteClient, setupRemoteHost } from "./remote.js";
 import { MobileView } from "./views/mobile.js";
 import { AboutView } from "./views/about.js";
 import { RemoteGuideView } from "./views/guide.js";
@@ -57,7 +57,8 @@ function navIcon(d: string): SVGSVGElement {
   return svg;
 }
 
-async function boot() {
+/** Starts the app once the language is loaded (called by boot.ts). */
+export async function startApp(code: string, remoteMode: "paired" | null) {
   const app = document.getElementById("app")!;
   captureErrors();
   captureActions();
@@ -67,26 +68,10 @@ async function boot() {
     [game] = await Promise.all([loadGame(), loadExobio()]);
   } catch (e) {
     log.error("app", `Game data: ${e}`);
-    replace(app, h("p.error", null, `Impossible de charger les données du jeu : ${e}`));
+    replace(app, h("p.error", null, t("main.couldnTLoadGameData", { e })));
     return;
   }
-  // Language: chosen once (pre-selected from the installer / Windows language), changeable in Settings.
-  // A phone served by EDCH's local server follows the PC's language until it picks its own.
-  const remoteMode = isTauri() ? null : await detectRemote();
-  let code = savedLang();
-  if (remoteMode) {
-    // A phone is the PC's screen elsewhere: same language, no language screen.
-    code = (remoteMode === "paired" ? await remoteLanguage() : null) ?? code ?? browserLang();
-  } else if (!code || !LANGS.some((l) => l.code === code)) {
-    code = await pickLanguage(app, guessLang(await installerLanguage()));
-    saveLang(code);
-  }
-  await initI18n(code);
-  watchTranslations(document.body);
-  if (remoteMode === "unpaired") {
-    replace(app, unpairedScreen());
-    return;
-  }
+  watchGameNames(document.body);
 
   const store = new Store();
   bindStore(store);
@@ -97,10 +82,10 @@ async function boot() {
   store.subscribe((st) => setRemoteCopyHere(st.settings.copyOnPhone));
   // An unexpected error right after start-up is worth a banner, not just a log line.
   window.addEventListener("error", (e) => {
-    if (inStartup()) startupAlert("ui-error", "Erreur inattendue au démarrage", String(e.message ?? e));
+    if (inStartup()) startupAlert("ui-error", t("main.unexpectedErrorStartUp"), String(e.message ?? e));
   });
   window.addEventListener("unhandledrejection", (e) => {
-    if (inStartup()) startupAlert("ui-error", "Erreur inattendue au démarrage", String((e.reason as Error)?.message ?? e.reason));
+    if (inStartup()) startupAlert("ui-error", t("main.unexpectedErrorStartUp"), String((e.reason as Error)?.message ?? e.reason));
   });
   await setDebugLog(store.state.settings.debugLog);
   log.info("app", `UI ready (language ${code}, view ${store.state.view})`);
@@ -216,8 +201,8 @@ async function boot() {
   const setWatch = (w: WatchStatus) => {
     store.state.watch = w;
     if (w.state === "live") clearAlert("journal");
-    else if (w.state === "error") startupAlert("journal", "Journal du jeu illisible", w.message ?? "", goTo("settings", "Paramètres"));
-    else if (w.state === "waiting" && inStartup()) startupAlert("journal", "Aucun journal du jeu trouvé", w.message ?? "Vérifie le dossier du journal dans les Paramètres.", goTo("settings", "Paramètres"));
+    else if (w.state === "error") startupAlert("journal", t("main.gameJournalUnreadable"), w.message ?? "", goTo("settings", t("common.settings")));
+    else if (w.state === "waiting" && inStartup()) startupAlert("journal", t("main.noGameJournalFound"), w.message ?? t("main.checkJournalFolderSettings"), goTo("settings", t("common.settings")));
     if (w.state === "live" || w.state === "waiting") {
       replaying = false;
       store.persistCmdr();
@@ -334,59 +319,18 @@ async function boot() {
     resetForReplay();
     startJournal(dir).catch((e) => setWatch({ state: "error", message: String(e) }));
   } else {
-    setWatch({ state: "error", message: "Indique le dossier du journal dans les Paramètres." });
+    setWatch({ state: "error", message: t("main.setJournalFolderSettings") });
   }
 }
 
-/** First-run language screen. Labels are in each language, so it needs no translation. */
-/** Shown on a phone that reached the local server without (or with an outdated) QR code. */
-function unpairedScreen(): HTMLElement {
-  const expired = location.hash === "#expired";
-  return h(
-    "div.lang-screen",
-    null,
-    h("img", { src: "favicon.png", alt: "" }),
-    h("h1", null, "EDCH"),
-    h("h2", null, "Cet appareil n'est pas connecté à EDCH"),
-    expired ? h("p.warn", null, "Ce QR code n'est plus valable : un nouveau code a été créé sur le PC. Scanne celui qui est affiché maintenant.") : null,
-    h("p", null, "Scanne le QR code affiché dans EDCH sur ton PC (page Mobile) pour connecter cet appareil."),
-    h("p.sub", null, "La connexion est enregistrée dans le navigateur qui ouvre le lien. Si ton lecteur de QR code l'ouvre dans sa propre fenêtre, ouvre-le plutôt dans Chrome ou Safari, ou copie le lien dans ton navigateur."),
-    h("button.primary", { onclick: () => location.replace("/") }, "Réessayer"),
-  );
-}
 
-function pickLanguage(app: HTMLElement, preselected: string): Promise<string> {
-  return new Promise((resolve) => {
-    let chosen = preselected;
-    const buttons = LANGS.map((l) =>
-      h("button.lang-choice", { class: l.code === chosen ? "active" : "", "data-code": l.code, onclick: () => select(l.code) }, l.label),
-    );
-    const select = (c: string) => {
-      chosen = c;
-      for (const b of buttons) b.classList.toggle("active", b.dataset.code === c);
-    };
-    replace(
-      app,
-      h(
-        "div.lang-screen",
-        null,
-        h("img", { src: "favicon.png", alt: "" }),
-        h("h1", null, "EDCH"),
-        h("p.sub", null, "Choose your language · Choisis ta langue · Sprache wählen · Elige tu idioma · Escolha o idioma · Выберите язык"),
-        h("div.lang-grid", null, buttons),
-        h("button.primary", { onclick: () => resolve(chosen) }, "OK"),
-      ),
-    );
-  });
-}
-
-const SECURITY_FR: Record<string, string> = { High: "Sécurité haute", Medium: "Sécurité moyenne", Low: "Sécurité basse", Anarchy: "Anarchie" };
-const ALLEGIANCE_FR: Record<string, string> = { Independent: "Indépendant", Federation: "Fédération", Empire: "Empire", Alliance: "Alliance", Thargoid: "Thargoid", Guardian: "Gardien", PilotsFederation: "Pilots Federation" };
+const SECURITY_FR: Record<string, string> = { High: t("common.highSecurity"), Medium: t("common.mediumSecurity"), Low: t("common.lowSecurity"), Anarchy: t("common.anarchy") };
+const ALLEGIANCE_FR: Record<string, string> = { Independent: t("main.independent"), Federation: t("main.federation"), Empire: "Empire", Alliance: "Alliance", Thargoid: "Thargoid", Guardian: t("main.guardian"), PilotsFederation: "Pilots Federation" };
 
 function renderHeader(el: HTMLElement, ctx: Ctx) {
   const { cmdr, watch } = ctx.store.state;
   const loc = cmdr.location;
-  const statusLabel: Record<string, string> = { live: "En direct", waiting: "En attente du jeu", error: "Erreur", demo: "Démo", idle: "Arrêté", remote: "Connecté au PC", offline: "PC injoignable" };
+  const statusLabel: Record<string, string> = { live: t("main.live"), waiting: t("main.waitingGame"), error: t("common.error"), demo: t("main.demo"), idle: t("main.stopped"), remote: t("main.connectedPc"), offline: t("common.pcUnreachable") };
   const states = new Set<string>();
   for (const f of loc?.factions ?? []) {
     if (f.name === loc?.controllingFaction && f.state && f.state !== "None") states.add(f.state);
@@ -394,7 +338,7 @@ function renderHeader(el: HTMLElement, ctx: Ctx) {
   }
   replace(
     el,
-    h("button.brand", { title: "Masquer ou afficher le menu", onclick: () => toggleNav() }, h("img", { src: "favicon.png", alt: "" }), h("span", null, "EDCH")),
+    h("button.brand", { title: t("main.hideShowMenu"), onclick: () => toggleNav() }, h("img", { src: "favicon.png", alt: "" }), h("span", null, "EDCH")),
     h(
       "div.cmdr",
       null,
@@ -405,16 +349,15 @@ function renderHeader(el: HTMLElement, ctx: Ctx) {
       ? h(
           "div.where",
           null,
-          h("button.sys", { title: "Copier le système", onclick: () => openSystem(loc.system, { navigate: false }) }, icon("pin"), h("span", null, loc.system)),
+          h("button.sys", { title: t("main.copySystemName"), onclick: () => openSystem(loc.system, { navigate: false }) }, icon("pin"), h("span", null, loc.system)),
           loc.station ? h("span.sub", null, loc.station) : null,
-          [loc.security ? SECURITY_FR[loc.security] ?? loc.security : undefined, loc.allegiance ? ALLEGIANCE_FR[loc.allegiance] ?? loc.allegiance : undefined].filter(Boolean).map((t) => h("span.badge.muted", null, t!)),
+          [loc.security ? SECURITY_FR[loc.security] ?? loc.security : undefined, loc.allegiance ? ALLEGIANCE_FR[loc.allegiance] ?? loc.allegiance : undefined].filter(Boolean).map((label) => h("span.badge.muted", null, label!)),
           [...states].slice(0, 4).map((s) => h("span.badge.hit", null, s)),
         )
-      : h("div.where.sub", null, "Position inconnue"),
+      : h("div.where.sub", null, t("common.unknownLocation")),
     gameBadge(ctx.store.state.game),
     focusButtons(),
     h("div.live", { class: watch.state, title: watch.message ?? watch.file ?? "" }, h("span.dot"), statusLabel[watch.state] ?? watch.state),
   );
 }
 
-boot();

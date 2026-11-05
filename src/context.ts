@@ -2,6 +2,7 @@ import type { Game } from "./data.js";
 import type { Reference } from "./spansh.js";
 import { totalNeeds, type Store } from "./store.js";
 import type { Uploaders } from "./uploaders.js";
+import { t } from "./i18n.js";
 
 export interface Ctx {
   game: Game;
@@ -19,7 +20,7 @@ export function referenceOf(ctx: Ctx): Reference {
   const loc = ctx.store.state.cmdr.location;
   if (loc?.pos) return { coords: loc.pos, system: loc.system, label: loc.system };
   const fallback = ctx.store.state.settings.fallbackSystem || "Sol";
-  return { system: fallback, label: `${fallback} (position du jeu inconnue)` };
+  return { system: fallback, label: t("context.gameLocationUnknown", { fallback }) };
 }
 
 let needsMemo: { list: unknown; value: Record<string, number> } | undefined;

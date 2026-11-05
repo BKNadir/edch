@@ -460,7 +460,7 @@ pub fn remote_tailscale() -> Option<String> {
 #[tauri::command]
 pub fn remote_start(app: AppHandle, state: State<'_, RemoteState>, token: String, port: u16) -> Result<RemoteInfo, String> {
     if token.len() < 32 || !token.chars().all(|c| c.is_ascii_alphanumeric()) {
-        return Err("Jeton invalide".into());
+        return Err("invalidToken".into());
     }
     let shared = state.inner.clone();
     *lock(&shared.token) = token;
@@ -522,7 +522,7 @@ fn bind(port: u16) -> Result<Server, String> {
             }
             Err(e) => {
                 crate::logs::warn("remote", &format!("Port {port} unavailable: {e}"));
-                return Err(format!("Port {port} indisponible : {e}"));
+                return Err(format!("portUnavailable: {port} ({e})"));
             }
         }
     }
@@ -576,7 +576,7 @@ pub fn remote_qr(text: String) -> Result<String, String> {
 #[tauri::command]
 pub fn open_page_in_browser(state: State<'_, RemoteState>, view: String) -> Result<(), String> {
     if view.is_empty() || view.len() > 32 || !view.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') {
-        return Err("Page inconnue".into());
+        return Err("unknownPage".into());
     }
     let shared = state.inner.clone();
     let port = lock(&shared.server).as_ref().and_then(|s| s.server_addr().to_ip()).map(|a| a.port());

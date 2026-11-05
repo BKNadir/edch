@@ -1,6 +1,7 @@
 // Reads Elite Dangerous .binds files (XML) into a flat list of bindings, and names
 // devices and keys for display. No DOM needed, so it is unit-testable in Node.
 
+import { t } from "./i18n.js";
 export interface DeviceTemplate {
   name: string;
   image: string;
@@ -14,10 +15,25 @@ export interface BindsMeta {
   templateBase: string;
   controls: Record<string, { g: string; c: string; n: string; o: number }>;
   keymap: Record<string, string>;
-  devices: Record<string, { label: string; kind: DeviceKind }>;
+  devices: Record<string, DeviceName>;
   vidpid: Record<string, string>;
   vendors: Record<string, string>;
-  credits: string;
+}
+
+/** A device's name in data/binds.json: a brand name, or a translation key for generic devices. */
+export interface DeviceName {
+  label: string;
+  kind: DeviceKind;
+  /** "binds.<nameKey>" names it in the app's language (keyboard, mouse, gamepads). */
+  nameKey?: string;
+  /** One half of a stick + throttle pair. */
+  part?: "stick" | "throttle";
+}
+
+/** The device's name as shown, in the app's language. */
+export function deviceLabel(d: DeviceName): string {
+  const name = d.nameKey ? t(`binds.${d.nameKey}`) : d.label;
+  return d.part ? t(d.part === "stick" ? "binds.stickOf" : "binds.throttleOf", { name }) : name;
 }
 
 export type DeviceKind = "keyboard" | "mouse" | "gamepad" | "joystick" | "vr";
@@ -93,7 +109,7 @@ function readSlot(action: string, node: XmlNode, slot: Bind["slot"]): Bind | nul
 export function parseBinds(xml: string): BindsFile {
   const doc = parseXml(xml.replace(/^﻿/, ""));
   const root = doc.children.find((c) => c.tag === "Root");
-  if (!root) throw new Error("Ce fichier n'est pas un fichier .binds d'Elite Dangerous");
+  if (!root) throw new Error(t("binds.notBindsFile"));
   const binds: Bind[] = [];
   let keyboardLayout = "en-US";
   for (const el of root.children) {
@@ -159,12 +175,12 @@ export function deviceInfo(meta: BindsMeta, id: string): { label: string; kind: 
   const tpl = meta.templates?.[id];
   const known = meta.devices[id];
   if (tpl && !known) return { label: tpl.name, kind: /pad|ds4|dualshock|710|xb360/i.test(id + tpl.image) ? "gamepad" : "joystick" };
-  if (known) return known;
+  if (known) return { label: deviceLabel(known), kind: known.kind };
   const mapped = meta.vidpid[id.toUpperCase()];
-  if (mapped && meta.devices[mapped]) return { label: meta.devices[mapped].label, kind: meta.devices[mapped].kind };
+  if (mapped && meta.devices[mapped]) return { label: deviceLabel(meta.devices[mapped]), kind: meta.devices[mapped].kind };
   if (/^[0-9A-F]{8}$/i.test(id)) {
     const vendor = meta.vendors[id.slice(0, 4).toUpperCase()];
-    return { label: `${vendor ?? "Périphérique"} ${id.toUpperCase()}`, kind: "joystick" };
+    return { label: vendor ? `${vendor} ${id.toUpperCase()}` : t("binds.deviceId", { id: id.toUpperCase() }), kind: "joystick" };
   }
   return { label: id, kind: "joystick" };
 }
@@ -190,21 +206,21 @@ export function padControl(device: string, key: string): string | null {
   return null;
 }
 
-const MOUSE: Record<string, string> = { Mouse_1: "Clic gauche", Mouse_2: "Clic droit", Mouse_3: "Clic molette", Mouse_4: "Bouton 4", Mouse_5: "Bouton 5", Mouse_XAxis: "Axe X", Mouse_YAxis: "Axe Y", Mouse_ZAxis: "Molette" };
+const MOUSE: Record<string, string> = { Mouse_1: t("binds.leftClick"), Mouse_2: t("binds.rightClick"), Mouse_3: t("binds.wheelClick"), Mouse_4: t("binds.button", { number: 4 }), Mouse_5: t("binds.button", { number: 5 }), Mouse_XAxis: t("binds.axis", { name: "X" }), Mouse_YAxis: t("binds.axis", { name: "Y" }), Mouse_ZAxis: t("binds.wheel") };
 
 export function keyLabel(meta: BindsMeta, key: string): string {
   if (meta.keymap[key]) return meta.keymap[key];
   const sign = key.startsWith("Pos_") ? " +" : key.startsWith("Neg_") ? " −" : "";
   const k = key.replace(/^(Pos|Neg)_/, "");
-  if (MOUSE[k]) return k === "Mouse_ZAxis" ? (sign === " +" ? "Molette ↑" : sign ? "Molette ↓" : "Molette") : MOUSE[k] + sign;
+  if (MOUSE[k]) return k === "Mouse_ZAxis" ? (sign === " +" ? t("binds.wheelUp") : sign ? t("binds.wheelDown") : t("binds.wheel")) : MOUSE[k] + sign;
   let m = /^Key_(.+)$/.exec(k);
   if (m) return m[1].replace(/Numpad_/, "Num ").replace(/Arrow$/, "").replace(/(?<=[a-z])(?=[A-Z])/g, " ");
   m = /^Joy_(\d+)$/.exec(k);
-  if (m) return `Bouton ${m[1]}`;
+  if (m) return t("binds.button", { number: m[1] });
   m = /^Joy_POV(\d)(Up|Down|Left|Right)$/.exec(k);
-  if (m) return `Chapeau ${m[1]} ${{ Up: "↑", Down: "↓", Left: "←", Right: "→" }[m[2]]}`;
+  if (m) return t("binds.hat", { number: m[1], direction: { Up: "↑", Down: "↓", Left: "←", Right: "→" }[m[2]] });
   m = /^Joy_(R?[XYZ]|U|V)Axis$/.exec(k);
-  if (m) return `Axe ${m[1]}${sign}`;
+  if (m) return t("binds.axis", { name: m[1] }) + sign;
   const pad = padControl("GamePad", key);
   if (pad) return pad;
   return k.replace(/_/g, " ") + sign;

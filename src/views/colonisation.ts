@@ -1,6 +1,6 @@
 import type { CarrierHold, Depot } from "../activity.js";
 import { callout, fmt, h, icon, replace } from "../dom.js";
-import { gameName } from "../i18n.js";
+import { gameName, t } from "../i18n.js";
 import { relTime } from "../time.js";
 import type { Ctx, View } from "../context.js";
 import { presetSearch } from "./search.js";
@@ -93,7 +93,7 @@ export class ColonisationView implements View {
         updated: r?.market_updated_at,
         selling: market.filter((m) => Number(m.supply) > 0).map((m) => ({ id: toId(String(m.commodity)), name: String(m.commodity), count: Number(m.supply) })),
         buying: market.filter((m) => Number(m.demand) > 0).map((m) => ({ id: toId(String(m.commodity)), name: String(m.commodity), count: Number(m.demand) })),
-        error: r ? undefined : "inconnu de Spansh",
+        error: r ? undefined : t("colonisation.unknownSpansh"),
       });
       log.debug("carrier", `${callsign}: Spansh market ${r ? `${market.length} line(s), updated ${r.market_updated_at ?? "?"}` : "not found"}`);
     } catch (e) {
@@ -123,20 +123,20 @@ export class ColonisationView implements View {
       h(
         "header.view-head",
         null,
-        h("div", null, h("h1", null, "Colonisation"), h("p.sub", null, "Chantiers de construction suivis depuis ton journal : ce qu'il reste à livrer, ta soute, les trajets et où acheter.")),
+        h("div", null, h("h1", null, t("common.colonisation")), h("p.sub", null, t("colonisation.constructionSitesTrackedFromJournalWhat"))),
         all.some((d) => d.complete || d.failed)
-          ? h("label.check", null, h("input", { type: "checkbox", checked: this.showDone, onchange: (e: Event) => ((this.showDone = (e.target as HTMLInputElement).checked), this.render()) }), " Afficher les chantiers terminés")
+          ? h("label.check", null, h("input", { type: "checkbox", checked: this.showDone, onchange: (e: Event) => ((this.showDone = (e.target as HTMLInputElement).checked), this.render()) }), (" " + t("colonisation.showFinishedSites")))
           : null,
       ),
       callout(
         "info",
-        "Page en cours de développement",
-        "Toutes les fonctions ne sont pas encore opérationnelles à 100 %. Le jeu n'écrit pas le contenu d'un fleet carrier dans le journal : sa soute est une estimation, complétée par le marché vu par Spansh. Une connexion à l'API de Frontier, qui donne la soute complète de ton carrier, est prévue.",
+        t("common.workProgress"),
+        t("colonisation.notEveryFeatureFullyWorkingYet"),
       ),
       this.holds(shown, capacity),
       shown.length
         ? shown.map((d) => this.depot(d, capacity))
-        : h("section.card", null, h("p.empty", null, "Aucun chantier en cours. Docke à un dépôt de construction (Colonisation) : EDCH lira la liste des marchandises demandées.")),
+        : h("section.card", null, h("p.empty", null, t("colonisation.noConstructionProgressDockConstructionDepot"))),
     );
   }
 
@@ -159,18 +159,18 @@ export class ColonisationView implements View {
   private marketBlock(marketId: number, needed: Set<string>, name: (id: string, label?: string) => string): HTMLElement | null {
     const m = this.marketOf(marketId);
     if (!m) return null;
-    if (m.loading && !m.updated && !m.selling.length) return h("p.sub", null, h("span.spinner"), " Marché du carrier sur Spansh…");
-    if (m.error) return h("p.sub", null, `Marché sur Spansh : ${m.error}`);
+    if (m.loading && !m.updated && !m.selling.length) return h("p.sub", null, h("span.spinner"), (" " + t("colonisation.carrierMarketSpansh")));
+    if (m.error) return h("p.sub", null, t("colonisation.marketSpansh", { error: m.error }));
     const line = (x: { id: string; name: string; count: number }) => h("li", { class: needed.has(x.id) ? "needed" : "" }, h("span", null, name(x.id, x.name)), h("strong", null, `${fmt(x.count)} t`));
     return h(
       "div.carrier-market",
       null,
       m.source === "journal"
-        ? h("p.sub", null, `Marché (ton journal, ${m.updated ? relTime(m.updated) : "?"})`)
-        : h("p.sub", null, `Marché (Spansh, données ${m.updated ? relTime(m.updated) : "?"})`),
-      m.selling.length ? [h("small.sub", null, "En vente (stock)"), h("ul.hold-list", null, m.selling.map(line))] : null,
-      m.buying.length ? [h("small.sub", null, "Achète"), h("ul.hold-list", null, m.buying.map(line))] : null,
-      !m.selling.length && !m.buying.length ? h("p.empty", null, "Aucun ordre d'achat ou de vente") : null,
+        ? h("p.sub", null, t("colonisation.marketJournal", { value: m.updated ? relTime(m.updated) : "?" }))
+        : h("p.sub", null, t("colonisation.marketSpanshData", { value: m.updated ? relTime(m.updated) : "?" })),
+      m.selling.length ? [h("small.sub", null, t("colonisation.saleStock")), h("ul.hold-list", null, m.selling.map(line))] : null,
+      m.buying.length ? [h("small.sub", null, t("colonisation.buying")), h("ul.hold-list", null, m.buying.map(line))] : null,
+      !m.selling.length && !m.buying.length ? h("p.empty", null, t("colonisation.noBuySellOrders")) : null,
     );
   }
 
@@ -188,15 +188,15 @@ export class ColonisationView implements View {
               .sort((a, b) => Number(needed.has(b[0])) - Number(needed.has(a[0])) || b[1] - a[1])
               .map(([id, n, label]) => h("li", { class: needed.has(id) ? "needed" : "" }, h("span", null, name(id, label)), h("strong", null, `${fmt(n)} t`))),
           )
-        : h("p.empty", null, "Vide");
+        : h("p.empty", null, t("colonisation.empty"));
     const shipItems = Object.entries(cmdr.cargo ?? {}).filter(([, n]) => n > 0) as [string, number][];
     const shipUsed = shipItems.reduce((s, [, n]) => s + n, 0);
     const cards: HTMLElement[] = [
       h(
         "div.hold",
         null,
-        h("h4", null, "Vaisseau"),
-        h("p.sub", null, capacity ? `${fmt(shipUsed)} / ${fmt(capacity)} t` : `${fmt(shipUsed)} t`),
+        h("h4", null, t("common.ship")),
+        h("p.sub", null, capacity ? t("colonisation.t", { shipUsed: fmt(shipUsed), capacity: fmt(capacity) }) : `${fmt(shipUsed)} t`),
         capacity ? h("div.bar", null, h("span", { style: { width: `${Math.min(100, (shipUsed / capacity) * 100)}%` } })) : null,
         list(shipItems),
       ),
@@ -209,11 +209,11 @@ export class ColonisationView implements View {
         h(
           "div.hold",
           null,
-          h("h4", null, c.mine ? "Mon fleet carrier" : "Carrier de l'escadrille"),
+          h("h4", null, c.mine ? t("colonisation.myFleetCarrier") : t("colonisation.squadronCarrier")),
           h("p.sub", { "data-no-tr": "" }, c.name),
-          c.total !== undefined ? h("p.sub", null, `${fmt(c.total)} t de marchandises (jeu, ${relTime(c.totalAt)})`) : null,
+          c.total !== undefined ? h("p.sub", null, t("colonisation.tGoodsGame", { total: fmt(c.total), relTime: relTime(c.totalAt) })) : null,
           list(items),
-          unknown ? h("p.sub", null, `+ ${fmt(unknown)} t non identifiées`) : null,
+          unknown ? h("p.sub", null, t("colonisation.tNotIdentified", { unknown: fmt(unknown) })) : null,
           this.marketBlock(c.marketId, needed, name),
         ),
       );
@@ -221,11 +221,11 @@ export class ColonisationView implements View {
     return h(
       "section.card.holds",
       null,
-      h("h3", null, "Soutes"),
+      h("h3", null, t("colonisation.holds")),
       h("div.hold-grid", null, cards),
       this.carriers().length
-        ? h("p.sub", null, "Le journal du jeu ne liste pas la soute d'un carrier : EDCH la reconstitue à partir de tes transferts vaisseau ↔ carrier et de tes achats et ventes sur son marché. Ce qui y a été mis par d'autres ou avant le début de ton historique (60 jours) n'apparaît pas. Le marché du carrier (ce qu'il vend avec son stock, ce qu'il achète) vient de Spansh, revérifié toutes les 5 minutes : il dépend des joueurs qui s'y sont dockés. Inara ne permet pas de lire la soute d'un carrier. Les marchandises demandées par tes chantiers sont surlignées.")
-        : h("p.sub", null, "Docke à ton fleet carrier (ou à celui de ton escadrille) puis transfère des marchandises : EDCH suivra aussi sa soute. Le total de ton carrier vient de l'écran de gestion du carrier."),
+        ? h("p.sub", null, t("colonisation.gameJournalDoesnTListCarrier"))
+        : h("p.sub", null, t("colonisation.dockFleetCarrierSquadronSTransfer")),
     );
   }
 
@@ -247,22 +247,22 @@ export class ColonisationView implements View {
       h(
         "div.depot-head",
         null,
-        h("div", null, h("h3", null, d.station ?? `Dépôt #${d.marketId}`), d.system ? sys(d.system) : null),
-        h("div.badges", null, d.complete ? h("span.badge.ok", null, "Terminé") : d.failed ? h("span.badge.warn", null, "Échoué") : h("span.badge", null, `${pct} %`), h("span.sub", null, `Mis à jour ${relTime(d.updated)}`)),
+        h("div", null, h("h3", null, d.station ?? t("colonisation.depot", { marketId: d.marketId })), d.system ? sys(d.system) : null),
+        h("div.badges", null, d.complete ? h("span.badge.ok", null, t("common.done")) : d.failed ? h("span.badge.warn", null, t("colonisation.failed")) : h("span.badge", null, `${pct} %`), h("span.sub", null, t("common.updated", { relTime: relTime(d.updated) }))),
       ),
       h("div.bar.big", null, h("span", { style: { width: `${pct}%` } })),
       h(
         "div.stats",
         null,
-        h("div.stat", null, h("strong", null, fmt(remaining)), h("span.sub", null, "t restantes")),
-        h("div.stat", null, h("strong", null, fmt(inHold)), h("span.sub", null, "t utiles en soute")),
-        inCarrier ? h("div.stat", null, h("strong", null, fmt(inCarrier)), h("span.sub", null, "t utiles dans tes carriers")) : null,
-        trips !== null ? h("div.stat", null, h("strong", null, fmt(trips)), h("span.sub", null, `trajets (${fmt(capacity)} t par trajet)`)) : null,
+        h("div.stat", null, h("strong", null, fmt(remaining)), h("span.sub", null, t("colonisation.tLeft"))),
+        h("div.stat", null, h("strong", null, fmt(inHold)), h("span.sub", null, t("colonisation.usefulTHold"))),
+        inCarrier ? h("div.stat", null, h("strong", null, fmt(inCarrier)), h("span.sub", null, t("colonisation.tUsefulCarriers"))) : null,
+        trips !== null ? h("div.stat", null, h("strong", null, fmt(trips)), h("span.sub", null, t("colonisation.tripsTPerTrip", { capacity: fmt(capacity) }))) : null,
       ),
       h(
         "table.table.depot-table",
         null,
-        h("thead", null, h("tr", null, h("th", null, "Marchandise"), h("th.num", null, "Livré"), h("th.num", null, "Demandé"), h("th.num", null, "Restant"), h("th.num", null, "En soute"), showCarrier ? h("th.num", null, "Carriers") : null, h("th", null, ""))),
+        h("thead", null, h("tr", null, h("th", null, t("colonisation.commodity")), h("th.num", null, t("colonisation.delivered")), h("th.num", null, t("colonisation.required")), h("th.num", null, t("common.left")), h("th.num", null, t("colonisation.hold")), showCarrier ? h("th.num", null, t("colonisation.carriers")) : null, h("th", null, ""))),
         h(
           "tbody",
           null,
@@ -284,14 +284,14 @@ export class ColonisationView implements View {
                   ? h(
                       "button.ghost.small",
                       {
-                        title: "Chercher où l'acheter près de toi",
+                        title: t("colonisation.findWhereBuyNear"),
                         onclick: () => {
                           presetSearch("buy", name);
                           this.ctx.store.setView("search");
                         },
                       },
                       icon("search"),
-                      " Acheter",
+                      (" " + t("colonisation.buy")),
                     )
                   : null,
               ),

@@ -6,11 +6,9 @@ import { DEFAULT_THEME } from "./theme.js";
 import { log } from "./logger.js";
 import {
   clipboardWrite,
-  forgetRemoteToken,
   onRemoteAction,
   remoteAction,
   remoteAddresses,
-  remoteFetch,
   remotePublish,
   remoteStart,
   remoteState,
@@ -20,7 +18,7 @@ import {
   type RemoteInfo,
 } from "./bridge.js";
 import { toast } from "./dom.js";
-import { lang } from "./i18n.js";
+import { lang, t } from "./i18n.js";
 import { emptyActivity } from "./activity.js";
 import { wingView } from "./live.js";
 import { unsoldSummary } from "./views/exploration.js";
@@ -141,42 +139,19 @@ export async function setupRemoteHost(store: Store) {
     try {
       await startRemote(store);
     } catch (e) {
-      startupAlert("remote", "Accès distant indisponible", String((e as Error)?.message ?? e), goTo("mobile", "Accès distant"));
+      startupAlert("remote", t("remote.remoteAccessUnavailable"), String((e as Error)?.message ?? e), goTo("mobile", t("common.remoteAccess")));
     }
   }
 }
 
 // ---------------- phone side ----------------
 
-/** Served by EDCH's local server? "paired" when this device holds the current secret. */
-export async function detectRemote(): Promise<"paired" | "unpaired" | null> {
-  try {
-    const res = await remoteFetch("/api/hello");
-    if (!res.ok) return null;
-    const body = await res.json();
-    if (body?.remote !== true) return null;
-    if (body.paired) return "paired";
-    forgetRemoteToken(); // stale secret ("New code" on the PC)
-    return "unpaired";
-  } catch {
-    return null;
-  }
-}
 
-/** The PC's language, so the phone shows the same one until the user picks another. */
-export async function remoteLanguage(): Promise<string | null> {
-  try {
-    const r = await Promise.race([remoteState(0), new Promise<null>((ok) => setTimeout(() => ok(null), 4000))]);
-    return typeof r?.state?.lang === "string" ? r.state.lang : null;
-  } catch {
-    return null;
-  }
-}
 
 export async function runRemoteClient(store: Store) {
   setRemote(true);
   store.onWishlistChange = (items) => {
-    remoteAction({ type: "wishlist", items }).catch(() => toast("PC injoignable : modification non envoyée"));
+    remoteAction({ type: "wishlist", items }).catch(() => toast(t("remote.pcUnreachableChangeNotSent")));
   };
   // Display settings changed on the phone: the PC saves them and every screen follows.
   const phonePart = (st: { settings: Settings }) => JSON.stringify(PHONE_SETTINGS.map((k) => st.settings[k]));
@@ -214,7 +189,7 @@ export async function runRemoteClient(store: Store) {
       }
       store.notify();
     } catch {
-      store.state.watch = { state: "offline", message: "PC injoignable" };
+      store.state.watch = { state: "offline", message: t("common.pcUnreachable") };
       store.notify();
       await new Promise((ok) => setTimeout(ok, 5000));
     }

@@ -1,4 +1,4 @@
-import { locale } from "./i18n.js";
+import { locale, t } from "./i18n.js";
 import { spanshPost } from "./bridge.js";
 import type { Vec3 } from "./journal.js";
 import type { Finder } from "./sources.js";
@@ -31,9 +31,9 @@ const TTL = 10 * 60 * 1000;
 
 const num = (n: unknown) => (typeof n === "number" ? n : Number(n ?? NaN));
 const fmtPop = (n: number) =>
-  n >= 1e9 ? `${(n / 1e9).toFixed(1)} Md hab.` : n >= 1e6 ? `${(n / 1e6).toFixed(1)} M hab.` : n >= 1e3 ? `${Math.round(n / 1e3)} k hab.` : `${n} hab.`;
+  n >= 1e9 ? t("spansh.bnPop", { value: (n / 1e9).toFixed(1) }) : n >= 1e6 ? t("spansh.mPop", { value: (n / 1e6).toFixed(1) }) : n >= 1e3 ? t("spansh.kPop", { value: Math.round(n / 1e3) }) : t("spansh.pop", { n });
 
-const SECURITY_FR: Record<string, string> = { High: "Sécurité haute", Medium: "Sécurité moyenne", Low: "Sécurité basse", Anarchy: "Anarchie" };
+const SECURITY_FR: Record<string, string> = { High: t("common.highSecurity"), Medium: t("common.mediumSecurity"), Low: t("common.lowSecurity"), Anarchy: t("common.anarchy") };
 
 export const inaraSystem = (name: string) => `https://inara.cz/elite/starsystem/?search=${encodeURIComponent(name)}`;
 
@@ -102,7 +102,7 @@ function bodyRow(r: any, f: Finder): ResultRow & { share: number } {
   const share = hit ? num(hit.share) : 0;
   const sub: string[] = [];
   if (r.subtype) sub.push(r.subtype);
-  if (r.distance_to_arrival !== undefined) sub.push(`${Math.round(num(r.distance_to_arrival)).toLocaleString(locale())} ls de l'arrivée`);
+  if (r.distance_to_arrival !== undefined) sub.push(t("spansh.lsFromArrival", { locale: Math.round(num(r.distance_to_arrival)).toLocaleString(locale()) }));
   if (r.gravity !== undefined && r.is_landable) sub.push(`${num(r.gravity).toFixed(2)} g`);
   const badges: ResultRow["badges"] = [];
   if (hit) badges.push({ text: `${f.materialName} ${share.toFixed(1)} %`, tone: "hit" });
@@ -131,12 +131,12 @@ function bodyRow(r: any, f: Finder): ResultRow & { share: number } {
 function stationRow(r: any): ResultRow {
   const sub: string[] = [];
   if (r.type) sub.push(r.type);
-  if (r.distance_to_arrival !== undefined) sub.push(`${Math.round(num(r.distance_to_arrival)).toLocaleString(locale())} ls`);
+  if (r.distance_to_arrival !== undefined) sub.push(t("common.ls", { locale: Math.round(num(r.distance_to_arrival)).toLocaleString(locale()) }));
   const badges: ResultRow["badges"] = [];
-  if (r.has_large_pad === true) badges.push({ text: "Pad L" });
-  else if (r.medium_pads > 0) badges.push({ text: "Pad M", tone: "muted" });
-  else if (r.small_pads > 0) badges.push({ text: "Pad S seulement", tone: "warn" });
-  if (r.is_planetary) badges.push({ text: "Planétaire", tone: "muted" });
+  if (r.has_large_pad === true) badges.push({ text: t("spansh.lPad") });
+  else if (r.medium_pads > 0) badges.push({ text: t("spansh.mPad"), tone: "muted" });
+  else if (r.small_pads > 0) badges.push({ text: t("spansh.sPadOnly"), tone: "warn" });
+  if (r.is_planetary) badges.push({ text: t("spansh.planetary"), tone: "muted" });
   return {
     system: r.system_name,
     title: `${r.name} | ${r.system_name}`,
@@ -181,4 +181,4 @@ export function distance(a?: Vec3, b?: Vec3 | null): number | undefined {
   return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 }
 
-export const fmtLy = (n?: number) => (n === undefined || Number.isNaN(n) ? "" : `${n.toLocaleString(locale(), { maximumFractionDigits: n < 100 ? 2 : 1 })} al`);
+export const fmtLy = (n?: number) => (n === undefined || Number.isNaN(n) ? "" : t("common.ly", { locale: n.toLocaleString(locale(), { maximumFractionDigits: n < 100 ? 2 : 1 }) }));

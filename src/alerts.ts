@@ -6,6 +6,7 @@ import { h, icon, replace, toast } from "./dom.js";
 import { log } from "./logger.js";
 import { notify } from "./notifier.js";
 import type { Store } from "./store.js";
+import { t } from "./i18n.js";
 
 interface Alert {
   key: string;
@@ -72,10 +73,10 @@ function render() {
           "div.row",
           null,
           isTauri()
-            ? h("button.ghost.small", { onclick: () => logsOpen().catch((e) => toast(String(e))) }, "Logs")
+            ? h("button.ghost.small", { onclick: () => logsOpen().catch((e) => toast(String(e))) }, t("alerts.logs"))
             : null,
           a.action ? h("button.primary.small", { onclick: () => (a.action!.run(), clearAlert(a.key)) }, a.action.label) : null,
-          h("button.ghost.small", { title: "Fermer", onclick: () => clearAlert(a.key) }, icon("close")),
+          h("button.ghost.small", { title: t("common.close"), onclick: () => clearAlert(a.key) }, icon("close")),
         ),
       ),
     ),

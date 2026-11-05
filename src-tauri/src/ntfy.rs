@@ -93,7 +93,7 @@ fn stream(app: AppHandle, topic: String, mut since: String, generation: u64) {
 #[tauri::command]
 pub fn ntfy_subscribe(app: AppHandle, topic: String, since: String) -> Result<(), String> {
     if !valid_topic(&topic) || !valid_since(&since) {
-        return Err("Sujet ntfy invalide".into());
+        return Err("invalidNtfyTopic".into());
     }
     let generation = GENERATION.fetch_add(1, Ordering::SeqCst) + 1;
     thread::spawn(move || stream(app, topic, since, generation));
@@ -113,7 +113,7 @@ static FAREWELL: Mutex<Option<(String, String)>> = Mutex::new(None);
 #[tauri::command]
 pub fn ntfy_set_farewell(topic: String, text: Option<String>) -> Result<(), String> {
     if !valid_topic(&topic) {
-        return Err("Sujet ntfy invalide".into());
+        return Err("invalidNtfyTopic".into());
     }
     let mut f = FAREWELL.lock().map_err(|e| e.to_string())?;
     *f = text.filter(|t| t.len() < 8192).map(|t| (topic, t));

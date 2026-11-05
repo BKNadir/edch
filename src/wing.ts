@@ -8,6 +8,7 @@
 import { httpFetch, isTauri, ntfySetFarewell, ntfySubscribe, ntfyUnsubscribe, onNtfy } from "./bridge.js";
 import { log } from "./logger.js";
 import type { Mission } from "./activity.js";
+import { t } from "./i18n.js";
 
 export interface WingMission {
   id: number;
@@ -334,8 +335,8 @@ export class WingLink {
   private async send(p: Packet) {
     const text = await seal(this.key, p);
     const reply = await httpFetch("POST", NTFY + this.topic, text, "text/plain");
-    if (reply.status === 429) throw new Error("ntfy.sh : trop de messages, réessaie plus tard");
-    if (reply.status < 200 || reply.status >= 300) throw new Error(`ntfy.sh a répondu ${reply.status}`);
+    if (reply.status === 429) throw new Error(t("wing.ntfyShTooManyMessagesTry"));
+    if (reply.status < 200 || reply.status >= 300) throw new Error(t("wing.ntfyShAnswered", { status: reply.status }));
   }
 
   private ok() {
@@ -358,7 +359,7 @@ export class WingLink {
     if (this.stopped || !this.key) return;
     try {
       const reply = await httpFetch("GET", `${NTFY}${this.topic}/json?poll=1&since=${encodeURIComponent(this.since)}`);
-      if (reply.status < 200 || reply.status >= 300) throw new Error(`ntfy.sh a répondu ${reply.status}`);
+      if (reply.status < 200 || reply.status >= 300) throw new Error(t("wing.ntfyShAnswered", { status: reply.status }));
       await this.handleLines(reply.body.split("\n"));
     } catch (e) {
       this.fail(e);

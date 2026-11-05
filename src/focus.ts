@@ -8,6 +8,7 @@ import { h, icon, toast } from "./dom.js";
 import { log } from "./logger.js";
 import { remoteRunning } from "./remote.js";
 import type { Store } from "./store.js";
+import { t } from "./i18n.js";
 
 let store: Store | null = null;
 let focused = false;
@@ -58,7 +59,7 @@ export function setFocus(on: boolean) {
   void setFullscreen(on);
   log.debug("ui", `Focus mode ${on ? "on" : "off"}`);
   if (on && !exitButton) {
-    exitButton = h("button.focus-exit", { title: "Quitter le plein écran (Échap)", onclick: () => setFocus(false) }, icon("close"), h("span", null, "Quitter le plein écran"));
+    exitButton = h("button.focus-exit", { title: t("focus.exitFullScreenEsc"), onclick: () => setFocus(false) }, icon("close"), h("span", null, t("focus.exitFullScreen")));
     document.body.append(exitButton);
   }
 }
@@ -71,7 +72,7 @@ export async function openInBrowser() {
   } catch (e) {
     const msg = String((e as Error)?.message ?? e);
     if (msg.includes("local-server-off")) {
-      toast("Active d'abord le serveur d'accès distant (page Accès distant) : c'est lui qui sert la page au navigateur.");
+      toast(t("focus.turnRemoteAccessServerFirstRemote"));
       store.setView("mobile");
     } else toast(msg);
   }
@@ -82,7 +83,7 @@ export function focusButtons(): HTMLElement {
   return h(
     "div.focus-buttons",
     null,
-    h("button.icon-btn", { title: "Plein écran : seulement cette page (Échap pour quitter)", onclick: () => setFocus(true) }, icon("expand")),
-    isTauri() && !isRemote() && remoteRunning() ? h("button.icon-btn", { title: "Ouvrir cette page seule dans le navigateur (pour un 2e écran)", onclick: () => openInBrowser() }, icon("link")) : null,
+    h("button.icon-btn", { title: t("focus.fullScreenPageOnlyEscExit"), onclick: () => setFocus(true) }, icon("expand")),
+    isTauri() && !isRemote() && remoteRunning() ? h("button.icon-btn", { title: t("focus.openPageAloneBrowserSecondScreen"), onclick: () => openInBrowser() }, icon("link")) : null,
   );
 }

@@ -16,30 +16,30 @@ import {
   type DeviceTemplate,
 } from "../binds.js";
 import { h, icon, replace, toast } from "../dom.js";
-import { fold, lang, tr } from "../i18n.js";
+import { fold, gameText, lang, t } from "../i18n.js";
 import type { Ctx, View } from "../context.js";
 import { DEMO_BINDS } from "../demo.js";
 
 const GROUP_FR: Record<string, string> = {
-  Ship: "Vaisseau",
-  Fighter: "Chasseur",
-  Scanners: "Scanners",
-  Multicrew: "Multi-équipage",
+  Ship: t("common.ship"),
+  Fighter: t("controls.fighter"),
+  Scanners: t("common.scanners"),
+  Multicrew: t("controls.multicrew"),
   SRV: "SRV",
-  OnFoot: "À pied",
+  OnFoot: t("common.foot"),
   "Holo-Me": "Holo-Me",
-  "Galaxy map": "Carte galactique",
-  UI: "Interface",
-  Camera: "Caméra",
-  "Head look": "Regard libre",
-  Misc: "Divers",
+  "Galaxy map": t("controls.galaxyMap"),
+  UI: t("controls.interface"),
+  Camera: t("controls.camera"),
+  "Head look": t("controls.headLook"),
+  Misc: t("controls.misc"),
 };
 const MODES: [string, string, string[] | null][] = [
-  ["all", "Tout", null],
-  ["ship", "Vaisseau", ["Ship", "Fighter", "Scanners", "Multicrew"]],
+  ["all", t("controls.all"), null],
+  ["ship", t("common.ship"), ["Ship", "Fighter", "Scanners", "Multicrew"]],
   ["srv", "SRV", ["SRV"]],
-  ["foot", "À pied", ["OnFoot", "Holo-Me"]],
-  ["ui", "Cartes & interface", ["Galaxy map", "UI", "Camera", "Head look", "Misc"]],
+  ["foot", t("common.foot"), ["OnFoot", "Holo-Me"]],
+  ["ui", t("controls.mapsUi"), ["Galaxy map", "UI", "Camera", "Head look", "Misc"]],
 ];
 const groupClass = (g: string) => `g-${g.toLowerCase().replace(/[^a-z]/g, "")}`;
 
@@ -75,8 +75,8 @@ export class ControlsView implements View {
   constructor(private ctx: Ctx) {}
 
   async mount(root: HTMLElement) {
-    replace(root, h("header.view-head", null, h("h1", null, "Commandes & contrôleurs")), this.backupCard(), this.body);
-    replace(this.body, h("p.sub", null, h("span.spinner"), " Lecture de tes raccourcis…"));
+    replace(root, h("header.view-head", null, h("h1", null, t("controls.controlsDevices"))), this.backupCard(), this.body);
+    replace(this.body, h("p.sub", null, h("span.spinner"), (" " + t("controls.readingBindings"))));
     try {
       this.meta = await loadMeta();
       await this.load();
@@ -99,7 +99,7 @@ export class ControlsView implements View {
       this.binds = f.binds;
       this.layout = f.keyboardLayout;
       this.presets = [f.preset];
-      this.note = "Mode démo : raccourcis d'exemple.";
+      this.note = t("controls.demoModeSampleBindings");
       return this.render();
     }
     this.files = (await listOptionFiles()).filter((f) => f.folder === "Bindings");
@@ -120,7 +120,7 @@ export class ControlsView implements View {
       parsed.set(p, file ? parseBinds(await readOptionFile("Bindings", file)) : null);
     }
     const missing = [...parsed.entries()].filter(([, v]) => !v).map(([k]) => k);
-    if (missing.length) this.note = `Préréglage(s) d'origine du jeu, non copiés dans ton dossier : ${missing.join(", ")}. Crée un préréglage personnalisé en jeu pour les voir ici.`;
+    if (missing.length) this.note = t("controls.builtGamePresetSNotCopied", { value: missing.join(", ") });
     this.binds = [];
     for (const [preset, f] of parsed) {
       if (!f) continue;
@@ -131,7 +131,7 @@ export class ControlsView implements View {
       }
     }
     if (!lines.length && names.some((n) => n.endsWith(".binds"))) {
-      this.note = "Aucun préréglage actif trouvé (StartPreset). Choisis un fichier ci-dessous.";
+      this.note = t("controls.noActivePresetFoundStartpresetPick");
     }
     this.render();
   }
@@ -142,7 +142,7 @@ export class ControlsView implements View {
     const doExport = async (graphics: boolean) => {
       try {
         const path = await exportConfig(graphics);
-        replace(this.backupOut, h("p", null, icon("check"), " Exporté : ", h("code", null, path), " ", h("button.ghost.small", { onclick: () => revealPath(path) }, "Afficher dans l'explorateur")));
+        replace(this.backupOut, h("p", null, icon("check"), (" " + t("controls.exported") + " "), h("code", null, path), " ", h("button.ghost.small", { onclick: () => revealPath(path) }, t("controls.showExplorer"))));
       } catch (e) {
         replace(this.backupOut, h("p.error", null, icon("warn"), ` ${String((e as Error).message ?? e)}`));
       }
@@ -159,12 +159,12 @@ export class ControlsView implements View {
           const report = await importConfig(new Uint8Array(await f.arrayBuffer()));
           replace(
             this.backupOut,
-            h("p", null, icon("check"), ` ${report.written.length} fichier(s) restauré(s). Ancienne config sauvegardée : `, h("code", null, report.backup), " ", h("button.ghost.small", { onclick: () => revealPath(report.backup) }, "Afficher")),
+            h("p", null, icon("check"), (" " + t("controls.filesRestored", { count: report.written.length }) + " "), h("code", null, report.backup), " ", h("button.ghost.small", { onclick: () => revealPath(report.backup) }, t("controls.show"))),
             h("p.sub", null, report.written.join(" · ")),
-            report.skipped.length ? h("p.sub", null, `Ignoré : ${report.skipped.join(", ")}`) : null,
-            h("p.notice", null, icon("warn"), " Relance Elite Dangerous (ou va dans Options → Commandes) pour que le jeu relise les fichiers."),
+            report.skipped.length ? h("p.sub", null, t("controls.skipped", { value: report.skipped.join(", ") })) : null,
+            h("p.notice", null, icon("warn"), (" " + t("controls.restartEliteDangerousOpenOptionsControls"))),
           );
-          toast("Configuration importée");
+          toast(t("controls.configurationImported"));
           this.chosen = "";
           await this.load();
         } catch (err) {
@@ -175,13 +175,13 @@ export class ControlsView implements View {
     return h(
       "section.card.backup",
       null,
-      h("div", null, h("h3", null, "Sauvegarder / restaurer ta configuration"), h("p.sub", null, "Exporte tes raccourcis (et tes réglages graphiques) dans un zip, dans Documents\\EDCH. L'import sauvegarde d'abord ta configuration actuelle. Ferme le jeu avant d'importer.")),
+      h("div", null, h("h3", null, t("controls.backUpRestoreConfiguration")), h("p.sub", null, t("controls.exportsBindingsGraphicsSettingsZipDocuments"))),
       h(
         "div.row",
         null,
-        h("button.primary", { onclick: () => doExport(false) }, "Exporter les raccourcis"),
-        h("button.ghost", { onclick: () => doExport(true) }, "Raccourcis + graphismes"),
-        h("label.file-btn", null, "Importer un zip…", file),
+        h("button.primary", { onclick: () => doExport(false) }, t("controls.exportBindings")),
+        h("button.ghost", { onclick: () => doExport(true) }, t("controls.bindingsGraphics")),
+        h("label.file-btn", null, t("controls.importZip"), file),
       ),
       this.backupOut,
     );
@@ -200,7 +200,7 @@ export class ControlsView implements View {
       if (!q) return true;
       const name = actionName(meta, b.action);
       const combo = comboLabel(meta, b);
-      return [name, tr(name), combo, tr(combo), b.action, GROUP_FR[g] ?? g, tr(GROUP_FR[g] ?? g)].some((t) => fold(t).includes(q));
+      return [name, gameText(name), combo, gameText(combo), b.action, GROUP_FR[g] ?? g].some((candidate) => fold(candidate).includes(q));
     });
   }
 
@@ -215,7 +215,7 @@ export class ControlsView implements View {
       ? h(
           "select",
           { onchange: (e: Event) => ((this.chosen = (e.target as HTMLSelectElement).value), this.load()) },
-          h("option", { value: "", selected: !this.chosen }, "Préréglage actif"),
+          h("option", { value: "", selected: !this.chosen }, t("controls.activePreset")),
           this.files.filter((f) => f.name.endsWith(".binds")).map((f) => h("option", { value: f.name, selected: f.name === this.chosen }, f.name)),
         )
       : null;
@@ -225,11 +225,11 @@ export class ControlsView implements View {
       h(
         "div.controls-bar",
         null,
-        h("div", null, h("strong", null, this.presets.length ? [...new Set(this.presets)].join(" / ") : "—"), h("span.sub", null, ` · ${this.binds.length} raccourcis · clavier ${this.layout}`)),
+        h("div", null, h("strong", null, this.presets.length ? [...new Set(this.presets)].join(" / ") : "—"), h("span.sub", null, (" " + t("controls.bindingsKeyboard", { count: this.binds.length, layout: this.layout })))),
         fileSelect,
         h("div.segmented", null, MODES.map(([m, l]) => h("button", { class: this.mode === m ? "active" : "", onclick: () => ((this.mode = m), this.render()) }, l))),
-        h("label.search-wrap", null, icon("search"), h("input.search", { type: "search", placeholder: "Chercher une commande…", value: this.query, oninput: (e: Event) => ((this.query = (e.target as HTMLInputElement).value), this.renderDebounced()) })),
-        h("button.ghost", { onclick: () => window.print() }, "Imprimer la fiche"),
+        h("label.search-wrap", null, icon("search"), h("input.search", { type: "search", placeholder: t("controls.searchControl"), value: this.query, oninput: (e: Event) => ((this.query = (e.target as HTMLInputElement).value), this.renderDebounced()) })),
+        h("button.ghost", { onclick: () => window.print() }, t("controls.printSheet")),
       ),
       this.note ? h("p.notice", null, icon("warn"), ` ${this.note}`) : null,
       devices.length
@@ -242,9 +242,9 @@ export class ControlsView implements View {
               return h("button", { class: d === this.device ? "active" : "", onclick: () => ((this.device = d), this.render()) }, h("span", null, info.label), h("small", null, ` ${count}`));
             }),
           )
-        : h("p.empty", null, "Aucun raccourci trouvé."),
+        : h("p.empty", null, t("controls.noBindingsFound")),
       this.device ? this.diagram(this.device, mine) : null,
-      h("p.sub.credits", null, meta.credits),
+      h("p.sub.credits", null, t("controls.credits")),
     );
   }
 
@@ -276,20 +276,20 @@ export class ControlsView implements View {
       this.render();
     };
     const options = Object.entries(meta.templates)
-      .filter(([id, t], i, all) => all.findIndex(([, u]) => u.image === t.image && u.name === t.name) === i && id)
+      .filter(([id, template], i, all) => all.findIndex(([, u]) => u.image === template.image && u.name === template.name) === i && id)
       .sort(([, a], [, b]) => a.name.localeCompare(b.name));
     const picker =
       info.kind === "keyboard" || info.kind === "mouse"
         ? null
         : h(
             "label.tpl-picker",
-            { title: "Ton modèle n'est pas reconnu ? Choisis le plus proche." },
-            "Gabarit ",
+            { title: t("controls.modelIsnTRecognisedPickClosest") },
+            (t("controls.template") + " "),
             h(
               "select",
               { onchange: (e: Event) => choose((e.target as HTMLSelectElement).value) },
-              h("option", { value: "", selected: !tplId }, "Schéma simple (sans image)"),
-              options.map(([id, t]) => h("option", { value: id, selected: id === tplId }, t.name)),
+              h("option", { value: "", selected: !tplId }, t("controls.simpleDiagramNoPicture")),
+              options.map(([id, template]) => h("option", { value: id, selected: id === tplId }, template.name)),
             ),
           );
     const title = h("div.device-title", null, h("h2", null, tpl && !meta.devices[device] ? tpl.name : info.label), h("span.sub", null, device !== info.label ? device : ""), picker);
@@ -317,7 +317,7 @@ export class ControlsView implements View {
       src: `${meta.templateBase}${tpl.image}.jpg`,
       alt: tpl.name,
       onerror: () => {
-        stage.replaceWith(h("div", null, h("p.notice", null, icon("warn"), " Image du gabarit indisponible (hors ligne ?). Schéma simple affiché à la place."), fallback()));
+        stage.replaceWith(h("div", null, h("p.notice", null, icon("warn"), (" " + t("controls.templatePictureUnavailableOfflineShowingSimple"))), fallback()));
       },
     });
     const boxes = [...placed.entries()].map(([key, list]) => {
@@ -346,11 +346,11 @@ export class ControlsView implements View {
     return h(
       "div",
       null,
-      h("div.row", null, h("button.ghost.small", { onclick: () => scroller.classList.toggle("zoom") }, icon("search"), " Agrandir / réduire")),
+      h("div.row", null, h("button.ghost.small", { onclick: () => scroller.classList.toggle("zoom") }, icon("search"), (" " + t("controls.zoomOut")))),
       scroller,
-      h("p.sub.credits", null, "Gabarit EDRefCard (MIT), image chargée depuis le dépôt GitHub d'EDRefCard."),
+      h("p.sub.credits", null, t("controls.edrefcardTemplateMitPictureLoadedFrom")),
       this.legendKey(),
-      unplaced.length ? h("div", null, h("h4.sub", null, "Pas de case sur ce gabarit"), this.legendTable(unplaced)) : null,
+      unplaced.length ? h("div", null, h("h4.sub", null, t("controls.noBoxTemplate")), this.legendTable(unplaced)) : null,
     );
   }
 
@@ -363,10 +363,10 @@ export class ControlsView implements View {
       const mod = b.modifiers.length ? `${b.modifiers.map((m) => keyLabel(meta, m.key)).join(" + ")} + ` : "";
       return h(
         `span.act.${groupClass(g)}`,
-        { title: `${tr(GROUP_FR[g] ?? g)} · ${b.action}${b.slot === "secondary" ? ` (${tr("secondaire")})` : ""}` },
+        { title: `${GROUP_FR[g] ?? g} · ${b.action}${b.slot === "secondary" ? ` (${t("controls.secondary")})` : ""}` },
         mod ? h("em", null, mod) : null,
         actionName(meta, b.action),
-        b.inverted ? h("small", null, " (inversé)") : null,
+        b.inverted ? h("small", null, (" " + t("controls.inverted"))) : null,
       );
     });
   }
@@ -408,33 +408,33 @@ export class ControlsView implements View {
     const iso = kb.format === "iso";
     const at = (row: Id[], cap: string[]) => row.map((id, i) => key(id, cap[i] ?? ""));
     const rows: HTMLElement[][] = [
-      [key("Key_Escape", "Échap"), gap(), ...[1, 2, 3, 4].map((n) => key(`Key_F${n}`, `F${n}`)), gap(), ...[5, 6, 7, 8].map((n) => key(`Key_F${n}`, `F${n}`)), gap(), ...[9, 10, 11, 12].map((n) => key(`Key_F${n}`, `F${n}`))],
+      [key("Key_Escape", t("controls.esc")), gap(), ...[1, 2, 3, 4].map((n) => key(`Key_F${n}`, `F${n}`)), gap(), ...[5, 6, 7, 8].map((n) => key(`Key_F${n}`, `F${n}`)), gap(), ...[9, 10, 11, 12].map((n) => key(`Key_F${n}`, `F${n}`))],
       [...at(ids.num, caps.num), key("Key_Backspace", "⌫", 2)],
       iso
-        ? [key("Key_Tab", "Tab", 1.5), ...at(ids.r1, caps.r1), key("Key_Enter", "Entrée", 1.5)]
+        ? [key("Key_Tab", "Tab", 1.5), ...at(ids.r1, caps.r1), key("Key_Enter", t("controls.enter"), 1.5)]
         : [key("Key_Tab", "Tab", 1.5), ...at(ids.r1, caps.r1), key(ids.extra, caps.extra, 1.5)],
       iso
-        ? [key("Key_CapsLock", "Verr. maj", 1.75), ...at(ids.r2, caps.r2), key(ids.extra, caps.extra), key("Key_Enter", "", 1.25, true)]
-        : [key("Key_CapsLock", "Verr. maj", 1.75), ...at(ids.r2, caps.r2), key("Key_Enter", "Entrée", 2.25)],
+        ? [key("Key_CapsLock", t("controls.capsLock"), 1.75), ...at(ids.r2, caps.r2), key(ids.extra, caps.extra), key("Key_Enter", "", 1.25, true)]
+        : [key("Key_CapsLock", t("controls.capsLock"), 1.75), ...at(ids.r2, caps.r2), key("Key_Enter", t("controls.enter"), 2.25)],
       iso
-        ? [key("Key_LeftShift", "Maj G", 1.25), key(ids.iso, caps.iso), ...at(ids.r3, caps.r3), key("Key_RightShift", "Maj D", 2.75)]
-        : [key("Key_LeftShift", "Maj G", 2.25), ...at(ids.r3, caps.r3), key("Key_RightShift", "Maj D", 2.75)],
-      [key("Key_LeftControl", "Ctrl G", 1.5), key("Key_LeftWin", "Win", 1.25), key("Key_LeftAlt", "Alt", 1.25), key("Key_Space", "Espace", 6.25), key("Key_RightAlt", "Alt Gr", 1.25), key("Key_Apps", "Menu", 1.25), key("Key_RightControl", "Ctrl D", 1.5)],
+        ? [key("Key_LeftShift", t("controls.lShift"), 1.25), key(ids.iso, caps.iso), ...at(ids.r3, caps.r3), key("Key_RightShift", t("controls.rShift"), 2.75)]
+        : [key("Key_LeftShift", t("controls.lShift"), 2.25), ...at(ids.r3, caps.r3), key("Key_RightShift", t("controls.rShift"), 2.75)],
+      [key("Key_LeftControl", t("controls.lCtrl"), 1.5), key("Key_LeftWin", "Win", 1.25), key("Key_LeftAlt", "Alt", 1.25), key("Key_Space", t("controls.space"), 6.25), key("Key_RightAlt", "Alt Gr", 1.25), key("Key_Apps", "Menu", 1.25), key("Key_RightControl", t("controls.rCtrl"), 1.5)],
     ];
     const nav: HTMLElement[][] = [
-      [key("Key_PrintScreen", "Impr"), key("Key_ScrollLock", "Arrêt défil"), key("Key_Pause", "Pause")],
-      [key("Key_Insert", "Inser"), key("Key_Home", "Début"), key("Key_PageUp", "Pg ↑")],
-      [key("Key_Delete", "Suppr"), key("Key_End", "Fin"), key("Key_PageDown", "Pg ↓")],
+      [key("Key_PrintScreen", t("controls.prtsc")), key("Key_ScrollLock", t("controls.scrollLock")), key("Key_Pause", "Pause")],
+      [key("Key_Insert", t("controls.ins")), key("Key_Home", t("controls.home")), key("Key_PageUp", "Pg ↑")],
+      [key("Key_Delete", t("controls.del")), key("Key_End", t("common.end")), key("Key_PageDown", "Pg ↓")],
       [h("div.kb-key.blank"), h("div.kb-key.blank"), h("div.kb-key.blank")],
       [h("div.kb-key.blank"), key("Key_UpArrow", "↑"), h("div.kb-key.blank")],
       [key("Key_LeftArrow", "←"), key("Key_DownArrow", "↓"), key("Key_RightArrow", "→")],
     ];
     const pad: HTMLElement[][] = [
       [h("div.kb-key.blank"), h("div.kb-key.blank"), h("div.kb-key.blank"), h("div.kb-key.blank")],
-      [key("Key_NumLock", "Verr num"), key("Key_Numpad_Divide", "/"), key("Key_Numpad_Multiply", "*"), key("Key_Numpad_Subtract", "-")],
+      [key("Key_NumLock", t("controls.numLock")), key("Key_Numpad_Divide", "/"), key("Key_Numpad_Multiply", "*"), key("Key_Numpad_Subtract", "-")],
       [key("Key_Numpad_7", "7"), key("Key_Numpad_8", "8"), key("Key_Numpad_9", "9"), key("Key_Numpad_Add", "+")],
       [key("Key_Numpad_4", "4"), key("Key_Numpad_5", "5"), key("Key_Numpad_6", "6"), h("div.kb-key.blank")],
-      [key("Key_Numpad_1", "1"), key("Key_Numpad_2", "2"), key("Key_Numpad_3", "3"), key("Key_Numpad_Enter", "Entrée")],
+      [key("Key_Numpad_1", "1"), key("Key_Numpad_2", "2"), key("Key_Numpad_3", "3"), key("Key_Numpad_Enter", t("controls.enter"))],
       [key("Key_Numpad_0", "0", 2), key("Key_Numpad_Decimal", ".")],
     ];
     const block = (rs: HTMLElement[][], cls: string) => h(`div.kb-block.${cls}`, null, rs.map((r) => h("div.kb-row", null, r)));
@@ -445,7 +445,7 @@ export class ControlsView implements View {
       this.keyboardSwitches(),
       h("div.kb", null, block(rows, "main"), block(nav, "nav"), block(pad, "numpad")),
       this.legendKey(),
-      others.length ? h("p.sub", null, `Touches hors schéma : ${[...new Set(others.map((b) => keyLabel(meta, b.key)))].join(", ")}`) : null,
+      others.length ? h("p.sub", null, t("controls.keysNotDiagram", { value: [...new Set(others.map((b) => keyLabel(meta, b.key)))].join(", ") })) : null,
       this.legendTable(binds),
     );
   }
@@ -468,10 +468,10 @@ export class ControlsView implements View {
     return h(
       "div.kb-switches",
       null,
-      h("span.sub", null, "Mon clavier"),
+      h("span.sub", null, t("controls.myKeyboard")),
       seg(kb.layout, [["azerty", "AZERTY"], ["qwerty", "QWERTY"], ["qwertz", "QWERTZ"]], (v) => this.ctx.store.updateSettings({ kbLayout: v })),
       seg(kb.format, [["iso", "ISO"], ["ansi", "ANSI"]], (v) => this.ctx.store.updateSettings({ kbFormat: v })),
-      h("span.sub", { title: "ISO : touche Entrée en L et une touche de plus à côté du Maj gauche (Europe). ANSI : Entrée sur une ligne (États-Unis)." }, `Raccourcis enregistrés pour un clavier ${this.layout}`),
+      h("span.sub", { title: t("controls.isoLShapedEnterKeyOne") }, t("controls.bindingsSavedKeyboard", { layout: this.layout })),
     );
   }
 
@@ -491,9 +491,9 @@ export class ControlsView implements View {
   private gamepad(device: string, binds: Bind[]): HTMLElement {
     const ps = device === "DualShock4" || device === "Playstation3Controller";
     const label: Record<string, string> = ps
-      ? { A: "✕", B: "○", X: "□", Y: "△", LBumper: "L1", RBumper: "R1", LTrigger: "L2", RTrigger: "R2", Back: "Share", Start: "Options", LThumb: "L3", RThumb: "R3", Guide: "PS", Touchpad: "Pavé tactile" }
-      : { A: "A", B: "B", X: "X", Y: "Y", LBumper: "LB", RBumper: "RB", LTrigger: "LT", RTrigger: "RT", Back: "View / Back", Start: "Menu / Start", LThumb: "L3 (clic stick G)", RThumb: "R3 (clic stick D)", Guide: "Guide", Touchpad: "Pavé" };
-    Object.assign(label, { DPadUp: "Croix ↑", DPadDown: "Croix ↓", DPadLeft: "Croix ←", DPadRight: "Croix →", LStickX: "Stick G ↔", LStickY: "Stick G ↕", RStickX: "Stick D ↔", RStickY: "Stick D ↕" });
+      ? { A: "✕", B: "○", X: "□", Y: "△", LBumper: "L1", RBumper: "R1", LTrigger: "L2", RTrigger: "R2", Back: "Share", Start: "Options", LThumb: "L3", RThumb: "R3", Guide: "PS", Touchpad: t("controls.touchpad") }
+      : { A: "A", B: "B", X: "X", Y: "Y", LBumper: "LB", RBumper: "RB", LTrigger: "LT", RTrigger: "RT", Back: "View / Back", Start: "Menu / Start", LThumb: t("controls.l3LeftStickClick"), RThumb: t("controls.r3RightStickClick"), Guide: "Guide", Touchpad: t("controls.pad") };
+    Object.assign(label, { DPadUp: t("controls.dPad2"), DPadDown: t("controls.dPad4"), DPadLeft: t("controls.dPad"), DPadRight: t("controls.dPad3"), LStickX: t("controls.leftStick"), LStickY: t("controls.leftStick2"), RStickX: t("controls.rightStick"), RStickY: t("controls.rightStick2") });
     const POS: Record<string, [number, number]> = {
       LTrigger: [200, 38], RTrigger: [560, 38], LBumper: [200, 82], RBumper: [560, 82],
       LStickX: [178, 170], LStickY: [230, 222], LThumb: [230, 170],
@@ -519,7 +519,7 @@ export class ControlsView implements View {
       if (text !== undefined) e.textContent = text;
       return e;
     };
-    const svg = el("svg", { viewBox: "0 0 760 380", class: "pad-svg", role: "img", "aria-label": "Schéma de la manette" });
+    const svg = el("svg", { viewBox: "0 0 760 380", class: "pad-svg", role: "img", "aria-label": t("controls.gamepadDiagram") });
     // Body.
     svg.append(
       el("path", { class: "pad-body", d: "M210 95 Q380 70 550 95 Q640 105 670 190 L700 300 Q712 352 660 360 Q615 366 585 320 L545 270 Q380 262 215 270 L175 320 Q145 366 100 360 Q48 352 60 300 L90 190 Q120 105 210 95 Z" }),
@@ -550,7 +550,7 @@ export class ControlsView implements View {
         "div.legend-grid",
         null,
         order.map((c) => h("div.legend-row", null, h("kbd.num", null, h("b", null, String(num.get(c))), ` ${label[c] ?? c}`), h("div.acts", null, this.chips(byControl.get(c)!)))),
-        unknown.length ? h("div.legend-row", null, h("kbd", null, "Autres"), h("div.acts", null, this.chips(unknown))) : null,
+        unknown.length ? h("div.legend-row", null, h("kbd", null, t("controls.other")), h("div.acts", null, this.chips(unknown))) : null,
       ),
     );
   }
@@ -582,13 +582,13 @@ export class ControlsView implements View {
       null,
       this.legendKey(),
       axes.size
-        ? h("div.board-section", null, h("h4", null, mouse ? "Axes et molette" : "Axes"), h("div.axis-list", null, [...axes.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([k, list]) => h("div.axis-row", null, h("span.axis-name", null, keyLabel(meta, k)), h("span.axis-bar", null, h("span")), h("div.acts", null, this.chips(list))))))
+        ? h("div.board-section", null, h("h4", null, mouse ? t("controls.axesWheel") : t("controls.axes")), h("div.axis-list", null, [...axes.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([k, list]) => h("div.axis-row", null, h("span.axis-name", null, keyLabel(meta, k)), h("span.axis-bar", null, h("span")), h("div.acts", null, this.chips(list))))))
         : null,
       hats.size
         ? h(
             "div.board-section",
             null,
-            h("h4", null, "Chapeaux (POV)"),
+            h("h4", null, t("controls.hatsPov")),
             h(
               "div.hat-list",
               null,
@@ -597,13 +597,13 @@ export class ControlsView implements View {
                   const list = dirs.get(d);
                   return h(`div.hat-cell.${d.toLowerCase()}${list ? ".bound" : ""}`, null, h("span.btn-label", null, arrow), list ? h("div.acts", null, this.chips(list)) : null);
                 };
-                return h("div.hat", null, h("span.hat-title", null, `Chapeau ${id}`), cell("Up", "↑"), cell("Left", "←"), h("div.hat-center"), cell("Right", "→"), cell("Down", "↓"));
+                return h("div.hat", null, h("span.hat-title", null, t("controls.hat", { id })), cell("Up", "↑"), cell("Left", "←"), h("div.hat-center"), cell("Right", "→"), cell("Down", "↓"));
               }),
             ),
           )
         : null,
       buttons.size
-        ? h("div.board-section", null, h("h4", null, "Boutons"), h("div.btn-grid", null, [...buttons.entries()].sort(([a], [b]) => n(a) - n(b)).map(([k, list]) => tile(keyLabel(meta, k), list))))
+        ? h("div.board-section", null, h("h4", null, t("controls.buttons")), h("div.btn-grid", null, [...buttons.entries()].sort(([a], [b]) => n(a) - n(b)).map(([k, list]) => tile(keyLabel(meta, k), list))))
         : null,
     );
   }

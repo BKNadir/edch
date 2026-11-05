@@ -66,7 +66,7 @@ pub fn launch_game(method: String, path: String) -> Result<(), String> {
             let ok_ext = p.extension().map(|e| e.eq_ignore_ascii_case("exe") || e.eq_ignore_ascii_case("sh") || e.eq_ignore_ascii_case("lnk")).unwrap_or(false)
                 || p.file_name().map(|n| n.to_string_lossy().to_lowercase().contains("minedlauncher")).unwrap_or(false);
             if !p.is_file() || !ok_ext {
-                return Err("Lanceur introuvable : choisis le fichier dans les Paramètres".into());
+                return Err("launcherNotFound".into());
             }
             logs::info("game", "Launching the game with the chosen launcher");
             let dir = p.parent().map(|d| d.to_path_buf()).unwrap_or_default();
@@ -76,7 +76,7 @@ pub fn launch_game(method: String, path: String) -> Result<(), String> {
             }
             return std::process::Command::new(p).current_dir(dir).spawn().map(|_| ()).map_err(|e| e.to_string());
         }
-        _ => return Err("Méthode de lancement inconnue".into()),
+        _ => return Err("unknownLaunchMethod".into()),
     };
     logs::info("game", &format!("Launching the game through {method}"));
     open_uri(&target)

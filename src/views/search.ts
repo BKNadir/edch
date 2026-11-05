@@ -1,4 +1,4 @@
-import { gameEnglish, gameName, resolveGameName, fold } from "../i18n.js";
+import { fold, gameEnglish, gameName, resolveGameName, t } from "../i18n.js";
 import { locale } from "../i18n.js";
 import { spanshPost } from "../bridge.js";
 import { h, icon, fmt, replace } from "../dom.js";
@@ -17,19 +17,19 @@ const STATION_TYPES = [
 const CARRIER = "Drake-Class Carrier";
 const SERVICES: [string, string][] = [
   ["Interstellar Factors Contact", "Interstellar Factors"],
-  ["Material Trader", "Trader de matériaux"],
-  ["Technology Broker", "Courtier technologique"],
+  ["Material Trader", t("search.materialTrader")],
+  ["Technology Broker", t("common.technologyBroker")],
   ["Universal Cartographics", "Universal Cartographics"],
   ["Vista Genomics", "Vista Genomics"],
-  ["Black Market", "Marché noir"],
-  ["Shipyard", "Chantier naval"],
-  ["Outfitting", "Équipement"],
-  ["Refuel", "Ravitaillement"],
-  ["Repair", "Réparation"],
-  ["Restock", "Munitions"],
-  ["Search and Rescue", "Recherche et sauvetage"],
+  ["Black Market", t("search.blackMarket")],
+  ["Shipyard", t("search.shipyard")],
+  ["Outfitting", t("search.outfitting")],
+  ["Refuel", t("search.refuel")],
+  ["Repair", t("search.repair")],
+  ["Restock", t("search.restock")],
+  ["Search and Rescue", t("search.searchRescue")],
   ["Pioneer Supplies", "Pioneer Supplies"],
-  ["Bartender", "Barman"],
+  ["Bartender", t("common.bartender")],
   ["Apex Interstellar", "Apex Interstellar"],
   ["Frontline Solutions", "Frontline Solutions"],
 ];
@@ -69,7 +69,7 @@ export class SearchView implements View {
       h("datalist#dl-ships", null, g.ships.map((s) => h("option", { value: s }))),
       h("datalist#dl-modules", null, g.modules.map((s) => h("option", { value: gameName(s) }))),
     );
-    replace(root, h("header.view-head", null, h("h1", null, "Recherche"), this.tabs), lists, h("section.card", null, this.form), this.out);
+    replace(root, h("header.view-head", null, h("h1", null, t("common.search2")), this.tabs), lists, h("section.card", null, this.form), this.out);
     if (pending) {
       this.tab = pending.tab;
       this.values[pending.tab] = gameName(pending.value);
@@ -86,48 +86,48 @@ export class SearchView implements View {
     // Results are explicit (button); only the "around X" line follows the commander.
     if (!this.root) return;
     const where = this.form.querySelector(".opts .sub");
-    if (where) where.textContent = `Autour de ${referenceOf(this.ctx).label}, ${this.ctx.store.state.settings.maxDistance} al max`;
+    if (where) where.textContent = t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: this.ctx.store.state.settings.maxDistance });
   }
 
   private renderTabs() {
     const labels: [Tab, string][] = [
-      ["buy", "Acheter une marchandise"],
-      ["sell", "Vendre une marchandise"],
-      ["ship", "Vaisseaux"],
-      ["module", "Modules"],
-      ["service", "Services"],
+      ["buy", t("search.buyCommodity")],
+      ["sell", t("search.sellCommodity")],
+      ["ship", t("search.ships")],
+      ["module", t("common.modules")],
+      ["service", t("search.services")],
     ];
     replace(
       this.tabs,
-      labels.map(([t, l]) => h("button", { class: this.tab === t ? "active" : "", onclick: () => ((this.tab = t), this.renderTabs(), this.renderForm(), replace(this.out)) }, l)),
+      labels.map(([tab, l]) => h("button", { class: this.tab === tab ? "active" : "", onclick: () => ((this.tab = tab), this.renderTabs(), this.renderForm(), replace(this.out)) }, l)),
     );
   }
 
   private renderForm() {
-    const t = this.tab;
+    const tab = this.tab;
     const input = (list: string, placeholder: string) =>
       h("input.big", {
         type: "text",
-        value: this.values[t],
+        value: this.values[tab],
         list,
         placeholder,
         spellcheck: false,
-        oninput: (e: Event) => (this.values[t] = (e.target as HTMLInputElement).value),
+        oninput: (e: Event) => (this.values[tab] = (e.target as HTMLInputElement).value),
         onkeydown: (e: KeyboardEvent) => e.key === "Enter" && this.run(),
       });
     const check = (key: "largePad" | "carriers" | "planetary" | "sortPrice", label: string) =>
       h("label.check", null, h("input", { type: "checkbox", checked: this.opts[key], onchange: (e: Event) => (this.opts[key] = (e.target as HTMLInputElement).checked) }), ` ${label}`);
 
     let main: HTMLElement;
-    if (t === "buy" || t === "sell") main = input("dl-commodities", "Marchandise (ex. Tritium, Or, Diamants basse température)");
-    else if (t === "ship") main = input("dl-ships", "Vaisseau (ex. Krait MkII, Anaconda)");
-    else if (t === "module")
+    if (tab === "buy" || tab === "sell") main = input("dl-commodities", t("search.commodityEGTritiumGoldLow"));
+    else if (tab === "ship") main = input("dl-ships", t("search.shipEGKraitMkiiAnaconda"));
+    else if (tab === "module")
       main = h(
         "div.row",
         null,
-        input("dl-modules", "Module (ex. Réacteur FSD, Survolteur de bouclier)"),
-        h("select", { title: "Classe", onchange: (e: Event) => (this.cls = (e.target as HTMLSelectElement).value) }, CLASSES.map((c) => h("option", { value: c, selected: c === this.cls }, c ? `Classe ${c}` : "Toute classe"))),
-        h("select", { title: "Classe", onchange: (e: Event) => (this.rating = (e.target as HTMLSelectElement).value) }, RATINGS.map((r) => h("option", { value: r, selected: r === this.rating }, r ? `Note ${r}` : "Toute note"))),
+        input("dl-modules", t("search.moduleEGFrameShiftDrive")),
+        h("select", { title: t("search.moduleClass"), onchange: (e: Event) => (this.cls = (e.target as HTMLSelectElement).value) }, CLASSES.map((c) => h("option", { value: c, selected: c === this.cls }, c ? t("search.class", { c }) : t("search.anyClass")))),
+        h("select", { title: t("search.moduleRating"), onchange: (e: Event) => (this.rating = (e.target as HTMLSelectElement).value) }, RATINGS.map((r) => h("option", { value: r, selected: r === this.rating }, r ? t("search.rating", { r }) : t("search.anyRating")))),
       );
     else
       main = h(
@@ -138,15 +138,15 @@ export class SearchView implements View {
 
     replace(
       this.form,
-      h("div.row", null, main, h("button.primary", { onclick: () => this.run() }, icon("search"), " Chercher")),
+      h("div.row", null, main, h("button.primary", { onclick: () => this.run() }, icon("search"), (" " + t("common.search")))),
       h(
         "div.row.opts",
         null,
-        check("largePad", "Pad L seulement"),
-        check("carriers", "Inclure les Fleet Carriers"),
-        check("planetary", "Inclure les ports planétaires"),
-        t === "buy" || t === "sell" ? check("sortPrice", t === "buy" ? "Trier par prix le plus bas" : "Trier par meilleur prix") : null,
-        h("span.sub", null, `Autour de ${referenceOf(this.ctx).label}, ${this.ctx.store.state.settings.maxDistance} al max`),
+        check("largePad", t("search.lPadOnly")),
+        check("carriers", t("search.includeFleetCarriers")),
+        check("planetary", t("search.includePlanetaryPorts")),
+        tab === "buy" || tab === "sell" ? check("sortPrice", tab === "buy" ? t("search.sortLowestPrice") : t("search.sortBestPrice")) : null,
+        h("span.sub", null, t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: this.ctx.store.state.settings.maxDistance })),
       ),
     );
   }
@@ -164,8 +164,8 @@ export class SearchView implements View {
   }
 
   private async run() {
-    const t = this.tab;
-    const typed = this.values[t].trim();
+    const tab = this.tab;
+    const typed = this.values[tab].trim();
     if (!typed) return;
     // Names can be typed in the app's language or in English; Spansh only knows English.
     const value = gameEnglish(typed);
@@ -177,9 +177,9 @@ export class SearchView implements View {
       const r = resolveGameName(typed, candidates);
       if (r.name) {
         if (fold(gameName(r.name)) !== fold(typed) && fold(r.name) !== fold(typed)) {
-          this.values[t] = gameName(r.name);
+          this.values[tab] = gameName(r.name);
           const input = this.form.querySelector<HTMLInputElement>("input.big");
-          if (input) input.value = this.values[t];
+          if (input) input.value = this.values[tab];
         }
         return r.name;
       }
@@ -193,25 +193,25 @@ export class SearchView implements View {
               ` ${several(typed)} `,
               r.suggestions.flatMap((sug, i) => [
                 i ? " · " : "",
-                h("button.inline-link.ref-link", { "data-no-tr": "", onclick: () => ((this.values[t] = gameName(sug)), this.renderForm(), this.run()) }, gameName(sug)),
+                h("button.inline-link.ref-link", { "data-no-tr": "", onclick: () => ((this.values[tab] = gameName(sug)), this.renderForm(), this.run()) }, gameName(sug)),
               ]),
             )
-          : h("p.empty", null, `Aucun nom connu ne correspond à « ${typed} ». Choisis dans la liste qui s'affiche quand tu tapes.`),
+          : h("p.empty", null, t("search.noKnownNameMatchesPickOne", { typed })),
       );
       return null;
     };
-    if (t === "buy" || t === "sell") {
-      const found = pick(g.commodities.map((c) => c.name), (x) => `Plusieurs marchandises correspondent à « ${x} » :`);
+    if (tab === "buy" || tab === "sell") {
+      const found = pick(g.commodities.map((c) => c.name), (x) => t("search.severalCommoditiesMatch", { x }));
       if (!found) return;
       name = found;
-      f.market = [{ name, [t === "buy" ? "supply" : "demand"]: { value: [String(this.opts.minQty), "1000000000"], comparison: "<=>" } }];
-    } else if (t === "ship") {
-      const found = pick(g.ships, (x) => `Plusieurs vaisseaux correspondent à « ${x} » :`);
+      f.market = [{ name, [tab === "buy" ? "supply" : "demand"]: { value: [String(this.opts.minQty), "1000000000"], comparison: "<=>" } }];
+    } else if (tab === "ship") {
+      const found = pick(g.ships, (x) => t("search.severalShipsMatch", { x }));
       if (!found) return;
       name = found;
       f.ships = { value: [name] };
-    } else if (t === "module") {
-      const found = pick(g.modules, (x) => `Plusieurs modules correspondent à « ${x} » :`);
+    } else if (tab === "module") {
+      const found = pick(g.modules, (x) => t("search.severalModulesMatch", { x }));
       if (!found) return;
       name = found;
       const group: Json = { name: { value: [name, ...(g.moduleAliases[name] ?? [])] } };
@@ -226,30 +226,30 @@ export class SearchView implements View {
     const body: Json = {
       filters: f,
       sort: [{ distance: { direction: "asc" } }],
-      size: t === "buy" || t === "sell" ? 50 : 20,
+      size: tab === "buy" || tab === "sell" ? 50 : 20,
       page: 0,
       ...(ref.coords ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } } : { reference_system: ref.system }),
     };
-    replace(this.out, h("p.sub", null, h("span.spinner"), " Recherche Spansh…"));
+    replace(this.out, h("p.sub", null, h("span.spinner"), (" " + t("common.searchingSpansh"))));
     const id = ++this.runId;
     try {
       const res = await spanshPost("stations/search", body);
       if (id !== this.runId) return;
       let rows: Json[] = Array.isArray(res?.results) ? res.results : [];
-      if ((t === "buy" || t === "sell") && this.opts.sortPrice) {
+      if ((tab === "buy" || tab === "sell") && this.opts.sortPrice) {
         const price = (r: Json) => {
           const m = (r.market ?? []).find((x: Json) => String(x.commodity).toLowerCase() === name.toLowerCase());
-          return m ? Number(t === "buy" ? m.buy_price : m.sell_price) : NaN;
+          return m ? Number(tab === "buy" ? m.buy_price : m.sell_price) : NaN;
         };
-        rows = rows.filter((r) => !Number.isNaN(price(r))).sort((a, b) => (t === "buy" ? price(a) - price(b) : price(b) - price(a)));
+        rows = rows.filter((r) => !Number.isNaN(price(r))).sort((a, b) => (tab === "buy" ? price(a) - price(b) : price(b) - price(a)));
       }
       if (!rows.length) {
-        replace(this.out, h("p.empty", null, `Rien trouvé à moins de ${this.ctx.store.state.settings.maxDistance} al. Augmente la distance dans les Paramètres ou vérifie le nom.`));
+        replace(this.out, h("p.empty", null, t("search.nothingFoundWithinLyIncreaseDistance", { maxDistance: this.ctx.store.state.settings.maxDistance })));
         return;
       }
       replace(
         this.out,
-        h("p.sub", null, `${fmt(Number(res.count ?? rows.length))} stations correspondent · ${rows.length} affichées`),
+        h("p.sub", null, t("search.matchingStationsShown", { count: fmt(Number(res.count ?? rows.length)), count2: rows.length })),
         h(
           "table.table.search-table",
           null,
@@ -259,14 +259,14 @@ export class SearchView implements View {
             h(
               "tr",
               null,
-              h("th", null, "Station"),
-              h("th.num", null, "Distance"),
-              h("th", null, t === "buy" ? "Prix d'achat · stock" : t === "sell" ? "Prix de vente · demande" : t === "service" ? "Type" : "Détail"),
-              h("th", null, "Pad / arrivée"),
-              h("th", null, "Màj"),
+              h("th", null, t("common.station")),
+              h("th.num", null, t("common.distance")),
+              h("th", null, tab === "buy" ? t("search.buyPriceStock") : tab === "sell" ? t("search.sellPriceDemand") : tab === "service" ? t("common.type") : t("search.details")),
+              h("th", null, t("search.padArrival")),
+              h("th", null, t("search.updated")),
             ),
           ),
-          h("tbody", null, rows.map((r) => this.row(r, t, name))),
+          h("tbody", null, rows.map((r) => this.row(r, tab, name))),
         ),
       );
     } catch (e) {
@@ -275,17 +275,17 @@ export class SearchView implements View {
     }
   }
 
-  private row(r: Json, t: Tab, name: string): HTMLElement {
+  private row(r: Json, tab: Tab, name: string): HTMLElement {
     let detail: (string | HTMLElement)[] = [];
-    if (t === "buy" || t === "sell") {
+    if (tab === "buy" || tab === "sell") {
       const m = (r.market ?? []).find((x: Json) => String(x.commodity).toLowerCase() === name.toLowerCase());
-      if (m) detail = t === "buy" ? [h("strong", null, `${fmt(m.buy_price)} cr`), ` · ${fmt(m.supply)} en stock`] : [h("strong", null, `${fmt(m.sell_price)} cr`), ` · demande ${fmt(m.demand)}`];
-    } else if (t === "ship") {
+      if (m) detail = tab === "buy" ? [h("strong", null, t("search.cr", { buyPrice: fmt(m.buy_price) })), (" " + t("search.stock", { supply: fmt(m.supply) }))] : [h("strong", null, t("search.cr", { buyPrice: fmt(m.sell_price) })), (" " + t("search.demand", { demand: fmt(m.demand) }))];
+    } else if (tab === "ship") {
       const s = (r.ships ?? []).find((x: Json) => String(x.name).toLowerCase() === name.toLowerCase());
-      detail = [s?.price ? h("strong", null, `${fmt(s.price)} cr`) : "En vente"];
-    } else if (t === "module") {
+      detail = [s?.price ? h("strong", null, t("search.cr", { buyPrice: fmt(s.price) })) : t("search.sale")];
+    } else if (tab === "module") {
       const mods = (r.modules ?? []).filter((x: Json) => String(x.name).toLowerCase() === name.toLowerCase() || (this.ctx.game.data.moduleAliases[name] ?? []).some((a) => a.toLowerCase() === String(x.name).toLowerCase()));
-      detail = [mods.slice(0, 6).map((x: Json) => `${x.class ?? ""}${x.rating ?? ""}`).join(" · ") || "Disponible"];
+      detail = [mods.slice(0, 6).map((x: Json) => `${x.class ?? ""}${x.rating ?? ""}`).join(" · ") || t("search.available")];
     } else detail = [r.type ?? ""];
     const pad = r.has_large_pad ? "L" : r.medium_pads > 0 ? "M" : r.small_pads > 0 ? "S" : "?";
     const age = r.market_updated_at ?? r.outfitting_updated_at ?? r.shipyard_updated_at ?? r.updated_at;
@@ -295,12 +295,12 @@ export class SearchView implements View {
       h(
         "td",
         null,
-        h("button.sys", { title: `Copier « ${r.system_name} »`, onclick: () => copySystem(r.system_name) }, icon("copy"), h("span", null, `${r.name} | ${r.system_name}`)),
-        h("button.link", { title: "Ouvrir sur Inara", onclick: () => openUrl(inaraSystem(r.system_name)) }, "Inara", icon("link")),
+        h("button.sys", { title: t("common.copy", { name: r.system_name }), onclick: () => copySystem(r.system_name) }, icon("copy"), h("span", null, `${r.name} | ${r.system_name}`)),
+        h("button.link", { title: t("search.openInara"), onclick: () => openUrl(inaraSystem(r.system_name)) }, "Inara", icon("link")),
       ),
       h("td.num", null, fmtLy(Number(r.distance))),
       h("td", null, detail),
-      h("td", null, `${pad} · ${r.distance_to_arrival !== undefined ? `${fmt(Math.round(Number(r.distance_to_arrival)))} ls` : "?"}`),
+      h("td", null, `${pad} · ${r.distance_to_arrival !== undefined ? t("common.ls", { locale: fmt(Math.round(Number(r.distance_to_arrival))) }) : "?"}`),
       h("td.sub", null, age ? new Date(age.endsWith("Z") || age.includes("+") ? age : `${age}Z`).toLocaleDateString(locale()) : ""),
     );
   }

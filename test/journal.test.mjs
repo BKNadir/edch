@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import "./i18n-setup.mjs";
 import { readFileSync } from "node:fs";
 import { applyLines, applyLocker, emptyState } from "../dist/js/journal.js";
 import { tradeRate } from "../dist/js/trade.js";

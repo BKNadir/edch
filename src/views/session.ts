@@ -1,6 +1,7 @@
 import { fmt, h, replace } from "../dom.js";
 import { credits, duration, relTime } from "../time.js";
 import type { Ctx, View } from "../context.js";
+import { t } from "../i18n.js";
 
 export class SessionView implements View {
   private root?: HTMLElement;
@@ -19,14 +20,14 @@ export class SessionView implements View {
     if (!this.root) return;
     const s = this.ctx.store.state.activity.session;
     const earned: [string, number][] = [
-      ["Primes", s.bounties],
-      ["Obligations de combat", s.bonds],
-      ["Commerce (bénéfice)", s.trade],
-      ["Exploration", s.exploration],
-      ["Exobiologie", s.exobiology],
-      ["Missions", s.missions],
+      [t("session.bounties"), s.bounties],
+      [t("session.combatBonds"), s.bonds],
+      [t("session.tradeProfit"), s.trade],
+      [t("common.exploration"), s.exploration],
+      [t("common.exobiology"), s.exobiology],
+      [t("common.missions"), s.missions],
     ];
-    const total = earned.reduce((t, [, v]) => t + v, 0);
+    const total = earned.reduce((sum, [, v]) => sum + v, 0);
     const max = Math.max(1, ...earned.map(([, v]) => Math.abs(v)));
     const elapsed = s.start ? Date.now() - Date.parse(s.start) : 0;
     replace(
@@ -34,12 +35,12 @@ export class SessionView implements View {
       h(
         "header.view-head",
         null,
-        h("div", null, h("h1", null, "Bilan de session"), h("p.sub", null, s.start ? `Depuis le lancement du jeu, ${relTime(s.start)} (${duration(elapsed)})` : "Lance Elite Dangerous : le bilan démarre à la connexion.")),
+        h("div", null, h("h1", null, t("session.sessionSummary")), h("p.sub", null, s.start ? t("session.sinceGameStarted", { relTime: relTime(s.start), duration: duration(elapsed) }) : t("session.startEliteDangerousSummaryBeginsWhen"))),
       ),
       h(
         "section.card",
         null,
-        h("div.sync-head", null, h("h3", null, "Crédits gagnés"), h("strong.big-number", null, `${credits(total)} Cr`)),
+        h("div.sync-head", null, h("h3", null, t("session.creditsEarned")), h("strong.big-number", null, `${credits(total)} Cr`)),
         h(
           "div.earn-bars",
           null,
@@ -47,22 +48,22 @@ export class SessionView implements View {
             h("div.earn-row", null, h("span", null, label), h("div.bar", null, h("span", { style: { width: `${(Math.abs(v) / max) * 100}%` } })), h("strong", null, `${credits(v)} Cr`)),
           ),
         ),
-        elapsed > 10 * 60000 && total > 0 ? h("p.sub", null, `≈ ${credits((total / elapsed) * 3600000)} Cr par heure`) : null,
+        elapsed > 10 * 60000 && total > 0 ? h("p.sub", null, t("session.crPerHour", { value: credits((total / elapsed) * 3600000) })) : null,
       ),
       h(
         "section.card",
         null,
-        h("h3", null, "Activité"),
+        h("h3", null, t("common.activity")),
         h(
           "div.stats",
           null,
-          h("div.stat", null, h("strong", null, fmt(s.jumps)), h("span.sub", null, "sauts")),
-          h("div.stat", null, h("strong", null, fmt(Math.round(s.distance))), h("span.sub", null, "al parcourues")),
-          h("div.stat", null, h("strong", null, fmt(s.missionsDone)), h("span.sub", null, "missions terminées")),
-          h("div.stat", null, h("strong", null, fmt(s.kills)), h("span.sub", null, "éliminations")),
-          h("div.stat", null, h("strong", null, fmt(s.materials)), h("span.sub", null, "matériaux ramassés")),
-          h("div.stat", null, h("strong", null, fmt(s.refined)), h("span.sub", null, "t minées")),
-          s.deaths ? h("div.stat.bad", null, h("strong", null, fmt(s.deaths)), h("span.sub", null, "destructions")) : null,
+          h("div.stat", null, h("strong", null, fmt(s.jumps)), h("span.sub", null, t("session.jumps"))),
+          h("div.stat", null, h("strong", null, fmt(Math.round(s.distance))), h("span.sub", null, t("session.lyTravelled"))),
+          h("div.stat", null, h("strong", null, fmt(s.missionsDone)), h("span.sub", null, t("session.missionsCompleted"))),
+          h("div.stat", null, h("strong", null, fmt(s.kills)), h("span.sub", null, t("session.kills"))),
+          h("div.stat", null, h("strong", null, fmt(s.materials)), h("span.sub", null, t("session.materialsCollected"))),
+          h("div.stat", null, h("strong", null, fmt(s.refined)), h("span.sub", null, t("session.tMined"))),
+          s.deaths ? h("div.stat.bad", null, h("strong", null, fmt(s.deaths)), h("span.sub", null, t("session.deaths"))) : null,
         ),
       ),
     );

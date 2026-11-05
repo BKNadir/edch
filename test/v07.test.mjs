@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import "./i18n-setup.mjs";
 import { webcrypto } from "node:crypto";
 import { applyActivityEvents, bodyValue, emptyActivity, massacreStacks, meritsThisWeek, surfaceDistance, weekStart } from "../dist/js/activity.js";
 import { open, seal, sameMission, topicFor, wingRows } from "../dist/js/wing.js";

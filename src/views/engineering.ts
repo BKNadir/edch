@@ -1,4 +1,4 @@
-import { nameMatches } from "../i18n.js";
+import { nameMatches, t } from "../i18n.js";
 import { h, icon, fmt, replace } from "../dom.js";
 import { ownedOf, type Ctx, type View } from "../context.js";
 import type { Blueprint, BlueprintKind } from "../types.js";
@@ -13,12 +13,12 @@ export function focusModule(module: string) {
 }
 
 const KINDS: { kind: BlueprintKind[]; label: string }[] = [
-  { kind: ["modification"], label: "Modules" },
-  { kind: ["experimental"], label: "Expérimentaux" },
-  { kind: ["synthesis"], label: "Synthèse" },
-  { kind: ["tech-broker"], label: "Courtier tech." },
-  { kind: ["suit", "weapon", "merchant"], label: "Odyssey" },
-  { kind: ["unlock", "bartender"], label: "Déblocages" },
+  { kind: ["modification"], label: t("common.modules") },
+  { kind: ["experimental"], label: t("engineering.experimentals") },
+  { kind: ["synthesis"], label: t("common.synthesis") },
+  { kind: ["tech-broker"], label: t("engineering.techBroker") },
+  { kind: ["suit", "weapon", "merchant"], label: t("common.odyssey") },
+  { kind: ["unlock", "bartender"], label: t("engineering.unlocks") },
 ];
 
 export class EngineeringView implements View {
@@ -36,7 +36,7 @@ export class EngineeringView implements View {
     this.root = root;
     const search = h("input.search", {
       type: "search",
-      placeholder: "Module ou modification…",
+      placeholder: t("engineering.moduleModification"),
       value: this.query,
       oninput: (e: Event) => {
         this.query = (e.target as HTMLInputElement).value.trim().toLowerCase();
@@ -45,7 +45,7 @@ export class EngineeringView implements View {
     });
     replace(
       root,
-      h("header.view-head", null, h("h1", null, "Ingénierie"), h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.tabs)),
+      h("header.view-head", null, h("h1", null, t("common.engineering")), h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.tabs)),
       h("div.bp-layout", null, this.side, this.main),
     );
     this.update();
@@ -114,7 +114,7 @@ export class EngineeringView implements View {
         const known = Boolean(this.ctx.game.material(id));
         return h(
           "button.mat-chip",
-          { class: !known ? "commodity" : have >= n ? "ok" : "short", onclick: () => (known ? this.ctx.store.select(id) : openCommodity(this.ctx.game.nameOf(id))), title: known ? `${have} possédés` : "Marchandise (soute) : où l'acheter" },
+          { class: !known ? "commodity" : have >= n ? "ok" : "short", onclick: () => (known ? this.ctx.store.select(id) : openCommodity(this.ctx.game.nameOf(id))), title: known ? t("engineering.owned", { have }) : t("engineering.commodityCargoWhereBuy") },
           this.ctx.game.nameOf(id),
           h("small", null, known ? `${fmt(Math.min(have, n))}/${n}` : `×${n}`),
         );
@@ -137,7 +137,7 @@ export class EngineeringView implements View {
           "button.primary.small",
           { onclick: () => addToWishlist(this.ctx, max, first.kind === "modification" ? 1 : undefined, max.grade) },
           icon("plus"),
-          grades.length > 1 && first.kind === "modification" ? ` G1→G${max.grade}` : " Wishlist",
+          grades.length > 1 && first.kind === "modification" ? ` G1→G${max.grade}` : (" " + t("common.wishlist")),
         ),
       ),
       max.effects?.length
@@ -153,8 +153,8 @@ export class EngineeringView implements View {
             h(
               "div.grade-title",
               null,
-              bp.grade ? h("strong", null, `Grade ${bp.grade}`) : null,
-              grades.length > 1 ? h("button.ghost.small", { title: "Ajouter seulement ce grade", onclick: () => addToWishlist(this.ctx, bp, bp.grade, bp.grade) }, icon("plus")) : null,
+              bp.grade ? h("strong", null, t("common.grade", { grade: bp.grade })) : null,
+              grades.length > 1 ? h("button.ghost.small", { title: t("engineering.addGradeOnly"), onclick: () => addToWishlist(this.ctx, bp, bp.grade, bp.grade) }, icon("plus")) : null,
             ),
             this.ingredients(bp),
           ),
