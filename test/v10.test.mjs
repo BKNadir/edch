@@ -1,8 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
-import { superchargeMultiplier } from "../dist/js/jump.js";
-import { fold, nameMatches } from "../dist/js/i18n.js";
+import { superchargeMultiplier } from "../dist/js/features/navigation/jumpRange.js";
+import { fold, nameMatches } from "../dist/js/platform/i18n.js";
 
 test("neutron boost: x6 for the Caspian's Mk II drive, x4 otherwise", () => {
   assert.equal(superchargeMultiplier("int_hyperdrive_overcharge_size8_class5_overchargebooster_mkii"), 6);
@@ -18,7 +18,7 @@ test("searches ignore accents, case and punctuation", () => {
   assert.ok(!nameMatches("Gold", "silver"));
 });
 
-import { readGalaxy, shipParams } from "../dist/js/galaxyRoute.js";
+import { readGalaxy, shipParams } from "../dist/js/features/navigation/galaxyRoute.js";
 
 const loadout = (over = {}) => ({
   ship: "caspianexplorer", unladenMass: 600, fuelMain: 64, fuelReserve: 1.2,
@@ -58,7 +58,7 @@ test("exact route: Spansh answer → jumps, refuels and neutrons", () => {
   assert.equal(r.jumps[0].scoopable, true);
 });
 
-import { DEFAULT_ORDER, menuOrder, phoneHiddenPages, visibleNav } from "../dist/js/nav.js";
+import { DEFAULT_ORDER, menuOrder, phoneHiddenPages, visibleNav } from "../dist/js/ui/menu/pages.js";
 
 const ids = (list) => list.map((n) => n.id).join(" ");
 

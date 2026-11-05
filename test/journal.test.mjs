@@ -2,10 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
 import { readFileSync } from "node:fs";
-import { applyLines, applyLocker, emptyState } from "../dist/js/journal.js";
-import { tradeRate } from "../dist/js/trade.js";
-import { buildRequest } from "../dist/js/spansh.js";
-import { findersFor, traderFinder } from "../dist/js/sources.js";
+import { applyLines, applyLocker, emptyState } from "../dist/js/game/journal.js";
+import { tradeRate } from "../dist/js/features/materials/trade.js";
+import { buildRequest } from "../dist/js/services/spansh.js";
+import { findersFor, traderFinder } from "../dist/js/features/materials/sources.js";
 
 const game = JSON.parse(readFileSync(new URL("../public/data/game.json", import.meta.url)));
 const byId = new Map(game.materials.map((m) => [m.id, m]));

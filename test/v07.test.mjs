@@ -2,8 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
 import { webcrypto } from "node:crypto";
-import { applyActivityEvents, bodyValue, emptyActivity, massacreStacks, meritsThisWeek, surfaceDistance, weekStart } from "../dist/js/activity.js";
-import { open, seal, sameMission, topicFor, wingRows } from "../dist/js/wing.js";
+import { applyActivityEvents, bodyValue, emptyActivity, massacreStacks, meritsThisWeek, surfaceDistance, weekStart } from "../dist/js/game/activity.js";
+import { open, seal, sameMission, topicFor, wingRows } from "../dist/js/services/wing.js";
 
 globalThis.crypto ??= webcrypto;
 
@@ -131,7 +131,7 @@ test("wing rows: who holds what", () => {
 });
 
 test("a wingmate's copy matches even with another id, language and no wing flag", async () => {
-  const { sameMission } = await import("../dist/js/wing.js");
+  const { sameMission } = await import("../dist/js/services/wing.js");
   const mine = { id: 1, name: "Mission_Delivery_Boom_Wing_name", title: "Livrer 720 t d'acier", faction: "Timbalderis Liberals", destSystem: "Kamadhenu", destStation: "Velazquez Port", expiry: "2026-11-02T10:00:00Z", status: "active" };
   const theirs = { ...mine, id: 2, title: "Deliver 720 t of steel", expiry: "2026-11-02T10:00:05Z" };
   assert.ok(sameMission(mine, theirs));
@@ -140,7 +140,7 @@ test("a wingmate's copy matches even with another id, language and no wing flag"
 });
 
 test("wing notifications: shared missions only, then acceptances", async () => {
-  const { WingLink } = await import("../dist/js/wing.js");
+  const { WingLink } = await import("../dist/js/services/wing.js");
   const m = { id: 1, name: "Mission_Delivery_Wing", title: "Deliver", faction: "F", destSystem: "Sol", status: "active", expiry: "2026-11-02T10:00:00Z" };
   const fresh = new Date().toISOString();
   let mine = [];

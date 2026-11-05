@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
-import { applyEvent, emptyState } from "../dist/js/journal.js";
+import { applyEvent, emptyState } from "../dist/js/game/journal.js";
 
 test("a ship change is shown at once, without keeping the previous ship's name", () => {
   const s = emptyState();
@@ -21,8 +21,8 @@ test("a ship change is shown at once, without keeping the previous ship's name",
   assert.equal(s.ship.name, "Renamed");
 });
 
-import { mergeMission, wingRows } from "../dist/js/wing.js";
-import { applyActivity, emptyActivity } from "../dist/js/activity.js";
+import { mergeMission, wingRows } from "../dist/js/services/wing.js";
+import { applyActivity, emptyActivity } from "../dist/js/game/activity.js";
 
 test("a shared mission accepted by a wingmate is linked by its id and shows the furthest progress", () => {
   // Real journals: VEKKIO accepted and shared it, MDLuffy accepted the share (nothing in his
@@ -72,7 +72,7 @@ test("a fleet carrier's hold is rebuilt from transfers, fuel deposits and carrie
   assert.equal(c.items.steel.count, 100, "a transfer after undocking doesn't count");
 });
 
-import { applyEvent as applyJournal, applyMarketFile, emptyState as emptyCmdr } from "../dist/js/journal.js";
+import { applyEvent as applyJournal, applyMarketFile, emptyState as emptyCmdr } from "../dist/js/game/journal.js";
 
 test("a carrier's market comes from Market.json and follows purchases made there", () => {
   const s = emptyCmdr();

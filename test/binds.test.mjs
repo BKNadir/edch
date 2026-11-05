@@ -2,8 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
 import { readFileSync } from "node:fs";
-import { comboLabel, deviceInfo, fileForPreset, groupOf, padControl, parseBinds, parseStartPreset, presetLineFor } from "../dist/js/binds.js";
-import { DEMO_BINDS } from "../dist/js/demo.js";
+import { comboLabel, deviceInfo, fileForPreset, groupOf, padControl, parseBinds, parseStartPreset, presetLineFor } from "../dist/js/features/controls/binds.js";
+import { DEMO_BINDS } from "../dist/js/game/demo.js";
 
 const meta = JSON.parse(readFileSync(new URL("../public/data/binds.json", import.meta.url)));
 
@@ -37,7 +37,7 @@ test("device names, pads and presets", () => {
 });
 
 test("templates: VKB Gladiator picture and pad box matching", async () => {
-  const { templateBox } = await import("../dist/js/binds.js");
+  const { templateBox } = await import("../dist/js/features/controls/binds.js");
   const vkb = meta.templates["231D0200"];
   assert.equal(vkb.image, "vkb-gladiator-nxt-premium-right");
   assert.equal(templateBox(vkb, "231D0200", "Joy_1"), "Joy_1");

@@ -2,8 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
 import { readFileSync } from "node:fs";
-import { backendMessage, initTexts, t } from "../dist/js/i18n.js";
-import { deviceLabel } from "../dist/js/binds.js";
+import { backendMessage, initTexts, t } from "../dist/js/platform/i18n.js";
+import { deviceLabel } from "../dist/js/features/controls/binds.js";
 
 const texts = (lang) => JSON.parse(readFileSync(new URL(`../public/locales/${lang}.json`, import.meta.url), "utf8"));
 

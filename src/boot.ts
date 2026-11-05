@@ -2,9 +2,9 @@
 // every module (including module-level constants) can use t(). Only light modules are imported
 // statically here: the app itself (main.ts) is loaded with a dynamic import once i18n is ready.
 
-import { forgetRemoteToken, installerLanguage, isTauri, remoteFetch, remoteState } from "./bridge.js";
-import { h, replace } from "./dom.js";
-import { browserLang, guessLang, initI18n, LANGS, saveLang, savedLang, t } from "./i18n.js";
+import { forgetRemoteToken, installerLanguage, isTauri, remoteFetch, remoteState } from "./platform/bridge.js";
+import { h, replace } from "./ui/dom.js";
+import { browserLang, guessLang, initI18n, LANGS, saveLang, savedLang, t } from "./platform/i18n.js";
 
 /** Served by EDCH's local server? "paired" when this device holds the current secret. */
 async function detectRemote(): Promise<"paired" | "unpaired" | null> {
@@ -49,7 +49,7 @@ async function boot() {
     replace(app, unpairedScreen());
     return;
   }
-  const { startApp } = await import("./main.js");
+  const { startApp } = await import("./app/main.js");
   await startApp(code, remoteMode);
 }
 

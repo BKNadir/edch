@@ -2,12 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
 import { readFileSync } from "node:fs";
-import { commodityMessage, fssMessage, journalMessage, navrouteMessage, outfittingMessage, shipyardMessage, trackSession } from "../dist/js/eddn.js";
-import { extractLoadout, importLoadout } from "../dist/js/importer.js";
-import { carrierEstimate, jumpModel } from "../dist/js/jump.js";
-import { Game } from "../dist/js/data.js";
-import { applyLines, emptyState } from "../dist/js/journal.js";
-import { wishNeeds } from "../dist/js/store.js";
+import { commodityMessage, fssMessage, journalMessage, navrouteMessage, outfittingMessage, shipyardMessage, trackSession } from "../dist/js/services/eddn.js";
+import { extractLoadout, importLoadout } from "../dist/js/features/materials/buildImporter.js";
+import { carrierEstimate, jumpModel } from "../dist/js/features/navigation/jumpRange.js";
+import { Game } from "../dist/js/game/data.js";
+import { applyLines, emptyState } from "../dist/js/game/journal.js";
+import { wishNeeds } from "../dist/js/state/store.js";
 
 const game = new Game(JSON.parse(readFileSync(new URL("../public/data/game.json", import.meta.url))));
 
