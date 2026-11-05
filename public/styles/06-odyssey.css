@@ -1,0 +1,34 @@
+/* Odyssey page: the ship locker. */
+
+/* ---------- odyssey ---------- */
+.locker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 6px;
+}
+.locker-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  padding: 8px 10px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.locker-item:hover {
+  border-color: var(--line-2);
+}
+.locker-item.zero .mat-name,
+.locker-item.zero .mat-count {
+  color: var(--dim-text);
+}
+.locker-item.selected {
+  border-color: var(--accent);
+}
+.locker-item.short {
+  box-shadow: inset 3px 0 0 var(--bad);
+}
+.locker-item.covered {
+  box-shadow: inset 3px 0 0 var(--ok);
+}

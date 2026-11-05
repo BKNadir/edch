@@ -1,0 +1,268 @@
+/* Phones and small tablets. */
+
+/* ---------- phones & small tablets ---------- */
+@media (max-width: 760px) {
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  body {
+    overflow-y: auto;
+  }
+  .content,
+  .view-head,
+  .toolbar,
+  .toolbar > *,
+  .view-head > *,
+  .card,
+  .settings,
+  .bp-main,
+  .bp-layout > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .segmented {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  .segmented button {
+    flex: 0 0 auto;
+  }
+  #app {
+    min-height: 100%;
+    height: auto;
+  }
+  .topbar {
+    height: auto;
+    padding: 8px 12px;
+    gap: 6px 12px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .brand {
+    min-width: 0;
+  }
+  .brand span {
+    display: none;
+  }
+  .cmdr {
+    flex: 1;
+  }
+  .where {
+    order: 3;
+    flex-basis: 100%;
+    gap: 6px;
+  }
+  .where .badge {
+    font-size: 10.5px;
+  }
+  .shell {
+    display: block;
+  }
+  .content {
+    overflow: visible;
+    padding: 12px 12px 86px;
+  }
+  .sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 25;
+    flex-direction: row;
+    gap: 0;
+    padding: 4px 4px calc(4px + env(safe-area-inset-bottom));
+    border-right: 0;
+    border-top: 1px solid var(--line);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+  .sidebar button {
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 10px;
+    font-size: 10.5px;
+    min-width: 64px;
+  }
+  .sidebar span {
+    display: inline !important;
+  }
+  .sidebar .count {
+    display: none;
+  }
+  .sidebar button:last-child,
+  .sidebar button[data-nav="about"] {
+    margin-top: 0;
+  }
+  .detail.open {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    z-index: 40;
+    border-left: 0;
+    padding-bottom: 20px;
+  }
+  .detail-head {
+    padding: 12px 14px;
+  }
+  .detail-trades,
+  .detail-body {
+    padding: 12px 14px;
+  }
+  .view-head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .view-head h1 {
+    font-size: 18px;
+  }
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-wrap {
+    width: 100%;
+  }
+  .search {
+    width: 100%;
+  }
+  .segmented {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  .mat-section {
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .grade-head,
+  .line-row {
+    grid-template-columns: 70px repeat(5, 104px);
+    width: max-content;
+  }
+  .line-name {
+    font-size: 11px;
+    white-space: normal;
+  }
+  .locker-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  .bp-layout {
+    grid-template-columns: 1fr;
+  }
+  .module-list {
+    position: static;
+    flex-direction: row;
+    overflow-x: auto;
+    max-height: none;
+    padding-bottom: 4px;
+  }
+  .module-list button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .bp .grades {
+    grid-template-columns: 1fr 1fr;
+  }
+  .wish-layout {
+    grid-template-columns: 1fr;
+  }
+  .needs {
+    position: static;
+  }
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .nav-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .field {
+    grid-template-columns: 1fr;
+  }
+  .field small {
+    grid-column: 1;
+  }
+  .field input,
+  .field select {
+    max-width: none;
+  }
+  .cargo-slider {
+    grid-template-columns: 1fr;
+  }
+  .eng-grid,
+  .btn-grid,
+  .legend-grid {
+    grid-template-columns: 1fr;
+  }
+  .search-form input.big,
+  .search-form select.big {
+    min-width: 0;
+    width: 100%;
+    flex-basis: 100%;
+  }
+  .opts {
+    gap: 8px 14px;
+  }
+  .controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .controls-bar .search {
+    width: 100%;
+  }
+  .tpl-picker {
+    margin-left: 0;
+    width: 100%;
+  }
+  .tpl-picker select {
+    max-width: 100%;
+    min-width: 0;
+    width: 0;
+    flex: 1;
+  }
+  .hat {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .axis-row {
+    grid-template-columns: 80px 1fr;
+  }
+  .axis-row .axis-bar {
+    display: none;
+  }
+  .legend-row {
+    grid-template-columns: 96px 1fr;
+  }
+  .qr-card {
+    grid-template-columns: 1fr;
+  }
+  .lang-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .sync-head {
+    gap: 10px;
+  }
+  .counters {
+    flex-wrap: wrap;
+  }
+  #toast {
+    bottom: 84px;
+    max-width: calc(100vw - 32px);
+    text-align: center;
+  }
+  .result-meta .links {
+    margin-left: 0;
+  }
+}

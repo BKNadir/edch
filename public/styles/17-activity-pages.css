@@ -1,0 +1,350 @@
+/* Activity pages: Missions, Colonisation, Community goals, Exploration, Mining, Powerplay, Session. */
+
+/* ---------- v0.7: activity pages ---------- */
+.nav-sep {
+  height: 1px;
+  background: var(--line);
+  margin: 6px 10px;
+  flex: 0 0 auto;
+}
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+.stat.bad strong {
+  color: var(--bad);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+  align-items: center;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  padding: 3px 10px;
+  border-radius: 16px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-2);
+  color: var(--text);
+}
+.chip.toggle {
+  cursor: pointer;
+  color: var(--muted);
+}
+.chip.toggle.on {
+  background: var(--accent-dim);
+  border-color: var(--accent-line);
+  color: var(--accent-soft);
+}
+.chip.edit input {
+  width: 52px;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: 5px;
+  padding: 1px 4px;
+  color: var(--text);
+}
+.badge.ok {
+  background: var(--ok-dim);
+  border-color: rgba(79, 209, 139, 0.35);
+  color: var(--ok-text);
+}
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+p.ok,
+span.ok {
+  color: var(--ok);
+}
+p.warn,
+span.warn,
+.warn {
+  color: var(--accent-soft);
+}
+.bar.big {
+  height: 8px;
+  margin: 8px 0;
+}
+.view-head + .card,
+.view-head + div {
+  margin-top: 0;
+}
+.card + .card,
+.card + div,
+div + .card {
+  margin-top: 12px;
+}
+.card h3 + .sub {
+  margin-top: -4px;
+}
+.mission-grid,
+.goal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.mission {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.mission.redirected {
+  border-color: rgba(79, 209, 139, 0.35);
+}
+.mission-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: flex-start;
+}
+.mission-head h3 {
+  margin: 0;
+  font-size: 14.5px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+}
+.mission p {
+  margin: 0;
+}
+.mission-dest {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+.mission-progress {
+  display: grid;
+  gap: 3px;
+}
+.mission-foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12.5px;
+  margin-top: 2px;
+}
+.stack {
+  margin-top: 10px;
+}
+.stack-head {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 12px;
+  align-items: center;
+}
+.wing-form,
+.notify-form,
+.merit-form {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0;
+}
+.notify-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.wing-form .row input {
+  flex: 1;
+  min-width: 180px;
+  max-width: 260px;
+  font-family: ui-monospace, Consolas, monospace;
+  letter-spacing: 0.06em;
+}
+.wing-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+}
+.wing-table tr.not-mine td {
+  background: var(--accent-dim);
+}
+.wing-table .badge {
+  margin: 1px 4px 1px 0;
+}
+.depot-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.depot-head h3 {
+  margin: 0 0 4px;
+}
+.depot-table tr.done td {
+  color: var(--muted);
+}
+.goal {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.goal h3 {
+  margin: 0;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text);
+  font-size: 14.5px;
+}
+ul.plain {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  display: grid;
+  gap: 4px;
+}
+.sampling.far {
+  border-color: rgba(79, 209, 139, 0.5);
+}
+.sampling.near {
+  border-color: var(--accent-line);
+}
+.samples {
+  display: flex;
+  gap: 8px;
+  margin: 6px 0;
+}
+.sample {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-2);
+  color: var(--muted);
+  font-weight: 600;
+}
+.sample.done {
+  background: var(--ok-dim);
+  border-color: rgba(79, 209, 139, 0.5);
+  color: var(--ok-text);
+}
+.bio-body {
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+.bio-body.here {
+  background: linear-gradient(90deg, var(--accent-dim), transparent);
+  margin: 0 -14px;
+  padding: 8px 14px;
+}
+.prospect.hit {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+.prospect-mats {
+  display: grid;
+  gap: 4px;
+  margin: 6px 0;
+}
+.prospect-mat {
+  display: grid;
+  grid-template-columns: minmax(140px, 220px) 1fr 70px;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+.prospect-mat strong {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.prospect-mat.target span {
+  color: var(--text);
+  font-weight: 600;
+}
+.prospect-mat.hit span,
+.prospect-mat.hit strong {
+  color: var(--accent);
+}
+.prospect-history {
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+}
+.prospect-history h4 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.prospect-row {
+  display: grid;
+  grid-template-columns: 90px auto 1fr;
+  gap: 8px;
+  align-items: start;
+  border-top: 1px solid var(--line);
+  padding-top: 4px;
+}
+.prospect-row .prospect-mats {
+  margin: 0;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+.prospect-row .prospect-mat {
+  grid-template-columns: 1fr auto;
+}
+.table tr.hot td {
+  background: var(--ok-dim);
+}
+.merit-form .field select {
+  max-width: 280px;
+}
+.day-bars {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  height: 140px;
+  align-items: end;
+  margin: 12px 0 4px;
+}
+.day-bar {
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  height: 100%;
+  text-align: center;
+  gap: 2px;
+}
+.day-bar span {
+  align-self: end;
+  background: linear-gradient(180deg, var(--accent), #c45a0d);
+  border-radius: 4px 4px 0 0;
+  min-height: 2px;
+}
+.day-bar small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.earn-bars {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0;
+}
+.earn-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 110px;
+  gap: 10px;
+  align-items: center;
+}
+.earn-row strong {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.big-number {
+  font-size: 20px;
+  color: var(--accent);
+}

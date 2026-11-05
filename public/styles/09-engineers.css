@@ -1,0 +1,53 @@
+/* Engineers page. */
+
+/* ---------- engineers ---------- */
+.eng-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 10px;
+}
+.eng {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+.eng.unlocked {
+  border-color: var(--accent-line);
+}
+.eng-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: flex-start;
+}
+.eng-head h3 {
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 15px;
+}
+.specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.spec {
+  font-size: 11.5px;
+  background: var(--panel-2);
+  border-radius: 5px;
+  padding: 1px 6px;
+  color: var(--text-soft);
+}
+.spec small {
+  color: var(--accent);
+}
+.eng-unlock summary {
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 12.5px;
+}
+.eng-unlock p {
+  font-size: 12.5px;
+  margin-top: 4px;
+  color: var(--text-soft);
+}

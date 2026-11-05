@@ -1,0 +1,48 @@
+/* About page. */
+
+/* ---------- about page ---------- */
+.about {
+  display: grid;
+  gap: 14px;
+  max-width: 980px;
+}
+.about .card {
+  display: grid;
+  gap: 10px;
+}
+.about-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+.about-links .sub {
+  margin: 4px 0 0 26px;
+}
+.thanks {
+  display: grid;
+  gap: 0;
+}
+.thanks-row {
+  display: grid;
+  grid-template-columns: 230px 1fr auto;
+  gap: 12px;
+  align-items: baseline;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+}
+.thanks-links {
+  text-align: right;
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .thanks-row {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+  .thanks-links {
+    text-align: left;
+    white-space: normal;
+  }
+}

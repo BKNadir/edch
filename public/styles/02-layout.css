@@ -1,0 +1,167 @@
+/* Layout: top bar, side menu, page area and detail panel. */
+
+/* ---------- shell ---------- */
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 0 18px;
+  height: 54px;
+  flex: none;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel-inset));
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: var(--accent);
+  min-width: 170px;
+}
+.brand img {
+  width: 26px;
+  height: 26px;
+}
+.cmdr {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  min-width: 0;
+}
+.where {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+  flex-wrap: wrap;
+}
+.live {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.live .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.live.live .dot {
+  background: var(--ok);
+  box-shadow: 0 0 0 3px var(--ok-dim);
+  animation: pulse 2s infinite;
+}
+.live.demo .dot {
+  background: var(--cyan);
+}
+.live.error .dot {
+  background: var(--bad);
+}
+.live.waiting .dot {
+  background: var(--accent);
+}
+@keyframes pulse {
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+.shell {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 196px minmax(0, 1fr) auto;
+  min-height: 0;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 10px;
+  border-right: 1px solid var(--line);
+  background: var(--panel);
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+.sidebar > * {
+  flex-shrink: 0;
+}
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  background: none;
+  border: 0;
+  color: var(--muted);
+  text-align: left;
+  font-weight: 500;
+}
+.sidebar button:hover {
+  background: var(--panel-2);
+  color: var(--text);
+}
+.sidebar button.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+.sidebar button .icon {
+  width: 18px;
+  height: 18px;
+}
+.sidebar .count {
+  margin-left: auto;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: 10px;
+  padding: 0 7px;
+  font-weight: 700;
+  font-size: 11px;
+}
+.sidebar button:last-child {
+  margin-top: auto;
+}
+.sidebar button[data-nav="about"] {
+  margin-top: auto;
+}
+.sidebar button[data-nav="about"] + button:last-child {
+  margin-top: 0;
+}
+
+.content {
+  overflow: auto;
+  padding: 18px 22px 40px;
+  min-width: 0;
+}
+.view-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}

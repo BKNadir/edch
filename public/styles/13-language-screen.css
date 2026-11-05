@@ -1,0 +1,56 @@
+/* First-run language screen and the "not paired" screen of a phone. */
+
+/* language screen */
+.lang-screen {
+  margin: auto;
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+  text-align: center;
+  padding: 40px;
+  max-width: 640px;
+}
+.lang-screen img {
+  width: 64px;
+  height: 64px;
+}
+.lang-screen h1 {
+  font-size: 28px;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+.lang-screen h2 {
+  font-size: 18px;
+}
+.lang-screen p {
+  color: var(--text-soft);
+  margin: 0;
+}
+.lang-screen p.warn {
+  color: var(--accent-soft);
+}
+.lang-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+.lang-choice {
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  padding: 12px;
+  font-size: 15px;
+}
+.lang-choice.active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+.field select {
+  background: var(--panel-2);
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  padding: 6px 9px;
+  max-width: 220px;
+}
