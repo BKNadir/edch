@@ -134,6 +134,9 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
       - run: npm install
       # Rust style and lints (docs/ARCHITECTURE.md). Clippy reports but does not block a release yet.
+      # The UI is built first: compiling the backend embeds dist/.
+      - name: Build the UI
+        run: npm run build
       - name: rustfmt
         working-directory: src-tauri
         run: cargo fmt --check
