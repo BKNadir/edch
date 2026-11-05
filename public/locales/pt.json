@@ -581,6 +581,8 @@
     "units": "{{total}} unidades"
   },
   "menuEdit": {
+    "addLine": "Adicionar uma linha",
+    "addLineHelp": "Adiciona uma linha no fim da lista; depois arraste-a entre duas páginas para separar dois grupos",
     "alsoShownPhoneClickKeepPc": "Também no celular: clique para mantê-la só no PC",
     "alwaysShown": "Sempre visível",
     "dragMove": "Arraste para mover",
@@ -592,6 +594,8 @@
     "originalOrderGroupsHiddenPagesPhone": "Ordem e grupos originais (páginas ocultas e celular não mudam)",
     "pageAlsoShowsPhone": "ligado: a página também aparece no celular.",
     "pcOnlyClickAlsoShowPhone": "Só PC: clique para mostrá-la também no celular",
+    "pinnedBottom": "Sempre no fim do menu",
+    "removeLine": "Remover esta linha",
     "reorderMenuChoosePhoneSPages": "Reorganizar o menu, escolher as páginas do celular",
     "showHidePage": ": mostrar ou ocultar a página.",
     "showPage": "Mostrar esta página"

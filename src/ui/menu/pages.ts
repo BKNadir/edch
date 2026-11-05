@@ -1,4 +1,5 @@
-// The side menu: pages in order ("-" is a separator). Settings and About can't be hidden.
+// The side menu: the pages, the order the player chose ("-" is a separating line), and About and
+// Settings, which are always shown and pinned at the bottom, outside the order the player edits.
 
 import { t } from "../../platform/i18n.js";
 export const NAV: { id: string; label: string; icon: string }[] = [
@@ -49,7 +50,9 @@ export const NAV: { id: string; label: string; icon: string }[] = [
   },
 ];
 
-export const ALWAYS_SHOWN = new Set(["settings", "about"]);
+/** Always shown, pinned at the bottom of the menu, not part of the editable order. */
+export const PINNED_BOTTOM = ["about", "settings"];
+export const ALWAYS_SHOWN = new Set(PINNED_BOTTOM);
 
 /** Pages that never show on a phone (they manage the PC itself). */
 export const NEVER_ON_PHONE = new Set(["mobile", "sync", "settings", "about"]);
@@ -76,20 +79,24 @@ export const DEFAULT_ORDER = [
   "controls",
   "mobile",
   "sync",
-  "-",
-  "about",
-  "settings",
 ];
 
 const byId = new Map(NAV.filter((n) => n.id !== "-").map((n) => [n.id, n]));
 const SEP = { id: "-", label: "", icon: "" };
 
 /**
- * The menu order: the one chosen in the menu's edit mode, else the default. Pages added in a
- * newer EDCH (not in a saved order yet) take their default place.
+ * The editable menu order: the one chosen in the menu's edit mode, else the default. Pages added in
+ * a newer EDCH (not in a saved order yet) take their default place. Lines are kept as saved, even
+ * at the ends or side by side (the edit mode shows them; the menu itself leaves those out).
  */
 export function menuOrder(saved: string[] | undefined): string[] {
-  const order = (saved?.length ? saved : DEFAULT_ORDER).filter((id) => id === "-" || byId.has(id));
+  let order = saved?.length ? [...saved] : [...DEFAULT_ORDER];
+  // Orders saved before About and Settings were pinned: drop them and the line that preceded them.
+  if (order.some((id) => PINNED_BOTTOM.includes(id))) {
+    const first = order.findIndex((id) => PINNED_BOTTOM.includes(id));
+    if (order[first - 1] === "-") order.splice(first - 1, 1);
+  }
+  order = order.filter((id) => id === "-" || (byId.has(id) && !PINNED_BOTTOM.includes(id)));
   for (const id of DEFAULT_ORDER) {
     if (id === "-" || order.includes(id)) continue;
     const before = DEFAULT_ORDER.slice(0, DEFAULT_ORDER.indexOf(id))
@@ -102,17 +109,36 @@ export function menuOrder(saved: string[] | undefined): string[] {
 
 export const navItem = (id: string) => (id === "-" ? SEP : byId.get(id));
 
-/** The menu without the pages hidden (and without separators left side by side or at the ends). */
-export function visibleNav(hidden: string[], extraHidden: string[] = [], saved?: string[]): typeof NAV {
-  const out = menuOrder(saved)
-    .map((id) => navItem(id)!)
-    // Settings and About can't be hidden by the player, but the phone leaves them out (extraHidden).
-    .filter((n) => n.id === "-" || ((ALWAYS_SHOWN.has(n.id) || !hidden.includes(n.id)) && !extraHidden.includes(n.id)));
-  return out.filter(
+/** Drops lines at either end and lines side by side. */
+function tidyLines(items: typeof NAV): typeof NAV {
+  return items.filter(
     (n, i) =>
       n.id !== "-" ||
-      (i > 0 && out[i - 1].id !== "-" && i < out.length - 1 && out.slice(i + 1).some((x) => x.id !== "-")),
+      (i > 0 && items[i - 1].id !== "-" && i < items.length - 1 && items.slice(i + 1).some((x) => x.id !== "-")),
   );
+}
+
+/** Pages shown here: not hidden by the player (About and Settings can't be) nor left out here. */
+const shownHere = (hidden: string[], extraHidden: string[]) => (n: { id: string }) =>
+  n.id === "-" || ((ALWAYS_SHOWN.has(n.id) || !hidden.includes(n.id)) && !extraHidden.includes(n.id));
+
+/** The editable part of the menu, as shown (`extraHidden`: pages left out here, e.g. on a phone). */
+export function customNav(hidden: string[], extraHidden: string[] = [], saved?: string[]): typeof NAV {
+  return tidyLines(
+    menuOrder(saved)
+      .map((id) => navItem(id)!)
+      .filter(shownHere(hidden, extraHidden)),
+  );
+}
+
+/** About and Settings, as shown here (a phone leaves them out). */
+export function pinnedNav(extraHidden: string[] = []): typeof NAV {
+  return PINNED_BOTTOM.map((id) => navItem(id)!).filter(shownHere([], extraHidden));
+}
+
+/** Every page shown here, in menu order (the editable part, then the pinned pages). */
+export function visibleNav(hidden: string[], extraHidden: string[] = [], saved?: string[]): typeof NAV {
+  return [...customNav(hidden, extraHidden, saved), ...pinnedNav(extraHidden)];
 }
 
 /** Pages a phone does not show: always the PC-only ones, plus those switched off in the menu's edit mode. */

@@ -150,3 +150,52 @@ body.menu-editing .sidebar span {
     height: 17px;
   }
 }
+
+/* About and Settings, pinned at the bottom of the menu (not part of the edited order). */
+.nav-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sidebar .nav-edit {
+  margin-top: 4px;
+}
+/* Edit mode: add or remove lines; the pinned pages, shown but fixed. */
+.nav-add-line {
+  align-self: flex-start;
+  margin: 6px 4px 0;
+}
+.sidebar .nav-edit-row .remove-line {
+  width: 22px;
+  height: 22px;
+}
+.nav-edit-pinned {
+  display: grid;
+  gap: 2px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.nav-edit-pinned .sub {
+  padding: 0 6px 4px;
+  font-size: 12px;
+}
+.nav-edit-row.pinned {
+  cursor: default;
+  opacity: 0.75;
+}
+@media (max-width: 760px) {
+  /* Menu at the bottom: the pinned pages simply follow the others. */
+  .nav-footer {
+    display: contents;
+  }
+}
+/* Edit mode rows never wider than the menu (the phone and eye switches stay visible). */
+.nav-edit-list,
+.nav-edit-pinned {
+  grid-template-columns: minmax(0, 1fr);
+}
+.sidebar.editing > * {
+  min-width: 0;
+}

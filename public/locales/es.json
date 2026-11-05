@@ -578,6 +578,8 @@
     "units": "{{total}} unidades"
   },
   "menuEdit": {
+    "addLine": "Añadir una línea",
+    "addLineHelp": "Añade una línea al final de la lista; luego arrástrala entre dos páginas para separar dos grupos",
     "alsoShownPhoneClickKeepPc": "También en el móvil: haz clic para dejarla solo en el PC",
     "alwaysShown": "Siempre visible",
     "dragMove": "Arrastrar para mover",
@@ -589,6 +591,8 @@
     "originalOrderGroupsHiddenPagesPhone": "Orden y grupos originales (las páginas ocultas y el móvil no cambian)",
     "pageAlsoShowsPhone": "activado: la página también se muestra en el móvil.",
     "pcOnlyClickAlsoShowPhone": "Solo PC: haz clic para mostrarla también en el móvil",
+    "pinnedBottom": "Siempre al final del menú",
+    "removeLine": "Quitar esta línea",
     "reorderMenuChoosePhoneSPages": "Reordenar el menú, elegir las páginas del móvil",
     "showHidePage": ": mostrar u ocultar la página.",
     "showPage": "Mostrar esta página"

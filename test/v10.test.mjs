@@ -73,12 +73,26 @@ test("exact route: Spansh answer → jumps, refuels and neutrons", () => {
   assert.equal(r.jumps[0].scoopable, true);
 });
 
-import { DEFAULT_ORDER, menuOrder, phoneHiddenPages, visibleNav } from "../dist/js/ui/menu/pages.js";
+import { customNav, DEFAULT_ORDER, menuOrder, phoneHiddenPages, visibleNav } from "../dist/js/ui/menu/pages.js";
 
 const ids = (list) => list.map((n) => n.id).join(" ");
 
-test("menu: default order by groups, lines between them", () => {
-  assert.equal(ids(visibleNav([])), DEFAULT_ORDER.join(" "));
+test("menu: default order by groups, lines between them, About and Settings pinned last", () => {
+  assert.equal(ids(visibleNav([])), [...DEFAULT_ORDER, "about", "settings"].join(" "));
+  assert.ok(!DEFAULT_ORDER.includes("about") && !DEFAULT_ORDER.includes("settings"));
+});
+
+test("menu: About and Settings leave an order saved before they were pinned, with their line", () => {
+  const old = [...DEFAULT_ORDER, "-", "about", "settings"];
+  assert.deepEqual(menuOrder(old), DEFAULT_ORDER);
+});
+
+test("menu: lines added anywhere are kept in the order, the menu leaves out the useless ones", () => {
+  const order = ["-", ...DEFAULT_ORDER.slice(0, 2), "-", ...DEFAULT_ORDER.slice(2), "-"];
+  assert.deepEqual(menuOrder(order), order); // the edit mode shows every line where it was put
+  const shown = ids(customNav([], [], order));
+  assert.ok(!shown.startsWith("-") && !shown.endsWith("-") && !/(^|\s)-\s-(\s|$)/.test(shown));
+  assert.equal(shown.split(" ")[2], "-"); // the new line between the 2nd and 3rd pages
 });
 
 test("menu: a saved order is kept, and pages added later take their default place", () => {

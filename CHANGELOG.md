@@ -3,6 +3,12 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.5
+
+- Menu: About and Settings now stay at the very bottom of the menu, apart from the pages you arrange.
+- Edit menu: "Add a line" adds a separating line (drag it between two pages), and the × next to a line removes it.
+- Edit menu: the phone and eye switches no longer get cut off at the right edge.
+
 ## 0.10.4
 
 - The menu is now sorted by use in game, in groups separated by a line: Missions, Navigation, Search · Colonisation, Mining, Exploration, Powerplay, Community goals, Session · Wishlist, Engineers, Materials, Engineering, Odyssey · Controls, Remote access, Sync · About, Settings.

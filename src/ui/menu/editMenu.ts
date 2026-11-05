@@ -1,17 +1,20 @@
-// The side menu: pages in groups separated by a line, and an edit mode (button at the bottom)
-// where pages are dragged to a new place, switched on/off for the phone, and hidden or shown.
+// The side menu: pages in groups separated by lines, About and Settings pinned at the bottom, and
+// an edit mode where pages and lines are dragged to a new place, lines added or removed, and pages
+// switched on/off for the phone or hidden. About and Settings are not part of the edited order.
 // Dragging uses pointer events: HTML5 drag and drop is unreliable in the Windows webview.
 
 import { h, replace } from "../dom.js";
 import { log } from "../../platform/logger.js";
 import {
   ALWAYS_SHOWN,
+  customNav,
   DEFAULT_ORDER,
-  NEVER_ON_PHONE,
   menuOrder,
+  NEVER_ON_PHONE,
   navItem,
   phoneHiddenPages,
-  visibleNav,
+  PINNED_BOTTOM,
+  pinnedNav,
 } from "./pages.js";
 import type { Store } from "../../state/store.js";
 import { t } from "../../platform/i18n.js";
@@ -35,6 +38,9 @@ const EYE = "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6
 const EYE_OFF = "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM3 3l18 18";
 const GRIP = "M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01";
 const PEN = "M4 20h4L19 9l-4-4L4 16zM14 6l4 4";
+const CROSS = "M6 6l12 12M18 6L6 18";
+const PLUS = "M12 5v14M5 12h14";
+const PIN = "M9 3h6l-1 6 3 3H7l3-3zM12 12v9";
 
 export interface MenuOptions {
   /** Remote (phone, tablet): pages switched off for the phone are left out, no edit mode. */
@@ -56,25 +62,26 @@ export function renderMenu(nav: HTMLElement, store: Store, o: MenuOptions) {
   nav.classList.toggle("editing", editing && !o.remote);
   document.body.classList.toggle("menu-editing", editing && !o.remote);
   if (editing && !o.remote) return renderEditing(nav, store, o);
-  const items = visibleNav(s.settings.hiddenViews ?? [], excludedHere(store, o), s.settings.navOrder);
+  const pageButton = (n: { id: string; label: string; icon: string }) =>
+    n.id === "-"
+      ? h("div.nav-sep")
+      : h(
+          "button",
+          {
+            class: s.view === n.id ? "active" : "",
+            "data-nav": n.id,
+            title: n.label,
+            onclick: () => store.setView(n.id),
+          },
+          o.navIcon(n.icon),
+          h("span", null, n.label),
+          n.id === "wishlist" && s.wishlist.length ? h("small.count", null, String(s.wishlist.length)) : null,
+        );
+  const excluded = excludedHere(store, o);
+  const pinned = pinnedNav(excluded);
   replace(
     nav,
-    items.map((n) =>
-      n.id === "-"
-        ? h("div.nav-sep")
-        : h(
-            "button",
-            {
-              class: s.view === n.id ? "active" : "",
-              "data-nav": n.id,
-              title: n.label,
-              onclick: () => store.setView(n.id),
-            },
-            o.navIcon(n.icon),
-            h("span", null, n.label),
-            n.id === "wishlist" && s.wishlist.length ? h("small.count", null, String(s.wishlist.length)) : null,
-          ),
-    ),
+    customNav(s.settings.hiddenViews ?? [], excluded, s.settings.navOrder).map(pageButton),
     o.remote
       ? null
       : h(
@@ -83,6 +90,8 @@ export function renderMenu(nav: HTMLElement, store: Store, o: MenuOptions) {
           svgIcon(PEN),
           h("span", null, t("common.editMenu")),
         ),
+    // About and Settings: always at the very bottom.
+    pinned.length ? h("div.nav-footer", null, h("div.nav-sep"), pinned.map(pageButton)) : null,
   );
 }
 
@@ -100,11 +109,8 @@ function renderEditing(nav: HTMLElement, store: Store, o: MenuOptions) {
   const order = menuOrder(s.navOrder);
   const hidden = new Set(s.hiddenViews ?? []);
   const phoneOff = new Set(s.phoneHidden ?? []);
-  const save = (next: string[]) => {
-    // No line at either end, never two lines side by side.
-    const clean = next.filter((id, i) => id !== "-" || (i > 0 && i < next.length - 1 && next[i - 1] !== "-"));
-    store.updateSettings({ navOrder: clean });
-  };
+  // Lines are saved as placed (even at an end): the menu itself leaves out the useless ones.
+  const save = (next: string[]) => store.updateSettings({ navOrder: next });
 
   const rows = order.map((id, index) => {
     const n = navItem(id)!;
@@ -114,6 +120,14 @@ function renderEditing(nav: HTMLElement, store: Store, o: MenuOptions) {
         { "data-index": String(index), title: t("menuEdit.lineBetweenTwoGroupsDragChange") },
         h("span.grip", null, svgIcon(GRIP)),
         h("span.sep-line"),
+        h(
+          "button.toggle.remove-line",
+          {
+            title: t("menuEdit.removeLine"),
+            onclick: () => save(order.filter((_, i) => i !== index)),
+          },
+          svgIcon(CROSS),
+        ),
       );
     }
     const never = NEVER_ON_PHONE.has(id);
@@ -168,6 +182,17 @@ function renderEditing(nav: HTMLElement, store: Store, o: MenuOptions) {
 
   const list = h("div.nav-edit-list", null, rows);
   enableDrag(list, order, save);
+  // About and Settings: shown, not draggable, always at the bottom.
+  const pinnedRows = PINNED_BOTTOM.map((id) => {
+    const n = navItem(id)!;
+    return h(
+      "div.nav-edit-row.pinned",
+      { title: t("menuEdit.pinnedBottom") },
+      h("span.grip", null, svgIcon(PIN)),
+      o.navIcon(n.icon),
+      h("span.label", null, n.label),
+    );
+  });
   replace(
     nav,
     h(
@@ -179,6 +204,13 @@ function renderEditing(nav: HTMLElement, store: Store, o: MenuOptions) {
       h("p", null, t("menuEdit.dragPageLineMove")),
     ),
     list,
+    h(
+      "button.ghost.small.nav-add-line",
+      { title: t("menuEdit.addLineHelp"), onclick: () => save([...order, "-"]) },
+      svgIcon(PLUS, "icon inline"),
+      " " + t("menuEdit.addLine"),
+    ),
+    h("div.nav-edit-pinned", null, h("p.sub", null, t("menuEdit.pinnedBottom")), pinnedRows),
     h(
       "div.nav-edit-actions",
       null,

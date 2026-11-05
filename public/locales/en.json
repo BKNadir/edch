@@ -577,6 +577,8 @@
     "units": "{{total}} units"
   },
   "menuEdit": {
+    "addLine": "Add a line",
+    "addLineHelp": "Adds a line at the bottom of the list; then drag it between two pages to separate two groups",
     "alsoShownPhoneClickKeepPc": "Also shown on the phone: click to keep it on the PC only",
     "alwaysShown": "Always shown",
     "dragMove": "Drag to move",
@@ -588,6 +590,8 @@
     "originalOrderGroupsHiddenPagesPhone": "Original order and groups (hidden pages and phone choices don't change)",
     "pageAlsoShowsPhone": "on: the page also shows on the phone.",
     "pcOnlyClickAlsoShowPhone": "PC only: click to also show it on the phone",
+    "pinnedBottom": "Always at the bottom of the menu",
+    "removeLine": "Remove this line",
     "reorderMenuChoosePhoneSPages": "Reorder the menu, choose the phone's pages",
     "showHidePage": ": show or hide the page.",
     "showPage": "Show this page"

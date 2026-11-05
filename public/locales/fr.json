@@ -578,6 +578,8 @@
     "units": "{{total}} unités"
   },
   "menuEdit": {
+    "addLine": "Ajouter une ligne",
+    "addLineHelp": "Ajoute une ligne en bas de la liste, puis glisse-la entre deux pages pour séparer deux groupes",
     "alsoShownPhoneClickKeepPc": "Affichée aussi sur le téléphone : clique pour la garder sur PC seulement",
     "alwaysShown": "Toujours affichée",
     "dragMove": "Glisser pour déplacer",
@@ -589,6 +591,8 @@
     "originalOrderGroupsHiddenPagesPhone": "Ordre et groupes d'origine (les pages masquées et le téléphone ne changent pas)",
     "pageAlsoShowsPhone": "allumé : la page s'affiche aussi sur le téléphone.",
     "pcOnlyClickAlsoShowPhone": "PC seulement : clique pour l'afficher aussi sur le téléphone",
+    "pinnedBottom": "Toujours en bas du menu",
+    "removeLine": "Supprimer cette ligne",
     "reorderMenuChoosePhoneSPages": "Réorganiser le menu, choisir les pages du téléphone",
     "showHidePage": ": afficher ou masquer la page.",
     "showPage": "Afficher cette page"

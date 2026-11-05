@@ -577,6 +577,8 @@
     "units": "{{total}} Einheiten"
   },
   "menuEdit": {
+    "addLine": "Linie hinzufügen",
+    "addLineHelp": "Fügt unten in der Liste eine Linie hinzu; zieh sie dann zwischen zwei Seiten, um zwei Gruppen zu trennen",
     "alsoShownPhoneClickKeepPc": "Auch auf dem Handy: Klicke, um sie nur am PC zu zeigen",
     "alwaysShown": "Immer angezeigt",
     "dragMove": "Zum Verschieben ziehen",
@@ -588,6 +590,8 @@
     "originalOrderGroupsHiddenPagesPhone": "Ursprüngliche Reihenfolge und Gruppen (ausgeblendete Seiten und Handy-Auswahl bleiben)",
     "pageAlsoShowsPhone": "an: Die Seite erscheint auch auf dem Handy.",
     "pcOnlyClickAlsoShowPhone": "Nur PC: Klicke, um sie auch auf dem Handy zu zeigen",
+    "pinnedBottom": "Immer unten im Menü",
+    "removeLine": "Diese Linie entfernen",
     "reorderMenuChoosePhoneSPages": "Menü neu ordnen, Seiten fürs Handy wählen",
     "showHidePage": ": Seite ein- oder ausblenden.",
     "showPage": "Diese Seite anzeigen"
