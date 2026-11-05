@@ -4,7 +4,7 @@
 import type { Game } from "../game/data.js";
 import type { Reference } from "../services/spansh.js";
 import { totalNeeds, type Store } from "./store.js";
-import type { Uploaders } from "../services/sync.js";
+import type { Uploaders } from "../services/sync/index.js";
 import { t } from "../platform/i18n.js";
 
 export interface Ctx {

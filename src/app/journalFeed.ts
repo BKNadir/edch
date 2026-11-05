@@ -10,7 +10,7 @@ import { applyLines, applyLocker } from "../game/journal/events.js";
 import { emptyState, type Json } from "../game/journal/state.js";
 import type { Store } from "../state/store.js";
 import { clearAlert, goTo, inStartup, startupAlert } from "../ui/alerts.js";
-import type { Uploaders } from "../services/sync.js";
+import type { Uploaders } from "../services/sync/index.js";
 import { loadHistory, onLiveEvents } from "../features/missions/live.js";
 
 /** Material capacity by id (from the game data), for the journal's material events. */

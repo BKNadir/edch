@@ -139,7 +139,7 @@ fn write_zip(target: &Path, folders: &[&str]) -> Result<usize, String> {
                 continue;
             }
             let bytes = fs::read(entry.path()).map_err(|e| e.to_string())?;
-            zip.start_file(format!("{folder}/{name}"), options.clone())
+            zip.start_file(format!("{folder}/{name}"), options)
                 .map_err(|e| e.to_string())?;
             zip.write_all(&bytes).map_err(|e| e.to_string())?;
             count += 1;

@@ -105,7 +105,8 @@ fn cleanup(dir: &PathBuf, prefix: &str) {
             Some((e.path(), modified))
         })
         .collect();
-    files.sort_by(|a, b| b.1.cmp(&a.1));
+    // Newest first.
+    files.sort_by_key(|f| std::cmp::Reverse(f.1));
     let limit = Duration::from_secs(KEEP_DAYS * 86_400);
     // The file of the run that is starting counts as one of the kept ones.
     for (path, modified) in files.into_iter().skip(KEEP_FILES - 1) {
@@ -195,6 +196,8 @@ pub fn info(source: &str, message: &str) {
 pub fn warn(source: &str, message: &str) {
     write("WARN", source, message);
 }
+/// Part of the logging API (not used by the backend today).
+#[allow(dead_code)]
 pub fn error(source: &str, message: &str) {
     write("ERROR", source, message);
 }
@@ -213,6 +216,7 @@ pub fn debug_enabled() -> bool {
 /// - IP addresses (local network, Tailscale, the phone's): `192.168.x.x`;
 /// - long hexadecimal or random-looking tokens (pairing code, wing topic, keys): `***`;
 /// - Frontier ids (`F12345678`): `F***`.
+///
 /// API keys never reach a log in the first place (URLs go through `redact`, bodies aren't logged).
 pub fn sanitize(text: &str) -> String {
     let mut out = text.to_string();

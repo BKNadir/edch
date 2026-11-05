@@ -18,7 +18,7 @@ import { changelogAfterUpdate } from "../ui/changelog.js";
 import { setupDesktop } from "../ui/desktop.js";
 import { h, replace } from "../ui/dom.js";
 import { startUpdateChecks } from "../ui/updateBanner.js";
-import { Uploaders } from "../services/sync.js";
+import { Uploaders } from "../services/sync/index.js";
 import { bindTour } from "../features/engineers/tour.js";
 import { bindStore, setupLive } from "../features/missions/live.js";
 import { bindLinks } from "../views/shared/links.js";
