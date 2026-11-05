@@ -1,26 +1,27 @@
-import { gameName, t } from "../../platform/i18n.js";
-import { h, icon, fmt, replace, toast } from "../../ui/dom.js";
-import { ownedOf, reserved, type Ctx, type View } from "../../state/context.js";
-import { blueprintGrades, bpKey, defaultRolls, wishNeeds, type WishItem } from "../../state/store.js";
-import { suggestTrades } from "../../features/materials/trade.js";
-import type { Blueprint } from "../../game/types.js";
-import { kindFr } from "../detail/index.js";
-import { extractLoadout, importLoadout } from "../../features/materials/buildImporter.js";
-import { engineerLinks, moduleLink, openSystem } from "../shared/links.js";
-import { pickEngineer, type Pick } from "../../features/engineers/engineerPick.js";
+import { pickEngineer } from "../../features/engineers/engineerPick.js";
 import {
   clearRoute,
   currentRoute,
   nextJump,
   planTour,
   plotTour,
-  tourRange,
   type TourPlan,
+  tourRange,
 } from "../../features/engineers/tour.js";
-import { fmtLy } from "../../services/spansh.js";
-import { copyText } from "../../platform/bridge.js";
+import { extractLoadout, importLoadout } from "../../features/materials/buildImporter.js";
+import { suggestTrades } from "../../features/materials/trade.js";
 import { superchargeMultiplier } from "../../features/navigation/jumpRange.js";
-import type { Engineer } from "../../game/types.js";
+import type { Blueprint } from "../../game/types.js";
+import { copyText } from "../../platform/bridge.js";
+import { gameName, t } from "../../platform/i18n.js";
+import { fmtLy } from "../../services/spansh.js";
+import { type Ctx, ownedOf, reserved, type View } from "../../state/context.js";
+import { blueprintGrades, bpKey, defaultRolls, type WishItem, wishNeeds } from "../../state/store.js";
+import { fmt, h, icon, replace, toast } from "../../ui/dom.js";
+import { kindFr } from "../detail/index.js";
+import { engineerLinks, moduleLink, openSystem } from "../shared/links.js";
+import { engineerButton, engineerRow, unlockBadge } from "./engineerRow.js";
+import { confirmClear, lineLabel, select } from "./widgets.js";
 
 export function addToWishlist(ctx: Ctx, bp: Blueprint, from?: number, to?: number) {
   const grades = blueprintGrades(ctx.game, bpKey(bp));
@@ -564,90 +565,4 @@ export class WishlistView implements View {
       ),
     );
   }
-}
-
-// A single "are you sure" without a blocking browser dialog: second click within 3 s confirms.
-let clearArmed = 0;
-function confirmClear(): boolean {
-  if (Date.now() - clearArmed < 3000) return true;
-  clearArmed = Date.now();
-  toast(t("wishlist.clickClearAgainConfirm"));
-  return false;
-}
-
-function select(options: number[], value: number, onChange: (v: number) => void): HTMLSelectElement {
-  return h(
-    "select",
-    { onchange: (e: Event) => onChange(Number((e.target as HTMLSelectElement).value)) },
-    options.map((o) => h("option", { value: String(o), selected: o === value }, `G${o}`)),
-  );
-}
-
-/** An engineer's name: copies the system of the workshop. */
-function engineerButton(e: Engineer): HTMLElement {
-  return h(
-    "button.inline-link.ref-link.eng-link",
-    {
-      title: t("common.copySSystem", { name: e.name, system: e.system }),
-      "data-no-tr": "",
-      onclick: () => openSystem(e.system),
-    },
-    e.name,
-  );
-}
-
-/** "To unlock" (or "to meet"): a click shows what the game asks for. */
-function unlockBadge(e: Engineer, known: boolean): HTMLElement {
-  const how = known ? e.unlock || e.meeting : e.meeting || e.discovery;
-  return h(
-    "details.unlock-badge",
-    null,
-    h("summary.badge.warn", null, known ? t("wishlist.unlock") : t("wishlist.meet")),
-    h(
-      "div.unlock-how",
-      null,
-      e.referredBy ? h("p", null, t("common.referredBy", { name: e.referredBy })) : null,
-      how ? h("p", null, how) : h("p", null, t("wishlist.seeEngineersPage")),
-    ),
-  );
-}
-
-/** The engineer chosen for a wishlist line, or the red notice when nobody you know can do it. */
-function engineerRow(pick: Pick | undefined, toMeet: Pick | undefined, want: number): HTMLElement {
-  if (pick) {
-    const e = pick.engineer;
-    return h(
-      "div.wish-eng",
-      null,
-      icon("pin"),
-      " ",
-      engineerButton(e),
-      want ? h("span.badge.muted", { title: t("wishlist.highestGradeEngineerCanDo") }, `G${pick.grade}`) : null,
-      want && pick.grade < want ? h("span.sub", null, " " + t("wishlist.gNoKnownEngineerDoesAround", { want })) : null,
-      h("span.sub", null, ` · ${e.system} — ${e.station}`, pick.dist !== undefined ? ` · ${fmtLy(pick.dist)}` : ""),
-      pick.unlocked ? null : unlockBadge(e, Boolean(pick.status)),
-    );
-  }
-  const e = toMeet?.engineer;
-  return h(
-    "div.wish-eng.alert",
-    null,
-    icon("warn"),
-    " " + t("wishlist.noKnownEngineerModuleUnlock"),
-    e
-      ? [
-          h("span.sub", null, " " + t("wishlist.nearest") + " "),
-          engineerButton(e),
-          h("span.sub", null, ` · ${e.system}${toMeet!.dist !== undefined ? ` · ${fmtLy(toMeet!.dist)}` : ""}`),
-          unlockBadge(e, false),
-        ]
-      : null,
-  );
-}
-
-function lineLabel(ctx: Ctx, item: WishItem): string {
-  const [kind, module, name] = item.bp.split("|");
-  return kind === "modification"
-    ? `${gameName(module)} — ${gameName(name)} G${item.gradeTo}`
-    : `${gameName(module)} — ${gameName(name)}`;
 }
