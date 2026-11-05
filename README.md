@@ -104,13 +104,17 @@ Layout:
 - `src/`: framework-free TypeScript UI, in layers (platform, game, state, ui, services, features, views, app); `src-tauri/`: Rust backend (journal, HTTP, option files, remote access server, updates), with no game logic. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.10.5` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
+A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.10.6` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
 
 ## Roadmap
 
 - Frontier login (cAPI, OAuth) for fleet, stock and fleet carrier: needs a Frontier Client ID.
 - EDDN: remaining schemas (codexentry, approachsettlement, fssbodysignals, fsssignaldiscovered…).
 - Optimised farming route for the wishlist.
+
+## Support EDCH
+
+EDCH is free, without ads, and will stay that way. It is designed, tested and maintained by CMDR MDLuffy, and developed with the help of the AI Claude (Anthropic). If it helps you, you can support the project on [Ko-fi](https://ko-fi.com/bknadir): it pays for the tools (the AI subscription), the time spent testing and fixing, and eventually the signing of the app.
 
 ## Credits
 

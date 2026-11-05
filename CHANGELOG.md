@@ -3,6 +3,11 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.6
+
+- About: a new "Support EDCH" card. EDCH stays free and without ads; if it helps you, the button opens the project's Ko-fi page. The card also says how EDCH is made: designed, tested and maintained by CMDR MDLuffy, developed with the help of the AI Claude (Anthropic).
+- No other visible change: code tidying (data sharing with EDDN, EDSM and Inara split by service, stricter checks of the backend code).
+
 ## 0.10.5
 
 - Menu: About and Settings now stay at the very bottom of the menu, apart from the pages you arrange.

@@ -1157,6 +1157,16 @@
     "pop": "{{n}} pop.",
     "sPadOnly": "S pad only"
   },
+  "support": {
+    "button": "Support the project on Ko-fi",
+    "helps": "Support, even a little, helps to:",
+    "intro": "EDCH is free, without ads, and will stay that way. It is designed, tested and maintained by CMDR MDLuffy, and developed with the help of the AI Claude (Anthropic).",
+    "reasonSigning": "eventually pay for signing the application, so Windows stops flagging it.",
+    "reasonTime": "keep time to test in game, fix bugs and follow Elite Dangerous updates;",
+    "reasonTools": "pay for the tools that move the project forward (the subscription to the AI that writes the code with me);",
+    "thanks": "It's also the best way to show the project matters to you. Thank you, and o7!",
+    "title": "Support EDCH"
+  },
   "sync": {
     "cmdrNameEdsm": "CMDR name on EDSM",
     "eddnCommunityDataNetwork": "EDDN — community data network",

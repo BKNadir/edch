@@ -2671,6 +2671,18 @@ kbd.num b {
   }
 }
 
+/* Support EDCH (Ko-fi): the reasons as a short list, the button below. */
+.about-support ul.support-reasons {
+  margin: 4px 0 6px;
+  padding-left: 20px;
+  display: grid;
+  gap: 4px;
+  color: var(--text);
+}
+.about-support .row {
+  margin-top: 6px;
+}
+
 /* ==================== ACTIVITY PAGES ====================
    Activity pages: Missions, Colonisation, Community goals, Exploration, Mining, Powerplay, Session. */
 

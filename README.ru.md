@@ -104,13 +104,17 @@ npm run demo        # только интерфейс в браузере, с п
 - `src/`: интерфейс на TypeScript без фреймворка, по слоям (platform, game, state, ui, services, features, views, app); `src-tauri/`: бэкенд на Rust (журнал, HTTP, файлы настроек, сервер удалённого доступа, обновления), без игровой логики. См. [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) и [CONTRIBUTING.md](CONTRIBUTING.md) (на английском).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: заново создают данные в `public/` (см. NOTICE).
 
-Сборка для Windows запускается при каждом push в `main`. Чтобы выпустить версию, отправьте тег, например `v0.10.5`: Release будет опубликован, а установленные копии предложат обновление.
+Сборка для Windows запускается при каждом push в `main`. Чтобы выпустить версию, отправьте тег, например `v0.10.6`: Release будет опубликован, а установленные копии предложат обновление.
 
 ## Планы
 
 - Вход через Frontier (cAPI, OAuth) для флота, запасов и корабля-носителя: нужен Client ID от Frontier.
 - EDDN: оставшиеся схемы (codexentry, approachsettlement, fssbodysignals, fsssignaldiscovered…).
 - Оптимальный маршрут фарма для списка желаний.
+
+## Поддержать EDCH
+
+EDCH бесплатен, без рекламы, и таким останется. Его задумывает, тестирует и поддерживает CMDR MDLuffy, а разрабатывает с помощью ИИ Claude (Anthropic). Если он вам полезен, вы можете поддержать проект на [Ko-fi](https://ko-fi.com/bknadir): это оплачивает инструменты (подписку на ИИ), время на тесты и исправления и со временем подпись приложения.
 
 ## Благодарности
 

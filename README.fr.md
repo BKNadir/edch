@@ -104,13 +104,17 @@ Structure :
 - `src/` : interface TypeScript sans framework, en couches (platform, game, state, ui, services, features, views, app) ; `src-tauri/` : backend Rust (journal, HTTP, fichiers d'options, serveur d'accès distant, mises à jour), sans logique de jeu. Voir [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) et [CONTRIBUTING.md](CONTRIBUTING.md) (en anglais).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.10.5` : la Release est publiée et les copies installées proposent la mise à jour.
+Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.10.6` : la Release est publiée et les copies installées proposent la mise à jour.
 
 ## Feuille de route
 
 - Connexion Frontier (cAPI, OAuth) pour la flotte, le stock et le Fleet Carrier : il faut un Client ID Frontier.
 - EDDN : schémas restants (codexentry, approachsettlement, fssbodysignals, fsssignaldiscovered…).
 - Itinéraire de farm optimisé pour la wishlist.
+
+## Soutenir EDCH
+
+EDCH est gratuit, sans publicité, et le restera. Il est conçu, testé et maintenu par CMDR MDLuffy, et développé avec l'aide de l'IA Claude (Anthropic). S'il t'est utile, tu peux soutenir le projet sur [Ko-fi](https://ko-fi.com/bknadir) : cela paie les outils (l'abonnement à l'IA), le temps passé à tester et corriger, et à terme la signature de l'application.
 
 ## Crédits
 

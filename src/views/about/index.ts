@@ -137,6 +137,7 @@ export class AboutView implements View {
           h("p", null, t("about.dreamtUpFlown") + " ", h("strong", { "data-no-tr": "" }, "CMDR MDLuffy"), "."),
           h("p.sub", null, t("about.thanksUsingEdchIfCrossPaths")),
         ),
+        supportCard(),
         h(
           "section.card",
           null,
@@ -284,4 +285,27 @@ export class AboutView implements View {
   update() {
     /* static page */
   }
+}
+
+/** Ko-fi page of the author: support is voluntary, nothing in EDCH depends on it. */
+const SUPPORT_URL = "https://ko-fi.com/bknadir";
+
+/** "Support EDCH": why support helps, and a button that opens the Ko-fi page in the browser. */
+function supportCard(): HTMLElement {
+  return h(
+    "section.card.about-support",
+    null,
+    h("h3", null, t("support.title")),
+    h("p", null, t("support.intro")),
+    h("p", null, t("support.helps")),
+    h(
+      "ul.support-reasons",
+      null,
+      h("li", null, t("support.reasonTools")),
+      h("li", null, t("support.reasonTime")),
+      h("li", null, t("support.reasonSigning")),
+    ),
+    h("p.sub", null, t("support.thanks")),
+    h("div.row", null, h("button.primary", { onclick: () => void openUrl(SUPPORT_URL) }, "☕ " + t("support.button"))),
+  );
 }
