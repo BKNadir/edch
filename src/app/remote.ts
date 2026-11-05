@@ -5,7 +5,8 @@
 import { clipboardWrite, onRemoteAction, remoteAction, remoteState, setRemote } from "../platform/bridge.js";
 import { lang, t } from "../platform/i18n.js";
 import { log } from "../platform/logger.js";
-import { emptyActivity, unsoldSummary } from "../game/activity.js";
+import { emptyActivity } from "../game/activity/state.js";
+import { unsoldSummary } from "../game/activity/exploration.js";
 import { emptyState } from "../game/journal.js";
 import { DEFAULT_THEME } from "../state/themeSettings.js";
 import type { Settings, Store } from "../state/store.js";

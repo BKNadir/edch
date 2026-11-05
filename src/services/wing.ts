@@ -7,7 +7,7 @@
 
 import { httpFetch, isTauri, ntfySetFarewell, ntfySubscribe, ntfyUnsubscribe, onNtfy } from "../platform/bridge.js";
 import { log } from "../platform/logger.js";
-import type { Mission } from "../game/activity.js";
+import type { Mission } from "../game/activity/state.js";
 import { t } from "../platform/i18n.js";
 
 export interface WingMission {

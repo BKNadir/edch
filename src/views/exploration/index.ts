@@ -1,4 +1,5 @@
-import { type OrganicFind, type Sampling, surfaceDistance, unsoldSummary } from "../../game/activity.js";
+import { type OrganicFind, type Sampling } from "../../game/activity/state.js";
+import { surfaceDistance, unsoldSummary } from "../../game/activity/exploration.js";
 import { fmt, h, replace } from "../../ui/dom.js";
 import { colonyDistance, possibleSpecies, speciesValue } from "../../game/exobio.js";
 import { credits, relTime } from "../../ui/format.js";

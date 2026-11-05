@@ -1,4 +1,4 @@
-import type { CommunityGoal } from "../../game/activity.js";
+import type { CommunityGoal } from "../../game/activity/state.js";
 import { httpFetch, openUrl } from "../../platform/bridge.js";
 import { fmt, h, replace } from "../../ui/dom.js";
 import { SOFTWARE_NAME } from "../../platform/version.js";

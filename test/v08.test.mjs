@@ -22,7 +22,8 @@ test("a ship change is shown at once, without keeping the previous ship's name",
 });
 
 import { mergeMission, wingRows } from "../dist/js/services/wing.js";
-import { applyActivity, emptyActivity } from "../dist/js/game/activity.js";
+import { applyActivity } from "../dist/js/game/activity/index.js";
+import { emptyActivity } from "../dist/js/game/activity/state.js";
 
 test("a shared mission accepted by a wingmate is linked by its id and shows the furthest progress", () => {
   // Real journals: VEKKIO accepted and shared it, MDLuffy accepted the share (nothing in his

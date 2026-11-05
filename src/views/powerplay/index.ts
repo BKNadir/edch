@@ -1,4 +1,4 @@
-import { meritsSince, meritsThisWeek, weekStart } from "../../game/activity.js";
+import { meritsSince, meritsThisWeek, weekStart } from "../../game/activity/powerplay.js";
 import { fmt, h, replace } from "../../ui/dom.js";
 import { locale, t } from "../../platform/i18n.js";
 import { duration } from "../../ui/format.js";

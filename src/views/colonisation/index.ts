@@ -1,4 +1,4 @@
-import type { CarrierHold, Depot } from "../../game/activity.js";
+import type { CarrierHold, Depot } from "../../game/activity/state.js";
 import { callout, fmt, h, icon, replace } from "../../ui/dom.js";
 import { gameName, t } from "../../platform/i18n.js";
 import { relTime } from "../../ui/format.js";

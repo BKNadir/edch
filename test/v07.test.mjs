@@ -2,7 +2,11 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
 import { webcrypto } from "node:crypto";
-import { applyActivityEvents, bodyValue, emptyActivity, massacreStacks, meritsThisWeek, surfaceDistance, weekStart } from "../dist/js/game/activity.js";
+import { applyActivityEvents } from "../dist/js/game/activity/index.js";
+import { bodyValue, surfaceDistance } from "../dist/js/game/activity/exploration.js";
+import { emptyActivity } from "../dist/js/game/activity/state.js";
+import { massacreStacks } from "../dist/js/game/activity/missions.js";
+import { meritsThisWeek, weekStart } from "../dist/js/game/activity/powerplay.js";
 import { open, seal, sameMission, topicFor, wingRows } from "../dist/js/services/wing.js";
 
 globalThis.crypto ??= webcrypto;

@@ -1,5 +1,6 @@
 import { openSettingsTab } from "../settings/index.js";
-import { massacreStacks, type Mission } from "../../game/activity.js";
+import { massacreStacks } from "../../game/activity/missions.js";
+import { type Mission } from "../../game/activity/state.js";
 import { isRemote } from "../../platform/bridge.js";
 import { callout, fmt, h, icon, replace, toast } from "../../ui/dom.js";
 import { activeMissions, isShared, setShared, syncWing, wingView } from "../../features/missions/live.js";

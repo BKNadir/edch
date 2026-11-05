@@ -2,7 +2,8 @@ import { tourEvent } from "../engineers/tour.js";
 import { inStartup, startupAlert, goTo } from "../../ui/alerts.js";
 // Glue between the journal, the activity tracker, the wing link and the notifications.
 
-import { applyActivity, emptyActivity, HISTORY_DAYS, HISTORY_EVENTS, type Mission } from "../../game/activity.js";
+import { applyActivity, HISTORY_DAYS, HISTORY_EVENTS } from "../../game/activity/index.js";
+import { emptyActivity, type Mission } from "../../game/activity/state.js";
 import { isRemote, scanHistory } from "../../platform/bridge.js";
 import { h } from "../../ui/dom.js";
 import { log } from "../../platform/logger.js";

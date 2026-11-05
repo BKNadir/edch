@@ -1,7 +1,7 @@
 // Exobiology catalogue (public/data/exobio.json, built by tools/gen_exobio.py): species values,
 // colony distances and the planet conditions each species grows on.
 
-import type { BodyInfo } from "./activity.js";
+import type { BodyInfo } from "./activity/state.js";
 
 export interface Species {
   n: string;
