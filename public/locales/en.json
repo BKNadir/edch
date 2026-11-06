@@ -993,7 +993,11 @@
     "sinceGameStarted": "Since the game started, {{relTime}} ({{duration}})",
     "startEliteDangerousSummaryBeginsWhen": "Start Elite Dangerous: the summary begins when you log in.",
     "tMined": "t mined",
-    "tradeProfit": "Trade (profit)"
+    "tradeProfit": "Trade (profit)",
+    "resetCounters": "Reset counters",
+    "resetCountersHelp": "Counts again from now (until the next game session)",
+    "countersReset": "Counters reset",
+    "sinceReset": "Since the reset, {{relTime}} ({{duration}})"
   },
   "settings": {
     "advanced": "Advanced",

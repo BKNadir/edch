@@ -8,6 +8,8 @@ import type { MiningSettings } from "../../state/store.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
 import { duration, relTime } from "../../ui/format.js";
 import { type MethodFilter, spotResults } from "./spotResults.js";
+import { miningSinceReset, resetMiningCounters } from "../../state/sessionReset.js";
+import { resetCountersButton } from "../shared/resetCounters.js";
 import { busy } from "../missions/index.js";
 import { openSettingsTab } from "../settings/index.js";
 
@@ -158,7 +160,8 @@ export class MiningView implements View {
 
   private prospect(): (HTMLElement | null)[] {
     const st = this.ctx.store.state;
-    const m = st.activity.mining;
+    // The counters since the last "Reset counters" of this game session (the last asteroids stay).
+    const m = miningSinceReset(st.activity);
     const s = st.settings.mining;
     const targets = new Map(s.targets.map((target) => [target.id, target.min]));
     const last = m.last[0];
@@ -310,7 +313,17 @@ export class MiningView implements View {
       h(
         "section.card",
         null,
-        h("h3", null, t("mining.session")),
+        h(
+          "div.sync-head",
+          null,
+          h("h3", null, t("mining.session")),
+          st.activity.session.start
+            ? resetCountersButton(
+                () => resetMiningCounters(st.activity),
+                () => this.render(),
+              )
+            : null,
+        ),
         h(
           "div.stats",
           null,

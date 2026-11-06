@@ -993,7 +993,11 @@
     "sinceGameStarted": "Seit dem Spielstart, {{relTime}} ({{duration}})",
     "startEliteDangerousSummaryBeginsWhen": "Starte Elite Dangerous: Die Bilanz beginnt bei der Anmeldung.",
     "tMined": "t abgebaut",
-    "tradeProfit": "Handel (Gewinn)"
+    "tradeProfit": "Handel (Gewinn)",
+    "resetCounters": "Zähler zurücksetzen",
+    "resetCountersHelp": "Zählt ab jetzt neu (bis zur nächsten Spielsitzung)",
+    "countersReset": "Zähler zurückgesetzt",
+    "sinceReset": "Seit dem Zurücksetzen, {{relTime}} ({{duration}})"
   },
   "settings": {
     "advanced": "Erweitert",

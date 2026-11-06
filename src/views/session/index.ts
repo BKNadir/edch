@@ -4,6 +4,8 @@ import { fmt, h, replace } from "../../ui/dom.js";
 import { credits, duration, relTime } from "../../ui/format.js";
 import type { Ctx, View } from "../../state/context.js";
 import { t } from "../../platform/i18n.js";
+import { resetSessionCounters, sessionSinceReset } from "../../state/sessionReset.js";
+import { resetCountersButton } from "../shared/resetCounters.js";
 
 export class SessionView implements View {
   private root?: HTMLElement;
@@ -20,7 +22,10 @@ export class SessionView implements View {
 
   private render() {
     if (!this.root) return;
-    const s = this.ctx.store.state.activity.session;
+    const activity = this.ctx.store.state.activity;
+    // The counters since the last "Reset counters" of this game session.
+    const s = sessionSinceReset(activity);
+    const wasReset = s.start !== activity.session.start;
     const earned: [string, number][] = [
       [t("session.bounties"), s.bounties],
       [t("session.combatBonds"), s.bonds],
@@ -45,10 +50,18 @@ export class SessionView implements View {
             "p.sub",
             null,
             s.start
-              ? t("session.sinceGameStarted", { relTime: relTime(s.start), duration: duration(elapsed) })
+              ? wasReset
+                ? t("session.sinceReset", { relTime: relTime(s.start), duration: duration(elapsed) })
+                : t("session.sinceGameStarted", { relTime: relTime(s.start), duration: duration(elapsed) })
               : t("session.startEliteDangerousSummaryBeginsWhen"),
           ),
         ),
+        activity.session.start
+          ? resetCountersButton(
+              () => resetSessionCounters(activity),
+              () => this.render(),
+            )
+          : null,
       ),
       h(
         "section.card",

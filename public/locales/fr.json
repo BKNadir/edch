@@ -994,7 +994,11 @@
     "sinceGameStarted": "Depuis le lancement du jeu, {{relTime}} ({{duration}})",
     "startEliteDangerousSummaryBeginsWhen": "Lance Elite Dangerous : le bilan démarre à la connexion.",
     "tMined": "t minées",
-    "tradeProfit": "Commerce (bénéfice)"
+    "tradeProfit": "Commerce (bénéfice)",
+    "resetCounters": "Remettre à zéro",
+    "resetCountersHelp": "Recompte à partir de maintenant (jusqu'à la prochaine session de jeu)",
+    "countersReset": "Compteurs remis à zéro",
+    "sinceReset": "Depuis la remise à zéro, {{relTime}} ({{duration}})"
   },
   "settings": {
     "advanced": "Avancé",

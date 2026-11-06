@@ -1000,7 +1000,11 @@
     "sinceGameStarted": "Desde que o jogo começou, {{relTime}} ({{duration}})",
     "startEliteDangerousSummaryBeginsWhen": "Abra o Elite Dangerous: o resumo começa quando você entra.",
     "tMined": "t mineradas",
-    "tradeProfit": "Comércio (lucro)"
+    "tradeProfit": "Comércio (lucro)",
+    "resetCounters": "Zerar contadores",
+    "resetCountersHelp": "Conta de novo a partir de agora (até a próxima sessão de jogo)",
+    "countersReset": "Contadores zerados",
+    "sinceReset": "Desde a zeragem, {{relTime}} ({{duration}})"
   },
   "settings": {
     "advanced": "Avançado",

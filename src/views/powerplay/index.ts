@@ -6,6 +6,8 @@ import { fmt, h, replace } from "../../ui/dom.js";
 import { locale, t } from "../../platform/i18n.js";
 import { duration } from "../../ui/format.js";
 import type { Ctx, View } from "../../state/context.js";
+import { powerplaySessionStart, resetPowerplayCounters } from "../../state/sessionReset.js";
+import { resetCountersButton } from "../shared/resetCounters.js";
 
 export class PowerplayView implements View {
   private root?: HTMLElement;
@@ -28,7 +30,9 @@ export class PowerplayView implements View {
     const now = new Date();
     const week = weekStart(now);
     const nextWeek = new Date(week.getTime() + 7 * 86400000);
-    const session = st.activity.session.start ? meritsSince(pp, new Date(st.activity.session.start)) : 0;
+    // Merits since the game session started, or since the last "Reset counters".
+    const sessionStart = powerplaySessionStart(st.activity);
+    const session = sessionStart ? meritsSince(pp, new Date(sessionStart)) : 0;
     // Last 7 days, one bar per day.
     const days = [...Array(7)].map((_, i) => {
       const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - (6 - i)));
@@ -59,7 +63,17 @@ export class PowerplayView implements View {
         ? h(
             "section.card",
             null,
-            h("h3", { "data-no-tr": "" }, pp.power),
+            h(
+              "div.sync-head",
+              null,
+              h("h3", { "data-no-tr": "" }, pp.power),
+              st.activity.session.start
+                ? resetCountersButton(
+                    () => resetPowerplayCounters(st.activity),
+                    () => this.render(),
+                  )
+                : null,
+            ),
             h(
               "div.stats",
               null,

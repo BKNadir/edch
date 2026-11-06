@@ -989,7 +989,11 @@
     "sinceGameStarted": "С запуска игры, {{relTime}} ({{duration}})",
     "startEliteDangerousSummaryBeginsWhen": "Запустите Elite Dangerous: итоги начинаются при входе.",
     "tMined": "т добыто",
-    "tradeProfit": "Торговля (прибыль)"
+    "tradeProfit": "Торговля (прибыль)",
+    "resetCounters": "Сбросить счётчики",
+    "resetCountersHelp": "Считать заново с этого момента (до следующей игровой сессии)",
+    "countersReset": "Счётчики сброшены",
+    "sinceReset": "С момента сброса, {{relTime}} ({{duration}})"
   },
   "settings": {
     "advanced": "Дополнительно",
