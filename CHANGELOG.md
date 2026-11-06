@@ -3,6 +3,14 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.7
+
+- Search: new **Faction** tab. Type a minor faction (suggestions from the factions met in your journal), choose "present in the system" or "controls the system", and tick the faction states you want (Famine, Expansion, War…, with the game's names in your language). The systems come nearest first, with the faction's influence, its states, who controls the system and how old the data is; a click copies the system.
+- Engineer tour, stop by stop: no more route calculation. The tour is the list of engineers to visit (nearest first, then nearest to the previous one), with their system; you plot each leg in the game. Click an engineer (or "Start the tour"): their system is copied. EDCH notes when you arrive there, and once every line of that stop is done, it copies the next engineer's system by itself (with a notification if you turned them on). "Go to the next engineer" moves the current one to the end of the tour.
+- Wishlist: lines your current ship already has (blueprint at the wanted grade or higher, experimental effect) show as "Already done on this ship", leave the tour and the materials needed, and an engineer with nothing left to do leaves the tour.
+- Wishlist: new **Simple / Advanced** switch at the top. Advanced (default) shows every line with its grades and the materials needed; Simple shows only the engineer tour. The default is set in Settings → Game and search → Engineers.
+- Translations: the engineers' requirements (how to meet and unlock them, who refers them) and the farming sites are now translated in every language, with the game's names for ranks, reputations and goods. Faction states are shown with the game's names too, and numbers use your language's decimal separator.
+
 ## 0.10.6
 
 - About: a new "Support EDCH" card. EDCH stays free and without ads; if it helps you, the button opens the project's Ko-fi page. The card also says how EDCH is made: designed, tested and maintained by CMDR MDLuffy, developed with the help of the AI Claude (Anthropic).

@@ -5,6 +5,7 @@ import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { referenceOf, type Ctx, type View } from "../../state/context.js";
 import { distance, fmtLy, inaraSystem } from "../../services/spansh.js";
 import { openUrl } from "../../platform/bridge.js";
+import { engineerText } from "../../game/data.js";
 import type { Engineer } from "../../game/types.js";
 import type { EngineerStatus } from "../../game/journal/state.js";
 import { moduleLink, openSystem } from "../shared/links.js";
@@ -137,9 +138,10 @@ export class EngineersView implements View {
     const unlocked = st?.progress === "Unlocked";
     const referrer = e.referredBy ? this.ctx.game.data.engineers.find((x) => x.name === e.referredBy) : undefined;
     const refStatus = referrer ? this.statusOf(referrer) : undefined;
-    const checks = [checkOf(this.ctx, e.meetingTest, e.meeting), checkOf(this.ctx, e.unlockTest, e.unlock)].filter(
-      Boolean,
-    ) as Check[];
+    const checks = [
+      checkOf(this.ctx, e.meetingTest, engineerText(e, "meeting")),
+      checkOf(this.ctx, e.unlockTest, engineerText(e, "unlock")),
+    ].filter(Boolean) as Check[];
     const rank = st?.rank ?? 0;
 
     return h(
@@ -232,7 +234,7 @@ export class EngineersView implements View {
                   e.referralGrade ? " " + t("engineers.rank", { referralGrade: e.referralGrade }) : "",
                 )
               : e.discovery
-                ? h("p.check-line", null, h("span.dot"), ` ${e.discovery}`)
+                ? h("p.check-line", null, h("span.dot"), ` ${engineerText(e, "discovery")}`)
                 : null,
             checks.map((c) => {
               const done = c.need !== undefined && (c.have ?? 0) >= c.need;

@@ -1,5 +1,5 @@
-// Search page: systems, stations, commodities, ships, modules and services near you (Spansh),
-// with the results as tables.
+// Search page: stations selling or buying a commodity, ships, modules and services near you, and
+// the systems of a minor faction (Spansh), with the results as tables.
 
 import { fold, gameEnglish, gameName, resolveGameName, t } from "../../platform/i18n.js";
 import { locale } from "../../platform/i18n.js";
@@ -9,9 +9,10 @@ import { referenceOf, type Ctx, type View } from "../../state/context.js";
 import { fmtLy, inaraSystem } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
 import { openUrl } from "../../platform/bridge.js";
+import { factionForm } from "./factionTab.js";
 
 type Json = Record<string, any>;
-type Tab = "buy" | "sell" | "ship" | "module" | "service";
+type Tab = "buy" | "sell" | "ship" | "module" | "service" | "faction";
 
 const STATION_TYPES = [
   "Asteroid base",
@@ -50,7 +51,7 @@ const SERVICES: [string, string][] = [
 const CLASSES = ["", "0", "1", "2", "3", "4", "5", "6", "7", "8"];
 const RATINGS = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I"];
 
-let pending: { tab: Tab; value: string } | null = null;
+let pending: { tab: "buy" | "sell"; value: string } | null = null;
 
 /** Opens the search page on `tab` with `value` (an English game name) and runs it. */
 export function presetSearch(tab: "buy" | "sell", value: string) {
@@ -64,7 +65,13 @@ export class SearchView implements View {
   private form = h("div.search-form");
   private tabs = h("div.segmented");
   private opts = { largePad: false, carriers: false, planetary: true, sortPrice: true, minQty: 1 };
-  private values: Record<Tab, string> = { buy: "", sell: "", ship: "", module: "", service: SERVICES[0][0] };
+  private values: Record<Exclude<Tab, "faction">, string> = {
+    buy: "",
+    sell: "",
+    ship: "",
+    module: "",
+    service: SERVICES[0][0],
+  };
   private cls = "";
   /** Only the latest search may show its results (an older, slower answer is dropped). */
   private runId = 0;
@@ -132,6 +139,7 @@ export class SearchView implements View {
       ["ship", t("search.ships")],
       ["module", t("common.modules")],
       ["service", t("search.services")],
+      ["faction", t("search.faction")],
     ];
     replace(
       this.tabs,
@@ -149,6 +157,10 @@ export class SearchView implements View {
   }
 
   private renderForm() {
+    if (this.tab === "faction") {
+      replace(this.form, factionForm(this.ctx, this.out));
+      return;
+    }
     const tab = this.tab;
     const input = (list: string, placeholder: string) =>
       h("input.big", {
@@ -255,6 +267,7 @@ export class SearchView implements View {
 
   private async run() {
     const tab = this.tab;
+    if (tab === "faction") return;
     const typed = this.values[tab].trim();
     if (!typed) return;
     // Names can be typed in the app's language or in English; Spansh only knows English.

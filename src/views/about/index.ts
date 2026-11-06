@@ -47,6 +47,11 @@ const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
     ],
   },
   {
+    name: "EDDI (EDCD)",
+    what: t("about.eddiTranslatedRanksStates"),
+    links: [["github.com/EDCD/EDDI", "https://github.com/EDCD/EDDI"]],
+  },
+  {
     name: "EDR (lekeno)",
     what: t("about.exobiologySpeciesNamesJournalWritesThem"),
     links: [["github.com/lekeno/edr", "https://github.com/lekeno/edr"]],

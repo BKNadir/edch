@@ -2,6 +2,7 @@
 // system), and how to unlock them when they are not known yet.
 
 import type { Pick } from "../../features/engineers/engineerPick.js";
+import { engineerText } from "../../game/data.js";
 import type { Engineer } from "../../game/types.js";
 import { t } from "../../platform/i18n.js";
 import { fmtLy } from "../../services/spansh.js";
@@ -23,7 +24,9 @@ export function engineerButton(e: Engineer): HTMLElement {
 
 /** "To unlock" (or "to meet"): a click shows what the game asks for. */
 export function unlockBadge(e: Engineer, known: boolean): HTMLElement {
-  const how = known ? e.unlock || e.meeting : e.meeting || e.discovery;
+  const how = known
+    ? engineerText(e, "unlock") || engineerText(e, "meeting")
+    : engineerText(e, "meeting") || engineerText(e, "discovery");
   return h(
     "details.unlock-badge",
     null,

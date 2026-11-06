@@ -1,29 +1,28 @@
 // Wishlist page: the blueprints wanted with their grades and materials, build import (Coriolis,
 // EDSY), the engineer for each line, and the engineer tour route.
 
+import { doneOnShip } from "../../features/engineers/doneOnShip.js";
 import { pickEngineer } from "../../features/engineers/engineerPick.js";
-import {
-  clearRoute,
-  currentRoute,
-  nextJump,
-  planTour,
-  plotTour,
-  type TourPlan,
-  tourRange,
-} from "../../features/engineers/tour.js";
+import { goToStop, passStop, planTour, stopTour, type Stop, tourProgress } from "../../features/engineers/tour.js";
 import { extractLoadout, importLoadout } from "../../features/materials/buildImporter.js";
 import { suggestTrades } from "../../features/materials/trade.js";
-import { superchargeMultiplier } from "../../features/navigation/jumpRange.js";
 import type { Blueprint } from "../../game/types.js";
-import { copyText } from "../../platform/bridge.js";
 import { gameName, t } from "../../platform/i18n.js";
 import { fmtLy } from "../../services/spansh.js";
 import { type Ctx, ownedOf, reserved, type View } from "../../state/context.js";
-import { blueprintGrades, bpKey, defaultRolls, type WishItem, wishNeeds } from "../../state/store.js";
+import {
+  blueprintGrades,
+  bpKey,
+  defaultRolls,
+  type WishlistMode,
+  totalNeeds,
+  type WishItem,
+  wishNeeds,
+} from "../../state/store.js";
 import { fmt, h, icon, replace, toast } from "../../ui/dom.js";
 import { kindFr } from "../detail/index.js";
-import { engineerLinks, moduleLink, openSystem } from "../shared/links.js";
-import { engineerButton, engineerRow, unlockBadge } from "./engineerRow.js";
+import { engineerLinks, moduleLink } from "../shared/links.js";
+import { engineerRow, unlockBadge } from "./engineerRow.js";
 import { confirmClear, lineLabel, select } from "./widgets.js";
 
 export function addToWishlist(ctx: Ctx, bp: Blueprint, from?: number, to?: number) {
@@ -47,9 +46,31 @@ export class WishlistView implements View {
   private importPanel: HTMLElement;
   private importOpen = false;
   private toolbar = h("div.toolbar");
+  /** Simple (the tour only) or advanced (every line, the materials): starts on the setting. */
+  private mode: WishlistMode;
 
   constructor(private ctx: Ctx) {
     this.importPanel = this.buildImport();
+    this.mode = ctx.store.state.settings.engineers.wishlistMode;
+  }
+
+  /** The Simple / Advanced switch at the top of the page. */
+  private modeSwitch(): HTMLElement {
+    const modes: [WishlistMode, string][] = [
+      ["advanced", t("wishlist.modeAdvanced")],
+      ["simple", t("wishlist.modeSimple")],
+    ];
+    return h(
+      "div.segmented",
+      { title: t("wishlist.modeHelp") },
+      modes.map(([mode, label]) =>
+        h(
+          "button",
+          { class: this.mode === mode ? "active" : "", onclick: () => ((this.mode = mode), this.update()) },
+          label,
+        ),
+      ),
+    );
   }
 
   private buildImport(): HTMLElement {
@@ -146,6 +167,7 @@ export class WishlistView implements View {
     const store = this.ctx.store;
     replace(
       this.toolbar,
+      store.state.wishlist.length && store.state.settings.engineers.autoPick ? this.modeSwitch() : null,
       h(
         "button.ghost",
         { onclick: () => ((this.importOpen = !this.importOpen), this.update()) },
@@ -179,63 +201,47 @@ export class WishlistView implements View {
 
   // ---------------- engineer tour ----------------
 
-  private tourOut = h("div.tour-out");
-  private plotting = false;
-
   private tourCard(): HTMLElement | null {
     const ctx = this.ctx;
     const plan = planTour(ctx);
-    if (!plan.stops.length) return null;
-    const s = ctx.store.state.settings.engineers;
-    const tooFar = plan.total > s.maxTourLy;
-    const range = tourRange(ctx);
-    const here = ctx.store.state.cmdr.location?.system;
-    const stopRows = plan.stops.map((st, i) => {
-      const e = st.pick.engineer;
-      const missing = Object.entries(st.missing);
-      return h(
-        "li.tour-stop",
-        { class: missing.length ? "blocked" : "" },
-        h("span.tour-num", null, String(i + 1)),
-        h(
-          "div",
+    const doneLines = plan.doneOnShip.length
+      ? h(
+          "div.tour-done",
           null,
+          h("span.badge.muted", null, icon("check"), " " + t("wishlist.doneOnShip")),
+          " ",
+          h("span.sub", null, plan.doneOnShip.map((l) => lineLabel(ctx, l)).join(" · ")),
+        )
+      : null;
+    if (!plan.stops.length) {
+      if (!doneLines) return null;
+      return h("section.card.tour", null, h("h3", null, t("wishlist.engineerTour")), doneLines);
+    }
+    const limit = ctx.store.state.settings.engineers.maxTourLy;
+    const tooFar = plan.total > limit;
+    const progress = tourProgress();
+    const current = progress ? plan.stops.find((st) => st.pick.engineer.name === progress.engineer) : undefined;
+    const stopRows = plan.stops.map((st, i) => this.stopRow(st, i, st === current ? progress!.arrived : undefined));
+    const actions = current
+      ? [
           h(
-            "div",
-            null,
-            engineerButton(e),
-            st.pick.unlocked ? null : unlockBadge(e, Boolean(st.pick.status)),
-            h("span.sub", null, ` · ${e.system} — ${e.station}`),
-            st.leg !== undefined ? h("span.sub", null, ` · ${fmtLy(st.leg)}`) : null,
+            "button.primary",
+            { title: t("wishlist.passStopHelp"), onclick: () => passStop(ctx) },
+            icon("play"),
+            " " + t("wishlist.nextEngineer"),
           ),
-          h("div.sub", null, st.lines.map((l) => lineLabel(ctx, l)).join(" · ")),
-          missing.length
-            ? h(
-                "div.tour-missing",
-                null,
-                icon("warn"),
-                " " + t("wishlist.missing") + " ",
-                missing.flatMap(([id, n], i) => [
-                  i ? ", " : "",
-                  h("span", { "data-no-tr": "" }, `${fmt(n)} × `),
-                  h("span", null, ctx.game.nameOf(id)),
-                ]),
-              )
-            : h("div.tour-ok", null, icon("check"), " " + t("wishlist.materialsOkStop")),
-        ),
-      );
-    });
-    const plotBtn = h(
-      "button.primary",
-      {
-        disabled: tooFar || this.plotting || !here || !range,
-        title: !range ? t("wishlist.jumpRangeUnknownStartGameSo") : !here ? t("common.unknownLocation") : "",
-        onclick: () => this.plot(plan, here!, range),
-      },
-      icon("search"),
-      " " + t("wishlist.plotRouteRange", { value: range ? fmtLy(range) : "?" }),
-    );
-    if (!this.plotting) this.renderRoute(here);
+          h("button.ghost", { onclick: () => stopTour(ctx) }, icon("close"), " " + t("wishlist.stopTour")),
+        ]
+      : h(
+          "button.primary",
+          {
+            disabled: tooFar,
+            title: t("wishlist.startTourHelp"),
+            onclick: () => goToStop(ctx, plan.stops[0]),
+          },
+          icon("copy"),
+          " " + t("wishlist.startTour"),
+        );
     return h(
       "section.card.tour",
       null,
@@ -248,97 +254,72 @@ export class WishlistView implements View {
           h("h3", null, t("wishlist.engineerTour")),
           h("p.sub", null, t("wishlist.tourStops", { count: plan.stops.length, fmtLy: fmtLy(plan.total) })),
         ),
-        plotBtn,
+        h("div.row", null, actions),
       ),
       tooFar
         ? h(
             "p.notice.danger",
             null,
             icon("warn"),
-            " " + t("wishlist.tourMoreThanLimitSettingsGame", { fmtLy: fmtLy(plan.total), fmtLy2: fmtLy(s.maxTourLy) }),
+            " " + t("wishlist.tourMoreThanLimitSettingsGame", { fmtLy: fmtLy(plan.total), fmtLy2: fmtLy(limit) }),
           )
         : null,
+      h("p.sub", null, current ? t("wishlist.tourRunningHelp") : t("wishlist.tourHowItWorks")),
       h("ol.tour-stops", null, stopRows),
-      this.tourOut,
+      doneLines,
     );
   }
 
-  private async plot(plan: TourPlan, from: string, range: number) {
-    // A second click while Spansh is still working would plot the whole tour twice.
-    if (this.plotting) return;
-    this.plotting = true;
-    this.update(); // the button shows as disabled
-    replace(this.tourOut, h("p.sub", null, h("span.spinner"), " " + t("common.spanshPlottingRoute")));
-    try {
-      await plotTour(
-        from,
-        plan.stops,
-        range,
-        (leg, of) =>
-          replace(
-            this.tourOut,
-            h("p.sub", null, h("span.spinner"), " " + t("wishlist.spanshPlottingLeg", { leg, of })),
-          ),
-        superchargeMultiplier(this.ctx.store.state.cmdr.loadout?.fsd),
-      );
-      this.plotting = false;
-      this.update();
-    } catch (e) {
-      this.plotting = false;
-      this.update();
-      replace(this.tourOut, h("p.error", null, icon("warn"), ` ${String((e as Error).message ?? e)}`));
-    }
-  }
-
-  private renderRoute(here?: string) {
-    const r = currentRoute();
-    if (!r) return replace(this.tourOut);
-    const auto = this.ctx.store.state.settings.engineers.autoCopyNext;
-    const at = here ? nextJump(here).index : -1;
-    const next = at >= 0 ? r.jumps[at + 1] : undefined;
-    replace(
-      this.tourOut,
+  /** One stop of the tour; `arrived` is set for the current stop only. */
+  private stopRow(st: Stop, index: number, arrived: boolean | undefined): HTMLElement {
+    const ctx = this.ctx;
+    const e = st.pick.engineer;
+    const missing = Object.entries(st.missing);
+    const isCurrent = arrived !== undefined;
+    return h(
+      "li.tour-stop",
+      { class: `${missing.length ? "blocked" : ""}${isCurrent ? " current" : ""}` },
+      h("span.tour-num", null, String(index + 1)),
       h(
-        "div.row.tour-head",
+        "div",
         null,
-        h("strong", null, t("wishlist.jumps", { totalJumps: fmt(r.totalJumps), fmtLy: fmtLy(r.distance) })),
-        next
-          ? h(
-              "button.ghost.small",
-              {
-                onclick: () =>
-                  copyText(next.system).then((ok) => ok && toast(t("common.nextJumpCopied", { next: next.system }))),
-              },
-              icon("copy"),
-              " " + t("wishlist.copyNextJump", { system: next.system }),
-            )
-          : null,
-        h("span.sub", null, auto ? t("wishlist.autoCopyNextJump") : t("wishlist.autoCopyNextJumpOffSettings")),
         h(
-          "button.ghost.small",
-          { onclick: () => (clearRoute(), this.update()) },
-          icon("close"),
-          " " + t("wishlist.clearRoute"),
-        ),
-      ),
-      h(
-        "ol.tour-route",
-        null,
-        r.jumps.map((j, i) =>
+          "div",
+          null,
           h(
-            "li",
-            { class: `${j.engineer ? "stop" : ""}${i === at ? " here" : ""}` },
-            h(
-              "button.sys",
-              { title: t("common.copy", { name: j.system }), onclick: () => openSystem(j.system, { navigate: false }) },
-              icon("copy"),
-              h("span", null, j.system),
-            ),
-            j.engineer ? h("span.badge.hit", { "data-no-tr": "" }, j.engineer) : null,
-            j.neutron ? h("span.badge", null, "Neutron") : null,
-            i === at ? h("span.badge.muted", null, t("common.areHere")) : null,
+            "button.inline-link.ref-link.eng-link",
+            {
+              title: t("wishlist.goToStop", { name: e.name, system: e.system }),
+              "data-no-tr": "",
+              onclick: () => goToStop(ctx, st),
+            },
+            e.name,
           ),
+          st.pick.unlocked ? null : [" ", unlockBadge(e, Boolean(st.pick.status))],
+          h("span.sub", null, ` · ${e.system} — ${e.station}`),
+          st.leg !== undefined ? h("span.sub", null, ` · ${fmtLy(st.leg)}`) : null,
+          isCurrent
+            ? h(
+                "span.badge.hit",
+                null,
+                arrived ? t("wishlist.stopArrived") : t("wishlist.stopOnTheWay", { system: e.system }),
+              )
+            : null,
         ),
+        h("div.sub", null, st.lines.map((l) => lineLabel(ctx, l)).join(" · ")),
+        missing.length
+          ? h(
+              "div.tour-missing",
+              null,
+              icon("warn"),
+              " " + t("wishlist.missing") + " ",
+              missing.flatMap(([id, n], i) => [
+                i ? ", " : "",
+                h("span", { "data-no-tr": "" }, `${fmt(n)} × `),
+                h("span", null, ctx.game.nameOf(id)),
+              ]),
+            )
+          : h("div.tour-ok", null, icon("check"), " " + t("wishlist.materialsOkStop")),
       ),
     );
   }
@@ -365,7 +346,10 @@ export class WishlistView implements View {
       return;
     }
 
-    const needs = reserved(this.ctx);
+    const simple = this.mode === "simple" && store.state.settings.engineers.autoPick;
+    // Lines the ship already has need no materials here.
+    const toDo = items.filter((item) => !doneOnShip(this.ctx, item));
+    const needs = toDo.length === items.length ? reserved(this.ctx) : totalNeeds(game, toDo);
     const rows = Object.entries(needs)
       .map(([id, need]) => ({ id, need, owned: ownedOf(this.ctx, id), m: game.material(id) }))
       .sort(
@@ -396,10 +380,11 @@ export class WishlistView implements View {
       const ready = Object.entries(local).every(([id, n]) => ownedOf(this.ctx, id) >= n);
       const gradeOptions = [...grades.keys()].sort();
       const autoPick = store.state.settings.engineers.autoPick;
-      const chosen = autoPick ? pickEngineer(this.ctx, item) : null;
+      const onShip = doneOnShip(this.ctx, item);
+      const chosen = autoPick && !onShip ? pickEngineer(this.ctx, item) : null;
       return h(
         "div.wish.card",
-        { class: `${ready ? "ready" : ""}${chosen?.toMeet ? " no-engineer" : ""}` },
+        { class: `${ready ? "ready" : ""}${chosen?.toMeet ? " no-engineer" : ""}${onShip ? " done-ship" : ""}` },
         h(
           "div.wish-head",
           null,
@@ -416,7 +401,11 @@ export class WishlistView implements View {
               !autoPick && any.engineers?.length ? [" · ", ...engineerLinks(any.engineers)] : "",
             ),
           ),
-          ready ? h("span.badge.hit", null, icon("check"), " " + t("wishlist.ready")) : null,
+          onShip
+            ? h("span.badge.muted", null, icon("check"), " " + t("wishlist.doneOnShip"))
+            : ready
+              ? h("span.badge.hit", null, icon("check"), " " + t("wishlist.ready"))
+              : null,
           h(
             "button.icon-btn",
             { title: t("common.remove"), onclick: () => store.setWishlist(items.filter((w) => w.id !== item.id)) },
@@ -538,34 +527,36 @@ export class WishlistView implements View {
       ),
       importer,
       store.state.settings.engineers.autoPick ? this.tourCard() : null,
-      h(
-        "div.wish-layout",
-        null,
-        h("div.wish-list", null, entries),
-        h(
-          "div.card.needs",
-          null,
-          h("h3", null, t("wishlist.materialsNeeded")),
-          h(
-            "table.table",
+      simple
+        ? null
+        : h(
+            "div.wish-layout",
             null,
+            h("div.wish-list", null, entries),
             h(
-              "thead",
+              "div.card.needs",
               null,
+              h("h3", null, t("wishlist.materialsNeeded")),
               h(
-                "tr",
+                "table.table",
                 null,
-                h("th", null, t("wishlist.material")),
-                h("th.num", null, t("wishlist.needed")),
-                h("th.num", null, t("wishlist.owned")),
-                h("th.num", null, t("wishlist.missing2")),
-                h("th", null, t("wishlist.progressTrade")),
+                h(
+                  "thead",
+                  null,
+                  h(
+                    "tr",
+                    null,
+                    h("th", null, t("wishlist.material")),
+                    h("th.num", null, t("wishlist.needed")),
+                    h("th.num", null, t("wishlist.owned")),
+                    h("th.num", null, t("wishlist.missing2")),
+                    h("th", null, t("wishlist.progressTrade")),
+                  ),
+                ),
+                h("tbody", null, shortRows),
               ),
             ),
-            h("tbody", null, shortRows),
           ),
-        ),
-      ),
     );
   }
 }

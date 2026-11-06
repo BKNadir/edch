@@ -2,7 +2,7 @@
 
 import { t } from "../../../platform/i18n.js";
 import type { Ctx } from "../../../state/context.js";
-import type { Settings } from "../../../state/store.js";
+import type { Settings, WishlistMode } from "../../../state/store.js";
 import { startGame } from "../../../ui/desktop.js";
 import { h } from "../../../ui/dom.js";
 
@@ -26,11 +26,6 @@ export function navigationCard(ctx: Ctx, rerender: () => void): HTMLElement {
     h("h3", null, t("common.navigation")),
     h("p.sub", null, t("settings.nextSystemCopiedPcSClipboard")),
     box(s.navAutoCopy, (on) => store.updateSettings({ navAutoCopy: on }), t("settings.copyNextJumpAutomaticallyWhenI")),
-    box(
-      s.engineers.autoCopyNext,
-      (on) => store.updateSettings({ engineers: { ...store.state.settings.engineers, autoCopyNext: on } }),
-      t("settings.copyNextJumpAutomaticallyWhenI2"),
-    ),
     box(s.navNotifyCopy, (on) => store.updateSettings({ navNotifyCopy: on }), t("settings.notifyMeWhenNextJumpCopied")),
   );
 }
@@ -40,7 +35,7 @@ export function engineersCard(ctx: Ctx, rerender: () => void): HTMLElement {
   const e = store.state.settings.engineers;
   const set = (patch: Partial<typeof e>) =>
     store.updateSettings({ engineers: { ...store.state.settings.engineers, ...patch } });
-  const check = (key: "autoPick" | "knownOnly" | "regionLimit" | "autoCopyNext" | "autoTick", label: string) =>
+  const check = (key: "autoPick" | "knownOnly" | "regionLimit" | "autoTick", label: string) =>
     h(
       "label.check",
       null,
@@ -75,6 +70,24 @@ export function engineersCard(ctx: Ctx, rerender: () => void): HTMLElement {
       h("small", null, t("settings.totalStraightLineDistanceBetweenStops")),
     ),
     check("autoTick", t("settings.moveWishlistItselfWhenGameApplies")),
+    h(
+      "label.field",
+      null,
+      h("span", null, t("settings.wishlistOpensIn")),
+      h(
+        "select",
+        {
+          onchange: (ev: Event) => set({ wishlistMode: (ev.target as HTMLSelectElement).value as WishlistMode }),
+        },
+        (
+          [
+            ["advanced", t("wishlist.modeAdvanced")],
+            ["simple", t("wishlist.modeSimple")],
+          ] as [WishlistMode, string][]
+        ).map(([mode, label]) => h("option", { value: mode, selected: e.wishlistMode === mode }, label)),
+      ),
+      h("small", null, t("wishlist.modeHelp")),
+    ),
   );
 }
 

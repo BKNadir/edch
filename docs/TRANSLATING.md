@@ -32,6 +32,10 @@ places:
 - Game terms in app texts must use the names the localized game shows (for example the French
   "Récupérateur de carburant", "Injection FSD").
 - A text missing in a language falls back to English.
+- The `engineerData` namespace holds texts of the game data that the game itself doesn't translate
+  for us: how to meet and unlock each engineer (`<engineerName>Meeting`, `<engineerName>Unlock`),
+  who refers them, and the farming sites. `engineerText()` and `siteText()` in `src/game/data.ts`
+  pick them.
 
 Run `npm run i18n:check` (also part of `npm test` and CI). It reports keys used in the code but
 missing in English, keys missing in a language, variables that differ from English, and keys the

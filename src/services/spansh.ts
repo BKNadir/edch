@@ -1,7 +1,7 @@
 // Spansh search API: turns a "where to find" rule into a Spansh query near the reference
 // system, runs it (with a short cache) and returns systems, bodies or stations with their distance.
 
-import { locale, t } from "../platform/i18n.js";
+import { gameName, locale, t } from "../platform/i18n.js";
 import { spanshPost } from "../platform/bridge.js";
 import type { Vec3 } from "../game/journal/state.js";
 import type { Finder } from "../features/materials/sources.js";
@@ -33,11 +33,12 @@ const cache = new Map<string, { at: number; value: FinderResult }>();
 const TTL = 10 * 60 * 1000;
 
 const num = (n: unknown) => (typeof n === "number" ? n : Number(n ?? NaN));
+const oneDecimal = (n: number) => n.toLocaleString(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const fmtPop = (n: number) =>
   n >= 1e9
-    ? t("spansh.bnPop", { value: (n / 1e9).toFixed(1) })
+    ? t("spansh.bnPop", { value: oneDecimal(n / 1e9) })
     : n >= 1e6
-      ? t("spansh.mPop", { value: (n / 1e6).toFixed(1) })
+      ? t("spansh.mPop", { value: oneDecimal(n / 1e6) })
       : n >= 1e3
         ? t("spansh.kPop", { value: Math.round(n / 1e3) })
         : t("spansh.pop", { n });
@@ -89,14 +90,17 @@ function systemRow(r: any, f: Finder): ResultRow {
       for (const st of all) if (wanted.has(st)) hits.set(st, [...(hits.get(st) ?? []), p.name]);
     }
     for (const [st, names] of hits)
-      badges.push({ text: `${st} · ${names.length > 1 ? `${names.length} factions` : names[0]}`, tone: "hit" });
+      badges.push({
+        text: `${gameName(st)} · ${names.length > 1 ? t("spansh.factionCount", { count: names.length }) : names[0]}`,
+        tone: "hit",
+      });
   }
   if (
     r.controlling_minor_faction_state &&
     !wanted.has(r.controlling_minor_faction_state) &&
     r.controlling_minor_faction_state !== "None"
   ) {
-    badges.push({ text: r.controlling_minor_faction_state, tone: "muted" });
+    badges.push({ text: gameName(r.controlling_minor_faction_state), tone: "muted" });
   }
   const sub: string[] = [];
   if (r.population) sub.push(fmtPop(num(r.population)));
@@ -200,6 +204,87 @@ export async function runFinder(f: Finder, ref: Reference, s: Settings, force = 
   const value = { rows, total: num(data?.count) || rows.length };
   cache.set(cacheKey, { at: Date.now(), value });
   return value;
+}
+
+// ---------------- faction search ----------------
+
+export interface FactionQuery {
+  faction: string;
+  /** Only the systems the faction controls. */
+  ownerOnly: boolean;
+  /** Faction states wanted (English game names); empty: any state. */
+  states: string[];
+}
+
+/** The faction's presence in a Spansh system result. */
+const presenceOf = (r: any, faction: string): any =>
+  (Array.isArray(r.minor_faction_presences) ? r.minor_faction_presences : []).find(
+    (p: any) => String(p.name).toLowerCase() === faction.toLowerCase(),
+  );
+
+const controls = (r: any, faction: string) =>
+  String(r.controlling_minor_faction ?? "").toLowerCase() === faction.toLowerCase();
+
+function factionRow(r: any, q: FactionQuery): ResultRow {
+  const presence = presenceOf(r, q.faction) ?? {};
+  const wanted = new Set(q.states);
+  const states = [
+    ...new Set<string>(
+      [presence.state, ...(Array.isArray(presence.active_states) ? presence.active_states : [])].filter(
+        (st) => st && st !== "None",
+      ),
+    ),
+  ];
+  const badges: ResultRow["badges"] = [];
+  if (controls(r, q.faction)) badges.push({ text: t("spansh.controlsSystem"), tone: "hit" });
+  if (typeof presence.influence === "number")
+    badges.push({ text: t("spansh.influence", { value: oneDecimal(presence.influence * 100) }) });
+  for (const st of states) badges.push({ text: gameName(st), tone: wanted.has(st) ? "hit" : "muted" });
+  const sub: string[] = [];
+  if (r.controlling_minor_faction && !controls(r, q.faction))
+    sub.push(t("spansh.controlledBy", { faction: r.controlling_minor_faction }));
+  if (r.population) sub.push(fmtPop(num(r.population)));
+  return {
+    system: r.name,
+    title: r.name,
+    distance: num(r.distance),
+    sub,
+    badges,
+    links: [
+      ...(r.id64 ? [{ label: "Spansh", url: `https://spansh.co.uk/system/${r.id64}` }] : []),
+      { label: "Inara", url: inaraSystem(r.name) },
+    ],
+    updated: r.updated_at,
+  };
+}
+
+/**
+ * Systems where a minor faction is present (or that it controls), nearest first, optionally only
+ * where it is in one of `states`. Spansh filters on the faction's main state.
+ */
+export async function searchFaction(q: FactionQuery, ref: Reference): Promise<FinderResult> {
+  const presence: Record<string, unknown> = { name: { value: [q.faction] } };
+  if (q.states.length) presence.state = { value: q.states };
+  const request = (filters: Record<string, unknown>, size: number) => ({
+    filters: { minor_faction_presences: [presence], ...filters },
+    sort: [{ distance: { direction: "asc" } }],
+    size,
+    page: 0,
+    ...reference(ref),
+  });
+  let data: any;
+  if (q.ownerOnly) {
+    try {
+      data = await spanshPost("systems/search", request({ controlling_minor_faction: { value: [q.faction] } }, 50));
+    } catch {
+      // Not every Spansh version filters on the controlling faction: filter the presences here.
+      data = await spanshPost("systems/search", request({}, 200));
+    }
+  } else data = await spanshPost("systems/search", request({}, 50));
+  let results: any[] = Array.isArray(data?.results) ? data.results : [];
+  if (q.ownerOnly) results = results.filter((r) => controls(r, q.faction));
+  const rows = results.map((r) => factionRow(r, q));
+  return { rows, total: q.ownerOnly ? rows.length : num(data?.count) || rows.length };
 }
 
 export function distance(a?: Vec3, b?: Vec3 | null): number | undefined {

@@ -71,6 +71,9 @@ export interface Settings {
   phoneHidden: string[];
 }
 
+/** How the Wishlist page opens: every line and the materials, or the engineer tour only. */
+export type WishlistMode = "advanced" | "simple";
+
 export interface EngineerSettings {
   /** Show one engineer per line (the best one) instead of the full list. */
   autoPick: boolean;
@@ -80,10 +83,10 @@ export interface EngineerSettings {
   regionLimit: boolean;
   /** Longest engineer tour proposed, in ly (straight lines between stops). */
   maxTourLy: number;
-  /** Copy the next jump of the tour when arriving in a system of the route. */
-  autoCopyNext: boolean;
   /** Tick wishlist lines off when the game says a modification was made (EngineerCraft). */
   autoTick: boolean;
+  /** How the Wishlist page opens. */
+  wishlistMode: WishlistMode;
 }
 
 export const DEFAULT_ENGINEER_SETTINGS: EngineerSettings = {
@@ -91,8 +94,8 @@ export const DEFAULT_ENGINEER_SETTINGS: EngineerSettings = {
   knownOnly: true,
   regionLimit: true,
   maxTourLy: 2000,
-  autoCopyNext: false,
   autoTick: true,
+  wishlistMode: "advanced",
 };
 
 export interface NotifySettings {

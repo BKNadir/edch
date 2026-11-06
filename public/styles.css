@@ -3835,34 +3835,35 @@ body.focus-mode .focus-exit {
   font-size: 12.5px;
   margin-top: 4px;
 }
-.tour-out {
+.tour-stop.current {
+  border-color: var(--accent);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+.tour-stop.current.blocked {
+  opacity: 1;
+}
+.tour-stop .badge.hit {
+  margin-left: 8px;
+}
+.tour-done {
   margin-top: 12px;
+  line-height: 1.6;
 }
-.tour-head {
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
+/* A line the ship already has: no visit needed, shown faded. */
+.wish.done-ship {
+  opacity: 0.55;
 }
-.tour-route {
-  margin: 0;
-  padding-left: 26px;
-  display: grid;
-  gap: 2px;
-  max-height: 360px;
-  overflow-y: auto;
-  font-size: 13px;
+
+/* Search, Faction tab: the states to filter on. */
+.faction-states {
+  margin-top: 10px;
 }
-.tour-route li {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.tour-route li.stop {
+.faction-states summary {
+  cursor: pointer;
   font-weight: 600;
 }
-.tour-route li.here .sys {
-  color: var(--accent);
+.faction-states .opts {
+  gap: 4px 16px;
 }
 
 /* Phones: rows of controls wrap instead of pushing the page wider. */

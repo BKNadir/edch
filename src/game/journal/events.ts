@@ -10,6 +10,7 @@ import {
   type FactionInfo,
   type Json,
   normalizedName,
+  rememberFactions,
   type Vec3,
 } from "./state.js";
 
@@ -163,6 +164,10 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
         reinforcement: typeof ev.PowerplayStateReinforcement === "number" ? ev.PowerplayStateReinforcement : undefined,
         undermining: typeof ev.PowerplayStateUndermining === "number" ? ev.PowerplayStateUndermining : undefined,
       };
+      rememberFactions(
+        state,
+        state.location.factions.map((f) => f.name),
+      );
       return true;
     }
 

@@ -105,9 +105,25 @@ export interface CommanderState {
    * carrier sells with its stock, what it buys. Kept up to date by MarketBuy/MarketSell.
    */
   carrierMarkets?: Record<number, CarrierMarketSnapshot>;
+  /** Minor factions met in the journal (systems visited, missions), most recent first. */
+  knownFactions?: string[];
   lastEvent?: string;
   materialsSeenAt?: string;
   lockerSeenAt?: string;
+}
+
+/** Most factions kept in `knownFactions` (for the Search page's suggestions). */
+const KNOWN_FACTIONS_MAX = 400;
+
+/** Puts `names` first in the commander's known factions. */
+export function rememberFactions(state: CommanderState, names: unknown[]) {
+  const fresh = names.filter((n): n is string => typeof n === "string" && n.length > 0);
+  if (!fresh.length) return;
+  const known = new Set(fresh);
+  state.knownFactions = [...fresh, ...(state.knownFactions ?? []).filter((n) => !known.has(n))].slice(
+    0,
+    KNOWN_FACTIONS_MAX,
+  );
 }
 
 export function emptyState(): CommanderState {

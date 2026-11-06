@@ -278,3 +278,24 @@ Weapon Schematic ¦ ¦ ¦ ¦ Esquema de arma ¦
 Weapon Test Data ¦ ¦ ¦ ¦ Dados de testes de armas ¦
 Xeno-Defence Protocols ¦ ¦ ¦ ¦ Protocolos de xenodefesa ¦
 pH Neutraliser ¦ ¦ ¦ ¦ Neutralizador de pH ¦
+
+# Minor faction states (Search → Faction), from EDDI's FactionStates resources (Apache-2.0).
+Blight ¦ Fléau ¦ Seuche ¦ Plaga ¦ Praga ¦ Неурожай
+Boom ¦ Essor économique ¦ Aufschwung ¦ Auge ¦ Auge ¦ Бум
+Bust ¦ Faillite ¦ Pleite ¦ Quiebra ¦ Recessão ¦ Провал
+Civil Liberty ¦ Liberté civile ¦ Bürgerliche Freiheit ¦ Libertad Civil ¦ Liberdade Civil ¦ Гражданская свобода
+Civil Unrest ¦ Émeutes ¦ Unruhen ¦ Desórdenes públicos ¦ Revolta Civil ¦ Гражданские беспорядки
+Civil War ¦ Guerre civile ¦ Bürgerkrieg ¦ Guerra civil ¦ Guerra Civil ¦ Гражданская война
+Drought ¦ Sécheresse ¦ Dürre ¦ Sequía ¦ Seca ¦ Засуха
+Election ¦ Élections ¦ Wahlen ¦ Elecciones ¦ Eleição ¦ Выборы
+Expansion ¦ Politique expansionniste ¦ Expansion ¦ Expansión ¦ Expansão ¦ Экспансия
+Famine ¦ Famine ¦ Hungersnot ¦ Hambruna ¦ Fome ¦ Голод
+Infrastructure Failure ¦ Infrastructure défaillante ¦ Ausfall der Infrastruktur ¦ Fallo de Infraestructura ¦ Falha de Infraestrutura ¦ Нарушение инфраструктуры
+Investment ¦ Investissements ¦ Investition ¦ Inversión ¦ Investimento ¦ Инвестирование
+Lockdown ¦ Loi Martiale ¦ Abriegelung ¦ Bloqueo ¦ Lei Marcial ¦ Карантин
+Natural Disaster ¦ Catastrophe naturelle ¦ Naturkatastrophe ¦ Desastre Natural ¦ Desastre Natural ¦ Стихийное бедствие
+Outbreak ¦ Épidémie ¦ Ausbruch ¦ Epidemia ¦ Epidemia ¦ Эпидемия
+Pirate Attack ¦ Attaque pirate ¦ Piratenangriff ¦ Ataque Pirata ¦ Ataque Pirata ¦ Атака пиратов
+Public Holiday ¦ Jour Férié ¦ Feiertag ¦ Fiesta Popular ¦ Feriado Público ¦ Праздники
+Retreat ¦ Retraite ¦ Rückzug ¦ Retirada ¦ Retirada ¦ Отступление
+War ¦ Guerre ¦ Krieg ¦ Guerra ¦ Guerra ¦ Война

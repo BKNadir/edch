@@ -18,6 +18,9 @@ Community data used to build public/data/game.json (tools/gen_data.py)
   localized names (commodities, materials, Odyssey items, modules, blueprints, experimental effects),
   vendored in tools/sources/almanac with its LICENSE, ATTRIBUTIONS.md and the commit they come from.
 - msarilar/EDEngineer (MIT, Copyright (c) 2016 Max) — translations of the game's names (materials, modules, blueprints), kept in tools/sources/edengineer/ and completed in tools/game_terms_*.txt.
+- EDCD/EDDI (Apache License 2.0) — translations of the minor faction states (tools/game_terms_2.txt), and
+  of the ranks and some commodities used in the engineers' requirements (public/locales/*.json,
+  engineerData), from its DataDefinitions resources.
 - EDCD/FDevIDs — journal symbols and grades, via d47.
 - EDCD/coriolis-data — cross-check of recipes, via d47; Frame Shift Drive constants (optimal mass, max fuel
   per jump, fuel multiplier and power) in src/fsdData.ts, from modules/standard/frame_shift_drive.json.

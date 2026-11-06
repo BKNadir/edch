@@ -2,7 +2,7 @@
 // the recipes using it, trades and the wishlist actions.
 
 import { gameName, t } from "../../platform/i18n.js";
-import { CATEGORY_LABELS } from "../../game/data.js";
+import { CATEGORY_LABELS, siteText } from "../../game/data.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { ownedOf, referenceOf, reserved, type Ctx } from "../../state/context.js";
 import { distance, fmtLy } from "../../services/spansh.js";
@@ -208,7 +208,7 @@ export class DetailPanel {
                 h(
                   "div.result-meta",
                   null,
-                  h("span.badge.hit", null, site.what),
+                  h("span.badge.hit", null, siteText(site.what)),
                   site.lat !== undefined
                     ? h("span.sub", null, t("detail.latLon", { lat: site.lat, lon: site.lon }))
                     : null,
