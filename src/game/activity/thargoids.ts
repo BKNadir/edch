@@ -5,25 +5,12 @@
 import type { EventHandlers, Thargoids } from "./state.js";
 import { num } from "./state.js";
 
-/** Thargoid ship types EDCH tells apart, from the smallest bond to the largest. */
-export type ThargoidType =
-  | "revenant"
-  | "scout"
-  | "banshee"
-  | "hunter"
-  | "cyclops"
-  | "orthrus"
-  | "basilisk"
-  | "medusa"
-  | "hydra"
-  | "unknown";
-
 /**
  * Combat bond of each type (credits), as paid since 2024. Scouts (Marauder, Berserker, Inciter,
  * Regenerator…) share one band (65 000 to 80 000): they can't be told apart by their bond. The
  * Glaive and the Scythe (the "Hunter" class) pay the same bond.
  */
-export const THARGOID_BONDS: { type: Exclude<ThargoidType, "unknown">; reward: number }[] = [
+export const THARGOID_BONDS = [
   { type: "revenant", reward: 25_000 },
   { type: "scout", reward: 80_000 },
   { type: "banshee", reward: 1_000_000 },
@@ -33,7 +20,16 @@ export const THARGOID_BONDS: { type: Exclude<ThargoidType, "unknown">; reward: n
   { type: "basilisk", reward: 24_000_000 },
   { type: "medusa", reward: 40_000_000 },
   { type: "hydra", reward: 60_000_000 },
-];
+] as const;
+
+/** Thargoid ship types EDCH tells apart (those of `THARGOID_BONDS`), or "unknown". */
+export type ThargoidType = (typeof THARGOID_BONDS)[number]["type"] | "unknown";
+
+/** Kills of one type: how many, and the bonds they paid. */
+export interface KillTally {
+  count: number;
+  credits: number;
+}
 
 /** Bonds counted as a scout (older and current scout rewards). */
 const SCOUT_BAND = { min: 30_000, max: 300_000 };
@@ -45,7 +41,8 @@ export function thargoidType(reward: number): ThargoidType {
   const exact = THARGOID_BONDS.find((bond) => bond.reward === reward);
   if (exact) return exact.type;
   if (reward >= SCOUT_BAND.min && reward <= SCOUT_BAND.max) return "scout";
-  const close = THARGOID_BONDS.find((bond) => Math.abs(reward - bond.reward) <= bond.reward * TOLERANCE);
+  const isClose = (bond: { reward: number }) => Math.abs(reward - bond.reward) <= bond.reward * TOLERANCE;
+  const close = THARGOID_BONDS.find(isClose);
   return close?.type ?? "unknown";
 }
 
@@ -64,9 +61,14 @@ export function axZoneIntensity(type: string): string {
 const MAX_KILLS = 5000;
 const MAX_ZONES = 500;
 
+/** Drops the oldest entries of `list` beyond `max`. */
+function keepLast(list: unknown[], max: number) {
+  if (list.length > max) list.splice(0, list.length - max);
+}
+
 /** Kills of each type among `kills` (count and credits), only the types seen. */
-export function killsByType(kills: Thargoids["kills"]): Map<ThargoidType, { count: number; credits: number }> {
-  const byType = new Map<ThargoidType, { count: number; credits: number }>();
+export function killsByType(kills: Thargoids["kills"]): Map<ThargoidType, KillTally> {
+  const byType = new Map<ThargoidType, KillTally>();
   for (const kill of kills) {
     const tally = byType.get(kill.type) ?? { count: 0, credits: 0 };
     tally.count += 1;
@@ -82,7 +84,7 @@ export const THARGOIDS_EVENTS: EventHandlers = {
     if (!isThargoidFaction(ev.VictimFaction)) return false;
     const reward = num(ev.Reward) ?? 0;
     st.thargoids.kills.push({ at, type: thargoidType(reward), reward, system: st.system?.name });
-    if (st.thargoids.kills.length > MAX_KILLS) st.thargoids.kills.splice(0, st.thargoids.kills.length - MAX_KILLS);
+    keepLast(st.thargoids.kills, MAX_KILLS);
     return true;
   },
   SupercruiseDestinationDrop: (st, ev, at) => {
@@ -93,7 +95,7 @@ export const THARGOIDS_EVENTS: EventHandlers = {
       label: String(ev.Type_Localised ?? ev.Type),
       system: st.system?.name,
     });
-    if (st.thargoids.zones.length > MAX_ZONES) st.thargoids.zones.splice(0, st.thargoids.zones.length - MAX_ZONES);
+    keepLast(st.thargoids.zones, MAX_ZONES);
     return true;
   },
 };
