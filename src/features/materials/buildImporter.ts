@@ -81,13 +81,15 @@ function pick(game: Game, kind: "modification" | "experimental", symbol: string,
 }
 
 export function importLoadout(game: Game, loadout: Json): ImportResult {
-  const counts = new Map<string, { bp: Blueprint; from: number; to: number; count: number }>();
+  const counts = new Map<string, { bp: Blueprint; from: number; to: number; count: number; slots: string[] }>();
   const skipped: string[] = [];
-  const add = (bp: Blueprint, from: number, to: number) => {
+  const add = (bp: Blueprint, from: number, to: number, slot: string) => {
     const key = `${bpKey(bp)}|${from}|${to}`;
     const prev = counts.get(key);
-    if (prev) prev.count += 1;
-    else counts.set(key, { bp, from, to, count: 1 });
+    if (prev) {
+      prev.count += 1;
+      if (slot) prev.slots.push(slot);
+    } else counts.set(key, { bp, from, to, count: 1, slots: slot ? [slot] : [] });
   };
 
   for (const m of loadout.Modules as Json[]) {
@@ -95,24 +97,26 @@ export function importLoadout(game: Game, loadout: Json): ImportResult {
     if (!eng) continue;
     const item = String(m.Item ?? "").toLowerCase();
     const module = moduleOf(item);
+    const slot = String(m.Slot ?? "").toLowerCase();
     const symbol = String(eng.BlueprintName ?? "").toLowerCase();
     const level = Math.max(1, Math.min(5, Number(eng.Level ?? 1)));
     const grades = pick(game, "modification", symbol, module);
     if (grades.length) {
       const top =
         grades.filter((g) => (g.grade ?? 0) <= level).sort((a, b) => (b.grade ?? 0) - (a.grade ?? 0))[0] ?? grades[0];
-      add(top, 1, Math.min(level, top.grade ?? level));
+      add(top, 1, Math.min(level, top.grade ?? level), slot);
     } else {
       skipped.push(`${m.Slot}: ${eng.BlueprintName}`);
     }
     if (eng.ExperimentalEffect) {
       const exp = pick(game, "experimental", String(eng.ExperimentalEffect).toLowerCase(), module)[0];
-      if (exp) add(exp, 0, 0);
+      if (exp) add(exp, 0, 0, slot);
       else skipped.push(`${m.Slot}: ${eng.ExperimentalEffect}`);
     }
   }
 
   const stamp = Date.now().toString(36);
+  const shipType = loadout.Ship ? String(loadout.Ship).toLowerCase() : undefined;
   const items: WishItem[] = [...counts.values()].map((c, i) => ({
     id: `${stamp}${i}`,
     bp: bpKey(c.bp),
@@ -121,6 +125,9 @@ export function importLoadout(game: Game, loadout: Json): ImportResult {
     rolls: {},
     count: c.count,
     note: loadout.ShipName || loadout.Ship,
+    // Every module's slot known: the line can be checked module by module.
+    ...(c.slots.length === c.count ? { slots: c.slots } : {}),
+    ...(shipType ? { shipType } : {}),
   }));
   return {
     items,

@@ -13,7 +13,7 @@ import { log } from "../../platform/logger.js";
 import { notify } from "../../ui/notifier.js";
 import { distance } from "../../services/spansh.js";
 import { blueprintGrades, defaultRolls, wishNeeds, type Store, type WishItem } from "../../state/store.js";
-import { doneOnShip } from "./doneOnShip.js";
+import { doneOnShip, slotsApply } from "./doneOnShip.js";
 import { engineerChoices, origin, type Pick } from "./engineerPick.js";
 
 type Json = Record<string, any>;
@@ -69,7 +69,9 @@ function assignLines(ctx: Ctx, items: WishItem[]): { byEngineer: Map<string, Sto
       });
     else if (r.toMeet) orphans.push(item);
   }
+  const placedAt = new Map<WishItem, string>();
   const place = (line: Placing, pick: Pick) => {
+    placedAt.set(line.item, pick.engineer.name);
     const stop = byEngineer.get(pick.engineer.name) ?? { pick, lines: [], missing: {} };
     stop.lines.push(line.item);
     byEngineer.set(pick.engineer.name, stop);
@@ -107,6 +109,16 @@ function assignLines(ctx: Ctx, items: WishItem[]): { byEngineer: Map<string, Sto
   left = [...effects];
   while (left.length) {
     for (const line of [...left]) {
+      if (slotsApply(ctx, line.item)) {
+        // A build's module: its own modification still to do decides; done, the nearest engineer.
+        const slots = new Set(line.item.slots);
+        const ownModification = mods.find((m) => m.item.slots?.some((slot) => slots.has(slot)));
+        const engineer = ownModification ? placedAt.get(ownModification.item) : undefined;
+        const pick = line.choices.find((c) => c.engineer.name === engineer) ?? atAStop(line) ?? line.choices[0];
+        place(line, pick);
+        left = left.filter((l) => l !== line);
+        continue;
+      }
       const withModule = [...byEngineer.values()]
         .filter((stop) =>
           stop.lines.some((l) => l.bp.split("|")[1] === line.module && blueprintKind(ctx, l) === "modification"),
@@ -369,8 +381,14 @@ function tick(ev: Json) {
   const kindOf = (item: WishItem) => [...blueprintGrades(game, item.bp).values()][0]?.kind;
   let next: WishItem[] | null = null;
   let message = "";
+  // The line of the very module worked on first (lines imported from a build know their slots).
+  const slot = typeof ev.Slot === "string" ? ev.Slot.toLowerCase() : "";
+  const ownFirst = (lines: WishItem[]) => [
+    ...lines.filter((w) => slot && w.slots?.includes(slot)),
+    ...lines.filter((w) => !slot || !w.slots?.includes(slot)),
+  ];
   if (effect) {
-    const item = list.find((w) => kindOf(w) === "experimental" && symbolsOf(w).includes(effect));
+    const item = ownFirst(list).find((w) => kindOf(w) === "experimental" && symbolsOf(w).includes(effect));
     if (!item) return;
     const name = gameName(item.bp.split("|")[2] ?? "");
     if (item.count > 1) {
@@ -382,23 +400,23 @@ function tick(ev: Json) {
     }
   } else if (blueprint && level) {
     const item =
-      list.find(
+      ownFirst(list).find(
         (w) =>
           kindOf(w) === "modification" &&
           symbolsOf(w).includes(blueprint) &&
           level >= w.gradeFrom &&
           level <= w.gradeTo,
-      ) ?? list.find((w) => kindOf(w) === "modification" && symbolsOf(w).includes(blueprint));
+      ) ?? ownFirst(list).find((w) => kindOf(w) === "modification" && symbolsOf(w).includes(blueprint));
     if (!item) return;
     const name = gameName(item.bp.split("|")[2] ?? "");
     const left = Math.max(0, (item.rolls[level] ?? defaultRolls(level)) - 1);
     let updated: WishItem | null = { ...item, rolls: { ...item.rolls, [level]: left } };
     // A module that reaches the wanted grade is done, whatever the rolls planned (the game may
     // complete a grade in fewer). Rolls on the same module after that don't count twice.
-    const slot = typeof ev.Slot === "string" ? `${item.id}|${ev.Slot}` : "";
-    if (level >= item.gradeTo && slot && doneSlots.has(slot)) return;
+    const doneKey = slot ? `${item.id}|${slot}` : "";
+    if (level >= item.gradeTo && doneKey && doneSlots.has(doneKey)) return;
     if (level >= item.gradeTo) {
-      if (slot) doneSlots.add(slot);
+      if (doneKey) doneSlots.add(doneKey);
       // One module done at the top grade.
       if (item.count > 1)
         updated = { ...item, count: item.count - 1, rolls: { ...item.rolls, [level]: defaultRolls(level) } };

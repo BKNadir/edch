@@ -212,3 +212,44 @@ test("done on ship: the module type counts (Overcharged on a multi-cannon is not
   assert.equal(doneOnShip(ctx, line("modification|Beam Laser|Overcharged Weapon", 5)), false);
   assert.equal(doneOnShip(ctx, line("modification|Multi-cannon|Overcharged Weapon", 5)), true);
 });
+
+test("imported build, module by module: the grade 5 engineer until the grade is reached, the effect alone at the nearest", async () => {
+  const { importLoadout } = await import("../dist/js/features/materials/buildImporter.js");
+  const build = {
+    Ship: "Krait_MkII",
+    Modules: [
+      {
+        Slot: "MediumHardpoint1",
+        Item: "Hpt_BeamLaser_Fixed_Medium",
+        Engineering: { BlueprintName: "Weapon_LongRange", Level: 5, ExperimentalEffect: "special_thermal_vent" },
+      },
+    ],
+  };
+  const { items } = importLoadout(game, build);
+  assert.deepEqual(
+    items.map((i) => [i.bp, i.slots, i.shipType]),
+    [
+      ["modification|Beam Laser|Long Range Weapon", ["mediumhardpoint1"], "krait_mkii"],
+      ["experimental|Beam Laser|Thermal Vent", ["mediumhardpoint1"], "krait_mkii"],
+    ],
+  );
+  const laser = (engineering) => ({ slot: "MediumHardpoint1", item: "hpt_beamlaser_fixed_medium", engineering });
+  const plan = (engineering) => {
+    const ctx = ctxWith(items, engineering ? [laser(engineering)] : []);
+    ctx.store.state.cmdr.loadout.ship = "krait_mkii";
+    ctx.store.state.cmdr.location = { system: "Wyrd", pos: [-11.03, 31.25, -4.3], docked: false, factions: [] };
+    return planTour(ctx).stops.map((s) => [s.pick.engineer.name, s.lines.map((l) => l.bp.split("|")[2]).sort()]);
+  };
+  // Nothing on the module: Long Range G5 and the effect, both at the grade 5 engineer.
+  assert.deepEqual(plan(null), [["Broo Tarquin", ["Long Range Weapon", "Thermal Vent"]]]);
+  // Stopped at a grade 3 engineer, who also applied the effect: only Long Range G5 is left, still at G5.
+  assert.deepEqual(plan({ blueprint: "Weapon_LongRange", level: 3, experimental: "special_thermal_vent" }), [
+    ["Broo Tarquin", ["Long Range Weapon"]],
+  ]);
+  // Long Range G5 done, no effect yet: the effect alone, at the nearest engineer (The Dweller, here).
+  assert.deepEqual(plan({ blueprint: "Weapon_LongRange", level: 5 }), [["The Dweller", ["Thermal Vent"]]]);
+  // Another ship type: the build's slots don't apply, the module type is checked instead.
+  const other = ctxWith(items, [laser({ blueprint: "Weapon_LongRange", level: 5 })]);
+  other.store.state.cmdr.loadout.ship = "python";
+  assert.equal(doneOnShip(other, items[0]), true);
+});

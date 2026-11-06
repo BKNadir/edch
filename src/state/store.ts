@@ -213,6 +213,13 @@ export interface WishItem {
   /** How many times (e.g. 4 thrusters, 2 synthesis runs). */
   count: number;
   note?: string;
+  /**
+   * Imported builds: the ship's slots the line comes from (journal names, lower case, e.g.
+   * "mediumhardpoint2"), so a module's effect stays tied to its own modification, and the ship
+   * type (journal symbol, e.g. "krait_mkii"). Lines added by hand have neither.
+   */
+  slots?: string[];
+  shipType?: string;
 }
 
 export interface AppState {
