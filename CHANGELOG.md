@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.9
+
+- Settings → Updates: new option "Also offer pre-releases (test versions)". Ticked, EDCH also offers the test builds published before a release, and installs them like any update; a pre-release is followed by the next one, then by its release. Unticked (default), only releases are offered, as before.
+
 ## 0.10.8
 
 - Engineer tour with fewer stops: each line now goes to an engineer already in the tour when one can do it, the hardest lines (grade 5, few engineers) deciding the stops. An experimental effect goes with its module's modification: no detour to a low-grade engineer for an effect (or a low-grade modification) the grade 5 engineer of that module also does. The wishlist lines show the same engineer as the tour.

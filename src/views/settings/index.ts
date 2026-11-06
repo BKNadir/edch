@@ -152,6 +152,17 @@ export class SettingsView implements View {
               }),
               " " + t("settings.checkGithubNewVersionsAutomatically"),
             ),
+            h(
+              "label.check",
+              null,
+              h("input", {
+                type: "checkbox",
+                checked: s.updatePreReleases,
+                onchange: (e: Event) => set({ updatePreReleases: (e.target as HTMLInputElement).checked }),
+              }),
+              " " + t("settings.offerPreReleases"),
+            ),
+            h("small", null, t("settings.offerPreReleasesHelp")),
             this.mode === "portable"
               ? h("p.sub", null, t("settings.portableVersionUpdatesArenTInstalled"))
               : this.mode !== "installer"

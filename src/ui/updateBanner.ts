@@ -163,8 +163,26 @@ async function download(info: UpdateInfo) {
   render();
 }
 
+/**
+ * The tag this build was installed from by the updater ("v0.10.8-pre.64"): a pre-release build
+ * has the version of its release (0.10.8), this tells which pre-release it is.
+ */
+const INSTALLED_KEY = "edch.installedTag";
+function installedTag(): string | null {
+  try {
+    return localStorage.getItem(INSTALLED_KEY);
+  } catch {
+    return null;
+  }
+}
+
 async function install(p: { info: UpdateInfo; path: string }) {
   try {
+    try {
+      localStorage.setItem(INSTALLED_KEY, `v${p.info.version}`);
+    } catch {
+      /* the next check takes this build for the release */
+    }
     await updateInstall(p.path);
   } catch (e) {
     phase = { kind: "failed", info: p.info, message: String((e as Error)?.message ?? e) };
@@ -180,7 +198,7 @@ export async function checkForUpdate(manual = false): Promise<void> {
     return;
   }
   try {
-    const info = await updateCheck();
+    const info = await updateCheck(store.state.settings.updatePreReleases, installedTag());
     if (!info) {
       if (manual) toast(t("updater.edchUpDate"));
       return;

@@ -1,6 +1,7 @@
 //! Updates from the GitHub releases of BKNadir/edch.
 //!
-//! check: compares the latest published release with this build's version.
+//! check: compares the latest published release (or, if chosen in Settings, the newest
+//! pre-release too) with this build's version.
 //! download: fetches the NSIS installer of that release into %TEMP%\EDCH-update, reporting
 //! progress, and checks its SHA-256 against the digest GitHub publishes for the asset.
 //! install: starts that installer in passive mode with /R (it reopens EDCH once done) and
@@ -58,36 +59,82 @@ fn update_dir() -> PathBuf {
     std::env::temp_dir().join("EDCH-update")
 }
 
-/// The latest published release, if it is newer than this build. Drafts and pre-releases
-/// are ignored (GitHub's "latest" never returns them).
-#[tauri::command]
-pub fn update_check() -> Result<Option<UpdateInfo>, String> {
-    let current = env!("CARGO_PKG_VERSION").to_string();
-    let url = format!("https://api.github.com/repos/{REPO}/releases/latest");
-    let release: serde_json::Value = match agent().get(&url).set("Accept", "application/vnd.github+json").call() {
-        Ok(r) => serde_json::from_str(&r.into_string().map_err(|e| e.to_string())?).map_err(|e| e.to_string())?,
-        Err(ureq::Error::Status(404, _)) => return Ok(None), // no release published yet
+/// Release order: (major, minor, patch, 1 for a release / 0 for a pre-release, pre-release run).
+/// "v0.10.8-pre.64" → (0, 10, 8, 0, 64), "v0.10.8" → (0, 10, 8, 1, 0): a release comes after
+/// its own pre-releases.
+fn release_key(tag: &str) -> Option<(u64, u64, u64, u8, u64)> {
+    let (major, minor, patch) = parse_version(tag)?;
+    Some(match tag.trim().split_once('-') {
+        None => (major, minor, patch, 1, 0),
+        Some((_, pre)) => {
+            let run = pre.rsplit('.').next().and_then(|n| n.parse().ok()).unwrap_or(0);
+            (major, minor, patch, 0, run)
+        }
+    })
+}
+
+/// GitHub's answer as JSON; None when there is nothing (404: no release published yet).
+fn github_json(url: &str) -> Result<Option<serde_json::Value>, String> {
+    match agent().get(url).set("Accept", "application/vnd.github+json").call() {
+        Ok(r) => Ok(Some(
+            serde_json::from_str(&r.into_string().map_err(|e| e.to_string())?).map_err(|e| e.to_string())?,
+        )),
+        Err(ureq::Error::Status(404, _)) => Ok(None),
         Err(ureq::Error::Status(code, _)) => {
             crate::logs::warn("update", &format!("GitHub answered {code}"));
-            return Err(format!("githubStatus: {code}"));
+            Err(format!("githubStatus: {code}"))
         }
-        Err(e) => return Err(format!("network: {e}")),
+        Err(e) => Err(format!("network: {e}")),
+    }
+}
+
+/// The release's Windows installer (NSIS), if it has one yet.
+fn setup_asset(release: &serde_json::Value) -> Option<&serde_json::Value> {
+    release["assets"].as_array().into_iter().flatten().find(|a| {
+        a["name"]
+            .as_str()
+            .is_some_and(|n| n.to_lowercase().ends_with("-setup.exe"))
+    })
+}
+
+/// The newest release newer than this build, if any.
+///
+/// `pre_releases`: also consider pre-releases (Settings → Updates). `installed`: the tag this
+/// build was installed from by the updater ("v0.10.8-pre.64"), so a pre-release build knows which
+/// one it is; ignored when it doesn't match this build's version.
+#[tauri::command]
+pub fn update_check(pre_releases: bool, installed: Option<String>) -> Result<Option<UpdateInfo>, String> {
+    let current = env!("CARGO_PKG_VERSION").to_string();
+    let mine = installed
+        .filter(|tag| parse_version(tag) == parse_version(&current))
+        .and_then(|tag| release_key(&tag))
+        .or_else(|| release_key(&current));
+    let releases: Vec<serde_json::Value> = if pre_releases {
+        let url = format!("https://api.github.com/repos/{REPO}/releases?per_page=20");
+        match github_json(&url)? {
+            Some(serde_json::Value::Array(list)) => list,
+            _ => Vec::new(),
+        }
+    } else {
+        // GitHub's "latest" never returns drafts or pre-releases.
+        let url = format!("https://api.github.com/repos/{REPO}/releases/latest");
+        github_json(&url)?.into_iter().collect()
     };
-    let tag = release["tag_name"].as_str().unwrap_or_default();
-    let (Some(latest), Some(mine)) = (parse_version(tag), parse_version(&current)) else {
+    let newest = releases
+        .iter()
+        .filter(|r| !r["draft"].as_bool().unwrap_or(false) && setup_asset(r).is_some())
+        .filter_map(|r| release_key(r["tag_name"].as_str().unwrap_or_default()).map(|key| (key, r)))
+        .max_by_key(|(key, _)| *key);
+    let (Some((latest, release)), Some(mine)) = (newest, mine) else {
         return Ok(None);
     };
     if latest <= mine {
         return Ok(None);
     }
-    let asset = release["assets"].as_array().into_iter().flatten().find(|a| {
-        a["name"]
-            .as_str()
-            .is_some_and(|n| n.to_lowercase().ends_with("-setup.exe"))
-    });
-    let Some(asset) = asset else {
-        return Ok(None); // release without a Windows installer (yet)
+    let Some(asset) = setup_asset(release) else {
+        return Ok(None);
     };
+    let tag = release["tag_name"].as_str().unwrap_or_default();
     Ok(Some(UpdateInfo {
         version: tag.trim_start_matches(['v', 'V']).to_string(),
         current,
@@ -192,7 +239,7 @@ pub fn update_install(app: AppHandle, path: String) -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-    use super::parse_version;
+    use super::{parse_version, release_key};
 
     #[test]
     fn versions() {
@@ -201,5 +248,13 @@ mod tests {
         assert_eq!(parse_version("v1.0.0-beta.1"), Some((1, 0, 0)));
         assert!(parse_version("v0.5.10") > parse_version("v0.5.9"));
         assert_eq!(parse_version("nightly"), None);
+    }
+
+    #[test]
+    fn releases_after_their_pre_releases() {
+        assert!(release_key("v0.10.8-pre.65") > release_key("v0.10.8-pre.64"));
+        assert!(release_key("v0.10.8") > release_key("v0.10.8-pre.66"));
+        assert!(release_key("v0.10.9-pre.1") > release_key("v0.10.8"));
+        assert!(release_key("v0.10.10-pre.2") > release_key("v0.10.9"));
     }
 }
