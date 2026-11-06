@@ -997,7 +997,8 @@
     "resetCounters": "Zähler zurücksetzen",
     "resetCountersHelp": "Zählt ab jetzt neu (bis zur nächsten Spielsitzung)",
     "countersReset": "Zähler zurückgesetzt",
-    "sinceReset": "Seit dem Zurücksetzen, {{relTime}} ({{duration}})"
+    "sinceReset": "Seit dem Zurücksetzen, {{relTime}} ({{duration}})",
+    "toCashIn": "In einer Station einzulösen: {{value}} Cr (Kopfgelder und Kampfbescheinigungen)"
   },
   "settings": {
     "advanced": "Erweitert",

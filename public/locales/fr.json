@@ -998,7 +998,8 @@
     "resetCounters": "Remettre à zéro",
     "resetCountersHelp": "Recompte à partir de maintenant (jusqu'à la prochaine session de jeu)",
     "countersReset": "Compteurs remis à zéro",
-    "sinceReset": "Depuis la remise à zéro, {{relTime}} ({{duration}})"
+    "sinceReset": "Depuis la remise à zéro, {{relTime}} ({{duration}})",
+    "toCashIn": "À encaisser en station : {{value}} Cr (primes et obligations de combat)"
   },
   "settings": {
     "advanced": "Avancé",

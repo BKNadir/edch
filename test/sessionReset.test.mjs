@@ -56,3 +56,26 @@ test("powerplay: the session's merits count from the reset", () => {
   resetPowerplayCounters(activity);
   assert.ok(powerplaySessionStart(activity) > "2026-11-06T18:00:00Z");
 });
+
+test("bounties and combat bonds count at the kill (Thargoids too); cashing in is kept apart", async () => {
+  const { applyActivity } = await import("../dist/js/game/activity/index.js");
+  const activity = emptyActivity();
+  const at = "2026-11-06T20:57:10Z";
+  applyActivity(activity, { event: "LoadGame", timestamp: "2026-11-06T20:00:00Z", Credits: 1000 });
+  for (let i = 0; i < 7; i++)
+    applyActivity(activity, {
+      event: "FactionKillBond",
+      timestamp: at,
+      Reward: 80000,
+      AwardingFaction: "$faction_PilotsFederation;",
+      VictimFaction: "$faction_Thargoid;",
+    });
+  applyActivity(activity, { event: "Bounty", timestamp: at, TotalReward: 25000, VictimFaction: "Pirates" });
+  assert.equal(activity.session.kills, 8);
+  assert.equal(activity.session.bonds, 560000);
+  assert.equal(activity.session.bounties, 25000);
+  // Cashing in doesn't count twice.
+  applyActivity(activity, { event: "RedeemVoucher", timestamp: at, Type: "CombatBond", Amount: 560000 });
+  assert.equal(activity.session.bonds, 560000);
+  assert.equal(activity.session.bondsCashed, 560000);
+});

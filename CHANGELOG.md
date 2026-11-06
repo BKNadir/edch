@@ -5,6 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.11
 
+- Session: bounties and combat bonds (Thargoids included) now count as soon as you get them, not only once cashed in at a station, and a line shows what is left to cash in.
 - Wishlist: new "Export my ship to EDSY" (or Coriolis) button. It opens your current ship, as the game's journal describes it (engineering done since included), in the build site chosen in Settings → Preferences.
 - Settings: new Preferences tab, with the language and start page, how pages open (Wishlist mode, Navigation route type, a click on a system), the Controls page's keyboard, the ship export site, and the Spansh system search settings (moved from the other tabs).
 - New "Reset counters" button on the pages with session counters: Session (credits earned and activity), Mining ("This session": tonnes refined, prospectors, asteroids…; the last asteroids stay) and Powerplay (merits this session). The counters start again from zero until the next game session, even after restarting EDCH.

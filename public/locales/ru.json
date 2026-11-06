@@ -993,7 +993,8 @@
     "resetCounters": "Сбросить счётчики",
     "resetCountersHelp": "Считать заново с этого момента (до следующей игровой сессии)",
     "countersReset": "Счётчики сброшены",
-    "sinceReset": "С момента сброса, {{relTime}} ({{duration}})"
+    "sinceReset": "С момента сброса, {{relTime}} ({{duration}})",
+    "toCashIn": "Получить на станции: {{value}} Кр (награды и боевые бонды)"
   },
   "settings": {
     "advanced": "Дополнительно",

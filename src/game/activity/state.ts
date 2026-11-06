@@ -156,8 +156,14 @@ export interface Sampling {
 export interface Session {
   start?: string;
   credits?: number;
+  /** Bounties earned at the kills of this session (cashed in or not). */
   bounties: number;
+  /** Combat bonds earned at the kills of this session (Thargoids included). */
   bonds: number;
+  /** Bounties cashed in at a station this session (some may be from earlier sessions). */
+  bountiesCashed: number;
+  /** Combat bonds cashed in at a station this session. */
+  bondsCashed: number;
   trade: number;
   exploration: number;
   exobiology: number;
@@ -238,6 +244,8 @@ export function emptySession(): Session {
   return {
     bounties: 0,
     bonds: 0,
+    bountiesCashed: 0,
+    bondsCashed: 0,
     trade: 0,
     exploration: 0,
     exobiology: 0,

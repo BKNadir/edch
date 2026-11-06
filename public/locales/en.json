@@ -997,7 +997,8 @@
     "resetCounters": "Reset counters",
     "resetCountersHelp": "Counts again from now (until the next game session)",
     "countersReset": "Counters reset",
-    "sinceReset": "Since the reset, {{relTime}} ({{duration}})"
+    "sinceReset": "Since the reset, {{relTime}} ({{duration}})",
+    "toCashIn": "To cash in at a station: {{value}} Cr (bounties and combat bonds)"
   },
   "settings": {
     "advanced": "Advanced",

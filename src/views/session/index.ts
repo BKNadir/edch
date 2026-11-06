@@ -35,6 +35,8 @@ export class SessionView implements View {
       [t("common.missions"), s.missions],
     ];
     const total = earned.reduce((sum, [, v]) => sum + v, 0);
+    // Bounties and combat bonds earned at the kills but not yet cashed in at a station.
+    const toCashIn = Math.max(0, s.bounties + s.bonds - (s.bountiesCashed ?? 0) - (s.bondsCashed ?? 0));
     const max = Math.max(1, ...earned.map(([, v]) => Math.abs(v)));
     const elapsed = s.start ? Date.now() - Date.parse(s.start) : 0;
     replace(
@@ -85,6 +87,7 @@ export class SessionView implements View {
             ),
           ),
         ),
+        toCashIn > 0 ? h("p.sub", null, t("session.toCashIn", { value: credits(toCashIn) })) : null,
         elapsed > 10 * 60000 && total > 0
           ? h("p.sub", null, t("session.crPerHour", { value: credits((total / elapsed) * 3600000) }))
           : null,

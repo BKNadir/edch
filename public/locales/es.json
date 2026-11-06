@@ -998,7 +998,8 @@
     "resetCounters": "Reiniciar contadores",
     "resetCountersHelp": "Vuelve a contar desde ahora (hasta la próxima sesión de juego)",
     "countersReset": "Contadores reiniciados",
-    "sinceReset": "Desde el reinicio, {{relTime}} ({{duration}})"
+    "sinceReset": "Desde el reinicio, {{relTime}} ({{duration}})",
+    "toCashIn": "Por cobrar en una estación: {{value}} Cr (recompensas y bonificaciones de combate)"
   },
   "settings": {
     "advanced": "Avanzado",

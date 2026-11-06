@@ -1004,7 +1004,8 @@
     "resetCounters": "Zerar contadores",
     "resetCountersHelp": "Conta de novo a partir de agora (até a próxima sessão de jogo)",
     "countersReset": "Contadores zerados",
-    "sinceReset": "Desde a zeragem, {{relTime}} ({{duration}})"
+    "sinceReset": "Desde a zeragem, {{relTime}} ({{duration}})",
+    "toCashIn": "A receber numa estação: {{value}} Cr (recompensas e pagamentos de combate)"
   },
   "settings": {
     "advanced": "Avançado",

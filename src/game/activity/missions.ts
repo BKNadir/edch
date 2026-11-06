@@ -140,9 +140,13 @@ export const MISSIONS_EVENTS: EventHandlers = {
     m.total = num(ev.TotalItemsToDeliver) ?? m.total;
     return true;
   },
+  // Bounties and combat bonds count as earned at the kill (Thargoid bonds included); what was
+  // cashed in at a station (RedeemVoucher) is kept apart, so the page shows what is left to cash.
   Bounty: (st, ev) => {
     const session = st.session;
-    session.kills += 1; // credits are counted when redeemed (RedeemVoucher)
+    session.kills += 1;
+    // Ships: TotalReward (all the factions' bounties); skimmers and others: Reward.
+    session.bounties += num(ev.TotalReward) ?? num(ev.Reward) ?? 0;
     const victim = ev.VictimFaction_Localised ?? ev.VictimFaction;
     if (victim) massacreKill(st, String(victim));
     return true;
@@ -150,13 +154,14 @@ export const MISSIONS_EVENTS: EventHandlers = {
   FactionKillBond: (st, ev) => {
     const session = st.session;
     session.kills += 1;
+    session.bonds += num(ev.Reward) ?? 0;
     return true;
   },
   RedeemVoucher: (st, ev) => {
     const session = st.session;
     const amount = num(ev.Amount) ?? 0;
-    if (ev.Type === "bounty") session.bounties += amount;
-    else if (ev.Type === "CombatBond") session.bonds += amount;
+    if (ev.Type === "bounty") session.bountiesCashed += amount;
+    else if (ev.Type === "CombatBond") session.bondsCashed += amount;
     return true;
   },
 };
