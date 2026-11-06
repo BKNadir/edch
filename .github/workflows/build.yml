@@ -267,39 +267,40 @@ jobs:
           fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "pre=$pre" >> "$GITHUB_OUTPUT"
+      # Built only (no tagName): the installer is renamed before it goes to the release.
       - uses: tauri-apps/tauri-action@v0
-        id: tauri
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ steps.rel.outputs.tag }}
-          releaseName: ${{ steps.rel.outputs.pre == 'true' && format('EDCH {0} (test build)', steps.rel.outputs.tag) || 'EDCH v__VERSION__' }}
-          releaseBody: ${{ steps.notes.outputs.body }}
-          releaseDraft: false
-          prerelease: ${{ steps.rel.outputs.pre == 'true' }}
           args: --target aarch64-pc-windows-msvc --bundles nsis
 
-      - name: Portable exe
-        id: portable
+      # Names: "EDCH_<version>_arm64_setup.exe" (not "-setup.exe": EDCH up to 0.10.9 takes the
+      # first "*-setup.exe" of a release as its update, whatever the processor) and
+      # "EDCH_<version>_arm64-portable.exe".
+      - name: Name the installer and the portable exe
+        id: files
         shell: bash
         run: |
-          file="EDCH_${{ steps.notes.outputs.version }}_arm64-portable.exe"
-          cp src-tauri/target/aarch64-pc-windows-msvc/release/edch.exe "$file"
-          echo "file=$file" >> "$GITHUB_OUTPUT"
+          version="${{ steps.notes.outputs.version }}"
+          setup="EDCH_${version}_arm64_setup.exe"
+          portable="EDCH_${version}_arm64-portable.exe"
+          cp src-tauri/target/aarch64-pc-windows-msvc/release/bundle/nsis/*-setup.exe "$setup"
+          cp src-tauri/target/aarch64-pc-windows-msvc/release/edch.exe "$portable"
+          echo "setup=$setup" >> "$GITHUB_OUTPUT"
+          echo "portable=$portable" >> "$GITHUB_OUTPUT"
 
-      - name: Attach the portable exe to the release
-        if: steps.tauri.outputs.releaseId != ''
+      - name: Attach them to the release
+        if: steps.rel.outputs.tag != ''
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload "${{ steps.rel.outputs.tag }}" "${{ steps.portable.outputs.file }}" --clobber -R "${{ github.repository }}"
+        run: |
+          gh release upload "${{ steps.rel.outputs.tag }}" "${{ steps.files.outputs.setup }}" "${{ steps.files.outputs.portable }}" --clobber -R "${{ github.repository }}"
 
       - uses: actions/upload-artifact@v4
         with:
           name: edch-windows-arm64
           path: |
-            ${{ steps.portable.outputs.file }}
-            src-tauri/target/aarch64-pc-windows-msvc/release/bundle/nsis/*.exe
+            ${{ steps.files.outputs.setup }}
+            ${{ steps.files.outputs.portable }}
           if-no-files-found: error
 
   # Linux on ARM (aarch64), built on GitHub's ARM runner: AppImage, .deb and .rpm, "aarch64" or
