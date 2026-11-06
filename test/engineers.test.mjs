@@ -412,3 +412,23 @@ test("the journal completes the engineer data: a grade seen in game counts", () 
   ctx.store.state.cmdr.engineered = [{ ...st.engineered[0], item: "int_sensors_size8_class5" }];
   assert.equal(planTour(ctx).stops[0].maxGrade[lifeSupport.id], 4);
 });
+
+test("done on ship: the game mounts the module in another slot than the build", () => {
+  const ammo = line("modification|Heat Sink Launcher|Ammo Capacity", 1, {
+    slots: ["tinyhardpoint1"],
+    shipType: "explorer_nx",
+  });
+  const ctx = ctxWith(
+    [],
+    [
+      { slot: "TinyHardpoint1", item: "hpt_xenoscannermk2_basic_tiny" },
+      {
+        slot: "TinyHardpoint3",
+        item: "hpt_heatsinklauncher_turret_tiny",
+        engineering: { blueprint: "Misc_HeatSinkCapacity", level: 1 },
+      },
+    ],
+  );
+  ctx.store.state.cmdr.loadout.ship = "explorer_nx";
+  assert.equal(doneOnShip(ctx, ammo), true);
+});

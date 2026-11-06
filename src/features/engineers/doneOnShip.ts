@@ -21,15 +21,24 @@ export function slotsApply(ctx: Ctx, item: WishItem): boolean {
  */
 export function doneOnShip(ctx: Ctx, item: WishItem, grade = item.gradeTo): boolean {
   const all = ctx.store.state.cmdr.loadout?.modules ?? [];
-  // The build's own slots when they apply, else any module of the line's type.
-  const slots = slotsApply(ctx, item) ? new Set(item.slots) : null;
-  const modules = slots ? all.filter((m) => slots.has(m.slot.toLowerCase())) : all;
   const blueprints = [...blueprintGrades(ctx.game, item.bp).values()];
-  if (!modules.length || !blueprints.length) return false;
+  if (!all.length || !blueprints.length) return false;
   const symbols = new Set(blueprints.flatMap((b) => b.symbols ?? []).map((s) => s.toLowerCase()));
   if (!symbols.size) return false;
   const kind = blueprints[0].kind;
   const wantedModule = (item.bp.split("|")[1] ?? "").toLowerCase();
+  // A build slot counts only while it holds that very module type (a module of unknown type may be
+  // anything: then the whole ship is checked).
+  const holdsWantedType = (shipModule: (typeof all)[number]) =>
+    moduleOf(shipModule.item ?? "")?.toLowerCase() === wantedModule;
+  // The build's own slots when they apply and still hold that module type; else any module of the
+  // line's type (the game may mount it in another slot than the build tool).
+  const buildSlots = slotsApply(ctx, item) ? new Set(item.slots) : null;
+  const inBuildSlots = buildSlots
+    ? all.filter((shipModule) => buildSlots.has(shipModule.slot.toLowerCase()) && holdsWantedType(shipModule))
+    : [];
+  const slots = buildSlots && inBuildSlots.length === buildSlots.size ? buildSlots : null;
+  const modules = slots ? inBuildSlots : all;
   let matching = 0;
   let ofType = 0;
   for (const module of modules) {
