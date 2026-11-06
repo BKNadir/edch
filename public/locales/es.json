@@ -772,7 +772,8 @@
     "about": "Acerca de",
     "controls": "Controles",
     "materials": "Materiales",
-    "session": "Sesión"
+    "session": "Sesión",
+    "thargoids": "Thargoides"
   },
   "navigation": {
     "alreadySuperchargedWhenLeaving": "Ya sobrecargado al salir",
@@ -1459,5 +1460,26 @@
     "found_other": "{{count}} elementos anotados",
     "afterSending": "Una vez enviado el ticket, borra missing-data.txt: la lista vuelve a empezar. EDCH lo hace solo si encuentra tu ticket en GitHub (comprueba cada 15 minutos).",
     "waitingForIssue": "Ticket abierto: esperando encontrarlo en GitHub."
+  },
+  "thargoids": {
+    "axZonesEntered": "Zonas de conflicto AX visitadas",
+    "bonds": "Bonos",
+    "howTypesAreKnown": "El diario del juego no nombra al Thargoide destruido ni a los que te rodean: EDCH reconoce el tipo por el bono de combate (explorador 80.000 Cr, Glaive o Scythe 4,5 M, Cyclops 8 M, Orthrus 15 M, Basilisk 24 M, Medusa 40 M, Hydra 60 M). Los exploradores (Marauder, Berserker, Inciter, Regenerator…) pagan casi el mismo bono y se cuentan juntos, igual que el Glaive y el Scythe.",
+    "kills": "Thargoides destruidos",
+    "lastDays": "Últimos {{count}} días",
+    "subtitle": "Thargoides destruidos, por tipo de nave, y zonas de conflicto AX visitadas.",
+    "thisSession": "Esta sesión",
+    "title": "Thargoides",
+    "type": "Tipo",
+    "typeBanshee": "Banshee",
+    "typeBasilisk": "Basilisk",
+    "typeCyclops": "Cyclops",
+    "typeHunter": "Glaive / Scythe",
+    "typeHydra": "Hydra",
+    "typeMedusa": "Medusa",
+    "typeOrthrus": "Orthrus",
+    "typeRevenant": "Revenant",
+    "typeScout": "Explorador",
+    "typeUnknown": "Otro (bono desconocido)"
   }
 }

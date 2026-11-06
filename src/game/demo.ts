@@ -273,6 +273,23 @@ export const DEMO_EVENTS: Record<string, unknown>[] = [
     VictimFaction: "Timbalderis Purple Hand Gang",
     TotalReward: 410_000,
   })),
+  // An AX conflict zone: a few scouts, a Glaive and a Cyclops (Thargoids page).
+  {
+    timestamp: at(119),
+    event: "SupercruiseDestinationDrop",
+    Type: "$Warzone_TG_High:#index=1;",
+    Type_Localised: "Zone de conflit AX [Intensité élevée]",
+    Threat: 0,
+  },
+  ...[80_000, 80_000, 80_000, 4_500_000, 8_000_000].map((reward) => ({
+    timestamp: at(119),
+    event: "FactionKillBond",
+    Reward: reward,
+    AwardingFaction: "$faction_PilotsFederation;",
+    AwardingFaction_Localised: "Pilots' Federation",
+    VictimFaction: "$faction_Thargoid;",
+    VictimFaction_Localised: "Thargoids",
+  })),
   {
     timestamp: at(120),
     event: "CargoDepot",

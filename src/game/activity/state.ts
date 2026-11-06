@@ -3,6 +3,8 @@
 // Powerplay merits) plus the current session's tallies and mining. The event handlers of each
 // domain (missions.ts, exploration.ts…) update it; index.ts dispatches the events to them.
 
+import type { ThargoidType } from "./thargoids.js";
+
 type Json = Record<string, any>;
 export type { Json };
 
@@ -203,6 +205,29 @@ export interface Powerplay {
   gains: { at: string; merits: number }[];
 }
 
+/** A Thargoid killed: when, its type (recognised from the bond), the bond and where. */
+export interface ThargoidKill {
+  at: string;
+  type: ThargoidType;
+  reward: number;
+  system?: string;
+}
+
+/** An AX conflict zone entered from supercruise. */
+export interface AxZoneVisit {
+  at: string;
+  /** "high", "med", "low"… from the zone's symbol. */
+  intensity: string;
+  /** The zone's name as the game shows it ("AX Conflict Zone [High Intensity]"). */
+  label: string;
+  system?: string;
+}
+
+export interface Thargoids {
+  kills: ThargoidKill[];
+  zones: AxZoneVisit[];
+}
+
 export interface ActivityState {
   missions: Record<number, Mission>;
   /** Recently finished missions (id → outcome), for the wing view. */
@@ -221,6 +246,7 @@ export interface ActivityState {
   session: Session;
   mining: Mining;
   powerplay: Powerplay;
+  thargoids: Thargoids;
   system?: { name: string; address?: number };
   /** Timestamp of the newest event folded in. */
   lastAt?: string;
@@ -283,6 +309,7 @@ export function emptyActivity(): ActivityState {
     session: emptySession(),
     mining: emptyMining(),
     powerplay: { gains: [] },
+    thargoids: { kills: [], zones: [] },
   };
 }
 

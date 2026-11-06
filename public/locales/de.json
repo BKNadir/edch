@@ -771,7 +771,8 @@
     "about": "Über",
     "controls": "Steuerung",
     "materials": "Materialien",
-    "session": "Sitzung"
+    "session": "Sitzung",
+    "thargoids": "Thargoiden"
   },
   "navigation": {
     "alreadySuperchargedWhenLeaving": "Beim Start schon aufgeladen",
@@ -1457,5 +1458,26 @@
     "found_other": "{{count}} Einträge notiert",
     "afterSending": "Nach dem Senden des Tickets lösche missing-data.txt: Die Liste beginnt neu. EDCH macht das selbst, wenn es dein Ticket auf GitHub findet (es prüft alle 15 Minuten).",
     "waitingForIssue": "Ticket geöffnet: wird auf GitHub gesucht."
+  },
+  "thargoids": {
+    "axZonesEntered": "Besuchte AX-Konfliktzonen",
+    "bonds": "Kampfanleihen",
+    "howTypesAreKnown": "Das Journal des Spiels nennt weder den zerstörten Thargoiden noch die in deiner Nähe: EDCH erkennt den Typ an der Kampfanleihe (Späher 80.000 Cr, Glaive oder Scythe 4,5 Mio., Cyclops 8 Mio., Orthrus 15 Mio., Basilisk 24 Mio., Medusa 40 Mio., Hydra 60 Mio.). Späher (Marauder, Berserker, Inciter, Regenerator…) zahlen alle etwa dieselbe Anleihe und werden zusammen gezählt, ebenso Glaive und Scythe.",
+    "kills": "Zerstörte Thargoiden",
+    "lastDays": "Letzte {{count}} Tage",
+    "subtitle": "Zerstörte Thargoiden nach Schiffstyp und besuchte AX-Konfliktzonen.",
+    "thisSession": "Diese Sitzung",
+    "title": "Thargoiden",
+    "type": "Typ",
+    "typeBanshee": "Banshee",
+    "typeBasilisk": "Basilisk",
+    "typeCyclops": "Cyclops",
+    "typeHunter": "Glaive / Scythe",
+    "typeHydra": "Hydra",
+    "typeMedusa": "Medusa",
+    "typeOrthrus": "Orthrus",
+    "typeRevenant": "Revenant",
+    "typeScout": "Späher",
+    "typeUnknown": "Andere (unbekannte Anleihe)"
   }
 }

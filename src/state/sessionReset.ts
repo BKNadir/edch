@@ -1,4 +1,4 @@
-// "Reset" buttons of the session counters (Session, Mining, Powerplay pages). The activity is
+// "Reset" buttons of the session counters (Session, Mining, Powerplay, Thargoids pages). The activity is
 // rebuilt from the journal at each start, so a reset can't just zero it: it keeps a snapshot of
 // the counters at that moment, and the pages show the counters minus that snapshot. A snapshot
 // belongs to one game session (its LoadGame time): a new game session starts from zero anyway.
@@ -18,6 +18,7 @@ interface Resets {
   session?: CounterReset<Session>;
   mining?: CounterReset<Mining>;
   powerplay?: CounterReset<null>;
+  thargoids?: CounterReset<null>;
 }
 
 const KEY = "edch.counterResets";
@@ -105,4 +106,16 @@ export function resetPowerplayCounters(activity: ActivityState) {
 /** Since when the Powerplay page counts the session's merits. */
 export function powerplaySessionStart(activity: ActivityState): string | undefined {
   return currentReset(activity, "powerplay")?.at ?? activity.session.start;
+}
+
+/** Thargoids page: the session's kills and AX zones count from now. */
+export function resetThargoidCounters(activity: ActivityState) {
+  if (!activity.session.start) return;
+  resets.thargoids = { gameSession: activity.session.start, at: new Date().toISOString(), counters: null };
+  save();
+}
+
+/** Since when the Thargoids page counts the session's kills and AX zones. */
+export function thargoidSessionStart(activity: ActivityState): string | undefined {
+  return currentReset(activity, "thargoids")?.at ?? activity.session.start;
 }

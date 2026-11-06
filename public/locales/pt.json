@@ -776,7 +776,8 @@
     "about": "Sobre",
     "controls": "Controles",
     "materials": "Materiais",
-    "session": "Sessão"
+    "session": "Sessão",
+    "thargoids": "Thargoids"
   },
   "navigation": {
     "alreadySuperchargedWhenLeaving": "Já sobrecarregado na partida",
@@ -1470,5 +1471,26 @@
     "found_other": "{{count}} itens anotados",
     "afterSending": "Depois de enviar o ticket, apague missing-data.txt: a lista recomeça. O EDCH faz isso sozinho se encontrar seu ticket no GitHub (verifica a cada 15 minutos).",
     "waitingForIssue": "Ticket aberto: aguardando encontrá-lo no GitHub."
+  },
+  "thargoids": {
+    "axZonesEntered": "Zonas de conflito AX visitadas",
+    "bonds": "Títulos",
+    "howTypesAreKnown": "O diário do jogo não nomeia o Thargoid destruído nem os que estão à sua volta: o EDCH reconhece o tipo pelo título de combate (batedor 80.000 Cr, Glaive ou Scythe 4,5 M, Cyclops 8 M, Orthrus 15 M, Basilisk 24 M, Medusa 40 M, Hydra 60 M). Os batedores (Marauder, Berserker, Inciter, Regenerator…) pagam quase o mesmo título e são contados juntos, tal como o Glaive e o Scythe.",
+    "kills": "Thargoids destruídos",
+    "lastDays": "Últimos {{count}} dias",
+    "subtitle": "Thargoids destruídos, por tipo de nave, e zonas de conflito AX visitadas.",
+    "thisSession": "Esta sessão",
+    "title": "Thargoids",
+    "type": "Tipo",
+    "typeBanshee": "Banshee",
+    "typeBasilisk": "Basilisk",
+    "typeCyclops": "Cyclops",
+    "typeHunter": "Glaive / Scythe",
+    "typeHydra": "Hydra",
+    "typeMedusa": "Medusa",
+    "typeOrthrus": "Orthrus",
+    "typeRevenant": "Revenant",
+    "typeScout": "Batedor",
+    "typeUnknown": "Outro (título desconhecido)"
   }
 }

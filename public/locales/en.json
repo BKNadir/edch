@@ -771,7 +771,8 @@
     "about": "About",
     "controls": "Controls",
     "materials": "Materials",
-    "session": "Session"
+    "session": "Session",
+    "thargoids": "Thargoids"
   },
   "navigation": {
     "alreadySuperchargedWhenLeaving": "Already supercharged when leaving",
@@ -1457,5 +1458,26 @@
     "found_other": "{{count}} items noted",
     "afterSending": "Once the issue is sent, delete missing-data.txt: the list starts again. EDCH does it by itself when it finds your issue on GitHub (it checks every 15 minutes).",
     "waitingForIssue": "Issue opened: waiting to find it on GitHub."
+  },
+  "thargoids": {
+    "axZonesEntered": "AX conflict zones entered",
+    "bonds": "Bonds",
+    "howTypesAreKnown": "The game's journal doesn't name the Thargoid you kill, nor those around you: EDCH recognises the type from the combat bond (scout 80,000 Cr, Glaive or Scythe 4.5 M, Cyclops 8 M, Orthrus 15 M, Basilisk 24 M, Medusa 40 M, Hydra 60 M). Scouts (Marauder, Berserker, Inciter, Regenerator…) all pay about the same bond and are counted together, and so are the Glaive and the Scythe.",
+    "kills": "Thargoids killed",
+    "lastDays": "Last {{count}} days",
+    "subtitle": "Thargoids killed, by ship type, and the AX conflict zones you entered.",
+    "thisSession": "This session",
+    "title": "Thargoids",
+    "type": "Type",
+    "typeBanshee": "Banshee",
+    "typeBasilisk": "Basilisk",
+    "typeCyclops": "Cyclops",
+    "typeHunter": "Glaive / Scythe",
+    "typeHydra": "Hydra",
+    "typeMedusa": "Medusa",
+    "typeOrthrus": "Orthrus",
+    "typeRevenant": "Revenant",
+    "typeScout": "Scout",
+    "typeUnknown": "Other (unknown bond)"
   }
 }

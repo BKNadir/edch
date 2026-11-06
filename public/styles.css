@@ -4173,3 +4173,11 @@ body.menu-editing .sidebar span {
 .sidebar.editing > * {
   min-width: 0;
 }
+
+/* Thargoids page: the kills by type (rows aren't clickable; types not met yet are dimmed). */
+.thargoid-table tr {
+  cursor: default;
+}
+.thargoid-table tr.muted td {
+  color: var(--muted);
+}

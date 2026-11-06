@@ -772,7 +772,8 @@
     "about": "À propos",
     "controls": "Commandes",
     "materials": "Matériaux",
-    "session": "Session"
+    "session": "Session",
+    "thargoids": "Thargoïdes"
   },
   "navigation": {
     "alreadySuperchargedWhenLeaving": "Déjà suralimenté au départ",
@@ -1459,5 +1460,26 @@
     "found_other": "{{count}} éléments notés",
     "afterSending": "Une fois le ticket envoyé, supprime missing-data.txt : la liste repart de zéro. EDCH le fait tout seul s'il retrouve ton ticket sur GitHub (il vérifie toutes les 15 minutes).",
     "waitingForIssue": "Ticket ouvert : en attente de le retrouver sur GitHub."
+  },
+  "thargoids": {
+    "axZonesEntered": "Zones de conflit AX visitées",
+    "bonds": "Obligations",
+    "howTypesAreKnown": "Le journal du jeu ne nomme ni le Thargoïde détruit ni ceux autour de vous : EDCH reconnaît le type à l'obligation de combat (éclaireur 80 000 Cr, Glaive ou Scythe 4,5 M, Cyclops 8 M, Orthrus 15 M, Basilisk 24 M, Medusa 40 M, Hydra 60 M). Les éclaireurs (Marauder, Berserker, Inciter, Regenerator…) rapportent tous à peu près la même obligation et sont comptés ensemble, de même que le Glaive et le Scythe.",
+    "kills": "Thargoïdes détruits",
+    "lastDays": "{{count}} derniers jours",
+    "subtitle": "Thargoïdes détruits, par type de vaisseau, et zones de conflit AX visitées.",
+    "thisSession": "Cette session",
+    "title": "Thargoïdes",
+    "type": "Type",
+    "typeBanshee": "Banshee",
+    "typeBasilisk": "Basilisk",
+    "typeCyclops": "Cyclops",
+    "typeHunter": "Glaive / Scythe",
+    "typeHydra": "Hydra",
+    "typeMedusa": "Medusa",
+    "typeOrthrus": "Orthrus",
+    "typeRevenant": "Revenant",
+    "typeScout": "Éclaireur",
+    "typeUnknown": "Autre (obligation inconnue)"
   }
 }

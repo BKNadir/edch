@@ -11,21 +11,42 @@ import { GOALS_EVENTS } from "./goals.js";
 import { MINING_EVENTS } from "./mining.js";
 import { MISSIONS_EVENTS } from "./missions.js";
 import { POWERPLAY_EVENTS } from "./powerplay.js";
-import type { ActivityContext, ActivityState, EventHandlers, Json } from "./state.js";
+import type { ActivityContext, ActivityState, EventHandler, EventHandlers, Json } from "./state.js";
+import { THARGOIDS_EVENTS } from "./thargoids.js";
 import { TRAVEL_EVENTS } from "./travel.js";
 
-/** Every handled journal event → its handler. */
-const HANDLERS: EventHandlers = {
-  ...TRAVEL_EVENTS,
-  ...MISSIONS_EVENTS,
-  ...COLONISATION_EVENTS,
-  ...GOALS_EVENTS,
-  ...EXPLORATION_EVENTS,
-  ...EXOBIOLOGY_EVENTS,
-  ...CARRIERS_EVENTS,
-  ...MINING_EVENTS,
-  ...POWERPLAY_EVENTS,
-};
+/**
+ * Merges the domains' handlers. An event handled by several domains (FactionKillBond: the session's
+ * bonds and the Thargoid kills) runs every handler, in the order of the domains.
+ */
+function mergeHandlers(...domains: EventHandlers[]): EventHandlers {
+  const merged: EventHandlers = {};
+  for (const domain of domains)
+    for (const [event, handler] of Object.entries(domain)) {
+      const previous: EventHandler | undefined = merged[event];
+      merged[event] = previous
+        ? (st, ev, at, ctx) => {
+            const changedBefore = previous(st, ev, at, ctx);
+            return handler(st, ev, at, ctx) || changedBefore;
+          }
+        : handler;
+    }
+  return merged;
+}
+
+/** Every handled journal event → its handler(s). */
+const HANDLERS: EventHandlers = mergeHandlers(
+  TRAVEL_EVENTS,
+  MISSIONS_EVENTS,
+  COLONISATION_EVENTS,
+  GOALS_EVENTS,
+  EXPLORATION_EVENTS,
+  EXOBIOLOGY_EVENTS,
+  CARRIERS_EVENTS,
+  MINING_EVENTS,
+  POWERPLAY_EVENTS,
+  THARGOIDS_EVENTS,
+);
 
 /** Events read back from the journal archive at start-up. */
 export const HISTORY_EVENTS = [
@@ -76,6 +97,7 @@ export const HISTORY_EVENTS = [
   "PowerplayJoin",
   "PowerplayLeave",
   "PowerplayDefect",
+  "SupercruiseDestinationDrop",
 ];
 
 /** How far back the archive is read. */
