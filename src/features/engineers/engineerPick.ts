@@ -4,7 +4,8 @@
 // of the other region are left out.
 
 import { referenceOf, type Ctx } from "../../state/context.js";
-import type { EngineerStatus } from "../../game/journal/state.js";
+import type { EngineeredBy, EngineerStatus } from "../../game/journal/state.js";
+import { moduleOf } from "../materials/buildImporter.js";
 import { distance } from "../../services/spansh.js";
 import { blueprintGrades, type WishItem } from "../../state/store.js";
 import type { Blueprint, Engineer } from "../../game/types.js";
@@ -44,12 +45,28 @@ export interface PickResult {
 
 const isKnown = (st?: EngineerStatus) => Boolean(st && st.progress !== "Barred");
 
-/** Engineers able to do `item`, with the best grade each can reach. */
+/**
+ * Engineers able to do `item`, with the best grade each can reach: the game data, completed by
+ * what the journal showed (an engineer who did this blueprint on this module type, at a grade).
+ */
 function candidates(ctx: Ctx, item: WishItem): { e: Engineer; grade: number }[] {
   const grades = blueprintGrades(ctx.game, item.bp);
   const best = new Map<string, number>();
   for (const [g, bp] of grades) for (const name of bp.engineers ?? []) best.set(name, Math.max(best.get(name) ?? 0, g));
+  for (const seen of seenInJournal(ctx, item))
+    best.set(seen.engineer, Math.max(best.get(seen.engineer) ?? 0, seen.level));
   return ctx.game.data.engineers.filter((e) => best.has(e.name)).map((e) => ({ e, grade: best.get(e.name)! }));
+}
+
+/** Engineering of `item`'s blueprint on its module type that the journal showed. */
+export function seenInJournal(ctx: Ctx, item: WishItem): EngineeredBy[] {
+  const blueprints = [...blueprintGrades(ctx.game, item.bp).values()];
+  if (blueprints[0]?.kind !== "modification") return [];
+  const symbols = new Set(blueprints.flatMap((b) => b.symbols ?? []).map((s) => s.toLowerCase()));
+  const module = (item.bp.split("|")[1] ?? "").toLowerCase();
+  return (ctx.store.state.cmdr.engineered ?? []).filter(
+    (seen) => symbols.has(seen.blueprint) && moduleOf(seen.item)?.toLowerCase() === module,
+  );
 }
 
 export function lineBlueprint(ctx: Ctx, item: WishItem): Blueprint | undefined {

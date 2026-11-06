@@ -5,6 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.11
 
+- Engineers: the game now completes EDCH's data. Each engineering in the journal (who did which modification, on which module, at which grade) is remembered, past sessions included; when an engineer did a modification or a grade the data doesn't give them, the wishlist and the tour count it from then on, and the log notes the gap so the data can be fixed. The journal only shows what was done: a grade an engineer can't do (lower than the data says) still has to be fixed by hand.
 - Fixed: "Already done on this ship" missed a modification when the wishlist line came from a build imported before 0.10.10, which had merged other modules into it (the heat sink launcher's Ammo Capacity with the caustic sink launchers: 4 asked, 1 on the ship). Only modules of the line's type count now, and a line asking more of them than the ship has is done once all of those are.
 
 ## 0.10.10

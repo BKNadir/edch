@@ -378,3 +378,37 @@ test("done on ship: an older imported line asking more modules than the ship has
   const plain = ctxWith([], [{ ...heatSink, engineering: undefined }, caustic(4)]);
   assert.equal(doneOnShip(plain, merged), false);
 });
+
+test("the journal completes the engineer data: a grade seen in game counts", () => {
+  const st = emptyState();
+  const craft = (Level, Module = "int_lifesupport_size5_class5") =>
+    JSON.stringify({
+      timestamp: "2026-11-06T20:00:00Z",
+      event: "EngineerCraft",
+      Engineer: "Lori Jameson",
+      BlueprintName: "Misc_Reinforced",
+      Module,
+      Level,
+      Ingredients: [],
+    });
+  applyLines(st, [craft(5), craft(3)], () => 0);
+  assert.deepEqual(st.engineered, [
+    { engineer: "Lori Jameson", blueprint: "misc_reinforced", item: "int_lifesupport_size5_class5", level: 5 },
+  ]);
+  // Life Support G5: the data gives it to Etienne Dorn only (Colonia); the journal showed Lori Jameson doing it.
+  const lifeSupport = line("modification|Life Support|Reinforced", 5);
+  const ctx = ctxWith([lifeSupport]);
+  ctx.store.state.cmdr.engineered = st.engineered;
+  ctx.store.state.cmdr.location = {
+    system: "Shinrarta Dezhra",
+    pos: [55.72, 17.59, 27.16],
+    docked: false,
+    factions: [],
+  };
+  const stop = planTour(ctx).stops[0];
+  assert.equal(stop.pick.engineer.name, "Lori Jameson");
+  assert.equal(stop.maxGrade[lifeSupport.id], undefined, "G5 is reachable at Lori Jameson's, as the game showed");
+  // The same blueprint seen on another module type doesn't count for life support.
+  ctx.store.state.cmdr.engineered = [{ ...st.engineered[0], item: "int_sensors_size8_class5" }];
+  assert.equal(planTour(ctx).stops[0].maxGrade[lifeSupport.id], 4);
+});

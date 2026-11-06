@@ -107,9 +107,45 @@ export interface CommanderState {
   carrierMarkets?: Record<number, CarrierMarketSnapshot>;
   /** Minor factions met in the journal (systems visited, missions), most recent first. */
   knownFactions?: string[];
+  /**
+   * Engineering seen in the journal (EngineerCraft): which engineer did which blueprint on which
+   * module, and the highest grade. The game is the reference: this completes the data's list of
+   * who does what (see features/engineers/engineerPick.ts).
+   */
+  engineered?: EngineeredBy[];
   lastEvent?: string;
   materialsSeenAt?: string;
   lockerSeenAt?: string;
+}
+
+export interface EngineeredBy {
+  engineer: string;
+  /** Journal blueprint name, lower case ("weapon_longrange"). */
+  blueprint: string;
+  /** Journal module symbol, lower case ("hpt_beamlaser_turret_large"). */
+  item: string;
+  /** Highest grade seen. */
+  level: number;
+}
+
+/** Most entries kept in `engineered`. */
+const ENGINEERED_MAX = 300;
+
+/** Notes an EngineerCraft: `engineer` did `blueprint` at `level` on `item` (the highest grade kept). */
+export function rememberEngineering(
+  state: CommanderState,
+  engineer: string,
+  blueprint: string,
+  item: string,
+  level: number,
+) {
+  if (!engineer || !blueprint || !item || !(level > 0)) return;
+  const list = state.engineered ?? [];
+  const key = (e: EngineeredBy) => `${e.engineer}|${e.blueprint}|${e.item}`;
+  const entry: EngineeredBy = { engineer, blueprint: blueprint.toLowerCase(), item: item.toLowerCase(), level };
+  const found = list.find((e) => key(e) === key(entry));
+  if (found) found.level = Math.max(found.level, level);
+  else state.engineered = [entry, ...list].slice(0, ENGINEERED_MAX);
 }
 
 /** Most factions kept in `knownFactions` (for the Search page's suggestions). */

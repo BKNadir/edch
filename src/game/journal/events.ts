@@ -10,6 +10,7 @@ import {
   type FactionInfo,
   type Json,
   normalizedName,
+  rememberEngineering,
   rememberFactions,
   type Vec3,
 } from "./state.js";
@@ -227,6 +228,8 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
         state.engineers[ev.Engineer] = { ...e, progress: "Unlocked" };
       }
       engineerModule(state, ev);
+      if (typeof ev.Engineer === "string" && typeof ev.BlueprintName === "string" && typeof ev.Module === "string")
+        rememberEngineering(state, ev.Engineer, ev.BlueprintName, ev.Module, Number(ev.Level ?? 0));
       return true;
 
     case "Synthesis":
