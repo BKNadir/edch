@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.10
+
+- Fixed: "Already done on this ship" missed modifications made at an engineer during the session (for example Heavy Duty G5 on the armour). The game doesn't rewrite the ship's module list after engineering; EDCH now updates the module from each engineering (grade, blueprint, experimental effect), so the line and the engineer leave the tour at once.
+
 ## 0.10.9
 
 - Settings → Updates: new option "Also offer pre-releases (test versions)". Ticked, EDCH also offers the test builds published before a release, and installs them like any update; a pre-release is followed by the next one, then by its release. Unticked (default), only releases are offered, as before.
