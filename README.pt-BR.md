@@ -104,7 +104,7 @@ Estrutura:
 - `src/`: interface em TypeScript sem framework, em camadas (platform, game, state, ui, services, features, views, app); `src-tauri/`: backend em Rust (diário, HTTP, arquivos de opções, servidor de acesso remoto, atualizações), sem lógica de jogo. Veja [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) e [CONTRIBUTING.md](CONTRIBUTING.md) (em inglês).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: regeneram os dados de `public/` (veja NOTICE).
 
-Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.10.9`: a Release é publicada e as cópias instaladas oferecem a atualização.
+Um build para Windows roda a cada push em `main`. Para publicar uma versão, envie uma tag como `v0.10.10`: a Release é publicada e as cópias instaladas oferecem a atualização.
 
 ## Roteiro
 

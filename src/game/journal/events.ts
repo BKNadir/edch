@@ -226,6 +226,7 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
         const e = state.engineers[ev.Engineer];
         state.engineers[ev.Engineer] = { ...e, progress: "Unlocked" };
       }
+      engineerModule(state, ev);
       return true;
 
     case "Synthesis":
@@ -290,4 +291,28 @@ export function applyLines(
     if (applyEvent(state, ev, cap)) changed = true;
   }
   return { changed, events };
+}
+
+/**
+ * The game doesn't write a new Loadout after engineering: the module worked on is updated here
+ * (blueprint, grade, experimental effect), so "already done on this ship" sees it at once.
+ */
+function engineerModule(state: CommanderState, ev: Json) {
+  if (!state.loadout || typeof ev.Slot !== "string" || typeof ev.BlueprintName !== "string") return;
+  const slot = ev.Slot.toLowerCase();
+  const module = state.loadout.modules.find((m) => String(m.slot).toLowerCase() === slot);
+  if (!module) return;
+  const before = module.engineering;
+  const sameBlueprint = before && before.blueprint.toLowerCase() === ev.BlueprintName.toLowerCase();
+  module.engineering = {
+    blueprint: ev.BlueprintName,
+    level: Number(ev.Level ?? before?.level ?? 1),
+    // A new blueprint replaces the module's engineering, its effect with it.
+    experimental:
+      typeof ev.ApplyExperimentalEffect === "string"
+        ? ev.ApplyExperimentalEffect
+        : sameBlueprint
+          ? before?.experimental
+          : undefined,
+  };
 }

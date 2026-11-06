@@ -253,3 +253,93 @@ test("imported build, module by module: the grade 5 engineer until the grade is 
   other.store.state.cmdr.loadout.ship = "python";
   assert.equal(doneOnShip(other, items[0]), true);
 });
+
+test("engineering updates the ship's module at once (the game writes no new Loadout after it)", () => {
+  const st = emptyState();
+  const journal = (ev) => JSON.stringify({ timestamp: "2026-11-06T17:00:00Z", ...ev });
+  applyLines(
+    st,
+    [
+      journal({
+        event: "Loadout",
+        Ship: "krait_mkii",
+        ShipID: 5,
+        Modules: [
+          {
+            Slot: "Armour",
+            Item: "krait_mkii_armour_grade3",
+            Engineering: { BlueprintName: "Armour_HeavyDuty", Level: 4, Quality: 1 },
+          },
+        ],
+      }),
+      journal({ event: "EngineerCraft", Slot: "Armour", BlueprintName: "Armour_HeavyDuty", Level: 5, Ingredients: [] }),
+      journal({
+        event: "EngineerCraft",
+        Slot: "Armour",
+        BlueprintName: "Armour_HeavyDuty",
+        Level: 5,
+        ApplyExperimentalEffect: "special_armour_chunky",
+        Ingredients: [],
+      }),
+    ],
+    () => 0,
+  );
+  assert.deepEqual(st.loadout.modules[0].engineering, {
+    blueprint: "Armour_HeavyDuty",
+    level: 5,
+    experimental: "special_armour_chunky",
+  });
+  const ctx = { game, store: { state: { cmdr: st } } };
+  assert.equal(doneOnShip(ctx, line("modification|Armour|Heavy Duty", 5)), true);
+  assert.equal(doneOnShip(ctx, line("experimental|Armour|Deep Plating", 0)), true);
+});
+
+test("a grade not reachable in your region: the best one there is the goal (Life Support G5 is only in Colonia)", () => {
+  const lifeSupport = line("modification|Life Support|Reinforced", 5);
+  const atLevel = (level) => {
+    const ctx = ctxWith(
+      [lifeSupport],
+      [
+        {
+          slot: "LifeSupport",
+          item: "int_lifesupport_size5_class5",
+          engineering: { blueprint: "Misc_Reinforced", level },
+        },
+      ],
+    );
+    ctx.store.state.cmdr.location = {
+      system: "Shinrarta Dezhra",
+      pos: [55.72, 17.59, 27.16],
+      docked: false,
+      factions: [],
+    };
+    return planTour(ctx);
+  };
+  const g3 = atLevel(3);
+  assert.equal(g3.stops[0].pick.engineer.name, "Lori Jameson");
+  assert.equal(g3.stops[0].maxGrade[lifeSupport.id], 4, "Lori Jameson does G4 at most");
+  const g4 = atLevel(4);
+  assert.equal(g4.stops.length, 0);
+  assert.equal(g4.doneAtMax[lifeSupport.id], 4);
+});
+
+test("import: guardian weapons and caustic sink launchers aren't taken for other modules", async () => {
+  const { importLoadout } = await import("../dist/js/features/materials/buildImporter.js");
+  const { items, skipped } = importLoadout(game, {
+    Ship: "explorer_nx",
+    Modules: [
+      {
+        Slot: "MediumHardpoint1",
+        Item: "hpt_guardian_plasmalauncher_fixed_medium",
+        Engineering: { BlueprintName: "Weapon_Overcharged", Level: 1 },
+      },
+      {
+        Slot: "TinyHardpoint4",
+        Item: "hpt_causticsinklauncher_turret_tiny",
+        Engineering: { BlueprintName: "Misc_HeatSinkCapacity", Level: 1 },
+      },
+    ],
+  });
+  assert.deepEqual(items, []);
+  assert.equal(skipped.length, 2);
+});

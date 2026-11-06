@@ -1341,7 +1341,8 @@
     "modeAdvanced": "Avancé",
     "modeSimple": "Simple",
     "modeHelp": "Simple : seulement la tournée des ingénieurs. Avancé : chaque ligne avec ses grades et les matériaux nécessaires.",
-    "stopNoLongerNeeded": "{{engineer}} n'est plus nécessaire : un autre ingénieur de la tournée fait les mêmes lignes. Passe à l'ingénieur suivant."
+    "stopNoLongerNeeded": "{{engineer}} n'est plus nécessaire : un autre ingénieur de la tournée fait les mêmes lignes. Passe à l'ingénieur suivant.",
+    "maxGradeInRegion": "G{{grade}} max dans ta région"
   },
   "engineerData": {
     "baltanosMeeting": "Atteins la réputation Amical avec le Colonia Council.",

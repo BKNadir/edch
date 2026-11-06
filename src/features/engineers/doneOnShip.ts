@@ -15,8 +15,11 @@ export function slotsApply(ctx: Ctx, item: WishItem): boolean {
   return Boolean(item.slots?.length && item.shipType && ship && ship.toLowerCase() === item.shipType);
 }
 
-/** True when the current ship already has what `item` asks for (as many modules as its quantity). */
-export function doneOnShip(ctx: Ctx, item: WishItem): boolean {
+/**
+ * True when the current ship already has what `item` asks for (as many modules as its quantity).
+ * `grade`: the grade to check instead of the line's (the best one reachable in your region).
+ */
+export function doneOnShip(ctx: Ctx, item: WishItem, grade = item.gradeTo): boolean {
   const all = ctx.store.state.cmdr.loadout?.modules ?? [];
   // The build's own slots when they apply, else any module of the line's type.
   const slots = slotsApply(ctx, item) ? new Set(item.slots) : null;
@@ -35,7 +38,7 @@ export function doneOnShip(ctx: Ctx, item: WishItem): boolean {
     if (type && type.toLowerCase() !== wantedModule) continue;
     if (kind === "experimental") {
       if (engineering.experimental && symbols.has(engineering.experimental.toLowerCase())) matching++;
-    } else if (symbols.has(engineering.blueprint.toLowerCase()) && engineering.level >= item.gradeTo) matching++;
+    } else if (symbols.has(engineering.blueprint.toLowerCase()) && engineering.level >= grade) matching++;
   }
   return matching >= (slots ? slots.size : Math.max(1, item.count));
 }

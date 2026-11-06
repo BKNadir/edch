@@ -24,6 +24,12 @@ const ITEM_MODULE: [RegExp, string][] = [
   [/^hpt_shieldbooster/, "Shield Booster"],
   [/^hpt_chafflauncher/, "Chaff Launcher"],
   [/^hpt_heatsinklauncher/, "Heat Sink Launcher"],
+  // Guardian and anti-Thargoid modules share blueprint names with ordinary ones but have no
+  // engineering of their own in the data: named here so they are never taken for those.
+  [/^hpt_guardian_plasmalauncher/, "Guardian Plasma Charger"],
+  [/^hpt_guardian_gausscannon/, "Guardian Gauss Cannon"],
+  [/^hpt_guardian_shardcannon/, "Guardian Shard Cannon"],
+  [/^hpt_causticsinklauncher/, "Caustic Sink Launcher"],
   [/^hpt_electroniccountermeasure/, "Electronic Countermeasure"],
   [/^hpt_plasmapointdefence/, "Point Defence"],
   [/^hpt_cloudscanner/, "Wake Scanner"],
@@ -74,10 +80,14 @@ export interface ImportResult {
   skipped: string[];
 }
 
+/**
+ * The blueprints of `symbol` for `module`. A module type unknown here: only when the symbol
+ * belongs to one module type ("Weapon_Overcharged" is on every weapon, so it can't be guessed).
+ */
 function pick(game: Game, kind: "modification" | "experimental", symbol: string, module?: string): Blueprint[] {
   const all = game.data.blueprints.filter((b) => b.kind === kind && b.symbols?.includes(symbol));
-  const own = module ? all.filter((b) => b.module.toLowerCase() === module.toLowerCase()) : [];
-  return own.length ? own : all;
+  if (module) return all.filter((b) => b.module.toLowerCase() === module.toLowerCase());
+  return new Set(all.map((b) => b.module)).size === 1 ? all : [];
 }
 
 export function importLoadout(game: Game, loadout: Json): ImportResult {

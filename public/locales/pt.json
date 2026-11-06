@@ -1352,7 +1352,8 @@
     "modeAdvanced": "Avançado",
     "modeSimple": "Simples",
     "modeHelp": "Simples: só a rota de engenheiros. Avançado: cada linha com seus graus e os materiais necessários.",
-    "stopNoLongerNeeded": "{{engineer}} não é mais necessário: outro engenheiro da rota faz as mesmas linhas. Passe ao próximo engenheiro."
+    "stopNoLongerNeeded": "{{engineer}} não é mais necessário: outro engenheiro da rota faz as mesmas linhas. Passe ao próximo engenheiro.",
+    "maxGradeInRegion": "G{{grade}} máx. na sua região"
   },
   "engineerData": {
     "baltanosMeeting": "Alcance a reputação Amigável com o Colonia Council.",
