@@ -222,6 +222,10 @@ jobs:
   # "arm64" in their names. Experimental: a failure here doesn't block the release.
   windows-arm:
     needs: windows
+    # Pre-releases only for 0.10.10: EDCH up to 0.10.9 takes a release's first "*-setup.exe" as
+    # its update, which would be the ARM one on x64 PCs. Releases get ARM builds from 0.10.11 on
+    # (once installed copies have the updater that picks their own processor): remove this line then.
+    if: startsWith(github.ref, 'refs/heads/prerelease/')
     runs-on: windows-latest
     continue-on-error: true
     permissions:
@@ -306,6 +310,10 @@ jobs:
   # "arm64" in their names. Experimental: a failure here doesn't block the release.
   linux-arm:
     needs: windows
+    # Pre-releases only for 0.10.10: EDCH up to 0.10.9 takes a release's first "*-setup.exe" as
+    # its update, which would be the ARM one on x64 PCs. Releases get ARM builds from 0.10.11 on
+    # (once installed copies have the updater that picks their own processor): remove this line then.
+    if: startsWith(github.ref, 'refs/heads/prerelease/')
     runs-on: ubuntu-22.04-arm
     continue-on-error: true
     permissions:
