@@ -1095,7 +1095,9 @@
     "wishlistOpensIn": "Wishlist page opens in",
     "copyNextSystemOnGameFocus": "Copy the next system to enter (route in progress or engineer tour) when the Elite Dangerous window comes back to the front (Windows only)",
     "offerPreReleases": "Also offer pre-releases (test versions)",
-    "offerPreReleasesHelp": "Pre-releases bring new features first but may have bugs. Unticked, the next release is offered as usual."
+    "offerPreReleasesHelp": "Pre-releases bring new features first but may have bugs. Unticked, the next release is offered as usual.",
+    "preReleaseBuild": "pre-release",
+    "updateAvailable": "Update available: {{version}}"
   },
   "sources": {
     "agriculture": "Agriculture",

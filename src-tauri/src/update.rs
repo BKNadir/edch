@@ -108,9 +108,10 @@ fn setup_asset(release: &serde_json::Value) -> Option<&serde_json::Value> {
 
 /// The newest release newer than this build, if any.
 ///
-/// `pre_releases`: also consider pre-releases (Settings → Updates). `installed`: the tag this
-/// build was installed from by the updater ("v0.10.8-pre.64"), so a pre-release build knows which
-/// one it is; ignored when it doesn't match this build's version.
+/// `pre_releases`: also consider pre-releases (Settings → Updates); when unticked on a
+/// pre-release build, the latest release is offered even if older. `installed`: the tag this
+/// build was published as ("v0.10.8-pre.64", from build-info.json or the updater), so a
+/// pre-release build knows which one it is; ignored when it doesn't match this build's version.
 #[tauri::command]
 pub fn update_check(pre_releases: bool, installed: Option<String>) -> Result<Option<UpdateInfo>, String> {
     let current = env!("CARGO_PKG_VERSION").to_string();
@@ -137,7 +138,10 @@ pub fn update_check(pre_releases: bool, installed: Option<String>) -> Result<Opt
     let (Some((latest, release)), Some(mine)) = (newest, mine) else {
         return Ok(None);
     };
-    if latest <= mine {
+    // A newer one; or, on a pre-release build with pre-releases no longer wanted, the latest
+    // release even if older (back to the stable version).
+    let back_to_release = !pre_releases && mine.3 == 0;
+    if latest <= mine && !back_to_release {
         return Ok(None);
     }
     let Some(asset) = setup_asset(release) else {

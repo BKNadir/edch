@@ -4,14 +4,13 @@
 import { defaultJournalDir, isRemote, isTauri, logsOpen, startJournal, updateMode } from "../../platform/bridge.js";
 import { lang, LANGS, saveLang, t } from "../../platform/i18n.js";
 import { setDebugLog } from "../../platform/logger.js";
-import { SOFTWARE_VERSION as APP_VERSION } from "../../platform/version.js";
 import type { Ctx, View } from "../../state/context.js";
 import type { Settings } from "../../state/store.js";
 import { h, replace, toast } from "../../ui/dom.js";
-import { checkForUpdate } from "../../ui/updateBanner.js";
 import { appearanceCard, pagesCard } from "./cards/display.js";
 import { engineersCard, launchCard, navigationCard } from "./cards/game.js";
 import { appCard } from "./cards/general.js";
+import { updatesCard } from "./cards/updates.js";
 import { notifyCard } from "./cards/notifications.js";
 
 const TABS: [string, string][] = [
@@ -136,41 +135,7 @@ export class SettingsView implements View {
               h("small", null, t("settings.materialModuleEffectNamesFollowGame")),
             ),
           ),
-      isTauri()
-        ? h(
-            "section.card",
-            { "data-tab": "general" },
-            h("h3", null, t("settings.updates")),
-            h("p.sub", null, t("common.installedVersion", { current: APP_VERSION })),
-            h(
-              "label.check",
-              null,
-              h("input", {
-                type: "checkbox",
-                checked: s.autoUpdate,
-                onchange: (e: Event) => set({ autoUpdate: (e.target as HTMLInputElement).checked }),
-              }),
-              " " + t("settings.checkGithubNewVersionsAutomatically"),
-            ),
-            h(
-              "label.check",
-              null,
-              h("input", {
-                type: "checkbox",
-                checked: s.updatePreReleases,
-                onchange: (e: Event) => set({ updatePreReleases: (e.target as HTMLInputElement).checked }),
-              }),
-              " " + t("settings.offerPreReleases"),
-            ),
-            h("small", null, t("settings.offerPreReleasesHelp")),
-            this.mode === "portable"
-              ? h("p.sub", null, t("settings.portableVersionUpdatesArenTInstalled"))
-              : this.mode !== "installer"
-                ? h("p.sub", null, t("settings.linuxUpdatesArenTInstalledAutomatically"))
-                : null,
-            h("div.row", null, h("button.ghost", { onclick: () => checkForUpdate(true) }, t("settings.checkNow"))),
-          )
-        : null,
+      isTauri() ? updatesCard(this.ctx, this.mode) : null,
       isTauri() && !isRemote() ? appCard(this.ctx, () => this.render()) : null,
       isTauri() && !isRemote() ? launchCard(this.ctx, () => this.render()) : null,
       h(

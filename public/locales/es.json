@@ -1096,7 +1096,9 @@
     "wishlistOpensIn": "La página Lista de deseos se abre en modo",
     "copyNextSystemOnGameFocus": "Copiar el próximo sistema al que entrar (ruta en curso o ruta de ingenieros) cuando la ventana de Elite Dangerous vuelve al primer plano (solo Windows)",
     "offerPreReleases": "Ofrecer también las versiones preliminares (versiones de prueba)",
-    "offerPreReleasesHelp": "Las versiones preliminares traen las novedades primero, pero pueden tener errores. Sin marcar, se ofrece la próxima versión normal como siempre."
+    "offerPreReleasesHelp": "Las versiones preliminares traen las novedades primero, pero pueden tener errores. Sin marcar, se ofrece la próxima versión normal como siempre.",
+    "preReleaseBuild": "versión preliminar",
+    "updateAvailable": "Actualización disponible: {{version}}"
   },
   "sources": {
     "agriculture": "Agricultura",

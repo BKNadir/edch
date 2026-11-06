@@ -7,3 +7,5 @@ package-lock.json
 !tools/**/*.log
 .DS_Store
 shots/
+# Written by CI before each build (the release tag, see src/platform/version.ts).
+public/build-info.json

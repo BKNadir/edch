@@ -1096,7 +1096,9 @@
     "wishlistOpensIn": "La page Wishlist s'ouvre en mode",
     "copyNextSystemOnGameFocus": "Copier le prochain système où entrer (route en cours ou tournée des ingénieurs) quand la fenêtre d'Elite Dangerous repasse au premier plan (Windows uniquement)",
     "offerPreReleases": "Proposer aussi les pré-releases (versions de test)",
-    "offerPreReleasesHelp": "Les pré-releases apportent les nouveautés en premier mais peuvent avoir des bugs. Décoché, la prochaine version normale est proposée comme d'habitude."
+    "offerPreReleasesHelp": "Les pré-releases apportent les nouveautés en premier mais peuvent avoir des bugs. Décoché, la prochaine version normale est proposée comme d'habitude.",
+    "preReleaseBuild": "pré-release",
+    "updateAvailable": "Mise à jour disponible : {{version}}"
   },
   "sources": {
     "agriculture": "Agriculture",

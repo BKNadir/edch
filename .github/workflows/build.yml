@@ -71,6 +71,12 @@ jobs:
           echo "Release: ${tag:-none} (pre-release: $pre)"
 
       # Builds the installers, and publishes them when "Release tag" names a release.
+      # The release tag inside the app (Settings → Updates, and the update check).
+      - name: Build info
+        if: steps.rel.outputs.tag != ''
+        shell: bash
+        run: echo '{"tag":"${{ steps.rel.outputs.tag }}"}' > public/build-info.json
+
       - uses: tauri-apps/tauri-action@v0
         id: tauri
         env:
@@ -179,6 +185,12 @@ jobs:
           echo "pre=$pre" >> "$GITHUB_OUTPUT"
           echo "Release: ${tag:-none} (pre-release: $pre)"
 
+      # The release tag inside the app (Settings → Updates, and the update check).
+      - name: Build info
+        if: steps.rel.outputs.tag != ''
+        shell: bash
+        run: echo '{"tag":"${{ steps.rel.outputs.tag }}"}' > public/build-info.json
+
       - uses: tauri-apps/tauri-action@v0
         id: tauri
         env:
@@ -271,6 +283,12 @@ jobs:
           fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "pre=$pre" >> "$GITHUB_OUTPUT"
+      # The release tag inside the app (Settings → Updates, and the update check).
+      - name: Build info
+        if: steps.rel.outputs.tag != ''
+        shell: bash
+        run: echo '{"tag":"${{ steps.rel.outputs.tag }}"}' > public/build-info.json
+
       - uses: tauri-apps/tauri-action@v0
         id: tauri
         env:
@@ -360,6 +378,12 @@ jobs:
           fi
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "pre=$pre" >> "$GITHUB_OUTPUT"
+      # The release tag inside the app (Settings → Updates, and the update check).
+      - name: Build info
+        if: steps.rel.outputs.tag != ''
+        shell: bash
+        run: echo '{"tag":"${{ steps.rel.outputs.tag }}"}' > public/build-info.json
+
       - uses: tauri-apps/tauri-action@v0
         id: tauri
         env:

@@ -17,6 +17,7 @@ import { locale, t } from "../platform/i18n.js";
 import { log } from "../platform/logger.js";
 import { notify } from "./notifier.js";
 import type { Store } from "../state/store.js";
+import { buildTag } from "../platform/version.js";
 
 const EVERY = 6 * 60 * 60 * 1000;
 
@@ -190,6 +191,36 @@ async function install(p: { info: UpdateInfo; path: string }) {
   }
 }
 
+/** Last answer of `findUpdate`, kept a few minutes so reopening Settings doesn't ask GitHub again. */
+let lastFound: { at: number; preReleases: boolean; info: UpdateInfo | null } | null = null;
+const FOUND_KEPT_MS = 10 * 60_000;
+
+/**
+ * The update GitHub offers this build (null: up to date), without showing anything. Throws on a
+ * network or GitHub error.
+ */
+export async function findUpdate(): Promise<UpdateInfo | null> {
+  if (!isTauri() || isRemote() || !store) return null;
+  const preReleases = store.state.settings.updatePreReleases;
+  if (lastFound && lastFound.preReleases === preReleases && Date.now() - lastFound.at < FOUND_KEPT_MS)
+    return lastFound.info;
+  // The tag CI wrote into this build, else the one the updater installed (builds before 0.10.11).
+  const installed = (await buildTag()) ?? installedTag();
+  const info = await updateCheck(preReleases, installed);
+  lastFound = { at: Date.now(), preReleases, info };
+  return info;
+}
+
+/** Shows the update banner for `info` (Settings → "Update available"). */
+export function offerUpdate(info: UpdateInfo) {
+  if (phase.kind === "downloading" || phase.kind === "ready") {
+    render();
+    return;
+  }
+  phase = { kind: "available", info };
+  render();
+}
+
 /** Checks GitHub now. `manual`: also report "up to date" and errors, and ignore a skipped version. */
 export async function checkForUpdate(manual = false): Promise<void> {
   if (!isTauri() || isRemote() || !store) return;
@@ -198,7 +229,7 @@ export async function checkForUpdate(manual = false): Promise<void> {
     return;
   }
   try {
-    const info = await updateCheck(store.state.settings.updatePreReleases, installedTag());
+    const info = await findUpdate();
     if (!info) {
       if (manual) toast(t("updater.edchUpDate"));
       return;
