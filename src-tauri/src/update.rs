@@ -88,21 +88,21 @@ fn github_json(url: &str) -> Result<Option<serde_json::Value>, String> {
     }
 }
 
-/// End of this build's installer name: "EDCH_0.10.10_x64-setup.exe", or
-/// "EDCH_0.10.10_arm64_setup.exe" on ARM (named so that EDCH up to 0.10.9, which takes the first
-/// "*-setup.exe", never installs it on an x64 PC).
-const SETUP_SUFFIX: &str = if cfg!(target_arch = "aarch64") {
-    "_arm64_setup.exe"
+/// The architecture in this build's installer name ("EDCH_0.10.10_x64-setup.exe",
+/// "EDCH_0.10.10_arm64-setup.exe").
+const ARCH: &str = if cfg!(target_arch = "aarch64") {
+    "_arm64-"
 } else {
-    "_x64-setup.exe"
+    "_x64-"
 };
 
-/// The release's Windows installer (NSIS) for this build's processor, if it has one yet.
+/// The release's Windows installer (NSIS) for this build's architecture, if it has one yet.
 fn setup_asset(release: &serde_json::Value) -> Option<&serde_json::Value> {
     release["assets"].as_array().into_iter().flatten().find(|a| {
-        a["name"]
-            .as_str()
-            .is_some_and(|n| n.to_lowercase().ends_with(SETUP_SUFFIX))
+        a["name"].as_str().is_some_and(|n| {
+            let n = n.to_lowercase();
+            n.ends_with("-setup.exe") && n.contains(ARCH)
+        })
     })
 }
 

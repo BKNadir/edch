@@ -8,7 +8,7 @@ and EDCH shows it in the update banner.
 - Engineer data checked against the game and community wikis: Lori Jameson does Life Support up to G4, not G5 (G5 is only Etienne Dorn, in Colonia); Juri Ishmaak also does the manifest, wake and kill warrant scanners up to G3. The other ship engineers match.
 - Engineer tour: when the wanted grade isn't reachable in your region (Life Support G5 outside Colonia), the line shows "G4 max in your region" at the best engineer there, and counts as done once your module has that grade.
 - Build import: Guardian weapons (plasma charger, gauss, shard cannon) and caustic sink launchers are no longer taken for ordinary modules (an Overcharged Guardian plasma charger showed as "Beam Laser — Overcharged"). Their engineering isn't in the data yet, so they are listed as skipped. Re-import your build to clean the old lines.
-- New, experimental: builds for ARM processors. Windows on ARM: "arm64" installer ("EDCH_<version>_arm64_setup.exe") and portable exe; Linux on ARM (aarch64): AppImage, .deb and .rpm. The automatic update picks the installer of your processor's kind.
+- New, experimental: builds for ARM processors. Windows on ARM: "arm64" installer and portable exe; Linux on ARM (aarch64): AppImage, .deb and .rpm. The automatic update picks the installer of your processor's kind.
 - Fixed: "Already done on this ship" missed modifications made at an engineer during the session (for example Heavy Duty G5 on the armour). The game doesn't rewrite the ship's module list after engineering; EDCH now updates the module from each engineering (grade, blueprint, experimental effect), so the line and the engineer leave the tour at once.
 
 ## 0.10.9
