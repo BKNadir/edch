@@ -643,7 +643,11 @@
     "whereMineSellPowerSSystems": "Where to mine and sell in your power's systems",
     "whereMineSystems": "Where to mine ({{power}} systems)",
     "whereSell": "Where to sell",
-    "whereSell2": "Where to sell ({{power}})"
+    "whereSell2": "Where to sell ({{power}})",
+    "miningType": "Mining type",
+    "hideMethod": "Hide this mining type from the results",
+    "showMethod": "Show this mining type in the results",
+    "noRingForShownMethods": "No ring for the mining types shown: click a hidden type above to show it again."
   },
   "miningSpots": {
     "common": "Common",
@@ -657,7 +661,10 @@
     "metallic": "Metallic",
     "pristine": "Pristine",
     "rocky": "Rocky",
-    "subsurfaceDisplacementMissiles": "Subsurface (displacement missiles)"
+    "subsurfaceDisplacementMissiles": "Subsurface (displacement missiles)",
+    "laser": "Laser",
+    "subsurface": "Subsurface",
+    "core": "Core"
   },
   "missions": {
     "accepted": "Accepted by",

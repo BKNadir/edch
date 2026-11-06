@@ -3,6 +3,11 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.8
+
+- Mining, "Where to mine": a new "Mining type" column says, for each planet's ring, how the mineral is mined there (laser, subsurface, core). Core only shows on the ring types where the mineral has motherlode asteroids.
+- Mining: the laser, subsurface and core chips above the table are now switches. Click one to hide that mining type from the results (rings left with no type shown are hidden), click it again to show it. The choice is kept.
+
 ## 0.10.7
 
 - Search: new **Faction** tab. Type a minor faction (suggestions from the factions met in your journal), choose "present in the system" or "controls the system", and tick the faction states you want (Famine, Expansion, War…, with the game's names in your language). The systems come nearest first, with the faction's influence, its states, who controls the system and how old the data is; a click copies the system.

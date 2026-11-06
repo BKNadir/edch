@@ -647,7 +647,11 @@
     "whereMineSellPowerSSystems": "Onde minerar e vender nos sistemas da sua potência",
     "whereMineSystems": "Onde minerar (sistemas de {{power}})",
     "whereSell": "Onde vender",
-    "whereSell2": "Onde vender ({{power}})"
+    "whereSell2": "Onde vender ({{power}})",
+    "miningType": "Tipo de mineração",
+    "hideMethod": "Ocultar este tipo de mineração nos resultados",
+    "showMethod": "Mostrar este tipo de mineração nos resultados",
+    "noRingForShownMethods": "Nenhum anel para os tipos de mineração mostrados: clique acima em um tipo oculto para mostrá-lo de novo."
   },
   "miningSpots": {
     "common": "Comum",
@@ -661,7 +665,10 @@
     "metallic": "Metálico",
     "pristine": "Intocado",
     "rocky": "Rochoso",
-    "subsurfaceDisplacementMissiles": "Subsuperfície (mísseis de deslocamento)"
+    "subsurfaceDisplacementMissiles": "Subsuperfície (mísseis de deslocamento)",
+    "laser": "Laser",
+    "subsurface": "Subsuperfície",
+    "core": "Núcleo"
   },
   "missions": {
     "accepted": "Aceita por",

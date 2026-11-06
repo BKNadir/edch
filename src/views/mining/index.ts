@@ -7,7 +7,7 @@ import { type Ctx, referenceOf, type View } from "../../state/context.js";
 import type { MiningSettings } from "../../state/store.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
 import { duration, relTime } from "../../ui/format.js";
-import { spotResults } from "./spotResults.js";
+import { type MethodFilter, spotResults } from "./spotResults.js";
 import { busy } from "../missions/index.js";
 import { openSettingsTab } from "../settings/index.js";
 
@@ -379,7 +379,9 @@ export class MiningView implements View {
         ),
         this.error && this.tab === "prospect" ? h("p.error", null, this.error) : null,
       ),
-      this.found ? spotResults(this.found, { mine: t("mining.whereMine"), sell: t("mining.whereSell") }) : null,
+      this.found
+        ? spotResults(this.found, { mine: t("mining.whereMine"), sell: t("mining.whereSell") }, this.methodFilter())
+        : null,
     );
   }
 
@@ -479,15 +481,35 @@ export class MiningView implements View {
     return { mine, sell, start: this.ctx.store.state.settings.maxDistance };
   }
 
+  /** The mining types shown in the results; hiding one is kept in the settings. */
+  private methodFilter(): MethodFilter {
+    const store = this.ctx.store;
+    return {
+      hidden: store.state.settings.mining.hiddenMethods,
+      toggle: (method) => {
+        const mining = store.state.settings.mining;
+        const hidden = mining.hiddenMethods.includes(method)
+          ? mining.hiddenMethods.filter((m) => m !== method)
+          : [...mining.hiddenMethods, method];
+        store.updateSettings({ mining: { ...mining, hiddenMethods: hidden } });
+        this.render();
+      },
+    };
+  }
+
   private meritResults(): HTMLElement {
     const r = this.results!;
     return h(
       "div.spot-results",
       null,
-      spotResults(r, {
-        mine: t("mining.whereMineSystems", { power: r.power }),
-        sell: t("mining.whereSell2", { power: r.power }),
-      }),
+      spotResults(
+        r,
+        {
+          mine: t("mining.whereMineSystems", { power: r.power }),
+          sell: t("mining.whereSell2", { power: r.power }),
+        },
+        this.methodFilter(),
+      ),
     );
   }
 }

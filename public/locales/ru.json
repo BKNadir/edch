@@ -641,7 +641,11 @@
     "whereMineSellPowerSSystems": "Где добывать и продавать в системах вашей державы",
     "whereMineSystems": "Где добывать (системы {{power}})",
     "whereSell": "Где продать",
-    "whereSell2": "Где продать ({{power}})"
+    "whereSell2": "Где продать ({{power}})",
+    "miningType": "Тип добычи",
+    "hideMethod": "Скрыть этот тип добычи в результатах",
+    "showMethod": "Показать этот тип добычи в результатах",
+    "noRingForShownMethods": "Нет колец для показанных типов добычи: нажмите на скрытый тип выше, чтобы снова его показать."
   },
   "miningSpots": {
     "common": "Обычные",
@@ -655,7 +659,10 @@
     "metallic": "Металлическое",
     "pristine": "Нетронутые",
     "rocky": "Каменное",
-    "subsurfaceDisplacementMissiles": "Подповерхностная (ракеты вытеснения)"
+    "subsurfaceDisplacementMissiles": "Подповерхностная (ракеты вытеснения)",
+    "laser": "Лазер",
+    "subsurface": "Подповерхностная",
+    "core": "Ядро"
   },
   "missions": {
     "accepted": "Приняли",

@@ -643,7 +643,11 @@
     "whereMineSellPowerSSystems": "Wo man in den Systemen deiner Macht abbaut und verkauft",
     "whereMineSystems": "Wo abbauen (Systeme von {{power}})",
     "whereSell": "Wo verkaufen",
-    "whereSell2": "Wo verkaufen ({{power}})"
+    "whereSell2": "Wo verkaufen ({{power}})",
+    "miningType": "Abbauart",
+    "hideMethod": "Diese Abbauart in den Ergebnissen ausblenden",
+    "showMethod": "Diese Abbauart in den Ergebnissen anzeigen",
+    "noRingForShownMethods": "Kein Ring für die angezeigten Abbauarten: Klicke oben auf eine ausgeblendete Art, um sie wieder anzuzeigen."
   },
   "miningSpots": {
     "common": "Normal",
@@ -657,7 +661,10 @@
     "metallic": "Metallisch",
     "pristine": "Unberührt",
     "rocky": "Felsig",
-    "subsurfaceDisplacementMissiles": "Unter der Oberfläche (Verdrängungsraketen)"
+    "subsurfaceDisplacementMissiles": "Unter der Oberfläche (Verdrängungsraketen)",
+    "laser": "Laser",
+    "subsurface": "Unter der Oberfläche",
+    "core": "Kern"
   },
   "missions": {
     "accepted": "Angenommen von",

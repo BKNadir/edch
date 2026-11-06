@@ -135,6 +135,8 @@ export interface MiningSettings {
   /** Merit Miner: power (empty = pledged power) and minerals searched. */
   power: string;
   minerals: string[];
+  /** Mining types hidden from the "Where to mine" results ("laser", "subsurface", "core"). */
+  hiddenMethods: string[];
 }
 
 export const DEFAULT_NOTIFY: NotifySettings = {
@@ -164,6 +166,7 @@ export const DEFAULT_MINING: MiningSettings = {
   alert: true,
   power: "",
   minerals: ["Platinum", "Painite", "Low Temperature Diamonds"],
+  hiddenMethods: [],
 };
 
 /** A wing code: 4 groups of 4 letters/digits (80 bits), easy to read out. */
