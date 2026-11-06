@@ -534,7 +534,9 @@
   },
   "live": {
     "accepted": "{{by}} aceitou \"{{title}}\"",
+    "clearAll": "Limpar tudo",
     "closedEdch": "{{name}} fechou o EDCH",
+    "dismiss": "Remover",
     "journalHistoryUnreadable": "Histórico do diário ilegível",
     "latestNotifications": "Últimas notificações",
     "leftWingGame": "{{name}} saiu da ala no jogo",

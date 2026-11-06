@@ -530,7 +530,9 @@
   },
   "live": {
     "accepted": "{{by}} принял(а) «{{title}}»",
+    "clearAll": "Очистить всё",
     "closedEdch": "{{name}} закрыл EDCH",
+    "dismiss": "Убрать",
     "journalHistoryUnreadable": "История журнала не читается",
     "latestNotifications": "Последние уведомления",
     "leftWingGame": "{{name}} покинул звено в игре",

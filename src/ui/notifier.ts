@@ -82,6 +82,24 @@ let unseen = 0;
 
 export const recentAlerts = () => alerts;
 
+/** Removes one notification from the panel (the very object listed by `recentAlerts`). */
+export function dismissAlert(alert: Alert) {
+  const index = alerts.indexOf(alert);
+  if (index < 0) return;
+  alerts.splice(index, 1);
+  unseen = Math.min(unseen, alerts.length);
+  if (!unseen) tab?.classList.remove("flash");
+  refresh();
+}
+
+/** Empties the panel's list of notifications and stops the tab's flash. */
+export function clearAlerts() {
+  alerts.length = 0;
+  unseen = 0;
+  tab?.classList.remove("flash");
+  refresh();
+}
+
 /** Plays the chosen sound and/or flashes the tab, and keeps the message in the panel. */
 export function notify(text: string, opts: { sound?: boolean } = {}) {
   if (!store) return;

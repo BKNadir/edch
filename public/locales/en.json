@@ -532,7 +532,9 @@
   },
   "live": {
     "accepted": "{{by}} accepted \"{{title}}\"",
+    "clearAll": "Clear all",
     "closedEdch": "{{name}} closed EDCH",
+    "dismiss": "Remove",
     "journalHistoryUnreadable": "Journal history unreadable",
     "latestNotifications": "Latest notifications",
     "leftWingGame": "{{name}} left the wing in game",

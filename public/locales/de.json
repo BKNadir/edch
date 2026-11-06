@@ -532,7 +532,9 @@
   },
   "live": {
     "accepted": "{{by}} hat „{{title}}“ angenommen",
+    "clearAll": "Alle löschen",
     "closedEdch": "{{name}} hat EDCH geschlossen",
+    "dismiss": "Entfernen",
     "journalHistoryUnreadable": "Journal-Verlauf nicht lesbar",
     "latestNotifications": "Letzte Benachrichtigungen",
     "leftWingGame": "{{name}} hat das Geschwader im Spiel verlassen",

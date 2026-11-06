@@ -532,7 +532,9 @@
   },
   "live": {
     "accepted": "{{by}} a accepté « {{title}} »",
+    "clearAll": "Tout effacer",
     "closedEdch": "{{name}} a fermé EDCH",
+    "dismiss": "Retirer",
     "journalHistoryUnreadable": "Historique du journal illisible",
     "latestNotifications": "Dernières notifications",
     "leftWingGame": "{{name}} a quitté l'escadrille en jeu",

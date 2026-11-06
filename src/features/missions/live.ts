@@ -5,10 +5,17 @@ import { inStartup, startupAlert, goTo } from "../../ui/alerts.js";
 import { applyActivity, HISTORY_DAYS, HISTORY_EVENTS } from "../../game/activity/index.js";
 import { emptyActivity, type Mission } from "../../game/activity/state.js";
 import { isRemote, scanHistory } from "../../platform/bridge.js";
-import { h } from "../../ui/dom.js";
+import { h, icon } from "../../ui/dom.js";
 import { log } from "../../platform/logger.js";
 import { gameName, t } from "../../platform/i18n.js";
-import { mountSideTab, notify, recentAlerts, refresh as refreshTab } from "../../ui/notifier.js";
+import {
+  clearAlerts,
+  dismissAlert,
+  mountSideTab,
+  notify,
+  recentAlerts,
+  refresh as refreshTab,
+} from "../../ui/notifier.js";
 import type { Store } from "../../state/store.js";
 import { hoursLeft, relTime } from "../../ui/format.js";
 import {
@@ -296,12 +303,31 @@ function panel(): (Node | null)[] {
     h(
       "section.side-section",
       null,
-      h("h4", null, t("live.latestNotifications")),
+      h(
+        "div.side-section-head",
+        null,
+        h("h4", null, t("live.latestNotifications")),
+        alerts.length ? h("button.ghost.small", { onclick: clearAlerts }, t("live.clearAll")) : null,
+      ),
       alerts.length
         ? h(
             "ul.side-list",
             null,
-            alerts.slice(0, 10).map((a) => h("li", null, h("span", null, a.text), h("span.sub", null, relTime(a.at)))),
+            alerts
+              .slice(0, 10)
+              .map((alert) =>
+                h(
+                  "li.side-alert",
+                  null,
+                  h("span", null, alert.text),
+                  h("span.sub", null, relTime(alert.at)),
+                  h(
+                    "button.ghost.small.side-alert-dismiss",
+                    { title: t("live.dismiss"), onclick: () => dismissAlert(alert) },
+                    icon("close"),
+                  ),
+                ),
+              ),
           )
         : h("p.sub", null, t("live.nothingYet")),
     ),
