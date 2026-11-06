@@ -75,9 +75,14 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
       state.fid = ev.FID;
       return true;
 
+    case "Fileheader":
+      if (typeof ev.gameversion === "string") state.gameVersion = ev.gameversion;
+      return true;
+
     case "LoadGame":
       state.commander = ev.Commander ?? state.commander;
       state.fid = ev.FID ?? state.fid;
+      if (typeof ev.gameversion === "string") state.gameVersion = ev.gameversion;
       if (ev.Ship) setShip(state, ev.Ship, ev.Ship_Localised, ev.ShipID, ev.ShipName, ev.ShipIdent);
       return true;
 

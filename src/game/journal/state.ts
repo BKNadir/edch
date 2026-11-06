@@ -107,6 +107,8 @@ export interface CommanderState {
   carrierMarkets?: Record<number, CarrierMarketSnapshot>;
   /** Minor factions met in the journal (systems visited, missions), most recent first. */
   knownFactions?: string[];
+  /** The game's version from the journal header ("4.2.1.0"). */
+  gameVersion?: string;
   /**
    * Engineering seen in the journal (EngineerCraft): which engineer did which blueprint on which
    * module, and the highest grade. The game is the reference: this completes the data's list of

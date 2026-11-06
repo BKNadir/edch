@@ -1423,5 +1423,17 @@
     "yiShenMeeting": "Erledige die Empfehlungsaufgaben für Baltanos, Eleanor Bresa und Rosa Dayette.",
     "zacariahNemoMeeting": "Erhalte eine Einladung von der Party of Yoru.",
     "zacariahNemoUnlock": "Liefere 25 t Haustiere aus Xihe."
+  },
+  "missingData": {
+    "title": "Hilf, die Daten zu vervollständigen",
+    "intro": "Wenn das Spiel Engineering zeigt, das EDCHs Daten nicht kennen (ein Ingenieur mit einem Grad, den die Daten ihm nicht geben, ein fehlendes Modul oder eine fehlende Modifikation), notiert EDCH es hier und in missing-data.txt im Log-Ordner. Schick die Liste in einem GitHub-Ticket: Die Daten werden für alle korrigiert.",
+    "none": "Bisher nichts Fehlendes notiert.",
+    "showFile": "Datei anzeigen",
+    "openIssue": "In einem GitHub-Ticket senden",
+    "clear": "Liste leeren",
+    "clearHelp": "Nach dem Senden: beginnt eine neue Liste",
+    "privacy": "Die Liste enthält keine privaten Daten: nur Ingenieure, Module, Modifikationen, Grade, Daten und die Spielversion.",
+    "found_one": "{{count}} Eintrag notiert",
+    "found_other": "{{count}} Einträge notiert"
   }
 }

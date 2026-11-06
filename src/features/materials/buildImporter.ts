@@ -77,7 +77,10 @@ export function extractLoadout(text: string): Json | null {
 export interface ImportResult {
   items: WishItem[];
   ship: string;
+  /** "Slot: blueprint" of the engineering the data doesn't know (shown after the import). */
   skipped: string[];
+  /** The same, for the missing data list: module (or its symbol when unknown), blueprint, grade. */
+  unknownEngineering: { module: string; blueprint: string; grade?: number }[];
 }
 
 /**
@@ -93,6 +96,7 @@ function pick(game: Game, kind: "modification" | "experimental", symbol: string,
 export function importLoadout(game: Game, loadout: Json): ImportResult {
   const counts = new Map<string, { bp: Blueprint; from: number; to: number; count: number; slots: string[] }>();
   const skipped: string[] = [];
+  const unknownEngineering: ImportResult["unknownEngineering"] = [];
   const add = (bp: Blueprint, from: number, to: number, slot: string) => {
     const key = `${bpKey(bp)}|${from}|${to}`;
     const prev = counts.get(key);
@@ -117,11 +121,15 @@ export function importLoadout(game: Game, loadout: Json): ImportResult {
       add(top, 1, Math.min(level, top.grade ?? level), slot);
     } else {
       skipped.push(`${m.Slot}: ${eng.BlueprintName}`);
+      unknownEngineering.push({ module: module ?? item, blueprint: String(eng.BlueprintName ?? ""), grade: level });
     }
     if (eng.ExperimentalEffect) {
       const exp = pick(game, "experimental", String(eng.ExperimentalEffect).toLowerCase(), module)[0];
       if (exp) add(exp, 0, 0, slot);
-      else skipped.push(`${m.Slot}: ${eng.ExperimentalEffect}`);
+      else {
+        skipped.push(`${m.Slot}: ${eng.ExperimentalEffect}`);
+        unknownEngineering.push({ module: module ?? item, blueprint: String(eng.ExperimentalEffect) });
+      }
     }
   }
 
@@ -143,5 +151,6 @@ export function importLoadout(game: Game, loadout: Json): ImportResult {
     items,
     ship: [loadout.Ship, loadout.ShipName].filter(Boolean).join(" « ") + (loadout.ShipName ? " »" : ""),
     skipped,
+    unknownEngineering,
   };
 }

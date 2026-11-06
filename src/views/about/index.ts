@@ -2,6 +2,7 @@
 // (with what a debug log contains and never contains), and a word from the author.
 
 import { isRemote, isTauri, logsOpen, openUrl, updateMode } from "../../platform/bridge.js";
+import { missingDataCard } from "./missingDataCard.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
 import { SOFTWARE_VERSION } from "../../platform/version.js";
 import { showChangelog } from "../../ui/changelog.js";
@@ -172,6 +173,7 @@ export class AboutView implements View {
           ),
         ),
         this.bugCard(),
+        missingDataCard(),
         h(
           "section.card",
           null,

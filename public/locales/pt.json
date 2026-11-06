@@ -1436,5 +1436,17 @@
     "yiShenMeeting": "Conclua as tarefas de indicação de Baltanos, Eleanor Bresa e Rosa Dayette.",
     "zacariahNemoMeeting": "Receba um convite do Party of Yoru.",
     "zacariahNemoUnlock": "Entregue 25 t de Mascotes Biomórficos de Xihe."
+  },
+  "missingData": {
+    "title": "Ajude a completar os dados",
+    "intro": "Quando o jogo mostra engenharia que os dados do EDCH não conhecem (um engenheiro fazendo um grau que os dados não lhe dão, um módulo ou modificação ausentes), o EDCH anota aqui e em missing-data.txt, na pasta de logs. Envie a lista em um ticket do GitHub: os dados serão corrigidos para todos.",
+    "none": "Nada faltando anotado por enquanto.",
+    "showFile": "Mostrar o arquivo",
+    "openIssue": "Enviar em um ticket do GitHub",
+    "clear": "Esvaziar a lista",
+    "clearHelp": "Depois de enviada: começa uma lista nova",
+    "privacy": "A lista não contém dados privados: apenas engenheiros, módulos, modificações, graus, datas e a versão do jogo.",
+    "found_one": "{{count}} item anotado",
+    "found_other": "{{count}} itens anotados"
   }
 }

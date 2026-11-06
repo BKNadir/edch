@@ -1425,5 +1425,17 @@
     "yiShenMeeting": "Termine les tâches de recommandation pour Baltanos, Eleanor Bresa et Rosa Dayette.",
     "zacariahNemoMeeting": "Obtiens une invitation du Party of Yoru.",
     "zacariahNemoUnlock": "Fournis 25 t de Compagnons biomorphiques de Xihe."
+  },
+  "missingData": {
+    "title": "Aider à compléter les données",
+    "intro": "Quand le jeu montre une ingénierie que les données d'EDCH ne connaissent pas (un ingénieur qui fait un grade que les données ne lui donnent pas, un module ou une modification absents), EDCH la note ici et dans missing-data.txt, dans le dossier des logs. Envoie la liste dans un ticket GitHub : les données seront corrigées pour tout le monde.",
+    "none": "Rien de manquant noté pour l'instant.",
+    "showFile": "Afficher le fichier",
+    "openIssue": "Envoyer dans un ticket GitHub",
+    "clear": "Vider la liste",
+    "clearHelp": "Une fois envoyée : repart d'une liste vide",
+    "privacy": "La liste ne contient aucune donnée privée : seulement des ingénieurs, modules, modifications, grades, dates et la version du jeu.",
+    "found_one": "{{count}} élément noté",
+    "found_other": "{{count}} éléments notés"
   }
 }

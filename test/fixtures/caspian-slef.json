@@ -1,0 +1,781 @@
+[
+  {
+    "header": {
+      "appName": "EDSY"
+    },
+    "data": {
+      "event": "Loadout",
+      "Ship": "explorer_nx",
+      "ShipName": "Test",
+      "ShipIdent": "",
+      "HullValue": 189326510,
+      "ModulesValue": 515136540,
+      "UnladenMass": 1955.2,
+      "CargoCapacity": 16,
+      "MaxJumpRange": 48.115027,
+      "FuelCapacity": {
+        "Main": 128,
+        "Reserve": 1.14
+      },
+      "Rebuy": 35223152,
+      "Modules": [
+        {
+          "Slot": "CargoHatch",
+          "Item": "modularcargobaydoor",
+          "On": true,
+          "Priority": 4
+        },
+        {
+          "Slot": "LargeHardpoint1",
+          "Item": "hpt_beamlaser_turret_large",
+          "On": true,
+          "Priority": 1,
+          "Value": 19399600,
+          "Engineering": {
+            "BlueprintName": "Weapon_LongRange",
+            "Level": 5,
+            "Quality": 1,
+            "ExperimentalEffect": "special_thermal_vent",
+            "Modifiers": [
+              {
+                "Label": "Mass",
+                "Value": 10.4,
+                "OriginalValue": 8
+              },
+              {
+                "Label": "PowerDraw",
+                "Value": 1.7365,
+                "OriginalValue": 1.51
+              },
+              {
+                "Label": "MaximumRange",
+                "Value": 6000,
+                "OriginalValue": 3000
+              },
+              {
+                "Label": "FalloffRange",
+                "Value": 6000,
+                "OriginalValue": 600
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "MediumHardpoint6",
+          "Item": "hpt_guardian_plasmalauncher_fixed_medium",
+          "On": true,
+          "Priority": 1,
+          "Value": 0,
+          "Engineering": {
+            "BlueprintName": "Weapon_Overcharged",
+            "Level": 1,
+            "Quality": 0,
+            "Modifiers": [
+              {
+                "Label": "PowerDraw",
+                "Value": 2.819903,
+                "OriginalValue": 2.13
+              },
+              {
+                "Label": "DamagePerSecond",
+                "Value": 41.500092,
+                "OriginalValue": 25
+              },
+              {
+                "Label": "Damage",
+                "Value": 8.300018,
+                "OriginalValue": 5
+              },
+              {
+                "Label": "ThermalLoad",
+                "Value": 7.815,
+                "OriginalValue": 5.21
+              },
+              {
+                "Label": "ArmourPenetration",
+                "Value": 110,
+                "OriginalValue": 80
+              },
+              {
+                "Label": "ShotSpeed",
+                "Value": 6000,
+                "OriginalValue": 1200
+              },
+              {
+                "Label": "AmmoClipSize",
+                "Value": 20,
+                "OriginalValue": 15
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "MediumHardpoint5",
+          "Item": "hpt_guardian_plasmalauncher_fixed_medium",
+          "On": true,
+          "Priority": 1,
+          "Value": 0,
+          "Engineering": {
+            "BlueprintName": "Weapon_Overcharged",
+            "Level": 1,
+            "Quality": 0,
+            "Modifiers": [
+              {
+                "Label": "PowerDraw",
+                "Value": 2.819903,
+                "OriginalValue": 2.13
+              },
+              {
+                "Label": "DamagePerSecond",
+                "Value": 41.500092,
+                "OriginalValue": 25
+              },
+              {
+                "Label": "Damage",
+                "Value": 8.300018,
+                "OriginalValue": 5
+              },
+              {
+                "Label": "ThermalLoad",
+                "Value": 7.815,
+                "OriginalValue": 5.21
+              },
+              {
+                "Label": "ArmourPenetration",
+                "Value": 110,
+                "OriginalValue": 80
+              },
+              {
+                "Label": "ShotSpeed",
+                "Value": 6000,
+                "OriginalValue": 1200
+              },
+              {
+                "Label": "AmmoClipSize",
+                "Value": 20,
+                "OriginalValue": 15
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "MediumHardpoint1",
+          "Item": "hpt_guardian_plasmalauncher_fixed_medium",
+          "On": true,
+          "Priority": 1,
+          "Value": 0,
+          "Engineering": {
+            "BlueprintName": "Weapon_Overcharged",
+            "Level": 1,
+            "Quality": 0,
+            "Modifiers": [
+              {
+                "Label": "PowerDraw",
+                "Value": 2.819903,
+                "OriginalValue": 2.13
+              },
+              {
+                "Label": "DamagePerSecond",
+                "Value": 41.500092,
+                "OriginalValue": 25
+              },
+              {
+                "Label": "Damage",
+                "Value": 8.300018,
+                "OriginalValue": 5
+              },
+              {
+                "Label": "ThermalLoad",
+                "Value": 7.815,
+                "OriginalValue": 5.21
+              },
+              {
+                "Label": "ArmourPenetration",
+                "Value": 110,
+                "OriginalValue": 80
+              },
+              {
+                "Label": "ShotSpeed",
+                "Value": 6000,
+                "OriginalValue": 1200
+              },
+              {
+                "Label": "AmmoClipSize",
+                "Value": 20,
+                "OriginalValue": 15
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "MediumHardpoint2",
+          "Item": "hpt_guardian_plasmalauncher_fixed_medium",
+          "On": true,
+          "Priority": 1,
+          "Value": 0,
+          "Engineering": {
+            "BlueprintName": "Weapon_Overcharged",
+            "Level": 1,
+            "Quality": 0,
+            "Modifiers": [
+              {
+                "Label": "PowerDraw",
+                "Value": 2.819903,
+                "OriginalValue": 2.13
+              },
+              {
+                "Label": "DamagePerSecond",
+                "Value": 41.500092,
+                "OriginalValue": 25
+              },
+              {
+                "Label": "Damage",
+                "Value": 8.300018,
+                "OriginalValue": 5
+              },
+              {
+                "Label": "ThermalLoad",
+                "Value": 7.815,
+                "OriginalValue": 5.21
+              },
+              {
+                "Label": "ArmourPenetration",
+                "Value": 110,
+                "OriginalValue": 80
+              },
+              {
+                "Label": "ShotSpeed",
+                "Value": 6000,
+                "OriginalValue": 1200
+              },
+              {
+                "Label": "AmmoClipSize",
+                "Value": 20,
+                "OriginalValue": 15
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "MediumHardpoint3",
+          "Item": "hpt_guardian_plasmalauncher_fixed_medium",
+          "On": true,
+          "Priority": 1,
+          "Value": 0,
+          "Engineering": {
+            "BlueprintName": "Weapon_Overcharged",
+            "Level": 1,
+            "Quality": 0,
+            "Modifiers": [
+              {
+                "Label": "PowerDraw",
+                "Value": 2.819903,
+                "OriginalValue": 2.13
+              },
+              {
+                "Label": "DamagePerSecond",
+                "Value": 41.500092,
+                "OriginalValue": 25
+              },
+              {
+                "Label": "Damage",
+                "Value": 8.300018,
+                "OriginalValue": 5
+              },
+              {
+                "Label": "ThermalLoad",
+                "Value": 7.815,
+                "OriginalValue": 5.21
+              },
+              {
+                "Label": "ArmourPenetration",
+                "Value": 110,
+                "OriginalValue": 80
+              },
+              {
+                "Label": "ShotSpeed",
+                "Value": 6000,
+                "OriginalValue": 1200
+              },
+              {
+                "Label": "AmmoClipSize",
+                "Value": 20,
+                "OriginalValue": 15
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "MediumHardpoint4",
+          "Item": "hpt_guardian_plasmalauncher_fixed_medium",
+          "On": true,
+          "Priority": 1,
+          "Value": 0,
+          "Engineering": {
+            "BlueprintName": "Weapon_Overcharged",
+            "Level": 1,
+            "Quality": 0,
+            "Modifiers": [
+              {
+                "Label": "PowerDraw",
+                "Value": 2.819903,
+                "OriginalValue": 2.13
+              },
+              {
+                "Label": "DamagePerSecond",
+                "Value": 41.500092,
+                "OriginalValue": 25
+              },
+              {
+                "Label": "Damage",
+                "Value": 8.300018,
+                "OriginalValue": 5
+              },
+              {
+                "Label": "ThermalLoad",
+                "Value": 7.815,
+                "OriginalValue": 5.21
+              },
+              {
+                "Label": "ArmourPenetration",
+                "Value": 110,
+                "OriginalValue": 80
+              },
+              {
+                "Label": "ShotSpeed",
+                "Value": 6000,
+                "OriginalValue": 1200
+              },
+              {
+                "Label": "AmmoClipSize",
+                "Value": 20,
+                "OriginalValue": 15
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "TinyHardpoint1",
+          "Item": "hpt_heatsinklauncher_turret_tiny",
+          "On": true,
+          "Priority": 0,
+          "Value": 0,
+          "Engineering": {
+            "BlueprintName": "Misc_HeatSinkCapacity",
+            "Level": 1,
+            "Quality": 0,
+            "Modifiers": [
+              {
+                "Label": "AmmoMaximum",
+                "Value": 4,
+                "OriginalValue": 2
+              },
+              {
+                "Label": "ReloadTime",
+                "Value": 17.5,
+                "OriginalValue": 10
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "TinyHardpoint2",
+          "Item": "hpt_xenoscannermk2_basic_tiny",
+          "On": true,
+          "Priority": 1,
+          "Value": 745950
+        },
+        {
+          "Slot": "TinyHardpoint3",
+          "Item": "hpt_antiunknownshutdown_tiny_v2",
+          "On": true,
+          "Priority": 1,
+          "Value": 0
+        },
+        {
+          "Slot": "TinyHardpoint4",
+          "Item": "hpt_causticsinklauncher_turret_tiny",
+          "On": true,
+          "Priority": 0,
+          "Value": 50000,
+          "Engineering": {
+            "BlueprintName": "Misc_HeatSinkCapacity",
+            "Level": 1,
+            "Quality": 1,
+            "Modifiers": [
+              {
+                "Label": "Mass",
+                "Value": 3.4,
+                "OriginalValue": 1.7
+              },
+              {
+                "Label": "AmmoMaximum",
+                "Value": 7,
+                "OriginalValue": 5
+              },
+              {
+                "Label": "ReloadTime",
+                "Value": 15,
+                "OriginalValue": 10
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "TinyHardpoint5",
+          "Item": "hpt_causticsinklauncher_turret_tiny",
+          "On": true,
+          "Priority": 0,
+          "Value": 50000,
+          "Engineering": {
+            "BlueprintName": "Misc_HeatSinkCapacity",
+            "Level": 1,
+            "Quality": 1,
+            "Modifiers": [
+              {
+                "Label": "Mass",
+                "Value": 3.4,
+                "OriginalValue": 1.7
+              },
+              {
+                "Label": "AmmoMaximum",
+                "Value": 7,
+                "OriginalValue": 5
+              },
+              {
+                "Label": "ReloadTime",
+                "Value": 15,
+                "OriginalValue": 10
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "TinyHardpoint6",
+          "Item": "hpt_causticsinklauncher_turret_tiny",
+          "On": true,
+          "Priority": 0,
+          "Value": 50000,
+          "Engineering": {
+            "BlueprintName": "Misc_HeatSinkCapacity",
+            "Level": 1,
+            "Quality": 1,
+            "Modifiers": [
+              {
+                "Label": "Mass",
+                "Value": 3.4,
+                "OriginalValue": 1.7
+              },
+              {
+                "Label": "AmmoMaximum",
+                "Value": 7,
+                "OriginalValue": 5
+              },
+              {
+                "Label": "ReloadTime",
+                "Value": 15,
+                "OriginalValue": 10
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "Armour",
+          "Item": "explorer_nx_armour_grade3",
+          "On": true,
+          "Priority": 0,
+          "Value": 175375160,
+          "Engineering": {
+            "BlueprintName": "Armour_HeavyDuty",
+            "Level": 5,
+            "Quality": 1,
+            "ExperimentalEffect": "special_armour_chunky",
+            "Modifiers": [
+              {
+                "Label": "Mass",
+                "Value": 78,
+                "OriginalValue": 60
+              },
+              {
+                "Label": "DefenceModifierHealthMultiplier",
+                "Value": 398.96,
+                "OriginalValue": 250
+              },
+              {
+                "Label": "KineticResistance",
+                "Value": -17.42,
+                "OriginalValue": -20
+              },
+              {
+                "Label": "ThermicResistance",
+                "Value": 2.15,
+                "OriginalValue": 0
+              },
+              {
+                "Label": "ExplosiveResistance",
+                "Value": -36.99,
+                "OriginalValue": -40
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "PowerPlant",
+          "Item": "int_powerplant_size8_class5",
+          "On": true,
+          "Priority": 0,
+          "Value": 116739870,
+          "Engineering": {
+            "BlueprintName": "PowerPlant_Armoured",
+            "Level": 5,
+            "Quality": 1,
+            "ExperimentalEffect": "special_powerplant_cooled",
+            "Modifiers": [
+              {
+                "Label": "Mass",
+                "Value": 96,
+                "OriginalValue": 80
+              },
+              {
+                "Label": "Integrity",
+                "Value": 363,
+                "OriginalValue": 165
+              },
+              {
+                "Label": "PowerCapacity",
+                "Value": 40.32,
+                "OriginalValue": 36
+              },
+              {
+                "Label": "HeatEfficiency",
+                "Value": 0.3168,
+                "OriginalValue": 0.4
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "MainEngines",
+          "Item": "int_engine_size7_class5_gravityoptimised_mkii",
+          "On": true,
+          "Priority": 0,
+          "Value": 68368390,
+          "Engineering": {
+            "BlueprintName": "Engine_Dirty",
+            "Level": 5,
+            "Quality": 1,
+            "ExperimentalEffect": "special_engine_overloaded",
+            "Modifiers": [
+              {
+                "Label": "Integrity",
+                "Value": 122.4,
+                "OriginalValue": 144
+              },
+              {
+                "Label": "PowerDraw",
+                "Value": 10.2144,
+                "OriginalValue": 9.12
+              },
+              {
+                "Label": "EngineOptimalMass",
+                "Value": 1890,
+                "OriginalValue": 2160
+              },
+              {
+                "Label": "EngineOptPerformance",
+                "Value": 145.6,
+                "OriginalValue": 100
+              },
+              {
+                "Label": "EngineHeatRate",
+                "Value": 2.288,
+                "OriginalValue": 1.3
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "FrameShiftDrive",
+          "Item": "int_hyperdrive_overcharge_size8_class5_overchargebooster_mkii",
+          "On": true,
+          "Priority": 2,
+          "Value": 82042060,
+          "Engineering": {
+            "BlueprintName": "FSD_LongRange",
+            "Level": 5,
+            "Quality": 1,
+            "Modifiers": [
+              {
+                "Label": "Mass",
+                "Value": 208,
+                "OriginalValue": 160
+              },
+              {
+                "Label": "Integrity",
+                "Value": 159.8,
+                "OriginalValue": 188
+              },
+              {
+                "Label": "PowerDraw",
+                "Value": 1.2075,
+                "OriginalValue": 1.05
+              },
+              {
+                "Label": "FSDOptimalMass",
+                "Value": 7238.5,
+                "OriginalValue": 4670
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "LifeSupport",
+          "Item": "int_lifesupport_size5_class5",
+          "On": true,
+          "Priority": 0,
+          "Value": 1241320,
+          "Engineering": {
+            "BlueprintName": "Misc_Reinforced",
+            "Level": 5,
+            "Quality": 1,
+            "Modifiers": [
+              {
+                "Label": "Mass",
+                "Value": 50,
+                "OriginalValue": 20
+              },
+              {
+                "Label": "Integrity",
+                "Value": 460,
+                "OriginalValue": 115
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "PowerDistributor",
+          "Item": "int_powerdistributor_size7_class5",
+          "On": true,
+          "Priority": 0,
+          "Value": 9731930,
+          "Engineering": {
+            "BlueprintName": "PowerDistributor_HighFrequency",
+            "Level": 5,
+            "Quality": 1,
+            "ExperimentalEffect": "special_powerdistributor_fast",
+            "Modifiers": [
+              {
+                "Label": "WeaponsCapacity",
+                "Value": 55.632,
+                "OriginalValue": 61
+              },
+              {
+                "Label": "WeaponsRecharge",
+                "Value": 9.1988,
+                "OriginalValue": 6.1
+              },
+              {
+                "Label": "EnginesCapacity",
+                "Value": 37.392,
+                "OriginalValue": 41
+              },
+              {
+                "Label": "EnginesRecharge",
+                "Value": 6.032,
+                "OriginalValue": 4
+              },
+              {
+                "Label": "SystemsCapacity",
+                "Value": 37.392,
+                "OriginalValue": 41
+              },
+              {
+                "Label": "SystemsRecharge",
+                "Value": 6.032,
+                "OriginalValue": 4
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "Radar",
+          "Item": "int_sensors_size8_class5",
+          "On": true,
+          "Priority": 2,
+          "Value": 27249390,
+          "Engineering": {
+            "BlueprintName": "Sensor_LongRange",
+            "Level": 5,
+            "Quality": 1,
+            "Modifiers": [
+              {
+                "Label": "Mass",
+                "Value": 320,
+                "OriginalValue": 160
+              },
+              {
+                "Label": "SensorTargetScanAngle",
+                "Value": 21,
+                "OriginalValue": 30
+              },
+              {
+                "Label": "Range",
+                "Value": 13440,
+                "OriginalValue": 7680
+              }
+            ]
+          }
+        },
+        {
+          "Slot": "FuelTank",
+          "Item": "int_fueltank_size7_class3",
+          "On": true,
+          "Priority": 0,
+          "Value": 1780910
+        },
+        {
+          "Slot": "Slot01_Size7",
+          "Item": "int_multidronecontrol_universal_size7_class5",
+          "On": true,
+          "Priority": 1,
+          "Value": 8000000
+        },
+        {
+          "Slot": "Slot07_Size5",
+          "Item": "int_expmodulestabiliser_size5_class3",
+          "On": true,
+          "Priority": 0,
+          "Value": 4000000
+        },
+        {
+          "Slot": "Slot08_Size4",
+          "Item": "int_modulereinforcement_size4_class2",
+          "On": true,
+          "Priority": 0,
+          "Value": 195000
+        },
+        {
+          "Slot": "Slot09_Size4",
+          "Item": "int_corrosionproofcargorack_size4_class1",
+          "On": true,
+          "Priority": 0,
+          "Value": 94330
+        },
+        {
+          "Slot": "Slot13_Size1",
+          "Item": "int_supercruiseassist",
+          "On": true,
+          "Priority": 0,
+          "Value": 9120
+        },
+        {
+          "Slot": "Slot14_Size1",
+          "Item": "int_dockingcomputer_advanced",
+          "On": true,
+          "Priority": 0,
+          "Value": 13510
+        }
+      ]
+    }
+  }
+]

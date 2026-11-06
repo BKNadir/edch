@@ -16,6 +16,7 @@ import { blueprintGrades, defaultRolls, wishNeeds, type Store, type WishItem } f
 import { doneOnShip, slotsApply } from "./doneOnShip.js";
 import { engineerChoices, origin, type Pick } from "./engineerPick.js";
 import { moduleOf } from "../materials/buildImporter.js";
+import { recordGap } from "../dataGaps/missingData.js";
 
 type Json = Record<string, any>;
 type Vec3 = [number, number, number];
@@ -382,6 +383,7 @@ export function tourEvent(ev: Json) {
     }
   }
   if (ev.event === "EngineerCraft") noteDataGap(gameCtx, ev);
+  if (ev.event === "Loadout") noteLoadoutGaps(gameCtx, ev);
   if (ev.event === "EngineerCraft" && store.state.settings.engineers.autoTick) tick(ev);
   // A modification made, or the ship changed: the current stop may have nothing left to do.
   if (ev.event === "EngineerCraft" || ev.event === "Loadout") advanceIfDone(gameCtx);
@@ -389,29 +391,82 @@ export function tourEvent(ev: Json) {
 
 /** The game made a modification: move the matching wishlist line on. */
 /**
- * The game showed an engineer doing a grade our data doesn't give them for that blueprint and
- * module: noted in the log (the journal-learned grade is used from now on, see engineerPick.ts),
- * so the data can be fixed. No private data: engineer, module and blueprint only.
+ * The game showed engineering our data lacks: an engineer doing a grade (or a modification) the
+ * data doesn't give them, or a module type it doesn't know. Noted in the missing data list
+ * (features/dataGaps) so the data can be completed; the journal-learned grade is used from now
+ * on (engineerPick.ts). No private data: engineer, module, blueprint and grade only.
  */
 function noteDataGap(ctx: Ctx, ev: Json) {
   const engineer = typeof ev.Engineer === "string" ? ev.Engineer : "";
-  const symbol = typeof ev.BlueprintName === "string" ? ev.BlueprintName.toLowerCase() : "";
-  const module = typeof ev.Module === "string" ? moduleOf(ev.Module) : undefined;
+  const blueprintSymbol = typeof ev.BlueprintName === "string" ? ev.BlueprintName : "";
+  const moduleSymbol = typeof ev.Module === "string" ? ev.Module : "";
   const level = Number(ev.Level ?? 0);
-  if (!engineer || !symbol || !module || !level) return;
+  if (!engineer || !blueprintSymbol || !moduleSymbol || !level) return;
+  const gameVersion = ctx.store.state.cmdr.gameVersion;
+  const module = moduleOf(moduleSymbol);
+  if (!module) {
+    recordGap({
+      kind: "unknownModule",
+      engineer,
+      module: moduleSymbol,
+      blueprint: blueprintSymbol,
+      grade: level,
+      gameVersion,
+    });
+    return;
+  }
   const blueprints = ctx.game.data.blueprints.filter(
-    (b) => b.kind === "modification" && b.module === module && b.symbols?.includes(symbol),
+    (b) => b.kind === "modification" && b.module === module && b.symbols?.includes(blueprintSymbol.toLowerCase()),
   );
   if (!blueprints.length) {
-    log.info("engineers", `Data gap: ${engineer} did ${ev.BlueprintName} G${level} on ${module}, not in the data`);
+    recordGap({ kind: "notInData", engineer, module, blueprint: blueprintSymbol, grade: level, gameVersion });
     return;
   }
   const dataGrade = Math.max(0, ...blueprints.filter((b) => b.engineers?.includes(engineer)).map((b) => b.grade ?? 0));
   if (level > dataGrade)
-    log.info(
-      "engineers",
-      `Data gap: ${engineer} did ${module} ${blueprints[0].name} G${level} (data: ${dataGrade ? `G${dataGrade}` : "not listed"})`,
-    );
+    recordGap({
+      kind: "engineerGrade",
+      engineer,
+      module,
+      blueprint: blueprints[0].name,
+      grade: level,
+      dataGrade,
+      gameVersion,
+    });
+}
+
+/**
+ * The ship's engineering the data doesn't know: a module of an unknown type, or a modification or
+ * experimental effect the data has no blueprint for on that module (Guardian weapons…).
+ */
+function noteLoadoutGaps(ctx: Ctx, ev: Json) {
+  const gameVersion = ctx.store.state.cmdr.gameVersion;
+  for (const shipModule of Array.isArray(ev.Modules) ? (ev.Modules as Json[]) : []) {
+    const engineering = shipModule.Engineering;
+    const moduleSymbol = String(shipModule.Item ?? "");
+    if (!engineering || !moduleSymbol) continue;
+    const module = moduleOf(moduleSymbol);
+    const level = Number(engineering.Level ?? 0) || undefined;
+    if (!module) {
+      recordGap({
+        kind: "unknownModule",
+        module: moduleSymbol,
+        blueprint: String(engineering.BlueprintName ?? ""),
+        grade: level,
+        gameVersion,
+      });
+      continue;
+    }
+    const known = (kind: "modification" | "experimental", symbol: unknown) =>
+      typeof symbol !== "string" ||
+      ctx.game.data.blueprints.some(
+        (b) => b.kind === kind && b.module === module && b.symbols?.includes(symbol.toLowerCase()),
+      );
+    if (!known("modification", engineering.BlueprintName))
+      recordGap({ kind: "notInData", module, blueprint: engineering.BlueprintName, grade: level, gameVersion });
+    if (!known("experimental", engineering.ExperimentalEffect))
+      recordGap({ kind: "notInData", module, blueprint: engineering.ExperimentalEffect, gameVersion });
+  }
 }
 
 /** Modules already counted done at their line's top grade ("<line id>|<slot>"), this session. */

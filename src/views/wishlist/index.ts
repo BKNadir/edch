@@ -1,6 +1,7 @@
 // Wishlist page: the blueprints wanted with their grades and materials, build import (Coriolis,
 // EDSY), the engineer for each line, and the engineer tour route.
 
+import { recordGap } from "../../features/dataGaps/missingData.js";
 import { doneOnShip } from "../../features/engineers/doneOnShip.js";
 import { pickEngineer, type Pick } from "../../features/engineers/engineerPick.js";
 import { goToStop, passStop, planTour, stopTour, type Stop, tourProgress } from "../../features/engineers/tour.js";
@@ -87,6 +88,9 @@ export class WishlistView implements View {
         return;
       }
       const res = importLoadout(this.ctx.game, loadout);
+      // Engineering the data doesn't know goes to the missing data list (About → Missing data).
+      for (const unknown of res.unknownEngineering)
+        recordGap({ kind: "notInData", ...unknown, gameVersion: this.ctx.store.state.cmdr.gameVersion });
       if (!res.items.length) {
         replace(report, h("p.error", null, icon("warn"), " " + t("wishlist.noEngineeredModuleFound", { source })));
         return;

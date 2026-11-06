@@ -364,6 +364,10 @@ export const logWrite = (level: string, source: string, message: string) =>
   invoke<void>("log_write", { level, source, message });
 export const logSetDebug = (on: boolean) => invoke<string | null>("log_set_debug", { on });
 export const logsOpen = () => invoke<string>("logs_open");
+/** Writes missing-data.txt next to the logs (features/dataGaps/missingData.ts). */
+export const missingDataSave = (text: string) => invoke<void>("missing_data_save", { text });
+/** Shows missing-data.txt in the file explorer. */
+export const missingDataShow = () => invoke<void>("missing_data_show");
 /** Portable build (no installer): updates open the release page instead. */
 /** How updates are installed: "installer" (Windows setup) or not ("portable", "linux", "macos": the release page opens). */
 export const updateMode = () =>

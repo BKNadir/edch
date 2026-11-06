@@ -373,6 +373,41 @@ pub fn log_set_debug(on: bool) -> Option<String> {
     }
 }
 
+/// File next to the logs with the game data EDCH's data lacks (written by the UI, see
+/// features/dataGaps/missingData.ts), for players to attach to a GitHub issue.
+const MISSING_DATA_FILE: &str = "missing-data.txt";
+/// Largest missing-data file accepted (the list is capped well below by the UI).
+const MISSING_DATA_MAX_BYTES: usize = 256 * 1024;
+
+/// Writes the missing-data file, through `sanitize` like every log line.
+#[tauri::command]
+pub fn missing_data_save(text: String) -> Result<(), String> {
+    if text.len() > MISSING_DATA_MAX_BYTES {
+        return Err("textTooLong".into());
+    }
+    let dir = dir();
+    fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    fs::write(dir.join(MISSING_DATA_FILE), sanitize(&text)).map_err(|e| e.to_string())
+}
+
+/// Shows the missing-data file in Explorer (selected), or its folder elsewhere.
+#[tauri::command]
+pub fn missing_data_show() -> Result<(), String> {
+    let path = dir().join(MISSING_DATA_FILE);
+    if !path.is_file() {
+        return Err("fileNotFound".into());
+    }
+    #[cfg(target_os = "windows")]
+    let result = std::process::Command::new("explorer")
+        .arg(format!("/select,{}", path.display()))
+        .spawn();
+    #[cfg(not(target_os = "windows"))]
+    let result = std::process::Command::new(if cfg!(target_os = "macos") { "open" } else { "xdg-open" })
+        .arg(dir())
+        .spawn();
+    result.map(|_| ()).map_err(|e| e.to_string())
+}
+
 /// Opens the logs folder in Explorer.
 #[tauri::command]
 pub fn logs_open() -> Result<String, String> {
