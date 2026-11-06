@@ -1037,7 +1037,6 @@
     "interfaceSize": "Taille de l'interface",
     "journalFolder": "Dossier du journal",
     "journalReadingStarted": "Lecture du journal démarrée",
-    "language": "Langue",
     "lastPageOpened": "La dernière page ouverte",
     "launch": "Lancer avec",
     "launchEliteButtonTopScreenStarts": "Le bouton « Lancer Elite » en haut de l'écran démarre le jeu, et indique quand il tourne. Il marche aussi depuis le téléphone.",
@@ -1102,7 +1101,17 @@
     "offerPreReleases": "Proposer aussi les pré-releases (versions de test)",
     "offerPreReleasesHelp": "Les pré-releases apportent les nouveautés en premier mais peuvent avoir des bugs. Décoché, la prochaine version normale est proposée comme d'habitude.",
     "preReleaseBuild": "pré-release",
-    "updateAvailable": "Mise à jour disponible : {{version}}"
+    "updateAvailable": "Mise à jour disponible : {{version}}",
+    "preferences": "Préférences",
+    "languageAndStart": "Langue et page de démarrage",
+    "pageDefaults": "Ouverture des pages",
+    "navigationRouteType": "Route par défaut dans Navigation",
+    "controlsKeyboard": "Clavier (page Commandes)",
+    "keyboardFormat": "Format du clavier",
+    "automatic": "Automatique",
+    "buildExport": "Export du vaisseau",
+    "preferredBuildSite": "Ouvrir mon vaisseau sur",
+    "preferredBuildSiteHelp": "Wishlist → « Exporter mon vaisseau » ouvre ton vaisseau actuel, tel que le jeu le décrit, sur ce site."
   },
   "sources": {
     "agriculture": "Agriculture",
@@ -1348,7 +1357,11 @@
     "modeSimple": "Simple",
     "modeHelp": "Simple : seulement la tournée des ingénieurs. Avancé : chaque ligne avec ses grades et les matériaux nécessaires.",
     "stopNoLongerNeeded": "{{engineer}} n'est plus nécessaire : un autre ingénieur de la tournée fait les mêmes lignes. Passe à l'ingénieur suivant.",
-    "maxGradeInRegion": "G{{grade}} max dans ta région"
+    "maxGradeInRegion": "G{{grade}} max dans ta région",
+    "exportShip": "Exporter mon vaisseau vers {{site}}",
+    "exportShipHelp": "Ouvre ton vaisseau actuel, tel que le jeu le décrit, sur le site choisi dans Paramètres → Préférences",
+    "exportNoShip": "Lance le jeu une fois : le journal décrit ton vaisseau au démarrage",
+    "exportFailed": "Export du vaisseau impossible : {{message}}"
   },
   "engineerData": {
     "baltanosMeeting": "Atteins la réputation Amical avec le Colonia Council.",

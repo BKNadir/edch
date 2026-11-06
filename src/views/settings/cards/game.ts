@@ -2,7 +2,7 @@
 
 import { t } from "../../../platform/i18n.js";
 import type { Ctx } from "../../../state/context.js";
-import type { Settings, WishlistMode } from "../../../state/store.js";
+import type { Settings } from "../../../state/store.js";
 import { startGame } from "../../../ui/desktop.js";
 import { h } from "../../../ui/dom.js";
 
@@ -75,24 +75,6 @@ export function engineersCard(ctx: Ctx, rerender: () => void): HTMLElement {
       h("small", null, t("settings.totalStraightLineDistanceBetweenStops")),
     ),
     check("autoTick", t("settings.moveWishlistItselfWhenGameApplies")),
-    h(
-      "label.field",
-      null,
-      h("span", null, t("settings.wishlistOpensIn")),
-      h(
-        "select",
-        {
-          onchange: (ev: Event) => set({ wishlistMode: (ev.target as HTMLSelectElement).value as WishlistMode }),
-        },
-        (
-          [
-            ["advanced", t("wishlist.modeAdvanced")],
-            ["simple", t("wishlist.modeSimple")],
-          ] as [WishlistMode, string][]
-        ).map(([mode, label]) => h("option", { value: mode, selected: e.wishlistMode === mode }, label)),
-      ),
-      h("small", null, t("wishlist.modeHelp")),
-    ),
   );
 }
 

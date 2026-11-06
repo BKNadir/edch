@@ -1043,7 +1043,6 @@
     "interfaceSize": "Tamanho da interface",
     "journalFolder": "Pasta do diário",
     "journalReadingStarted": "Leitura do diário iniciada",
-    "language": "Idioma",
     "lastPageOpened": "A última página aberta",
     "launch": "Iniciar com",
     "launchEliteButtonTopScreenStarts": "O botão \"Iniciar Elite\" no topo inicia o jogo e mostra quando ele está rodando. Funciona também pelo celular.",
@@ -1108,7 +1107,17 @@
     "offerPreReleases": "Oferecer também as pré-versões (versões de teste)",
     "offerPreReleasesHelp": "As pré-versões trazem as novidades primeiro, mas podem ter bugs. Desmarcado, a próxima versão normal é oferecida como sempre.",
     "preReleaseBuild": "pré-versão",
-    "updateAvailable": "Atualização disponível: {{version}}"
+    "updateAvailable": "Atualização disponível: {{version}}",
+    "preferences": "Preferências",
+    "languageAndStart": "Idioma e página inicial",
+    "pageDefaults": "Como as páginas abrem",
+    "navigationRouteType": "Rota padrão em Navegação",
+    "controlsKeyboard": "Teclado (página Controles)",
+    "keyboardFormat": "Formato do teclado",
+    "automatic": "Automático",
+    "buildExport": "Exportação da nave",
+    "preferredBuildSite": "Abrir minha nave em",
+    "preferredBuildSiteHelp": "Lista de desejos → \"Exportar minha nave\" abre sua nave atual, como o jogo a descreve, neste site."
   },
   "sources": {
     "agriculture": "Agricultura",
@@ -1359,7 +1368,11 @@
     "modeSimple": "Simples",
     "modeHelp": "Simples: só a rota de engenheiros. Avançado: cada linha com seus graus e os materiais necessários.",
     "stopNoLongerNeeded": "{{engineer}} não é mais necessário: outro engenheiro da rota faz as mesmas linhas. Passe ao próximo engenheiro.",
-    "maxGradeInRegion": "G{{grade}} máx. na sua região"
+    "maxGradeInRegion": "G{{grade}} máx. na sua região",
+    "exportShip": "Exportar minha nave para {{site}}",
+    "exportShipHelp": "Abre sua nave atual, como o jogo a descreve, no site escolhido em Configurações → Preferências",
+    "exportNoShip": "Inicie o jogo uma vez: o diário descreve sua nave ao começar",
+    "exportFailed": "Não foi possível exportar a nave: {{message}}"
   },
   "engineerData": {
     "baltanosMeeting": "Alcance a reputação Amigável com o Colonia Council.",

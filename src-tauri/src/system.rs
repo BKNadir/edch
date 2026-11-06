@@ -41,6 +41,12 @@ pub fn open_url(url: String) -> Result<(), String> {
     if !url.starts_with("https://") {
         return Err("httpsOnly".into());
     }
+    // Long addresses (a ship exported to EDSY or Coriolis: 2 000+ characters) go straight to the
+    // shell: rundll32's handler may cut them.
+    #[cfg(target_os = "windows")]
+    if url.len() > LONG_URL {
+        return shell_open(&url);
+    }
     #[cfg(target_os = "windows")]
     let result = {
         use std::os::windows::process::CommandExt;
@@ -57,6 +63,38 @@ pub fn open_url(url: String) -> Result<(), String> {
     let result = std::process::Command::new("xdg-open").arg(&url).spawn();
 
     result.map(|_| ()).map_err(|e| e.to_string())
+}
+
+/// Longest address opened through rundll32 (Internet Explorer's old limit, 2 083, with a margin).
+#[cfg(target_os = "windows")]
+const LONG_URL: usize = 2000;
+
+/// Opens `url` in the default browser through ShellExecuteW (no length limit of its own).
+#[cfg(target_os = "windows")]
+fn shell_open(url: &str) -> Result<(), String> {
+    use windows_sys::Win32::UI::Shell::ShellExecuteW;
+    use windows_sys::Win32::UI::WindowsAndMessaging::SW_SHOWNORMAL;
+    let wide = |text: &str| text.encode_utf16().chain(std::iter::once(0)).collect::<Vec<u16>>();
+    let verb = wide("open");
+    let target = wide(url);
+    // SAFETY: `verb` and `target` are NUL-terminated UTF-16 buffers that outlive the call; the
+    // window, parameters and directory may be null.
+    let result = unsafe {
+        ShellExecuteW(
+            std::ptr::null_mut(),
+            verb.as_ptr(),
+            target.as_ptr(),
+            std::ptr::null(),
+            std::ptr::null(),
+            SW_SHOWNORMAL,
+        )
+    };
+    // ShellExecuteW returns a value above 32 on success.
+    if result as isize > 32 {
+        Ok(())
+    } else {
+        Err(format!("shellExecute: {}", result as isize))
+    }
 }
 
 /// How this build updates: "installer" (Windows setup), "portable" (Windows, no installer),

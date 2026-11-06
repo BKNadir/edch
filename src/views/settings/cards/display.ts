@@ -91,19 +91,6 @@ export function pagesCard(ctx: Ctx, rerender: () => void): HTMLElement {
     h(
       "label.field",
       null,
-      h("span", null, t("settings.startPage")),
-      h(
-        "select",
-        { onchange: (e: Event) => set({ startView: (e.target as HTMLSelectElement).value }) },
-        h("option", { value: "", selected: !s.startView }, t("settings.lastPageOpened")),
-        pages
-          .filter((p) => !hidden.has(p.id))
-          .map((p) => h("option", { value: p.id, selected: s.startView === p.id }, p.label)),
-      ),
-    ),
-    h(
-      "label.field",
-      null,
       h("span", null, t("settings.interfaceSize")),
       h(
         "select",

@@ -92,6 +92,11 @@ export interface CommanderState {
   engineers: Record<string, EngineerStatus>;
   engineering: ModuleEngineering[];
   loadout?: ShipLoadout;
+  /**
+   * The ship's last Loadout event as the journal wrote it (engineering since applied), for the
+   * build export to EDSY or Coriolis, which read this very format.
+   */
+  loadoutJournal?: Record<string, unknown>;
   /** Ship cargo hold, by lowercase commodity symbol. */
   cargo: Record<string, number>;
   /** From Status.json. */

@@ -2,7 +2,7 @@
 // cards that are not in cards/ (language, updates, journal folder, Spansh search).
 
 import { defaultJournalDir, isRemote, isTauri, logsOpen, startJournal, updateMode } from "../../platform/bridge.js";
-import { lang, LANGS, saveLang, t } from "../../platform/i18n.js";
+import { t } from "../../platform/i18n.js";
 import { setDebugLog } from "../../platform/logger.js";
 import type { Ctx, View } from "../../state/context.js";
 import type { Settings } from "../../state/store.js";
@@ -11,10 +11,12 @@ import { appearanceCard, pagesCard } from "./cards/display.js";
 import { engineersCard, launchCard, navigationCard } from "./cards/game.js";
 import { appCard } from "./cards/general.js";
 import { updatesCard } from "./cards/updates.js";
+import { buildSiteCard, keyboardCard, languageCard, pageDefaultsCard } from "./cards/preferences.js";
 import { notifyCard } from "./cards/notifications.js";
 
 const TABS: [string, string][] = [
   ["general", t("settings.general")],
+  ["preferences", t("settings.preferences")],
   ["game", t("settings.gameSearch")],
   ["display", t("settings.display")],
   ["notifications", t("common.notifications")],
@@ -111,30 +113,10 @@ export class SettingsView implements View {
     const body = h(
       "div.settings",
       null,
-      isRemote()
-        ? null
-        : h(
-            "section.card",
-            { "data-tab": "general" },
-            h("h3", null, t("settings.language")),
-            h(
-              "label.field",
-              null,
-              h("span", null, t("settings.interfaceLanguage")),
-              h(
-                "select",
-                {
-                  "data-no-tr": "",
-                  onchange: (e: Event) => {
-                    saveLang((e.target as HTMLSelectElement).value);
-                    location.reload();
-                  },
-                },
-                LANGS.map((l) => h("option", { value: l.code, selected: l.code === lang().code }, l.label)),
-              ),
-              h("small", null, t("settings.materialModuleEffectNamesFollowGame")),
-            ),
-          ),
+      languageCard(this.ctx),
+      pageDefaultsCard(this.ctx),
+      keyboardCard(this.ctx),
+      buildSiteCard(this.ctx),
       isTauri() ? updatesCard(this.ctx, this.mode) : null,
       isTauri() && !isRemote() ? appCard(this.ctx, () => this.render()) : null,
       isTauri() && !isRemote() ? launchCard(this.ctx, () => this.render()) : null,
@@ -179,7 +161,7 @@ export class SettingsView implements View {
       ),
       h(
         "section.card",
-        { "data-tab": "game" },
+        { "data-tab": "preferences" },
         h("h3", null, t("settings.systemSearchSpansh")),
         number(t("settings.maxDistanceLy"), s.maxDistance, "maxDistance", t("settings.searchRadiusAroundLocation"), {
           min: "10",
@@ -221,17 +203,6 @@ export class SettingsView implements View {
           }),
           " " + t("settings.tradersLPadOnly"),
         ),
-        h(
-          "label.check",
-          null,
-          h("input", {
-            type: "checkbox",
-            checked: s.systemOpensNav,
-            onchange: (e: Event) => set({ systemOpensNav: (e.target as HTMLInputElement).checked }),
-          }),
-          " " + t("settings.clickingSystemAlsoOpensNavigationSystem"),
-        ),
-        h("small.sub", null, t("settings.nameAlwaysCopiedPcSClipboard")),
         h(
           "label.check",
           null,

@@ -5,6 +5,8 @@ and EDCH shows it in the update banner.
 
 ## 0.10.11
 
+- Wishlist: new "Export my ship to EDSY" (or Coriolis) button. It opens your current ship, as the game's journal describes it (engineering done since included), in the build site chosen in Settings → Preferences.
+- Settings: new Preferences tab, with the language and start page, how pages open (Wishlist mode, Navigation route type, a click on a system), the Controls page's keyboard, the ship export site, and the Spansh system search settings (moved from the other tabs).
 - New "Reset counters" button on the pages with session counters: Session (credits earned and activity), Mining ("This session": tonnes refined, prospectors, asteroids…; the last asteroids stay) and Powerplay (merits this session). The counters start again from zero until the next game session, even after restarting EDCH.
 - Fixed: "Already done on this ship" missed a module the game mounts in another slot than the build tool (EDSY, Coriolis) put it: when the build's slot holds another module type, the whole ship is checked for that module type.
 - Settings → Updates: the installed version is the exact one ("0.10.11-pre.83 (pre-release)" for a test build). An "Update available" button shows next to "Check now" when GitHub has an update for this build (checked quietly when Settings opens, no notification). With "Also offer pre-releases" unticked on a test build, the latest release is offered, even if older, to go back to the stable version.

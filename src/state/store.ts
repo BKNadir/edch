@@ -39,6 +39,8 @@ export interface Settings {
   debugLog: boolean;
   /** Clicking a system name also opens Navigation with it as destination. */
   systemOpensNav: boolean;
+  /** Where "Export my ship" opens the current ship (Settings → Preferences). */
+  buildSite: "edsy" | "coriolis";
   /** How to start the game from EDCH. */
   gameLaunch: { method: "steam" | "epic" | "exe"; path: string };
   /** What the window's close button does. */
@@ -255,6 +257,7 @@ const DEFAULT_SETTINGS: Settings = {
   theme: DEFAULT_THEME,
   debugLog: false,
   systemOpensNav: false,
+  buildSite: "edsy",
   gameLaunch: { method: "steam", path: "" },
   closeBehavior: "quit",
   showChangelog: true,

@@ -5,6 +5,8 @@ import { recordGap } from "../../features/dataGaps/missingData.js";
 import { doneOnShip } from "../../features/engineers/doneOnShip.js";
 import { pickEngineer, type Pick } from "../../features/engineers/engineerPick.js";
 import { goToStop, passStop, planTour, stopTour, type Stop, tourProgress } from "../../features/engineers/tour.js";
+import { BUILD_SITE_NAMES, buildExportUrl } from "../../features/materials/buildExporter.js";
+import { openUrl } from "../../platform/bridge.js";
 import { extractLoadout, importLoadout } from "../../features/materials/buildImporter.js";
 import { suggestTrades } from "../../features/materials/trade.js";
 import type { Blueprint } from "../../game/types.js";
@@ -178,6 +180,7 @@ export class WishlistView implements View {
         icon("plus"),
         this.importOpen ? " " + t("wishlist.closeImport") : " " + t("wishlist.importEdsyCoriolis"),
       ),
+      this.exportButton(),
       store.state.wishlist.length
         ? h(
             "button.ghost",
@@ -196,6 +199,30 @@ export class WishlistView implements View {
   mount(root: HTMLElement) {
     this.root = root;
     this.update();
+  }
+
+  /** "Export my ship to EDSY" (or Coriolis, Settings → Preferences): opens the current ship there. */
+  private exportButton(): HTMLElement {
+    const store = this.ctx.store;
+    const site = store.state.settings.buildSite;
+    const loadout = store.state.cmdr.loadoutJournal;
+    return h(
+      "button.ghost",
+      {
+        disabled: !loadout,
+        title: loadout ? t("wishlist.exportShipHelp") : t("wishlist.exportNoShip"),
+        onclick: async () => {
+          if (!loadout) return;
+          try {
+            await openUrl(await buildExportUrl(loadout, site));
+          } catch (e) {
+            toast(t("wishlist.exportFailed", { message: String((e as Error)?.message ?? e) }));
+          }
+        },
+      },
+      icon("link"),
+      " " + t("wishlist.exportShip", { site: BUILD_SITE_NAMES[site] }),
+    );
   }
 
   private patch(id: string, change: Partial<WishItem>) {

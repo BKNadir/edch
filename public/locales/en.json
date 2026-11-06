@@ -1036,7 +1036,6 @@
     "interfaceSize": "Interface size",
     "journalFolder": "Journal folder",
     "journalReadingStarted": "Journal reading started",
-    "language": "Language",
     "lastPageOpened": "The last page opened",
     "launch": "Launch with",
     "launchEliteButtonTopScreenStarts": "The \"Launch Elite\" button at the top of the screen starts the game, and shows when it's running. It works from the phone too.",
@@ -1101,7 +1100,17 @@
     "offerPreReleases": "Also offer pre-releases (test versions)",
     "offerPreReleasesHelp": "Pre-releases bring new features first but may have bugs. Unticked, the next release is offered as usual.",
     "preReleaseBuild": "pre-release",
-    "updateAvailable": "Update available: {{version}}"
+    "updateAvailable": "Update available: {{version}}",
+    "preferences": "Preferences",
+    "languageAndStart": "Language and start page",
+    "pageDefaults": "How pages open",
+    "navigationRouteType": "Navigation route by default",
+    "controlsKeyboard": "Keyboard (Controls page)",
+    "keyboardFormat": "Keyboard format",
+    "automatic": "Automatic",
+    "buildExport": "Ship export",
+    "preferredBuildSite": "Open my ship in",
+    "preferredBuildSiteHelp": "Wishlist → \"Export my ship\" opens your current ship, as the game describes it, on this site."
   },
   "sources": {
     "agriculture": "Agriculture",
@@ -1346,7 +1355,11 @@
     "modeSimple": "Simple",
     "modeHelp": "Simple: the engineer tour only. Advanced: every line with its grades and the materials needed.",
     "stopNoLongerNeeded": "{{engineer}} is no longer needed: an engineer further on in the tour does the same lines. Go to the next engineer.",
-    "maxGradeInRegion": "G{{grade}} max in your region"
+    "maxGradeInRegion": "G{{grade}} max in your region",
+    "exportShip": "Export my ship to {{site}}",
+    "exportShipHelp": "Opens your current ship, as the game describes it, in the site chosen in Settings → Preferences",
+    "exportNoShip": "Start the game once: the journal describes your ship at start-up",
+    "exportFailed": "Couldn't export the ship: {{message}}"
   },
   "engineerData": {
     "baltanosMeeting": "Reach Friendly reputation with the Colonia Council.",

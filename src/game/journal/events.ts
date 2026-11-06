@@ -92,6 +92,7 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
       setShip(state, ev.ShipType, ev.ShipType_Localised, ev.ShipID ?? ev.NewShipID);
       if (state.loadout && state.loadout.shipId !== (ev.ShipID ?? ev.NewShipID)) {
         state.loadout = undefined;
+        state.loadoutJournal = undefined;
         state.engineering = [];
       }
       return true;
@@ -117,6 +118,8 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
           experimental: m.Engineering.ExperimentalEffect_Localised ?? m.Engineering.ExperimentalEffect,
         }));
       state.loadout = readLoadout(ev);
+      // A copy: engineering later changes it, the event itself stays as read.
+      state.loadoutJournal = structuredClone(ev);
       return true;
 
     case "MarketBuy":
@@ -306,7 +309,9 @@ export function applyLines(
  * (blueprint, grade, experimental effect), so "already done on this ship" sees it at once.
  */
 function engineerModule(state: CommanderState, ev: Json) {
-  if (!state.loadout || typeof ev.Slot !== "string" || typeof ev.BlueprintName !== "string") return;
+  if (typeof ev.Slot !== "string" || typeof ev.BlueprintName !== "string") return;
+  engineerJournalModule(state, ev);
+  if (!state.loadout) return;
   const slot = ev.Slot.toLowerCase();
   const module = state.loadout.modules.find((m) => String(m.slot).toLowerCase() === slot);
   if (!module) return;
@@ -323,4 +328,35 @@ function engineerModule(state: CommanderState, ev: Json) {
           ? before?.experimental
           : undefined,
   };
+}
+
+/**
+ * The same on the journal's Loadout kept for the build export: the module's Engineering takes the
+ * craft's engineer, blueprint, grade, quality, modifiers and effect.
+ */
+function engineerJournalModule(state: CommanderState, ev: Json) {
+  const modules = state.loadoutJournal?.Modules;
+  if (!Array.isArray(modules)) return;
+  const slot = String(ev.Slot).toLowerCase();
+  const shipModule = (modules as Json[]).find((m) => String(m.Slot).toLowerCase() === slot);
+  if (!shipModule) return;
+  const before: Json = shipModule.Engineering ?? {};
+  const sameBlueprint = String(before.BlueprintName ?? "").toLowerCase() === String(ev.BlueprintName).toLowerCase();
+  const engineering: Json = {
+    Engineer: ev.Engineer,
+    EngineerID: ev.EngineerID,
+    BlueprintID: ev.BlueprintID,
+    BlueprintName: ev.BlueprintName,
+    Level: ev.Level,
+    Quality: ev.Quality,
+    Modifiers: Array.isArray(ev.Modifiers) ? ev.Modifiers : (before.Modifiers ?? []),
+  };
+  const effect = typeof ev.ApplyExperimentalEffect === "string" ? ev.ApplyExperimentalEffect : undefined;
+  if (effect) engineering.ExperimentalEffect = effect;
+  else if (sameBlueprint && before.ExperimentalEffect) {
+    engineering.ExperimentalEffect = before.ExperimentalEffect;
+    if (before.ExperimentalEffect_Localised)
+      engineering.ExperimentalEffect_Localised = before.ExperimentalEffect_Localised;
+  }
+  shipModule.Engineering = engineering;
 }
