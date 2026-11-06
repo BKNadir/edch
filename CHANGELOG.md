@@ -3,6 +3,19 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.8
+
+- Engineer tour with fewer stops: each line now goes to an engineer already in the tour when one can do it, the hardest lines (grade 5, few engineers) deciding the stops. An experimental effect goes with its module's modification: no detour to a low-grade engineer for an effect (or a low-grade modification) the grade 5 engineer of that module also does. The wishlist lines show the same engineer as the tour.
+- Fixed: "Already done on this ship" now checks the module type. The game names some blueprints the same for every weapon (Overcharged, Long Range…), so an Overcharged multi-cannon made an Overcharged beam laser line look done.
+- When the tour's current stop is no longer needed after this regrouping, the tour says so and offers to go to the next engineer.
+- Fixed: the next system wasn't copied while you played (engineer tour, and the route's next system on arrival). Windows refused the copy while EDCH's window wasn't in front; EDCH now writes the clipboard itself.
+- Fixed: an engineer tour stop now ends as soon as its modules reach the wanted grade, even in fewer rolls than planned, so the next engineer's system is copied.
+- New option in Settings → Game and search → Navigation (on by default, Windows only): when the Elite Dangerous window comes back to the front, the next system to enter is copied (the next system of the route in progress, or the engineer of the tour you are heading to).
+- Mining, "Where to mine": a new "Mining type" column says, for each planet's ring, how the mineral is mined there (laser, subsurface, core). Core only shows on the ring types where the mineral has motherlode asteroids.
+- Mining: the laser, subsurface and core chips above the table are now switches. Click one to hide that mining type from the results (rings left with no type shown are hidden), click it again to show it. The choice is kept.
+- Mining: as soon as you prospect an asteroid, the "Last asteroid" card moves to the top of the page. A switch in the card shows the last asteroid only, the last 3 (default) or the last 5.
+- Mining: the asteroid's material content (Low, Medium, High) is shown in your language, and percentages use your language's decimal separator.
+
 ## 0.10.7
 
 - Search: new **Faction** tab. Type a minor faction (suggestions from the factions met in your journal), choose "present in the system" or "controls the system", and tick the faction states you want (Famine, Expansion, War…, with the game's names in your language). The systems come nearest first, with the faction's influence, its states, who controls the system and how old the data is; a click copies the system.

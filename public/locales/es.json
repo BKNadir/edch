@@ -644,7 +644,17 @@
     "whereMineSellPowerSSystems": "Dónde minar y vender en los sistemas de tu potencia",
     "whereMineSystems": "Dónde minar (sistemas de {{power}})",
     "whereSell": "Dónde vender",
-    "whereSell2": "Dónde vender ({{power}})"
+    "whereSell2": "Dónde vender ({{power}})",
+    "miningType": "Tipo de minería",
+    "hideMethod": "Ocultar este tipo de minería en los resultados",
+    "showMethod": "Mostrar este tipo de minería en los resultados",
+    "noRingForShownMethods": "Ningún anillo para los tipos de minería mostrados: haz clic arriba en un tipo oculto para volver a mostrarlo.",
+    "contentLow": "Bajo",
+    "contentMedium": "Medio",
+    "contentHigh": "Alto",
+    "asteroidsShownHelp": "Cuántos de los últimos asteroides prospectados mostrar",
+    "asteroidsShown_one": "El último",
+    "asteroidsShown_other": "Los últimos {{count}}"
   },
   "miningSpots": {
     "common": "Común",
@@ -658,7 +668,10 @@
     "metallic": "Metálico",
     "pristine": "Prístino",
     "rocky": "Rocoso",
-    "subsurfaceDisplacementMissiles": "Subsuperficie (misiles de desplazamiento)"
+    "subsurfaceDisplacementMissiles": "Subsuperficie (misiles de desplazamiento)",
+    "laser": "Láser",
+    "subsurface": "Subsuperficie",
+    "core": "Núcleo"
   },
   "missions": {
     "accepted": "Aceptada por",
@@ -1080,7 +1093,8 @@
     "waitingGame": "Esperando al juego…",
     "windowSCloseButton": "Botón de cierre de la ventana",
     "wishlistEngineerTour": "Para la lista de deseos y la ruta de ingenieros.",
-    "wishlistOpensIn": "La página Lista de deseos se abre en modo"
+    "wishlistOpensIn": "La página Lista de deseos se abre en modo",
+    "copyNextSystemOnGameFocus": "Copiar el próximo sistema al que entrar (ruta en curso o ruta de ingenieros) cuando la ventana de Elite Dangerous vuelve al primer plano (solo Windows)"
   },
   "sources": {
     "agriculture": "Agricultura",
@@ -1324,7 +1338,8 @@
     "stopOnTheWay": "Parada actual · de camino a {{system}}",
     "modeAdvanced": "Avanzado",
     "modeSimple": "Simple",
-    "modeHelp": "Simple: solo la ruta de ingenieros. Avanzado: cada línea con sus grados y los materiales necesarios."
+    "modeHelp": "Simple: solo la ruta de ingenieros. Avanzado: cada línea con sus grados y los materiales necesarios.",
+    "stopNoLongerNeeded": "{{engineer}} ya no es necesario: otro ingeniero de la ruta hace las mismas líneas. Pasa al siguiente ingeniero."
   },
   "engineerData": {
     "baltanosMeeting": "Alcanza la reputación Amistoso con el Colonia Council.",

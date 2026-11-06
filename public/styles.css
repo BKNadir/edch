@@ -3615,6 +3615,26 @@ label.check.disabled {
   border-color: color-mix(in srgb, var(--ok) 50%, transparent);
   color: var(--ok);
 }
+/* The mining type chips are switches: a hidden type is struck through and dimmed. */
+button.chip.method {
+  cursor: pointer;
+  font: inherit;
+  font-size: 12.5px;
+  height: auto;
+}
+button.chip.method.off {
+  border-color: var(--line-2);
+  color: var(--muted);
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+.spot-table .chips.methods {
+  margin: 0;
+  gap: 4px;
+}
+.spot-table .chips.methods .badge {
+  margin-left: 0;
+}
 .spot-table tr.hot td {
   background: color-mix(in srgb, var(--ok) 8%, transparent);
 }

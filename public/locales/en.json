@@ -643,7 +643,17 @@
     "whereMineSellPowerSSystems": "Where to mine and sell in your power's systems",
     "whereMineSystems": "Where to mine ({{power}} systems)",
     "whereSell": "Where to sell",
-    "whereSell2": "Where to sell ({{power}})"
+    "whereSell2": "Where to sell ({{power}})",
+    "miningType": "Mining type",
+    "hideMethod": "Hide this mining type from the results",
+    "showMethod": "Show this mining type in the results",
+    "noRingForShownMethods": "No ring for the mining types shown: click a hidden type above to show it again.",
+    "contentLow": "Low",
+    "contentMedium": "Medium",
+    "contentHigh": "High",
+    "asteroidsShownHelp": "How many of the last prospected asteroids to show",
+    "asteroidsShown_one": "Last",
+    "asteroidsShown_other": "Last {{count}}"
   },
   "miningSpots": {
     "common": "Common",
@@ -657,7 +667,10 @@
     "metallic": "Metallic",
     "pristine": "Pristine",
     "rocky": "Rocky",
-    "subsurfaceDisplacementMissiles": "Subsurface (displacement missiles)"
+    "subsurfaceDisplacementMissiles": "Subsurface (displacement missiles)",
+    "laser": "Laser",
+    "subsurface": "Subsurface",
+    "core": "Core"
   },
   "missions": {
     "accepted": "Accepted by",
@@ -1079,7 +1092,8 @@
     "waitingGame": "Waiting for the game…",
     "windowSCloseButton": "Window's close button",
     "wishlistEngineerTour": "For the wishlist and the engineer tour.",
-    "wishlistOpensIn": "Wishlist page opens in"
+    "wishlistOpensIn": "Wishlist page opens in",
+    "copyNextSystemOnGameFocus": "Copy the next system to enter (route in progress or engineer tour) when the Elite Dangerous window comes back to the front (Windows only)"
   },
   "sources": {
     "agriculture": "Agriculture",
@@ -1322,7 +1336,8 @@
     "stopOnTheWay": "Current stop · on the way to {{system}}",
     "modeAdvanced": "Advanced",
     "modeSimple": "Simple",
-    "modeHelp": "Simple: the engineer tour only. Advanced: every line with its grades and the materials needed."
+    "modeHelp": "Simple: the engineer tour only. Advanced: every line with its grades and the materials needed.",
+    "stopNoLongerNeeded": "{{engineer}} is no longer needed: an engineer further on in the tour does the same lines. Go to the next engineer."
   },
   "engineerData": {
     "baltanosMeeting": "Reach Friendly reputation with the Colonia Council.",

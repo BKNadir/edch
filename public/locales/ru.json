@@ -641,7 +641,16 @@
     "whereMineSellPowerSSystems": "Где добывать и продавать в системах вашей державы",
     "whereMineSystems": "Где добывать (системы {{power}})",
     "whereSell": "Где продать",
-    "whereSell2": "Где продать ({{power}})"
+    "whereSell2": "Где продать ({{power}})",
+    "miningType": "Тип добычи",
+    "hideMethod": "Скрыть этот тип добычи в результатах",
+    "showMethod": "Показать этот тип добычи в результатах",
+    "noRingForShownMethods": "Нет колец для показанных типов добычи: нажмите на скрытый тип выше, чтобы снова его показать.",
+    "contentLow": "Низкое",
+    "contentMedium": "Среднее",
+    "contentHigh": "Высокое",
+    "asteroidsShownHelp": "Сколько последних разведанных астероидов показывать",
+    "asteroidsShown": "Последние: {{count}}"
   },
   "miningSpots": {
     "common": "Обычные",
@@ -655,7 +664,10 @@
     "metallic": "Металлическое",
     "pristine": "Нетронутые",
     "rocky": "Каменное",
-    "subsurfaceDisplacementMissiles": "Подповерхностная (ракеты вытеснения)"
+    "subsurfaceDisplacementMissiles": "Подповерхностная (ракеты вытеснения)",
+    "laser": "Лазер",
+    "subsurface": "Подповерхностная",
+    "core": "Ядро"
   },
   "missions": {
     "accepted": "Приняли",
@@ -1076,7 +1088,8 @@
     "waitingGame": "Ожидание игры…",
     "windowSCloseButton": "Кнопка закрытия окна",
     "wishlistEngineerTour": "Для списка желаний и маршрута по инженерам.",
-    "wishlistOpensIn": "Страница списка желаемого открывается в режиме"
+    "wishlistOpensIn": "Страница списка желаемого открывается в режиме",
+    "copyNextSystemOnGameFocus": "Копировать следующую систему (текущий маршрут или тур по инженерам), когда окно Elite Dangerous снова на переднем плане (только Windows)"
   },
   "sources": {
     "agriculture": "Сельское хозяйство",
@@ -1314,7 +1327,8 @@
     "stopOnTheWay": "Текущая остановка · в пути в {{system}}",
     "modeAdvanced": "Подробно",
     "modeSimple": "Просто",
-    "modeHelp": "Просто: только тур по инженерам. Подробно: каждая строка с уровнями и нужными материалами."
+    "modeHelp": "Просто: только тур по инженерам. Подробно: каждая строка с уровнями и нужными материалами.",
+    "stopNoLongerNeeded": "{{engineer}} больше не нужен: те же строки делает другой инженер тура. Переходите к следующему инженеру."
   },
   "engineerData": {
     "baltanosMeeting": "Достигните репутации «Дружелюбие» у Colonia Council.",

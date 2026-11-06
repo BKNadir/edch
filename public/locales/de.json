@@ -643,7 +643,17 @@
     "whereMineSellPowerSSystems": "Wo man in den Systemen deiner Macht abbaut und verkauft",
     "whereMineSystems": "Wo abbauen (Systeme von {{power}})",
     "whereSell": "Wo verkaufen",
-    "whereSell2": "Wo verkaufen ({{power}})"
+    "whereSell2": "Wo verkaufen ({{power}})",
+    "miningType": "Abbauart",
+    "hideMethod": "Diese Abbauart in den Ergebnissen ausblenden",
+    "showMethod": "Diese Abbauart in den Ergebnissen anzeigen",
+    "noRingForShownMethods": "Kein Ring für die angezeigten Abbauarten: Klicke oben auf eine ausgeblendete Art, um sie wieder anzuzeigen.",
+    "contentLow": "Niedrig",
+    "contentMedium": "Mittel",
+    "contentHigh": "Hoch",
+    "asteroidsShownHelp": "Wie viele der zuletzt prospektierten Asteroiden angezeigt werden",
+    "asteroidsShown_one": "Letzter",
+    "asteroidsShown_other": "Letzte {{count}}"
   },
   "miningSpots": {
     "common": "Normal",
@@ -657,7 +667,10 @@
     "metallic": "Metallisch",
     "pristine": "Unberührt",
     "rocky": "Felsig",
-    "subsurfaceDisplacementMissiles": "Unter der Oberfläche (Verdrängungsraketen)"
+    "subsurfaceDisplacementMissiles": "Unter der Oberfläche (Verdrängungsraketen)",
+    "laser": "Laser",
+    "subsurface": "Unter der Oberfläche",
+    "core": "Kern"
   },
   "missions": {
     "accepted": "Angenommen von",
@@ -1079,7 +1092,8 @@
     "waitingGame": "Warte auf das Spiel…",
     "windowSCloseButton": "Schließen-Schaltfläche des Fensters",
     "wishlistEngineerTour": "Für die Wunschliste und die Ingenieurs-Tour.",
-    "wishlistOpensIn": "Wunschliste öffnet sich als"
+    "wishlistOpensIn": "Wunschliste öffnet sich als",
+    "copyNextSystemOnGameFocus": "Nächstes Zielsystem (laufende Route oder Ingenieurstour) kopieren, wenn das Fenster von Elite Dangerous wieder im Vordergrund ist (nur Windows)"
   },
   "sources": {
     "agriculture": "Landwirtschaft",
@@ -1322,7 +1336,8 @@
     "stopOnTheWay": "Aktueller Halt · unterwegs nach {{system}}",
     "modeAdvanced": "Erweitert",
     "modeSimple": "Einfach",
-    "modeHelp": "Einfach: nur die Ingenieurstour. Erweitert: jede Zeile mit ihren Graden und den nötigen Materialien."
+    "modeHelp": "Einfach: nur die Ingenieurstour. Erweitert: jede Zeile mit ihren Graden und den nötigen Materialien.",
+    "stopNoLongerNeeded": "{{engineer}} wird nicht mehr gebraucht: ein anderer Ingenieur der Tour erledigt dieselben Zeilen. Geh zum nächsten Ingenieur."
   },
   "engineerData": {
     "baltanosMeeting": "Erreiche den Ruf Freundlich beim Colonia Council.",

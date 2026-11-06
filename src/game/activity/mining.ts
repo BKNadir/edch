@@ -4,6 +4,13 @@
 import { num, symbolId, type EventHandlers, type Json } from "./state.js";
 
 /** Journal events of this domain. */
+
+/** "$AsteroidMaterialContent_Low;" → "Low" (shown in the app's language); else the game's text. */
+function contentLevel(ev: Json): string | undefined {
+  const level = /AsteroidMaterialContent_(Low|Medium|High)/.exec(String(ev.Content ?? ""));
+  return level ? level[1] : (ev.Content_Localised ?? ev.Content);
+}
+
 export const MINING_EVENTS: EventHandlers = {
   LaunchDrone: (st, ev, at) => {
     if (ev.Type === "Prospector") st.mining.prospectors += 1;
@@ -25,7 +32,7 @@ export const MINING_EVENTS: EventHandlers = {
           pct: num(x.Proportion) ?? 0,
         }))
         .sort((a: { pct: number }, b: { pct: number }) => b.pct - a.pct),
-      content: ev.Content_Localised ?? ev.Content,
+      content: contentLevel(ev),
       motherlode: ev.MotherlodeMaterial_Localised ?? ev.MotherlodeMaterial,
       remaining: num(ev.Remaining),
     });

@@ -31,6 +31,7 @@ const PHONE_SETTINGS = [
   "engineers",
   "navAutoCopy",
   "navNotifyCopy",
+  "copyOnGameFocus",
   "navExact",
 ] as const;
 

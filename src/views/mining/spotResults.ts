@@ -2,9 +2,12 @@
 // sell them at the best price.
 
 import {
+  ringMethods,
   MAX_RADIUS,
   METHOD_LABEL,
+  METHOD_SHORT_LABEL,
   miningMethods,
+  type MiningMethod,
   RESERVE,
   RING_TYPE,
   spanshBodyUrl,
@@ -16,8 +19,21 @@ import { relTime } from "../../ui/format.js";
 import type { SpotResults } from "./index.js";
 import { sys } from "../missions/index.js";
 
+/** The mining types shown: a click on a type's chip hides or shows it. */
+export interface MethodFilter {
+  hidden: string[];
+  toggle: (method: MiningMethod) => void;
+}
+
 /** Where to mine (green) first, then where to sell (blue). */
-export function spotResults(r: SpotResults, title: { mine: string; sell: string }): HTMLElement[] {
+export function spotResults(
+  r: SpotResults,
+  title: { mine: string; sell: string },
+  filter: MethodFilter,
+): HTMLElement[] {
+  const hidden = new Set(filter.hidden);
+  const shownMethods = (mineral: string, ringType?: string) =>
+    ringMethods(mineral, ringType).filter((method) => !hidden.has(method));
   const tooFar = (radius: number, widened: boolean, found: boolean, what: "hotspot" | "buyer") =>
     !found
       ? h(
@@ -46,8 +62,9 @@ export function spotResults(r: SpotResults, title: { mine: string; sell: string 
     "section.card.mine-zone",
     null,
     h("h3", null, title.mine),
-    r.mine.map((m) =>
-      h(
+    r.mine.map((m) => {
+      const spots = m.spots.filter((x) => shownMethods(m.mineral, x.ringType).length > 0);
+      return h(
         "div.mine-block",
         null,
         h(
@@ -57,14 +74,27 @@ export function spotResults(r: SpotResults, title: { mine: string; sell: string 
           h(
             "div.chips",
             null,
-            miningMethods(m.mineral).map((x) => h("span.chip.method", null, METHOD_LABEL[x])),
+            miningMethods(m.mineral).map((method) =>
+              h(
+                "button.chip.method",
+                {
+                  class: hidden.has(method) ? "off" : "",
+                  title: hidden.has(method) ? t("mining.showMethod") : t("mining.hideMethod"),
+                  "aria-pressed": String(!hidden.has(method)),
+                  onclick: () => filter.toggle(method),
+                },
+                icon(hidden.has(method) ? "close" : "check"),
+                " " + METHOD_LABEL[method],
+              ),
+            ),
           ),
         ),
         !m.ringable
           ? h("p.sub", null, t("mining.noHotspotsMineralSMinedLasers"))
           : [
               tooFar(m.radius, m.widened, m.spots.length > 0, "hotspot"),
-              m.spots.length
+              m.spots.length && !spots.length ? h("p.sub", null, t("mining.noRingForShownMethods")) : null,
+              spots.length
                 ? h(
                     "table.table.spot-table",
                     null,
@@ -77,6 +107,7 @@ export function spotResults(r: SpotResults, title: { mine: string; sell: string 
                         h("th", null, t("mining.planetRing")),
                         h("th", null, t("mining.ringType")),
                         h("th", null, t("mining.reserve")),
+                        h("th", null, t("mining.miningType")),
                         h("th.num", null, t("mining.hotspots")),
                         h("th", null, t("common.system")),
                         h("th.num", null, t("common.distance")),
@@ -86,7 +117,7 @@ export function spotResults(r: SpotResults, title: { mine: string; sell: string 
                     h(
                       "tbody",
                       null,
-                      m.spots.slice(0, 15).map((x) =>
+                      spots.slice(0, 15).map((x) =>
                         h(
                           "tr",
                           null,
@@ -108,6 +139,17 @@ export function spotResults(r: SpotResults, title: { mine: string; sell: string 
                           ),
                           h("td", null, x.ringType ? (RING_TYPE[x.ringType] ?? x.ringType) : ""),
                           h("td", null, x.reserve ? (RESERVE[x.reserve] ?? x.reserve) : ""),
+                          h(
+                            "td",
+                            null,
+                            h(
+                              "div.chips.methods",
+                              null,
+                              shownMethods(m.mineral, x.ringType).map((method) =>
+                                h("span.badge.muted", null, METHOD_SHORT_LABEL[method]),
+                              ),
+                            ),
+                          ),
                           h("td.num", null, h("strong", null, String(x.count))),
                           h("td", null, sys(x.system), x.state ? h("div.sub", null, x.state) : null),
                           h(
@@ -126,8 +168,8 @@ export function spotResults(r: SpotResults, title: { mine: string; sell: string 
                   )
                 : null,
             ],
-      ),
-    ),
+      );
+    }),
   );
   const sellCard = h(
     "section.card.sell-zone",

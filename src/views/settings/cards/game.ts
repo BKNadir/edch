@@ -27,6 +27,11 @@ export function navigationCard(ctx: Ctx, rerender: () => void): HTMLElement {
     h("p.sub", null, t("settings.nextSystemCopiedPcSClipboard")),
     box(s.navAutoCopy, (on) => store.updateSettings({ navAutoCopy: on }), t("settings.copyNextJumpAutomaticallyWhenI")),
     box(s.navNotifyCopy, (on) => store.updateSettings({ navNotifyCopy: on }), t("settings.notifyMeWhenNextJumpCopied")),
+    box(
+      s.copyOnGameFocus,
+      (on) => store.updateSettings({ copyOnGameFocus: on }),
+      t("settings.copyNextSystemOnGameFocus"),
+    ),
   );
 }
 

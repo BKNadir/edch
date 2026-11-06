@@ -348,6 +348,8 @@ export async function onNtfy(
 }
 export const clipboardWrite = (text: string) => invoke<void>("clipboard_write", { text });
 export const gameRunning = () => invoke<string>("game_running").catch(() => "");
+/** Is Elite Dangerous the window in front: "yes", "no", or "unknown" (not on Windows). */
+export const gameFocused = () => invoke<string>("game_focused").catch(() => "unknown");
 export const launchGame = (method: string, path: string) => invoke<void>("launch_game", { method, path });
 export const setCloseBehavior = (mode: string) => invoke<void>("set_close_behavior", { mode }).catch(() => undefined);
 export const appQuit = () => invoke<void>("app_quit");
@@ -403,6 +405,16 @@ export async function copyText(text: string): Promise<boolean> {
 }
 
 async function localCopy(text: string): Promise<boolean> {
+  // In the app, the backend writes the clipboard: the webview's clipboard refuses to write while
+  // EDCH's window isn't focused, which is always the case when the copy follows a game event.
+  if (isTauri() && !remote) {
+    try {
+      await invoke<void>("clipboard_write", { text });
+      return true;
+    } catch {
+      /* the webview's clipboard below */
+    }
+  }
   try {
     await navigator.clipboard.writeText(text);
     return true;

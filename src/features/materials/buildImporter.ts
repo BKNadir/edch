@@ -49,7 +49,8 @@ const ITEM_MODULE: [RegExp, string][] = [
   [/^int_dronecontrol_resourcesiphon/, "Hatch Breaker Limpet Controller"],
 ];
 
-const moduleOf = (item: string) => ITEM_MODULE.find(([re]) => re.test(item))?.[1];
+/** The blueprint module name of a journal item ("hpt_beamlaser_fixed_medium" → "Beam Laser"). */
+export const moduleOf = (item: string) => ITEM_MODULE.find(([re]) => re.test(item.toLowerCase()))?.[1];
 
 /** Finds the loadout in any of the formats people paste. */
 export function extractLoadout(text: string): Json | null {

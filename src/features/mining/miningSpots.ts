@@ -62,6 +62,40 @@ export function miningMethods(mineral: string): MiningMethod[] {
   return out;
 }
 
+/**
+ * Ring types where a mineral's motherlode (core) asteroids are found. Its hotspots only show in
+ * compatible rings anyway; this keeps "core" off the rings where you'd find no motherlode.
+ */
+const CORE_RING_TYPES: Record<string, string[]> = {
+  Alexandrite: ["Rocky", "Metal Rich", "Icy"],
+  Benitoite: ["Rocky", "Metal Rich"],
+  Bromellite: ["Icy"],
+  Grandidierite: ["Icy", "Rocky"],
+  "Low Temperature Diamonds": ["Icy"],
+  Monazite: ["Rocky", "Metal Rich", "Metallic"],
+  Musgravite: ["Rocky", "Metal Rich"],
+  Painite: ["Metallic", "Metal Rich", "Rocky"],
+  Rhodplumsite: ["Metallic", "Metal Rich"],
+  Serendibite: ["Rocky", "Metal Rich", "Icy"],
+  "Void Opal": ["Icy"],
+};
+
+/** How `mineral` is mined in a ring of `ringType` (all its methods when the type is unknown). */
+export function ringMethods(mineral: string, ringType: string | undefined): MiningMethod[] {
+  const coreRings = CORE_RING_TYPES[mineral];
+  if (!ringType || !coreRings || coreRings.includes(ringType)) return miningMethods(mineral);
+  return miningMethods(mineral).filter(
+    (method) => method === "laser" || (method === "subsurface" && mineral === "Platinum"),
+  );
+}
+
+/** Short names, for the table's "Mining type" column. */
+export const METHOD_SHORT_LABEL: Record<MiningMethod, string> = {
+  laser: t("miningSpots.laser"),
+  subsurface: t("miningSpots.subsurface"),
+  core: t("miningSpots.core"),
+};
+
 export const METHOD_LABEL: Record<MiningMethod, string> = {
   laser: t("miningSpots.laserSurface"),
   subsurface: t("miningSpots.subsurfaceDisplacementMissiles"),

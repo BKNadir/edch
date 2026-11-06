@@ -63,6 +63,8 @@ export interface Settings {
   navAutoCopy: boolean;
   /** An EDCH notification (Notifications tab, sound if chosen) when a next jump is copied. */
   navNotifyCopy: boolean;
+  /** Copy the next system to enter (route or engineer tour) when the game's window comes to the front (Windows). */
+  copyOnGameFocus: boolean;
   /** Navigation: exact route with fuel (Spansh Galaxy Plotter) rather than the quick neutron route. */
   navExact: boolean;
   /** Menu order chosen in the menu's edit mode ("-" = a line between groups); empty = default. */
@@ -135,6 +137,10 @@ export interface MiningSettings {
   /** Merit Miner: power (empty = pledged power) and minerals searched. */
   power: string;
   minerals: string[];
+  /** Mining types hidden from the "Where to mine" results ("laser", "subsurface", "core"). */
+  hiddenMethods: string[];
+  /** How many of the last prospected asteroids the Mining page shows (1, 3 or 5). */
+  shownAsteroids: number;
 }
 
 export const DEFAULT_NOTIFY: NotifySettings = {
@@ -164,6 +170,8 @@ export const DEFAULT_MINING: MiningSettings = {
   alert: true,
   power: "",
   minerals: ["Platinum", "Painite", "Low Temperature Diamonds"],
+  hiddenMethods: [],
+  shownAsteroids: 3,
 };
 
 /** A wing code: 4 groups of 4 letters/digits (80 bits), easy to read out. */
@@ -250,6 +258,7 @@ const DEFAULT_SETTINGS: Settings = {
   engineers: DEFAULT_ENGINEER_SETTINGS,
   navAutoCopy: false,
   navNotifyCopy: true,
+  copyOnGameFocus: true,
   navExact: true,
   navOrder: [],
   phoneHidden: [],

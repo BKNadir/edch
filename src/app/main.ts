@@ -20,6 +20,7 @@ import { h, replace } from "../ui/dom.js";
 import { startUpdateChecks } from "../ui/updateBanner.js";
 import { Uploaders } from "../services/sync/index.js";
 import { bindTour } from "../features/engineers/tour.js";
+import { startCopyOnGameFocus } from "../features/navigation/copyOnGameFocus.js";
 import { bindStore, setupLive } from "../features/missions/live.js";
 import { bindLinks } from "../views/shared/links.js";
 import { setHere } from "../views/shared/resultsTable.js";
@@ -64,6 +65,7 @@ export async function startApp(code: string, remoteMode: "paired" | null) {
   setHere(() => ({ system: store.state.cmdr.location?.system, seenAt: store.state.cmdr.location?.seenAt }));
   const ctx: Ctx = { game, store };
   bindTour(ctx);
+  startCopyOnGameFocus(ctx);
   const capacityOf = (id: string) => game.capacityOf(id);
   const sync = new Uploaders(
     () => store.state.settings.sync,

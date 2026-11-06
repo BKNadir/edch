@@ -12,15 +12,18 @@ import { doneOnShip } from "../dist/js/features/engineers/doneOnShip.js";
 import {
   bindTour,
   goToStop,
+  nextSystemToEnter,
   passStop,
   planTour,
+  setNavRoute,
   stopTour,
   tourEvent,
   tourProgress,
 } from "../dist/js/features/engineers/tour.js";
 
-// No clipboard here: a copy that never finishes (so no toast is drawn without a page).
-Object.defineProperty(globalThis.navigator, "clipboard", { value: { writeText: () => new Promise(() => {}) } });
+// No clipboard here: by default a copy that never finishes; a test can swap `clipboard.writeText`.
+const clipboard = { writeText: () => new Promise(() => {}) };
+Object.defineProperty(globalThis.navigator, "clipboard", { value: clipboard });
 
 // The toasts need a page: a stand-in element is enough here.
 const toastElement = { textContent: "", classList: { add() {}, remove() {} } };
@@ -146,4 +149,66 @@ test("journal: factions of the systems visited are remembered, most recent first
     });
   applyLines(st, [jump("A", ["Mother Gaia", "Sol Workers' Party"]), jump("B", ["Mother Gaia", "Other One"])], () => 0);
   assert.deepEqual(st.knownFactions, ["Mother Gaia", "Other One", "Sol Workers' Party"]);
+});
+
+test("tour: reaching the wanted grade in fewer rolls ends the stop and copies the next engineer", async () => {
+  const copied = [];
+  clipboard.writeText = async (text) => void copied.push(text);
+  const ctx = ctxWith([line(FSD_RANGE, 5), line(PP_OVERCHARGED, 5)]);
+  ctx.store.setWishlist = (list) => (ctx.store.state.wishlist = list);
+  bindTour(ctx);
+  const hera = planTour(ctx).stops.find((s) => s.pick.engineer.name === "Hera Tani");
+  goToStop(ctx, hera);
+  // One G5 roll on the power plant (5 rolls planned): the module is at G5, the line is done.
+  tourEvent({ event: "EngineerCraft", Slot: "PowerPlant", BlueprintName: "PowerPlant_Boosted", Level: 5 });
+  assert.equal(ctx.store.state.wishlist.length, 1);
+  assert.notEqual(tourProgress()?.engineer, "Hera Tani");
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(copied.at(-1), tourProgress()?.system, "next engineer's system copied");
+  // A second roll on the same module counts nothing more.
+  tourEvent({ event: "EngineerCraft", Slot: "PowerPlant", BlueprintName: "PowerPlant_Boosted", Level: 5 });
+  assert.equal(ctx.store.state.wishlist.length, 1);
+  stopTour(ctx);
+});
+
+test("back to the game: the next system of the route, else the tour's engineer", () => {
+  const ctx = ctxWith([line(PP_OVERCHARGED, 5)]);
+  bindTour(ctx);
+  assert.equal(nextSystemToEnter(), null);
+  goToStop(ctx, planTour(ctx).stops[0]);
+  assert.equal(nextSystemToEnter()?.system, "Kuwemaki");
+  setNavRoute(["Sol", "Alpha Centauri", "Kuwemaki"]);
+  assert.equal(nextSystemToEnter()?.system, "Alpha Centauri");
+  tourEvent({ event: "FSDJump", StarSystem: "Alpha Centauri" });
+  assert.equal(nextSystemToEnter()?.system, "Kuwemaki");
+  stopTour(ctx);
+});
+
+test("tour: as few stops as possible, an effect goes with its module's grade 5 engineer", () => {
+  const ctx = ctxWith([
+    line("modification|Beam Laser|Overcharged Weapon", 1),
+    line("experimental|Beam Laser|Thermal Vent", 0),
+    line("modification|Beam Laser|Long Range Weapon", 5),
+    line("modification|Armour|Heavy Duty", 5),
+    line("experimental|Armour|Deep Plating", 0),
+  ]);
+  // At The Dweller's (Wyrd): he does Overcharged and Thermal Vent, but Broo Tarquin is needed
+  // for Long Range G5 and does both too: no stop at The Dweller.
+  ctx.store.state.cmdr.location = { system: "Wyrd", pos: [-11.03, 31.25, -4.3], docked: false, factions: [] };
+  const stops = planTour(ctx).stops.map((s) => [s.pick.engineer.name, s.lines.map((l) => l.bp.split("|")[2]).sort()]);
+  assert.deepEqual(stops, [
+    ["Selene Jean", ["Deep Plating", "Heavy Duty"]],
+    ["Broo Tarquin", ["Long Range Weapon", "Overcharged Weapon", "Thermal Vent"]],
+  ]);
+});
+
+test("done on ship: the module type counts (Overcharged on a multi-cannon is not on the beam laser)", () => {
+  const multicannon = {
+    slot: "MediumHardpoint1",
+    item: "hpt_multicannon_gimbal_medium",
+    engineering: { blueprint: "Weapon_Overcharged", level: 5 },
+  };
+  const ctx = ctxWith([], [multicannon]);
+  assert.equal(doneOnShip(ctx, line("modification|Beam Laser|Overcharged Weapon", 5)), false);
+  assert.equal(doneOnShip(ctx, line("modification|Multi-cannon|Overcharged Weapon", 5)), true);
 });

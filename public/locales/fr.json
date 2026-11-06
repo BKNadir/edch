@@ -644,7 +644,17 @@
     "whereMineSellPowerSSystems": "Où miner et vendre dans les systèmes de ta puissance",
     "whereMineSystems": "Où miner (systèmes de {{power}})",
     "whereSell": "Où vendre",
-    "whereSell2": "Où vendre ({{power}})"
+    "whereSell2": "Où vendre ({{power}})",
+    "miningType": "Type de minage",
+    "hideMethod": "Masquer ce type de minage dans les résultats",
+    "showMethod": "Afficher ce type de minage dans les résultats",
+    "noRingForShownMethods": "Aucun anneau pour les types de minage affichés : clique sur un type masqué ci-dessus pour le réafficher.",
+    "contentLow": "Faible",
+    "contentMedium": "Moyen",
+    "contentHigh": "Élevé",
+    "asteroidsShownHelp": "Nombre de derniers astéroïdes prospectés à afficher",
+    "asteroidsShown_one": "Le dernier",
+    "asteroidsShown_other": "Les {{count}} derniers"
   },
   "miningSpots": {
     "common": "Commun",
@@ -658,7 +668,10 @@
     "metallic": "Métallique",
     "pristine": "Vierge",
     "rocky": "Rocheux",
-    "subsurfaceDisplacementMissiles": "Sous-surface (missiles d'abrasion)"
+    "subsurfaceDisplacementMissiles": "Sous-surface (missiles d'abrasion)",
+    "laser": "Laser",
+    "subsurface": "Sous-surface",
+    "core": "Cœur"
   },
   "missions": {
     "accepted": "Acceptée par",
@@ -1080,7 +1093,8 @@
     "waitingGame": "En attente du jeu…",
     "windowSCloseButton": "Bouton de fermeture de la fenêtre",
     "wishlistEngineerTour": "Pour la wishlist et la tournée des ingénieurs.",
-    "wishlistOpensIn": "La page Wishlist s'ouvre en mode"
+    "wishlistOpensIn": "La page Wishlist s'ouvre en mode",
+    "copyNextSystemOnGameFocus": "Copier le prochain système où entrer (route en cours ou tournée des ingénieurs) quand la fenêtre d'Elite Dangerous repasse au premier plan (Windows uniquement)"
   },
   "sources": {
     "agriculture": "Agriculture",
@@ -1324,7 +1338,8 @@
     "stopOnTheWay": "Étape en cours · en route vers {{system}}",
     "modeAdvanced": "Avancé",
     "modeSimple": "Simple",
-    "modeHelp": "Simple : seulement la tournée des ingénieurs. Avancé : chaque ligne avec ses grades et les matériaux nécessaires."
+    "modeHelp": "Simple : seulement la tournée des ingénieurs. Avancé : chaque ligne avec ses grades et les matériaux nécessaires.",
+    "stopNoLongerNeeded": "{{engineer}} n'est plus nécessaire : un autre ingénieur de la tournée fait les mêmes lignes. Passe à l'ingénieur suivant."
   },
   "engineerData": {
     "baltanosMeeting": "Atteins la réputation Amical avec le Colonia Council.",
