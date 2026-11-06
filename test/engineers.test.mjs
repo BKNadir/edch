@@ -65,7 +65,13 @@ test("done on ship: the blueprint at the wanted grade or higher, and the experim
   );
   assert.equal(doneOnShip(withEffect, line(FSD_RANGE, 5)), true);
   assert.equal(doneOnShip(withEffect, line(MASS_MANAGER, 0)), true);
-  assert.equal(doneOnShip(withEffect, line(FSD_RANGE, 5, { count: 2 })), false, "two modules wanted, one on the ship");
+  // Two multi-cannons wanted, both on the ship, one engineered: not done yet.
+  const cannon = (slot, engineering) => ({ slot, item: "hpt_multicannon_gimbal_medium", engineering });
+  const oneOfTwo = ctxWith(
+    [],
+    [cannon("MediumHardpoint1", { blueprint: "Weapon_Overcharged", level: 5 }), cannon("MediumHardpoint2")],
+  );
+  assert.equal(doneOnShip(oneOfTwo, line("modification|Multi-cannon|Overcharged Weapon", 5, { count: 2 })), false);
 });
 
 test("tour: lines on the ship leave it, the current stop comes first, passed stops come last", () => {
@@ -342,4 +348,33 @@ test("import: guardian weapons and caustic sink launchers aren't taken for other
   });
   assert.deepEqual(items, []);
   assert.equal(skipped.length, 2);
+});
+
+test("done on ship: an older imported line asking more modules than the ship has of that type", () => {
+  const heatSink = {
+    slot: "TinyHardpoint1",
+    item: "hpt_heatsinklauncher_turret_tiny",
+    engineering: { blueprint: "Misc_HeatSinkCapacity", level: 1 },
+  };
+  const caustic = (n) => ({
+    slot: `TinyHardpoint${n}`,
+    item: "hpt_causticsinklauncher_turret_tiny",
+    engineering: { blueprint: "Misc_HeatSinkCapacity", level: 1 },
+  });
+  const ctx = ctxWith([], [heatSink, caustic(4), caustic(5), caustic(6)]);
+  ctx.store.state.cmdr.loadout.ship = "explorer_nx";
+  // Up to 0.10.9 the import merged the caustic sink launchers into the heat sink launcher's line.
+  const merged = line("modification|Heat Sink Launcher|Ammo Capacity", 1, { count: 4 });
+  assert.equal(doneOnShip(ctx, merged), true);
+  assert.equal(
+    doneOnShip(ctx, {
+      ...merged,
+      slots: ["tinyhardpoint1", "tinyhardpoint4", "tinyhardpoint5", "tinyhardpoint6"],
+      shipType: "explorer_nx",
+    }),
+    true,
+  );
+  // The heat sink launcher not engineered yet: not done.
+  const plain = ctxWith([], [{ ...heatSink, engineering: undefined }, caustic(4)]);
+  assert.equal(doneOnShip(plain, merged), false);
 });

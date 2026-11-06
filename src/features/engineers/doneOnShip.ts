@@ -31,14 +31,19 @@ export function doneOnShip(ctx: Ctx, item: WishItem, grade = item.gradeTo): bool
   const kind = blueprints[0].kind;
   const wantedModule = (item.bp.split("|")[1] ?? "").toLowerCase();
   let matching = 0;
+  let ofType = 0;
   for (const module of modules) {
-    const engineering = module.engineering;
-    if (!engineering) continue;
     const type = moduleOf(module.item ?? "");
     if (type && type.toLowerCase() !== wantedModule) continue;
+    if (type) ofType++;
+    const engineering = module.engineering;
+    if (!engineering) continue;
     if (kind === "experimental") {
       if (engineering.experimental && symbols.has(engineering.experimental.toLowerCase())) matching++;
     } else if (symbols.has(engineering.blueprint.toLowerCase()) && engineering.level >= grade) matching++;
   }
-  return matching >= (slots ? slots.size : Math.max(1, item.count));
+  // As many as wanted; a line asking more modules than the ship has of that type (older imports
+  // merged other modules into it) is done once all of them are.
+  const wanted = slots ? slots.size : Math.max(1, item.count);
+  return matching >= Math.max(1, ofType ? Math.min(wanted, ofType) : wanted);
 }

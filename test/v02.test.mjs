@@ -51,7 +51,7 @@ test("journal/1 strips personal data and localised keys", () => {
   assert.deepEqual(m.header, {
     uploaderID: "Jameson",
     softwareName: "EDCH",
-    softwareVersion: "0.10.10",
+    softwareVersion: "0.10.11",
     gameversion: "4.2.0.1",
     gamebuild: "r1/r0 ",
   });

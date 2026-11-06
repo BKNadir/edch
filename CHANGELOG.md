@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.11
+
+- Fixed: "Already done on this ship" missed a modification when the wishlist line came from a build imported before 0.10.10, which had merged other modules into it (the heat sink launcher's Ammo Capacity with the caustic sink launchers: 4 asked, 1 on the ship). Only modules of the line's type count now, and a line asking more of them than the ship has is done once all of those are.
+
 ## 0.10.10
 
 - Engineer data checked against the game and community wikis: Lori Jameson does Life Support up to G4, not G5 (G5 is only Etienne Dorn, in Colonia); Juri Ishmaak also does the manifest, wake and kill warrant scanners up to G3. The other ship engineers match.
