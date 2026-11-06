@@ -63,6 +63,8 @@ export interface Settings {
   navAutoCopy: boolean;
   /** An EDCH notification (Notifications tab, sound if chosen) when a next jump is copied. */
   navNotifyCopy: boolean;
+  /** Copy the next system to enter (route or engineer tour) when the game's window comes to the front (Windows). */
+  copyOnGameFocus: boolean;
   /** Navigation: exact route with fuel (Spansh Galaxy Plotter) rather than the quick neutron route. */
   navExact: boolean;
   /** Menu order chosen in the menu's edit mode ("-" = a line between groups); empty = default. */
@@ -256,6 +258,7 @@ const DEFAULT_SETTINGS: Settings = {
   engineers: DEFAULT_ENGINEER_SETTINGS,
   navAutoCopy: false,
   navNotifyCopy: true,
+  copyOnGameFocus: true,
   navExact: true,
   navOrder: [],
   phoneHidden: [],

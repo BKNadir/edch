@@ -73,6 +73,7 @@ pub fn run() {
             remote::remote_tailscale,
             system::is_portable,
             app::game_running,
+            app::game_focused,
             app::launch_game,
             app::set_close_behavior,
             app::app_quit,

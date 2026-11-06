@@ -1099,7 +1099,8 @@
     "waitingGame": "Aguardando o jogo…",
     "windowSCloseButton": "Botão de fechar da janela",
     "wishlistEngineerTour": "Para a lista de desejos e a rota de engenheiros.",
-    "wishlistOpensIn": "A página Lista de desejos abre no modo"
+    "wishlistOpensIn": "A página Lista de desejos abre no modo",
+    "copyNextSystemOnGameFocus": "Copiar o próximo sistema para entrar (rota em andamento ou rota de engenheiros) quando a janela do Elite Dangerous volta para a frente (só Windows)"
   },
   "sources": {
     "agriculture": "Agricultura",

@@ -29,7 +29,7 @@ tauri-plugin-single-instance = "2"
 
 # Windows only: the process list for "is the game running?" (no tasklist.exe).
 [target.'cfg(windows)'.dependencies]
-windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_System_Diagnostics_ToolHelp"] }
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_System_Diagnostics_ToolHelp", "Win32_UI_WindowsAndMessaging"] }
 
 [profile.release]
 codegen-units = 1

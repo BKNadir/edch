@@ -1092,7 +1092,8 @@
     "waitingGame": "Warte auf das Spiel…",
     "windowSCloseButton": "Schließen-Schaltfläche des Fensters",
     "wishlistEngineerTour": "Für die Wunschliste und die Ingenieurs-Tour.",
-    "wishlistOpensIn": "Wunschliste öffnet sich als"
+    "wishlistOpensIn": "Wunschliste öffnet sich als",
+    "copyNextSystemOnGameFocus": "Nächstes Zielsystem (laufende Route oder Ingenieurstour) kopieren, wenn das Fenster von Elite Dangerous wieder im Vordergrund ist (nur Windows)"
   },
   "sources": {
     "agriculture": "Landwirtschaft",

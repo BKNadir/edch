@@ -1088,7 +1088,8 @@
     "waitingGame": "Ожидание игры…",
     "windowSCloseButton": "Кнопка закрытия окна",
     "wishlistEngineerTour": "Для списка желаний и маршрута по инженерам.",
-    "wishlistOpensIn": "Страница списка желаемого открывается в режиме"
+    "wishlistOpensIn": "Страница списка желаемого открывается в режиме",
+    "copyNextSystemOnGameFocus": "Копировать следующую систему (текущий маршрут или тур по инженерам), когда окно Elite Dangerous снова на переднем плане (только Windows)"
   },
   "sources": {
     "agriculture": "Сельское хозяйство",

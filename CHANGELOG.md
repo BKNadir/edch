@@ -5,6 +5,9 @@ and EDCH shows it in the update banner.
 
 ## 0.10.8
 
+- Fixed: the next system wasn't copied while you played (engineer tour, and the route's next system on arrival). Windows refused the copy while EDCH's window wasn't in front; EDCH now writes the clipboard itself.
+- Fixed: an engineer tour stop now ends as soon as its modules reach the wanted grade, even in fewer rolls than planned, so the next engineer's system is copied.
+- New option in Settings → Game and search → Navigation (on by default, Windows only): when the Elite Dangerous window comes back to the front, the next system to enter is copied (the next system of the route in progress, or the engineer of the tour you are heading to).
 - Mining, "Where to mine": a new "Mining type" column says, for each planet's ring, how the mineral is mined there (laser, subsurface, core). Core only shows on the ring types where the mineral has motherlode asteroids.
 - Mining: the laser, subsurface and core chips above the table are now switches. Click one to hide that mining type from the results (rings left with no type shown are hidden), click it again to show it. The choice is kept.
 - Mining: as soon as you prospect an asteroid, the "Last asteroid" card moves to the top of the page. A switch in the card shows the last asteroid only, the last 3 (default) or the last 5.

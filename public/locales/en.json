@@ -1092,7 +1092,8 @@
     "waitingGame": "Waiting for the game…",
     "windowSCloseButton": "Window's close button",
     "wishlistEngineerTour": "For the wishlist and the engineer tour.",
-    "wishlistOpensIn": "Wishlist page opens in"
+    "wishlistOpensIn": "Wishlist page opens in",
+    "copyNextSystemOnGameFocus": "Copy the next system to enter (route in progress or engineer tour) when the Elite Dangerous window comes back to the front (Windows only)"
   },
   "sources": {
     "agriculture": "Agriculture",

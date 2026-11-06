@@ -1,5 +1,5 @@
-//! Desktop behaviour: is Elite Dangerous running, launching it, what closing the window does
-//! (quit, minimise, hide in the notification area, or ask first).
+//! Desktop behaviour: is Elite Dangerous running (and is its window in front), launching it, what
+//! closing the window does (quit, minimise, hide in the notification area, or ask first).
 
 use std::sync::Mutex;
 use tauri::menu::{Menu, MenuItem};
@@ -86,6 +86,78 @@ fn detect() -> String {
     } else {
         String::new()
     }
+}
+
+/// Is the game's window the one in front? "yes", "no", or "unknown" where EDCH can't tell (Linux:
+/// no reliable way under Wayland and Proton). Used to copy the next system when you go back to
+/// the game.
+#[tauri::command]
+pub async fn game_focused() -> String {
+    tauri::async_runtime::spawn_blocking(foreground_is_game)
+        .await
+        .unwrap_or_default()
+}
+
+#[cfg(target_os = "windows")]
+fn foreground_is_game() -> String {
+    use windows_sys::Win32::UI::WindowsAndMessaging::{GetForegroundWindow, GetWindowThreadProcessId};
+    let mut pid: u32 = 0;
+    // SAFETY: GetForegroundWindow has no preconditions (it may return null, checked);
+    // GetWindowThreadProcessId only writes one u32 into `pid`.
+    unsafe {
+        let window = GetForegroundWindow();
+        if window.is_null() {
+            return "no".into();
+        }
+        GetWindowThreadProcessId(window, &mut pid);
+    }
+    match process_name(pid) {
+        Some(name) if matches!(classify(&name), Running::Game) => "yes".into(),
+        _ => "no".into(),
+    }
+}
+
+/// Lower-case exe name of the process `pid`, from a process snapshot.
+#[cfg(target_os = "windows")]
+fn process_name(pid: u32) -> Option<String> {
+    use windows_sys::Win32::Foundation::{CloseHandle, INVALID_HANDLE_VALUE};
+    use windows_sys::Win32::System::Diagnostics::ToolHelp::{
+        CreateToolhelp32Snapshot, Process32FirstW, Process32NextW, PROCESSENTRY32W, TH32CS_SNAPPROCESS,
+    };
+    if pid == 0 {
+        return None;
+    }
+    // SAFETY: as in `detect`: the snapshot handle is checked and closed once, the entry's size is
+    // set before the first call.
+    unsafe {
+        let snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        if snapshot == INVALID_HANDLE_VALUE {
+            return None;
+        }
+        let mut entry: PROCESSENTRY32W = std::mem::zeroed();
+        entry.dwSize = std::mem::size_of::<PROCESSENTRY32W>() as u32;
+        let mut more = Process32FirstW(snapshot, &mut entry) != 0;
+        let mut found = None;
+        while more {
+            if entry.th32ProcessID == pid {
+                let len = entry
+                    .szExeFile
+                    .iter()
+                    .position(|&c| c == 0)
+                    .unwrap_or(entry.szExeFile.len());
+                found = Some(String::from_utf16_lossy(&entry.szExeFile[..len]).to_lowercase());
+                break;
+            }
+            more = Process32NextW(snapshot, &mut entry) != 0;
+        }
+        CloseHandle(snapshot);
+        found
+    }
+}
+
+#[cfg(not(target_os = "windows"))]
+fn foreground_is_game() -> String {
+    "unknown".into()
 }
 
 /// What one process (its lower-case name or command line) is.

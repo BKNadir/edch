@@ -1093,7 +1093,8 @@
     "waitingGame": "En attente du jeu…",
     "windowSCloseButton": "Bouton de fermeture de la fenêtre",
     "wishlistEngineerTour": "Pour la wishlist et la tournée des ingénieurs.",
-    "wishlistOpensIn": "La page Wishlist s'ouvre en mode"
+    "wishlistOpensIn": "La page Wishlist s'ouvre en mode",
+    "copyNextSystemOnGameFocus": "Copier le prochain système où entrer (route en cours ou tournée des ingénieurs) quand la fenêtre d'Elite Dangerous repasse au premier plan (Windows uniquement)"
   },
   "sources": {
     "agriculture": "Agriculture",

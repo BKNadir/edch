@@ -197,13 +197,34 @@ let navRoute: string[] = (() => {
   }
 })();
 
+/**
+ * The next system to enter of the route plotted in this session (null: no route in progress).
+ * Not kept across restarts: an old route isn't "in progress".
+ */
+let navTarget: string | null = null;
+
 export function setNavRoute(systems: string[]) {
   navRoute = systems;
+  navTarget = systems[1] ?? null;
   try {
     localStorage.setItem(NAV_KEY, JSON.stringify(systems));
   } catch {
     /* kept in memory only */
   }
+}
+
+/**
+ * The system to copy when you go back to the game: the next system of the route in progress,
+ * else the engineer of the tour you are heading to. Null when there is nothing to enter.
+ */
+export function nextSystemToEnter(): { system: string; label: string } | null {
+  if (navTarget) return { system: navTarget, label: t("common.nextJumpCopied", { next: navTarget }) };
+  if (tour && !tour.arrived)
+    return {
+      system: tour.system,
+      label: t("tour.engineerSystemCopied", { system: tour.system, engineer: tour.engineer }),
+    };
+  return null;
 }
 
 /** Copies `system` (the next one of a route) and says so. */
@@ -231,6 +252,8 @@ export function tourEvent(ev: Json) {
     const here = ev.StarSystem.toLowerCase();
     // Navigation page route: arriving at the end of a step copies the next system.
     const i = store.state.settings.navAutoCopy ? navRoute.findIndex((x) => x.toLowerCase() === here) : -1;
+    const at = navRoute.findIndex((x) => x.toLowerCase() === here);
+    if (at >= 0) navTarget = navRoute[at + 1] ?? null;
     if (i >= 0) {
       const next = navRoute[i + 1];
       if (next) copyNext(next, t("common.nextJumpCopied", { next }));
@@ -248,6 +271,9 @@ export function tourEvent(ev: Json) {
 }
 
 /** The game made a modification: move the matching wishlist line on. */
+/** Modules already counted done at their line's top grade ("<line id>|<slot>"), this session. */
+const doneSlots = new Set<string>();
+
 function tick(ev: Json) {
   if (!store || !gameCtx) return;
   const game = gameCtx.game;
@@ -283,7 +309,12 @@ function tick(ev: Json) {
     const name = gameName(item.bp.split("|")[2] ?? "");
     const left = Math.max(0, (item.rolls[level] ?? defaultRolls(level)) - 1);
     let updated: WishItem | null = { ...item, rolls: { ...item.rolls, [level]: left } };
-    if (left === 0 && level >= item.gradeTo) {
+    // A module that reaches the wanted grade is done, whatever the rolls planned (the game may
+    // complete a grade in fewer). Rolls on the same module after that don't count twice.
+    const slot = typeof ev.Slot === "string" ? `${item.id}|${ev.Slot}` : "";
+    if (level >= item.gradeTo && slot && doneSlots.has(slot)) return;
+    if (level >= item.gradeTo) {
+      if (slot) doneSlots.add(slot);
       // One module done at the top grade.
       if (item.count > 1)
         updated = { ...item, count: item.count - 1, rolls: { ...item.rolls, [level]: defaultRolls(level) } };
