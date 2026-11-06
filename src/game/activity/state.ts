@@ -224,6 +224,11 @@ export interface ActivityState {
   system?: { name: string; address?: number };
   /** Timestamp of the newest event folded in. */
   lastAt?: string;
+  /**
+   * The game was closed (Shutdown) or started again (a new journal file): the next LoadGame starts
+   * a new session. A LoadGame without either is a relog from the main menu: the session goes on.
+   */
+  gameRestarted?: boolean;
 }
 
 /** Extra live information some events need. */

@@ -51,7 +51,19 @@ const onLocation: EventHandler = (st, ev, at) => {
 
 /** Journal events of this domain. */
 export const TRAVEL_EVENTS: EventHandlers = {
+  // A new journal file or the game closing ends the session; a relog from the main menu doesn't.
+  Fileheader: (st) => {
+    st.gameRestarted = true;
+    return false;
+  },
+  Shutdown: (st) => {
+    st.gameRestarted = true;
+    return false;
+  },
   LoadGame: (st, ev, at) => {
+    const relog = Boolean(st.session.start) && st.gameRestarted === false;
+    st.gameRestarted = false;
+    if (relog) return false;
     st.session = { ...emptySession(), start: at, credits: num(ev.Credits) };
     st.mining = emptyMining();
     return true;

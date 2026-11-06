@@ -29,6 +29,8 @@ const HANDLERS: EventHandlers = {
 
 /** Events read back from the journal archive at start-up. */
 export const HISTORY_EVENTS = [
+  "Fileheader",
+  "Shutdown",
   "LoadGame",
   "Location",
   "FSDJump",

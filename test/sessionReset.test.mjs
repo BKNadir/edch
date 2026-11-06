@@ -79,3 +79,22 @@ test("bounties and combat bonds count at the kill (Thargoids too); cashing in is
   assert.equal(activity.session.bonds, 560000);
   assert.equal(activity.session.bondsCashed, 560000);
 });
+
+test("a relog from the main menu goes on with the session; a new game start (journal file) or Shutdown starts a new one", async () => {
+  const { applyActivity } = await import("../dist/js/game/activity/index.js");
+  const activity = emptyActivity();
+  const event = (timestamp, name, extra = {}) => applyActivity(activity, { timestamp, event: name, ...extra });
+  event("2026-11-06T12:31:11Z", "Fileheader");
+  event("2026-11-06T12:31:45Z", "LoadGame", { Credits: 100 });
+  event("2026-11-06T13:00:00Z", "FSDJump", { StarSystem: "A", JumpDist: 20, StarPos: [0, 0, 0] });
+  // Back to the main menu and in again (no new journal file).
+  event("2026-11-06T20:47:16Z", "LoadGame", { Credits: 200 });
+  assert.equal(activity.session.jumps, 1);
+  assert.equal(activity.session.start, "2026-11-06T12:31:45Z");
+  // The game closed, then started again.
+  event("2026-11-06T21:30:00Z", "Shutdown");
+  event("2026-11-07T10:00:00Z", "Fileheader");
+  event("2026-11-07T10:00:30Z", "LoadGame", { Credits: 300 });
+  assert.equal(activity.session.jumps, 0);
+  assert.equal(activity.session.start, "2026-11-07T10:00:30Z");
+});
