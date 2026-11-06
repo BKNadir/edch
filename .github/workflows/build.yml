@@ -218,6 +218,160 @@ jobs:
             edch.deb
           if-no-files-found: error
 
+  # Windows on ARM (arm64), cross-compiled on the x64 runner: NSIS installer and portable exe,
+  # "arm64" in their names. Experimental: a failure here doesn't block the release.
+  windows-arm:
+    needs: windows
+    runs-on: windows-latest
+    continue-on-error: true
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-pc-windows-msvc
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./src-tauri -> target"
+          key: arm64
+      - run: npm install
+      - name: Release notes
+        id: notes
+        shell: bash
+        env:
+          PYTHONIOENCODING: utf-8
+        run: |
+          version=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          {
+            echo "body<<EDCH_NOTES_END"
+            python3 tools/release_notes.py "$version" || python tools/release_notes.py "$version"
+            echo "EDCH_NOTES_END"
+          } >> "$GITHUB_OUTPUT"
+      # Same release as the Windows job (see "Release tag" there).
+      - name: Release tag
+        id: rel
+        shell: bash
+        env:
+          MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          version=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          tag=""; pre=false
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then tag="$GITHUB_REF_NAME"
+          elif [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/main && "$MESSAGE" == *"[release]"* ]]; then tag="v$version"
+          elif [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/prerelease/* ]]; then tag="v$version-pre.$GITHUB_RUN_NUMBER"; pre=true
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "pre=$pre" >> "$GITHUB_OUTPUT"
+      - uses: tauri-apps/tauri-action@v0
+        id: tauri
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ steps.rel.outputs.tag }}
+          releaseName: ${{ steps.rel.outputs.pre == 'true' && format('EDCH {0} (test build)', steps.rel.outputs.tag) || 'EDCH v__VERSION__' }}
+          releaseBody: ${{ steps.notes.outputs.body }}
+          releaseDraft: false
+          prerelease: ${{ steps.rel.outputs.pre == 'true' }}
+          args: --target aarch64-pc-windows-msvc --bundles nsis
+
+      - name: Portable exe
+        id: portable
+        shell: bash
+        run: |
+          file="EDCH_${{ steps.notes.outputs.version }}_arm64-portable.exe"
+          cp src-tauri/target/aarch64-pc-windows-msvc/release/edch.exe "$file"
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+
+      - name: Attach the portable exe to the release
+        if: steps.tauri.outputs.releaseId != ''
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${{ steps.rel.outputs.tag }}" "${{ steps.portable.outputs.file }}" --clobber -R "${{ github.repository }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: edch-windows-arm64
+          path: |
+            ${{ steps.portable.outputs.file }}
+            src-tauri/target/aarch64-pc-windows-msvc/release/bundle/nsis/*.exe
+          if-no-files-found: error
+
+  # Linux on ARM (aarch64), built on GitHub's ARM runner: AppImage, .deb and .rpm, "aarch64" or
+  # "arm64" in their names. Experimental: a failure here doesn't block the release.
+  linux-arm:
+    needs: windows
+    runs-on: ubuntu-22.04-arm
+    continue-on-error: true
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./src-tauri -> target"
+      - name: System libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+      - run: npm install
+      - name: Release notes
+        id: notes
+        shell: bash
+        env:
+          PYTHONIOENCODING: utf-8
+        run: |
+          version=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          {
+            echo "body<<EDCH_NOTES_END"
+            python3 tools/release_notes.py "$version" || python tools/release_notes.py "$version"
+            echo "EDCH_NOTES_END"
+          } >> "$GITHUB_OUTPUT"
+      # Same release as the Windows job (see "Release tag" there).
+      - name: Release tag
+        id: rel
+        shell: bash
+        env:
+          MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          version=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          tag=""; pre=false
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then tag="$GITHUB_REF_NAME"
+          elif [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/main && "$MESSAGE" == *"[release]"* ]]; then tag="v$version"
+          elif [[ "$GITHUB_EVENT_NAME" == push && "$GITHUB_REF" == refs/heads/prerelease/* ]]; then tag="v$version-pre.$GITHUB_RUN_NUMBER"; pre=true
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "pre=$pre" >> "$GITHUB_OUTPUT"
+      - uses: tauri-apps/tauri-action@v0
+        id: tauri
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ steps.rel.outputs.tag }}
+          releaseName: ${{ steps.rel.outputs.pre == 'true' && format('EDCH {0} (test build)', steps.rel.outputs.tag) || 'EDCH v__VERSION__' }}
+          releaseBody: ${{ steps.notes.outputs.body }}
+          releaseDraft: false
+          prerelease: ${{ steps.rel.outputs.pre == 'true' }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: edch-linux-arm64
+          path: |
+            src-tauri/target/release/bundle/appimage/*.AppImage
+            src-tauri/target/release/bundle/deb/*.deb
+            src-tauri/target/release/bundle/rpm/*.rpm
+          if-no-files-found: error
+
   # Flatpak bundle from the .deb (experimental: a failure here doesn't block the release).
   flatpak:
     needs: linux

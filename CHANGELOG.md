@@ -5,6 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.10
 
+- New, experimental: builds for ARM processors. Windows on ARM: "arm64" installer and portable exe; Linux on ARM (aarch64): AppImage, .deb and .rpm. The automatic update picks the installer of your processor's kind.
 - Fixed: "Already done on this ship" missed modifications made at an engineer during the session (for example Heavy Duty G5 on the armour). The game doesn't rewrite the ship's module list after engineering; EDCH now updates the module from each engineering (grade, blueprint, experimental effect), so the line and the engineer leave the tour at once.
 
 ## 0.10.9
