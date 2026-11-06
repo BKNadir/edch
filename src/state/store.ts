@@ -27,6 +27,8 @@ export interface Settings {
   remote: RemoteSettings;
   /** Look for a new release on GitHub at start-up and every few hours. */
   autoUpdate: boolean;
+  /** Also offer pre-releases (test builds) as updates. */
+  updatePreReleases: boolean;
   /** A version the user chose to skip ("Plus tard" hides it until the next one). */
   skippedVersion: string;
   notify: NotifySettings;
@@ -245,6 +247,7 @@ const DEFAULT_SETTINGS: Settings = {
   sync: DEFAULT_SYNC,
   remote: DEFAULT_REMOTE,
   autoUpdate: true,
+  updatePreReleases: false,
   skippedVersion: "",
   notify: DEFAULT_NOTIFY,
   wing: DEFAULT_WING,

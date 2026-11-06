@@ -444,7 +444,9 @@ export interface UpdateInfo {
   digest: string | null;
 }
 
-export const updateCheck = () => invoke<UpdateInfo | null>("update_check");
+/** `preReleases`: also offer pre-releases; `installed`: the tag this build was installed from. */
+export const updateCheck = (preReleases: boolean, installed: string | null) =>
+  invoke<UpdateInfo | null>("update_check", { preReleases, installed });
 export const updateDownload = (info: UpdateInfo) => invoke<string>("update_download", { info });
 export const updateInstall = (path: string) => invoke<void>("update_install", { path });
 export async function onUpdateProgress(cb: (done: number, total: number) => void): Promise<() => void> {
