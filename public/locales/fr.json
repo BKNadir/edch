@@ -1338,7 +1338,8 @@
     "stopOnTheWay": "Étape en cours · en route vers {{system}}",
     "modeAdvanced": "Avancé",
     "modeSimple": "Simple",
-    "modeHelp": "Simple : seulement la tournée des ingénieurs. Avancé : chaque ligne avec ses grades et les matériaux nécessaires."
+    "modeHelp": "Simple : seulement la tournée des ingénieurs. Avancé : chaque ligne avec ses grades et les matériaux nécessaires.",
+    "stopNoLongerNeeded": "{{engineer}} n'est plus nécessaire : un autre ingénieur de la tournée fait les mêmes lignes. Passe à l'ingénieur suivant."
   },
   "engineerData": {
     "baltanosMeeting": "Atteins la réputation Amical avec le Colonia Council.",

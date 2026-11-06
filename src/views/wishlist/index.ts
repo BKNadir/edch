@@ -2,7 +2,7 @@
 // EDSY), the engineer for each line, and the engineer tour route.
 
 import { doneOnShip } from "../../features/engineers/doneOnShip.js";
-import { pickEngineer } from "../../features/engineers/engineerPick.js";
+import { pickEngineer, type Pick } from "../../features/engineers/engineerPick.js";
 import { goToStop, passStop, planTour, stopTour, type Stop, tourProgress } from "../../features/engineers/tour.js";
 import { extractLoadout, importLoadout } from "../../features/materials/buildImporter.js";
 import { suggestTrades } from "../../features/materials/trade.js";
@@ -221,8 +221,10 @@ export class WishlistView implements View {
     const tooFar = plan.total > limit;
     const progress = tourProgress();
     const current = progress ? plan.stops.find((st) => st.pick.engineer.name === progress.engineer) : undefined;
+    // The tour's stop was regrouped away (another engineer of the tour does its lines).
+    const stale = progress && !current ? progress.engineer : null;
     const stopRows = plan.stops.map((st, i) => this.stopRow(st, i, st === current ? progress!.arrived : undefined));
-    const actions = current
+    const actions = progress
       ? [
           h(
             "button.primary",
@@ -264,7 +266,8 @@ export class WishlistView implements View {
             " " + t("wishlist.tourMoreThanLimitSettingsGame", { fmtLy: fmtLy(plan.total), fmtLy2: fmtLy(limit) }),
           )
         : null,
-      h("p.sub", null, current ? t("wishlist.tourRunningHelp") : t("wishlist.tourHowItWorks")),
+      h("p.sub", null, progress ? t("wishlist.tourRunningHelp") : t("wishlist.tourHowItWorks")),
+      stale ? h("p.notice", null, icon("warn"), " " + t("wishlist.stopNoLongerNeeded", { engineer: stale })) : null,
       h("ol.tour-stops", null, stopRows),
       doneLines,
     );
@@ -360,6 +363,10 @@ export class WishlistView implements View {
       );
     const done = rows.filter((r) => r.owned >= r.need).length;
 
+    // Each line's engineer as the tour groups them (fewer stops than each line's nearest one).
+    const tourEngineer = new Map<string, Pick>();
+    if (store.state.settings.engineers.autoPick)
+      for (const stop of planTour(this.ctx).stops) for (const line of stop.lines) tourEngineer.set(line.id, stop.pick);
     const entries = items.map((item) => {
       const grades = blueprintGrades(game, item.bp);
       const any = [...grades.values()][0];
@@ -381,7 +388,8 @@ export class WishlistView implements View {
       const gradeOptions = [...grades.keys()].sort();
       const autoPick = store.state.settings.engineers.autoPick;
       const onShip = doneOnShip(this.ctx, item);
-      const chosen = autoPick && !onShip ? pickEngineer(this.ctx, item) : null;
+      const grouped = tourEngineer.get(item.id);
+      const chosen = autoPick && !onShip ? (grouped ? { pick: grouped } : pickEngineer(this.ctx, item)) : null;
       return h(
         "div.wish.card",
         { class: `${ready ? "ready" : ""}${chosen?.toMeet ? " no-engineer" : ""}${onShip ? " done-ship" : ""}` },

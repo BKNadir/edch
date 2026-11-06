@@ -5,6 +5,9 @@ and EDCH shows it in the update banner.
 
 ## 0.10.8
 
+- Engineer tour with fewer stops: each line now goes to an engineer already in the tour when one can do it, the hardest lines (grade 5, few engineers) deciding the stops. An experimental effect goes with its module's modification: no detour to a low-grade engineer for an effect (or a low-grade modification) the grade 5 engineer of that module also does. The wishlist lines show the same engineer as the tour.
+- Fixed: "Already done on this ship" now checks the module type. The game names some blueprints the same for every weapon (Overcharged, Long Range…), so an Overcharged multi-cannon made an Overcharged beam laser line look done.
+- When the tour's current stop is no longer needed after this regrouping, the tour says so and offers to go to the next engineer.
 - Fixed: the next system wasn't copied while you played (engineer tour, and the route's next system on arrival). Windows refused the copy while EDCH's window wasn't in front; EDCH now writes the clipboard itself.
 - Fixed: an engineer tour stop now ends as soon as its modules reach the wanted grade, even in fewer rolls than planned, so the next engineer's system is copied.
 - New option in Settings → Game and search → Navigation (on by default, Windows only): when the Elite Dangerous window comes back to the front, the next system to enter is copied (the next system of the route in progress, or the engineer of the tour you are heading to).

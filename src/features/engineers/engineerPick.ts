@@ -1,6 +1,7 @@
-// Which engineer to visit for a wishlist line: the nearest one you know who reaches the wanted
-// grade (or the best grade available), for an experimental effect simply the nearest one. The
-// Bubble and Colonia are 22 000 ly apart: engineers of the other region are left out.
+// Which engineers can do a wishlist line: those you know who reach the wanted grade (or the best
+// grade available), for an experimental effect any of them; the nearest one when a line stands
+// alone. The tour groups lines (tour.ts). The Bubble and Colonia are 22 000 ly apart: engineers
+// of the other region are left out.
 
 import { referenceOf, type Ctx } from "../../state/context.js";
 import type { EngineerStatus } from "../../game/journal/state.js";
@@ -55,12 +56,16 @@ export function lineBlueprint(ctx: Ctx, item: WishItem): Blueprint | undefined {
   return [...blueprintGrades(ctx.game, item.bp).values()][0];
 }
 
-/** The engineer to visit for `item`. */
-export function pickEngineer(ctx: Ctx, item: WishItem): PickResult {
+/**
+ * Every engineer able to do `item` as wanted, nearest first: for a modification those reaching
+ * the wanted grade (else those with the best grade available), for an experimental effect any of
+ * them. Empty with `toMeet` or `none` when nobody you can visit does it.
+ */
+export function engineerChoices(ctx: Ctx, item: WishItem): { choices: Pick[]; toMeet?: Pick; none?: boolean } {
   const s = ctx.store.state.settings.engineers;
   const bp = lineBlueprint(ctx, item);
   const all = candidates(ctx, item);
-  if (!bp || !all.length) return { none: true };
+  if (!bp || !all.length) return { choices: [], none: true };
   const here = origin(ctx);
   const region = here ? regionOf(here) : undefined;
   const statuses = ctx.store.state.cmdr.engineers;
@@ -73,16 +78,22 @@ export function pickEngineer(ctx: Ctx, item: WishItem): PickResult {
   const byDist = (a: Pick, b: Pick) => (a.dist ?? Infinity) - (b.dist ?? Infinity);
   const known = pool.filter((p) => isKnown(p.status));
   const usable = s.knownOnly ? known : pool;
-  if (!usable.length) return { toMeet: [...pool].sort(byDist)[0] };
-  // A modification: the nearest one reaching the wanted grade, else the best grade available.
-  // An engineer's own maximum counts, even if your rank with them is lower for now.
+  if (!usable.length) return { choices: [], toMeet: [...pool].sort(byDist)[0] };
+  // A modification: those reaching the wanted grade, else the best grade available. An
+  // engineer's own maximum counts, even if your rank with them is lower for now.
   if (bp.kind === "modification") {
     const want = item.gradeTo;
     const enough = usable.filter((p) => p.grade >= want);
-    if (enough.length) return { pick: enough.sort(byDist)[0] };
+    if (enough.length) return { choices: enough.sort(byDist) };
     const top = Math.max(...usable.map((p) => p.grade));
-    return { pick: usable.filter((p) => p.grade === top).sort(byDist)[0] };
+    return { choices: usable.filter((p) => p.grade === top).sort(byDist) };
   }
-  // An experimental effect (or anything without grades): the grade doesn't matter, the nearest one.
-  return { pick: [...usable].sort(byDist)[0] };
+  // An experimental effect (or anything without grades): the grade doesn't matter.
+  return { choices: [...usable].sort(byDist) };
+}
+
+/** The nearest engineer to visit for `item` alone (the tour may group it with another one). */
+export function pickEngineer(ctx: Ctx, item: WishItem): PickResult {
+  const r = engineerChoices(ctx, item);
+  return r.choices.length ? { pick: r.choices[0] } : { toMeet: r.toMeet, none: r.none };
 }

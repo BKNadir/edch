@@ -183,3 +183,32 @@ test("back to the game: the next system of the route, else the tour's engineer",
   assert.equal(nextSystemToEnter()?.system, "Kuwemaki");
   stopTour(ctx);
 });
+
+test("tour: as few stops as possible, an effect goes with its module's grade 5 engineer", () => {
+  const ctx = ctxWith([
+    line("modification|Beam Laser|Overcharged Weapon", 1),
+    line("experimental|Beam Laser|Thermal Vent", 0),
+    line("modification|Beam Laser|Long Range Weapon", 5),
+    line("modification|Armour|Heavy Duty", 5),
+    line("experimental|Armour|Deep Plating", 0),
+  ]);
+  // At The Dweller's (Wyrd): he does Overcharged and Thermal Vent, but Broo Tarquin is needed
+  // for Long Range G5 and does both too: no stop at The Dweller.
+  ctx.store.state.cmdr.location = { system: "Wyrd", pos: [-11.03, 31.25, -4.3], docked: false, factions: [] };
+  const stops = planTour(ctx).stops.map((s) => [s.pick.engineer.name, s.lines.map((l) => l.bp.split("|")[2]).sort()]);
+  assert.deepEqual(stops, [
+    ["Selene Jean", ["Deep Plating", "Heavy Duty"]],
+    ["Broo Tarquin", ["Long Range Weapon", "Overcharged Weapon", "Thermal Vent"]],
+  ]);
+});
+
+test("done on ship: the module type counts (Overcharged on a multi-cannon is not on the beam laser)", () => {
+  const multicannon = {
+    slot: "MediumHardpoint1",
+    item: "hpt_multicannon_gimbal_medium",
+    engineering: { blueprint: "Weapon_Overcharged", level: 5 },
+  };
+  const ctx = ctxWith([], [multicannon]);
+  assert.equal(doneOnShip(ctx, line("modification|Beam Laser|Overcharged Weapon", 5)), false);
+  assert.equal(doneOnShip(ctx, line("modification|Multi-cannon|Overcharged Weapon", 5)), true);
+});

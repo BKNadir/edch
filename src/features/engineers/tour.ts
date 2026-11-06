@@ -14,7 +14,7 @@ import { notify } from "../../ui/notifier.js";
 import { distance } from "../../services/spansh.js";
 import { blueprintGrades, defaultRolls, wishNeeds, type Store, type WishItem } from "../../state/store.js";
 import { doneOnShip } from "./doneOnShip.js";
-import { origin, pickEngineer, type Pick } from "./engineerPick.js";
+import { engineerChoices, origin, type Pick } from "./engineerPick.js";
 
 type Json = Record<string, any>;
 type Vec3 = [number, number, number];
@@ -38,26 +38,110 @@ export interface TourPlan {
   doneOnShip: WishItem[];
 }
 
+/** A line to place, with the engineers able to do it (nearest first). */
+interface Placing {
+  item: WishItem;
+  choices: Pick[];
+  experimental: boolean;
+  /** The blueprint's module ("Beam Laser"): an effect goes with its module's modification. */
+  module: string;
+}
+
+/**
+ * Which engineer does each line, with as few stops as possible: the hardest lines first (fewest
+ * engineers able, highest grade); a line goes to an engineer already in the tour when one can do
+ * it, else to the engineer able to do the most lines still unplaced (the nearest on a tie). An
+ * experimental effect goes with its module's modification when that engineer can apply it: no
+ * detour to a low-grade engineer for an effect the grade 5 one also does.
+ */
+function assignLines(ctx: Ctx, items: WishItem[]): { byEngineer: Map<string, Stop>; orphans: WishItem[] } {
+  const byEngineer = new Map<string, Stop>();
+  const orphans: WishItem[] = [];
+  const placing: Placing[] = [];
+  for (const item of items) {
+    const r = engineerChoices(ctx, item);
+    if (r.choices.length)
+      placing.push({
+        item,
+        choices: r.choices,
+        experimental: blueprintKind(ctx, item) === "experimental",
+        module: item.bp.split("|")[1] ?? "",
+      });
+    else if (r.toMeet) orphans.push(item);
+  }
+  const place = (line: Placing, pick: Pick) => {
+    const stop = byEngineer.get(pick.engineer.name) ?? { pick, lines: [], missing: {} };
+    stop.lines.push(line.item);
+    byEngineer.set(pick.engineer.name, stop);
+  };
+  const atAStop = (line: Placing) => line.choices.find((c) => byEngineer.has(c.engineer.name));
+  /** Opens a stop for `line`: the engineer able to do the most of `left` (choices are nearest first). */
+  const openStopFor = (line: Placing, left: Placing[]) => {
+    let best = line.choices[0];
+    let bestCount = -1;
+    for (const choice of line.choices) {
+      const count = left.filter((l) => l.choices.some((c) => c.engineer.name === choice.engineer.name)).length;
+      if (count > bestCount) [best, bestCount] = [choice, count];
+    }
+    place(line, best);
+  };
+  const hardestFirst = (a: Placing, b: Placing) =>
+    a.choices.length - b.choices.length || b.item.gradeTo - a.item.gradeTo;
+  // Modifications first: they decide the stops.
+  const mods = placing.filter((l) => !l.experimental).sort(hardestFirst);
+  const effects = placing.filter((l) => l.experimental).sort(hardestFirst);
+  let left = [...mods];
+  while (left.length) {
+    for (const line of [...left]) {
+      const pick = atAStop(line);
+      if (pick) {
+        place(line, pick);
+        left = left.filter((l) => l !== line);
+      }
+    }
+    if (!left.length) break;
+    const line = left.shift()!;
+    openStopFor(line, [...left, ...effects]);
+  }
+  // Effects: with their module's modification (the highest grade one), else any stop, else a new one.
+  left = [...effects];
+  while (left.length) {
+    for (const line of [...left]) {
+      const withModule = [...byEngineer.values()]
+        .filter((stop) =>
+          stop.lines.some((l) => l.bp.split("|")[1] === line.module && blueprintKind(ctx, l) === "modification"),
+        )
+        .sort(
+          (a, b) =>
+            Math.max(...b.lines.filter((l) => l.bp.split("|")[1] === line.module).map((l) => l.gradeTo)) -
+            Math.max(...a.lines.filter((l) => l.bp.split("|")[1] === line.module).map((l) => l.gradeTo)),
+        )
+        .map((stop) => line.choices.find((c) => c.engineer.name === stop.pick.engineer.name))
+        .find(Boolean);
+      const pick = withModule ?? atAStop(line);
+      if (pick) {
+        place(line, pick);
+        left = left.filter((l) => l !== line);
+      }
+    }
+    if (!left.length) break;
+    const line = left.shift()!;
+    openStopFor(line, left);
+  }
+  return { byEngineer, orphans };
+}
+
+const blueprintKind = (ctx: Ctx, item: WishItem) => [...blueprintGrades(ctx.game, item.bp).values()][0]?.kind;
+
 /**
  * The stops with what each one is for: the current stop of a started tour first, then nearest
  * first from there (or from you), the stops you passed last.
  */
 export function planTour(ctx: Ctx): TourPlan {
-  const byEngineer = new Map<string, Stop>();
-  const orphans: WishItem[] = [];
   const shipDone: WishItem[] = [];
-  for (const item of ctx.store.state.wishlist) {
-    if (doneOnShip(ctx, item)) {
-      shipDone.push(item);
-      continue;
-    }
-    const r = pickEngineer(ctx, item);
-    if (r.pick) {
-      const s = byEngineer.get(r.pick.engineer.name) ?? { pick: r.pick, lines: [], missing: {} };
-      s.lines.push(item);
-      byEngineer.set(r.pick.engineer.name, s);
-    } else if (r.toMeet) orphans.push(item);
-  }
+  const toDo: WishItem[] = [];
+  for (const item of ctx.store.state.wishlist) (doneOnShip(ctx, item) ? shipDone : toDo).push(item);
+  const { byEngineer, orphans } = assignLines(ctx, toDo);
   const all = [...byEngineer.values()];
   const stops: Stop[] = [];
   let at = origin(ctx);

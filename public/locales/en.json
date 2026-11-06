@@ -1336,7 +1336,8 @@
     "stopOnTheWay": "Current stop · on the way to {{system}}",
     "modeAdvanced": "Advanced",
     "modeSimple": "Simple",
-    "modeHelp": "Simple: the engineer tour only. Advanced: every line with its grades and the materials needed."
+    "modeHelp": "Simple: the engineer tour only. Advanced: every line with its grades and the materials needed.",
+    "stopNoLongerNeeded": "{{engineer}} is no longer needed: an engineer further on in the tour does the same lines. Go to the next engineer."
   },
   "engineerData": {
     "baltanosMeeting": "Reach Friendly reputation with the Colonia Council.",
