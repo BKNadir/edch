@@ -210,7 +210,11 @@ export class WishlistView implements View {
           null,
           h("span.badge.muted", null, icon("check"), " " + t("wishlist.doneOnShip")),
           " ",
-          h("span.sub", null, plan.doneOnShip.map((l) => lineLabel(ctx, l)).join(" · ")),
+          h(
+            "span.sub",
+            null,
+            plan.doneOnShip.map((l) => lineLabel(ctx, l) + maxGradeNote(plan.doneAtMax[l.id])).join(" · "),
+          ),
         )
       : null;
     if (!plan.stops.length) {
@@ -309,7 +313,7 @@ export class WishlistView implements View {
               )
             : null,
         ),
-        h("div.sub", null, st.lines.map((l) => lineLabel(ctx, l)).join(" · ")),
+        h("div.sub", null, st.lines.map((l) => lineLabel(ctx, l) + maxGradeNote(st.maxGrade[l.id])).join(" · ")),
         missing.length
           ? h(
               "div.tour-missing",
@@ -568,3 +572,6 @@ export class WishlistView implements View {
     );
   }
 }
+
+/** " (G4 max in your region)" for a line whose wanted grade isn't reachable here. */
+const maxGradeNote = (grade: number | undefined) => (grade ? ` (${t("wishlist.maxGradeInRegion", { grade })})` : "");

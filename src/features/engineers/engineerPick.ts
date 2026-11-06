@@ -69,16 +69,18 @@ export function engineerChoices(ctx: Ctx, item: WishItem): { choices: Pick[]; to
   const here = origin(ctx);
   const region = here ? regionOf(here) : undefined;
   const statuses = ctx.store.state.cmdr.engineers;
+  const toPick = ({ e, grade }: { e: Engineer; grade: number }): Pick => {
+    const status = statuses[e.name];
+    return { engineer: e, grade, status, unlocked: status?.progress === "Unlocked", dist: distance(here, e.pos) };
+  };
   const pool = all
     .filter(({ e }) => !s.regionLimit || !region || !e.pos || regionOf(e.pos as Vec3) === region)
-    .map(({ e, grade }): Pick => {
-      const status = statuses[e.name];
-      return { engineer: e, grade, status, unlocked: status?.progress === "Unlocked", dist: distance(here, e.pos) };
-    });
+    .map(toPick);
   const byDist = (a: Pick, b: Pick) => (a.dist ?? Infinity) - (b.dist ?? Infinity);
   const known = pool.filter((p) => isKnown(p.status));
   const usable = s.knownOnly ? known : pool;
-  if (!usable.length) return { choices: [], toMeet: [...pool].sort(byDist)[0] };
+  // Nobody here (only in the other region, or not met yet): the nearest one to meet.
+  if (!usable.length) return { choices: [], toMeet: [...(pool.length ? pool : all.map(toPick))].sort(byDist)[0] };
   // A modification: those reaching the wanted grade, else the best grade available. An
   // engineer's own maximum counts, even if your rank with them is lower for now.
   if (bp.kind === "modification") {

@@ -75,6 +75,20 @@ def materials() -> list[dict]:
     return out
 
 
+# Corrections to the vendored tables, checked in game: (engineer, module) -> highest grade.
+# Lori Jameson: Life Support G4, not G5 (in game, and https://wiki.alioth.net/index.php/Elite_4/Engineers).
+GRADE_FIXES: dict[tuple[str, str], int] = {
+    ("Lori Jameson", "Life Support"): 4,
+}
+# Modules missing from the vendored tables: (engineer, module) -> highest grade.
+# Juri Ishmaak: the three scanners up to G3 (wiki.alioth.net and elite-dangerous.fandom.com).
+GRADE_ADDS: dict[tuple[str, str], int] = {
+    ("Juri Ishmaak", "Manifest Scanner"): 3,
+    ("Juri Ishmaak", "Wake Scanner"): 3,
+    ("Juri Ishmaak", "Kill Warrant Scanner"): 3,
+}
+
+
 def blueprints(known: set[str]) -> list[dict]:
     out = []
     missing: set[str] = set()
@@ -105,7 +119,14 @@ def blueprints(known: set[str]) -> list[dict]:
         if r["grade"]:
             bp["grade"] = int(r["grade"])
         if r["engineers"]:
-            bp["engineers"] = split(r["engineers"], ",")
+            bp["engineers"] = [
+                e for e in split(r["engineers"], ",")
+                if not (bp.get("grade") and bp["grade"] > GRADE_FIXES.get((e, r["module"]), 99))
+            ]
+        if r["kind"] == "modification" and bp.get("grade"):
+            for (name, module), top in GRADE_ADDS.items():
+                if module == r["module"] and bp["grade"] <= top and name not in bp.setdefault("engineers", []):
+                    bp["engineers"].append(name)
         if r.get("symbol"):
             bp["symbols"] = [x.lower() for x in split(r["symbol"], ",")]
         if effects:
@@ -122,7 +143,11 @@ def engineers() -> list[dict]:
         specs = []
         for s in split(r["specialities"], ","):
             name, _, grade = s.rpartition(":")
-            specs.append({"name": name, "grade": int(grade) if grade.isdigit() else 0})
+            value = int(grade) if grade.isdigit() else 0
+            specs.append({"name": name, "grade": min(value, GRADE_FIXES.get((r["name"], name), value))})
+        for (name, module), top in GRADE_ADDS.items():
+            if name == r["name"] and not any(sp["name"] == module for sp in specs):
+                specs.append({"name": module, "grade": top})
         out.append({
             "id": int(r["id"]),
             "name": r["name"],

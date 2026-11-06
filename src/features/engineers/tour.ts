@@ -26,6 +26,8 @@ export interface Stop {
   leg?: number;
   /** Materials missing for what is done at this stop, after the earlier stops used theirs. */
   missing: Record<string, number>;
+  /** Lines this engineer can't take to their wanted grade: the grade they reach (line id → grade). */
+  maxGrade: Record<string, number>;
 }
 
 export interface TourPlan {
@@ -36,6 +38,8 @@ export interface TourPlan {
   orphans: WishItem[];
   /** Lines the current ship already has: no visit needed. */
   doneOnShip: WishItem[];
+  /** Of those, lines done at the best grade reachable in your region, lower than wanted (id → grade). */
+  doneAtMax: Record<string, number>;
 }
 
 /** A line to place, with the engineers able to do it (nearest first). */
@@ -72,8 +76,9 @@ function assignLines(ctx: Ctx, items: WishItem[]): { byEngineer: Map<string, Sto
   const placedAt = new Map<WishItem, string>();
   const place = (line: Placing, pick: Pick) => {
     placedAt.set(line.item, pick.engineer.name);
-    const stop = byEngineer.get(pick.engineer.name) ?? { pick, lines: [], missing: {} };
+    const stop = byEngineer.get(pick.engineer.name) ?? { pick, lines: [], missing: {}, maxGrade: {} };
     stop.lines.push(line.item);
+    if (!line.experimental && pick.grade < line.item.gradeTo) stop.maxGrade[line.item.id] = pick.grade;
     byEngineer.set(pick.engineer.name, stop);
   };
   const atAStop = (line: Placing) => line.choices.find((c) => byEngineer.has(c.engineer.name));
@@ -152,7 +157,21 @@ const blueprintKind = (ctx: Ctx, item: WishItem) => [...blueprintGrades(ctx.game
 export function planTour(ctx: Ctx): TourPlan {
   const shipDone: WishItem[] = [];
   const toDo: WishItem[] = [];
-  for (const item of ctx.store.state.wishlist) (doneOnShip(ctx, item) ? shipDone : toDo).push(item);
+  const doneAtMax: Record<string, number> = {};
+  for (const item of ctx.store.state.wishlist) {
+    if (doneOnShip(ctx, item)) {
+      shipDone.push(item);
+      continue;
+    }
+    // The wanted grade isn't reachable here (Life Support G5 only in Colonia): the best one is.
+    const best = blueprintKind(ctx, item) === "modification" ? engineerChoices(ctx, item).choices[0]?.grade : undefined;
+    if (best && best < item.gradeTo && doneOnShip(ctx, item, best)) {
+      shipDone.push(item);
+      doneAtMax[item.id] = best;
+      continue;
+    }
+    toDo.push(item);
+  }
   const { byEngineer, orphans } = assignLines(ctx, toDo);
   const all = [...byEngineer.values()];
   const stops: Stop[] = [];
@@ -193,7 +212,7 @@ export function planTour(ctx: Ctx): TourPlan {
       }
     }
   }
-  return { stops, total, orphans, doneOnShip: shipDone };
+  return { stops, total, orphans, doneOnShip: shipDone, doneAtMax };
 }
 
 // ---------------- the tour in progress ----------------
