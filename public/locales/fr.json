@@ -1432,10 +1432,10 @@
     "none": "Rien de manquant noté pour l'instant.",
     "showFile": "Afficher le fichier",
     "openIssue": "Envoyer dans un ticket GitHub",
-    "clear": "Vider la liste",
-    "clearHelp": "Une fois envoyée : repart d'une liste vide",
     "privacy": "La liste ne contient aucune donnée privée : seulement des ingénieurs, modules, modifications, grades, dates et la version du jeu.",
     "found_one": "{{count}} élément noté",
-    "found_other": "{{count}} éléments notés"
+    "found_other": "{{count}} éléments notés",
+    "afterSending": "Une fois le ticket envoyé, supprime missing-data.txt : la liste repart de zéro. EDCH le fait tout seul s'il retrouve ton ticket sur GitHub (il vérifie toutes les 15 minutes).",
+    "waitingForIssue": "Ticket ouvert : en attente de le retrouver sur GitHub."
   }
 }

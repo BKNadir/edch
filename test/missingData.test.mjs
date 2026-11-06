@@ -12,7 +12,7 @@ const { Game } = await import("../dist/js/game/data.js");
 const { emptyState } = await import("../dist/js/game/journal/state.js");
 const { DEFAULT_ENGINEER_SETTINGS } = await import("../dist/js/state/store.js");
 const { bindTour, tourEvent } = await import("../dist/js/features/engineers/tour.js");
-const { clearGaps, dataGaps, gapLine, gapsText, recordGap } =
+const { dataGaps, gapLine, gapsText, newReport, pendingReport, recordGap } =
   await import("../dist/js/features/dataGaps/missingData.js");
 
 const game = new Game(JSON.parse(readFileSync(new URL("../public/data/game.json", import.meta.url))));
@@ -24,26 +24,30 @@ function bindWithShip() {
   bindTour({ game, store: { state: { wishlist: [], settings, cmdr }, notify() {}, setWishlist() {} } });
 }
 
+/** The gap noted for `engineer` and `module`, if any. */
+const gapOf = (engineer, module) => dataGaps().find((gap) => gap.engineer === engineer && gap.module === module);
+
 test("a gap seen again is counted once, with the highest grade", () => {
-  clearGaps();
-  const gap = { kind: "engineerGrade", engineer: "Lori Jameson", module: "Life Support", blueprint: "Reinforced" };
+  const gap = { kind: "engineerGrade", engineer: "Test Engineer", module: "Life Support", blueprint: "Reinforced" };
   recordGap({ ...gap, grade: 4, dataGrade: 3 });
   recordGap({ ...gap, grade: 5, dataGrade: 3 });
-  assert.equal(dataGaps().length, 1);
-  assert.equal(dataGaps()[0].count, 2);
-  assert.equal(dataGaps()[0].grade, 5);
+  const noted = gapOf("Test Engineer", "Life Support");
+  assert.equal(noted.count, 2);
+  assert.equal(noted.grade, 5);
   assert.match(
-    gapLine(dataGaps()[0]),
-    /Engineer grade beyond the data \| Lori Jameson \| Life Support \| Reinforced \| G5 \(data: G3\)/,
+    gapLine(noted),
+    /Engineer grade beyond the data \| Test Engineer \| Life Support \| Reinforced \| G5 \(data: G3\)/,
   );
 });
 
 test("the ship's engineering the data doesn't know is noted (Guardian weapons), the rest isn't", () => {
-  clearGaps();
   bindWithShip();
+  const before = dataGaps().length;
   const slef = JSON.parse(readFileSync(new URL("./fixtures/caspian-slef.json", import.meta.url), "utf8"))[0].data;
   tourEvent({ ...slef, event: "Loadout" });
-  const lines = dataGaps().map((gap) => `${gap.module} | ${gap.blueprint}`);
+  const lines = dataGaps()
+    .slice(before)
+    .map((gap) => `${gap.module} | ${gap.blueprint}`);
   assert.deepEqual(lines.sort(), [
     "Caustic Sink Launcher | Misc_HeatSinkCapacity",
     "Guardian Plasma Charger | Weapon_Overcharged",
@@ -54,7 +58,6 @@ test("the ship's engineering the data doesn't know is noted (Guardian weapons), 
 });
 
 test("an engineer's grade beyond the data, seen in game", () => {
-  clearGaps();
   bindWithShip();
   tourEvent({
     event: "EngineerCraft",
@@ -64,18 +67,18 @@ test("an engineer's grade beyond the data, seen in game", () => {
     Slot: "LifeSupport",
     Level: 5,
   });
-  assert.equal(dataGaps().length, 1);
+  const noted = gapOf("Lori Jameson", "Life Support");
   assert.deepEqual(
     {
-      kind: dataGaps()[0].kind,
-      engineer: dataGaps()[0].engineer,
-      grade: dataGaps()[0].grade,
-      data: dataGaps()[0].dataGrade,
+      kind: noted.kind,
+      engineer: noted.engineer,
+      grade: noted.grade,
+      data: noted.dataGrade,
     },
     { kind: "engineerGrade", engineer: "Lori Jameson", grade: 5, data: 4 },
   );
-  // Within the data: nothing noted.
-  clearGaps();
+  // Within the data: nothing new noted.
+  const before = dataGaps().length;
   tourEvent({
     event: "EngineerCraft",
     Engineer: "Lori Jameson",
@@ -84,5 +87,12 @@ test("an engineer's grade beyond the data, seen in game", () => {
     Slot: "LifeSupport",
     Level: 4,
   });
-  assert.equal(dataGaps().length, 0);
+  assert.equal(dataGaps().length, before);
+});
+
+test("an issue opened from About gets a random report id, kept until GitHub shows the issue", () => {
+  const report = newReport();
+  assert.match(report.id, /^edch-report-[0-9a-f]{8}$/);
+  assert.equal(pendingReport().id, report.id);
+  assert.notEqual(newReport().id, report.id);
 });

@@ -1,10 +1,13 @@
 // What the game showed that EDCH's data lacks: an engineer doing a modification or a grade the
 // data doesn't give them, an engineered module of an unknown type, a build's engineering the
 // data doesn't know. Kept on this PC (no private data: no commander name, path or position),
-// written to "missing-data.txt" in the logs folder, and offered in About as a GitHub issue, so
-// the data can be completed.
+// written to "missing-data.txt" in the logs folder (the file exists only while the list isn't
+// empty), and offered in About as a GitHub issue, so the data can be completed.
+//
+// Once sent, the list empties itself: the issue holds a random report id that EDCH looks for on
+// GitHub (public search), or the player deletes the file.
 
-import { isRemote, isTauri, missingDataSave } from "../../platform/bridge.js";
+import { isRemote, isTauri, missingDataExists, missingDataReported, missingDataSave } from "../../platform/bridge.js";
 import { log } from "../../platform/logger.js";
 
 export type GapKind = "engineerGrade" | "notInData" | "unknownModule";
@@ -68,10 +71,81 @@ export function recordGap(gap: Omit<DataGap, "firstSeen" | "lastSeen" | "count">
   save();
 }
 
-/** Empties the list (after it was reported), and the file. */
-export function clearGaps() {
-  gaps = [];
+/** An issue opened from About, not found on GitHub yet: its id and when it was opened. */
+export interface PendingReport {
+  id: string;
+  sentAt: string;
+}
+
+const REPORT_KEY = "edch.missingDataReport";
+/** How often GitHub is searched for the pending report's issue. */
+const REPORT_CHECK_EVERY_MS = 15 * 60_000;
+/** An issue not found after this long was probably never sent: EDCH stops looking. */
+const REPORT_GIVE_UP_MS = 14 * 24 * 3_600_000;
+
+let pending: PendingReport | null = (() => {
+  try {
+    return JSON.parse(localStorage.getItem(REPORT_KEY) ?? "null") as PendingReport | null;
+  } catch {
+    return null;
+  }
+})();
+
+/** The issue opened from About and waiting to be found on GitHub, if any. */
+export const pendingReport = () => pending;
+
+function savePending(report: PendingReport | null) {
+  pending = report;
+  try {
+    if (report) localStorage.setItem(REPORT_KEY, JSON.stringify(report));
+    else localStorage.removeItem(REPORT_KEY);
+  } catch {
+    /* kept in memory only */
+  }
+}
+
+/** A new report id for the issue about to be opened ("edch-report-3f9a1c2b"), kept as pending. */
+export function newReport(): PendingReport {
+  const random = new Uint8Array(4);
+  crypto.getRandomValues(random);
+  const id = `edch-report-${[...random].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
+  savePending({ id, sentAt: new Date().toISOString() });
+  for (const listener of listeners) listener();
+  return pending!;
+}
+
+/** Drops the gaps already noted when `report` was opened (newer ones stay for the next issue). */
+function forgetReported(report: PendingReport) {
+  gaps = gaps.filter((gap) => gap.firstSeen > report.sentAt);
+  savePending(null);
+  log.info("data", "Missing data issue found on GitHub: the reported items left the list");
   save();
+}
+
+/**
+ * At start-up and every 15 minutes: a deleted missing-data.txt empties the list, and a pending
+ * report found on GitHub removes what it held.
+ */
+export function startMissingDataChecks() {
+  if (!isTauri() || isRemote()) return;
+  const check = async () => {
+    if (gaps.length && !(await missingDataExists().catch(() => true))) {
+      gaps = [];
+      savePending(null);
+      log.info("data", "missing-data.txt was deleted: the list starts again");
+      save();
+      return;
+    }
+    if (!pending) return;
+    if (Date.now() - Date.parse(pending.sentAt) > REPORT_GIVE_UP_MS) {
+      savePending(null);
+      for (const listener of listeners) listener();
+      return;
+    }
+    if (await missingDataReported(pending.id).catch(() => false)) forgetReported(pending);
+  };
+  void check();
+  window.setInterval(() => void check(), REPORT_CHECK_EVERY_MS);
 }
 
 /** Keeps the list on this PC and rewrites missing-data.txt, then tells the listeners. */
@@ -81,7 +155,7 @@ function save() {
   } catch {
     /* kept in memory only */
   }
-  if (isTauri() && !isRemote()) void missingDataSave(gapsText()).catch(() => undefined);
+  if (isTauri() && !isRemote()) void missingDataSave(gaps.length ? gapsText() : "").catch(() => undefined);
   for (const listener of listeners) listener();
 }
 

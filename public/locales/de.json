@@ -1430,10 +1430,10 @@
     "none": "Bisher nichts Fehlendes notiert.",
     "showFile": "Datei anzeigen",
     "openIssue": "In einem GitHub-Ticket senden",
-    "clear": "Liste leeren",
-    "clearHelp": "Nach dem Senden: beginnt eine neue Liste",
     "privacy": "Die Liste enthält keine privaten Daten: nur Ingenieure, Module, Modifikationen, Grade, Daten und die Spielversion.",
     "found_one": "{{count}} Eintrag notiert",
-    "found_other": "{{count}} Einträge notiert"
+    "found_other": "{{count}} Einträge notiert",
+    "afterSending": "Nach dem Senden des Tickets lösche missing-data.txt: Die Liste beginnt neu. EDCH macht das selbst, wenn es dein Ticket auf GitHub findet (es prüft alle 15 Minuten).",
+    "waitingForIssue": "Ticket geöffnet: wird auf GitHub gesucht."
   }
 }

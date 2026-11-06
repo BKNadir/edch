@@ -1443,10 +1443,10 @@
     "none": "Nada faltando anotado por enquanto.",
     "showFile": "Mostrar o arquivo",
     "openIssue": "Enviar em um ticket do GitHub",
-    "clear": "Esvaziar a lista",
-    "clearHelp": "Depois de enviada: começa uma lista nova",
     "privacy": "A lista não contém dados privados: apenas engenheiros, módulos, modificações, graus, datas e a versão do jogo.",
     "found_one": "{{count}} item anotado",
-    "found_other": "{{count}} itens anotados"
+    "found_other": "{{count}} itens anotados",
+    "afterSending": "Depois de enviar o ticket, apague missing-data.txt: a lista recomeça. O EDCH faz isso sozinho se encontrar seu ticket no GitHub (verifica a cada 15 minutos).",
+    "waitingForIssue": "Ticket aberto: aguardando encontrá-lo no GitHub."
   }
 }

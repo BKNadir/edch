@@ -379,15 +379,23 @@ const MISSING_DATA_FILE: &str = "missing-data.txt";
 /// Largest missing-data file accepted (the list is capped well below by the UI).
 const MISSING_DATA_MAX_BYTES: usize = 256 * 1024;
 
-/// Writes the missing-data file, through `sanitize` like every log line.
+/// Writes the missing-data file, through `sanitize` like every log line. An empty text removes
+/// it: the file exists only while something is missing.
 #[tauri::command]
 pub fn missing_data_save(text: String) -> Result<(), String> {
     if text.len() > MISSING_DATA_MAX_BYTES {
         return Err("textTooLong".into());
     }
     let dir = dir();
+    let path = dir.join(MISSING_DATA_FILE);
+    if text.is_empty() {
+        return match fs::remove_file(&path) {
+            Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(e.to_string()),
+            _ => Ok(()),
+        };
+    }
     fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
-    fs::write(dir.join(MISSING_DATA_FILE), sanitize(&text)).map_err(|e| e.to_string())
+    fs::write(path, sanitize(&text)).map_err(|e| e.to_string())
 }
 
 /// Shows the missing-data file in Explorer (selected), or its folder elsewhere.
@@ -406,6 +414,44 @@ pub fn missing_data_show() -> Result<(), String> {
         .arg(dir())
         .spawn();
     result.map(|_| ()).map_err(|e| e.to_string())
+}
+
+/// Does the missing-data file still exist? (A player who deleted it after sending it starts a
+/// new list.)
+#[tauri::command]
+pub fn missing_data_exists() -> bool {
+    dir().join(MISSING_DATA_FILE).is_file()
+}
+
+/// Was a GitHub issue holding `report_id` created? Public search, no account: the id is random
+/// ("edch-report-3f9a1c2b") and says nothing about the player.
+#[tauri::command]
+pub async fn missing_data_reported(report_id: String) -> Result<bool, String> {
+    let valid = report_id.starts_with("edch-report-")
+        && report_id.len() <= 40
+        && report_id.chars().all(|c| c.is_ascii_alphanumeric() || c == '-');
+    if !valid {
+        return Err("invalidReportId".into());
+    }
+    tauri::async_runtime::spawn_blocking(move || {
+        let url =
+            format!("https://api.github.com/search/issues?q=%22{report_id}%22+repo:BKNadir/edch+in:body&per_page=1");
+        let agent = ureq::AgentBuilder::new()
+            .timeout_connect(Duration::from_secs(15))
+            .timeout_read(Duration::from_secs(30))
+            .user_agent(concat!("EDCH/", env!("CARGO_PKG_VERSION")))
+            .build();
+        let response = agent
+            .get(&url)
+            .set("Accept", "application/vnd.github+json")
+            .call()
+            .map_err(|e| format!("network: {e}"))?;
+        let body: serde_json::Value =
+            serde_json::from_str(&response.into_string().map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
+        Ok(body["total_count"].as_u64().unwrap_or(0) > 0)
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
 
 /// Opens the logs folder in Explorer.

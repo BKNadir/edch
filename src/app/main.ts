@@ -21,6 +21,7 @@ import { startUpdateChecks } from "../ui/updateBanner.js";
 import { Uploaders } from "../services/sync/index.js";
 import { bindTour } from "../features/engineers/tour.js";
 import { startCopyOnGameFocus } from "../features/navigation/copyOnGameFocus.js";
+import { startMissingDataChecks } from "../features/dataGaps/missingData.js";
 import { bindStore, setupLive } from "../features/missions/live.js";
 import { bindLinks } from "../views/shared/links.js";
 import { setHere } from "../views/shared/resultsTable.js";
@@ -66,6 +67,7 @@ export async function startApp(code: string, remoteMode: "paired" | null) {
   const ctx: Ctx = { game, store };
   bindTour(ctx);
   startCopyOnGameFocus(ctx);
+  startMissingDataChecks();
   const capacityOf = (id: string) => game.capacityOf(id);
   const sync = new Uploaders(
     () => store.state.settings.sync,

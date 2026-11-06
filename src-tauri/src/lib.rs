@@ -89,6 +89,8 @@ pub fn run() {
             logs::logs_open,
             logs::missing_data_save,
             logs::missing_data_show,
+            logs::missing_data_exists,
+            logs::missing_data_reported,
             update::update_check,
             update::update_download,
             update::update_install

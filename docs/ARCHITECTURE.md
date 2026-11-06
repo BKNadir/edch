@@ -150,8 +150,10 @@ tables, with checked corrections (`GRADE_FIXES`, `GRADE_ADDS`, each with its sou
 completes it while you play: `CommanderState.engineered` keeps who did which modification, on which
 module and at which grade (`EngineerCraft`), and `features/engineers/engineerPick.ts` counts it.
 What the game shows and the data lacks goes to `features/dataGaps/missingData.ts`: a list kept on
-the PC, written to `missing-data.txt` in the logs folder, that About offers to send as a GitHub
-issue (no private data).
+the PC, written to `missing-data.txt` in the logs folder (only while it isn't empty), that About
+offers to send as a GitHub issue (no private data). The issue holds a random report id
+(`edch-report-…`): EDCH searches GitHub for it (`missing_data_reported`, public search, no
+account) and drops the sent items once found; a deleted file also empties the list.
 
 ## Privacy rules
 

@@ -1430,10 +1430,10 @@
     "none": "Nothing missing noted so far.",
     "showFile": "Show the file",
     "openIssue": "Send in a GitHub issue",
-    "clear": "Empty the list",
-    "clearHelp": "Once sent: starts a new list",
     "privacy": "The list holds no private data: engineers, modules, modifications, grades, dates and the game's version only.",
     "found_one": "{{count}} item noted",
-    "found_other": "{{count}} items noted"
+    "found_other": "{{count}} items noted",
+    "afterSending": "Once the issue is sent, delete missing-data.txt: the list starts again. EDCH does it by itself when it finds your issue on GitHub (it checks every 15 minutes).",
+    "waitingForIssue": "Issue opened: waiting to find it on GitHub."
   }
 }

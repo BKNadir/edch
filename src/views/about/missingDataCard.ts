@@ -2,7 +2,7 @@
 // (features/dataGaps), with buttons to show missing-data.txt and to open a GitHub issue already
 // filled with the list.
 
-import { clearGaps, dataGaps, gapsText, onDataGaps } from "../../features/dataGaps/missingData.js";
+import { dataGaps, gapsText, newReport, onDataGaps, pendingReport } from "../../features/dataGaps/missingData.js";
 import { isRemote, isTauri, missingDataShow, openUrl } from "../../platform/bridge.js";
 import { t } from "../../platform/i18n.js";
 import { SOFTWARE_VERSION } from "../../platform/version.js";
@@ -38,20 +38,20 @@ function cardContent(): (HTMLElement | null)[] {
             t("missingData.showFile"),
           ),
           h("button.primary", { onclick: openIssue }, icon("link"), " " + t("missingData.openIssue")),
-          h(
-            "button.ghost",
-            { title: t("missingData.clearHelp"), onclick: () => clearGaps() },
-            icon("close"),
-            " " + t("missingData.clear"),
-          ),
         )
       : null,
+    count ? h("p.sub", null, t("missingData.afterSending")) : null,
+    pendingReport() ? h("p.sub", null, icon("check"), " " + t("missingData.waitingForIssue")) : null,
     h("p.sub", null, t("missingData.privacy")),
   ];
 }
 
-/** Opens a new GitHub issue with the list (cut when too long: then the file is attached). */
+/**
+ * Opens a new GitHub issue with the list (cut when too long: then the file is attached), and a
+ * report id EDCH then looks for on GitHub to empty the list once the issue exists.
+ */
 function openIssue() {
+  const report = newReport();
   const list = gapsText();
   const tooLong = list.length > ISSUE_BODY_MAX_CHARS;
   const body = [
@@ -62,6 +62,8 @@ function openIssue() {
     tooLong ? `${list.slice(0, ISSUE_BODY_MAX_CHARS)}\n…` : list,
     "```",
     tooLong ? "(the list is cut: drag missing-data.txt from the logs folder here)" : "",
+    "",
+    `Report: ${report.id}`,
   ].join("\n");
   void openUrl(
     `${REPO}/issues/new?labels=data&title=${encodeURIComponent("[Data] Missing game data")}&body=${encodeURIComponent(body)}`,

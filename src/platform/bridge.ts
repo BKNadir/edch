@@ -368,6 +368,10 @@ export const logsOpen = () => invoke<string>("logs_open");
 export const missingDataSave = (text: string) => invoke<void>("missing_data_save", { text });
 /** Shows missing-data.txt in the file explorer. */
 export const missingDataShow = () => invoke<void>("missing_data_show");
+/** Does missing-data.txt still exist (false: the player deleted it)? */
+export const missingDataExists = () => invoke<boolean>("missing_data_exists");
+/** Was a GitHub issue holding `reportId` created (public search)? */
+export const missingDataReported = (reportId: string) => invoke<boolean>("missing_data_reported", { reportId });
 /** Portable build (no installer): updates open the release page instead. */
 /** How updates are installed: "installer" (Windows setup) or not ("portable", "linux", "macos": the release page opens). */
 export const updateMode = () =>
