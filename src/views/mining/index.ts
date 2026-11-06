@@ -2,7 +2,7 @@
 // (Spansh), and the Powerplay "Merit Miner" search.
 
 import { findRingSpots, findSellSpots, type RingSpot, type SellSpot } from "../../features/mining/miningSpots.js";
-import { gameName, t } from "../../platform/i18n.js";
+import { gameName, locale, t } from "../../platform/i18n.js";
 import { type Ctx, referenceOf, type View } from "../../state/context.js";
 import type { MiningSettings } from "../../state/store.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
@@ -67,6 +67,18 @@ const MINERALS: [string, boolean][] = [
   ["Water", true],
   ["Hydrogen Peroxide", true],
 ];
+
+/** The asteroid's material content: Low, Medium, High in the app's language (older entries: the game's text). */
+const CONTENT_LABELS: Record<string, string> = {
+  Low: t("mining.contentLow"),
+  Medium: t("mining.contentMedium"),
+  High: t("mining.contentHigh"),
+};
+const contentLabel = (content: string) => CONTENT_LABELS[content] ?? content;
+const fmtPct = (pct: number) => pct.toLocaleString(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+/** Choices for the number of last asteroids shown. */
+const ASTEROID_COUNTS = [1, 3, 5];
 
 /** Journal symbol of a mineral (ProspectedAsteroid uses these). */
 const symbolOf = (name: string) =>
@@ -167,7 +179,7 @@ export class MiningView implements View {
             { class: `${hit ? "hit" : ""} ${min !== undefined ? "target" : ""}` },
             h("span", null, gameName(x.label)),
             big ? h("div.bar", null, h("span", { style: { width: `${Math.min(100, x.pct * 2)}%` } })) : null,
-            h("strong", null, `${x.pct.toFixed(1)} %`),
+            h("strong", null, `${fmtPct(x.pct)} %`),
           );
         }),
       );
@@ -219,7 +231,61 @@ export class MiningView implements View {
       ),
     );
 
+    const shown = s.shownAsteroids;
+    // Once you mine (an asteroid prospected), the last asteroids come first.
+    const prospectCard = last
+      ? h(
+          "section.card.prospect",
+          {
+            class:
+              last.motherlode || last.materials.some((x) => (targets.get(x.name) ?? Infinity) <= x.pct) ? "hit" : "",
+          },
+          h(
+            "div.sync-head",
+            null,
+            h("h3", null, t("mining.lastAsteroid")),
+            this.asteroidCountSwitch(),
+            h(
+              "div.badges",
+              null,
+              last.content ? h("span.badge", null, t("mining.content", { content: contentLabel(last.content) })) : null,
+              last.motherlode
+                ? h(
+                    "span.badge.hit",
+                    null,
+                    t("common.motherlode", { MotherlodeMaterialLocalised: gameName(last.motherlode) }),
+                  )
+                : null,
+              last.remaining !== undefined && last.remaining < 100
+                ? h("span.badge.muted", null, t("mining.left", { remaining: fmt(last.remaining) }))
+                : null,
+              h("span.sub", null, relTime(last.at)),
+            ),
+          ),
+          materialBars(last, true),
+          shown > 1 && m.last.length > 1
+            ? h(
+                "div.prospect-history",
+                null,
+                h("h4", null, t("mining.previous")),
+                m.last
+                  .slice(1, shown)
+                  .map((p) =>
+                    h(
+                      "div.prospect-row",
+                      null,
+                      h("span.sub", null, relTime(p.at)),
+                      p.motherlode ? h("span.badge.hit", null, gameName(p.motherlode)) : null,
+                      materialBars(p, false),
+                    ),
+                  ),
+              )
+            : null,
+        )
+      : h("section.card", null, h("p.empty", null, t("mining.fireProspectorLimpetAsteroidCompositionWill")));
+
     return [
+      last ? prospectCard : null,
       h(
         "section.card",
         null,
@@ -240,55 +306,7 @@ export class MiningView implements View {
       this.finder(
         s.targets.map((target) => MINERALS.find(([n]) => symbolOf(n) === target.id)?.[0]).filter(Boolean) as string[],
       ),
-      last
-        ? h(
-            "section.card.prospect",
-            {
-              class:
-                last.motherlode || last.materials.some((x) => (targets.get(x.name) ?? Infinity) <= x.pct) ? "hit" : "",
-            },
-            h(
-              "div.sync-head",
-              null,
-              h("h3", null, t("mining.lastAsteroid")),
-              h(
-                "div.badges",
-                null,
-                last.content ? h("span.badge", null, t("mining.content", { content: last.content })) : null,
-                last.motherlode
-                  ? h(
-                      "span.badge.hit",
-                      null,
-                      t("common.motherlode", { MotherlodeMaterialLocalised: gameName(last.motherlode) }),
-                    )
-                  : null,
-                last.remaining !== undefined && last.remaining < 100
-                  ? h("span.badge.muted", null, t("mining.left", { remaining: fmt(last.remaining) }))
-                  : null,
-                h("span.sub", null, relTime(last.at)),
-              ),
-            ),
-            materialBars(last, true),
-            m.last.length > 1
-              ? h(
-                  "div.prospect-history",
-                  null,
-                  h("h4", null, t("mining.previous")),
-                  m.last
-                    .slice(1, 8)
-                    .map((p) =>
-                      h(
-                        "div.prospect-row",
-                        null,
-                        h("span.sub", null, relTime(p.at)),
-                        p.motherlode ? h("span.badge.hit", null, gameName(p.motherlode)) : null,
-                        materialBars(p, false),
-                      ),
-                    ),
-                )
-              : null,
-          )
-        : h("section.card", null, h("p.empty", null, t("mining.fireProspectorLimpetAsteroidCompositionWill"))),
+      last ? null : prospectCard,
       h(
         "section.card",
         null,
@@ -324,6 +342,25 @@ export class MiningView implements View {
           : null,
       ),
     ];
+  }
+
+  /** How many of the last asteroids to show: 1, 3 or 5. */
+  private asteroidCountSwitch(): HTMLElement {
+    const shown = this.ctx.store.state.settings.mining.shownAsteroids;
+    return h(
+      "div.segmented.small",
+      { title: t("mining.asteroidsShownHelp") },
+      ASTEROID_COUNTS.map((count) =>
+        h(
+          "button",
+          {
+            class: shown === count ? "active" : "",
+            onclick: () => (this.set({ shownAsteroids: count }), this.render()),
+          },
+          t("mining.asteroidsShown", { count }),
+        ),
+      ),
+    );
   }
 
   /** Where to mine and sell a mineral, nearest first (prospecting tab, any power). */

@@ -647,7 +647,13 @@
     "miningType": "Mining type",
     "hideMethod": "Hide this mining type from the results",
     "showMethod": "Show this mining type in the results",
-    "noRingForShownMethods": "No ring for the mining types shown: click a hidden type above to show it again."
+    "noRingForShownMethods": "No ring for the mining types shown: click a hidden type above to show it again.",
+    "contentLow": "Low",
+    "contentMedium": "Medium",
+    "contentHigh": "High",
+    "asteroidsShownHelp": "How many of the last prospected asteroids to show",
+    "asteroidsShown_one": "Last",
+    "asteroidsShown_other": "Last {{count}}"
   },
   "miningSpots": {
     "common": "Common",

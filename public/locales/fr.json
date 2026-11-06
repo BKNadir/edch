@@ -648,7 +648,13 @@
     "miningType": "Type de minage",
     "hideMethod": "Masquer ce type de minage dans les résultats",
     "showMethod": "Afficher ce type de minage dans les résultats",
-    "noRingForShownMethods": "Aucun anneau pour les types de minage affichés : clique sur un type masqué ci-dessus pour le réafficher."
+    "noRingForShownMethods": "Aucun anneau pour les types de minage affichés : clique sur un type masqué ci-dessus pour le réafficher.",
+    "contentLow": "Faible",
+    "contentMedium": "Moyen",
+    "contentHigh": "Élevé",
+    "asteroidsShownHelp": "Nombre de derniers astéroïdes prospectés à afficher",
+    "asteroidsShown_one": "Le dernier",
+    "asteroidsShown_other": "Les {{count}} derniers"
   },
   "miningSpots": {
     "common": "Commun",

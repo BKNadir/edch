@@ -647,7 +647,13 @@
     "miningType": "Abbauart",
     "hideMethod": "Diese Abbauart in den Ergebnissen ausblenden",
     "showMethod": "Diese Abbauart in den Ergebnissen anzeigen",
-    "noRingForShownMethods": "Kein Ring für die angezeigten Abbauarten: Klicke oben auf eine ausgeblendete Art, um sie wieder anzuzeigen."
+    "noRingForShownMethods": "Kein Ring für die angezeigten Abbauarten: Klicke oben auf eine ausgeblendete Art, um sie wieder anzuzeigen.",
+    "contentLow": "Niedrig",
+    "contentMedium": "Mittel",
+    "contentHigh": "Hoch",
+    "asteroidsShownHelp": "Wie viele der zuletzt prospektierten Asteroiden angezeigt werden",
+    "asteroidsShown_one": "Letzter",
+    "asteroidsShown_other": "Letzte {{count}}"
   },
   "miningSpots": {
     "common": "Normal",

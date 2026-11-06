@@ -12,3 +12,19 @@ test("mining types: core only in the rings where the mineral has motherlodes", (
   assert.deepEqual(ringMethods("Platinum", "Metallic"), ["laser", "subsurface"]);
   assert.deepEqual(ringMethods("Painite", undefined), ["laser", "subsurface", "core"], "unknown ring type: all");
 });
+
+test("prospected asteroid: the content level is kept as Low / Medium / High", async () => {
+  const { applyActivity } = await import("../dist/js/game/activity/index.js");
+  const { emptyActivity } = await import("../dist/js/game/activity/state.js");
+  const st = emptyActivity();
+  applyActivity(st, {
+    event: "ProspectedAsteroid",
+    timestamp: "2026-11-06T15:00:00Z",
+    Materials: [{ Name: "Bromellite", Proportion: 21.3 }],
+    Content: "$AsteroidMaterialContent_Low;",
+    Content_Localised: "Material Content: Low",
+    Remaining: 100,
+  });
+  assert.equal(st.mining.last[0].content, "Low");
+  assert.equal(st.mining.last[0].materials[0].pct, 21.3);
+});

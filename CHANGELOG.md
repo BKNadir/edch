@@ -7,6 +7,8 @@ and EDCH shows it in the update banner.
 
 - Mining, "Where to mine": a new "Mining type" column says, for each planet's ring, how the mineral is mined there (laser, subsurface, core). Core only shows on the ring types where the mineral has motherlode asteroids.
 - Mining: the laser, subsurface and core chips above the table are now switches. Click one to hide that mining type from the results (rings left with no type shown are hidden), click it again to show it. The choice is kept.
+- Mining: as soon as you prospect an asteroid, the "Last asteroid" card moves to the top of the page. A switch in the card shows the last asteroid only, the last 3 (default) or the last 5.
+- Mining: the asteroid's material content (Low, Medium, High) is shown in your language, and percentages use your language's decimal separator.
 
 ## 0.10.7
 

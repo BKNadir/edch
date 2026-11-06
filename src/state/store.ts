@@ -137,6 +137,8 @@ export interface MiningSettings {
   minerals: string[];
   /** Mining types hidden from the "Where to mine" results ("laser", "subsurface", "core"). */
   hiddenMethods: string[];
+  /** How many of the last prospected asteroids the Mining page shows (1, 3 or 5). */
+  shownAsteroids: number;
 }
 
 export const DEFAULT_NOTIFY: NotifySettings = {
@@ -167,6 +169,7 @@ export const DEFAULT_MINING: MiningSettings = {
   power: "",
   minerals: ["Platinum", "Painite", "Low Temperature Diamonds"],
   hiddenMethods: [],
+  shownAsteroids: 3,
 };
 
 /** A wing code: 4 groups of 4 letters/digits (80 bits), easy to read out. */
