@@ -81,6 +81,15 @@ if [[ -f package-lock.json ]]; then
 else
   npm install --no-package-lock
 fi
+# Mise en forme uniquement dans la copie temporaire : évite que les anciennes
+# versions de Prettier bloquent la publication des fichiers ajoutés à GitHub.
+FORMAT_FILES=(docs/EDCH_BGS_MANJARO_V1.4.9.2_PUBLICATION.md)
+for f in "${FILES[@]}"; do
+  case "$f" in *.ts|*.mjs|*.json|*.css) FORMAT_FILES+=("$f");; esac
+done
+node_modules/.bin/prettier --write "${FORMAT_FILES[@]}"
+git add -- docs/EDCH_BGS_MANJARO_V1.4.9.2_PUBLICATION.md "${FILES[@]}"
+git diff --cached --check
 npm test
 (cd src-tauri && cargo check)
 # Compiler un binaire complet pour tester aussi Tauri : EDCH_TEST_NATIVE=1.
