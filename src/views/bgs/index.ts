@@ -1,6 +1,8 @@
 // EDCH-BGS-v1.2: influence history, conservative route planner and report export
 // BGS & Patrols extension for EDCH 0.10.11. Only public Spansh/EDCD requests; private data stays local.
-import { isRemote, spanshPost } from "../../platform/bridge.js";
+import { bgsSaveJson, bgsSavePdf, isRemote, isTauri, spanshPost } from "../../platform/bridge.js";
+import { diagnoseBgsReliability, verifyBgsSnapshot } from "../../features/bgs/reliability.js"; // EDCH-BGS-RELIABILITY-v1.4.9
+import { buildBgsReportPdf } from "../../features/bgs/reportPdf.js";
 import { currentTick, refreshTick, type TickResult } from "../../features/bgs/monitor.js";
 import { withVisits } from "../../features/bgs/utils.js";
 import {
@@ -43,6 +45,13 @@ import {
   type BgsSystem,
 } from "../../features/bgs/core.js";
 
+import {
+  cleanFactionName,
+  rememberedFactions,
+  sameFactionName,
+  validFactionSnapshot,
+} from "../../features/bgs/factionChoice.js"; // EDCH-BGS-FACTION-SWITCH-v1.4.9.2
+
 const KEY = "edch.bgs.custom.v1";
 const MAX_IMPORT_BYTES = 2_000_000;
 function load(): BgsState {
@@ -70,8 +79,7 @@ function loadFaction(faction: string): BgsState {
     const parsed = JSON.parse(
       localStorage.getItem(`${KEY}.faction.${encodeURIComponent(faction.toLocaleLowerCase())}`) ?? "null",
     );
-    if (parsed && typeof parsed.faction === "string" && Array.isArray(parsed.systems) && Array.isArray(parsed.history))
-      return parsed as BgsState;
+    if (validFactionSnapshot(parsed, faction)) return parsed;
   } catch {
     /* no previous data */
   }
@@ -114,6 +122,7 @@ export class BgsView implements View {
   private state: BgsState = load();
   private factionInput = this.state.faction;
   private busy = false;
+  private importing = false;
   private progress = "";
   private message = "";
   private selected = "all";
@@ -219,16 +228,64 @@ export class BgsView implements View {
     }
     this.render();
   }
+  // EDCH-BGS-FACTION-SWITCH-v1.4.9.2: change the monitored faction without deleting history.
+  private async switchFaction() {
+    const faction = cleanFactionName(this.factionInput);
+    if (!faction) {
+      this.message = "Nom de faction invalide (1 à 160 caractères).";
+      this.render();
+      return;
+    }
+    if (this.busy || this.loading || isRemote()) return;
+    if (sameFactionName(faction, this.state.faction)) {
+      this.factionInput = this.state.faction;
+      this.message = `Faction déjà sélectionnée : ${this.state.faction}`;
+      this.render();
+      return;
+    }
+    this.busy = true;
+    this.message = `Chargement local de ${faction}…`;
+    this.render();
+    try {
+      await this.queue; // Previous faction's SQLite writes must finish first.
+      if (!store(this.state) && !localSqlite()) throw new Error("Sauvegarde de l'ancienne faction indisponible");
+      let next = loadFaction(faction);
+      if (localSqlite()) {
+        const saved = await readBgs(faction);
+        if (saved.snapshot) {
+          const parsed: unknown = JSON.parse(saved.snapshot);
+          if (!validFactionSnapshot(parsed, faction)) throw new Error("Snapshot SQLite incohérent : autre faction");
+          next = parsed;
+        }
+        next = withVisits(next, saved.visits);
+      }
+      const who = this.ctx.store.state.cmdr.commander?.trim();
+      if (who && !setCommanderFaction(who, faction))
+        throw new Error("Impossible d'associer la nouvelle faction au CMDR ; changement annulé");
+      this.state = next;
+      this.factionInput = this.state.faction;
+      this.myFactionAutoKey = who ? who.toLocaleLowerCase() + "|" + faction.toLocaleLowerCase() : "";
+      this.myFactionPage = 0;
+      this.myFactionSearch = "";
+      this.trendSystem = "";
+      this.message = `Faction active : ${this.state.faction}. Données précédentes conservées séparément. Cliquez sur Actualiser Spansh pour rechercher les systèmes.`;
+      this.changed();
+    } catch (error) {
+      this.message = `Changement refusé, faction initiale conservée : ${String((error as Error)?.message ?? error)}`;
+      this.factionInput = this.state.faction;
+      this.render();
+    } finally {
+      this.busy = false;
+      this.render();
+    }
+  }
+
   private async retrieve() {
     const faction = this.factionInput.trim();
     if (!faction || this.busy) return;
-    if (faction.toLocaleLowerCase() !== this.state.faction.toLocaleLowerCase()) {
-      store(this.state); // keep previous faction's observations
-      this.state = loadFaction(faction);
-      this.factionInput = this.state.faction;
-      // Let already queued writes to the previous faction finish before reading SQLite.
-      await this.queue;
-      await this.loadFromSqlite(faction);
+    if (!sameFactionName(faction, this.state.faction)) {
+      await this.switchFaction();
+      if (!sameFactionName(faction, this.state.faction)) return; // Never request the wrong faction.
     }
     this.busy = true;
     this.message = "";
@@ -315,37 +372,73 @@ export class BgsView implements View {
     this.state.systems.push({ name: value, states: [], retrievedAt: new Date().toISOString(), source: "manual" });
     this.changed();
   }
-  private importData(file: File) {
+  // EDCH-BGS-RELIABILITY-v1.4.9: never replace BGS data until a native backup succeeds.
+  private async importData(file: File) {
+    if (this.importing) return;
     if (file.size > MAX_IMPORT_BYTES) {
       this.message = "Fichier trop volumineux (maximum 2 Mo).";
       this.render();
       return;
     }
-    void file
-      .text()
-      .then((text) => {
-        // EDCH-BGS-v1.4: validation avant changement des données.
-        const input = parseBgsBackup(text);
-        if (this.state.systems.length || this.state.history.length) {
+    this.importing = true;
+    try {
+      const input = parseBgsBackup(await file.text());
+      const hasData = this.state.systems.length > 0 || this.state.history.length > 0;
+      let confirmation = "";
+      if (hasData) {
+        const existing = verifyBgsSnapshot(this.state);
+        if (isTauri() && !isRemote()) {
+          confirmation = await bgsSaveJson(existing.json);
+          if (!confirmation) throw new Error("Chemin de sauvegarde BGS non confirmé");
+        } else {
+          // Web browsers cannot confirm that the user actually kept the downloaded file.
           const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-          download(
-            `EDCH-BGS-avant-import-${stamp}.json`,
-            JSON.stringify(this.state, null, 2),
-            "application/json;charset=utf-8",
-          );
+          download(`EDCH-BGS-avant-import-${stamp}.json`, existing.json, "application/json;charset=utf-8");
+          if (
+            !window.confirm(
+              "Une sauvegarde JSON a été proposée au téléchargement. Vérifie qu'elle existe avant de remplacer les données BGS. Continuer ?",
+            )
+          ) {
+            this.message = "Import annulé. Données BGS conservées.";
+            return;
+          }
         }
-        this.state = input;
-        this.factionInput = input.faction;
-        this.message = "Import validé. Sauvegarde précédente téléchargée si des données existaient.";
-        this.changed();
-      })
-      .catch((e) => {
-        this.message = `Import refusé : ${String(e.message ?? e)}`;
-        this.render();
-      });
+      }
+      this.state = input;
+      this.factionInput = input.faction;
+      this.message = confirmation
+        ? `Import validé ; sauvegarde précédente conservée : ${confirmation}`
+        : "Import validé. Aucun historique précédent à sauvegarder ou confirmation utilisateur obtenue.";
+      this.changed();
+    } catch (e) {
+      this.message = `Import refusé, données BGS conservées : ${String((e as Error)?.message ?? e)}`;
+    } finally {
+      this.importing = false;
+      this.render();
+    }
   }
-  private exportJson() {
-    download("EDCH-BGS-sauvegarde.json", JSON.stringify(this.state, null, 2), "application/json;charset=utf-8");
+  private async exportJson() {
+    try {
+      const backup = verifyBgsSnapshot(this.state);
+      if (isTauri() && !isRemote()) {
+        const path = await bgsSaveJson(backup.json);
+        this.message = `Sauvegarde BGS JSON enregistrée : ${path}`;
+      } else {
+        download("EDCH-BGS-sauvegarde.json", backup.json, "application/json;charset=utf-8");
+        this.message = "Téléchargement JSON demandé. Vérifie le fichier dans le navigateur.";
+      }
+    } catch (e) {
+      this.message = `Échec sauvegarde BGS JSON : ${String((e as Error)?.message ?? e)}`;
+    }
+    this.render();
+  }
+  private diagnosticExport() {
+    try {
+      this.message = diagnoseBgsReliability(this.state, this.ctx.store.state.cmdr.commander).message;
+    } catch (e) {
+      this.message = `Diagnostic BGS/PDF : ${String((e as Error)?.message ?? e)}`;
+    }
+    this.render();
   }
   private exportCsv() {
     download("EDCH-BGS-patrouille.csv", "\ufeff" + csvOf(patrolOrder(this.filtered())), "text/csv;charset=utf-8");
@@ -361,30 +454,32 @@ export class BgsView implements View {
     const current = ref.coords ? { name: ref.system ?? ref.label, coords: ref.coords } : undefined;
     return planPatrolRoute(this.filtered(), current, { maxLegLy: this.routeMaxLy, maxStops: this.routeStops });
   }
-  private exportReport() {
-    // Static, printable HTML: no script or external resource. Open in a browser and Print -> PDF.
-    const esc = (v: unknown): string =>
-      String(v ?? "").replace(
-        /[&<>"']/g,
-        (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c,
-      );
-    const summary = trendsSummary(this.state);
-    const alerts = trendAlerts(this.state);
-    const tableRows = patrolOrder(this.state.systems)
-      .map((s) => {
-        const t = trendOf(this.state, s);
-        return `<tr><td>${esc(s.name)}</td><td>${esc(s.influence?.toFixed(1) ?? "?")}</td><td>${esc(t.delta?.toFixed(1) ?? "?")}</td><td>${esc(s.controls ? "Oui" : s.controls === false ? "Non" : "?")}</td><td>${esc(s.lastVisitedAt ?? "-")}</td></tr>`;
-      })
-      .join("");
-    const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>EDCH BGS - ${esc(this.state.faction)}</title>
-<style>body{font:14px system-ui,Arial;margin:35px;color:#161b23}h1{color:#22436b}table{border-collapse:collapse;width:100%}th,td{border:1px solid #9da8b3;padding:5px;text-align:left}th{background:#eaf0f7}tr{break-inside:avoid}small{color:#555}@media print{body{margin:10mm}} </style></head>
-<body><h1>EDCH BGS — ${esc(this.state.faction)}</h1><p>Rapport généré : ${esc(new Date().toISOString())}</p>
-<p>Systèmes : ${this.state.systems.length} ; hausse : ${summary.rising} ; baisse : ${summary.falling} ; sans comparaison : ${summary.unavailable}.</p>
-<p>Dernier tick EDCD : ${esc(this.state.tickAt ?? "inconnu")}. Résultats Spansh ${this.state.partial ? "partiels" : "tels que relevés"}.</p>
-<h2>Alertes observées (${alerts.length})</h2><ul>${alerts.map((a) => `<li>${esc(a.system)} : ${esc(a.text)}</li>`).join("") || "<li>Aucune alerte récente identifiée</li>"}</ul>
-<h2>Relevé des systèmes</h2><table><thead><tr><th>Système</th><th>Influence %</th><th>Variation points</th><th>Contrôle</th><th>Dernière visite</th></tr></thead><tbody>${tableRows}</tbody></table>
-<p><small>Les relevés communautaires peuvent être incomplets ou obsolètes ; une variation entre deux observations ne prouve pas l'instant d'un tick.</small></p></body></html>`;
-    download("EDCH-BGS-rapport-imprimable.html", html, "text/html;charset=utf-8");
+  // EDCH-BGS-PDF-v1.4.3: genuine PDF, saved by Rust on desktop (no WebKit blob download).
+  private async exportReport() {
+    try {
+      const bytes = buildBgsReportPdf(this.state, { commander: this.ctx.store.state.cmdr.commander });
+      if (isTauri() && !isRemote()) {
+        const path = await bgsSavePdf(bytes);
+        this.message = `Rapport PDF enregistré : ${path}`;
+      } else {
+        // Browser / remote mode: ordinary download, without needing a Tauri backend.
+        const url = URL.createObjectURL(new Blob([new Uint8Array(bytes)], { type: "application/pdf" }));
+        try {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "EDCH-BGS-rapport.pdf";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          this.message = "Téléchargement PDF demandé au navigateur.";
+        } finally {
+          window.setTimeout(() => URL.revokeObjectURL(url), 30_000);
+        }
+      }
+    } catch (error) {
+      this.message = `Échec export PDF : ${String((error as Error)?.message ?? error)}`;
+    }
+    this.render();
   }
   private renderTrendChart(system: BgsSystem): HTMLElement {
     const trend = trendOf(this.state, system);
@@ -933,6 +1028,18 @@ export class BgsView implements View {
     const fieldFaction = field("Nom de la faction", this.factionInput, (value) => {
       this.factionInput = value;
     });
+    fieldFaction.setAttribute("list", "edch-bgs-saved-factions");
+    const factionsList = h(
+      "datalist",
+      { id: "edch-bgs-saved-factions" },
+      ...rememberedFactions(
+        localStorage,
+        this.state.faction,
+        this.ctx.store.state.cmdr.commander
+          ? readCommanderLog(this.ctx.store.state.cmdr.commander).followedFaction
+          : undefined,
+      ).map((name) => h("option", { value: name })),
+    );
     const selection =
       this.state.systems.find((s) => s.name === this.trendSystem) ??
       this.state.systems.find((s) => trendOf(this.state, s).samples.length >= 2) ??
@@ -942,6 +1049,8 @@ export class BgsView implements View {
       "div.bgs-actions",
       null,
       fieldFaction,
+      factionsList,
+      btn("Changer de faction", () => void this.switchFaction(), this.busy || this.loading || isRemote()),
       btn(
         this.busy ? "Recherche en cours" : "Actualiser Spansh",
         () => void this.retrieve(),
@@ -1017,7 +1126,10 @@ export class BgsView implements View {
       filterSelect,
       searchInput,
       btn("Exporter CSV", () => this.exportCsv()),
-      btn("Sauvegarde JSON", () => this.exportJson()),
+      btn("Sauvegarde JSON", () => {
+        void this.exportJson();
+      }),
+      btn("Diagnostic BGS / PDF", () => this.diagnosticExport()),
       h(
         "label.bgs-import",
         null,
@@ -1108,7 +1220,9 @@ export class BgsView implements View {
             ),
           ),
           btn("Exporter les variations CSV", () => this.exportTrends()),
-          btn("Rapport imprimable / PDF", () => this.exportReport()),
+          btn("Télécharger le rapport PDF", () => {
+            void this.exportReport();
+          }),
         ),
         selection ? this.renderTrendChart(selection) : h("p.sub", null, "Aucun système suivi."),
       ),

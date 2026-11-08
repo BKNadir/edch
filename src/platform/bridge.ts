@@ -287,6 +287,22 @@ export const readOptionFile = async (folder: string, name: string): Promise<stri
 export const exportConfig = (includeGraphics: boolean) => invoke<string>("export_config", { includeGraphics });
 export const importConfig = (bytes: Uint8Array) => invoke<ImportReport>("import_config", { data: Array.from(bytes) });
 export const revealPath = (path: string) => invoke<void>("reveal_path", { path });
+// EDCH-BGS-RELIABILITY-v1.4.9: native backup, never a WebKit blob download on desktop.
+export const bgsSaveJson = (snapshot: string): Promise<string> => invoke<string>("bgs_save_json", { snapshot });
+// EDCH-ONFOOT-EDIT-v1.4.4: creates a NEW file, never overwrites existing presets.
+export interface FootPresetResult {
+  preset: string;
+  filename: string;
+  path: string;
+  changes: number;
+}
+export const footSavePreset = (
+  sourceFile: string,
+  changes: { action: string; slot: "primary" | "secondary"; key: string; modifiers: string[] }[],
+): Promise<FootPresetResult> => invoke<FootPresetResult>("foot_save_preset", { sourceFile, changes });
+// EDCH-BGS-PDF-v1.4.3
+export const bgsSavePdf = (bytes: Uint8Array): Promise<string> =>
+  invoke<string>("bgs_save_pdf", { data: Array.from(bytes) });
 
 // ----- mobile access (local server) -----
 export interface RemoteInfo {

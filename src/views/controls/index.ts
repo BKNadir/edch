@@ -40,6 +40,7 @@ import type { Ctx, View } from "../../state/context.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
 import { board, gamepad, GROUP_LABELS, groupClass, legendTable } from "./deviceBoard.js";
 import { keyboard } from "./keyboard.js";
+import { OnFootEditor } from "./footEditor.js"; // EDCH-ONFOOT-EDIT-v1.4.4
 
 const MODES: [string, string, string[] | null][] = [
   ["all", t("controls.all"), null],
@@ -78,6 +79,7 @@ export class ControlsView implements View {
   private query = "";
   private body = h("div.controls-body");
   private backupOut = h("div.backup-out");
+  private onFootEditor = new OnFootEditor();
 
   constructor(private ctx: Ctx) {}
 
@@ -337,6 +339,21 @@ export class ControlsView implements View {
         h("button.ghost", { onclick: () => window.print() }, t("controls.printSheet")),
       ),
       this.note ? h("p.notice", null, icon("warn"), ` ${this.note}`) : null,
+      // EDCH-ONFOOT-EDIT-v1.4.4: edit and save a separate Odyssey keyboard-only preset.
+      this.mode === "foot"
+        ? this.onFootEditor.render(
+            meta,
+            this.binds,
+            this.files,
+            this.presets,
+            this.chosen,
+            () => this.render(),
+            async (filename: string) => {
+              this.chosen = filename;
+              await this.load();
+            },
+          )
+        : null,
       devices.length
         ? h(
             "div.device-tabs",
