@@ -244,6 +244,16 @@
     "gameLocationUnknown": "{{fallback}} (posição no jogo desconhecida)"
   },
   "controls": {
+    "actionLabelsLanguage": "Idioma dos comandos",
+    "actionLabels_auto": "Conforme EDCH",
+    "actionLabels_fr": "Francês",
+    "actionLabels_en": "Inglês",
+    "refreshBindings": "Atualizar comandos",
+    "bindingsReloaded": "Comandos atualizados",
+    "missingPresetHelp": "Se faltar um perfil HOTAS do jogo, guarda um perfil personalizado em Opções → Controlos e clica em « Atualizar comandos ». As teclas não são alteradas.",
+    "exportDeviceCsv": "Exportar comandos do dispositivo (CSV)",
+    "sharedBindings": "Rever atribuições partilhadas",
+    "sharedBindingsHelp": "Um botão é usado por várias ações no mesmo grupo. Isto não é necessariamente um conflito: Elite Dangerous permite comandos contextuais.",
     "activePreset": "Predefinição ativa",
     "all": "Tudo",
     "axes": "Eixos",

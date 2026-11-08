@@ -244,6 +244,16 @@
     "gameLocationUnknown": "{{fallback}} (Spielposition unbekannt)"
   },
   "controls": {
+    "actionLabelsLanguage": "Sprache der Befehle",
+    "actionLabels_auto": "Wie EDCH",
+    "actionLabels_fr": "Französisch",
+    "actionLabels_en": "Englisch",
+    "refreshBindings": "Belegungen neu laden",
+    "bindingsReloaded": "Belegungen neu geladen",
+    "missingPresetHelp": "Fehlt eine integrierte HOTAS-Vorlage, speichere im Spiel unter Optionen → Steuerung ein eigenes Profil und klicke hier auf „Belegungen neu laden“.",
+    "exportDeviceCsv": "Gerätebelegung als CSV exportieren",
+    "sharedBindings": "Mehrfachbelegungen prüfen",
+    "sharedBindingsHelp": "Eine Taste steuert mehrere Aktionen in derselben Gruppe. Dies ist nicht zwingend ein Konflikt: Elite Dangerous nutzt kontextabhängige Steuerungen.",
     "activePreset": "Aktive Vorlage",
     "all": "Alles",
     "axes": "Achsen",

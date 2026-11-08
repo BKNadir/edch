@@ -1,3 +1,4 @@
+// EDCH-BGS-v1.1
 //! EDCH backend.
 //!
 //! Deliberately small: the UI owns all game logic. The backend tails the Elite Dangerous journal
@@ -13,6 +14,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 mod app;
+mod bgs_db;
 mod http;
 mod journal;
 mod logs;
@@ -51,6 +53,10 @@ pub fn run() {
         .manage(Arc::new(journal::WatchState::default()))
         .manage(remote::RemoteState::default())
         .invoke_handler(tauri::generate_handler![
+            bgs_db::bgs_load,
+            bgs_db::bgs_save,
+            bgs_db::bgs_visit,
+            bgs_db::bgs_health,
             journal::default_journal_dir,
             journal::scan_history,
             journal::start_journal,

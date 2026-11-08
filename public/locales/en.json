@@ -244,6 +244,16 @@
     "gameLocationUnknown": "{{fallback}} (game location unknown)"
   },
   "controls": {
+    "actionLabelsLanguage": "Action labels",
+    "actionLabels_auto": "Follow EDCH",
+    "actionLabels_fr": "French",
+    "actionLabels_en": "English",
+    "refreshBindings": "Refresh bindings",
+    "bindingsReloaded": "Bindings reloaded",
+    "missingPresetHelp": "For a built-in HOTAS preset, open Elite Dangerous → Options → Controls, save it under a custom preset name, then click Refresh bindings here. No in-game inputs are changed.",
+    "exportDeviceCsv": "Export device bindings (CSV)",
+    "sharedBindings": "Review shared assignments",
+    "sharedBindingsHelp": "The same button is used by multiple actions in one group. This is not necessarily a conflict: Elite Dangerous supports contextual controls.",
     "activePreset": "Active preset",
     "all": "All",
     "axes": "Axes",

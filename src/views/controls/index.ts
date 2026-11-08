@@ -2,7 +2,6 @@
 // and axis does (keyboard, gamepad, joystick and mouse pictures), with search, filters and backup.
 
 import {
-  actionName,
   type Bind,
   type BindsMeta,
   comboLabel,
@@ -10,13 +9,23 @@ import {
   type DeviceTemplate,
   fileForPreset,
   groupOf,
-  keyLabel,
   parseBinds,
   parseStartPreset,
   presetLineFor,
   templateBox,
 } from "../../features/controls/binds.js";
 import { DEMO_BINDS } from "../../game/demo.js";
+import { bindingsCsv, repeatedAssignments } from "../../features/controls/report.js";
+// EDCH-BGS-v1.3
+import {
+  actionLanguageChoice,
+  englishActionLabel,
+  localizedActionLabel,
+  setActionLanguageChoice,
+  type ActionLanguage,
+  localizedKeyLabel,
+} from "../../features/controls/actionLabels.js";
+// EDCH-BINDS-FR-v1.2.1
 import {
   exportConfig,
   importConfig,
@@ -107,6 +116,7 @@ export class ControlsView implements View {
     }
     this.files = (await listOptionFiles()).filter((f) => f.folder === "Bindings");
     const names = this.files.map((f) => f.name);
+    if (this.chosen && !names.includes(this.chosen)) this.chosen = "";
     if (this.chosen) {
       const f = parseBinds(await readOptionFile("Bindings", this.chosen));
       this.binds = f.binds;
@@ -125,7 +135,9 @@ export class ControlsView implements View {
       parsed.set(p, file ? parseBinds(await readOptionFile("Bindings", file)) : null);
     }
     const missing = [...parsed.entries()].filter(([, v]) => !v).map(([k]) => k);
-    if (missing.length) this.note = t("controls.builtGamePresetSNotCopied", { value: missing.join(", ") });
+    if (missing.length)
+      this.note =
+        t("controls.builtGamePresetSNotCopied", { value: missing.join(", ") }) + " " + t("controls.missingPresetHelp");
     this.binds = [];
     for (const [preset, f] of parsed) {
       if (!f) continue;
@@ -229,11 +241,17 @@ export class ControlsView implements View {
       const g = groupOf(meta, b.action);
       if (groups && !groups.includes(g)) return false;
       if (!q) return true;
-      const name = actionName(meta, b.action);
+      const name = localizedActionLabel(meta, b.action);
       const combo = comboLabel(meta, b);
-      return [name, gameText(name), combo, gameText(combo), b.action, GROUP_LABELS[g] ?? g].some((candidate) =>
-        fold(candidate).includes(q),
-      );
+      return [
+        name,
+        englishActionLabel(meta, b.action),
+        gameText(name),
+        combo,
+        gameText(combo),
+        b.action,
+        GROUP_LABELS[g] ?? g,
+      ].some((candidate) => fold(candidate).includes(q));
     });
   }
 
@@ -243,7 +261,31 @@ export class ControlsView implements View {
     if (!devices.includes(this.device)) this.device = devices[0] ?? "";
     const binds = this.visible();
     const mine = binds.filter((b) => b.device === this.device);
+    const repeated = repeatedAssignments(meta, mine);
 
+    const languageChoice = actionLanguageChoice();
+    const languageSelect = h(
+      "label.binds-language",
+      null,
+      t("controls.actionLabelsLanguage") + " ",
+      h(
+        "select",
+        {
+          value: languageChoice,
+          onchange: (e: Event) => {
+            setActionLanguageChoice((e.target as HTMLSelectElement).value as ActionLanguage);
+            this.render();
+          },
+        },
+        (
+          [
+            ["auto", t("controls.actionLabels_auto")],
+            ["fr", t("controls.actionLabels_fr")],
+            ["en", t("controls.actionLabels_en")],
+          ] as const
+        ).map(([language, label]) => h("option", { value: language, selected: language === languageChoice }, label)),
+      ),
+    );
     const fileSelect = this.files.length
       ? h(
           "select",
@@ -267,6 +309,7 @@ export class ControlsView implements View {
           h("span.sub", null, " " + t("controls.bindingsKeyboard", { count: this.binds.length, layout: this.layout })),
         ),
         fileSelect,
+        languageSelect,
         h(
           "div.segmented",
           null,
@@ -285,6 +328,12 @@ export class ControlsView implements View {
             oninput: (e: Event) => ((this.query = (e.target as HTMLInputElement).value), this.renderDebounced()),
           }),
         ),
+        h(
+          "button.ghost",
+          { disabled: !mine.length, onclick: () => this.exportDeviceCsv(mine) },
+          t("controls.exportDeviceCsv"),
+        ),
+        h("button.ghost", { onclick: () => void this.refreshBindings() }, t("controls.refreshBindings")),
         h("button.ghost", { onclick: () => window.print() }, t("controls.printSheet")),
       ),
       this.note ? h("p.notice", null, icon("warn"), ` ${this.note}`) : null,
@@ -305,8 +354,60 @@ export class ControlsView implements View {
           )
         : h("p.empty", null, t("controls.noBindingsFound")),
       this.device ? this.diagram(this.device, mine) : null,
+      repeated.length
+        ? h(
+            "details.controls-overlaps",
+            null,
+            h("summary", null, t("controls.sharedBindings") + ` (${repeated.length})`),
+            h("p.sub", null, t("controls.sharedBindingsHelp")),
+            h(
+              "div.legend-grid",
+              null,
+              repeated
+                .slice(0, 30)
+                .map((item) =>
+                  h(
+                    "div.legend-row",
+                    null,
+                    h("kbd", null, `${item.combo} · ${item.group}`),
+                    h("div.acts", null, item.actions.map((a) => localizedActionLabel(meta, a)).join(" · ")),
+                  ),
+                ),
+            ),
+          )
+        : null,
       h("p.sub.credits", null, t("controls.credits")),
     );
+  }
+
+  /** Export only the selected device; the game's settings are never changed. */
+  private exportDeviceCsv(binds: Bind[]) {
+    if (!this.meta || !binds.length) return;
+    const filename = this.device.replace(/[^a-z0-9_-]+/gi, "_").slice(0, 48) || "peripherique";
+    const contents = "\ufeff" + bindingsCsv(this.meta, binds, localizedActionLabel);
+    const url = URL.createObjectURL(new Blob([contents], { type: "text/csv;charset=utf-8" }));
+    try {
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `EDCH-commandes-${filename}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } finally {
+      window.setTimeout(() => URL.revokeObjectURL(url), 30000);
+    }
+  }
+
+  // EDCH-BINDS-FR-v1.3.1 — keyboard + mouse + HOTAS key labels share one language preference.
+  // EDCH-BGS-v1.4: reread newly saved .binds without restarting the game or EDCH.
+  private async refreshBindings() {
+    try {
+      await this.load();
+      toast(t("controls.bindingsReloaded"));
+    } catch (e) {
+      this.note = String((e as Error)?.message ?? e);
+      this.render();
+    }
   }
 
   private debounce?: number;
@@ -361,7 +462,32 @@ export class ControlsView implements View {
       null,
       h("h2", null, tpl && !meta.devices[device] ? tpl.name : info.label),
       h("span.sub", null, device !== info.label ? device : ""),
+      h(
+        "label.tpl-picker",
+        { title: t("controls.actionLabelsLanguage") },
+        t("controls.actionLabelsLanguage") + " ",
+        h(
+          "select",
+          {
+            value: actionLanguageChoice(),
+            onchange: (e: Event) => {
+              setActionLanguageChoice((e.target as HTMLSelectElement).value as ActionLanguage);
+              this.render();
+            },
+          },
+          (
+            [
+              ["fr", t("controls.actionLabels_fr")],
+              ["auto", t("controls.actionLabels_auto")],
+              ["en", t("controls.actionLabels_en")],
+            ] as const
+          ).map(([language, label]) =>
+            h("option", { value: language, selected: actionLanguageChoice() === language }, label),
+          ),
+        ),
+      ),
       picker,
+      // EDCH-BINDS-FR-v1.2.2
     );
     let drawing: HTMLElement;
     if (info.kind === "keyboard")
@@ -414,13 +540,13 @@ export class ControlsView implements View {
       const text = list
         .map(
           (b) =>
-            `${b.modifiers.length ? `${b.modifiers.map((m) => keyLabel(meta, m.key)).join("+")}+` : ""}${actionName(meta, b.action)}${b.inverted ? " (inv.)" : ""}`,
+            `${b.modifiers.length ? `${b.modifiers.map((m) => localizedKeyLabel(meta, m.key)).join("+")}+` : ""}${localizedActionLabel(meta, b.action)}${b.inverted ? " (inv.)" : ""}`,
         )
         .join(" · ");
       return h(
         `div.tpl-box.${groupClass(g)}`,
         {
-          title: `${keyLabel(meta, key)} : ${text}`,
+          title: `${localizedKeyLabel(meta, key)} : ${text}`,
           style: {
             left: `${(x / w) * 100}%`,
             top: `${(y / hgt) * 100}%`,

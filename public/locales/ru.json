@@ -244,6 +244,16 @@
     "gameLocationUnknown": "{{fallback}} (позиция в игре неизвестна)"
   },
   "controls": {
+    "actionLabelsLanguage": "Язык команд",
+    "actionLabels_auto": "Как в EDCH",
+    "actionLabels_fr": "Французский",
+    "actionLabels_en": "Английский",
+    "refreshBindings": "Обновить назначения",
+    "bindingsReloaded": "Назначения обновлены",
+    "missingPresetHelp": "Если встроенный профиль HOTAS недоступен, сохраните собственный профиль в настройках управления игры, затем нажмите «Обновить назначения». Назначения не меняются.",
+    "exportDeviceCsv": "Экспорт назначений устройства в CSV",
+    "sharedBindings": "Проверить повторные назначения",
+    "sharedBindingsHelp": "Одна кнопка назначена нескольким действиям одной группы. Это не обязательно конфликт: в Elite Dangerous есть контекстные команды.",
     "activePreset": "Активный пресет",
     "all": "Всё",
     "axes": "Оси",

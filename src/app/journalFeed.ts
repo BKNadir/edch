@@ -1,3 +1,4 @@
+// EDCH-BGS-v1.1
 // Journal feed (PC): starts reading the game's journal and applies what arrives to the store:
 // journal lines, the journal's status, and the companion files (Status, Market, Cargo,
 // ShipLocker). Live events also go to the data sharing services and to the live features.
@@ -12,6 +13,8 @@ import type { Store } from "../state/store.js";
 import { clearAlert, goTo, inStartup, startupAlert } from "../ui/alerts.js";
 import type { Uploaders } from "../services/sync/index.js";
 import { loadHistory, onLiveEvents } from "../features/missions/live.js";
+import { recordLiveArrivals } from "../features/bgs/live.js";
+import { startBgsTickMonitor } from "../features/bgs/monitor.js";
 
 /** Material capacity by id (from the game data), for the journal's material events. */
 type CapacityOf = (id: string) => number | undefined;
@@ -65,10 +68,13 @@ export async function startJournalFeed(store: Store, sync: Uploaders, capacityOf
   let saveTimer: number | undefined;
   let uploads = Promise.resolve();
   sync.start();
+  startBgsTickMonitor();
   await onJournal({
     batch: (b) => {
       const { changed, events } = applyLines(store.state.cmdr, b.lines, capacityOf);
       if (!b.replay) {
+        // Never count replayed historical journals as fresh BGS patrol visits.
+        recordLiveArrivals(events, store.state.cmdr.commander); // EDCH-BGS-v1.4.1
         onLiveEvents(events);
         if (log.debugOn && events.length) {
           log.debug("journal", `Events: ${events.map((e) => e.event).join(", ")}`);

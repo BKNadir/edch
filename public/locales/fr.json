@@ -244,6 +244,16 @@
     "gameLocationUnknown": "{{fallback}} (position du jeu inconnue)"
   },
   "controls": {
+    "actionLabelsLanguage": "Langue des commandes",
+    "actionLabels_auto": "Selon EDCH",
+    "actionLabels_fr": "Français",
+    "actionLabels_en": "Anglais",
+    "refreshBindings": "Actualiser les commandes",
+    "bindingsReloaded": "Commandes rechargées",
+    "missingPresetHelp": "Pour un préréglage HOTAS d’origine manquant : ouvre Elite Dangerous → Options → Commandes, enregistre un préréglage personnalisé, puis clique sur « Actualiser les commandes ». Les affectations ne sont pas modifiées.",
+    "exportDeviceCsv": "Exporter le X52 / périphérique en CSV",
+    "sharedBindings": "Affectations multiples à vérifier",
+    "sharedBindingsHelp": "Une même touche est utilisée par plusieurs actions dans un même groupe. Ce n’est pas nécessairement un conflit : Elite Dangerous autorise les commandes contextuelles.",
     "activePreset": "Préréglage actif",
     "all": "Tout",
     "axes": "Axes",
