@@ -1,0 +1,64 @@
+name: EDCH BGS v1.6.1 — Stabilisation PRO
+
+on:
+  push:
+    branches:
+      - 'feat/bgs-*'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bgs-v161-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typescript-and-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Dependencies
+        run: npm ci
+      - name: Full TypeScript, formatting and existing test suite
+        run: npm test
+      - name: SQLite WAL snapshot and rollback integration fixture
+        run: python3 tools/test_sqlite_backup_v161.py
+
+  rust-and-linux-build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: System dependencies for Tauri 2 / WebKitGTK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev librsvg2-dev patchelf libssl-dev \
+            libgtk-3-dev libsoup-3.0-dev
+      - name: Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Dependencies
+        run: npm ci
+      - name: Rust unit tests
+        run: cargo test --manifest-path src-tauri/Cargo.toml
+      - name: Rust check
+        run: cargo check --manifest-path src-tauri/Cargo.toml
+      - name: Native Linux Tauri build
+        run: npm run app:build
