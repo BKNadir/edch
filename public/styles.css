@@ -4372,3 +4372,34 @@ button.side-tab > .side-tab-badge {
   transform: none !important;
 }
 /* EDCH-NOTIFICATIONS-V147-END */
+
+/* EDCH-BGS-WORKSPACE-v1.5.1: four accessible BGS panels. */
+.bgs-workspace-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+  border-bottom: 1px solid var(--border, #31383e);
+  padding-bottom: 10px;
+}
+.bgs-workspace-tabs [role="tab"] {
+  cursor: pointer;
+  padding: 9px 15px;
+  border-radius: 8px;
+}
+.bgs-workspace-tabs [aria-selected="true"] {
+  color: var(--accent, #e78a35);
+  border-color: currentColor;
+  font-weight: 700;
+}
+.bgs-workspace-pane[hidden] {
+  display: none !important;
+}
+.bgs-agent-table {
+  min-width: 600px;
+  font-size: 0.92rem;
+}
+.bgs-agent-table td {
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}

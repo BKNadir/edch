@@ -26,6 +26,10 @@ import { parseBgsBackup } from "../../features/bgs/importSafety.js";
 import { planPatrolRoute, routeCsv } from "../../features/bgs/routes.js";
 import { sparklinePath, trendAlerts, trendCsv, trendOf, trendsSummary } from "../../features/bgs/trends.js";
 import { notify } from "../../ui/notifier.js";
+// EDCH-COG-AGENT-JOURNAL-v1.5.0
+import { agentEnabled, agentStatus, setAgentEnabled } from "../../features/agent/runtime.js";
+// EDCH-BGS-WORKSPACE-v1.5.1
+import { mountBgsWorkspace } from "./workspace.js";
 import { localSqlite, readBgs, recordVisitDb, sqliteHealth, writeBgs } from "../../features/bgs/sqlite.js";
 import { clipboardWrite } from "../../platform/bridge.js";
 import type { Ctx, View } from "../../state/context.js";
@@ -140,6 +144,10 @@ export class BgsView implements View {
   private myFactionAutoKey = "";
   private trendSystem = "";
   constructor(private ctx: Ctx) {
+    window.addEventListener("edch-agent-status", () => {
+      const node = this.root?.querySelector("#edch-agent-status");
+      if (node) node.textContent = agentStatus();
+    });
     window.addEventListener("edch-bgs-cmdr-event", () => this.renderCommanderOverview());
     window.addEventListener("edch-bgs-visit", (ev: Event) => {
       const visit = (ev as CustomEvent<{ system: string; at: string }>).detail;
@@ -1058,6 +1066,11 @@ export class BgsView implements View {
       ),
       btn("Rafraîchir tick", () => void this.tick(), this.busy || isRemote()),
       btn("Diagnostic", () => void this.diagnostic(), this.busy || this.loading || isRemote()),
+      btn(agentEnabled() ? "Arrêter agent journal" : "Activer agent journal", () => {
+        setAgentEnabled(!agentEnabled());
+        this.render();
+      }, isRemote()),
+      h("span#edch-agent-status.sub", null, agentStatus()),
       btn("+ Système", () => this.addSystem()),
     );
     const filterSelect = h(
@@ -1367,5 +1380,6 @@ export class BgsView implements View {
     );
     this.renderFactionSystems();
     this.renderCommanderOverview();
+    mountBgsWorkspace(root, this.ctx.store.state.cmdr.commander, this.state.faction, this.state); // EDCH-COG-MEMORY-v1.5.3 EDCH-BGS-ALERTS-v1.5.4
   }
 }

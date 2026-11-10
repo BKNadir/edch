@@ -15,6 +15,7 @@ use std::sync::Arc;
 
 mod app;
 mod bgs_db;
+mod agent_memory; // EDCH-COG-MEMORY-v1.5.3
 mod bgs_backup; // EDCH-BGS-RELIABILITY-v1.4.9
 mod bgs_pdf; // EDCH-BGS-PDF-v1.4.3
 mod http;
@@ -57,6 +58,9 @@ pub fn run() {
         .manage(remote::RemoteState::default())
         .invoke_handler(tauri::generate_handler![
             bgs_db::bgs_load,
+            agent_memory::agent_memory_add,
+            agent_memory::agent_memory_list,
+            agent_memory::agent_memory_delete,
             bgs_db::bgs_save,
             bgs_db::bgs_visit,
             bgs_db::bgs_health,
