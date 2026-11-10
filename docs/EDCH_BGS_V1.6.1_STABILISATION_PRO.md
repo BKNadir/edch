@@ -22,8 +22,9 @@ Tests isolés à la création : 56 tests JavaScript (réussis), 1 test d'intégr
 ```bash
 git fetch origin feat/bgs-stabilisation-pro-v1.6.1-20261110
 git checkout -b feat/bgs-stabilisation-pro-v1.6.1-20261110 origin/feat/bgs-stabilisation-pro-v1.6.1-20261110
-npm ci
-npm test
+npm install --no-package-lock
+npm run build
+node --test test/*.test.mjs
 cargo test --manifest-path src-tauri/Cargo.toml
 npm run app:build
 WEBKIT_DISABLE_DMABUF_RENDERER=1 src-tauri/target/release/edch
