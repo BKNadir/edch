@@ -59,6 +59,8 @@ jobs:
           node-version: '22'
       - name: Dependencies (upstream project has no package-lock)
         run: npm install --no-package-lock
+      - name: Build frontend for Tauri macros
+        run: npm run build
       - name: Rust unit tests
         run: cargo test --manifest-path src-tauri/Cargo.toml
       - name: Rust check
