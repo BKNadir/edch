@@ -1,7 +1,8 @@
 # Contributing to EDCH
 
 Thanks for helping! Start with [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): it explains how the
-code is organised and the rules that keep it that way.
+code is organised and the rules that keep it that way. Working with an AI assistant? Give it
+[AGENTS.md](AGENTS.md) (most assistants read it on their own): the project's rules in one place.
 
 ## Setup
 
