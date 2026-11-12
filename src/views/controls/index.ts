@@ -33,7 +33,7 @@ import { fold, gameText, t } from "../../platform/i18n.js";
 import type { Ctx, View } from "../../state/context.js";
 import { dialog } from "../../ui/dialog.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
-import { keepPicture, keptPictureUrl } from "../../services/controllerPictures.js";
+import { keepPicture, keptPictureName, keptPictureUrl } from "../../services/controllerPictures.js";
 import { board, gamepad, GROUP_LABELS, groupClass, legendTable } from "./deviceBoard.js";
 import { keyboard } from "./keyboard.js";
 import { ConfigureSession, type PresetSource } from "./configure.js";
@@ -616,9 +616,10 @@ export class ControlsView implements View {
         );
       },
     });
-    void keptPictureUrl(tpl.image).then((kept) => {
+    const keptName = keptPictureName(meta.templateBase, tpl.image);
+    void keptPictureUrl(keptName).then((kept) => {
       img.src = kept ?? pictureUrl;
-      if (!kept) void keepPicture(tpl.image, pictureUrl);
+      if (!kept) void keepPicture(keptName, pictureUrl);
     });
     // Configuring: every box of the picture, the empty ones too, so any control can be clicked.
     const boxKeys = this.session ? Object.keys(tpl.boxes).filter((key) => !/Axis$/.test(key)) : [...placed.keys()];

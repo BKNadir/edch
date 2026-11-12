@@ -23,6 +23,7 @@ and EDCH shows it in the update banner.
 - About: a new section thanks EDCH's contributors.
 - Station search results (Search page and finders) show each station's type as an icon: Coriolis, Orbis, Ocellus, Dodec, outpost, asteroid base, megaship, carriers, planetary port and outpost, settlement, construction depot. Most icons come from EDAssets (credited in About).
 - Everything that loads (searches, routes, markets…) now shows the game-style triangle loader from EDAssets, in your theme's colour.
+- Controls: device data updated to EDRefCard's maintained version (edrefcard2): 19 more devices drawn on their picture (Thrustmaster TCA Sidesticks and TPR pedals, VKB STECS and Gladiator NXT Premium OTA, Virpil Alpha Prime, FLNKR, MongoosT throttles and Control Panel #2, Winwing Ursa Minor Fighter and Orion 2 F18 handle…), more ids recognised (Xbox Elite Series 2…), corrected templates (T.16000M, X56 throttle, G940 pedals…) and the newer Odyssey controls named (emotes, grenades, battery and medkit, walk, free camera, field neutraliser…).
 - Safety: importing a configuration zip now checks everything first (size, number of files, file names, contents, duplicates) and writes the files aside before putting them in place, so a broken or hostile zip can't fill the memory or leave a half-imported configuration.
 - Safety: web requests follow a redirection only to the same allowed sites, and never repeat an address (which can hold a key) in an error message.
 - Safety: an update is installed only when its SHA-256 checksum, published by GitHub, matches.

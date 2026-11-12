@@ -70,5 +70,18 @@ test("templates: VKB Gladiator picture and pad box matching", async () => {
   assert.equal(deviceInfo(meta, "231D0200").label, "VKB Gladiator NXT Premium Right");
   const pad = meta.templates["GamePad"];
   assert.ok(templateBox(pad, "GamePad", "GamePad_FaceDown"), "GamePad_* names find the Pad_* boxes");
-  assert.ok(meta.templateBase.startsWith("https://raw.githubusercontent.com/richardbuckle/EDRefCard/"));
+  assert.ok(meta.templateBase.startsWith("https://raw.githubusercontent.com/brammmers/edrefcard2/"));
+});
+
+test("templates: newer EDRefCard devices, and kept pictures named after their source", async () => {
+  const { keptPictureName } = await import("../dist/js/services/controllerPictures.js");
+  const meta = JSON.parse(readFileSync(new URL("../public/data/binds.json", import.meta.url), "utf8"));
+  // Thrustmaster TPR pedals, Virpil Alpha Prime, VKB STECS (first of two same-id devices).
+  assert.equal(meta.templates["044FB68F"].image, "tpr-rudder");
+  assert.equal(meta.templates["334483F3"].image, "vpc-alpha-prime-left");
+  assert.equal(meta.templates["231D012D"].image, "vkb-stecs-1");
+  assert.ok(!Object.keys(meta.templates).some((key) => key.includes("::")));
+  assert.deepEqual(meta.templates["3344825A"].size, [3790, 2091]);
+  assert.equal(keptPictureName(meta.templateBase, "hotas4"), "hotas4-f2e91f8");
+  assert.equal(keptPictureName("https://example.com/res/", "hotas4"), "hotas4");
 });

@@ -66,9 +66,12 @@ const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
     ],
   },
   {
-    name: "EDRefCard (Richard Buckle)",
+    name: "EDRefCard (Richard Buckle, Jason Bramley)",
     what: t("about.controlNamesPicturesHotasJoysticksPads"),
-    links: [["github.com/richardbuckle/EDRefCard", "https://github.com/richardbuckle/EDRefCard"]],
+    links: [
+      ["github.com/brammmers/edrefcard2", "https://github.com/brammmers/edrefcard2"],
+      ["github.com/richardbuckle/EDRefCard", "https://github.com/richardbuckle/EDRefCard"],
+    ],
   },
   {
     name: "EDAssets (SpyTec)",

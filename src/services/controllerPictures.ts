@@ -24,6 +24,16 @@ function dropOldCopies() {
 }
 
 /**
+ * The name a template's picture is kept under: its name and the EDRefCard commit it comes from
+ * ("hotas4-f2e91f8"), so a picture redrawn in a newer EDRefCard is downloaded again rather than
+ * shown with the new template's boxes on the old picture.
+ */
+export function keptPictureName(templateBase: string, image: string): string {
+  const commit = /\/([0-9a-f]{7,40})\/www\/res\/?$/.exec(templateBase)?.[1];
+  return commit ? `${image}-${commit.slice(0, 7)}` : image;
+}
+
+/**
  * The address to show a template's picture from: its copy kept on the PC (an object URL), or
  * undefined when it isn't kept yet (then show `url` and call `keepPicture`).
  */
