@@ -162,18 +162,40 @@ export class ColonisationView implements View {
           h("h1", null, t("common.colonisation")),
           h("p.sub", null, t("colonisation.constructionSitesTrackedFromJournalWhat")),
         ),
-        all.some((d) => d.complete || d.failed)
-          ? h(
-              "label.check",
-              null,
-              h("input", {
-                type: "checkbox",
-                checked: this.showDone,
-                onchange: (e: Event) => ((this.showDone = (e.target as HTMLInputElement).checked), this.render()),
-              }),
-              " " + t("colonisation.showFinishedSites"),
-            )
-          : null,
+        h(
+          "div.view-head-options",
+          null,
+          this.hasSquadronCarrier()
+            ? h(
+                "label.check",
+                null,
+                h("input", {
+                  type: "checkbox",
+                  checked: st.settings.colonisationSquadronCarrier,
+                  onchange: (e: Event) => {
+                    this.ctx.store.updateSettings({
+                      colonisationSquadronCarrier: (e.target as HTMLInputElement).checked,
+                    });
+                    // The box keeps the focus, which holds back update(): redraw now.
+                    this.render();
+                  },
+                }),
+                " " + t("colonisation.showSquadronCarrier"),
+              )
+            : null,
+          all.some((d) => d.complete || d.failed)
+            ? h(
+                "label.check",
+                null,
+                h("input", {
+                  type: "checkbox",
+                  checked: this.showDone,
+                  onchange: (e: Event) => ((this.showDone = (e.target as HTMLInputElement).checked), this.render()),
+                }),
+                " " + t("colonisation.showFinishedSites"),
+              )
+            : null,
+        ),
       ),
       callout("info", t("common.workProgress"), t("colonisation.notEveryFeatureFullyWorkingYet")),
       this.holds(shown, capacity),
@@ -183,19 +205,25 @@ export class ColonisationView implements View {
     );
   }
 
-  /** Your carrier and your squadron's: the ones whose hold is worth showing. */
+  /** Your carrier, and your squadron's when the page's box is ticked: the holds counted and shown. */
   private carriers(): CarrierHold[] {
+    const withSquadron = this.ctx.store.state.settings.colonisationSquadronCarrier;
     return Object.values(this.ctx.store.state.activity.carriers ?? {})
-      .filter((c) => c.mine || c.squadron)
+      .filter((c) => c.mine || (withSquadron && c.squadron))
       .sort((a, b) => Number(b.mine) - Number(a.mine));
   }
 
-  /** How much of a commodity sits in your carriers (journal estimate, or the stock it sells if higher). */
+  /** A squadron carrier is known (you docked at it): the page offers to show it. */
+  private hasSquadronCarrier(): boolean {
+    return Object.values(this.ctx.store.state.activity.carriers ?? {}).some((c) => c.squadron);
+  }
+
+  /**
+   * How much of a commodity sits in your carriers, from the journal estimate (transfers, trades,
+   * and the stock their market offered when you looked at it).
+   */
   private inCarriers(id: string): number {
-    return this.carriers().reduce((s, c) => {
-      const selling = this.marketOf(c.marketId)?.selling.find((x) => x.id === id)?.count ?? 0;
-      return s + Math.max(c.items[id]?.count ?? 0, selling);
-    }, 0);
+    return this.carriers().reduce((sum, carrier) => sum + (carrier.items[id]?.count ?? 0), 0);
   }
 
   /** What the carrier's market shows on Spansh: sell orders (stock) and buy orders. */
@@ -318,8 +346,15 @@ export class ColonisationView implements View {
     );
     const showCarrier = this.carriers().length > 0;
     const rows = d.resources
-      .map((r) => ({ ...r, left: Math.max(0, r.required - r.provided), hold: cargo[r.id] ?? 0 }))
+      .map((r) => {
+        const left = Math.max(0, r.required - r.provided);
+        const hold = cargo[r.id] ?? 0;
+        const carriers = showCarrier ? this.inCarriers(r.id) : 0;
+        // Still to buy or find: what is left once the hold and the carriers are delivered.
+        return { ...r, left, hold, carriers, toSource: Math.max(0, left - hold - carriers) };
+      })
       .sort((a, b) => Number(a.left === 0) - Number(b.left === 0) || b.left - a.left);
+    const toSource = rows.reduce((sum, row) => sum + row.toSource, 0);
     return h(
       "section.card.depot",
       null,
@@ -357,6 +392,7 @@ export class ColonisationView implements View {
               h("span.sub", null, t("colonisation.tUsefulCarriers")),
             )
           : null,
+        h("div.stat", null, h("strong", null, fmt(toSource)), h("span.sub", null, t("colonisation.tToSource"))),
         trips !== null
           ? h(
               "div.stat",
@@ -381,6 +417,7 @@ export class ColonisationView implements View {
             h("th.num", null, t("common.left")),
             h("th.num", null, t("colonisation.hold")),
             showCarrier ? h("th.num", null, t("colonisation.carriers")) : null,
+            h("th.num", { title: t("colonisation.toSourceHelp") }, t("colonisation.toSource")),
             h("th", null, ""),
           ),
         ),
@@ -397,7 +434,12 @@ export class ColonisationView implements View {
               h("td.num", null, fmt(r.required)),
               h("td.num", null, r.left ? h("strong", null, fmt(r.left)) : h("span.ok", null, "✓")),
               h("td.num", null, r.hold ? fmt(r.hold) : ""),
-              showCarrier ? h("td.num", null, this.inCarriers(r.id) ? fmt(this.inCarriers(r.id)) : "") : null,
+              showCarrier ? h("td.num", null, r.carriers ? fmt(r.carriers) : "") : null,
+              h(
+                "td.num",
+                null,
+                r.left ? (r.toSource ? h("strong", null, fmt(r.toSource)) : h("span.ok", null, "✓")) : "",
+              ),
               h(
                 "td",
                 null,

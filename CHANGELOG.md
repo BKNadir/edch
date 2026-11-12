@@ -6,6 +6,11 @@ and EDCH shows it in the update banner.
 ## 0.10.12
 
 - New share mode switch in the top bar (also on the Sync page): Normal, BGS or Invisible. BGS keeps your BGS work private: EDDN, EDSM and Inara no longer get the factions, their influence, states and conflicts, nor your missions, vouchers, trade or data sold (jumps, scans and markets are still shared). Invisible shares nothing at all. The mode stays as you set it after a restart, and switching drops what was still waiting to be sent. It only hides what you send: other players in the same system can still share its state.
+- Colonisation: new "To source" column (and total): what is still to buy or find once your hold and your carriers are delivered.
+- Colonisation: your squadron's carrier is shown and counted only when "Show the squadron carrier" is ticked (kept after a restart).
+- Fixed: Colonisation showed wrong carrier quantities after taking goods back from a carrier or buying from its market (an old market stock kept hiding the change). The stock a carrier's market offers now raises the hold estimate once, when you look at it, and every later transfer or trade counts from there, after a restart too.
+- Fixed: donating tritium to a carrier's fuel no longer removes it from the carrier's hold (it comes from your ship's hold).
+- Fixed: the ship's hold counted a commodity only once when the game listed it on several lines (mission cargo).
 
 ## 0.10.11
 

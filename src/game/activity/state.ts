@@ -258,9 +258,22 @@ export interface ActivityState {
 }
 
 /** Extra live information some events need. */
+/** A carrier's sell orders as Market.json showed them (see `game/journal/companionFiles.ts`). */
+export interface CarrierStockSeen {
+  /** Timestamp of the Market.json read (the same as its Market journal event). */
+  marketAt: string;
+  /**
+   * Commodity id → stock offered for sale when Market.json was read (trades made since don't change
+   * it): the carrier's hold held at least that much then.
+   */
+  stockAtRead: Record<string, { label: string; count: number }>;
+}
+
 export interface ActivityContext {
   /** Live position on a planet (Status.json), for exobiology sample spacing. */
   position?: { lat: number; lon: number };
+  /** The last carrier market read from Market.json, by market id (for the history replay). */
+  carrierMarket?: (marketId: number) => CarrierStockSeen | undefined;
 }
 
 /**

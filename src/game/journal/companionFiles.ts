@@ -19,7 +19,12 @@ export function applyCargoFile(state: CommanderState, file: Json): boolean {
 }
 
 export interface CarrierMarketSnapshot {
+  /** Last change: the Market.json read, or a trade made since. */
   at: string;
+  /** When Market.json was read (its timestamp, as the Market journal event's). */
+  marketAt: string;
+  /** The sell orders' stock when Market.json was read, untouched by later trades (`selling` follows them). */
+  stockAtRead: Record<string, { label: string; count: number }>;
   station: string;
   selling: Record<string, { label: string; count: number; price?: number }>;
   buying: Record<string, { label: string; count: number; price?: number }>;
@@ -38,17 +43,22 @@ export function applyMarketFile(state: CommanderState, file: Json): boolean {
   if (!file || !Array.isArray(file.Items) || !/carrier/i.test(String(file.StationType ?? ""))) return false;
   const id = Number(file.MarketID);
   if (!id) return false;
+  const readAt = String(file.timestamp ?? new Date().toISOString());
   const snap: CarrierMarketSnapshot = {
-    at: String(file.timestamp ?? new Date().toISOString()),
+    at: readAt,
+    marketAt: readAt,
     station: String(file.StationName ?? ""),
+    stockAtRead: {},
     selling: {},
     buying: {},
   };
   for (const it of file.Items) {
     const key = commodityKey(it.Name);
     const label = String(it.Name_Localised ?? key);
-    if (Number(it.Stock) > 0)
+    if (Number(it.Stock) > 0) {
       snap.selling[key] = { label, count: Number(it.Stock), price: Number(it.BuyPrice) || undefined };
+      snap.stockAtRead[key] = { label, count: Number(it.Stock) };
+    }
     if (Number(it.Demand) > 0)
       snap.buying[key] = { label, count: Number(it.Demand), price: Number(it.SellPrice) || undefined };
   }

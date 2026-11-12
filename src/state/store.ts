@@ -39,6 +39,8 @@ export interface Settings {
   debugLog: boolean;
   /** Clicking a system name also opens Navigation with it as destination. */
   systemOpensNav: boolean;
+  /** Colonisation page: also count and show your squadron's fleet carrier hold. */
+  colonisationSquadronCarrier: boolean;
   /** Where "Export my ship" opens the current ship (Settings → Preferences). */
   buildSite: "edsy" | "coriolis";
   /** How to start the game from EDCH. */
@@ -257,6 +259,7 @@ const DEFAULT_SETTINGS: Settings = {
   theme: DEFAULT_THEME,
   debugLog: false,
   systemOpensNav: false,
+  colonisationSquadronCarrier: false,
   buildSite: "edsy",
   gameLaunch: { method: "steam", path: "" },
   closeBehavior: "quit",

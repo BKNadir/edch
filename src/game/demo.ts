@@ -389,6 +389,21 @@ export const DEMO_EVENTS: Record<string, unknown>[] = [
     SpaceUsage: { TotalCapacity: 25000, Cargo: 3650 },
   },
   { timestamp: at(125), event: "Undocked", StationName: "NADIR'S HOPE X9Z-41K", MarketID: 3709999999 },
+  // Demo squadron carrier: some polymers left there (shown when the Colonisation page's box is ticked).
+  {
+    timestamp: at(125),
+    event: "Docked",
+    StationName: "ORBITAL GUILD K2D-7QF",
+    StarSystem: "Col 285 Sector AB-C c13-4",
+    MarketID: 3709999998,
+    StationType: "SquadronCarrier",
+  },
+  {
+    timestamp: at(125),
+    event: "CargoTransfer",
+    Transfers: [{ Type: "polymers", Type_Localised: "Polymers", Count: 400, Direction: "tocarrier" }],
+  },
+  { timestamp: at(125), event: "Undocked", StationName: "ORBITAL GUILD K2D-7QF", MarketID: 3709999998 },
   {
     timestamp: at(126),
     event: "CommunityGoal",

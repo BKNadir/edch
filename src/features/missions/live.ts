@@ -264,6 +264,8 @@ export async function loadHistory(dir: string) {
   }
   log.info("history", `${lines.length} archived journal line(s) read`);
   const st = emptyActivity();
+  // The carriers' last read markets: their stock is applied to the holds when the replay reaches them.
+  const carrierMarket = (marketId: number) => store.state.cmdr.carrierMarkets?.[marketId];
   let last = "";
   for (const line of lines) {
     let ev: Json;
@@ -272,7 +274,7 @@ export async function loadHistory(dir: string) {
     } catch {
       continue;
     }
-    applyActivity(st, ev);
+    applyActivity(st, ev, { carrierMarket });
     if (ev.timestamp && ev.timestamp >= last) {
       if (ev.timestamp > last) historyEdge.clear();
       last = ev.timestamp;

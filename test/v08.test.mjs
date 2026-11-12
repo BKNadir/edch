@@ -99,7 +99,7 @@ test("a shared mission accepted by a wingmate is linked by its id and shows the 
   assert.equal(rows[0].mission.delivered, 784);
 });
 
-test("a fleet carrier's hold is rebuilt from transfers, fuel deposits and carrier market trades", () => {
+test("a fleet carrier's hold is rebuilt from transfers and carrier market trades", () => {
   // Real lines from a journal (own carrier H7N-WVK).
   const st = emptyActivity();
   const lines = [
@@ -168,7 +168,8 @@ test("a fleet carrier's hold is rebuilt from transfers, fuel deposits and carrie
   assert.equal(c.total, 2486);
   assert.equal(c.items.powertransferconduits.count, 17);
   assert.equal(c.items.powerconverter.count, 10);
-  assert.equal(c.items.tritium.count, 586);
+  // The tritium donated for fuel comes from the ship's hold: the carrier's hold keeps its 786 t.
+  assert.equal(c.items.tritium.count, 786);
   assert.equal(c.items.steel.count, 100, "a transfer after undocking doesn't count");
 });
 

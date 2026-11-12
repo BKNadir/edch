@@ -2870,6 +2870,13 @@ div + .card {
 .depot-table tr.done td {
   color: var(--muted);
 }
+/* Colonisation page head: the squadron carrier and finished sites boxes, side by side. */
+.view-head-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  align-items: center;
+}
 .goal {
   display: grid;
   gap: 6px;

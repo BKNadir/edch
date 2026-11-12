@@ -8,6 +8,7 @@ import { eventDetail, log } from "../platform/logger.js";
 import { applyCargoFile, applyMarketFile, applyStatus } from "../game/journal/companionFiles.js";
 import { applyLines, applyLocker } from "../game/journal/events.js";
 import { emptyState, type Json } from "../game/journal/state.js";
+import { noteCarrierStock } from "../game/activity/carriers.js";
 import type { Store } from "../state/store.js";
 import { clearAlert, goTo, inStartup, startupAlert } from "../ui/alerts.js";
 import type { Uploaders } from "../services/sync/index.js";
@@ -60,6 +61,18 @@ function readCompanionFile(store: Store, name: string, apply: (json: Json) => bo
 }
 
 /** Starts the journal feed. */
+/**
+ * A carrier's Market.json was read: keep its market, and raise the estimate of its hold to the
+ * stock it offers (what it sells is in its hold). Returns true when the market was kept.
+ */
+function readCarrierMarket(store: Store, file: Json): boolean {
+  if (!applyMarketFile(store.state.cmdr, file)) return false;
+  const marketId = Number(file.MarketID);
+  const snapshot = store.state.cmdr.carrierMarkets?.[marketId];
+  if (snapshot) noteCarrierStock(store.state.activity, marketId, snapshot);
+  return true;
+}
+
 export async function startJournalFeed(store: Store, sync: Uploaders, capacityOf: CapacityOf) {
   const watch = (w: WatchStatus) => setWatch(store, w);
   let saveTimer: number | undefined;
@@ -88,7 +101,7 @@ export async function startJournalFeed(store: Store, sync: Uploaders, capacityOf
       }
       // The Market event's goods are in Market.json: read it at once (a carrier's market is live data).
       if (!b.replay && events.some((e) => e.event === "Market")) {
-        readCompanionFile(store, "Market.json", (json) => applyMarketFile(store.state.cmdr, json));
+        readCompanionFile(store, "Market.json", (json) => readCarrierMarket(store, json));
       }
       // ShipLocker events often only say "look at ShipLocker.json".
       if (events.some((e) => e.event === "ShipLocker" && !e.Items)) {
@@ -110,7 +123,7 @@ export async function startJournalFeed(store: Store, sync: Uploaders, capacityOf
           return;
         }
         if (a.name === "Market.json") {
-          if (applyMarketFile(store.state.cmdr, JSON.parse(a.content))) {
+          if (readCarrierMarket(store, JSON.parse(a.content))) {
             log.debug("carrier", "Carrier market read from Market.json");
             store.notify();
           }

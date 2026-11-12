@@ -1,7 +1,16 @@
 // Fleet carriers' holds (rebuilt from transfers, market trades and stats, since the journal
-// never lists a carrier's cargo) and the trade tallies of the session.
+// never lists a carrier's cargo) and the trade tallies of the session. The carrier's market
+// (Market.json) gives a floor: a commodity it sells is in its hold, at least as much as the stock
+// offered. That floor is applied when the market was read, so later transfers count from it.
 
-import { num, symbolId, type CarrierHold, type EventHandlers } from "./state.js";
+import {
+  num,
+  symbolId,
+  type ActivityState,
+  type CarrierHold,
+  type CarrierStockSeen,
+  type EventHandlers,
+} from "./state.js";
 
 /** Adds (or removes, with a negative delta) a commodity in a carrier's hold. */
 export function carrierAdd(c: CarrierHold, type: unknown, label: unknown, delta: number) {
@@ -13,8 +22,34 @@ export function carrierAdd(c: CarrierHold, type: unknown, label: unknown, delta:
   if (!item.count) delete c.items[id];
 }
 
+/**
+ * The carrier's market was read (Market.json): each commodity it sells is in its hold, at least
+ * as much as the stock offered. Returns true when the estimate changed.
+ */
+export function noteCarrierStock(st: ActivityState, marketId: number, seen: CarrierStockSeen): boolean {
+  const carrier = st.carriers[marketId];
+  if (!carrier) return false;
+  let changed = false;
+  for (const [id, line] of Object.entries(seen.stockAtRead ?? {})) {
+    const known = carrier.items[id]?.count ?? 0;
+    if (line.count <= known) continue;
+    carrierAdd(carrier, id, line.label, line.count - known);
+    changed = true;
+  }
+  if (changed) carrier.updated = seen.marketAt;
+  return changed;
+}
+
 /** Journal events of this domain. */
 export const CARRIERS_EVENTS: EventHandlers = {
+  // The market screen of a carrier: replaying the history, the floor its last read market gives
+  // is applied at that very moment (live, the app applies it once Market.json is read).
+  Market: (st, ev, at, ctx) => {
+    const marketId = Number(ev.MarketID);
+    const seen = ctx.carrierMarket?.(marketId);
+    if (!seen || seen.marketAt !== at) return false;
+    return noteCarrierStock(st, marketId, seen);
+  },
   CargoTransfer: (st, ev, at) => {
     const c = st.docked?.carrier ? st.carriers[st.docked.marketId] : undefined;
     if (!c) return false;
@@ -50,14 +85,8 @@ export const CARRIERS_EVENTS: EventHandlers = {
     c.updated = at;
     return true;
   },
-  CarrierDepositFuel: (st, ev, at) => {
-    // Tritium from the carrier's hold into its tank.
-    const c = st.carriers[Number(ev.CarrierID)];
-    if (!c) return false;
-    carrierAdd(c, "tritium", "Tritium", -(num(ev.Amount) ?? 0));
-    c.updated = at;
-    return true;
-  },
+  // CarrierDepositFuel isn't handled: the tritium donated comes from the ship's hold, not the
+  // carrier's (the ship's Cargo drops by the amount), so the carrier's hold doesn't change.
   MarketBuy: (st, ev, at) => {
     const c = st.carriers[Number(ev.MarketID)];
     if (!c) return false;

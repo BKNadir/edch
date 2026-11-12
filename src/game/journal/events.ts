@@ -128,8 +128,11 @@ export function applyEvent(state: CommanderState, ev: Json, cap?: CapacityOf): b
 
     case "Cargo":
       if (Array.isArray(ev.Inventory) && (ev.Vessel ?? "Ship") === "Ship") {
-        state.cargo = {};
-        for (const c of ev.Inventory) state.cargo[normalizedName(c.Name)] = Number(c.Count ?? 0);
+        // A commodity can have several lines (mission cargo, stolen goods): add them up.
+        const cargo: Record<string, number> = {};
+        for (const c of ev.Inventory)
+          cargo[normalizedName(c.Name)] = (cargo[normalizedName(c.Name)] ?? 0) + Number(c.Count ?? 0);
+        state.cargo = cargo;
         return true;
       }
       return false;
