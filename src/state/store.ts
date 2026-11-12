@@ -3,7 +3,7 @@
 
 import { log } from "../platform/logger.js";
 import { type ThemeSettings } from "./themeSettings.js";
-import { DEFAULT_THEME } from "./themeSettings.js";
+import { DEFAULT_THEME, validTheme } from "./themeSettings.js";
 import { emptyActivity, type ActivityState } from "../game/activity/state.js";
 import type { Game } from "../game/data.js";
 import { emptyState, type CommanderState } from "../game/journal/state.js";
@@ -228,6 +228,57 @@ export interface WishItem {
   shipType?: string;
 }
 
+/** More lines than anyone plans: a list that big didn't come from EDCH. */
+const MAX_WISH_ITEMS = 2_000;
+
+/** A number within [min, max], else undefined. */
+const numberWithin = (value: unknown, min: number, max: number) =>
+  typeof value === "number" && Number.isFinite(value) && value >= min && value <= max ? value : undefined;
+
+/** A string of at most `max` characters, else undefined. */
+const shortText = (value: unknown, max: number) =>
+  typeof value === "string" && value.length <= max ? value : undefined;
+
+/**
+ * The valid lines of a wishlist that comes from outside (a phone, a saved list): each field of the
+ * expected type and size; a line with a wrong required field is dropped, a wrong optional field
+ * is left out.
+ */
+export function validWishItems(value: unknown): WishItem[] {
+  if (!Array.isArray(value)) return [];
+  const items: WishItem[] = [];
+  for (const raw of value.slice(0, MAX_WISH_ITEMS)) {
+    if (!raw || typeof raw !== "object") continue;
+    const line = raw as Record<string, unknown>;
+    const id = shortText(line.id, 80);
+    const bp = shortText(line.bp, 300);
+    const gradeFrom = numberWithin(line.gradeFrom, 0, 10);
+    const gradeTo = numberWithin(line.gradeTo, 0, 10);
+    const count = numberWithin(line.count, 0, 10_000);
+    if (!id || !bp || gradeFrom === undefined || gradeTo === undefined || count === undefined) continue;
+    const rolls: Record<number, number> = {};
+    if (line.rolls && typeof line.rolls === "object" && !Array.isArray(line.rolls)) {
+      for (const [grade, times] of Object.entries(line.rolls as Record<string, unknown>)) {
+        const rollCount = numberWithin(times, 0, 1_000);
+        if (numberWithin(Number(grade), 0, 10) !== undefined && rollCount !== undefined)
+          rolls[Number(grade)] = rollCount;
+      }
+    }
+    const item: WishItem = { id, bp, gradeFrom, gradeTo, rolls, count };
+    const note = shortText(line.note, 1_000);
+    if (note !== undefined) item.note = note;
+    if (Array.isArray(line.slots)) {
+      item.slots = line.slots
+        .filter((slot): slot is string => typeof slot === "string" && slot.length <= 64)
+        .slice(0, 64);
+    }
+    const shipType = shortText(line.shipType, 64);
+    if (shipType !== undefined) item.shipType = shipType;
+    items.push(item);
+  }
+  return items;
+}
+
 export interface AppState {
   cmdr: CommanderState;
   /** Missions, colonisation, goals, exploration… rebuilt from the journal archive. */
@@ -299,11 +350,19 @@ function loadArray<T>(key: string): T[] {
   }
 }
 
+/** Whether a save already failed: reported once, not on every change. */
+let saveFailureLogged = false;
+
 function save(key: string, value: unknown) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    /* storage unavailable: keep working in memory */
+  } catch (error) {
+    // Storage full or unavailable: EDCH keeps working in memory, but the change may be lost on
+    // restart. Logged once, with the error's kind only (never the data).
+    if (!saveFailureLogged) {
+      saveFailureLogged = true;
+      log.warn("store", `Settings not saved (${(error as Error)?.name ?? "error"}): kept until EDCH closes`);
+    }
   }
 }
 
@@ -329,11 +388,11 @@ export class Store {
           notify: { ...DEFAULT_NOTIFY, ...(loaded.notify ?? {}) },
           wing: { ...DEFAULT_WING, ...(loaded.wing ?? {}) },
           mining: { ...DEFAULT_MINING, ...(loaded.mining ?? {}) },
-          theme: { ...DEFAULT_THEME, ...(loaded.theme ?? {}) },
+          theme: { ...DEFAULT_THEME, ...validTheme(loaded.theme) },
           engineers: { ...DEFAULT_ENGINEER_SETTINGS, ...(loaded.engineers ?? {}) },
         };
       })(),
-      wishlist: loadArray<WishItem>("edc.wishlist"),
+      wishlist: validWishItems(loadArray<unknown>("edc.wishlist")),
       view: (() => {
         try {
           return localStorage.getItem("edc.view") ?? "materials";

@@ -57,9 +57,22 @@ fn options_root() -> Result<PathBuf, String> {
         .join("Options"))
 }
 
-/// Only plain file names with the extensions the game uses; no paths, no tricks.
+/// Names Windows keeps for devices: "CON.binds" would open the console, not a file.
+const RESERVED_NAMES: [&str; 22] = [
+    "con", "prn", "aux", "nul", "com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9", "lpt1", "lpt2",
+    "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9",
+];
+
+/// Only plain file names with the extensions the game uses; no paths, no tricks (no folder, no
+/// "..", no stream ("x.binds:y"), no character Windows refuses, no device name, no hidden file).
 fn allowed_option_file(folder: &str, name: &str) -> bool {
-    if name.is_empty() || name.contains('/') || name.contains('\\') || name.contains("..") {
+    let plain = !name.is_empty()
+        && name.len() <= 200
+        && !name.starts_with('.')
+        && !name.contains("..")
+        && !name.chars().any(|c| c.is_control() || "/\\:*?\"<>|".contains(c));
+    let stem = name.split('.').next().unwrap_or_default().trim().to_lowercase();
+    if !plain || RESERVED_NAMES.contains(&stem.as_str()) {
         return false;
     }
     let lower = name.to_lowercase();
@@ -68,6 +81,31 @@ fn allowed_option_file(folder: &str, name: &str) -> bool {
         "Graphics" => lower.ends_with(".xml"),
         _ => false,
     }
+}
+
+/// An imported zip is a few hundred kilobytes; these limits keep a broken or hostile archive
+/// (huge, or that expands enormously) from filling the memory or the disk.
+const MAX_IMPORT_ZIP_BYTES: usize = 32 * 1024 * 1024;
+const MAX_IMPORT_ENTRIES: usize = 2_000;
+const MAX_IMPORT_FILES: usize = 300;
+const MAX_OPTION_FILE_BYTES: u64 = 4 * 1024 * 1024;
+const MAX_IMPORT_TOTAL_BYTES: u64 = 32 * 1024 * 1024;
+
+/// Whether `bytes` look like an option file: text (UTF-8, optionally with a BOM, no NUL byte), and
+/// XML for .binds and .xml files. A .start file holds preset names, one per line.
+fn looks_like_option_file(name: &str, bytes: &[u8]) -> bool {
+    let Ok(text) = std::str::from_utf8(bytes) else {
+        return false;
+    };
+    if text.contains('\0') {
+        return false;
+    }
+    let text = text.trim_start_matches('\u{feff}').trim_start();
+    let lower = name.to_lowercase();
+    if lower.ends_with(".binds") || lower.ends_with(".xml") {
+        return text.starts_with('<');
+    }
+    true
 }
 
 fn unix_secs(t: SystemTime) -> u64 {
@@ -167,17 +205,25 @@ pub fn export_config(include_graphics: bool) -> Result<String, String> {
     Ok(target.to_string_lossy().to_string())
 }
 
-/// Restores a zip made by export_config (or any zip with Bindings/ and Graphics/ entries).
-/// The current configuration is always backed up first.
-#[tauri::command]
-pub fn import_config(data: Vec<u8>) -> Result<ImportReport, String> {
+/// An option file found in an imported zip: its folder ("Bindings"), name and content.
+type ImportedFile = (String, String, Vec<u8>);
+
+/// Reads and checks an imported zip without writing anything: the option files it holds, and the
+/// entries left out (other files, duplicates, files too big, or that aren't option files).
+fn read_import_archive(data: Vec<u8>) -> Result<(Vec<ImportedFile>, Vec<String>), String> {
     use std::io::Read as _;
+    if data.len() > MAX_IMPORT_ZIP_BYTES {
+        return Err("zipTooLarge".into());
+    }
     let mut archive = zip::ZipArchive::new(std::io::Cursor::new(data)).map_err(|e| format!("unreadableZip: {e}"))?;
-    // Validate everything before touching the game's files.
-    let mut files: Vec<(String, String, Vec<u8>)> = Vec::new();
+    if archive.len() > MAX_IMPORT_ENTRIES {
+        return Err("zipTooLarge".into());
+    }
+    let mut files: Vec<ImportedFile> = Vec::new();
     let mut skipped = Vec::new();
+    let mut total: u64 = 0;
     for i in 0..archive.len() {
-        let mut entry = archive.by_index(i).map_err(|e| e.to_string())?;
+        let entry = archive.by_index(i).map_err(|e| format!("unreadableZip: {e}"))?;
         if entry.is_dir() {
             continue;
         }
@@ -189,30 +235,81 @@ pub fn import_config(data: Vec<u8>) -> Result<ImportReport, String> {
             .rev()
             .find(|w| OPTION_FOLDERS.contains(&w[0]))
             .map(|w| (w[0].to_string(), w[1].to_string()));
-        match pair {
-            Some((folder, name)) if parts.last() == Some(&name.as_str()) && allowed_option_file(&folder, &name) => {
-                let mut bytes = Vec::new();
-                entry.read_to_end(&mut bytes).map_err(|e| e.to_string())?;
-                files.push((folder, name, bytes));
-            }
-            _ => skipped.push(full),
+        let Some((folder, name)) =
+            pair.filter(|(folder, name)| parts.last() == Some(&name.as_str()) && allowed_option_file(folder, name))
+        else {
+            skipped.push(full);
+            continue;
+        };
+        // The same file twice (in two folders of the archive): the first one wins.
+        let duplicate = files
+            .iter()
+            .any(|(f, n, _)| *f == folder && n.eq_ignore_ascii_case(&name));
+        if duplicate || entry.size() > MAX_OPTION_FILE_BYTES {
+            skipped.push(full);
+            continue;
         }
+        // The size written in the archive can lie: the reading itself is capped.
+        let mut bytes = Vec::new();
+        entry
+            .take(MAX_OPTION_FILE_BYTES + 1)
+            .read_to_end(&mut bytes)
+            .map_err(|e| format!("unreadableZip: {e}"))?;
+        total += bytes.len() as u64;
+        if total > MAX_IMPORT_TOTAL_BYTES || files.len() >= MAX_IMPORT_FILES {
+            return Err("zipTooLarge".into());
+        }
+        if bytes.len() as u64 > MAX_OPTION_FILE_BYTES || !looks_like_option_file(&name, &bytes) {
+            skipped.push(full);
+            continue;
+        }
+        files.push((folder, name, bytes));
     }
     if files.is_empty() {
         return Err("zipWithoutSettings".into());
     }
+    Ok((files, skipped))
+}
+
+/// Restores a zip made by export_config (or any zip with Bindings/ and Graphics/ entries).
+/// Everything is checked before anything is written (sizes, names, contents, duplicates), the
+/// current configuration is backed up, and the files are written aside first then moved in place:
+/// a failure on the way leaves the configuration as it was.
+#[tauri::command]
+pub fn import_config(data: Vec<u8>) -> Result<ImportReport, String> {
+    let (files, skipped) = read_import_archive(data)?;
     let backup = documents_dir()
         .join("sauvegardes")
         .join(format!("avant-import-{}.zip", unix_secs(SystemTime::now())));
     write_zip(&backup, &OPTION_FOLDERS)?;
 
+    // Every file is written aside first; only when all of them are there are they moved in place.
     let root = options_root()?;
-    let mut written = Vec::new();
+    let mut staged: Vec<(PathBuf, PathBuf, String)> = Vec::new();
+    let remove_staged = |staged: &[(PathBuf, PathBuf, String)]| {
+        for (temporary, _, _) in staged {
+            let _ = fs::remove_file(temporary);
+        }
+    };
     for (folder, name, bytes) in files {
         let dir = root.join(&folder);
-        fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
-        fs::write(dir.join(&name), bytes).map_err(|e| e.to_string())?;
-        written.push(format!("{folder}/{name}"));
+        let temporary = dir.join(format!("{name}.edch-import"));
+        let written = fs::create_dir_all(&dir).and_then(|_| fs::write(&temporary, bytes));
+        if let Err(error) = written {
+            let _ = fs::remove_file(&temporary);
+            remove_staged(&staged);
+            return Err(error.to_string());
+        }
+        staged.push((temporary, dir.join(&name), format!("{folder}/{name}")));
+    }
+    let mut written = Vec::new();
+    for (index, (temporary, target, label)) in staged.iter().enumerate() {
+        if fs::rename(temporary, target).is_err() {
+            remove_staged(&staged[index..]);
+            // Some files were already replaced: the backup made above holds the previous ones.
+            return Err(format!("importIncomplete: {}", backup.to_string_lossy()));
+        }
+        written.push(label.clone());
     }
     Ok(ImportReport {
         written,
@@ -243,7 +340,11 @@ pub fn save_edch_preset(name: String, content: String, create: bool) -> Result<S
     let valid_name = allowed_option_file("Bindings", &name)
         && name.to_lowercase().ends_with(".binds")
         && preset.ends_with(EDCH_PRESET_SUFFIX);
-    if !valid_name || !content.contains(&format!("PresetName=\"{preset}\"")) || !content.contains("<Root") {
+    let valid_content = content.len() as u64 <= MAX_OPTION_FILE_BYTES
+        && looks_like_option_file(&name, content.as_bytes())
+        && content.contains(&format!("PresetName=\"{preset}\""))
+        && content.contains("<Root");
+    if !valid_name || !valid_content {
         return Err("presetRefused".into());
     }
     let folder = options_root()?.join("Bindings");
@@ -325,4 +426,85 @@ pub fn read_builtin_preset(name: String, launcher_path: String) -> Result<String
     Ok(String::from_utf8_lossy(&bytes)
         .trim_start_matches('\u{feff}')
         .to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{allowed_option_file, looks_like_option_file, read_import_archive, MAX_OPTION_FILE_BYTES};
+    use std::io::Write as _;
+
+    /// A zip holding `entries` (name, content), compressed.
+    fn zip_of(entries: &[(&str, Vec<u8>)]) -> Vec<u8> {
+        let mut zip = zip::ZipWriter::new(std::io::Cursor::new(Vec::new()));
+        let options = zip::write::SimpleFileOptions::default().compression_method(zip::CompressionMethod::Deflated);
+        for (name, content) in entries {
+            zip.start_file(*name, options).unwrap();
+            zip.write_all(content).unwrap();
+        }
+        zip.finish().unwrap().into_inner()
+    }
+
+    #[test]
+    fn hostile_archives() {
+        let binds = b"\xef\xbb\xbf<?xml version=\"1.0\"?><Root PresetName=\"Custom\"/>".to_vec();
+        // A file that expands far beyond the limit (a "zip bomb") is left out, not read whole.
+        let bomb = vec![b'<'; (MAX_OPTION_FILE_BYTES * 2) as usize];
+        let data = zip_of(&[
+            ("Options/Bindings/Custom.4.2.binds", binds.clone()),
+            ("Bindings/Custom.4.2.binds", binds.clone()),
+            ("Bindings/Huge.4.2.binds", bomb),
+            ("Bindings/Program.4.2.binds", b"MZ\x90\x00binary".to_vec()),
+            ("Bindings/../../evil.binds", binds.clone()),
+            ("Graphics/readme.txt", b"hello".to_vec()),
+        ]);
+        let (files, skipped) = read_import_archive(data).unwrap();
+        assert_eq!(files.len(), 1);
+        assert_eq!(
+            (files[0].0.as_str(), files[0].1.as_str()),
+            ("Bindings", "Custom.4.2.binds")
+        );
+        assert_eq!(skipped.len(), 5);
+        // Nothing usable, or not a zip at all: refused.
+        assert_eq!(
+            read_import_archive(zip_of(&[("x.txt", b"x".to_vec())])).unwrap_err(),
+            "zipWithoutSettings"
+        );
+        assert!(read_import_archive(b"not a zip".to_vec())
+            .unwrap_err()
+            .starts_with("unreadableZip"));
+    }
+
+    #[test]
+    fn option_file_names() {
+        assert!(allowed_option_file("Bindings", "Custom.4.2.binds"));
+        assert!(allowed_option_file("Bindings", "StartPreset.4.start"));
+        assert!(allowed_option_file("Graphics", "Settings.xml"));
+        for refused in [
+            "../x.binds",
+            "a/b.binds",
+            "a\\b.binds",
+            "x.binds:stream",
+            "CON.binds",
+            "lpt1.4.binds",
+            ".hidden.binds",
+            "x.exe",
+            "",
+        ] {
+            assert!(!allowed_option_file("Bindings", refused), "{refused}");
+        }
+        assert!(!allowed_option_file("Graphics", "x.binds"));
+        assert!(!allowed_option_file("Other", "x.binds"));
+    }
+
+    #[test]
+    fn option_file_contents() {
+        assert!(looks_like_option_file(
+            "x.binds",
+            "\u{feff}<?xml version=\"1.0\"?><Root/>".as_bytes()
+        ));
+        assert!(looks_like_option_file("x.start", b"Custom\nCustom\n"));
+        assert!(!looks_like_option_file("x.binds", b"MZ\x90\x00"));
+        assert!(!looks_like_option_file("x.binds", b"not xml"));
+        assert!(!looks_like_option_file("x.start", b"a\0b"));
+    }
 }

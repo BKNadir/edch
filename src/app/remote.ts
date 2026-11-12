@@ -8,32 +8,14 @@ import { log } from "../platform/logger.js";
 import { emptyActivity } from "../game/activity/state.js";
 import { unsoldSummary } from "../game/activity/exploration.js";
 import { emptyState } from "../game/journal/state.js";
-import { DEFAULT_THEME } from "../state/themeSettings.js";
-import type { Settings, Store } from "../state/store.js";
+import { DEFAULT_THEME, validTheme } from "../state/themeSettings.js";
+import { PHONE_SETTINGS, validPhoneSettings } from "../state/phoneSettings.js";
+import { validWishItems, type Settings, type Store } from "../state/store.js";
 import { goTo, startupAlert } from "../ui/alerts.js";
 import { startGame } from "../ui/desktop.js";
 import { toast } from "../ui/dom.js";
 import { publishNow, remoteRunning, setRemotePublisher, startRemote } from "../services/remoteServer.js";
 import { wingView } from "../features/missions/live.js";
-
-/** Settings a phone can change (display only: never keys, paths or the PC's behaviour). */
-const PHONE_SETTINGS = [
-  "theme",
-  "hiddenViews",
-  "uiScale",
-  "startView",
-  "systemOpensNav",
-  "notify",
-  "mining",
-  "copyOnPhone",
-  "kbLayout",
-  "kbFormat",
-  "engineers",
-  "navAutoCopy",
-  "navNotifyCopy",
-  "copyOnGameFocus",
-  "navExact",
-] as const;
 
 function snapshot(store: Store): string {
   const s = store.state;
@@ -74,19 +56,19 @@ export async function setupRemoteHost(store: Store) {
   });
   await onRemoteAction((action) => {
     log.info("remote", `Phone action: ${String(action?.type ?? "?")}`);
-    if (action?.type === "wishlist" && Array.isArray(action.items)) store.setWishlist(action.items, true);
+    if (action?.type === "wishlist" && Array.isArray(action.items))
+      store.setWishlist(validWishItems(action.items), true);
     // A system clicked on the phone: the game runs here, so its clipboard is the one that matters.
     if (action?.type === "clipboard" && typeof action.text === "string" && action.text.length <= 2000) {
       clipboardWrite(action.text).catch((e) => log.warn("remote", `Clipboard: ${String((e as Error)?.message ?? e)}`));
     }
     if (action?.type === "theme" && action.theme && typeof action.theme === "object") {
-      store.updateSettings({ theme: { ...DEFAULT_THEME, ...store.state.settings.theme, ...action.theme } });
+      store.updateSettings({ theme: { ...DEFAULT_THEME, ...store.state.settings.theme, ...validTheme(action.theme) } });
     }
     // Display settings changed on the phone: the PC keeps them, and every screen follows.
     if (action?.type === "settings" && action.patch && typeof action.patch === "object") {
-      const patch: Record<string, unknown> = {};
-      for (const k of PHONE_SETTINGS) if (k in action.patch) patch[k] = action.patch[k];
-      if (Object.keys(patch).length) store.updateSettings(patch as Partial<Settings>);
+      const patch = validPhoneSettings(action.patch as Record<string, unknown>, store.state.settings);
+      if (Object.keys(patch).length) store.updateSettings(patch);
     }
     if (action?.type === "launch") void startGame();
   });

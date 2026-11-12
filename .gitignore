@@ -9,3 +9,7 @@ package-lock.json
 shots/
 # Written by CI before each build (the release tag, see src/platform/version.ts).
 public/build-info.json
+
+# Python bytecode (generated)
+__pycache__/
+*.pyc

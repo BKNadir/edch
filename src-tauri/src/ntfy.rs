@@ -29,6 +29,9 @@ struct NtfyState {
     message: Option<String>,
 }
 
+/// Longest ntfy line passed on to the UI (a wing message is about a kilobyte).
+const MAX_LINE_BYTES: usize = 64 * 1024;
+
 fn valid_topic(topic: &str) -> bool {
     !topic.is_empty() && topic.len() <= 64 && topic.chars().all(|c| c.is_ascii_alphanumeric() || c == '_' || c == '-')
 }
@@ -65,7 +68,8 @@ fn stream(app: AppHandle, topic: String, mut since: String, generation: u64) {
                         return;
                     }
                     let Ok(line) = line else { break };
-                    if line.trim().is_empty() {
+                    // ntfy messages are at most a few kilobytes: anything bigger isn't EDCH's.
+                    if line.trim().is_empty() || line.len() > MAX_LINE_BYTES {
                         continue;
                     }
                     // Remember where we are, to resume there after a reconnection.

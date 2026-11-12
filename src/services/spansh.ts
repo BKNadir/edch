@@ -31,6 +31,18 @@ export interface FinderResult {
 
 const cache = new Map<string, { at: number; value: FinderResult }>();
 const TTL = 10 * 60 * 1000;
+/** Searches kept at most: enough for going back and forth, without growing over a long session. */
+const CACHE_SIZE = 50;
+
+/** Keeps `value` for `key`, dropping expired searches and, past CACHE_SIZE, the oldest ones. */
+function remember(key: string, value: FinderResult) {
+  const now = Date.now();
+  for (const [oldKey, entry] of cache) if (now - entry.at >= TTL) cache.delete(oldKey);
+  cache.delete(key);
+  cache.set(key, { at: now, value });
+  // A Map keeps the order of insertion: the first keys are the oldest.
+  while (cache.size > CACHE_SIZE) cache.delete(cache.keys().next().value!);
+}
 
 const num = (n: unknown) => (typeof n === "number" ? n : Number(n ?? NaN));
 const oneDecimal = (n: number) => n.toLocaleString(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -202,7 +214,7 @@ export async function runFinder(f: Finder, ref: Reference, s: Settings, force = 
     } else rows = bodies;
   }
   const value = { rows, total: num(data?.count) || rows.length };
-  cache.set(cacheKey, { at: Date.now(), value });
+  remember(cacheKey, value);
   return value;
 }
 

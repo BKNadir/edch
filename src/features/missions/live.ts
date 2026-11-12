@@ -133,7 +133,7 @@ export async function syncWing() {
       if (store.state.settings.wing.notifyAccept) notify(t("live.accepted", { by, title: row.mission.title }));
     },
     left: (name, reason) => {
-      log.info("wing", `${name} left (${reason ?? "?"})`);
+      log.info("wing", `A wing member left (${reason ?? "?"})`);
       if (!store.state.settings.wing.notifyLeave) return;
       if (reason === "closed") notify(t("live.closedEdch", { name }));
       else if (reason === "wing") notify(t("live.leftWingGame", { name }));

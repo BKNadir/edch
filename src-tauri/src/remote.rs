@@ -21,6 +21,38 @@ use tiny_http::{Header, Method, Request, Response, Server, StatusCode};
 
 const BODY_LIMIT: u64 = 4 << 20;
 const LONG_POLL: Duration = Duration::from_secs(25);
+/// Requests handled at once (each long-poll holds one for up to LONG_POLL). A few phones need a
+/// handful; beyond this, new requests are answered "busy" at once instead of piling up threads.
+const MAX_ACTIVE_REQUESTS: usize = 48;
+
+/// Requests being handled right now.
+static ACTIVE_REQUESTS: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+
+/// Counts one request as active for as long as it lives.
+struct ActiveRequest;
+
+impl ActiveRequest {
+    /// None when MAX_ACTIVE_REQUESTS are already being handled.
+    fn start() -> Option<ActiveRequest> {
+        use std::sync::atomic::Ordering;
+        let mut current = ACTIVE_REQUESTS.load(Ordering::Relaxed);
+        loop {
+            if current >= MAX_ACTIVE_REQUESTS {
+                return None;
+            }
+            match ACTIVE_REQUESTS.compare_exchange(current, current + 1, Ordering::AcqRel, Ordering::Relaxed) {
+                Ok(_) => return Some(ActiveRequest),
+                Err(seen) => current = seen,
+            }
+        }
+    }
+}
+
+impl Drop for ActiveRequest {
+    fn drop(&mut self) {
+        ACTIVE_REQUESTS.fetch_sub(1, std::sync::atomic::Ordering::AcqRel);
+    }
+}
 
 #[derive(Default)]
 struct Shared {
@@ -613,9 +645,22 @@ pub fn remote_start(
         }
         match server.recv() {
             Ok(req) => {
+                let Some(active) = ActiveRequest::start() else {
+                    respond(
+                        req,
+                        503,
+                        "text/plain",
+                        b"Busy".to_vec(),
+                        &[("Retry-After", "5".to_string())],
+                    );
+                    continue;
+                };
                 let app = app.clone();
                 let shared = loop_shared.clone();
-                thread::spawn(move || handle(app, shared, req));
+                thread::spawn(move || {
+                    let _active = active;
+                    handle(app, shared, req)
+                });
             }
             Err(_) => break,
         }

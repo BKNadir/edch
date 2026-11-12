@@ -36,6 +36,9 @@ struct Progress {
     total: u64,
 }
 
+/// An installer is a few megabytes: anything far bigger isn't one of EDCH's.
+const MAX_INSTALLER_BYTES: u64 = 512 * 1024 * 1024;
+
 fn agent() -> ureq::Agent {
     ureq::AgentBuilder::new()
         .timeout_connect(Duration::from_secs(15))
@@ -163,9 +166,21 @@ pub fn update_check(pre_releases: bool, installed: Option<String>) -> Result<Opt
 fn download(app: &AppHandle, info: &UpdateInfo) -> Result<PathBuf, String> {
     let prefix = format!("https://github.com/{REPO}/releases/download/");
     if !info.url.starts_with(&prefix) {
-        return Err(format!("addressRefused: {}", info.url));
+        return Err("addressRefused".into());
     }
-    let name = info.asset.replace(['/', '\\'], "_");
+    // The SHA-256 GitHub publishes for the asset is required: an installer that can't be checked
+    // is never run.
+    let expected = info
+        .digest
+        .as_deref()
+        .and_then(|digest| digest.strip_prefix("sha256:"))
+        .filter(|hex| hex.len() == 64 && hex.chars().all(|c| c.is_ascii_hexdigit()))
+        .ok_or_else(|| "checksumMissing".to_string())?
+        .to_ascii_lowercase();
+    if info.size > MAX_INSTALLER_BYTES {
+        return Err("unexpectedFile".into());
+    }
+    let name = info.asset.replace(['/', '\\', ':'], "_");
     if !name.to_lowercase().ends_with(".exe") {
         return Err("unexpectedFile".into());
     }
@@ -175,7 +190,14 @@ fn download(app: &AppHandle, info: &UpdateInfo) -> Result<PathBuf, String> {
     let target = dir.join(&name);
     let partial = dir.join(format!("{name}.part"));
 
-    let response = agent().get(&info.url).call().map_err(|e| format!("download: {e}"))?;
+    let response = agent()
+        .get(&info.url)
+        .call()
+        .map_err(|e| format!("download: {}", e.kind()))?;
+    // GitHub sends the file from its download servers: still over https.
+    if !response.get_url().starts_with("https://") {
+        return Err("addressRefused".into());
+    }
     let total = response
         .header("Content-Length")
         .and_then(|v| v.parse::<u64>().ok())
@@ -187,9 +209,14 @@ fn download(app: &AppHandle, info: &UpdateInfo) -> Result<PathBuf, String> {
     let mut done: u64 = 0;
     let mut last_emit: u64 = 0;
     loop {
-        let n = reader.read(&mut buf).map_err(|e| format!("download: {e}"))?;
+        let n = reader.read(&mut buf).map_err(|e| format!("download: {}", e.kind()))?;
         if n == 0 {
             break;
+        }
+        if done + n as u64 > MAX_INSTALLER_BYTES {
+            drop(file);
+            let _ = fs::remove_file(&partial);
+            return Err("unexpectedFile".into());
         }
         file.write_all(&buf[..n]).map_err(|e| e.to_string())?;
         hasher.update(&buf[..n]);
@@ -213,12 +240,10 @@ fn download(app: &AppHandle, info: &UpdateInfo) -> Result<PathBuf, String> {
         let _ = fs::remove_file(&partial);
         return Err("incompleteDownload".into());
     }
-    if let Some(expected) = info.digest.as_deref().and_then(|d| d.strip_prefix("sha256:")) {
-        let got: String = hasher.finalize().iter().map(|b| format!("{b:02x}")).collect();
-        if !got.eq_ignore_ascii_case(expected) {
-            let _ = fs::remove_file(&partial);
-            return Err("checksumMismatch".into());
-        }
+    let got: String = hasher.finalize().iter().map(|b| format!("{b:02x}")).collect();
+    if got != expected {
+        let _ = fs::remove_file(&partial);
+        return Err("checksumMismatch".into());
     }
     fs::rename(&partial, &target).map_err(|e| e.to_string())?;
     Ok(target)

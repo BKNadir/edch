@@ -213,7 +213,7 @@ pub fn debug_enabled() -> bool {
 /// Removes private information from every log line, whatever wrote it, so a log can be
 /// attached to a public bug report:
 /// - the Windows user folder and user name (`C:\Users\name\…` → `%USERPROFILE%\…`);
-/// - IP addresses (local network, Tailscale, the phone's): `192.168.x.x`;
+/// - IP addresses (local network, Tailscale, the phone's): `192.168.x.x`, `fd7a:…`;
 /// - long hexadecimal or random-looking tokens (pairing code, wing topic, keys): `***`;
 /// - Frontier ids (`F12345678`): `F***`.
 ///
@@ -237,7 +237,39 @@ pub fn sanitize(text: &str) -> String {
             out = replace_ci(&out, &format!("/{user}/"), "/%USERNAME%/");
         }
     }
-    mask_tokens(&out)
+    mask_tokens(&mask_ipv6(&out))
+}
+
+/// Masks IPv6 addresses (a phone or Tailscale address), keeping only the first group: the kind
+/// of address ("fe80" local, "fd7a" Tailscale…) is useful, the address isn't. Times ("15:38:19")
+/// and MAC addresses aren't IPv6 addresses and stay as they are.
+fn mask_ipv6(text: &str) -> String {
+    let in_word = |c: char| c.is_ascii_alphanumeric() || c == ':' || c == '.' || c == '%';
+    let mut out = String::with_capacity(text.len());
+    let mut word = String::new();
+    let flush = |word: &mut String, out: &mut String| {
+        // A sentence's full stop and a zone ("%eth0") aren't part of the address.
+        let without_stop = word.trim_end_matches('.');
+        let address = without_stop.split('%').next().unwrap_or(without_stop);
+        if address.contains(':') && address.parse::<std::net::Ipv6Addr>().is_ok() {
+            out.push_str(address.split(':').next().unwrap_or(""));
+            out.push_str(":…");
+            out.push_str(&word[without_stop.len()..]);
+        } else {
+            out.push_str(word);
+        }
+        word.clear();
+    };
+    for c in text.chars() {
+        if in_word(c) {
+            word.push(c);
+        } else {
+            flush(&mut word, &mut out);
+            out.push(c);
+        }
+    }
+    flush(&mut word, &mut out);
+    out
 }
 
 fn replace_ci(text: &str, needle: &str, with: &str) -> String {
@@ -328,8 +360,23 @@ pub fn redact(url: &str) -> String {
 
 #[tauri::command]
 pub fn log_write(level: String, source: String, message: String) {
+    // From the UI: a known level, a short source name, and a line that can't flood the files.
+    let level = match level.to_uppercase().as_str() {
+        "DEBUG" if !debug_enabled() => return,
+        level @ ("DEBUG" | "INFO" | "WARN" | "ERROR") => level.to_string(),
+        _ => "INFO".to_string(),
+    };
+    let source: String = source
+        .chars()
+        .filter(|c| c.is_ascii_alphanumeric() || *c == '-' || *c == '_')
+        .take(32)
+        .collect();
+    let message: String = message.chars().take(MAX_UI_LINE_CHARS).collect();
     write(&level, &source, &message);
 }
+
+/// Longest line the UI may write to a log.
+const MAX_UI_LINE_CHARS: usize = 8_000;
 
 /// Turns the debug log on or off; returns its path while on.
 #[tauri::command]
@@ -503,6 +550,15 @@ mod tests {
         assert_eq!(
             sanitize("Journal.2026-11-01T080133.01.log"),
             "Journal.2026-11-01T080133.01.log"
+        );
+        assert_eq!(
+            sanitize("GET / from fe80::1c2d:3e4f:5a6b:7c8d%12 and fd7a:115c:a1e0::1234."),
+            "GET / from fe80:… and fd7a:…."
+        );
+        // Times and MAC addresses aren't IPv6 addresses.
+        assert_eq!(
+            sanitize("at 15:38:19.89, mac aa:bb:cc:dd:ee:ff"),
+            "at 15:38:19.89, mac aa:bb:cc:dd:ee:ff"
         );
     }
 

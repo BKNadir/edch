@@ -51,6 +51,23 @@ const AUX_FILES: [&str; 5] = [
     "Status.json",
     "Market.json",
 ];
+/// Every companion file the UI may read with read_aux_file (the game writes them next to the journal).
+const READABLE_AUX_FILES: [&str; 10] = [
+    "ShipLocker.json",
+    "Backpack.json",
+    "Cargo.json",
+    "Status.json",
+    "Market.json",
+    "NavRoute.json",
+    "Outfitting.json",
+    "Shipyard.json",
+    "ModulesInfo.json",
+    "FCMaterials.json",
+];
+/// The biggest companion file (a large market) is well under a megabyte.
+const MAX_AUX_FILE_BYTES: u64 = 16 * 1024 * 1024;
+/// The journal folder being watched: read_aux_file reads there (or in the game's default folder) only.
+static WATCHED_DIR: std::sync::Mutex<Option<PathBuf>> = std::sync::Mutex::new(None);
 const BATCH: usize = 2000;
 const MAX_REPLAY_FILES: usize = 40;
 
@@ -337,6 +354,9 @@ pub fn start_journal(app: AppHandle, dir: String) -> Result<(), String> {
     if !path.is_dir() {
         return Err(format!("folderNotFound: {dir}"));
     }
+    if let Ok(mut watched) = WATCHED_DIR.lock() {
+        *watched = path.canonicalize().ok();
+    }
     let state = app.state::<Arc<WatchState>>().inner().clone();
     let generation = state.generation.fetch_add(1, Ordering::SeqCst) + 1;
     let handle = app.clone();
@@ -344,10 +364,30 @@ pub fn start_journal(app: AppHandle, dir: String) -> Result<(), String> {
     Ok(())
 }
 
+/// Whether `dir` is the journal folder being watched, or the game's default one.
+fn is_journal_dir(dir: &Path) -> bool {
+    let Ok(dir) = dir.canonicalize() else {
+        return false;
+    };
+    let watched = WATCHED_DIR.lock().ok().and_then(|watched| watched.clone());
+    let default = default_journal_dir().and_then(|d| PathBuf::from(d).canonicalize().ok());
+    watched.as_ref() == Some(&dir) || default.as_ref() == Some(&dir)
+}
+
+/// One of the game's companion files (Status.json, Market.json…), from the journal folder only.
 #[tauri::command]
 pub fn read_aux_file(dir: String, name: String) -> Result<String, String> {
-    if name.contains('/') || name.contains('\\') || !name.ends_with(".json") {
+    if !READABLE_AUX_FILES.contains(&name.as_str()) {
         return Err("fileNameRefused".into());
     }
-    fs::read_to_string(Path::new(&dir).join(&name)).map_err(|e| e.to_string())
+    let dir = Path::new(&dir);
+    if !is_journal_dir(dir) {
+        return Err("fileRefused".into());
+    }
+    let file = File::open(dir.join(&name)).map_err(|e| e.to_string())?;
+    let mut text = String::new();
+    file.take(MAX_AUX_FILE_BYTES)
+        .read_to_string(&mut text)
+        .map_err(|e| e.to_string())?;
+    Ok(text)
 }

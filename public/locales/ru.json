@@ -54,7 +54,7 @@
     "logs": "Журналы"
   },
   "backend": {
-    "addressRefused": "Адрес отклонён: {{detail}}",
+    "addressRefused": "Адрес отклонён",
     "checksumMismatch": "Загруженный файл не совпадает с опубликованной версией (контрольная сумма)",
     "download": "Загрузка: {{detail}}",
     "fileNameRefused": "Имя файла отклонено",
@@ -79,7 +79,17 @@
     "unknownLaunchMethod": "Неизвестный способ запуска",
     "unknownPage": "Неизвестная страница",
     "unreadableZip": "Не удаётся прочитать zip: {{detail}}",
-    "zipWithoutSettings": "В этом zip нет файлов Bindings/*.binds или Graphics/*.xml"
+    "zipWithoutSettings": "В этом zip нет файлов Bindings/*.binds или Graphics/*.xml",
+    "zipTooLarge": "Этот zip слишком большой или содержит слишком много файлов для настроек игры",
+    "importIncomplete": "Импорт прервался. Прежние настройки сохранены в резервной копии: {{detail}}",
+    "checksumMissing": "GitHub не сообщает контрольную сумму этого файла: обновление не установлено",
+    "replyTooLarge": "Сервер прислал слишком большой ответ",
+    "tooManyRedirects": "Слишком много перенаправлений",
+    "presetRefused": "Записывать можно только собственные пресеты EDCH («…_EDCH»)",
+    "presetExists": "Этот пресет уже существует",
+    "presetMissing": "Этого пресета больше нет",
+    "builtinPresetNotFound": "Стандартный пресет игры не найден в её установке",
+    "notAPicture": "Это не изображение"
   },
   "binds": {
     "axis": "Ось {{name}}",

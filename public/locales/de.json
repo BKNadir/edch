@@ -54,7 +54,7 @@
     "logs": "Protokolle"
   },
   "backend": {
-    "addressRefused": "Adresse abgelehnt: {{detail}}",
+    "addressRefused": "Adresse abgelehnt",
     "checksumMismatch": "Die heruntergeladene Datei entspricht nicht der veröffentlichten Version (Prüfsumme)",
     "download": "Download: {{detail}}",
     "fileNameRefused": "Dateiname abgelehnt",
@@ -79,7 +79,17 @@
     "unknownLaunchMethod": "Unbekannte Startmethode",
     "unknownPage": "Unbekannte Seite",
     "unreadableZip": "Zip nicht lesbar: {{detail}}",
-    "zipWithoutSettings": "Dieses Zip enthält keine Bindings/*.binds- oder Graphics/*.xml-Datei"
+    "zipWithoutSettings": "Dieses Zip enthält keine Bindings/*.binds- oder Graphics/*.xml-Datei",
+    "zipTooLarge": "Dieses Zip ist zu groß oder enthält zu viele Dateien für eine Spielkonfiguration",
+    "importIncomplete": "Der Import wurde unterbrochen. Deine vorherige Konfiguration ist in der Sicherung: {{detail}}",
+    "checksumMissing": "GitHub gibt keine Prüfsumme für diese Datei an: das Update wird nicht installiert",
+    "replyTooLarge": "Der Server hat eine zu große Antwort gesendet",
+    "tooManyRedirects": "Zu viele Weiterleitungen",
+    "presetRefused": "Nur EDCHs eigene Voreinstellungen („…_EDCH“) können geschrieben werden",
+    "presetExists": "Diese Voreinstellung existiert bereits",
+    "presetMissing": "Diese Voreinstellung existiert nicht mehr",
+    "builtinPresetNotFound": "Die Standard-Voreinstellung des Spiels wurde in seiner Installation nicht gefunden",
+    "notAPicture": "Kein Bild"
   },
   "binds": {
     "axis": "Achse {{name}}",

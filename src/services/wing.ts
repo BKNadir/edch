@@ -93,13 +93,72 @@ export async function seal(key: CryptoKey, packet: Packet): Promise<string> {
   return `edch1:${toB64(out)}`;
 }
 
+/** Most missions a commander can hold, with room to spare. */
+const MAX_WING_MISSIONS = 40;
+
+const textOf = (value: unknown, max: number) => (typeof value === "string" ? value.slice(0, max) : undefined);
+const numberOf = (value: unknown) => (typeof value === "number" && Number.isFinite(value) ? value : undefined);
+/** `object` without its undefined fields (a field absent from the message stays absent). */
+const withoutUndefined = <T extends object>(object: T): T =>
+  Object.fromEntries(Object.entries(object).filter(([, value]) => value !== undefined)) as T;
+
+/** A wing mission as received, with only the expected fields, of the expected types and sizes. */
+function validMission(value: unknown): WingMission | null {
+  if (!value || typeof value !== "object") return null;
+  const m = value as Record<string, unknown>;
+  const id = numberOf(m.id);
+  if (id === undefined) return null;
+  return withoutUndefined({
+    id,
+    name: textOf(m.name, 120),
+    title: textOf(m.title, 80) ?? "",
+    faction: textOf(m.faction, 60) ?? "",
+    destSystem: textOf(m.destSystem, 80),
+    destStation: textOf(m.destStation, 80),
+    expiry: textOf(m.expiry, 40),
+    status: textOf(m.status, 20) ?? "",
+    killCount: numberOf(m.killCount),
+    kills: numberOf(m.kills),
+    delivered: numberOf(m.delivered),
+    total: numberOf(m.total),
+    reward: numberOf(m.reward),
+    commodity: textOf(m.commodity, 80),
+    count: numberOf(m.count),
+  });
+}
+
+/**
+ * A wing message as received, checked field by field: only wing members can write one (it is
+ * encrypted with the wing's code), but EDCH still never trusts its shape.
+ */
+function validPacket(value: unknown): Packet | null {
+  if (!value || typeof value !== "object") return null;
+  const p = value as Record<string, unknown>;
+  if (p.v !== 1 || typeof p.from !== "string" || p.from.length > 64 || typeof p.at !== "string") return null;
+  const missions = Array.isArray(p.missions)
+    ? p.missions
+        .slice(0, MAX_WING_MISSIONS)
+        .map(validMission)
+        .filter((m): m is WingMission => m !== null)
+    : [];
+  const reasons: LeaveReason[] = ["closed", "wing", "off"];
+  return withoutUndefined<Packet>({
+    v: 1,
+    from: p.from,
+    name: textOf(p.name, 40) ?? "",
+    at: p.at.slice(0, 40),
+    missions,
+    bye: p.bye === true ? true : undefined,
+    reason: reasons.find((reason) => reason === p.reason),
+  });
+}
+
 export async function open(key: CryptoKey, text: string): Promise<Packet | null> {
   if (!text.startsWith("edch1:")) return null;
   try {
     const raw = fromB64(text.slice(6));
     const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: raw.slice(0, 12) }, key, raw.slice(12));
-    const p = JSON.parse(textDecoder.decode(plain));
-    return p && p.v === 1 && typeof p.from === "string" ? (p as Packet) : null;
+    return validPacket(JSON.parse(textDecoder.decode(plain)));
   } catch {
     return null; // another wing's message on a colliding topic, or tampered: ignore
   }
@@ -431,9 +490,10 @@ export class WingLink {
         left: p.bye,
         reason: p.bye ? p.reason : undefined,
       });
+      // Other commanders' names stay out of the logs: a log may be attached to a public report.
       log.debug(
         "wing",
-        `${p.name || "CMDR"}: ${p.bye ? "left" : `${(p.missions ?? []).length} mission(s)`} ${(p.missions ?? []).map((m) => `#${m.id}${m.total ? ` ${m.delivered ?? 0}/${m.total}` : ""}`).join(" ")}`,
+        `Wing member: ${p.bye ? "left" : `${(p.missions ?? []).length} mission(s)`} ${(p.missions ?? []).map((m) => `#${m.id}${m.total ? ` ${m.delivered ?? 0}/${m.total}` : ""}`).join(" ")}`,
       );
       changed = true;
     }

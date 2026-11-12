@@ -54,7 +54,7 @@
     "logs": "Logs"
   },
   "backend": {
-    "addressRefused": "Address refused: {{detail}}",
+    "addressRefused": "Address refused",
     "checksumMismatch": "The downloaded file doesn't match the published version (checksum)",
     "download": "Download: {{detail}}",
     "fileNameRefused": "File name refused",
@@ -79,7 +79,17 @@
     "unknownLaunchMethod": "Unknown launch method",
     "unknownPage": "Unknown page",
     "unreadableZip": "Unreadable zip: {{detail}}",
-    "zipWithoutSettings": "This zip has no Bindings/*.binds or Graphics/*.xml file"
+    "zipWithoutSettings": "This zip has no Bindings/*.binds or Graphics/*.xml file",
+    "zipTooLarge": "This zip is too large or holds too many files for a game configuration",
+    "importIncomplete": "The import stopped halfway. Your previous configuration is in the backup: {{detail}}",
+    "checksumMissing": "GitHub doesn't give this file's checksum: the update isn't installed",
+    "replyTooLarge": "The server sent an answer that is too large",
+    "tooManyRedirects": "Too many redirections",
+    "presetRefused": "Only EDCH's own presets (\"…_EDCH\") can be written",
+    "presetExists": "This preset already exists",
+    "presetMissing": "This preset no longer exists",
+    "builtinPresetNotFound": "The game's default preset wasn't found in its installation",
+    "notAPicture": "Not a picture"
   },
   "binds": {
     "axis": "Axis {{name}}",

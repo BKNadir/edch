@@ -30,3 +30,24 @@ export const DEFAULT_THEME: ThemeSettings = {
   bg: "#0a0c0f",
   oled: false,
 };
+
+/** A colour as the colour pickers give it: "#rgb" or "#rrggbb". */
+const COLOUR = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
+
+/**
+ * The valid part of theme settings that come from outside (a phone, an old save): colours only as
+ * "#rrggbb" (a CSS value such as "url(…)" could make the page load something), a short preset
+ * id, and a true/false OLED switch. Anything else is dropped.
+ */
+export function validTheme(value: unknown): Partial<ThemeSettings> {
+  if (!value || typeof value !== "object") return {};
+  const theme = value as Record<string, unknown>;
+  const valid: Partial<ThemeSettings> = {};
+  for (const key of ["accent", "cyan", "bg"] as const) {
+    const colour = theme[key];
+    if (typeof colour === "string" && COLOUR.test(colour)) valid[key] = colour;
+  }
+  if (typeof theme.preset === "string" && /^[a-z]{1,16}$/.test(theme.preset)) valid.preset = theme.preset;
+  if (typeof theme.oled === "boolean") valid.oled = theme.oled;
+  return valid;
+}

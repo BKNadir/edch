@@ -54,7 +54,7 @@
     "logs": "Registros"
   },
   "backend": {
-    "addressRefused": "Dirección rechazada: {{detail}}",
+    "addressRefused": "Dirección rechazada",
     "checksumMismatch": "El archivo descargado no coincide con la versión publicada (suma de comprobación)",
     "download": "Descarga: {{detail}}",
     "fileNameRefused": "Nombre de archivo rechazado",
@@ -79,7 +79,17 @@
     "unknownLaunchMethod": "Método de inicio desconocido",
     "unknownPage": "Página desconocida",
     "unreadableZip": "Zip ilegible: {{detail}}",
-    "zipWithoutSettings": "Este zip no contiene ningún archivo Bindings/*.binds ni Graphics/*.xml"
+    "zipWithoutSettings": "Este zip no contiene ningún archivo Bindings/*.binds ni Graphics/*.xml",
+    "zipTooLarge": "Este zip es demasiado grande o contiene demasiados archivos para una configuración del juego",
+    "importIncomplete": "La importación se detuvo a medias. Tu configuración anterior está en la copia de seguridad: {{detail}}",
+    "checksumMissing": "GitHub no da la suma de comprobación de este archivo: la actualización no se instala",
+    "replyTooLarge": "El servidor envió una respuesta demasiado grande",
+    "tooManyRedirects": "Demasiadas redirecciones",
+    "presetRefused": "Solo se pueden escribir los preajustes propios de EDCH («…_EDCH»)",
+    "presetExists": "Este preajuste ya existe",
+    "presetMissing": "Este preajuste ya no existe",
+    "builtinPresetNotFound": "No se encontró el preajuste predeterminado del juego en su instalación",
+    "notAPicture": "No es una imagen"
   },
   "binds": {
     "axis": "Eje {{name}}",
