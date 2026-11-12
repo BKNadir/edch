@@ -228,12 +228,23 @@ export class ColonisationView implements View {
 
   /** What the carrier's market shows on Spansh: sell orders (stock) and buy orders. */
   private marketBlock(
-    marketId: number,
+    carrier: CarrierHold,
     needed: Set<string>,
     name: (id: string, label?: string) => string,
   ): HTMLElement | null {
-    const m = this.marketOf(marketId);
-    if (!m) return null;
+    const market = this.marketOf(carrier.marketId);
+    if (!market) return null;
+    // Your own market read: goods taken back to your ship since then leave its stock too (the
+    // stock for sale can't be more than what the hold still has).
+    const m =
+      market.source === "journal"
+        ? {
+            ...market,
+            selling: market.selling
+              .map((line) => ({ ...line, count: Math.min(line.count, carrier.items[line.id]?.count ?? 0) }))
+              .filter((line) => line.count > 0),
+          }
+        : market;
     if (m.loading && !m.updated && !m.selling.length)
       return h("p.sub", null, h("span.spinner"), " " + t("colonisation.carrierMarketSpansh"));
     if (m.error) return h("p.sub", null, t("colonisation.marketSpansh", { error: m.error }));
@@ -315,7 +326,7 @@ export class ColonisationView implements View {
             : null,
           list(items),
           unknown ? h("p.sub", null, t("colonisation.tNotIdentified", { unknown: fmt(unknown) })) : null,
-          this.marketBlock(c.marketId, needed, name),
+          this.marketBlock(c, needed, name),
         ),
       );
     }

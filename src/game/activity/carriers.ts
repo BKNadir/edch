@@ -1,7 +1,9 @@
 // Fleet carriers' holds (rebuilt from transfers, market trades and stats, since the journal
 // never lists a carrier's cargo) and the trade tallies of the session. The carrier's market
-// (Market.json) gives a floor: a commodity it sells is in its hold, at least as much as the stock
-// offered. That floor is applied when the market was read, so later transfers count from it.
+// (Market.json) corrects the estimate when it is read, so later transfers count from it: for your
+// own carrier it is a floor (what it sells is in its hold, at least the stock offered; you may keep
+// goods without a sell order); for another carrier (your squadron's) it is the truth, since other
+// players empty it without your journal seeing it.
 
 import {
   num,
@@ -23,17 +25,28 @@ export function carrierAdd(c: CarrierHold, type: unknown, label: unknown, delta:
 }
 
 /**
- * The carrier's market was read (Market.json): each commodity it sells is in its hold, at least
- * as much as the stock offered. Returns true when the estimate changed.
+ * The carrier's market was read (Market.json). Your own carrier: each commodity it sells is in
+ * its hold, at least as much as the stock offered (a floor). Another carrier (your squadron's):
+ * its hold becomes what the market sells, nothing else, since other players add and take goods
+ * without your journal seeing it. Returns true when the estimate changed.
  */
 export function noteCarrierStock(st: ActivityState, marketId: number, seen: CarrierStockSeen): boolean {
   const carrier = st.carriers[marketId];
   if (!carrier) return false;
+  const selling = seen.stockAtRead ?? {};
   let changed = false;
-  for (const [id, line] of Object.entries(seen.stockAtRead ?? {})) {
+  if (!carrier.mine) {
+    for (const id of Object.keys(carrier.items))
+      if (!selling[id]) {
+        delete carrier.items[id];
+        changed = true;
+      }
+  }
+  for (const [id, line] of Object.entries(selling)) {
     const known = carrier.items[id]?.count ?? 0;
-    if (line.count <= known) continue;
-    carrierAdd(carrier, id, line.label, line.count - known);
+    const wanted = carrier.mine ? Math.max(known, line.count) : line.count;
+    if (wanted === known) continue;
+    carrierAdd(carrier, id, line.label, wanted - known);
     changed = true;
   }
   if (changed) carrier.updated = seen.marketAt;

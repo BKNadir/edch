@@ -143,3 +143,33 @@ test("carrier hold: donating tritium for fuel comes from the ship, not the carri
   ]);
   assert.equal(st.carriers[CARRIER].items.tritium.count, 786);
 });
+
+test("squadron carrier: its market read is the truth (others empty it without your journal)", () => {
+  const SQUADRON = 3708867072;
+  const cmdr = emptyState();
+  applyMarketFile(cmdr, {
+    timestamp: at(5),
+    MarketID: SQUADRON,
+    StationName: "T7G-27Z",
+    StationType: "SquadronCarrier",
+    Items: [{ Name: "$aluminium_name;", Name_Localised: "Aluminium", Stock: 30, Demand: 0 }],
+  });
+  const st = emptyActivity();
+  applyActivityEvents(st, [
+    { timestamp: at(1), event: "Docked", StationName: "T7G-27Z", StationType: "SquadronCarrier", MarketID: SQUADRON },
+    // Your own deposits: 2 steel and 50 aluminium.
+    {
+      timestamp: at(2),
+      event: "CargoTransfer",
+      Transfers: [
+        { Type: "steel", Count: 2, Direction: "tocarrier" },
+        { Type: "aluminium", Count: 50, Direction: "tocarrier" },
+      ],
+    },
+  ]);
+  assert.equal(st.carriers[SQUADRON].items.steel.count, 2);
+  // Later its market shows no steel and 30 aluminium: others took the rest.
+  noteCarrierStock(st, SQUADRON, cmdr.carrierMarkets[SQUADRON]);
+  assert.equal(st.carriers[SQUADRON].items.steel, undefined, "nothing left: not 2");
+  assert.equal(st.carriers[SQUADRON].items.aluminium.count, 30);
+});
