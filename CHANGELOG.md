@@ -22,6 +22,7 @@ and EDCH shows it in the update banner.
 - Linux: with NVIDIA's own driver, EDCH's window no longer stays blank or crashes ("GBM" errors): the usual WebKitGTK workaround (WEBKIT_DISABLE_DMABUF_RENDERER) is turned on by itself, unless you set it yourself.
 - About: a new section thanks EDCH's contributors.
 - Station search results (Search page and finders) show each station's type as an icon: Coriolis, Orbis, Ocellus, Dodec, outpost, asteroid base, megaship, carriers, planetary port and outpost, settlement, construction depot. Most icons come from EDAssets (credited in About).
+- Everything that loads (searches, routes, markets…) now shows the game-style triangle loader from EDAssets, in your theme's colour.
 - Safety: importing a configuration zip now checks everything first (size, number of files, file names, contents, duplicates) and writes the files aside before putting them in place, so a broken or hostile zip can't fill the memory or leave a half-imported configuration.
 - Safety: web requests follow a redirection only to the same allowed sites, and never repeat an address (which can hold a key) in an error message.
 - Safety: an update is installed only when its SHA-256 checksum, published by GitHub, matches.

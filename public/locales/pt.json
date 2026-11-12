@@ -51,7 +51,7 @@
     "eddiTranslatedRanksStates": "Nomes traduzidos de estados de facção, patentes e algumas mercadorias",
     "contributors": "Colaboradores",
     "thanksContributors": "Obrigado aos colaboradores:",
-    "stationIcons": "Ícones das estações (Coriolis, Orbis, Ocellus, postos avançados, portos…), redesenhados a partir dos do jogo"
+    "stationIcons": "Ícones das estações (Coriolis, Orbis, Ocellus, postos avançados, portos…), redesenhados a partir dos do jogo, e a animação de carregamento"
   },
   "alerts": {
     "logs": "Logs"

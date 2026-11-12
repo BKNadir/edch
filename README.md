@@ -120,4 +120,4 @@ EDCH is free, without ads, and will stay that way. It is designed, tested and ma
 
 ## Credits
 
-Data: EDCD/FDevIDs and msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Localized game names: Elite Dangerous Almanac (MIT) and EDEngineer. Control names and device templates: EDRefCard (Richard Buckle, MIT). Station icons: EDAssets (SpyTec, MIT). Searches: Spansh (EDDN). Elite Dangerous is a trademark of Frontier Developments plc. Unofficial, non-commercial community tool. Details in [NOTICE](NOTICE).
+Data: EDCD/FDevIDs and msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Localized game names: Elite Dangerous Almanac (MIT) and EDEngineer. Control names and device templates: EDRefCard (Richard Buckle, MIT). Station icons and loading animation: EDAssets (SpyTec, MIT). Searches: Spansh (EDDN). Elite Dangerous is a trademark of Frontier Developments plc. Unofficial, non-commercial community tool. Details in [NOTICE](NOTICE).

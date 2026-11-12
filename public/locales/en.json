@@ -51,7 +51,7 @@
     "eddiTranslatedRanksStates": "Translated names of faction states, ranks and some commodities",
     "contributors": "Contributors",
     "thanksContributors": "Thanks to the contributors:",
-    "stationIcons": "Station icons (Coriolis, Orbis, Ocellus, outposts, ports…), redrawn from the game's"
+    "stationIcons": "Station icons (Coriolis, Orbis, Ocellus, outposts, ports…), redrawn from the game's, and the loading animation"
   },
   "alerts": {
     "logs": "Logs"

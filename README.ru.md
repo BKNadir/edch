@@ -120,4 +120,4 @@ EDCH бесплатен, без рекламы, и таким останется
 
 ## Благодарности
 
-Данные: EDCD/FDevIDs и msarilar/EDEngineer (MIT) через dseelinger/d47 (MIT). Переведённые названия из игры: Elite Dangerous Almanac (MIT) и EDEngineer. Названия команд и шаблоны устройств: EDRefCard (Richard Buckle, MIT). Значки станций: EDAssets (SpyTec, MIT). Поиск: Spansh (EDDN). Elite Dangerous — товарный знак Frontier Developments plc. Неофициальный некоммерческий инструмент сообщества. Подробности в [NOTICE](NOTICE).
+Данные: EDCD/FDevIDs и msarilar/EDEngineer (MIT) через dseelinger/d47 (MIT). Переведённые названия из игры: Elite Dangerous Almanac (MIT) и EDEngineer. Названия команд и шаблоны устройств: EDRefCard (Richard Buckle, MIT). Значки станций и анимация загрузки: EDAssets (SpyTec, MIT). Поиск: Spansh (EDDN). Elite Dangerous — товарный знак Frontier Developments plc. Неофициальный некоммерческий инструмент сообщества. Подробности в [NOTICE](NOTICE).

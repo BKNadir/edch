@@ -51,7 +51,7 @@
     "eddiTranslatedRanksStates": "Übersetzte Namen von Fraktionszuständen, Rängen und einigen Waren",
     "contributors": "Mitwirkende",
     "thanksContributors": "Danke an die Mitwirkenden:",
-    "stationIcons": "Stationssymbole (Coriolis, Orbis, Ocellus, Außenposten, Häfen…), nach denen des Spiels nachgezeichnet"
+    "stationIcons": "Stationssymbole (Coriolis, Orbis, Ocellus, Außenposten, Häfen…), nach denen des Spiels nachgezeichnet, und die Ladeanimation"
   },
   "alerts": {
     "logs": "Protokolle"

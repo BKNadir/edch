@@ -120,4 +120,4 @@ EDCH ist kostenlos, werbefrei und bleibt es auch. Es wird von CMDR MDLuffy entwo
 
 ## Danksagungen
 
-Daten: EDCD/FDevIDs und msarilar/EDEngineer (MIT), über dseelinger/d47 (MIT). Übersetzte Spielnamen: Elite Dangerous Almanac (MIT) und EDEngineer. Befehlsnamen und Gerätevorlagen: EDRefCard (Richard Buckle, MIT). Stationssymbole: EDAssets (SpyTec, MIT). Suchen: Spansh (EDDN). Elite Dangerous ist eine Marke von Frontier Developments plc. Inoffizielles, nicht kommerzielles Community-Tool. Details in [NOTICE](NOTICE).
+Daten: EDCD/FDevIDs und msarilar/EDEngineer (MIT), über dseelinger/d47 (MIT). Übersetzte Spielnamen: Elite Dangerous Almanac (MIT) und EDEngineer. Befehlsnamen und Gerätevorlagen: EDRefCard (Richard Buckle, MIT). Stationssymbole und Ladeanimation: EDAssets (SpyTec, MIT). Suchen: Spansh (EDDN). Elite Dangerous ist eine Marke von Frontier Developments plc. Inoffizielles, nicht kommerzielles Community-Tool. Details in [NOTICE](NOTICE).
