@@ -19,6 +19,7 @@ mod logs;
 mod ntfy;
 mod options;
 mod paths;
+mod picture_cache;
 mod remote;
 mod system;
 mod update;
@@ -62,6 +63,8 @@ pub fn run() {
             options::read_option_file,
             options::export_config,
             options::import_config,
+            picture_cache::picture_cache_read,
+            picture_cache::picture_cache_write,
             system::reveal_path,
             system::installer_language,
             remote::remote_start,

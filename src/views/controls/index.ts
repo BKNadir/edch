@@ -29,7 +29,7 @@ import {
 import { fold, gameText, t } from "../../platform/i18n.js";
 import type { Ctx, View } from "../../state/context.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
-import { keepPicture, keptPicture } from "../../services/controllerPictures.js";
+import { keepPicture, keptPictureUrl } from "../../services/controllerPictures.js";
 import { board, gamepad, GROUP_LABELS, groupClass, legendTable } from "./deviceBoard.js";
 import { keyboard } from "./keyboard.js";
 
@@ -397,10 +397,7 @@ export class ControlsView implements View {
         : board(this.meta!, () => this.legendKey(), binds, false);
     // The picture kept on the PC when there is one (instant, offline too); else GitHub's, kept for next time.
     const pictureUrl = `${meta.templateBase}${tpl.image}.jpg`;
-    const kept = keptPicture(pictureUrl);
-    if (!kept) void keepPicture(pictureUrl);
     const img = h("img.tpl-img", {
-      src: kept ?? pictureUrl,
       alt: tpl.name,
       onerror: () => {
         stage.replaceWith(
@@ -412,6 +409,10 @@ export class ControlsView implements View {
           ),
         );
       },
+    });
+    void keptPictureUrl(tpl.image).then((kept) => {
+      img.src = kept ?? pictureUrl;
+      if (!kept) void keepPicture(tpl.image, pictureUrl);
     });
     const boxes = [...placed.entries()].map(([key, list]) => {
       const [x, y, bw, bh] = tpl.boxes[key];

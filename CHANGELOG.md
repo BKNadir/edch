@@ -12,7 +12,7 @@ and EDCH shows it in the update banner.
 - Fixed: donating tritium to a carrier's fuel no longer removes it from the carrier's hold (it comes from your ship's hold).
 - Fixed: the ship's hold counted a commodity only once when the game listed it on several lines (mission cargo).
 - Fixed: war and civil war massacre missions ("kill … in a conflict zone") never counted their kills: the combat bonds of a conflict zone now count, one mission at a time per issuing faction like the game. In a wing, your wingmates' kills count in the game but aren't in your journal: the counter can be behind until the game marks the mission done (the Missions page says so).
-- Controls: the controller picture shown is kept on the PC (a lighter copy, the last 3 used), so the page shows it at once next time, offline too, instead of downloading 1.3 MB from GitHub each time.
+- Controls: each controller picture shown is kept on the PC, unchanged (full quality), in EDCH's folder, so the page shows it at once next time, offline too, instead of downloading 1.3 MB from GitHub each time.
 - Controls: the controller picture no longer sits on a white background: the white blends into the page, and on dark themes the picture is shown light on dark. Printing still gives the original picture on white.
 
 ## 0.10.11

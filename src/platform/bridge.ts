@@ -287,6 +287,11 @@ export const readOptionFile = async (folder: string, name: string): Promise<stri
 export const exportConfig = (includeGraphics: boolean) => invoke<string>("export_config", { includeGraphics });
 export const importConfig = (bytes: Uint8Array) => invoke<ImportReport>("import_config", { data: Array.from(bytes) });
 export const revealPath = (path: string) => invoke<void>("reveal_path", { path });
+/** A controller picture kept on the PC (Controls page), as raw bytes; rejects when not kept yet. */
+export const readKeptPicture = (name: string) => invoke<ArrayBuffer>("picture_cache_read", { name });
+/** Keeps a controller picture on the PC, unchanged (full quality). */
+export const writeKeptPicture = (name: string, bytes: Uint8Array) =>
+  invoke<void>("picture_cache_write", { name, data: Array.from(bytes) });
 
 // ----- mobile access (local server) -----
 export interface RemoteInfo {

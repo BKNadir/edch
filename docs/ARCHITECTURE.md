@@ -135,6 +135,7 @@ wins, and several rules rely on that. Don't move existing rules around.
 | `ntfy.rs` | Wing missions shared through ntfy.sh (encrypted) |
 | `update.rs` | Update check, download and install from GitHub releases |
 | `logs.rs` | Log files (standard and debug), with private data removed |
+| `picture_cache.rs` | Controller pictures of the Controls page, kept unchanged next to the logs folder |
 
 Windows and Linux differences stay inside the backend, behind `#[cfg(target_os = "…")]`: journal
 and options folders (Proton prefixes on Linux), opening links (`rundll32` / `xdg-open`), the game
