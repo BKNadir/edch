@@ -19,6 +19,7 @@ and EDCH shows it in the update banner.
 - Controls: the game's default presets (KeyboardMouseOnly…) are now shown too: EDCH reads them, read-only, from the game's installation (ControlSchemes). It's the only file of the game's installation EDCH touches (the READMEs say so).
 - Fixed: Controls' "Zoom in / out" left you stuck in the top-left corner of the picture: the zoomed picture now scrolls both ways and can be dragged with the mouse.
 - Fixed: Colonisation could show goods on a squadron carrier that others had already taken (your journal only sees your own transfers). When you open its market, the squadron carrier's hold now becomes what the market sells; your own carrier keeps its estimate, raised by the market. The stock for sale shown no longer counts goods you took back to your ship.
+- Linux: with NVIDIA's own driver, EDCH's window no longer stays blank or crashes ("GBM" errors): the usual WebKitGTK workaround (WEBKIT_DISABLE_DMABUF_RENDERER) is turned on by itself, unless you set it yourself. Thanks to philippe015 for the fix.
 
 ## 0.10.11
 
