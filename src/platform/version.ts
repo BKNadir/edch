@@ -4,7 +4,7 @@
 /** Name sent to EDDN, EDSM and Inara with the data. */
 export const SOFTWARE_NAME = "EDCH";
 
-export const SOFTWARE_VERSION = "0.10.11";
+export const SOFTWARE_VERSION = "0.10.12";
 
 /**
  * The GitHub release this build was published as ("v0.10.11" or "v0.10.11-pre.83"): CI writes it

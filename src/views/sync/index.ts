@@ -6,6 +6,7 @@ import { openUrl } from "../../platform/bridge.js";
 import { h, icon, replace } from "../../ui/dom.js";
 import type { Ctx, View } from "../../state/context.js";
 import type { SyncSettings } from "../../state/syncSettings.js";
+import { shareModeSwitch } from "../shared/shareModeSwitch.js";
 
 /** EDMC-style connections: EDDN, EDSM, Inara. */
 export class SyncView implements View {
@@ -55,6 +56,24 @@ export class SyncView implements View {
       h(
         "div.settings",
         null,
+        h(
+          "section.card",
+          null,
+          h(
+            "div.sync-head",
+            null,
+            h("div", null, h("h3", null, t("shareMode.title")), h("p.sub", null, t("shareMode.intro"))),
+            shareModeSwitch(this.ctx.store),
+          ),
+          h(
+            "ul.share-mode-help",
+            null,
+            h("li", null, h("strong", null, t("shareMode.normal")), " — ", t("shareMode.normalHelp")),
+            h("li", null, h("strong", null, t("shareMode.bgs")), " — ", t("shareMode.bgsHelp")),
+            h("li", null, h("strong", null, t("shareMode.invisible")), " — ", t("shareMode.invisibleHelp")),
+          ),
+          h("p.sub", null, t("shareMode.othersStillShare")),
+        ),
         h(
           "section.card",
           null,

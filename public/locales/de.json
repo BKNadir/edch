@@ -1479,5 +1479,16 @@
     "typeRevenant": "Revenant",
     "typeScout": "Späher",
     "typeUnknown": "Andere (unbekannte Anleihe)"
+  },
+  "shareMode": {
+    "bgs": "BGS",
+    "bgsHelp": "Deine BGS-Arbeit bleibt privat: Fraktionen, ihr Einfluss, ihre Zustände und Konflikte werden nicht geteilt, ebenso wenig deine Missionen, Kopfgelder und Anleihen, Handel oder verkaufte Daten. Sprünge, Scans und Märkte schon.",
+    "intro": "Was EDCH an EDDN, EDSM und Inara sendet. Der Schalter ist auch in der oberen Leiste und bleibt nach einem Neustart so eingestellt.",
+    "invisible": "Unsichtbar",
+    "invisibleHelp": "Nichts wird geteilt: kein Sprung, kein Markt, gar nichts. Was noch gesendet werden sollte, wird verworfen.",
+    "normal": "Normal",
+    "normalHelp": "Alles, was die aktivierten Dienste annehmen, wird geteilt.",
+    "othersStillShare": "Das verbirgt nur, was du sendest: Andere Spieler im selben System können seinen Zustand weiterhin teilen.",
+    "title": "Was du teilst"
   }
 }

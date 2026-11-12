@@ -18,6 +18,12 @@ export class InaraUploader {
 
   constructor(private ctx: UploadContext) {}
 
+  /** Forgets the events waiting to be sent, and the pending materials snapshot (the share mode changed). */
+  clear() {
+    this.events = [];
+    this.materialsChanged = false;
+  }
+
   queue(ev: Json) {
     const add = (eventName: string, eventData: unknown) =>
       !this.refused && this.events.push({ eventName, eventTimestamp: ev.timestamp, eventData });

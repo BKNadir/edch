@@ -1481,5 +1481,16 @@
     "typeRevenant": "Revenant",
     "typeScout": "Éclaireur",
     "typeUnknown": "Autre (obligation inconnue)"
+  },
+  "shareMode": {
+    "bgs": "BGS",
+    "bgsHelp": "Ton travail BGS reste privé : les factions, leur influence, leurs états et conflits ne sont pas partagés, ni tes missions, primes et obligations, ventes de marchandises ou de données. Les sauts, scans et marchés le sont toujours.",
+    "intro": "Ce qu'EDCH envoie à EDDN, EDSM et Inara. Le sélecteur est aussi dans la barre du haut, et reste réglé après un redémarrage.",
+    "invisible": "Invisible",
+    "invisibleHelp": "Rien n'est partagé : ni saut, ni marché, rien du tout. Ce qui attendait d'être envoyé est abandonné.",
+    "normal": "Normal",
+    "normalHelp": "Tout ce que prennent les services activés est partagé.",
+    "othersStillShare": "Cela masque seulement ce que tu envoies : d'autres joueurs de passage dans le même système peuvent toujours partager son état.",
+    "title": "Ce que tu partages"
   }
 }

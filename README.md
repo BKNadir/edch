@@ -104,7 +104,7 @@ Layout:
 - `src/`: framework-free TypeScript UI, in layers (platform, game, state, ui, services, features, views, app); `src-tauri/`: Rust backend (journal, HTTP, option files, remote access server, updates), with no game logic. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.10.11` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
+A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.10.12` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
 
 ## Roadmap
 

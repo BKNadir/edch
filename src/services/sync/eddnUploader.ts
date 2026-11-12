@@ -41,6 +41,11 @@ export class EddnUploader {
     }
   }
 
+  /** Forgets the messages waiting to be sent (the share mode changed). */
+  clear() {
+    this.queue = [];
+  }
+
   /** Builds the message for a live event (with the session before this event) and queues it. */
   async fromEvent(ev: Json) {
     const s = this.ctx.session;

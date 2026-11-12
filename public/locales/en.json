@@ -1479,5 +1479,16 @@
     "typeRevenant": "Revenant",
     "typeScout": "Scout",
     "typeUnknown": "Other (unknown bond)"
+  },
+  "shareMode": {
+    "bgs": "BGS",
+    "bgsHelp": "Your BGS work stays private: the factions, their influence, states and conflicts aren't shared, nor your missions, vouchers, trade or data sold. Jumps, scans and markets still are.",
+    "intro": "What EDCH sends to EDDN, EDSM and Inara. The switch is also in the top bar, and stays as you set it after a restart.",
+    "invisible": "Invisible",
+    "invisibleHelp": "Nothing is shared: no jump, no market, nothing at all. What was waiting to be sent is dropped.",
+    "normal": "Normal",
+    "normalHelp": "Everything the services you enabled take is shared.",
+    "othersStillShare": "This only hides what you send: other players visiting the same system can still share its state.",
+    "title": "What you share"
   }
 }

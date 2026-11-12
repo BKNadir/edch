@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.12
+
+- New share mode switch in the top bar (also on the Sync page): Normal, BGS or Invisible. BGS keeps your BGS work private: EDDN, EDSM and Inara no longer get the factions, their influence, states and conflicts, nor your missions, vouchers, trade or data sold (jumps, scans and markets are still shared). Invisible shares nothing at all. The mode stays as you set it after a restart, and switching drops what was still waiting to be sent. It only hides what you send: other players in the same system can still share its state.
+
 ## 0.10.11
 
 - Session: going back to the main menu and in again no longer starts a new session (jumps, mining, missions… went back to zero). A session now ends when the game closes or starts again.

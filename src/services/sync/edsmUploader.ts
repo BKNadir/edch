@@ -49,6 +49,11 @@ export class EdsmUploader {
     }
   }
 
+  /** Forgets the events waiting to be sent (the share mode changed). */
+  clear() {
+    this.pending = [];
+  }
+
   queue(ev: Json) {
     if (this.discard?.has(ev.event)) return;
     this.pending.push({ ...ev, ...this.transient });

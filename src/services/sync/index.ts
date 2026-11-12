@@ -1,7 +1,8 @@
 // Sends live game data to EDDN, EDSM and Inara (what EDMC does), with each service's rules:
 // only live events (never the start-up replay), no retry on EDDN 400/426, ≥ 60 s before a retry.
 // This coordinator feeds every event to the three uploaders, flushes them every 10 s, and keeps
-// the counters and log shown on the Sync page.
+// the counters and log shown on the Sync page. The share mode (normal, BGS, invisible) filters
+// what they get; switching it drops what was waiting to be sent under the previous mode.
 
 import { log as appLog } from "../../platform/logger.js";
 import { t } from "../../platform/i18n.js";
@@ -12,6 +13,8 @@ import type { Json, SyncLogEntry, SyncStats, UploadContext } from "./common.js";
 import { EddnUploader } from "./eddnUploader.js";
 import { EdsmUploader } from "./edsmUploader.js";
 import { InaraUploader } from "./inaraUploader.js";
+import { shareableEvent } from "./shareMode.js";
+import type { ShareMode } from "../../state/syncSettings.js";
 
 export type { SyncLogEntry, SyncStats } from "./common.js";
 
@@ -22,6 +25,8 @@ export class Uploaders {
   private edsm: EdsmUploader;
   private inara: InaraUploader;
   private timer?: number;
+  /** The share mode the waiting messages were queued under. */
+  private queuedUnder: ShareMode | undefined;
 
   constructor(
     private settings: () => SyncSettings,
@@ -72,21 +77,39 @@ export class Uploaders {
   /** Every event goes through here; `live` is false during the start-up replay. */
   async handle(ev: Json, live: boolean) {
     const s = this.settings();
+    this.dropIfModeChanged();
+    // What may be shared of this event (null: nothing, in the current share mode).
+    const shared = live ? shareableEvent(ev, s.shareMode) : null;
     // EDDN: build with the session *before* this event, then track it.
-    if (live && s.eddn) {
+    if (shared && s.eddn) {
       try {
-        await this.eddn.fromEvent(ev);
+        await this.eddn.fromEvent(shared);
       } catch (e) {
         this.log("EDDN", ev.event, false, String(e));
       }
     }
+    // The session and EDSM's context are EDCH's own reading: always from the full event.
     trackSession(this.session, ev);
     this.edsm.track(ev);
-    if (live && s.edsm && s.edsmKey && s.edsmCommander) this.edsm.queue(ev);
-    if (live && s.inara && s.inaraKey) this.inara.queue(ev);
+    if (shared && s.edsm && s.edsmKey && s.edsmCommander) this.edsm.queue(shared);
+    if (shared && s.inara && s.inaraKey) this.inara.queue(shared);
+  }
+
+  /** The share mode changed: what was queued under the previous one is never sent. */
+  private dropIfModeChanged() {
+    const mode = this.settings().shareMode;
+    if (this.queuedUnder !== undefined && this.queuedUnder !== mode) {
+      this.eddn.clear();
+      this.edsm.clear();
+      this.inara.clear();
+    }
+    this.queuedUnder = mode;
   }
 
   private async flush() {
+    this.dropIfModeChanged();
+    // Invisible: nothing leaves the PC (not even Inara's materials snapshot).
+    if (this.settings().shareMode === "invisible") return;
     await this.eddn.send();
     await this.edsm.flush();
     await this.inara.flush();

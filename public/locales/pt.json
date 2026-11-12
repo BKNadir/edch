@@ -1492,5 +1492,16 @@
     "typeRevenant": "Revenant",
     "typeScout": "Batedor",
     "typeUnknown": "Outro (título desconhecido)"
+  },
+  "shareMode": {
+    "bgs": "BGS",
+    "bgsHelp": "Seu trabalho de BGS fica privado: as facções, sua influência, estados e conflitos não são compartilhados, nem suas missões, recompensas e títulos, comércio ou dados vendidos. Saltos, escaneamentos e mercados continuam sendo.",
+    "intro": "O que o EDCH envia ao EDDN, EDSM e Inara. O seletor também fica na barra superior e continua como você deixou após reiniciar.",
+    "invisible": "Invisível",
+    "invisibleHelp": "Nada é compartilhado: nenhum salto, nenhum mercado, nada. O que aguardava envio é descartado.",
+    "normal": "Normal",
+    "normalHelp": "Tudo o que os serviços ativados aceitam é compartilhado.",
+    "othersStillShare": "Isso esconde apenas o que você envia: outros jogadores de passagem no mesmo sistema ainda podem compartilhar o estado dele.",
+    "title": "O que você compartilha"
   }
 }

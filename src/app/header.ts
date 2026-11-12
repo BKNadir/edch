@@ -1,11 +1,14 @@
 // Top bar: the commander and ship, the current system (click to copy it) with its security,
-// allegiance and faction states, the game's state, the focus buttons and the journal status.
+// allegiance and faction states, the share mode (what EDDN, EDSM and Inara get), the game's state,
+// the focus buttons and the journal status.
 
+import { isRemote } from "../platform/bridge.js";
 import { t } from "../platform/i18n.js";
 import type { Ctx } from "../state/context.js";
 import { gameBadge } from "../ui/desktop.js";
 import { h, icon, replace } from "../ui/dom.js";
 import { openSystem } from "../views/shared/links.js";
+import { shareModeSwitch } from "../views/shared/shareModeSwitch.js";
 import { focusButtons, toggleNav } from "./focus.js";
 
 /** Journal values → labels shown. */
@@ -77,6 +80,8 @@ export function renderHeader(el: HTMLElement, ctx: Ctx) {
           [...states].slice(0, 4).map((state) => h("span.badge.hit", null, state)),
         )
       : h("div.where.sub", null, t("common.unknownLocation")),
+    // The PC shares the data: a paired phone doesn't hold the Sync settings.
+    isRemote() ? null : shareModeSwitch(ctx.store, true),
     gameBadge(ctx.store.state.game),
     focusButtons(),
     h(

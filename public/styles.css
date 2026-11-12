@@ -4181,3 +4181,50 @@ body.menu-editing .sidebar span {
 .thargoid-table tr.muted td {
   color: var(--muted);
 }
+
+/* Share mode switch (top bar, Sync page): Normal / BGS / Invisible. Anything but Normal stands out
+   so a hidden mode is never forgotten. */
+.share-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 2px 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-inset);
+  white-space: nowrap;
+}
+.share-mode .icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+  color: var(--muted);
+}
+.share-mode-option {
+  border: 0;
+  background: transparent;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.share-mode-option.on {
+  background: var(--panel-2);
+  color: var(--text);
+  font-weight: 600;
+}
+.share-mode.bgs,
+.share-mode.invisible {
+  border-color: var(--accent);
+}
+.share-mode.bgs .icon,
+.share-mode.invisible .icon,
+.share-mode.bgs .share-mode-option.on,
+.share-mode.invisible .share-mode-option.on {
+  color: var(--accent);
+}
+.share-mode-help {
+  margin: 10px 0 6px;
+  padding-left: 18px;
+  line-height: 1.5;
+}
