@@ -129,10 +129,23 @@ the user can see are returned as codes and translated by the UI (`backend.<code>
 
 ## Releases
 
-- Version bumps stay in `0.10.x` unless the maintainer says otherwise. The version is in
+- Version bumps stay in `0.10.x` unless the maintainer says otherwise (then update this line). The version is in
   `package.json`, `src-tauri/tauri.conf.json`, `src-tauri/Cargo.toml`, `src/platform/version.ts`,
   `test/v02.test.mjs` and the READMEs' release example.
 - Every user-visible change gets a line at the top of `CHANGELOG.md` (English): that section becomes
   the release notes and the update banner.
 - A push to `prerelease/<version>` publishes a pre-release (`v<version>-pre.<run>`). Releases are
   published from `main` by the maintainer only (commit containing `[release]`).
+
+## Keeping this file current
+
+This file is part of the project and must stay true. Update it in the same change when:
+
+- the version changes series (`0.10.x` → `0.11.x`, …): the version line above, and every rule the
+  new series changes;
+- a convention, a rule or the architecture changes (new layer, new storage, new check, new CI step,
+  a new place for something);
+- a new feature becomes the best example of a pattern ("Adding a feature", step 1).
+
+Also check it against the code at every release: paths, file names and commands it mentions must
+exist.
