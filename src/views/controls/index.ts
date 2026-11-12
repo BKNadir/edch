@@ -11,6 +11,7 @@ import {
   fileForPreset,
   groupOf,
   keyLabel,
+  padControl,
   parseBinds,
   parseStartPreset,
   presetLineFor,
@@ -21,17 +22,22 @@ import {
   exportConfig,
   importConfig,
   isTauri,
+  listBuiltinPresets,
   listOptionFiles,
   type OptionFile,
+  readBuiltinPreset,
   readOptionFile,
   revealPath,
 } from "../../platform/bridge.js";
 import { fold, gameText, t } from "../../platform/i18n.js";
 import type { Ctx, View } from "../../state/context.js";
+import { dialog } from "../../ui/dialog.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
 import { keepPicture, keptPictureUrl } from "../../services/controllerPictures.js";
 import { board, gamepad, GROUP_LABELS, groupClass, legendTable } from "./deviceBoard.js";
 import { keyboard } from "./keyboard.js";
+import { ConfigureSession, type PresetSource } from "./configure.js";
+import { controlOf, type ControlPress, watchPresses } from "./inputCapture.js";
 
 const MODES: [string, string, string[] | null][] = [
   ["all", t("controls.all"), null],
@@ -40,6 +46,9 @@ const MODES: [string, string, string[] | null][] = [
   ["foot", t("common.foot"), ["OnFoot", "Holo-Me"]],
   ["ui", t("controls.mapsUi"), ["Galaxy map", "UI", "Camera", "Head look", "Misc"]],
 ];
+
+/** How long a pressed control stays shown and highlighted. */
+const PRESS_SHOWN_MS = 4000;
 
 let metaPromise: Promise<BindsMeta> | undefined;
 
@@ -58,6 +67,17 @@ export class ControlsView implements View {
   private layout = "en-US";
   private note = "";
   private device = "";
+  /** The presets the game uses, as read (to copy them for "Configure"). */
+  private sources: PresetSource[] = [];
+  /** The game's default presets found in its installation ("KeyboardMouseOnly.binds"…). */
+  private builtinFiles: string[] = [];
+  /** "Configure": the copies being edited, else undefined. */
+  private session?: ConfigureSession;
+  /** A dialog of "Configure" is open: presses don't open another one. */
+  private configuring = false;
+  /** The control last pressed (shown and highlighted for a few seconds). */
+  private pressed?: { device: string; key: string; at: number };
+  private stopWatching?: () => void;
   /** Per device: chosen template id ("" = none / simple diagram). */
   private tplChoice: Record<string, string> = (() => {
     try {
@@ -81,9 +101,16 @@ export class ControlsView implements View {
       this.body,
     );
     replace(this.body, h("p.sub", null, h("span.spinner"), " " + t("controls.readingBindings")));
+    this.body.onclick = (event) => this.onDiagramClick(event);
     try {
-      this.meta = await loadMeta();
+      const meta = await loadMeta();
+      this.meta = meta;
       await this.load();
+      this.stopWatching ??= watchPresses(
+        meta,
+        () => this.layout,
+        (press) => this.onPress(press),
+      );
     } catch (e) {
       replace(this.body, h("p.error", null, icon("warn"), ` ${String((e as Error).message ?? e)}`));
     }
@@ -120,10 +147,22 @@ export class ControlsView implements View {
       names.find((n) => n.toLowerCase().startsWith("startpreset") && n.endsWith(".start"));
     const lines = startName ? parseStartPreset(await readOptionFile("Bindings", startName)) : [];
     this.presets = lines;
+    // The game's default presets aren't in the Bindings folder: read them (read-only) from its
+    // installation's ControlSchemes folder.
+    const launcherPath = this.ctx.store.state.settings.gameLaunch?.path ?? "";
+    this.builtinFiles = await listBuiltinPresets(launcherPath).catch(() => []);
     const parsed = new Map<string, ReturnType<typeof parseBinds> | null>();
+    this.sources = [];
     for (const p of new Set(lines)) {
       const file = fileForPreset(p, names);
-      parsed.set(p, file ? parseBinds(await readOptionFile("Bindings", file)) : null);
+      const builtin = this.builtinFiles.find((name) => name.toLowerCase() === `${p}.binds`.toLowerCase());
+      let xml: string | undefined;
+      if (file) xml = await readOptionFile("Bindings", file);
+      else if (builtin) xml = await readBuiltinPreset(builtin, launcherPath).catch(() => undefined);
+      if (xml !== undefined) this.sources.push({ preset: p, file, xml });
+      // While configuring, the page shows the copies being edited.
+      const shown = this.session?.xmlFor(p) ?? xml;
+      parsed.set(p, shown !== undefined ? parseBinds(shown) : null);
     }
     const missing = [...parsed.entries()].filter(([, v]) => !v).map(([k]) => k);
     if (missing.length) this.note = t("controls.builtGamePresetSNotCopied", { value: missing.join(", ") });
@@ -287,8 +326,34 @@ export class ControlsView implements View {
           }),
         ),
         h("button.ghost", { onclick: () => window.print() }, t("controls.printSheet")),
+        this.session
+          ? h(
+              "button.primary",
+              { onclick: () => this.stopConfigure() },
+              icon("check"),
+              " " + t("controls.configureDone"),
+            )
+          : h(
+              "button.primary",
+              {
+                disabled: !this.configurable(),
+                title: this.configurable() ? t("controls.configureHelp") : t("controls.configureOnlyActive"),
+                onclick: () => void this.startConfigure(),
+              },
+              t("controls.configure"),
+            ),
       ),
       this.note ? h("p.notice", null, icon("warn"), ` ${this.note}`) : null,
+      this.session
+        ? h(
+            "div.callout.info.configure-banner",
+            { role: "note" },
+            h("strong", null, t("controls.configuringTitle", { presets: this.session.copyNames().join(" / ") })),
+            h("p", null, t("controls.configuringHelp")),
+            h("p.sub", null, t("controls.configuringInGame", { presets: this.session.copyNames().join(" / ") })),
+          )
+        : null,
+      this.pressedBanner(),
       devices.length
         ? h(
             "div.device-tabs",
@@ -308,6 +373,146 @@ export class ControlsView implements View {
       this.device ? this.diagram(this.device, mine) : null,
       h("p.sub.credits", null, t("controls.credits")),
     );
+    this.body.classList.toggle("configuring", Boolean(this.session));
+    this.highlightPressed();
+  }
+
+  // ---------------- configure ----------------
+
+  /** "Configure" works on the presets the game uses now (not on another file picked in the list). */
+  private configurable(): boolean {
+    return isTauri() && !this.chosen && this.presets.length > 0 && this.sources.length === new Set(this.presets).size;
+  }
+
+  private async startConfigure() {
+    if (!this.configurable() || this.configuring) return;
+    this.configuring = true;
+    try {
+      const ok = await dialog(
+        t("controls.configureTitle"),
+        [h("p", null, t("controls.configureIntro")), h("p.sub", null, t("controls.configureSafety"))],
+        [
+          { label: t("controls.cancel"), value: "" },
+          { label: t("controls.configureStart"), value: "go", primary: true },
+        ],
+      );
+      if (ok !== "go") return;
+      const session = new ConfigureSession(this.meta!, this.presets);
+      if (
+        !(await session.start(
+          this.sources,
+          this.files.map((f) => f.name),
+        ))
+      )
+        return;
+      this.session = session;
+      toast(t("controls.configureCopyMade", { presets: session.copyNames().join(" / ") }));
+      await this.load();
+    } catch (e) {
+      toast(String((e as Error)?.message ?? e));
+    } finally {
+      this.configuring = false;
+    }
+  }
+
+  private async stopConfigure() {
+    this.session = undefined;
+    await this.load();
+  }
+
+  /** Configure mode: a click on a control of the drawing opens its dialog. */
+  private onDiagramClick(event: Event) {
+    if (!this.session) return;
+    const element = (event.target as HTMLElement).closest<HTMLElement>("[data-control-key]");
+    const key = element?.dataset.controlKey;
+    if (key) void this.configureControl({ device: this.device, key });
+  }
+
+  private async configureControl(control: { device: string; key: string }) {
+    if (!this.session || this.configuring) return;
+    if (/Axis$/.test(control.key)) {
+      toast(t("controls.axesNotConfigurable"));
+      return;
+    }
+    this.configuring = true;
+    try {
+      const name = `${deviceInfo(this.meta!, control.device).label} · ${keyLabel(this.meta!, control.key)}`;
+      if (await this.session.configure(control, name)) {
+        toast(t("controls.configureSaved"));
+        await this.load();
+      }
+    } catch (e) {
+      toast(String((e as Error)?.message ?? e));
+    } finally {
+      this.configuring = false;
+    }
+  }
+
+  // ---------------- pressed controls ----------------
+
+  /** A control was pressed (EDCH focused): configure it, or show what it does. */
+  private onPress(press: ControlPress) {
+    if (!this.body.isConnected || !this.meta || this.configuring) return;
+    const devicesInUse = [...new Set(this.binds.map((b) => b.device))];
+    const control = controlOf(press, devicesInUse);
+    if (this.session) {
+      void this.configureControl(control);
+      return;
+    }
+    this.pressed = { ...control, at: Date.now() };
+    if (devicesInUse.includes(control.device)) this.device = control.device;
+    this.render();
+    // The banner and highlight go away after a while.
+    window.setTimeout(() => {
+      if (this.pressed && Date.now() - this.pressed.at >= PRESS_SHOWN_MS - 50) {
+        this.pressed = undefined;
+        this.render();
+      }
+    }, PRESS_SHOWN_MS);
+  }
+
+  /** Does `key` (as drawn) name the same control as the pressed `pressedKey` on `device`? */
+  private sameControl(device: string, key: string, pressedKey: string): boolean {
+    if (key === pressedKey || key.replace(/^(Pos|Neg)_/, "") === pressedKey) return true;
+    const pad = padControl(device, pressedKey);
+    return Boolean(pad && padControl(device, key) === pad);
+  }
+
+  /** What the pressed control does, above the drawing. */
+  private pressedBanner(): HTMLElement | null {
+    if (!this.pressed || !this.meta) return null;
+    const { device, key } = this.pressed;
+    const functions = this.binds.filter((b) => b.device === device && this.sameControl(device, b.key, key));
+    const name = `${deviceInfo(this.meta, device).label} · ${keyLabel(this.meta, key)}`;
+    return h(
+      "div.pressed-banner",
+      { role: "status" },
+      h("strong", null, name),
+      functions.length
+        ? h(
+            "span",
+            null,
+            functions
+              .map(
+                (b) =>
+                  `${b.modifiers.length ? `${comboLabel(this.meta!, b)} → ` : ""}${gameText(actionName(this.meta!, b.action))}`,
+              )
+              .join(" · "),
+          )
+        : h("span.sub", null, t("controls.controlFree")),
+    );
+  }
+
+  /** Highlights the pressed control on the drawing. */
+  private highlightPressed() {
+    if (!this.pressed || this.pressed.device !== this.device) return;
+    const { device, key } = this.pressed;
+    for (const element of this.body.querySelectorAll<HTMLElement>("[data-control-key]")) {
+      if (this.sameControl(device, element.dataset.controlKey ?? "", key)) {
+        element.classList.add("pressed");
+        element.scrollIntoView({ block: "nearest", inline: "nearest" });
+      }
+    }
   }
 
   private debounce?: number;
@@ -399,6 +604,7 @@ export class ControlsView implements View {
     const pictureUrl = `${meta.templateBase}${tpl.image}.jpg`;
     const img = h("img.tpl-img", {
       alt: tpl.name,
+      draggable: false,
       onerror: () => {
         stage.replaceWith(
           h(
@@ -414,9 +620,12 @@ export class ControlsView implements View {
       img.src = kept ?? pictureUrl;
       if (!kept) void keepPicture(tpl.image, pictureUrl);
     });
-    const boxes = [...placed.entries()].map(([key, list]) => {
+    // Configuring: every box of the picture, the empty ones too, so any control can be clicked.
+    const boxKeys = this.session ? Object.keys(tpl.boxes).filter((key) => !/Axis$/.test(key)) : [...placed.keys()];
+    const boxes = boxKeys.map((key) => {
+      const list = placed.get(key) ?? [];
       const [x, y, bw, bh] = tpl.boxes[key];
-      const g = groupOf(meta, list[0].action);
+      const g = list[0] ? groupOf(meta, list[0].action) : "";
       const text = list
         .map(
           (b) =>
@@ -424,8 +633,9 @@ export class ControlsView implements View {
         )
         .join(" · ");
       return h(
-        `div.tpl-box.${groupClass(g)}`,
+        `div.tpl-box${list.length ? `.${groupClass(g)}` : ".empty"}`,
         {
+          "data-control-key": list[0]?.key ?? key,
           title: `${keyLabel(meta, key)} : ${text}`,
           style: {
             left: `${(x / w) * 100}%`,
@@ -440,6 +650,27 @@ export class ControlsView implements View {
     });
     const stage = h("div.tpl-stage", { style: { aspectRatio: `${w} / ${hgt}` } }, img, boxes);
     const scroller = h("div.tpl-scroll", null, stage);
+    // Zoomed in, the picture scrolls both ways, and can be dragged around with the mouse.
+    let drag: { x: number; y: number; left: number; top: number } | undefined;
+    scroller.addEventListener("pointerdown", (e: PointerEvent) => {
+      if (!scroller.classList.contains("zoom") || e.button !== 0) return;
+      // No native drag of the picture: the mouse moves the view.
+      e.preventDefault();
+      drag = { x: e.clientX, y: e.clientY, left: scroller.scrollLeft, top: scroller.scrollTop };
+      scroller.setPointerCapture(e.pointerId);
+      scroller.classList.add("dragging");
+    });
+    scroller.addEventListener("pointermove", (e: PointerEvent) => {
+      if (!drag) return;
+      scroller.scrollLeft = drag.left - (e.clientX - drag.x);
+      scroller.scrollTop = drag.top - (e.clientY - drag.y);
+    });
+    const endDrag = () => {
+      drag = undefined;
+      scroller.classList.remove("dragging");
+    };
+    scroller.addEventListener("pointerup", endDrag);
+    scroller.addEventListener("pointercancel", endDrag);
     return h(
       "div",
       null,
@@ -448,7 +679,16 @@ export class ControlsView implements View {
         null,
         h(
           "button.ghost.small",
-          { onclick: () => scroller.classList.toggle("zoom") },
+          {
+            onclick: () => {
+              // Keep the middle of what is shown in the middle after zooming in or out.
+              const middleX = (scroller.scrollLeft + scroller.clientWidth / 2) / scroller.scrollWidth;
+              const middleY = (scroller.scrollTop + scroller.clientHeight / 2) / scroller.scrollHeight;
+              scroller.classList.toggle("zoom");
+              scroller.scrollLeft = middleX * scroller.scrollWidth - scroller.clientWidth / 2;
+              scroller.scrollTop = middleY * scroller.scrollHeight - scroller.clientHeight / 2;
+            },
+          },
           icon("search"),
           " " + t("controls.zoomOut"),
         ),

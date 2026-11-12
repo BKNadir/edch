@@ -1,11 +1,14 @@
-// A small in-app dialog (no Windows pop-up): a title, content and buttons.
+// A small in-app dialog (no Windows pop-up): a title, content and buttons. The content may also
+// close the dialog itself (a list to pick from): pass a function that gets `close`.
 
 import { h, icon } from "./dom.js";
 import { t } from "../platform/i18n.js";
 
+type DialogBody = (Node | string | null)[];
+
 export function dialog(
   title: string,
-  body: (Node | string | null)[],
+  body: DialogBody | ((close: (value: string | null) => void) => DialogBody),
   buttons: { label: string; primary?: boolean; value: string }[],
 ): Promise<string | null> {
   return new Promise((resolve) => {
@@ -29,7 +32,7 @@ export function dialog(
           h("h3", null, title),
           h("button.icon-btn", { title: t("common.close"), onclick: () => close(null) }, icon("close")),
         ),
-        h("div.dialog-body", null, ...body),
+        h("div.dialog-body", null, ...(typeof body === "function" ? body(close) : body)),
         h(
           "div.dialog-actions",
           null,

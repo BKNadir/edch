@@ -165,7 +165,9 @@ These hold everywhere, front end and backend:
   `logs.rs` (`sanitize`, `redact`) and `platform/logger.ts` enforce it; keep using them.
 - API keys and paths are never sent to phones (`app/remote.ts`, `snapshot`).
 - EDCH never reads or changes the game's code or data files; it only reads the journal and
-  companion files, and the option files the user exports or imports.
+  companion files, and the option files the user exports or imports. It writes a binding file only
+  for its own presets (`…_EDCH`, Controls → Configure). In the game's installation folder, the only
+  files it reads are the default control presets (`ControlSchemes\*.binds`), read-only.
 
 ## Checks
 

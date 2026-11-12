@@ -69,6 +69,8 @@ O EDCH lê o diário do jogo no seu PC. Isto é tudo o que sai dele, e para onde
 
 Nada mais é coletado ou enviado. Suas configurações, chaves e lista de desejos ficam em `%LOCALAPPDATA%\EDCompanionHelper`.
 
+**Os arquivos do jogo**: o EDCH lê o diário e os arquivos que o jogo escreve ao lado dele (`Status.json`, `Cargo.json`, `Market.json`…), e seus arquivos de controles (`Options\Bindings`) para mostrá-los, exportá-los e importá-los; ele só escreve um arquivo de controles para as próprias predefinições (chamadas `…_EDCH`), nunca as do jogo. Na pasta de instalação do jogo, os **únicos** arquivos que o EDCH toca são as predefinições de controles padrão (`ControlSchemes\*.binds`), **somente leitura**, para mostrá-las na página Controles e copiá-las. Nada mais do jogo é lido ou alterado.
+
 ## Idiomas
 
 O EDCH está disponível nos seis idiomas do jogo: inglês (padrão), francês, alemão, espanhol, português (Brasil) e russo. O instalador pergunta o idioma e o app o adota no primeiro uso. Você pode mudá-lo a qualquer momento em **Configurações → Idioma**. Os nomes de materiais, módulos, projetos e efeitos seguem a tradução do jogo; os nomes dos controles ficam como no jogo em inglês.

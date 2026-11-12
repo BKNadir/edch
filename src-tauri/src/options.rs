@@ -1,15 +1,16 @@
 //! The game's option files (key bindings, graphics): list, read, export to a zip in
 //! Documents\\EDCH, and import from a zip (the current files are always backed up first). Only the
-//! Bindings and Graphics folders, and only the file types the game uses, are ever touched.
+//! Bindings and Graphics folders, and only the file types the game uses, are ever touched. EDCH
+//! writes a binding file itself only for its own presets ("…_EDCH"), never the game's.
 
 use serde::Serialize;
 use std::fs::{self, File};
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 
-use crate::paths::documents_dir;
 #[cfg(target_os = "linux")]
 use crate::paths::proton_users;
+use crate::paths::{control_schemes_dirs, documents_dir};
 
 #[derive(Serialize)]
 pub struct OptionFile {
@@ -218,4 +219,110 @@ pub fn import_config(data: Vec<u8>) -> Result<ImportReport, String> {
         skipped,
         backup: backup.to_string_lossy().to_string(),
     })
+}
+
+/// Ending of the presets EDCH creates: the only binding files it ever writes itself.
+const EDCH_PRESET_SUFFIX: &str = "_EDCH";
+
+/// Files already backed up this session (one backup before the first change is enough).
+static BACKED_UP: std::sync::Mutex<Vec<String>> = std::sync::Mutex::new(Vec::new());
+
+#[derive(Serialize)]
+pub struct SavedPreset {
+    /// The backup made before this write (the first one of the session), if any.
+    backup: Option<String>,
+}
+
+/// Writes one of EDCH's own binding presets ("Custom_EDCH.4.2.binds"): created as a copy of a game
+/// preset (`create`), or updated. Any other file is refused, so the game's presets are never
+/// changed. Before the first write of the session, the Bindings folder (for a new copy) or the
+/// file itself (for an update) is backed up in Documents\EDCH\sauvegardes.
+#[tauri::command]
+pub fn save_edch_preset(name: String, content: String, create: bool) -> Result<SavedPreset, String> {
+    let preset = name.split('.').next().unwrap_or_default().to_string();
+    let valid_name = allowed_option_file("Bindings", &name)
+        && name.to_lowercase().ends_with(".binds")
+        && preset.ends_with(EDCH_PRESET_SUFFIX);
+    if !valid_name || !content.contains(&format!("PresetName=\"{preset}\"")) || !content.contains("<Root") {
+        return Err("presetRefused".into());
+    }
+    let folder = options_root()?.join("Bindings");
+    let path = folder.join(&name);
+    if create && path.exists() {
+        return Err("presetExists".into());
+    }
+    if !create && !path.is_file() {
+        return Err("presetMissing".into());
+    }
+    let mut backed_up = BACKED_UP.lock().map_err(|e| e.to_string())?;
+    let backup_key = if create {
+        String::from("Bindings/")
+    } else {
+        name.clone()
+    };
+    let mut backup = None;
+    if !backed_up.contains(&backup_key) {
+        let stamp = unix_secs(SystemTime::now());
+        let target = if create {
+            let target = documents_dir()
+                .join("sauvegardes")
+                .join(format!("avant-configuration-{stamp}.zip"));
+            write_zip(&target, &["Bindings"])?;
+            target
+        } else {
+            let target = documents_dir().join("sauvegardes").join(format!("{name}.{stamp}.bak"));
+            fs::create_dir_all(documents_dir().join("sauvegardes")).map_err(|e| e.to_string())?;
+            fs::copy(&path, &target).map_err(|e| e.to_string())?;
+            target
+        };
+        backed_up.push(backup_key);
+        backup = Some(target.to_string_lossy().to_string());
+    }
+    // The game writes its .binds files with a UTF-8 BOM. Written aside first, then moved in place,
+    // so the game never reads a half-written file.
+    fs::create_dir_all(&folder).map_err(|e| e.to_string())?;
+    let temporary = folder.join(format!("{name}.part"));
+    let text = format!("\u{feff}{}", content.trim_start_matches('\u{feff}'));
+    fs::write(&temporary, text).map_err(|e| e.to_string())?;
+    fs::rename(&temporary, &path).map_err(|e| e.to_string())?;
+    Ok(SavedPreset { backup })
+}
+
+/// A default control preset's file name ("KeyboardMouseOnly.binds"): a plain .binds name.
+fn allowed_builtin_preset(name: &str) -> bool {
+    allowed_option_file("Bindings", name) && name.to_lowercase().ends_with(".binds")
+}
+
+/// The game's default control presets (the .binds files of its ControlSchemes folder), found in
+/// its installation. `launcher_path`: the launcher chosen in Settings, a hint where the game is.
+#[tauri::command]
+pub fn list_builtin_presets(launcher_path: String) -> Vec<String> {
+    let mut names: Vec<String> = Vec::new();
+    for folder in control_schemes_dirs(&launcher_path) {
+        for entry in fs::read_dir(folder).into_iter().flatten().flatten() {
+            let name = entry.file_name().to_string_lossy().to_string();
+            if allowed_builtin_preset(&name) && !names.contains(&name) {
+                names.push(name);
+            }
+        }
+    }
+    names
+}
+
+/// Reads one of the game's default control presets, read-only ("builtinPresetNotFound" when the
+/// game's installation or the file isn't found).
+#[tauri::command]
+pub fn read_builtin_preset(name: String, launcher_path: String) -> Result<String, String> {
+    if !allowed_builtin_preset(&name) {
+        return Err("fileRefused".into());
+    }
+    let path = control_schemes_dirs(&launcher_path)
+        .into_iter()
+        .map(|folder| folder.join(&name))
+        .find(|path| path.is_file())
+        .ok_or_else(|| "builtinPresetNotFound".to_string())?;
+    let bytes = fs::read(path).map_err(|e| e.to_string())?;
+    Ok(String::from_utf8_lossy(&bytes)
+        .trim_start_matches('\u{feff}')
+        .to_string())
 }

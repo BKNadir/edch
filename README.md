@@ -69,6 +69,8 @@ EDCH reads your game journal on your PC. Here is everything that leaves it, and 
 
 Nothing else is collected or sent. Your settings, keys and wishlist are stored in `%LOCALAPPDATA%\EDCompanionHelper`.
 
+**The game's files**: EDCH reads the journal and the files the game writes next to it (`Status.json`, `Cargo.json`, `Market.json`…), and your control files (`Options\Bindings`) to show, export and import them; it writes a control file only for its own presets (named `…_EDCH`), never the game's. In the game's installation folder, the **only** files EDCH touches are the default control presets (`ControlSchemes\*.binds`), **read-only**, to show them on the Controls page and copy them. Nothing else of the game is read or changed.
+
 ## Languages
 
 EDCH is available in the game's six languages: English (default), French, German, Spanish, Portuguese (Brazil) and Russian. The installer asks for the language and the app picks it up on first launch. You can change it at any time in **Settings → Language**. Material, module, blueprint and effect names follow the game's own translation; control names stay as in the English game.

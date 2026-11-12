@@ -1821,6 +1821,8 @@ label.file-btn:hover {
 .diagram {
   display: grid;
   gap: 12px;
+  /* Its items may be narrower than their content (the zoomed picture scrolls instead). */
+  grid-template-columns: minmax(0, 1fr);
 }
 .device-title {
   display: flex;
@@ -2264,12 +2266,98 @@ kbd.num b {
     background: color-mix(in srgb, var(--gc) 22%, #f2f2f2);
   }
 }
+/* The picture's frame: it never grows wider than the page (the grid it sits in would let it), so a
+   zoomed-in picture scrolls inside it, both ways, and can be dragged. */
 .tpl-scroll {
-  overflow-x: auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: auto;
   border-radius: 8px;
+}
+.tpl-scroll.zoom {
+  max-height: 80vh;
+  cursor: grab;
+}
+.tpl-scroll.zoom.dragging {
+  cursor: grabbing;
+  user-select: none;
 }
 .tpl-scroll.zoom .tpl-stage {
   width: 220%;
+}
+
+/* Controls → Configure: controls are clickable; the picture's empty boxes show where they are. */
+.controls-body.configuring [data-control-key] {
+  cursor: pointer;
+}
+.controls-body.configuring .tpl-box.empty {
+  outline: 1px dashed var(--accent);
+  outline-offset: -1px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.controls-body.configuring .tpl-box:hover,
+.controls-body.configuring .kb-key:hover,
+.controls-body.configuring .btn-tile:hover,
+.controls-body.configuring .hat-cell:hover {
+  outline: 2px solid var(--accent);
+}
+.configure-banner p {
+  margin: 4px 0 0;
+}
+/* The control just pressed on the device (EDCH focused): highlighted on the drawing, its functions above. */
+[data-control-key].pressed {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 6px var(--accent-dim);
+}
+circle[data-control-key].pressed {
+  stroke: var(--accent);
+  stroke-width: 4;
+}
+.pressed-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--accent-dim);
+}
+/* The function picker of Configure. */
+.action-current {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.action-current-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.action-pick-list {
+  display: grid;
+  gap: 4px;
+  max-height: 50vh;
+  margin-top: 8px;
+  overflow: auto;
+}
+.action-pick {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gc, var(--line));
+  border-radius: 6px;
+  background: var(--panel-inset);
+  color: var(--text);
+  text-align: left;
+}
+.action-pick:hover {
+  border-color: var(--accent);
 }
 
 /* ==================== LANGUAGE SCREEN ====================

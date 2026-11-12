@@ -29,7 +29,9 @@ list. If Prettier complains, run `npm run format`.
 - **Never touch the game.** EDCH reads the journal and the companion files (`Status.json`,
   `Cargo.json`, `Market.json`…). It does not read or change the game's code or data, send inputs to
   the game or automate it. The option files (key bindings, graphics) are only exported and imported
-  at the user's request, with a backup first.
+  at the user's request, with a backup first; EDCH writes a binding file only for its own presets
+  (`…_EDCH`), never the game's. The one exception in the game's installation folder: the default
+  control presets (`ControlSchemes\*.binds`), read-only, nothing else (the READMEs say so).
 - **No local database** (SQLite, IndexedDB…) and no new storage system. State is rebuilt from the
   journal; settings go through `state/store.ts` (saved in `localStorage` by the store). Small
   per-feature keys are fine when they follow the existing pattern (`edch.<name>`).

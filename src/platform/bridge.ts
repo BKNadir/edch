@@ -286,6 +286,17 @@ export const readOptionFile = async (folder: string, name: string): Promise<stri
 };
 export const exportConfig = (includeGraphics: boolean) => invoke<string>("export_config", { includeGraphics });
 export const importConfig = (bytes: Uint8Array) => invoke<ImportReport>("import_config", { data: Array.from(bytes) });
+/**
+ * Writes one of EDCH's own binding presets ("…_EDCH"), as a new copy (`create`) or an update. The
+ * backend refuses any other file; it returns the backup made before the session's first write.
+ */
+export const saveEdchPreset = (name: string, content: string, create: boolean) =>
+  invoke<{ backup: string | null }>("save_edch_preset", { name, content, create });
+/** The game's default control presets (.binds of its installation's ControlSchemes), read-only. */
+export const listBuiltinPresets = (launcherPath: string) => invoke<string[]>("list_builtin_presets", { launcherPath });
+/** Reads one of the game's default control presets ("KeyboardMouseOnly.binds"), read-only. */
+export const readBuiltinPreset = (name: string, launcherPath: string) =>
+  invoke<string>("read_builtin_preset", { name, launcherPath });
 export const revealPath = (path: string) => invoke<void>("reveal_path", { path });
 /** A controller picture kept on the PC (Controls page), as raw bytes; rejects when not kept yet. */
 export const readKeptPicture = (name: string) => invoke<ArrayBuffer>("picture_cache_read", { name });

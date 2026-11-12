@@ -14,6 +14,10 @@ and EDCH shows it in the update banner.
 - Fixed: war and civil war massacre missions ("kill … in a conflict zone") never counted their kills: the combat bonds of a conflict zone now count, one mission at a time per issuing faction like the game. In a wing, your wingmates' kills count in the game but aren't in your journal: the counter can be behind until the game marks the mission done (the Missions page says so).
 - Controls: each controller picture shown is kept on the PC, unchanged (full quality), in EDCH's folder, so the page shows it at once next time, offline too, instead of downloading 1.3 MB from GitHub each time.
 - Controls: the controller picture no longer sits on a white background: the white blends into the page, and on dark themes the picture is shown light on dark. Printing still gives the original picture on white.
+- Controls: new "Configure" button. It makes a copy of the presets the game uses now, named "…_EDCH" (the game's own presets are never changed), then a click on a control of the drawing, or a press on it on your device, lets you give it a function. A control already used is reported first (replace or keep both), and the function takes its first free slot. Each change is saved at once in the copy; your Bindings folder is backed up before the first one. Choose the copy in the game (Options → Controls) to use it. Axes can't be configured yet.
+- Controls: press a button, hat or key while EDCH has the focus, and the page shows what it does and highlights it on the drawing.
+- Controls: the game's default presets (KeyboardMouseOnly…) are now shown too: EDCH reads them, read-only, from the game's installation (ControlSchemes). It's the only file of the game's installation EDCH touches (the READMEs say so).
+- Fixed: Controls' "Zoom in / out" left you stuck in the top-left corner of the picture: the zoomed picture now scrolls both ways and can be dragged with the mouse.
 
 ## 0.10.11
 

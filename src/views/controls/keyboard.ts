@@ -80,6 +80,8 @@ export function keyboard(
     return h(
       `div.kb-key${list.length ? `.bound.${groupClass(g)}` : ""}${all.some((id) => modKeys.has(id)) ? ".modkey" : ""}${tail ? ".enter-tail" : ""}`,
       {
+        // The game's name of the key (the bound one first), to click it or highlight it when pressed.
+        "data-control-key": all.find((id) => byKey.has(id)) ?? all[0],
         style: { flexGrow: String(w), flexBasis: `${w * 44}px` },
         title: list.length
           ? list.map((b) => `${comboLabel(meta, b)} → ${actionName(meta, b.action)}`).join("\n")

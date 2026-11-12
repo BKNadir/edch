@@ -177,9 +177,11 @@ export function gamepad(meta: BindsMeta, legendKey: () => HTMLElement, device: s
   for (const c of order) {
     const [x, y] = POS[c];
     const g = groupOf(meta, byControl.get(c)![0].action);
+    // The control's key, to click it (Configure) or highlight it when pressed.
+    const controlKey = byControl.get(c)![0].key;
     svg.append(
-      el("circle", { class: `pad-marker ${groupClass(g)}`, cx: x, cy: y, r: 13 }),
-      el("text", { class: "pad-num", x, y: y + 4.5 }, String(num.get(c))),
+      el("circle", { class: `pad-marker ${groupClass(g)}`, cx: x, cy: y, r: 13, "data-control-key": controlKey }),
+      el("text", { class: "pad-num", x, y: y + 4.5, "data-control-key": controlKey }, String(num.get(c))),
     );
   }
   return h(
@@ -193,7 +195,7 @@ export function gamepad(meta: BindsMeta, legendKey: () => HTMLElement, device: s
       order.map((c) =>
         h(
           "div.legend-row",
-          null,
+          { "data-control-key": byControl.get(c)![0].key },
           h("kbd.num", null, h("b", null, String(num.get(c))), ` ${label[c] ?? c}`),
           h("div.acts", null, chips(meta, byControl.get(c)!)),
         ),
@@ -224,7 +226,7 @@ export function board(meta: BindsMeta, legendKey: () => HTMLElement, binds: Bind
     const g = groupOf(meta, list[0].action);
     return h(
       `div.btn-tile.${groupClass(g)}`,
-      null,
+      { "data-control-key": list[0].key },
       h("span.btn-label", null, label),
       h("div.acts", null, chips(meta, list)),
     );
@@ -268,7 +270,7 @@ export function board(meta: BindsMeta, legendKey: () => HTMLElement, binds: Bind
                 const list = dirs.get(d);
                 return h(
                   `div.hat-cell.${d.toLowerCase()}${list ? ".bound" : ""}`,
-                  null,
+                  { "data-control-key": `Joy_POV${id}${d}` },
                   h("span.btn-label", null, arrow),
                   list ? h("div.acts", null, chips(meta, list)) : null,
                 );
