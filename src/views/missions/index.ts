@@ -364,6 +364,7 @@ export class MissionsView implements View {
       null,
       h("h3", null, t("missions.stackedMassacreMissions")),
       h("p.sub", null, t("missions.eachKillCountsOneMissionPer")),
+      h("p.sub", null, t("missions.wingKillsNotInJournal")),
       stacks.map((s) =>
         h(
           "div.stack",

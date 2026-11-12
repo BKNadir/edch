@@ -740,6 +740,7 @@
     "whatNotifiesNewMissionAcceptanceMember": "What notifies you (new mission, acceptance, a member leaving…) is set in",
     "whereGetBuyMine": "Where to get it (buy or mine)",
     "wingCode": "Wing code",
+    "wingKillsNotInJournal": "In a wing, your wingmates' kills also count in the game, but they aren't in your journal: the counter can be behind until the game marks a mission done.",
     "you": "(you)"
   },
   "mobile": {

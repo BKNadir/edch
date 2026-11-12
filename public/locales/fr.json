@@ -741,6 +741,7 @@
     "whatNotifiesNewMissionAcceptanceMember": "Ce qui te prévient (nouvelle mission, acceptation, départ d'un membre…) se règle dans",
     "whereGetBuyMine": "Où le trouver (achat ou minage)",
     "wingCode": "Code de l'escadrille",
+    "wingKillsNotInJournal": "En escadrille, les éliminations de tes coéquipiers comptent aussi en jeu, mais elles ne sont pas dans ton journal : le compteur peut être en retard jusqu'à ce que le jeu valide une mission.",
     "you": "(toi)"
   },
   "mobile": {

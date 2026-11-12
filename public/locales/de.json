@@ -740,6 +740,7 @@
     "whatNotifiesNewMissionAcceptanceMember": "Was dich benachrichtigt (neue Mission, Annahme, ein Mitglied geht…), stellst du ein unter",
     "whereGetBuyMine": "Wo bekommen (kaufen oder abbauen)",
     "wingCode": "Geschwadercode",
+    "wingKillsNotInJournal": "In einem Geschwader zählen im Spiel auch die Abschüsse deiner Mitspieler, aber sie stehen nicht in deinem Journal: Der Zähler kann hinterherhinken, bis das Spiel eine Mission als erledigt markiert.",
     "you": "(du)"
   },
   "mobile": {

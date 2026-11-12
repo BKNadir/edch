@@ -741,6 +741,7 @@
     "whatNotifiesNewMissionAcceptanceMember": "Lo que te avisa (nueva misión, aceptación, salida de un miembro…) se ajusta en",
     "whereGetBuyMine": "Dónde conseguirlo (comprar o minar)",
     "wingCode": "Código del ala",
+    "wingKillsNotInJournal": "En ala, las bajas de tus compañeros también cuentan en el juego, pero no están en tu diario: el contador puede ir por detrás hasta que el juego dé una misión por cumplida.",
     "you": "(tú)"
   },
   "mobile": {

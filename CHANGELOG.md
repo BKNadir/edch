@@ -11,6 +11,7 @@ and EDCH shows it in the update banner.
 - Fixed: Colonisation showed wrong carrier quantities after taking goods back from a carrier or buying from its market (an old market stock kept hiding the change). The stock a carrier's market offers now raises the hold estimate once, when you look at it, and every later transfer or trade counts from there, after a restart too.
 - Fixed: donating tritium to a carrier's fuel no longer removes it from the carrier's hold (it comes from your ship's hold).
 - Fixed: the ship's hold counted a commodity only once when the game listed it on several lines (mission cargo).
+- Fixed: war and civil war massacre missions ("kill … in a conflict zone") never counted their kills: the combat bonds of a conflict zone now count, one mission at a time per issuing faction like the game. In a wing, your wingmates' kills count in the game but aren't in your journal: the counter can be behind until the game marks the mission done (the Missions page says so).
 
 ## 0.10.11
 

@@ -23,7 +23,11 @@ export function missionTitle(symbol: string): string {
   );
 }
 
-/** One kill against `victimFaction`: counts for the oldest unfinished mission of each issuer. */
+/**
+ * One kill against `victimFaction`: counts for the oldest unfinished mission of each issuer (the
+ * game completes one mission at a time per issuing faction). Called for bounties and for combat
+ * bonds (conflict massacre missions, "Mission_Massacre_Conflict_…", are fought in conflict zones).
+ */
 function massacreKill(st: ActivityState, victimFaction: string) {
   const byIssuer = new Map<string, Mission>();
   const candidates = Object.values(st.missions)
@@ -155,6 +159,9 @@ export const MISSIONS_EVENTS: EventHandlers = {
     const session = st.session;
     session.kills += 1;
     session.bonds += num(ev.Reward) ?? 0;
+    // A war or civil war massacre mission counts the kills of its conflict zone.
+    const victim = ev.VictimFaction_Localised ?? ev.VictimFaction;
+    if (victim) massacreKill(st, String(victim));
     return true;
   },
   RedeemVoucher: (st, ev) => {
