@@ -2217,16 +2217,21 @@ kbd.num b {
   position: relative;
   width: 100%;
   container-type: inline-size;
-  background: #fff;
   border-radius: 8px;
   overflow: hidden;
+  /* Its own layer, so the picture blends with the page behind it only. */
+  isolation: isolate;
+  background: var(--panel);
 }
+/* The template is drawn on white: the theme blends the white away (see --picture-* in theme.ts). */
 .tpl-img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: block;
+  filter: var(--picture-filter, none);
+  mix-blend-mode: var(--picture-blend, multiply);
 }
 .tpl-box {
   position: absolute;
@@ -2234,17 +2239,29 @@ kbd.num b {
   align-items: center;
   padding: 0 0.35cqw;
   line-height: 1.05;
-  color: #111;
+  color: var(--text);
   font-weight: 600;
   overflow: hidden;
   white-space: normal;
   word-break: break-word;
-  background: color-mix(in srgb, var(--gc) 22%, #f2f2f2);
+  background: color-mix(in srgb, var(--gc) 22%, var(--panel-2));
   border-left: 0.25cqw solid var(--gc);
 }
 @media print {
   .tpl-picker {
     display: none;
+  }
+  /* On paper: the original picture, on white, whatever the theme. */
+  .tpl-stage {
+    background: #fff;
+  }
+  .tpl-img {
+    filter: none;
+    mix-blend-mode: normal;
+  }
+  .tpl-box {
+    color: #111;
+    background: color-mix(in srgb, var(--gc) 22%, #f2f2f2);
   }
 }
 .tpl-scroll {

@@ -76,6 +76,10 @@ export function applyTheme(theme: ThemeSettings) {
     "--line": theme.oled ? "#1a1e24" : light ? line(14) : mix(14),
     "--line-2": theme.oled ? "#252b33" : light ? line(22) : mix(19),
     "--text": light ? "#1b2129" : "#e7e9ec",
+    // Pictures drawn on white (controller templates): blended so the white disappears, and
+    // turned negative on dark themes (the white becomes the background, the drawing light).
+    "--picture-filter": light ? "none" : "invert(1) hue-rotate(180deg)",
+    "--picture-blend": light ? "multiply" : "screen",
     "--muted": light ? "#5b6573" : "#8a94a2",
     "--text-soft": light ? "#39424d" : "#c6ccd4",
     "--bad": light ? "#d32f2f" : "#ff5d5d",
