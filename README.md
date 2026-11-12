@@ -10,7 +10,7 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
 
 **EDCH was largely written by an AI (Claude, by Anthropic), overseen by a developer** who decides the features, tests and approves every release. The tool may be incomplete or contain bugs or inaccurate data. If you find any, please open an [issue](../../issues).
 
-**EDCH would not work without other people's work.** Its data, translations and searches come from projects built and maintained by volunteers in the community: Spansh, EDDN and EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDSY, Coriolis… If EDCH is useful to you, please thank them, support them or contribute to their projects. Details are in [Credits](#credits) and in [NOTICE](NOTICE).
+**EDCH would not work without other people's work.** Its data, translations and searches come from projects built and maintained by volunteers in the community: Spansh, EDDN and EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDAssets, EDSY, Coriolis… If EDCH is useful to you, please thank them, support them or contribute to their projects. Details are in [Credits](#credits) and in [NOTICE](NOTICE).
 
 ![A material's page: trades and systems in Boom/Expansion (demo data)](docs/materials.png)
 
@@ -120,4 +120,4 @@ EDCH is free, without ads, and will stay that way. It is designed, tested and ma
 
 ## Credits
 
-Data: EDCD/FDevIDs and msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Localized game names: Elite Dangerous Almanac (MIT) and EDEngineer. Control names and device templates: EDRefCard (Richard Buckle, MIT). Searches: Spansh (EDDN). Elite Dangerous is a trademark of Frontier Developments plc. Unofficial, non-commercial community tool. Details in [NOTICE](NOTICE).
+Data: EDCD/FDevIDs and msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Localized game names: Elite Dangerous Almanac (MIT) and EDEngineer. Control names and device templates: EDRefCard (Richard Buckle, MIT). Station icons: EDAssets (SpyTec, MIT). Searches: Spansh (EDDN). Elite Dangerous is a trademark of Frontier Developments plc. Unofficial, non-commercial community tool. Details in [NOTICE](NOTICE).

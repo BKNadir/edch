@@ -50,7 +50,8 @@
     "yesEdchSVersionPagesOpened": "Ja: die EDCH-Version, geöffnete Seiten und geklickte Schaltflächen, Fehler, Spielereignisse (Systeme, Stationen, Missionen, Waren) und Kommandantennamen (deiner und die deines Geschwaders).",
     "eddiTranslatedRanksStates": "Übersetzte Namen von Fraktionszuständen, Rängen und einigen Waren",
     "contributors": "Mitwirkende",
-    "thanksContributors": "Danke an die Mitwirkenden:"
+    "thanksContributors": "Danke an die Mitwirkenden:",
+    "stationIcons": "Stationssymbole (Coriolis, Orbis, Ocellus, Außenposten, Häfen…), nach denen des Spiels nachgezeichnet"
   },
   "alerts": {
     "logs": "Protokolle"

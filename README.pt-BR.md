@@ -10,7 +10,7 @@ Um companheiro leve para **Elite Dangerous** (Windows). Ele lê o diário do jog
 
 **O EDCH foi escrito em grande parte por uma IA (Claude, da Anthropic), com o acompanhamento de um desenvolvedor** que define as funções, testa e aprova cada versão. Por isso a ferramenta pode estar incompleta ou ter bugs ou dados imprecisos. Se encontrar algum, abra uma [issue](../../issues).
 
-**O EDCH não funcionaria sem o trabalho de outras pessoas.** Os dados, as traduções e as buscas vêm de projetos criados e mantidos voluntariamente por membros da comunidade: Spansh, EDDN e EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDSY, Coriolis… Se o EDCH for útil para você, agradeça, apoie ou contribua com esses projetos. Detalhes em [Créditos](#créditos) e em [NOTICE](NOTICE).
+**O EDCH não funcionaria sem o trabalho de outras pessoas.** Os dados, as traduções e as buscas vêm de projetos criados e mantidos voluntariamente por membros da comunidade: Spansh, EDDN e EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDAssets, EDSY, Coriolis… Se o EDCH for útil para você, agradeça, apoie ou contribua com esses projetos. Detalhes em [Créditos](#créditos) e em [NOTICE](NOTICE).
 
 ![Ficha de um material: trocas e sistemas em Prosperidade/Expansão (dados de demonstração)](docs/materials.png)
 
@@ -120,4 +120,4 @@ O EDCH é gratuito, sem anúncios, e vai continuar assim. Ele é criado, testado
 
 ## Créditos
 
-Dados: EDCD/FDevIDs e msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Nomes do jogo traduzidos: Elite Dangerous Almanac (MIT) e EDEngineer. Nomes dos controles e modelos dos dispositivos: EDRefCard (Richard Buckle, MIT). Buscas: Spansh (EDDN). Elite Dangerous é uma marca da Frontier Developments plc. Ferramenta comunitária não oficial e não comercial. Detalhes em [NOTICE](NOTICE).
+Dados: EDCD/FDevIDs e msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Nomes do jogo traduzidos: Elite Dangerous Almanac (MIT) e EDEngineer. Nomes dos controles e modelos dos dispositivos: EDRefCard (Richard Buckle, MIT). Ícones das estações: EDAssets (SpyTec, MIT). Buscas: Spansh (EDDN). Elite Dangerous é uma marca da Frontier Developments plc. Ferramenta comunitária não oficial e não comercial. Detalhes em [NOTICE](NOTICE).

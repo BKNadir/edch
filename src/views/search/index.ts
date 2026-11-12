@@ -5,6 +5,7 @@ import { fold, gameEnglish, gameName, resolveGameName, t } from "../../platform/
 import { locale } from "../../platform/i18n.js";
 import { spanshPost } from "../../platform/bridge.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
+import { stationIcon } from "../../ui/stationIcon.js";
 import { referenceOf, type Ctx, type View } from "../../state/context.js";
 import { fmtLy, inaraSystem } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
@@ -467,6 +468,7 @@ export class SearchView implements View {
           "button.sys",
           { title: t("common.copy", { name: r.system_name }), onclick: () => copySystem(r.system_name) },
           icon("copy"),
+          stationIcon(r.type),
           h("span", null, `${r.name} | ${r.system_name}`),
         ),
         h(

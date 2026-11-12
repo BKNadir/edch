@@ -10,7 +10,7 @@
 
 **EDCH в основном написан ИИ (Claude от Anthropic) под контролем разработчика**, который определяет функции, тестирует и утверждает каждую версию. Поэтому инструмент может быть неполным, содержать ошибки или неточные данные. Если найдёте их, откройте [issue](../../issues).
 
-**EDCH не работал бы без труда других людей.** Данные, переводы и поиск взяты из проектов, которые создают и поддерживают добровольцы сообщества: Spansh, EDDN и EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDSY, Coriolis… Если EDCH вам полезен, поблагодарите их, поддержите или внесите вклад в их проекты. Подробности в разделе [Благодарности](#благодарности) и в файле [NOTICE](NOTICE).
+**EDCH не работал бы без труда других людей.** Данные, переводы и поиск взяты из проектов, которые создают и поддерживают добровольцы сообщества: Spansh, EDDN и EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDAssets, EDSY, Coriolis… Если EDCH вам полезен, поблагодарите их, поддержите или внесите вклад в их проекты. Подробности в разделе [Благодарности](#благодарности) и в файле [NOTICE](NOTICE).
 
 ![Страница материала: обмен и системы в состоянии бума/экспансии (демо-данные)](docs/materials.png)
 
@@ -120,4 +120,4 @@ EDCH бесплатен, без рекламы, и таким останется
 
 ## Благодарности
 
-Данные: EDCD/FDevIDs и msarilar/EDEngineer (MIT) через dseelinger/d47 (MIT). Переведённые названия из игры: Elite Dangerous Almanac (MIT) и EDEngineer. Названия команд и шаблоны устройств: EDRefCard (Richard Buckle, MIT). Поиск: Spansh (EDDN). Elite Dangerous — товарный знак Frontier Developments plc. Неофициальный некоммерческий инструмент сообщества. Подробности в [NOTICE](NOTICE).
+Данные: EDCD/FDevIDs и msarilar/EDEngineer (MIT) через dseelinger/d47 (MIT). Переведённые названия из игры: Elite Dangerous Almanac (MIT) и EDEngineer. Названия команд и шаблоны устройств: EDRefCard (Richard Buckle, MIT). Значки станций: EDAssets (SpyTec, MIT). Поиск: Spansh (EDDN). Elite Dangerous — товарный знак Frontier Developments plc. Неофициальный некоммерческий инструмент сообщества. Подробности в [NOTICE](NOTICE).

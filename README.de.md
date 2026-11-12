@@ -10,7 +10,7 @@ Ein schlanker Begleiter für **Elite Dangerous** (Windows). Er liest das Spiel-J
 
 **EDCH wurde größtenteils von einer KI (Claude von Anthropic) geschrieben, begleitet von einem Entwickler**, der die Funktionen festlegt und jede Version testet und freigibt. Das Tool kann daher unvollständig sein, Fehler oder ungenaue Daten enthalten. Wenn du welche findest, eröffne bitte ein [Issue](../../issues).
 
-**Ohne die Arbeit anderer würde EDCH nicht funktionieren.** Daten, Übersetzungen und Suchen stammen aus Projekten, die ehrenamtlich von Mitgliedern der Community aufgebaut und gepflegt werden: Spansh, EDDN und EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDSY, Coriolis… Wenn dir EDCH nützt, bedanke dich bei ihnen, unterstütze sie oder trage zu ihren Projekten bei. Details unter [Danksagungen](#danksagungen) und in [NOTICE](NOTICE).
+**Ohne die Arbeit anderer würde EDCH nicht funktionieren.** Daten, Übersetzungen und Suchen stammen aus Projekten, die ehrenamtlich von Mitgliedern der Community aufgebaut und gepflegt werden: Spansh, EDDN und EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDAssets, EDSY, Coriolis… Wenn dir EDCH nützt, bedanke dich bei ihnen, unterstütze sie oder trage zu ihren Projekten bei. Details unter [Danksagungen](#danksagungen) und in [NOTICE](NOTICE).
 
 ![Seite eines Materials: Tauschvorschläge und Systeme im Boom/in Expansion (Demodaten)](docs/materials.png)
 
@@ -120,4 +120,4 @@ EDCH ist kostenlos, werbefrei und bleibt es auch. Es wird von CMDR MDLuffy entwo
 
 ## Danksagungen
 
-Daten: EDCD/FDevIDs und msarilar/EDEngineer (MIT), über dseelinger/d47 (MIT). Übersetzte Spielnamen: Elite Dangerous Almanac (MIT) und EDEngineer. Befehlsnamen und Gerätevorlagen: EDRefCard (Richard Buckle, MIT). Suchen: Spansh (EDDN). Elite Dangerous ist eine Marke von Frontier Developments plc. Inoffizielles, nicht kommerzielles Community-Tool. Details in [NOTICE](NOTICE).
+Daten: EDCD/FDevIDs und msarilar/EDEngineer (MIT), über dseelinger/d47 (MIT). Übersetzte Spielnamen: Elite Dangerous Almanac (MIT) und EDEngineer. Befehlsnamen und Gerätevorlagen: EDRefCard (Richard Buckle, MIT). Stationssymbole: EDAssets (SpyTec, MIT). Suchen: Spansh (EDDN). Elite Dangerous ist eine Marke von Frontier Developments plc. Inoffizielles, nicht kommerzielles Community-Tool. Details in [NOTICE](NOTICE).

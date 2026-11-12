@@ -5,6 +5,7 @@ import { locale, t } from "../../platform/i18n.js";
 import { openUrl } from "../../platform/bridge.js";
 import { openSystem } from "./links.js";
 import { h, icon } from "../../ui/dom.js";
+import { stationIcon } from "../../ui/stationIcon.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../../services/spansh.js";
 import type { Finder } from "../../features/materials/sources.js";
 import type { Settings } from "../../state/store.js";
@@ -48,6 +49,7 @@ export function resultRow(r: ResultRow): HTMLElement {
         "button.sys",
         { title: t("common.copy", { name: r.system }), onclick: () => copySystem(r.system) },
         icon("copy"),
+        stationIcon(r.stationType),
         h("span", null, r.title),
       ),
       h("span.dist", null, fmtLy(r.distance)),

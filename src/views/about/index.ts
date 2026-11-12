@@ -71,6 +71,11 @@ const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
     links: [["github.com/richardbuckle/EDRefCard", "https://github.com/richardbuckle/EDRefCard"]],
   },
   {
+    name: "EDAssets (SpyTec)",
+    what: t("about.stationIcons"),
+    links: [["github.com/SpyTec/EDAssets", "https://github.com/SpyTec/EDAssets"]],
+  },
+  {
     name: "EDSY",
     what: t("about.buildExportFormatImportedIntoWishlist"),
     links: [

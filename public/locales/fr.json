@@ -50,7 +50,8 @@
     "yesEdchSVersionPagesOpened": "Oui : la version d'EDCH, les pages ouvertes et les boutons cliqués, les erreurs, les événements du jeu (systèmes, stations, missions, marchandises), et les noms de commandant (le tien et ceux de ton escadrille).",
     "eddiTranslatedRanksStates": "Noms traduits des états de faction, des rangs et de certaines marchandises",
     "contributors": "Contributeurs",
-    "thanksContributors": "Merci aux contributeurs :"
+    "thanksContributors": "Merci aux contributeurs :",
+    "stationIcons": "Icônes des stations (Coriolis, Orbis, Ocellus, avant-postes, ports…), redessinées d'après celles du jeu"
   },
   "alerts": {
     "logs": "Logs"

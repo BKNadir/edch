@@ -861,6 +861,13 @@ button:disabled {
 .sys:hover span {
   text-decoration: underline;
 }
+/* A station's type (ui/stationIcon.ts): its own lines and fills, in the theme's colour. */
+.station-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--accent);
+}
 .dist {
   color: var(--muted);
   font-variant-numeric: tabular-nums;

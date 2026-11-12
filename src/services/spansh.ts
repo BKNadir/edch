@@ -22,6 +22,8 @@ export interface ResultRow {
   badges: { text: string; tone?: "hit" | "warn" | "muted" }[];
   links: { label: string; url: string }[];
   updated?: string;
+  /** A station's type as Spansh writes it ("Orbis Starport"), for its icon. */
+  stationType?: string;
 }
 
 export interface FinderResult {
@@ -190,6 +192,7 @@ function stationRow(r: any): ResultRow {
       { label: "Inara", url: inaraSystem(r.system_name) },
     ],
     updated: r.updated_at,
+    stationType: typeof r.type === "string" ? r.type : undefined,
   };
 }
 

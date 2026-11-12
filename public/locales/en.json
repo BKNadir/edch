@@ -50,7 +50,8 @@
     "yesEdchSVersionPagesOpened": "Yes: EDCH's version, the pages opened and buttons clicked, errors, game events (systems, stations, missions, commodities), and commander names (yours and your wing's).",
     "eddiTranslatedRanksStates": "Translated names of faction states, ranks and some commodities",
     "contributors": "Contributors",
-    "thanksContributors": "Thanks to the contributors:"
+    "thanksContributors": "Thanks to the contributors:",
+    "stationIcons": "Station icons (Coriolis, Orbis, Ocellus, outposts, ports…), redrawn from the game's"
   },
   "alerts": {
     "logs": "Logs"

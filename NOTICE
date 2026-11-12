@@ -31,6 +31,27 @@ Key bindings
 - richardbuckle/EDRefCard (MIT) — control names and groups (bindingsData.py) and the
   game's DeviceMappings.xml, vendored in tools/sources/edrefcard (tools/gen_binds.py).
 
+Station icons
+-------------
+- SpyTec/EDAssets (MIT, Copyright (c) 2015 Eric "SpyTec" Gustavsson, commit 5a9b2f8) — the Coriolis,
+  Orbis, Ocellus, asteroid base, outpost, megaship, planetary port and settlement icons
+  (public/static/img/stations and settlements), redrawn from the game's icons; recoloured and given a
+  common line thickness in src/ui/stationIcon.ts. The game's designs are Frontier Developments'.
+
+  The MIT License (MIT)
+  Copyright (c) 2015 Eric "SpyTec" Gustavsson
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
+  associated documentation files (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge, publish, distribute,
+  sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions: The above copyright notice and this
+  permission notice shall be included in all copies or substantial portions of the Software.
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+  LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+  NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 Live data
 ---------
 - Spansh (spansh.co.uk) — galaxy, body and station searches, built from EDDN.
