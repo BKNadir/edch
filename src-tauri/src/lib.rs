@@ -13,6 +13,11 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 mod app;
+#[cfg(feature = "hailport")]
+mod hailport;
+#[cfg(not(feature = "hailport"))]
+#[path = "hailport_off.rs"]
+mod hailport;
 mod http;
 mod journal;
 mod logs;
@@ -90,6 +95,10 @@ pub fn run() {
             ntfy::ntfy_subscribe,
             ntfy::ntfy_unsubscribe,
             ntfy::ntfy_set_farewell,
+            hailport::hailport_available,
+            hailport::hailport_connect,
+            hailport::hailport_disconnect,
+            hailport::hailport_send,
             logs::log_write,
             logs::log_set_debug,
             logs::logs_open,

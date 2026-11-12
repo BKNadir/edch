@@ -13,6 +13,7 @@ import { appCard } from "./cards/general.js";
 import { updatesCard } from "./cards/updates.js";
 import { buildSiteCard, keyboardCard, languageCard, pageDefaultsCard } from "./cards/preferences.js";
 import { notifyCard } from "./cards/notifications.js";
+import { hailportCard } from "./cards/hailport.js";
 
 const TABS: [string, string][] = [
   ["general", t("settings.general")],
@@ -119,6 +120,7 @@ export class SettingsView implements View {
       buildSiteCard(this.ctx),
       isTauri() ? updatesCard(this.ctx, this.mode) : null,
       isTauri() && !isRemote() ? appCard(this.ctx, () => this.render()) : null,
+      isTauri() && !isRemote() ? hailportCard(this.ctx, () => this.render()) : null,
       isTauri() && !isRemote() ? launchCard(this.ctx, () => this.render()) : null,
       h(
         "section.card",

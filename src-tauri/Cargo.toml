@@ -26,6 +26,13 @@ local-ip-address = "0.6"
 arboard = { version = "3", default-features = false }
 tauri-plugin-window-state = "2"
 tauri-plugin-single-instance = "2"
+# Hailport (voice assistant) link: a local WebSocket client, without TLS. Left out of the portable
+# exe (built with --no-default-features), which doesn't offer Hailport.
+tungstenite = { version = "0.28", default-features = false, features = ["handshake"], optional = true }
+
+[features]
+default = ["hailport"]
+hailport = ["dep:tungstenite"]
 
 # Windows only: the process list for "is the game running?" (no tasklist.exe).
 [target.'cfg(windows)'.dependencies]

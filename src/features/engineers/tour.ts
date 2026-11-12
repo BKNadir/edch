@@ -320,6 +320,9 @@ let navRoute: string[] = (() => {
  */
 let navTarget: string | null = null;
 
+/** The systems of the last ship route plotted (Navigation page or voice), in order. */
+export const navRouteSystems = (): readonly string[] => navRoute;
+
 export function setNavRoute(systems: string[]) {
   navRoute = systems;
   navTarget = systems[1] ?? null;

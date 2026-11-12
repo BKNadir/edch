@@ -41,6 +41,7 @@ Un compañero ligero para **Elite Dangerous** (Windows). Lee el diario del juego
 - **Minería**: resultados de los prospectores en directo con alertas para tus objetivos y núcleos, tonelaje de la sesión; una búsqueda al estilo Merit Miner de dónde minar y vender en los sistemas de tu potencia.
 - **Powerplay y sesión**: méritos de la semana y de la sesión, estado de Powerplay del sistema actual; créditos ganados por actividad desde que te conectaste.
 - **Acceso remoto**: abre EDCH en tu móvil o tableta escaneando un código QR. Un servidor local (desactivado por defecto) sirve la aplicación en tu red. Solo entran los dispositivos que escanearon el código QR: la IP del PC no basta. «Código nuevo» desconecta todos los dispositivos. La interfaz se adapta al móvil (navegación abajo, paneles a pantalla completa) y los cambios en la lista de deseos hechos en el móvil vuelven al PC. También puede abrir una página sola en un navegador, para una segunda pantalla, y un modo de pantalla completa muestra solo la página actual.
+- **Asistente de voz**: conectado a Hailport, un asistente de voz en tu PC, EDCH responde por voz: abrir una página, copiar el siguiente sistema, calcular una ruta, encontrar el comerciante de materiales o el servicio más cercano, contar un material, resumir las misiones o la colonización, y anuncia los atraques, el final de una ruta, las misiones a punto de expirar y las obras terminadas. Desactivado por defecto; no está en la versión portátil.
 - **Temas**: temas listos (incluido un tema claro «Día»), colores propios y modo OLED. Los colores demasiado claros u oscuros para leerse se ajustan automáticamente.
 - **Actualizaciones automáticas**: EDCH comprueba en GitHub si hay una versión nueva, muestra un aviso, descarga el instalador cuando lo pides (suma de comprobación verificada) y se reinicia para terminar. Se puede desactivar en Ajustes.
 - **Sincronización al estilo EDMC**: envío en directo a **EDDN** (mercados, equipamiento, astilleros, saltos, escaneos, rutas), **EDSM** e **Inara** (con tu clave API). Se respetan las reglas de EDDN: datos personales eliminados, posición verificada, un mensaje rechazado nunca se reenvía, nada de tu historial.
@@ -66,6 +67,7 @@ EDCH lee el diario del juego en tu PC. Esto es todo lo que sale de él, y hacia 
 - **ntfy.sh** (solo si activas el ala compartida): tus misiones de ala, cifradas con el código del ala antes de salir de tu PC.
 - **GitHub**: solo para comprobar si hay una versión nueva (se puede desactivar en Ajustes).
 - **Acceso remoto**: se queda en tu red local; desactivado por defecto y protegido por el código QR.
+- **Hailport** (solo si lo activas en Ajustes): se queda en tu PC (127.0.0.1). EDCH le da tu posición, tu nave, tu ruta, tus misiones y tu carga en resumen, nunca tu nombre de comandante, tu escuadrón ni tus claves. Si Hailport usa un modelo de lenguaje en línea, estos datos van a ese servicio.
 
 No se recoge ni se envía nada más. Tus ajustes, claves y lista de deseos se guardan en `%LOCALAPPDATA%\EDCompanionHelper`.
 

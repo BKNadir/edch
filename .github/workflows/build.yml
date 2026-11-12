@@ -88,12 +88,14 @@ jobs:
           releaseDraft: false
           prerelease: ${{ steps.rel.outputs.pre == 'true' }}
 
-      # Portable version: the same exe, named so EDCH knows it isn't installed (its updates
-      # open the release page instead of running an installer).
+      # Portable version: built again without the Hailport link (it needs Hailport installed on the
+      # PC, which a portable EDCH can't count on), and named so EDCH knows it isn't installed
+      # (its updates open the release page instead of running an installer).
       - name: Portable exe
         id: portable
         shell: bash
         run: |
+          npx tauri build --no-bundle -- --no-default-features
           version=$(node -p "require('./src-tauri/tauri.conf.json').version")
           file="EDCH_${version}_x64-portable.exe"
           cp src-tauri/target/release/edch.exe "$file"
@@ -301,6 +303,8 @@ jobs:
         id: portable
         shell: bash
         run: |
+          # Without the Hailport link, like the x64 portable exe.
+          npx tauri build --target aarch64-pc-windows-msvc --no-bundle -- --no-default-features
           file="EDCH_${{ steps.notes.outputs.version }}_arm64-portable.exe"
           cp src-tauri/target/aarch64-pc-windows-msvc/release/edch.exe "$file"
           echo "file=$file" >> "$GITHUB_OUTPUT"
