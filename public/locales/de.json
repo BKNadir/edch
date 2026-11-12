@@ -48,7 +48,9 @@
     "whatLogContainsNeverContains": "Was ein Protokoll enthält (und was nie)",
     "whatSNewEachVersion": "Neuigkeiten jeder Version:",
     "yesEdchSVersionPagesOpened": "Ja: die EDCH-Version, geöffnete Seiten und geklickte Schaltflächen, Fehler, Spielereignisse (Systeme, Stationen, Missionen, Waren) und Kommandantennamen (deiner und die deines Geschwaders).",
-    "eddiTranslatedRanksStates": "Übersetzte Namen von Fraktionszuständen, Rängen und einigen Waren"
+    "eddiTranslatedRanksStates": "Übersetzte Namen von Fraktionszuständen, Rängen und einigen Waren",
+    "contributors": "Mitwirkende",
+    "thanksContributors": "Danke an die Mitwirkenden:"
   },
   "alerts": {
     "logs": "Protokolle"

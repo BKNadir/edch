@@ -20,6 +20,7 @@ and EDCH shows it in the update banner.
 - Fixed: Controls' "Zoom in / out" left you stuck in the top-left corner of the picture: the zoomed picture now scrolls both ways and can be dragged with the mouse.
 - Fixed: Colonisation could show goods on a squadron carrier that others had already taken (your journal only sees your own transfers). When you open its market, the squadron carrier's hold now becomes what the market sells; your own carrier keeps its estimate, raised by the market. The stock for sale shown no longer counts goods you took back to your ship.
 - Linux: with NVIDIA's own driver, EDCH's window no longer stays blank or crashes ("GBM" errors): the usual WebKitGTK workaround (WEBKIT_DISABLE_DMABUF_RENDERER) is turned on by itself, unless you set it yourself.
+- About: a new section thanks EDCH's contributors.
 - Safety: importing a configuration zip now checks everything first (size, number of files, file names, contents, duplicates) and writes the files aside before putting them in place, so a broken or hostile zip can't fill the memory or leave a half-imported configuration.
 - Safety: web requests follow a redirection only to the same allowed sites, and never repeat an address (which can hold a key) in an error message.
 - Safety: an update is installed only when its SHA-256 checksum, published by GitHub, matches.

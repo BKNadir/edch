@@ -107,6 +107,11 @@ const PROJECTS: { name: string; what: string; links: [string, string][] }[] = [
   },
 ];
 
+/** People who contributed to EDCH (with or without AI): GitHub name, and in-game name when known. */
+const CONTRIBUTORS: { github: string; commander?: string }[] = [
+  { github: "philippe015", commander: "Cyberpunk Philou" },
+];
+
 const link = (label: string, url: string) =>
   h("button.inline-link", { "data-no-tr": "", onclick: () => openUrl(url) }, label);
 
@@ -144,6 +149,24 @@ export class AboutView implements View {
           h("p.sub", null, t("about.thanksUsingEdchIfCrossPaths")),
         ),
         supportCard(),
+        h(
+          "section.card",
+          null,
+          h("h3", null, t("about.contributors")),
+          h("p", null, t("about.thanksContributors")),
+          h(
+            "ul.about-links",
+            null,
+            CONTRIBUTORS.map((person) =>
+              h(
+                "li",
+                null,
+                link(person.github, `https://github.com/${person.github}`),
+                person.commander ? h("span", { "data-no-tr": "" }, ` — CMDR ${person.commander}`) : null,
+              ),
+            ),
+          ),
+        ),
         h(
           "section.card",
           null,

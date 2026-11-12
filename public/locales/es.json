@@ -48,7 +48,9 @@
     "whatLogContainsNeverContains": "Qué contiene un registro (y qué nunca contiene)",
     "whatSNewEachVersion": "Novedades de cada versión:",
     "yesEdchSVersionPagesOpened": "Sí: la versión de EDCH, las páginas abiertas y los botones pulsados, los errores, los eventos del juego (sistemas, estaciones, misiones, mercancías) y los nombres de comandante (el tuyo y los de tu ala).",
-    "eddiTranslatedRanksStates": "Nombres traducidos de estados de facción, rangos y algunas mercancías"
+    "eddiTranslatedRanksStates": "Nombres traducidos de estados de facción, rangos y algunas mercancías",
+    "contributors": "Colaboradores",
+    "thanksContributors": "Gracias a los colaboradores:"
   },
   "alerts": {
     "logs": "Registros"

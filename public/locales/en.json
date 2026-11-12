@@ -48,7 +48,9 @@
     "whatLogContainsNeverContains": "What a log contains (and never contains)",
     "whatSNewEachVersion": "What's new in each version:",
     "yesEdchSVersionPagesOpened": "Yes: EDCH's version, the pages opened and buttons clicked, errors, game events (systems, stations, missions, commodities), and commander names (yours and your wing's).",
-    "eddiTranslatedRanksStates": "Translated names of faction states, ranks and some commodities"
+    "eddiTranslatedRanksStates": "Translated names of faction states, ranks and some commodities",
+    "contributors": "Contributors",
+    "thanksContributors": "Thanks to the contributors:"
   },
   "alerts": {
     "logs": "Logs"
