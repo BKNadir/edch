@@ -1,14 +1,15 @@
 // Sending the member's BGS work to the squadron's Discord bot (EDCH-Discord): only when the member
 // pasted their key and ticked "Send BGS reports" (Sync page). Every 15 minutes, and on request,
-// the actions since the last report that concern the squadron's faction go out (features/bgs/
-// report.ts); the bot counts an action sent twice once, so a retry is harmless.
+// the actions since the last report that concern the factions the squadron follows go out, one
+// report per faction (features/bgs/report.ts); the bot counts an action sent twice once, so a
+// retry is harmless.
 // This is the only place BGS data leaves the PC in BGS or Invisible mode: the member chose this
 // bot, which writes to their squadron's own Discord channel.
 
 import { SOFTWARE_VERSION } from "../../platform/version.js";
 import { log } from "../../platform/logger.js";
 import { trustBot } from "../../platform/bridge.js";
-import { BotError, botFaction, readBotKey, sendBotReport } from "../../services/discordBot.js";
+import { BotError, botFactions, readBotKey, sendBotReport } from "../../services/discordBot.js";
 import type { Store } from "../../state/store.js";
 import { isHistoryRead } from "../missions/live.js";
 import { bgsReport } from "./report.js";
@@ -23,8 +24,8 @@ const SENT_KEY = "edch.discord.sent";
 /** What the Sync page shows. */
 export interface BotSyncStatus {
   state: "off" | "sending" | "ok" | "error";
-  /** The squadron's faction, as the bot told. */
-  faction?: string;
+  /** The factions the squadron follows (its own and allies), the default first, as the bot told. */
+  factions?: string[];
   /** When the last report went out. */
   lastSent?: string;
   /** Actions sent by the last report. */
@@ -77,21 +78,24 @@ export async function sendBgsNow(store: Store): Promise<void> {
   store.notify();
   const id = `${claims.guildId}:${claims.userId}`;
   try {
-    const faction = await botFaction(settings.discordKey);
+    const factions = await botFactions(settings.discordKey);
     const now = Date.now();
     const to = new Date(now).toISOString();
     const oldest = new Date(now - FIRST_REPORT_DAYS * 86_400_000).toISOString();
     const last = lastSentFor(id);
     const from = last && last > oldest ? last : oldest;
-    const report = bgsReport(store.state.activity.bgs.actions, faction, from, to, SOFTWARE_VERSION);
     let sent = 0;
-    for (let start = 0; start < report.actions.length; start += CHUNK)
-      sent += await sendBotReport(settings.discordKey, {
-        ...report,
-        actions: report.actions.slice(start, start + CHUNK),
-      });
+    for (const faction of factions) {
+      const report = bgsReport(store.state.activity.bgs.actions, faction, from, to, SOFTWARE_VERSION);
+      for (let start = 0; start < report.actions.length; start += CHUNK)
+        sent += await sendBotReport(settings.discordKey, {
+          ...report,
+          actions: report.actions.slice(start, start + CHUNK),
+        });
+    }
+    // Only once every faction went out: after a failure, the next try covers the same period.
     setLastSent(id, to);
-    Object.assign(botSync, { state: "ok", faction, lastSent: to, lastCount: sent, error: undefined });
+    Object.assign(botSync, { state: "ok", factions, lastSent: to, lastCount: sent, error: undefined });
     if (sent) log.info("discord", `BGS report sent: ${sent} actions`);
   } catch (error) {
     const code = error instanceof BotError ? error.code : "unavailable";

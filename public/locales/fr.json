@@ -1646,7 +1646,7 @@
   },
   "discord": {
     "addBot": "Utiliser le bot par défaut : l'ajouter à mon serveur Discord",
-    "addBotHelp": "Ajouter le bot demande le droit Gérer le serveur sur ce serveur. Un admin lance ensuite /bgs setup faction:… : le bot crée le rôle BGS, #edch-sync (ses données, admins seulement) et #edch-bgs (un fil par système, pour le rôle). Donne le rôle aux membres qui font les rapports ; /bgs link leur envoie leur clé en message privé. Une escadrille qui veut sa propre copie peut l'héberger à partir du code sur GitHub.",
+    "addBotHelp": "Ajouter le bot demande le droit Gérer le serveur sur ce serveur. Un admin lance ensuite /bgs setup (le bot crée le rôle BGS, #edch-sync pour ses données, admins seulement, et #edch-bgs, un fil par système, pour le rôle) puis /bgs faction add pour la faction de l'escadrille, et encore pour les factions alliées. Donne le rôle aux membres qui font les rapports ; /bgs link leur envoie leur clé en message privé. EDCH envoie un rapport pour chaque faction suivie. Une escadrille qui veut sa propre copie peut l'héberger à partir du code sur GitHub.",
     "hostOwn": "Héberger ton propre bot (GitHub)",
     "intro": "Le bot Discord EDCH rassemble le travail BGS de ton escadrille sur son propre serveur Discord. Activé, EDCH envoie toutes les 15 minutes ce que tu as fait pour la faction de l'escadrille, même en mode BGS ou Invisible : uniquement à ce bot, qui écrit dans le salon privé de ton escadrille.",
     "key": "Ta clé",
@@ -1665,6 +1665,7 @@
     "trustBot": "Faire confiance à ce bot"
   },
   "discordError": {
+    "noFaction": "Ton serveur ne suit encore aucune faction : un admin en ajoute une avec /bgs faction add.",
     "badFormat": "Le bot n'a pas compris le rapport : mets à jour EDCH ou le bot.",
     "badKey": "Ce n'est pas une clé valide : relance /bgs link et colle la clé en entier.",
     "notSetUp": "Le bot n'est pas configuré sur ton serveur : un admin lance /bgs setup.",

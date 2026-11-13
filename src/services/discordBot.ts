@@ -57,6 +57,7 @@ export class BotError extends Error {
 /** The bot's error codes EDCH knows (anything else is shown as "unavailable"). */
 const KNOWN_ERRORS = new Set([
   "badKey",
+  "noFaction",
   "otherServer",
   "notSetUp",
   "revoked",
@@ -82,11 +83,16 @@ async function call(key: string, path: "/v1/config" | "/v1/report", body?: unkno
   throw new BotError(code);
 }
 
-/** The faction the squadron follows (also checks the key, the role and the server's set-up). */
-export async function botFaction(key: string): Promise<string> {
+/**
+ * The factions the squadron follows, the default first: its own and allied ones (also checks the
+ * key, the role and the server's set-up). An older bot answers one `faction` only.
+ */
+export async function botFactions(key: string): Promise<string[]> {
   const answer = await call(key, "/v1/config");
-  if (typeof answer.faction !== "string" || !answer.faction) throw new BotError("unavailable");
-  return answer.faction;
+  const list = Array.isArray(answer.factions) ? answer.factions : [answer.faction];
+  const factions = list.filter((f): f is string => typeof f === "string" && f.trim().length > 0);
+  if (!factions.length) throw new BotError("noFaction");
+  return factions;
 }
 
 /** Sends a report; returns how many actions the bot accepted. */

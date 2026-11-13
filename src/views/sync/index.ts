@@ -245,8 +245,8 @@ export class SyncView implements View {
         h(
           "p.sub",
           null,
-          botSync.faction
-            ? t("discord.linkedFaction", { faction: botSync.faction, host })
+          botSync.factions?.length
+            ? t("discord.linkedFaction", { faction: botSync.factions.join(", "), host })
             : t("discord.linked", { host }),
         ),
       );

@@ -1644,7 +1644,7 @@
   },
   "discord": {
     "addBot": "Use the default bot: add it to my Discord server",
-    "addBotHelp": "Adding the bot needs the Manage Server right on that server. Then an admin runs /bgs setup faction:… : the bot creates the BGS role, #edch-sync (its data, admins only) and #edch-bgs (one thread per system, for the role). Give the role to the members who report; /bgs link sends them their key by direct message. A squadron that wants its own copy can host it from the GitHub code.",
+    "addBotHelp": "Adding the bot needs the Manage Server right on that server. Then an admin runs /bgs setup (the bot creates the BGS role, #edch-sync for its data, admins only, and #edch-bgs, one thread per system, for the role) and /bgs faction add for the squadron's faction, and again for allied ones. Give the role to the members who report; /bgs link sends them their key by direct message. EDCH sends a report for each faction followed. A squadron that wants its own copy can host it from the GitHub code.",
     "hostOwn": "Host your own bot (GitHub)",
     "intro": "The EDCH Discord bot gathers your squadron's BGS work in its own Discord server. With this on, EDCH sends what you did for the squadron's faction every 15 minutes, even in BGS or Invisible mode: only to this bot, which writes to your squadron's private channel.",
     "key": "Your key",
@@ -1663,6 +1663,7 @@
     "trustBot": "Trust this bot"
   },
   "discordError": {
+    "noFaction": "Your server follows no faction yet: an admin adds one with /bgs faction add.",
     "badFormat": "The bot didn't understand the report: update EDCH or the bot.",
     "badKey": "This isn't a valid key: run /bgs link again and paste the whole key.",
     "notSetUp": "The bot isn't set up on your server: an admin runs /bgs setup.",
