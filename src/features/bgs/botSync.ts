@@ -1,5 +1,6 @@
 // Sending the member's BGS work to the squadron's Discord bot (EDCH-Discord): only when the member
-// pasted their key and ticked "Send BGS reports" (Sync page). Every 15 minutes, and on request,
+// pasted their key and ticked "Send BGS reports" (Sync page). A minute after a new action or
+// arrival, every 15 minutes, and on request,
 // the actions since the last report that concern the factions the squadron follows go out, one
 // report per faction, with the systems visited where one of them is (features/bgs/report.ts);
 // the bot counts an action sent twice once, so a retry is harmless. Then what the squadron's
@@ -17,6 +18,8 @@ import { isHistoryRead } from "../missions/live.js";
 import { bgsReport, systemsSeen } from "./report.js";
 
 const EVERY_MS = 15 * 60_000;
+/** After an arrival or a BGS action, the report goes this soon (several in a row: one report). */
+const SOON_MS = 60_000;
 /** The first report goes back this far at most (the journal holds 60 days). */
 const FIRST_REPORT_DAYS = 7;
 /** Actions per call: the bot accepts up to 2000. */
@@ -119,7 +122,18 @@ export async function sendBgsNow(store: Store): Promise<void> {
   }
 }
 
-/** Starts the periodic reports; called once the journal is read. */
+/**
+ * What the journal added for the BGS since the last look: an action, or an arrival somewhere.
+ * Compared by count and newest arrival, so redrawing the page for other reasons does nothing.
+ */
+function bgsMark(store: Store): string {
+  const bgs = store.state.activity.bgs;
+  let newest = "";
+  for (const seen of Object.values(bgs.observed)) if (seen.at > newest) newest = seen.at;
+  return `${bgs.actions.length}|${newest}`;
+}
+
+/** Starts the reports; called once the journal is read. */
 export function startBotSync(store: Store) {
   void trustBot(store.state.settings.sync.discordBot || null).catch(() => undefined);
   // The first report once the journal archive is read (it takes a few seconds at start-up).
@@ -129,4 +143,18 @@ export function startBotSync(store: Store) {
     void sendBgsNow(store);
   }, 10_000);
   setInterval(() => void sendBgsNow(store), EVERY_MS);
+  // Soon after a new action or arrival, rather than at the next quarter of an hour, so the
+  // squadron sees it while it matters.
+  let mark = "";
+  let soon: ReturnType<typeof setTimeout> | undefined;
+  store.subscribe(() => {
+    const settings = store.state.settings.sync;
+    if (!isHistoryRead() || !settings.discord || !settings.discordKey) return;
+    const next = bgsMark(store);
+    if (!mark) mark = next;
+    if (next === mark) return;
+    mark = next;
+    clearTimeout(soon);
+    soon = setTimeout(() => void sendBgsNow(store), SOON_MS);
+  });
 }
