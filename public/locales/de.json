@@ -1409,7 +1409,7 @@
     "stopOnTheWay": "Aktueller Halt · unterwegs nach {{system}}",
     "modeAdvanced": "Erweitert",
     "modeSimple": "Einfach",
-    "modeHelp": "Einfach: nur die Ingenieurstour. Erweitert: jede Zeile mit ihren Graden und den nötigen Materialien.",
+    "modeHelp": "Einfach: nur die Ingenieurstour. Erweitert: jede Zeile mit ihren Graden und den nötigen Materialien, ohne die Tour.",
     "stopNoLongerNeeded": "{{engineer}} wird nicht mehr gebraucht: ein anderer Ingenieur der Tour erledigt dieselben Zeilen. Geh zum nächsten Ingenieur.",
     "maxGradeInRegion": "G{{grade}} max in deiner Region",
     "exportShip": "Mein Schiff nach {{site}} exportieren",

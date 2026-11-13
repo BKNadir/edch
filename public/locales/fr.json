@@ -1411,7 +1411,7 @@
     "stopOnTheWay": "Étape en cours · en route vers {{system}}",
     "modeAdvanced": "Avancé",
     "modeSimple": "Simple",
-    "modeHelp": "Simple : seulement la tournée des ingénieurs. Avancé : chaque ligne avec ses grades et les matériaux nécessaires.",
+    "modeHelp": "Simple : seulement la tournée des ingénieurs. Avancé : chaque ligne avec ses grades et les matériaux nécessaires, sans la tournée.",
     "stopNoLongerNeeded": "{{engineer}} n'est plus nécessaire : un autre ingénieur de la tournée fait les mêmes lignes. Passe à l'ingénieur suivant.",
     "maxGradeInRegion": "G{{grade}} max dans ta région",
     "exportShip": "Exporter mon vaisseau vers {{site}}",

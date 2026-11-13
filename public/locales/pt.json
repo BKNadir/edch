@@ -1422,7 +1422,7 @@
     "stopOnTheWay": "Parada atual · a caminho de {{system}}",
     "modeAdvanced": "Avançado",
     "modeSimple": "Simples",
-    "modeHelp": "Simples: só a rota de engenheiros. Avançado: cada linha com seus graus e os materiais necessários.",
+    "modeHelp": "Simples: só a rota de engenheiros. Avançado: cada linha com seus graus e os materiais necessários, sem a rota.",
     "stopNoLongerNeeded": "{{engineer}} não é mais necessário: outro engenheiro da rota faz as mesmas linhas. Passe ao próximo engenheiro.",
     "maxGradeInRegion": "G{{grade}} máx. na sua região",
     "exportShip": "Exportar minha nave para {{site}}",

@@ -49,7 +49,7 @@ export class WishlistView implements View {
   private importPanel: HTMLElement;
   private importOpen = false;
   private toolbar = h("div.toolbar");
-  /** Simple (the tour only) or advanced (every line, the materials): starts on the setting. */
+  /** Simple (the tour only) or advanced (every line, the materials, no tour): starts on the setting. */
   private mode: WishlistMode;
 
   constructor(private ctx: Ctx) {
@@ -569,7 +569,8 @@ export class WishlistView implements View {
         this.toolbar,
       ),
       importer,
-      store.state.settings.engineers.autoPick ? this.tourCard() : null,
+      // The engineer tour belongs to the Simple mode only; Advanced shows the lines and materials.
+      simple ? this.tourCard() : null,
       simple
         ? null
         : h(
