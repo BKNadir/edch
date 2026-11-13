@@ -23,6 +23,7 @@ import { Uploaders } from "../services/sync/index.js";
 import { bindTour } from "../features/engineers/tour.js";
 import { startCopyOnGameFocus } from "../features/navigation/copyOnGameFocus.js";
 import { startMissingDataChecks } from "../features/dataGaps/missingData.js";
+import { startBotSync } from "../features/bgs/botSync.js";
 import { bindStore, setupLive } from "../features/missions/live.js";
 import { bindLinks } from "../views/shared/links.js";
 import { setHere } from "../views/shared/resultsTable.js";
@@ -106,4 +107,6 @@ export async function startApp(code: string, remoteMode: "paired" | null) {
   void startEdomhLinks(ctx);
   setupLive(store);
   await startJournalFeed(store, sync, capacityOf);
+  // After the journal: the BGS actions to report are known.
+  startBotSync(store);
 }

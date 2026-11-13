@@ -1,9 +1,15 @@
 # BGS report for a squadron bot
 
-The BGS page keeps what you did for a minor faction (`game/activity/bgs.ts`). A squadron bot will
-later gather these reports so teammates see each other's work. **Nothing sends them yet**: there is
-no option for it. When the link comes, it will be off by default, enabled by a box to tick, and BGS
-data will reach the bot only, never EDDN, EDSM or Inara while the share mode is BGS or Invisible.
+The BGS page keeps what you did for a minor faction (`game/activity/bgs.ts`). **EDCH-Discord**, the
+squadron bot (its own repository, `edch-discord`), gathers these reports so teammates see each
+other's work with `/bgs summary`. EDCH sends them only when the member pasted the key `/bgs link`
+gave them and ticked the switch (Sync → Connect to the Discord bot): every 15 minutes, the actions
+since the last report that concern the squadron's faction (`features/bgs/botSync.ts`). It is the
+only place BGS data leaves the PC in BGS or Invisible mode, by the member's choice.
+
+The bot keeps nothing itself: it writes the reports to the private `#edch-bgs` channel of the
+squadron's Discord server. EDCH reaches only the shared bot and a squadron's own bot the member
+confirmed (`src-tauri/src/discord_bot.rs`); the key is never written to the logs.
 
 The report is built by `bgsReport()` in `src/features/bgs/report.ts`.
 

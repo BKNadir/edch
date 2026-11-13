@@ -69,6 +69,7 @@ EDCH lee el diario del juego en tu PC. Esto es todo lo que sale de él, y hacia 
 - **Spansh**: tus búsquedas (sistema, material, mercancía, facción menor…) y tu posición como punto de partida.
 - **EDDN** (activado por defecto, como en EDMC; se puede desactivar en Sincronización): datos de mercados, equipamiento, astilleros, saltos y escaneos, sin tus datos personales, como exige EDDN.
 - **EDSM e Inara**: nada sobre ti mientras no introduzcas tu propia clave API en Sincronización; tus claves se quedan en tu PC. EDCH también lee datos públicos de EDSM cuando lo pides (los cuerpos de un sistema en la página Exploración, el historial de influencia de una facción en la página BGS): solo se envía el nombre del sistema.
+- **EDCH-Discord** (el bot de Discord de tu escuadrón): nada mientras no pegues tu clave en Sincronización y actives el interruptor. Entonces, cada 15 minutos, lo que hiciste por la facción del escuadrón (sistemas, misiones y su influencia, créditos; sin nombre de comandante), escrito en un canal privado del servidor de Discord de tu escuadrón.
 - **ntfy.sh** (solo si activas el ala compartida): tus misiones de ala, cifradas con el código del ala antes de salir de tu PC.
 - **tick.edcd.io** (solo mientras se muestra la página BGS con una facción seguida): pregunta la hora del último tick del BGS. No se envía nada con ello.
 - **GitHub**: solo para comprobar si hay una versión nueva (se puede desactivar en Ajustes).

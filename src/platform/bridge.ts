@@ -45,7 +45,7 @@ export function rawLog(level: string, source: string, message: string): Promise<
 }
 
 /** Calls nobody needs in the debug log: they run all the time and log themselves when useful. */
-const QUIET = new Set(["log_write", "log_set_debug", "http_fetch", "remote_publish", "remote_qr"]);
+const QUIET = new Set(["log_write", "log_set_debug", "http_fetch", "remote_publish", "remote_qr", "bot_fetch"]);
 /** Arguments that may hold secrets or big payloads: only their size is logged. */
 const HIDDEN = /token|key|secret|data|state|body|content|text/i;
 
@@ -503,3 +503,12 @@ export async function onEdomhLink(cb: (link: string) => void): Promise<void> {
   if (!isTauri() || remote) return;
   await window.__TAURI__!.event.listen<string>("edomh-link", (e) => cb(e.payload));
 }
+
+/** EDCH-Discord (src-tauri/src/discord_bot.rs): the squadron bot that receives BGS reports. */
+export const trustBot = (origin: string | null) =>
+  isTauri() && !remote ? invoke<void>("trust_bot", { origin }) : Promise.resolve();
+/** One call to the bot (GET /v1/config, POST /v1/report); never throws on an HTTP status. */
+export const botFetch = (origin: string, path: "/v1/config" | "/v1/report", key: string, body?: string) =>
+  isTauri() && !remote
+    ? invoke<HttpReply>("bot_fetch", { origin, path, key, body: body ?? null })
+    : Promise.reject(new Error(t("bridge.availableAppNotDemoMode")));

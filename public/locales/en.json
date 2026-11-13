@@ -1641,5 +1641,36 @@
     "importTitle": "Add this build to the wishlist?",
     "nothingToAdd": "This build has no engineering EDCH knows.",
     "unreadable": "This EDOMH link couldn't be read (only EDSY and Coriolis builds are supported)."
+  },
+  "discord": {
+    "addBot": "Add the bot to my Discord server",
+    "addBotHelp": "Discord asks for the Manage Server right on that server. Then create a private #edch-bgs channel and run /bgs setup there.",
+    "intro": "EDCH-Discord gathers your squadron's BGS work in its own Discord server. With this on, EDCH sends what you did for the squadron's faction every 15 minutes, even in BGS or Invisible mode: only to this bot, which writes to your squadron's private channel.",
+    "key": "Your key",
+    "keyHelp": "In your squadron's Discord: /bgs link. Keep it to yourself: it reports in your name.",
+    "lastSent_one": "Last report {{time}}: {{count}} action.",
+    "lastSent_other": "Last report {{time}}: {{count}} actions.",
+    "linked": "Linked to {{host}}.",
+    "linkedFaction": "Linked to {{host}}: the squadron follows {{faction}}.",
+    "notLinked": "Not linked: paste the key /bgs link gives you.",
+    "off": "Reports are off: tick the switch to send them.",
+    "otherBot": "This key comes from another bot than EDCH's: {{host}}. Your BGS reports will go to it, and to whoever runs it. Trust it only if it is your squadron's own bot.",
+    "otherBotTitle": "Another bot",
+    "sendNow": "Send now",
+    "sending": "Sending…",
+    "title": "Connect to the Discord bot",
+    "trustBot": "Trust this bot"
+  },
+  "discordError": {
+    "badFormat": "The bot didn't understand the report: update EDCH or the bot.",
+    "badKey": "This isn't a valid key: run /bgs link again and paste the whole key.",
+    "notSetUp": "The bot isn't set up on your server: an admin runs /bgs setup in #edch-bgs.",
+    "otherFaction": "The bot follows another faction than the one in the report.",
+    "otherServer": "This key is for another squadron's bot.",
+    "revoked": "This key was cancelled: run /bgs link again.",
+    "roleMissing": "You no longer have the role that allows reports on your squadron's server.",
+    "tooLarge": "The report was too large for the bot.",
+    "unavailable": "The bot couldn't be reached: EDCH tries again in 15 minutes.",
+    "unknownVersion": "The bot doesn't know this report format: update EDCH or the bot."
   }
 }

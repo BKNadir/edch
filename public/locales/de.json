@@ -1641,5 +1641,36 @@
     "importTitle": "Diesen Build zur Wunschliste hinzufügen?",
     "nothingToAdd": "Dieser Build hat kein Engineering, das EDCH kennt.",
     "unreadable": "Dieser EDOMH-Link konnte nicht gelesen werden (nur Builds von EDSY und Coriolis werden unterstützt)."
+  },
+  "discord": {
+    "addBot": "Den Bot zu meinem Discord-Server hinzufügen",
+    "addBotHelp": "Discord verlangt dort das Recht „Server verwalten“. Lege dann einen privaten Kanal #edch-bgs an und führe dort /bgs setup aus.",
+    "intro": "EDCH-Discord sammelt die BGS-Arbeit deines Geschwaders auf dessen eigenem Discord-Server. Eingeschaltet sendet EDCH alle 15 Minuten, was du für die Fraktion des Geschwaders getan hast, auch im BGS- oder Unsichtbar-Modus: nur an diesen Bot, der in den privaten Kanal deines Geschwaders schreibt.",
+    "key": "Dein Schlüssel",
+    "keyHelp": "Im Discord deines Geschwaders: /bgs link. Behalte ihn für dich: Er sendet Berichte in deinem Namen.",
+    "lastSent_one": "Letzter Bericht {{time}}: {{count}} Aktion.",
+    "lastSent_other": "Letzter Bericht {{time}}: {{count}} Aktionen.",
+    "linked": "Verbunden mit {{host}}.",
+    "linkedFaction": "Verbunden mit {{host}}: das Geschwader verfolgt {{faction}}.",
+    "notLinked": "Nicht verbunden: füge den Schlüssel ein, den /bgs link dir gibt.",
+    "off": "Berichte sind aus: schalte den Schalter ein, um sie zu senden.",
+    "otherBot": "Dieser Schlüssel stammt von einem anderen Bot als dem von EDCH: {{host}}. Deine BGS-Berichte gehen an ihn und an den, der ihn betreibt. Vertraue ihm nur, wenn es der Bot deines Geschwaders ist.",
+    "otherBotTitle": "Ein anderer Bot",
+    "sendNow": "Jetzt senden",
+    "sending": "Wird gesendet…",
+    "title": "Mit dem Discord-Bot verbinden",
+    "trustBot": "Diesem Bot vertrauen"
+  },
+  "discordError": {
+    "badFormat": "Der Bot hat den Bericht nicht verstanden: aktualisiere EDCH oder den Bot.",
+    "badKey": "Das ist kein gültiger Schlüssel: führe /bgs link erneut aus und füge den ganzen Schlüssel ein.",
+    "notSetUp": "Der Bot ist auf deinem Server nicht eingerichtet: ein Admin führt /bgs setup in #edch-bgs aus.",
+    "otherFaction": "Der Bot verfolgt eine andere Fraktion als die des Berichts.",
+    "otherServer": "Dieser Schlüssel ist für den Bot eines anderen Geschwaders.",
+    "revoked": "Dieser Schlüssel wurde widerrufen: führe /bgs link erneut aus.",
+    "roleMissing": "Du hast die Rolle nicht mehr, die Berichte auf dem Server deines Geschwaders erlaubt.",
+    "tooLarge": "Der Bericht war zu groß für den Bot.",
+    "unavailable": "Der Bot war nicht erreichbar: EDCH versucht es in 15 Minuten erneut.",
+    "unknownVersion": "Der Bot kennt dieses Berichtsformat nicht: aktualisiere EDCH oder den Bot."
   }
 }

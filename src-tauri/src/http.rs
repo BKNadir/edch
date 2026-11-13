@@ -8,7 +8,7 @@ use crate::logs;
 
 #[derive(Serialize)]
 pub struct HttpReply {
-    status: u16,
+    pub status: u16,
     body: String,
 }
 
@@ -77,7 +77,20 @@ pub fn blocking_http(
     body: Option<&str>,
     content_type: Option<&str>,
 ) -> Result<HttpReply, String> {
-    if !allowed(url) {
+    request(method, url, body, content_type, None, &allowed)
+}
+
+/// The request itself: `allow` says which addresses (the first and every redirect) may be
+/// reached; `authorization` is sent as is (the Discord bot's key, never logged).
+pub fn request(
+    method: &str,
+    url: &str,
+    body: Option<&str>,
+    content_type: Option<&str>,
+    authorization: Option<&str>,
+    allow: &dyn Fn(&str) -> bool,
+) -> Result<HttpReply, String> {
+    if !allow(url) {
         return Err("addressRefused".into());
     }
     let agent = ureq::AgentBuilder::new()
@@ -89,7 +102,10 @@ pub fn blocking_http(
     let mut body = body;
     let mut url = url.to_string();
     for _ in 0..=MAX_REDIRECTS {
-        let request = agent.request(&method, &url);
+        let mut request = agent.request(&method, &url);
+        if let Some(value) = authorization {
+            request = request.set("Authorization", value);
+        }
         let result = match body {
             Some(text) => request
                 .set("Content-Type", content_type.unwrap_or("application/json"))
@@ -116,7 +132,7 @@ pub fn blocking_http(
         let next = response
             .header("Location")
             .and_then(|location| redirect_target(&url, location))
-            .filter(|next| allowed(next))
+            .filter(|next| allow(next))
             .ok_or_else(|| "addressRefused".to_string())?;
         // As browsers do: 301/302/303 go on with a GET without the body; 307/308 repeat the request.
         if matches!(status, 301..=303) {

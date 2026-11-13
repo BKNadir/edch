@@ -1,9 +1,13 @@
 // Sync page: sharing the journal with EDDN, EDSM and Inara (what is sent, keys, counters and the
-// last exchanges).
+// last exchanges), and the link to the squadron's Discord bot (EDCH-Discord) for BGS reports.
 
 import { locale, t } from "../../platform/i18n.js";
-import { openUrl } from "../../platform/bridge.js";
-import { h, icon, replace } from "../../ui/dom.js";
+import { openUrl, trustBot } from "../../platform/bridge.js";
+import { botSync, sendBgsNow } from "../../features/bgs/botSync.js";
+import { botInviteUrl, readBotKey, SHARED_BOT } from "../../services/discordBot.js";
+import { dialog } from "../../ui/dialog.js";
+import { relTime } from "../../ui/format.js";
+import { h, icon, replace, toast } from "../../ui/dom.js";
 import type { Ctx, View } from "../../state/context.js";
 import type { SyncSettings } from "../../state/syncSettings.js";
 import { shareModeSwitch } from "../shared/shareModeSwitch.js";
@@ -12,6 +16,7 @@ import { shareModeSwitch } from "../shared/shareModeSwitch.js";
 export class SyncView implements View {
   private root?: HTMLElement;
   private activity = h("div.sync-activity");
+  private discordStatus = h("div.discord-status");
   constructor(private ctx: Ctx) {}
 
   mount(root: HTMLElement) {
@@ -139,14 +144,126 @@ export class SyncView implements View {
             t("sync.openInaraApiKeyPage"),
           ),
         ),
+        this.discordCard(toggle),
         h("section.card", null, h("h3", null, t("common.activity")), this.activity),
       ),
     );
     this.update();
   }
 
+  /**
+   * "Connect to the Discord bot": the key from `/bgs link`, the switch that sends the BGS reports,
+   * and the link that adds the shared bot to a server (Discord asks for the Manage Server right).
+   */
+  private discordCard(toggle: (checked: boolean, onChange: (v: boolean) => void) => HTMLElement): HTMLElement {
+    const store = this.ctx.store;
+    const set = (patch: Partial<SyncSettings>) =>
+      store.updateSettings({ sync: { ...store.state.settings.sync, ...patch } });
+    const s = store.state.settings.sync;
+    const keyInput = h("input", {
+      type: "password",
+      value: s.discordKey,
+      spellcheck: false,
+      autocomplete: "off",
+      placeholder: "edch1.…",
+      onchange: (e: Event) => void this.setDiscordKey((e.target as HTMLInputElement).value.trim(), keyInput),
+    }) as HTMLInputElement;
+    const invite = botInviteUrl();
+    return h(
+      "section.card",
+      null,
+      h(
+        "div.sync-head",
+        null,
+        h("div", null, h("h3", null, t("discord.title")), h("p.sub", null, t("discord.intro"))),
+        toggle(s.discord, (on) => {
+          set({ discord: on });
+          void sendBgsNow(store);
+        }),
+      ),
+      h("label.field", null, h("span", null, t("discord.key")), keyInput, h("small", null, t("discord.keyHelp"))),
+      this.discordStatus,
+      h(
+        "div.row",
+        null,
+        h("button.ghost", { onclick: () => void sendBgsNow(store) }, t("discord.sendNow")),
+        invite ? h("button.inline-link", { onclick: () => openUrl(invite) }, t("discord.addBot")) : null,
+      ),
+      invite ? h("p.sub", null, t("discord.addBotHelp")) : null,
+    );
+  }
+
+  /** A pasted key: checked, and a bot other than the shared one is confirmed by the member first. */
+  private async setDiscordKey(key: string, input: HTMLInputElement) {
+    const store = this.ctx.store;
+    const set = (patch: Partial<SyncSettings>) =>
+      store.updateSettings({ sync: { ...store.state.settings.sync, ...patch } });
+    if (!key) {
+      set({ discordKey: "", discordBot: "", discord: false });
+      await trustBot(null).catch(() => undefined);
+      this.showDiscordStatus();
+      return;
+    }
+    const claims = readBotKey(key);
+    if (!claims) {
+      input.value = store.state.settings.sync.discordKey;
+      toast(t("discordError.badKey"));
+      return;
+    }
+    let bot = "";
+    if (claims.bot !== SHARED_BOT) {
+      if (claims.bot !== store.state.settings.sync.discordBot) {
+        const answer = await dialog(
+          t("discord.otherBotTitle"),
+          [h("p", null, t("discord.otherBot", { host: new URL(claims.bot).host }))],
+          [
+            { label: t("common.cancel"), value: "no" },
+            { label: t("discord.trustBot"), value: "yes", primary: true },
+          ],
+        );
+        if (answer !== "yes") {
+          input.value = store.state.settings.sync.discordKey;
+          return;
+        }
+      }
+      bot = claims.bot;
+    }
+    await trustBot(bot || null).catch(() => undefined);
+    set({ discordKey: key, discordBot: bot });
+    void sendBgsNow(store);
+  }
+
+  private showDiscordStatus() {
+    const s = this.ctx.store.state.settings.sync;
+    const claims = s.discordKey ? readBotKey(s.discordKey) : null;
+    const lines: (Node | string | null)[] = [];
+    if (!claims) lines.push(h("p.sub", null, t("discord.notLinked")));
+    else {
+      const host = new URL(claims.bot).host;
+      lines.push(
+        h(
+          "p.sub",
+          null,
+          botSync.faction
+            ? t("discord.linkedFaction", { faction: botSync.faction, host })
+            : t("discord.linked", { host }),
+        ),
+      );
+      if (botSync.state === "sending") lines.push(h("p.sub", null, h("span.spinner"), " ", t("discord.sending")));
+      else if (botSync.state === "error" && botSync.error)
+        lines.push(h("p.bad", null, icon("warn"), " ", t(`discordError.${botSync.error}`)));
+      else if (botSync.lastSent)
+        lines.push(
+          h("p.sub", null, t("discord.lastSent", { time: relTime(botSync.lastSent), count: botSync.lastCount ?? 0 })),
+        );
+      if (!s.discord) lines.push(h("p.sub", null, t("discord.off")));
+    }
+    replace(this.discordStatus, ...lines);
+  }
+
   update() {
     if (!this.root) return;
+    this.showDiscordStatus();
     const stats = this.ctx.sync?.stats;
     if (!stats) {
       replace(this.activity, h("p.sub", null, t("common.availableAppNotDemoMode")));

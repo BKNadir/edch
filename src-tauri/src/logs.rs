@@ -293,8 +293,27 @@ fn replace_ci(text: &str, needle: &str, with: &str) -> String {
     out
 }
 
+/// Hides EDCH-Discord keys ("edch1.<payload>.<signature>"): their base64 has dashes, which would
+/// split them into words too short for `mask_word`.
+fn mask_bot_keys(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut rest = text;
+    while let Some(start) = rest.find("edch1.") {
+        out.push_str(&rest[..start]);
+        out.push_str("edch1.***");
+        let after = &rest[start..];
+        let end = after
+            .find(|c: char| !(c.is_ascii_alphanumeric() || matches!(c, '.' | '-' | '_')))
+            .unwrap_or(after.len());
+        rest = &after[end..];
+    }
+    out.push_str(rest);
+    out
+}
+
 /// Masks IPv4 addresses, long hex/alphanumeric tokens and Frontier ids, word by word.
 fn mask_tokens(text: &str) -> String {
+    let text = &mask_bot_keys(text);
     let mut out = String::with_capacity(text.len());
     let mut word = String::new();
     let flush = |word: &mut String, out: &mut String| {
@@ -525,6 +544,15 @@ mod tests {
         assert_eq!(civil(0), (1970, 1, 1, 0, 0, 0));
         assert_eq!(civil(1_793_523_749), (2026, 11, 1, 9, 2, 29));
         assert_eq!(civil(951_782_400), (2000, 2, 29, 0, 0, 0));
+    }
+
+    #[test]
+    fn bot_keys_are_removed() {
+        use super::sanitize;
+        assert_eq!(
+            sanitize("key edch1.eyJiIjoiaHR0cHM6Ly9ib3Qi-fQ.Ab_c-9xY used"),
+            "key edch1.*** used"
+        );
     }
 
     #[test]

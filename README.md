@@ -69,6 +69,7 @@ EDCH reads your game journal on your PC. Here is everything that leaves it, and 
 - **Spansh**: your searches (system, material, commodity, minor faction…) and your position as their starting point.
 - **EDDN** (on by default, like EDMC; can be turned off in Sync): market, outfitting, shipyard, jump and scan data, with your personal details removed, as EDDN requires.
 - **EDSM and Inara**: nothing about you unless you enter your own API key in Sync; your keys stay on your PC. EDCH also reads EDSM's public data when you ask for it (a system's bodies on the Exploration page, a faction's influence history on the BGS page): only the system's name is sent.
+- **EDCH-Discord** (your squadron's Discord bot): nothing unless you paste your key in Sync and tick the switch. Then, every 15 minutes, what you did for the squadron's faction (systems, missions and their influence, credits; no commander name), written to a private channel of your squadron's Discord server.
 - **ntfy.sh** (only if you enable wing sharing): your wing missions, encrypted with the wing code before leaving your PC.
 - **tick.edcd.io** (only while the BGS page is shown, with a faction followed): asks the time of the last BGS tick. Nothing is sent with it.
 - **GitHub**: only to check whether a new version exists (can be turned off in Settings).

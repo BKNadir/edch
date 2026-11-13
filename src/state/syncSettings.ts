@@ -1,5 +1,6 @@
-// Settings of the data sharing services (Sync page): EDDN, EDSM and Inara, with the API keys.
-// The keys never leave the PC (not sent to phones, never written to the logs).
+// Settings of the data sharing services (Sync page): EDDN, EDSM and Inara, with the API keys, and
+// the squadron's Discord bot (EDCH-Discord) with the member's key. The keys never leave the PC
+// (not sent to phones, never written to the logs).
 
 /**
  * What EDCH shares with EDDN, EDSM and Inara (the switch in the top bar):
@@ -19,6 +20,15 @@ export interface SyncSettings {
   edsmKey: string;
   inara: boolean;
   inaraKey: string;
+  /** Send BGS reports to the squadron's Discord bot (off until the member ticks it). */
+  discord: boolean;
+  /** The key `/bgs link` gave the member ("edch1.…"): it names the bot, server and member. */
+  discordKey: string;
+  /**
+   * A squadron's own bot the member confirmed ("https://host"); empty for the shared bot. EDCH
+   * reaches no other bot address.
+   */
+  discordBot: string;
 }
 
 export const DEFAULT_SYNC: SyncSettings = {
@@ -29,4 +39,7 @@ export const DEFAULT_SYNC: SyncSettings = {
   edsmKey: "",
   inara: false,
   inaraKey: "",
+  discord: false,
+  discordKey: "",
+  discordBot: "",
 };

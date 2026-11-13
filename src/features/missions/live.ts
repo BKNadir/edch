@@ -32,6 +32,9 @@ type Json = Record<string, any>;
 
 let store: Store;
 let historyEnd = "";
+/** The journal archive was read into the activity (what is sent to the squadron bot needs it). */
+let historyRead = false;
+export const isHistoryRead = () => historyRead;
 const historyEdge = new Set<string>();
 let link: WingLink | null = null;
 let linkCode = "";
@@ -282,6 +285,7 @@ export async function loadHistory(dir: string) {
     }
   }
   historyEnd = last;
+  historyRead = true;
   store.state.activity = st;
   store.notify();
   refreshTab();

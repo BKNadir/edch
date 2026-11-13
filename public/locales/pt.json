@@ -1654,5 +1654,36 @@
     "importTitle": "Adicionar este build à lista de desejos?",
     "nothingToAdd": "Este build não tem nenhuma engenharia que o EDCH conheça.",
     "unreadable": "Não foi possível ler este link EDOMH (só builds do EDSY e do Coriolis são suportados)."
+  },
+  "discord": {
+    "addBot": "Adicionar o bot ao meu servidor do Discord",
+    "addBotHelp": "O Discord pede a permissão Gerenciar servidor nesse servidor. Depois crie um canal privado #edch-bgs e rode /bgs setup nele.",
+    "intro": "O EDCH-Discord reúne o trabalho de BGS do seu esquadrão no próprio servidor do Discord dele. Ligado, o EDCH envia a cada 15 minutos o que você fez pela facção do esquadrão, mesmo no modo BGS ou Invisível: só para este bot, que escreve no canal privado do seu esquadrão.",
+    "key": "Sua chave",
+    "keyHelp": "No Discord do seu esquadrão: /bgs link. Guarde-a só para você: ela envia relatórios em seu nome.",
+    "lastSent_one": "Último relatório {{time}}: {{count}} ação.",
+    "lastSent_other": "Último relatório {{time}}: {{count}} ações.",
+    "linked": "Vinculado a {{host}}.",
+    "linkedFaction": "Vinculado a {{host}}: o esquadrão acompanha {{faction}}.",
+    "notLinked": "Não vinculado: cole a chave que /bgs link te dá.",
+    "off": "Os relatórios estão desligados: ligue a chave para enviá-los.",
+    "otherBot": "Esta chave vem de outro bot que não o do EDCH: {{host}}. Seus relatórios de BGS vão para ele e para quem o administra. Confie nele só se for o bot do seu esquadrão.",
+    "otherBotTitle": "Outro bot",
+    "sendNow": "Enviar agora",
+    "sending": "Enviando…",
+    "title": "Conectar ao bot do Discord",
+    "trustBot": "Confiar neste bot"
+  },
+  "discordError": {
+    "badFormat": "O bot não entendeu o relatório: atualize o EDCH ou o bot.",
+    "badKey": "Esta não é uma chave válida: rode /bgs link de novo e cole a chave inteira.",
+    "notSetUp": "O bot não está configurado no seu servidor: um admin roda /bgs setup em #edch-bgs.",
+    "otherFaction": "O bot acompanha outra facção diferente da do relatório.",
+    "otherServer": "Esta chave é do bot de outro esquadrão.",
+    "revoked": "Esta chave foi cancelada: rode /bgs link de novo.",
+    "roleMissing": "Você não tem mais o cargo que permite relatórios no servidor do seu esquadrão.",
+    "tooLarge": "O relatório era grande demais para o bot.",
+    "unavailable": "Não foi possível acessar o bot: o EDCH tenta de novo em 15 minutos.",
+    "unknownVersion": "O bot não conhece este formato de relatório: atualize o EDCH ou o bot."
   }
 }

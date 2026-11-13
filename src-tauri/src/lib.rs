@@ -4,8 +4,8 @@
 //! and streams raw lines to the UI (journal), reads the companion files the game rewrites, makes
 //! the HTTP requests the webview can't (http), manages the game's option files (options), runs
 //! the remote access server (remote), shares wing missions (ntfy), handles updates (update), the
-//! window and the game launch (app), passes EDOMH build links on (edomh_link), and writes the
-//! logs (logs).
+//! window and the game launch (app), passes EDOMH build links on (edomh_link), sends BGS reports to the
+//! squadron bot (discord_bot), and writes the logs (logs).
 //!
 //! Errors the user can see are returned as codes ("fileNotFound", "network: <detail>"), shown
 //! in the user's language by the UI (see docs/TRANSLATING.md).
@@ -14,6 +14,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 mod app;
+mod discord_bot;
 mod edomh_link;
 mod http;
 mod journal;
@@ -57,6 +58,8 @@ pub fn run() {
         .manage(Arc::new(journal::WatchState::default()))
         .manage(remote::RemoteState::default())
         .invoke_handler(tauri::generate_handler![
+            discord_bot::trust_bot,
+            discord_bot::bot_fetch,
             edomh_link::take_launch_link,
             edomh_link::edomh_handler_status,
             edomh_link::set_edomh_handler,

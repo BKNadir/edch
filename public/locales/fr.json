@@ -1643,5 +1643,36 @@
     "importTitle": "Ajouter ce build à la wishlist ?",
     "nothingToAdd": "Ce build n'a pas d'ingénierie qu'EDCH connaît.",
     "unreadable": "Ce lien EDOMH n'a pas pu être lu (seuls les builds EDSY et Coriolis sont pris en charge)."
+  },
+  "discord": {
+    "addBot": "Ajouter le bot à mon serveur Discord",
+    "addBotHelp": "Discord demande le droit Gérer le serveur sur ce serveur. Crée ensuite un salon privé #edch-bgs et lance /bgs setup dedans.",
+    "intro": "EDCH-Discord rassemble le travail BGS de ton escadrille sur son propre serveur Discord. Activé, EDCH envoie toutes les 15 minutes ce que tu as fait pour la faction de l'escadrille, même en mode BGS ou Invisible : uniquement à ce bot, qui écrit dans le salon privé de ton escadrille.",
+    "key": "Ta clé",
+    "keyHelp": "Dans le Discord de ton escadrille : /bgs link. Garde-la pour toi : elle envoie des rapports en ton nom.",
+    "lastSent_one": "Dernier rapport {{time}} : {{count}} action.",
+    "lastSent_other": "Dernier rapport {{time}} : {{count}} actions.",
+    "linked": "Relié à {{host}}.",
+    "linkedFaction": "Relié à {{host}} : l'escadrille suit {{faction}}.",
+    "notLinked": "Pas relié : colle la clé que te donne /bgs link.",
+    "off": "Les rapports sont coupés : active l'interrupteur pour les envoyer.",
+    "otherBot": "Cette clé vient d'un autre bot que celui d'EDCH : {{host}}. Tes rapports BGS iront à ce bot et à la personne qui le fait tourner. Ne lui fais confiance que si c'est le bot de ton escadrille.",
+    "otherBotTitle": "Un autre bot",
+    "sendNow": "Envoyer maintenant",
+    "sending": "Envoi…",
+    "title": "Connexion au bot Discord",
+    "trustBot": "Faire confiance à ce bot"
+  },
+  "discordError": {
+    "badFormat": "Le bot n'a pas compris le rapport : mets à jour EDCH ou le bot.",
+    "badKey": "Ce n'est pas une clé valide : relance /bgs link et colle la clé en entier.",
+    "notSetUp": "Le bot n'est pas configuré sur ton serveur : un admin lance /bgs setup dans #edch-bgs.",
+    "otherFaction": "Le bot suit une autre faction que celle du rapport.",
+    "otherServer": "Cette clé est pour le bot d'une autre escadrille.",
+    "revoked": "Cette clé a été annulée : relance /bgs link.",
+    "roleMissing": "Tu n'as plus le rôle qui autorise les rapports sur le serveur de ton escadrille.",
+    "tooLarge": "Le rapport était trop gros pour le bot.",
+    "unavailable": "Le bot n'a pas pu être joint : EDCH réessaie dans 15 minutes.",
+    "unknownVersion": "Le bot ne connaît pas ce format de rapport : mets à jour EDCH ou le bot."
   }
 }

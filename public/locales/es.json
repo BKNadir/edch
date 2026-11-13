@@ -1643,5 +1643,36 @@
     "importTitle": "¿Añadir este build a la lista de deseos?",
     "nothingToAdd": "Este build no tiene ninguna ingeniería que EDCH conozca.",
     "unreadable": "No se pudo leer este enlace EDOMH (solo se admiten builds de EDSY y Coriolis)."
+  },
+  "discord": {
+    "addBot": "Añadir el bot a mi servidor de Discord",
+    "addBotHelp": "Discord pide el permiso Gestionar servidor en ese servidor. Luego crea un canal privado #edch-bgs y ejecuta /bgs setup en él.",
+    "intro": "EDCH-Discord reúne el trabajo de BGS de tu escuadrón en su propio servidor de Discord. Activado, EDCH envía cada 15 minutos lo que hiciste por la facción del escuadrón, incluso en modo BGS o Invisible: solo a este bot, que escribe en el canal privado de tu escuadrón.",
+    "key": "Tu clave",
+    "keyHelp": "En el Discord de tu escuadrón: /bgs link. Guárdala para ti: envía informes en tu nombre.",
+    "lastSent_one": "Último informe {{time}}: {{count}} acción.",
+    "lastSent_other": "Último informe {{time}}: {{count}} acciones.",
+    "linked": "Vinculado a {{host}}.",
+    "linkedFaction": "Vinculado a {{host}}: el escuadrón sigue a {{faction}}.",
+    "notLinked": "Sin vincular: pega la clave que te da /bgs link.",
+    "off": "Los informes están desactivados: activa el interruptor para enviarlos.",
+    "otherBot": "Esta clave viene de otro bot distinto del de EDCH: {{host}}. Tus informes de BGS irán a él y a quien lo gestione. Confía en él solo si es el bot de tu escuadrón.",
+    "otherBotTitle": "Otro bot",
+    "sendNow": "Enviar ahora",
+    "sending": "Enviando…",
+    "title": "Conectar con el bot de Discord",
+    "trustBot": "Confiar en este bot"
+  },
+  "discordError": {
+    "badFormat": "El bot no entendió el informe: actualiza EDCH o el bot.",
+    "badKey": "No es una clave válida: vuelve a ejecutar /bgs link y pega la clave completa.",
+    "notSetUp": "El bot no está configurado en tu servidor: un admin ejecuta /bgs setup en #edch-bgs.",
+    "otherFaction": "El bot sigue otra facción distinta de la del informe.",
+    "otherServer": "Esta clave es para el bot de otro escuadrón.",
+    "revoked": "Esta clave fue anulada: vuelve a ejecutar /bgs link.",
+    "roleMissing": "Ya no tienes el rol que permite enviar informes en el servidor de tu escuadrón.",
+    "tooLarge": "El informe era demasiado grande para el bot.",
+    "unavailable": "No se pudo contactar con el bot: EDCH lo intentará de nuevo en 15 minutos.",
+    "unknownVersion": "El bot no conoce este formato de informe: actualiza EDCH o el bot."
   }
 }
