@@ -11,6 +11,7 @@ import type { Blueprint } from "../game/types.js";
 import type { WatchStatus } from "../platform/bridge.js";
 import { type SyncSettings } from "./syncSettings.js";
 import { DEFAULT_SYNC } from "./syncSettings.js";
+import { type BgsSettings, DEFAULT_BGS, validBgsSettings } from "./bgsSettings.js";
 
 export interface Settings {
   journalDir: string;
@@ -24,6 +25,8 @@ export interface Settings {
   fallbackSystem: string;
   largePadOnly: boolean;
   sync: SyncSettings;
+  /** The BGS page: the faction followed. */
+  bgs: BgsSettings;
   remote: RemoteSettings;
   /** Look for a new release on GitHub at start-up and every few hours. */
   autoUpdate: boolean;
@@ -300,6 +303,7 @@ const DEFAULT_SETTINGS: Settings = {
   fallbackSystem: "Sol",
   largePadOnly: false,
   sync: DEFAULT_SYNC,
+  bgs: DEFAULT_BGS,
   remote: DEFAULT_REMOTE,
   autoUpdate: true,
   updatePreReleases: false,
@@ -384,6 +388,7 @@ export class Store {
         return {
           ...loaded,
           sync: { ...DEFAULT_SYNC, ...(loaded.sync ?? {}) },
+          bgs: validBgsSettings(loaded.bgs),
           remote: { ...DEFAULT_REMOTE, ...(loaded.remote ?? {}) },
           notify: { ...DEFAULT_NOTIFY, ...(loaded.notify ?? {}) },
           wing: { ...DEFAULT_WING, ...(loaded.wing ?? {}) },

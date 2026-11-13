@@ -25,6 +25,7 @@ import { PowerplayView } from "../views/powerplay/index.js";
 import { SearchView } from "../views/search/index.js";
 import { SessionView } from "../views/session/index.js";
 import { ThargoidsView } from "../views/thargoids/index.js";
+import { BgsView } from "../views/bgs/index.js";
 import { SettingsView } from "../views/settings/index.js";
 import { SyncView } from "../views/sync/index.js";
 import { WishlistView } from "../views/wishlist/index.js";
@@ -64,6 +65,7 @@ function createViews(ctx: Ctx, replayJournal: () => void): Record<string, View> 
     mining: new MiningView(ctx),
     powerplay: new PowerplayView(ctx),
     thargoids: new ThargoidsView(ctx),
+    bgs: new BgsView(ctx),
     session: new SessionView(ctx),
     settings: new SettingsView(ctx, replayJournal),
   };

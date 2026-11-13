@@ -1,8 +1,9 @@
 // Activity: folds journal events into the activity state (state.ts). Each domain has its own
-// handlers (travel, missions, colonisation, goals, exploration, exobiology, carriers, mining,
-// Powerplay); this module dispatches every event to the right one. Rebuilt at start-up from the
+// handlers (travel, BGS, missions, colonisation, goals, exploration, exobiology, carriers, mining,
+// Powerplay, Thargoids); this module dispatches every event to the right one. Rebuilt at start-up from the
 // last weeks of journal (scan_history), then kept up to date by live events. Pure functions.
 
+import { BGS_EVENTS } from "./bgs.js";
 import { CARRIERS_EVENTS } from "./carriers.js";
 import { COLONISATION_EVENTS } from "./colonisation.js";
 import { EXOBIOLOGY_EVENTS } from "./exobiology.js";
@@ -37,6 +38,8 @@ function mergeHandlers(...domains: EventHandlers[]): EventHandlers {
 /** Every handled journal event → its handler(s). */
 const HANDLERS: EventHandlers = mergeHandlers(
   TRAVEL_EVENTS,
+  // Before the missions: a failed mission is still known there (its faction).
+  BGS_EVENTS,
   MISSIONS_EVENTS,
   COLONISATION_EVENTS,
   GOALS_EVENTS,
@@ -98,6 +101,7 @@ export const HISTORY_EVENTS = [
   "PowerplayLeave",
   "PowerplayDefect",
   "SupercruiseDestinationDrop",
+  "CommitCrime",
 ];
 
 /** How far back the archive is read. */

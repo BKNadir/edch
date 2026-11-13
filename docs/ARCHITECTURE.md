@@ -63,7 +63,7 @@ never from a layer above.** `tools/check-layers.cjs` enforces it (run by `npm te
 | `state/` | The app's state and settings | `store.ts`, `context.ts`, `themeSettings.ts`, `syncSettings.ts` |
 | `ui/` | Shared display pieces: DOM helper, dialogs, banners, theme, menu, formats | `dom.ts`, `dialog.ts`, `alerts.ts`, `notifier.ts`, `menu/` |
 | `services/` | Other sites and servers | `spansh.ts`, `edsm.ts`, `eddn.ts`, `sync/` (EDDN, EDSM, Inara uploaders), `wing.ts`, `remoteServer.ts` |
-| `features/` | Calculations and logic behind the pages, without the page itself | `navigation/`, `engineers/`, `materials/`, `mining/`, `controls/`, `missions/`, `dataGaps/` (game data EDCH lacks, see below) |
+| `features/` | Calculations and logic behind the pages, without the page itself | `navigation/`, `engineers/`, `materials/`, `mining/`, `controls/`, `missions/`, `bgs/` (faction rows, alerts, report for the bot: see [BGS_SYNC.md](BGS_SYNC.md)), `dataGaps/` (game data EDCH lacks, see below) |
 | `views/` | One folder per page (`index.ts` is the page), plus `shared/` and `detail/` (right panel) | `views/navigation/`, `views/settings/cards/` |
 | `app/` | Start-up and wiring: layout, top bar, journal feed, remote access | `main.ts`, `shell.ts`, `header.ts`, `journalFeed.ts`, `remote.ts` |
 

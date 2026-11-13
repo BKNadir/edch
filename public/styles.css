@@ -4295,6 +4295,33 @@ body.menu-editing .sidebar span {
   color: var(--muted);
 }
 
+/* BGS page: the activity and systems tables scroll sideways on narrow windows; systems needing
+   attention are marked by a bar on their left. */
+.bgs-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.bgs-table-wrap {
+  overflow-x: auto;
+}
+.bgs-table tr {
+  cursor: default;
+}
+.bgs-table td .badge {
+  margin: 0 4px 2px 0;
+}
+.bgs-table tr.bgs-attention td:first-child {
+  box-shadow: inset 3px 0 0 var(--warn-text);
+}
+.bgs-tour {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  line-height: 1.8;
+}
+
 /* Share mode switch (top bar, Sync page): Normal / BGS / Invisible. Anything but Normal stands out
    so a hidden mode is never forgotten. */
 .share-mode {

@@ -29,6 +29,7 @@ export const NAV: { id: string; label: string; icon: string }[] = [
   },
   { id: "mining", label: t("common.mining"), icon: "M14 4l6 6M4 20l9-9M11 6c3-2 6-1 7 0M18 13c2-3 1-6 0-7" },
   { id: "powerplay", label: t("common.powerplay"), icon: "M13 2L4 14h7l-1 8 9-12h-7z" },
+  { id: "bgs", label: t("nav.bgs"), icon: "M4 20V10M10 20V4M16 20v-7M22 20H2" },
   {
     id: "thargoids",
     label: t("nav.thargoids"),
@@ -72,6 +73,7 @@ export const DEFAULT_ORDER = [
   "mining",
   "exploration",
   "powerplay",
+  "bgs",
   "goals",
   "thargoids",
   "session",

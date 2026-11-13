@@ -6,6 +6,7 @@ import { spanshPost } from "../platform/bridge.js";
 import type { Vec3 } from "../game/journal/state.js";
 import type { Finder } from "../features/materials/sources.js";
 import type { Settings } from "../state/store.js";
+import type { FactionPresence } from "../game/activity/bgs.js";
 
 export interface Reference {
   coords?: Vec3;
@@ -311,3 +312,123 @@ export const fmtLy = (n?: number) =>
   n === undefined || Number.isNaN(n)
     ? ""
     : t("common.ly", { locale: n.toLocaleString(locale(), { maximumFractionDigits: n < 100 ? 2 : 1 }) });
+
+/** A system where a followed faction is present, as Spansh knows it (BGS page). */
+export interface FactionSystem {
+  name: string;
+  id64?: string;
+  coords?: Vec3;
+  distance?: number;
+  /** When Spansh last received data for the system (not the time of a BGS tick). */
+  updatedAt?: string;
+  controlling?: string;
+  /** Every faction present, influence in percent. */
+  factions: FactionPresence[];
+}
+
+/** Every faction's state names of a Spansh presence (strings or { state } objects). */
+const stateNames = (list: unknown): string[] =>
+  Array.isArray(list)
+    ? list
+        .map((entry: any) => (typeof entry === "string" ? entry : (entry?.state ?? entry?.State)))
+        .filter((name: unknown): name is string => typeof name === "string" && name !== "None")
+    : [];
+
+/** A date string as ISO 8601 UTC, or undefined when it isn't a date. */
+function isoDate(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const time = Date.parse(value.replace(" ", "T").replace(/([+-]\d\d)$/, "$1:00"));
+  return Number.isFinite(time) ? new Date(time).toISOString() : undefined;
+}
+
+/** A Spansh systems/search record, decoded; influence is never made up when missing. */
+export function decodeFactionSystem(raw: any): FactionSystem | null {
+  const name = String(raw?.name ?? "").trim();
+  if (!name) return null;
+  const presences: any[] = Array.isArray(raw?.minor_faction_presences) ? raw.minor_faction_presences : [];
+  const factions: FactionPresence[] = presences
+    .filter((p) => typeof p?.name === "string" && p.name)
+    .map((p) => {
+      const value = typeof p.influence === "number" && Number.isFinite(p.influence) ? p.influence : NaN;
+      // Spansh gives 0–1; some exports give 0–100.
+      const influence = value >= 0 && value <= 1 ? value * 100 : value > 1 && value <= 100 ? value : NaN;
+      return {
+        name: p.name,
+        influence: Number.isFinite(influence) ? Math.round(influence * 10) / 10 : NaN,
+        state: typeof p.state === "string" ? p.state : "None",
+        active: stateNames(p.active_states),
+        pending: stateNames(p.pending_states),
+        recovering: stateNames(p.recovering_states),
+      };
+    });
+  const coords = Array.isArray(raw?.coords)
+    ? raw.coords
+    : raw?.coords && typeof raw.coords === "object"
+      ? [raw.coords.x, raw.coords.y, raw.coords.z]
+      : [raw?.x, raw?.y, raw?.z];
+  const controller = raw?.controlling_minor_faction;
+  return {
+    name,
+    id64: raw.id64 == null ? undefined : String(raw.id64),
+    coords:
+      coords.length >= 3 && coords.slice(0, 3).every(Number.isFinite) ? [coords[0], coords[1], coords[2]] : undefined,
+    distance: Number.isFinite(num(raw.distance)) ? num(raw.distance) : undefined,
+    // As ISO 8601 so it compares with journal timestamps (Spansh writes "2026-11-10 12:00:00+00").
+    updatedAt: isoDate(raw.updated_at),
+    controlling:
+      typeof controller === "string" ? controller : typeof controller?.name === "string" ? controller.name : undefined,
+    factions,
+  };
+}
+
+/** Every system where `faction` is present (nearest first), page by page. */
+export interface FactionSystems {
+  systems: FactionSystem[];
+  /** How many Spansh says there are. */
+  total: number;
+  /** Fewer systems than Spansh counts: the page limit was reached, or Spansh repeated a page. */
+  partial: boolean;
+}
+
+/** Pages read at most (100 systems each): enough for any faction, without an endless loop. */
+const FACTION_PAGES = 30;
+
+/**
+ * All the systems of a minor faction, nearest to `ref` first. Spansh answers 100 systems at a
+ * time: the pages are read until all are there (FACTION_PAGES at most).
+ * Credit: the paging follows Cyberpunk Philou's BGS prototype (pull request #2).
+ */
+export async function factionSystems(
+  faction: string,
+  ref: Reference,
+  onProgress?: (found: number, total: number) => void,
+): Promise<FactionSystems> {
+  const systems = new Map<string, FactionSystem>();
+  let total = 0;
+  let complete = false;
+  for (let page = 0; page < FACTION_PAGES; page++) {
+    const data: any = await spanshPost("systems/search", {
+      filters: { minor_faction_presences: [{ name: { value: [faction] } }] },
+      sort: [{ distance: { direction: "asc" } }],
+      size: 100,
+      page,
+      ...reference(ref),
+    });
+    const records: any[] = Array.isArray(data?.results) ? data.results : [];
+    total = num(data?.count) || total;
+    const before = systems.size;
+    for (const record of records) {
+      const system = decodeFactionSystem(record);
+      if (system && system.factions.some((f) => f.name.toLowerCase() === faction.toLowerCase()))
+        systems.set(system.id64 ?? system.name.toLowerCase(), system);
+    }
+    onProgress?.(systems.size, total);
+    if (records.length < 100 || (total && systems.size >= total)) {
+      complete = true;
+      break;
+    }
+    // Spansh repeating a page must not keep us looping.
+    if (systems.size === before) break;
+  }
+  return { systems: [...systems.values()], total: total || systems.size, partial: !complete };
+}

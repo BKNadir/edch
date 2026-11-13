@@ -3,6 +3,7 @@
 // Powerplay merits) plus the current session's tallies and mining. The event handlers of each
 // domain (missions.ts, exploration.ts…) update it; index.ts dispatches the events to them.
 
+import { type BgsJournal, emptyBgs } from "./bgs.js";
 import type { ThargoidType } from "./thargoids.js";
 
 type Json = Record<string, any>;
@@ -247,6 +248,8 @@ export interface ActivityState {
   mining: Mining;
   powerplay: Powerplay;
   thargoids: Thargoids;
+  /** What the commander did for the minor factions, and the factions seen in each system. */
+  bgs: BgsJournal;
   system?: { name: string; address?: number };
   /** Timestamp of the newest event folded in. */
   lastAt?: string;
@@ -323,6 +326,7 @@ export function emptyActivity(): ActivityState {
     mining: emptyMining(),
     powerplay: { gains: [] },
     thargoids: { kills: [], zones: [] },
+    bgs: emptyBgs(),
   };
 }
 
