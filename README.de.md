@@ -64,6 +64,7 @@ EDCH liest das Spiel-Journal auf deinem PC. Das ist alles, was ihn verlässt, un
 - **EDDN** (standardmäßig an, wie bei EDMC; unter Synchronisierung abschaltbar): Markt-, Ausrüstungs-, Werft-, Sprung- und Scandaten, ohne persönliche Daten, wie EDDN es verlangt.
 - **EDSM und Inara**: nichts, solange du nicht unter Synchronisierung deinen eigenen API-Schlüssel einträgst. Deine Schlüssel bleiben auf deinem PC.
 - **ntfy.sh** (nur wenn du das Geschwader-Teilen aktivierst): deine Geschwadermissionen, mit dem Geschwadercode verschlüsselt, bevor sie deinen PC verlassen.
+- **tick.edcd.io** (nur solange die BGS-Seite mit einer verfolgten Fraktion angezeigt wird): fragt die Zeit des letzten BGS-Ticks ab. Dabei wird nichts gesendet.
 - **GitHub**: nur um zu prüfen, ob es eine neue Version gibt (in den Einstellungen abschaltbar).
 - **Fernzugriff**: bleibt in deinem lokalen Netzwerk; standardmäßig aus und durch den QR-Code geschützt.
 

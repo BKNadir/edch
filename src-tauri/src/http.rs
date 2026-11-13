@@ -13,7 +13,7 @@ pub struct HttpReply {
 }
 
 /// Hosts the UI may talk to. Everything else is refused.
-const ALLOWED_HOSTS: [&str; 7] = [
+const ALLOWED_HOSTS: [&str; 8] = [
     "https://ntfy.sh/",
     "https://spansh.co.uk/",
     "https://www.spansh.co.uk/",
@@ -21,6 +21,7 @@ const ALLOWED_HOSTS: [&str; 7] = [
     "https://www.edsm.net/",
     "https://inara.cz/",
     "https://edsm.net/",
+    "https://tick.edcd.io/",
 ];
 
 /// Redirects followed at most, each one checked against the allowed hosts.
@@ -168,6 +169,8 @@ mod tests {
     #[test]
     fn only_allowed_hosts() {
         assert!(allowed("https://spansh.co.uk/api/systems/search"));
+        assert!(allowed("https://tick.edcd.io/api/tick"));
+        assert!(!allowed("https://edcd.io/"));
         assert!(!allowed("https://spansh.co.uk.example.com/api"));
         assert!(!allowed("http://spansh.co.uk/api"));
         assert!(!allowed("https://example.com/?https://spansh.co.uk/"));

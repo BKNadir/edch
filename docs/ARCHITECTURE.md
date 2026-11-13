@@ -126,7 +126,7 @@ wins, and several rules rely on that. Don't move existing rules around.
 | --- | --- |
 | `lib.rs` | Start-up: plugins, state, the list of commands the UI can call |
 | `journal.rs` | Journal folder, replay and tail of the journal, companion files, archive scan |
-| `http.rs` | HTTP requests for the UI, to an allow-list of hosts only |
+| `http.rs` | HTTP requests for the UI, to an allow-list of hosts only (`ALLOWED_HOSTS`) |
 | `options.rs` | The game's option files (bindings, graphics): list, read, export, import |
 | `paths.rs` | Where the game's files are (Proton prefixes on Linux) and EDCH's Documents folder |
 | `system.rs` | Clipboard, opening links and files, portable build, installer language |

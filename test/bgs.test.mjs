@@ -177,3 +177,11 @@ test("bgs rows: the newest data wins, alerts, advice and the refresh tour", () =
   const tour = refreshTour(rows, [0, 0, 0]).map((row) => row.system);
   assert.deepEqual(tour, ["Alpha", "Delta"]);
 });
+
+test("bgs tick: the detector's date as ISO, anything else refused", async () => {
+  const { decodeTick } = await import("../dist/js/services/bgsTick.js");
+  assert.equal(decodeTick('"2026-11-12T15:41:03Z"'), "2026-11-12T15:41:03.000Z");
+  assert.throws(() => decodeTick('{"tick":"2026-11-12"}'));
+  assert.throws(() => decodeTick('"soon"'));
+  assert.throws(() => decodeTick("<html>"));
+});

@@ -64,6 +64,7 @@ EDCH reads your game journal on your PC. Here is everything that leaves it, and 
 - **EDDN** (on by default, like EDMC; can be turned off in Sync): market, outfitting, shipyard, jump and scan data, with your personal details removed, as EDDN requires.
 - **EDSM and Inara**: nothing unless you enter your own API key in Sync. Your keys stay on your PC.
 - **ntfy.sh** (only if you enable wing sharing): your wing missions, encrypted with the wing code before leaving your PC.
+- **tick.edcd.io** (only while the BGS page is shown, with a faction followed): asks the time of the last BGS tick. Nothing is sent with it.
 - **GitHub**: only to check whether a new version exists (can be turned off in Settings).
 - **Remote access**: stays on your local network; off by default and protected by the QR code.
 

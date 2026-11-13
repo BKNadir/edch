@@ -6,6 +6,7 @@
 import { HISTORY_DAYS } from "../../game/activity/index.js";
 import { gameName, t } from "../../platform/i18n.js";
 import { log } from "../../platform/logger.js";
+import { knownTick, refreshTick } from "../../services/bgsTick.js";
 import { factionSystems, fmtLy, type FactionSystems } from "../../services/spansh.js";
 import type { Ctx, View } from "../../state/context.js";
 import { referenceOf } from "../../state/context.js";
@@ -22,8 +23,8 @@ import {
 } from "../../features/bgs/analysis.js";
 import { systemLink } from "../shared/links.js";
 
-/** Periods of "what you did": the last 24 hours (about one BGS day), the last 7 days. */
-const PERIODS = { day: 86_400_000, week: 7 * 86_400_000 } as const;
+/** Periods of "what you did": since the last BGS tick (when known), the last 24 hours, 7 days. */
+const PERIODS = { tick: 0, day: 86_400_000, week: 7 * 86_400_000 } as const;
 type Period = keyof typeof PERIODS;
 
 const ALERT_LABELS = (): Record<BgsAlertKind, string> => ({
@@ -52,7 +53,7 @@ const SERIOUS: BgsAlertKind[] = ["retreat", "conflict", "rivalClose"];
 
 export class BgsView implements View {
   private root?: HTMLElement;
-  private period: Period = "day";
+  private period: Period = "tick";
   /** Spansh's list for a faction, loaded on request (kept while EDCH runs). */
   private loaded?: { faction: string; result: FactionSystems };
   private loading?: { found: number; total: number };
@@ -63,6 +64,15 @@ export class BgsView implements View {
   mount(root: HTMLElement) {
     this.root = root;
     this.render();
+  }
+
+  /** The tick is asked only while this page is shown with a faction followed (not at start-up). */
+  private checkTick() {
+    if (!this.faction || !this.root?.isConnected) return;
+    const before = knownTick();
+    void refreshTick().then((tick) => {
+      if (tick !== before) this.render();
+    });
   }
 
   update() {
@@ -109,7 +119,10 @@ export class BgsView implements View {
     const faction = this.faction;
     const spansh = this.loaded && this.loaded.faction === faction ? this.loaded.result : undefined;
     const rows = factionRows(faction, spansh?.systems, activity.bgs.observed);
-    const since = new Date(Date.now() - PERIODS[this.period]).toISOString();
+    this.checkTick();
+    const tick = knownTick();
+    const period: Period = this.period === "tick" && !tick ? "day" : this.period;
+    const since = period === "tick" ? tick! : new Date(Date.now() - PERIODS[period]).toISOString();
     const done = faction ? activityFor(activity.bgs.actions, faction, since) : [];
     const tour = refreshTour(rows, cmdr.location?.pos);
     const shareMode = settings.sync.shareMode;
@@ -119,8 +132,8 @@ export class BgsView implements View {
       h("header.view-head", null, h("div", null, h("h1", null, t("bgs.title")), h("p.sub", null, t("bgs.subtitle")))),
       this.factionCard(faction, activity.bgs.observed, spansh),
       faction ? this.alertsSummary(rows) : null,
-      faction ? this.activityCard(done) : null,
-      faction ? this.systemsCard(rows) : null,
+      faction ? this.activityCard(done, period, tick) : null,
+      faction ? this.systemsCard(rows, tick) : null,
       faction ? this.tourCard(tour, shareMode) : null,
     );
   }
@@ -208,11 +221,14 @@ export class BgsView implements View {
     );
   }
 
-  private activityCard(done: ReturnType<typeof activityFor>): HTMLElement {
+  private activityCard(done: ReturnType<typeof activityFor>, shown: Period, tick?: string): HTMLElement {
     const periodButton = (period: Period, label: string) =>
       h(
-        `button${this.period === period ? ".active" : ""}`,
+        `button${shown === period ? ".active" : ""}`,
         {
+          disabled: period === "tick" && !tick,
+          title:
+            period === "tick" ? (tick ? t("bgs.tickAt", { time: relTime(tick) }) : t("bgs.tickUnknown")) : undefined,
           onclick: () => {
             this.period = period;
             this.render();
@@ -228,7 +244,13 @@ export class BgsView implements View {
         "div.bgs-card-head",
         null,
         h("h3", null, t("bgs.yourActivity")),
-        h("div.segmented", null, periodButton("day", t("bgs.last24h")), periodButton("week", t("bgs.last7days"))),
+        h(
+          "div.segmented",
+          null,
+          periodButton("tick", t("bgs.sinceTick")),
+          periodButton("day", t("bgs.last24h")),
+          periodButton("week", t("bgs.last7days")),
+        ),
       ),
       h("p.sub", null, t("bgs.activityHelp", { days: HISTORY_DAYS })),
       done.length
@@ -284,7 +306,7 @@ export class BgsView implements View {
     );
   }
 
-  private systemsCard(rows: BgsSystemRow[]): HTMLElement {
+  private systemsCard(rows: BgsSystemRow[], tick?: string): HTMLElement {
     const labels = ALERT_LABELS();
     const advice = ADVICE_LABELS();
     const percent = (n?: number) => (n === undefined ? "?" : `${n.toFixed(1)} %`);
@@ -298,7 +320,7 @@ export class BgsView implements View {
       "section.card",
       null,
       h("h3", null, t("bgs.factionSystems")),
-      h("p.sub", null, t("bgs.systemsHelp")),
+      h("p.sub", null, t("bgs.systemsHelp"), tick ? ` ${t("bgs.lastTick", { time: relTime(tick) })}` : null),
       rows.length
         ? h(
             "div.bgs-table-wrap",
@@ -365,6 +387,9 @@ export class BgsView implements View {
                       null,
                       row.dataAt ? relTime(row.dataAt) : "?",
                       h("small.sub", null, ` ${row.source === "journal" ? t("bgs.sourceJournal") : "Spansh"}`),
+                      tick && row.dataAt && row.dataAt < tick
+                        ? h("span.badge.muted", { title: t("bgs.beforeTickHelp") }, t("bgs.beforeTick"))
+                        : null,
                     ),
                     h(
                       `td${row.alerts.includes("notVisited") ? ".bad" : ""}`,

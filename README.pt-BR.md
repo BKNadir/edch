@@ -64,6 +64,7 @@ O EDCH lê o diário do jogo no seu PC. Isto é tudo o que sai dele, e para onde
 - **EDDN** (ligado por padrão, como no EDMC; pode ser desligado em Sincronização): dados de mercados, equipamentos, estaleiros, saltos e escaneamentos, sem seus dados pessoais, como o EDDN exige.
 - **EDSM e Inara**: nada enquanto você não informar sua própria chave API em Sincronização. Suas chaves ficam no seu PC.
 - **ntfy.sh** (só se você ativar a ala compartilhada): suas missões de ala, criptografadas com o código da ala antes de sair do seu PC.
+- **tick.edcd.io** (só enquanto a página BGS está aberta, com uma facção acompanhada): pergunta o horário do último tick do BGS. Nada é enviado junto.
 - **GitHub**: só para verificar se existe uma versão nova (pode ser desligado nas Configurações).
 - **Acesso remoto**: fica na sua rede local; desligado por padrão e protegido pelo QR code.
 

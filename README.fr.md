@@ -64,6 +64,7 @@ EDCH lit le journal du jeu sur ton PC. Voici tout ce qui en sort, et vers où :
 - **EDDN** (activé par défaut, comme EDMC ; désactivable dans Synchro) : marchés, équipement, chantiers, sauts et scans, sans tes données personnelles, comme EDDN l'exige.
 - **EDSM et Inara** : rien tant que tu n'as pas saisi ta propre clé API dans Synchro. Tes clés restent sur ton PC.
 - **ntfy.sh** (seulement si tu actives le partage d'escadrille) : tes missions d'escadrille, chiffrées avec le code de l'escadrille avant de quitter ton PC.
+- **tick.edcd.io** (seulement quand la page BGS est affichée, avec une faction suivie) : demande l'heure du dernier tick BGS. Rien n'est envoyé avec.
 - **GitHub** : seulement pour vérifier si une nouvelle version existe (désactivable dans les Paramètres).
 - **Accès distant** : reste sur ton réseau local ; désactivé par défaut et protégé par le QR code.
 
