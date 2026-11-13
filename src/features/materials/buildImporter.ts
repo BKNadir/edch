@@ -1,4 +1,5 @@
-// Imports a ship build (EDSY / Coriolis export, SLEF or a journal Loadout) into the wishlist:
+// Imports a ship build (EDSY / Coriolis export, SLEF, a journal Loadout or an EDOMH link decoded
+// by edomhLink.ts) into the wishlist:
 // every engineered module becomes "blueprint G1 → its grade", plus its experimental effect.
 
 import type { Game } from "../../game/data.js";
@@ -36,7 +37,8 @@ const ITEM_MODULE: [RegExp, string][] = [
   [/^hpt_cargoscanner/, "Manifest Scanner"],
   [/^hpt_crimescanner/, "Kill Warrant Scanner"],
   [/^int_hyperdrive/, "Frame Shift Drive"],
-  [/^int_engine/, "Thrusters"],
+  // Also the Mk II thrusters ("int_mkiiagileboost_engine_…").
+  [/^int_([a-z0-9]+_)?engine/, "Thrusters"],
   [/^int_powerplant/, "Power Plant"],
   [/^int_powerdistributor/, "Power Distributor"],
   [/^int_lifesupport/, "Life Support"],
@@ -114,20 +116,22 @@ export function importLoadout(game: Game, loadout: Json): ImportResult {
     const slot = String(m.Slot ?? "").toLowerCase();
     const symbol = String(eng.BlueprintName ?? "").toLowerCase();
     const level = Math.max(1, Math.min(5, Number(eng.Level ?? 1)));
-    const grades = pick(game, "modification", symbol, module);
+    const grades = symbol ? pick(game, "modification", symbol, module) : [];
+    const where = m.Slot || m.Item;
+    // No modification symbol: an experimental effect alone (EDOMH links can give one).
     if (grades.length) {
       const top =
         grades.filter((g) => (g.grade ?? 0) <= level).sort((a, b) => (b.grade ?? 0) - (a.grade ?? 0))[0] ?? grades[0];
       add(top, 1, Math.min(level, top.grade ?? level), slot);
-    } else {
-      skipped.push(`${m.Slot}: ${eng.BlueprintName}`);
+    } else if (symbol) {
+      skipped.push(`${where}: ${eng.BlueprintName}`);
       unknownEngineering.push({ module: module ?? item, blueprint: String(eng.BlueprintName ?? ""), grade: level });
     }
     if (eng.ExperimentalEffect) {
       const exp = pick(game, "experimental", String(eng.ExperimentalEffect).toLowerCase(), module)[0];
       if (exp) add(exp, 0, 0, slot);
       else {
-        skipped.push(`${m.Slot}: ${eng.ExperimentalEffect}`);
+        skipped.push(`${where}: ${eng.ExperimentalEffect}`);
         unknownEngineering.push({ module: module ?? item, blueprint: String(eng.ExperimentalEffect) });
       }
     }

@@ -26,6 +26,7 @@ import { startMissingDataChecks } from "../features/dataGaps/missingData.js";
 import { bindStore, setupLive } from "../features/missions/live.js";
 import { bindLinks } from "../views/shared/links.js";
 import { setHere } from "../views/shared/resultsTable.js";
+import { startEdomhLinks } from "./edomhLinks.js";
 import { initFocus } from "./focus.js";
 import { replayJournal, setWatch, startJournalFeed } from "./journalFeed.js";
 import { runRemoteClient, setupRemoteHost } from "./remote.js";
@@ -102,6 +103,7 @@ export async function startApp(code: string, remoteMode: "paired" | null) {
   setupDesktop(store);
   void changelogAfterUpdate(store);
   startUpdateChecks(store);
+  void startEdomhLinks(ctx);
   setupLive(store);
   await startJournalFeed(store, sync, capacityOf);
 }

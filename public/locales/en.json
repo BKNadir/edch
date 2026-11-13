@@ -92,7 +92,9 @@
     "presetExists": "This preset already exists",
     "presetMissing": "This preset no longer exists",
     "builtinPresetNotFound": "The game's default preset wasn't found in its installation",
-    "notAPicture": "Not a picture"
+    "notAPicture": "Not a picture",
+    "accessDenied": "EDCH wasn't allowed to change this setting of your system.",
+    "unsupported": "Not available on this system."
   },
   "binds": {
     "axis": "Axis {{name}}",
@@ -256,7 +258,8 @@
     "wing": "Wing",
     "wishlist": "Wishlist",
     "workProgress": "Work in progress",
-    "sortHint": "Click to sort (again: reverse, a third time: back to the usual order)"
+    "sortHint": "Click to sort (again: reverse, a third time: back to the usual order)",
+    "cancel": "Cancel"
   },
   "context": {
     "gameLocationUnknown": "{{fallback}} (game location unknown)"
@@ -1166,7 +1169,13 @@
     "automatic": "Automatic",
     "buildExport": "Ship export",
     "preferredBuildSite": "Open my ship in",
-    "preferredBuildSiteHelp": "Wishlist → \"Export my ship\" opens your current ship, as the game describes it, on this site."
+    "preferredBuildSiteHelp": "Wishlist → \"Export my ship\" opens your current ship, as the game describes it, on this site.",
+    "edomhLinks": "Open EDOMH links in EDCH",
+    "edomhLinksHelp": "EDSY's and Coriolis's \"Export to EDOMH\" button then opens EDCH, which shows the build and asks before adding it to the wishlist. If Odyssey Materials Helper is installed, it no longer receives these links while this is on; turning it off gives them back.",
+    "edomhLinksOurs": "EDCH opens EDOMH links.",
+    "edomhLinksOther": "Another app (Odyssey Materials Helper?) opens EDOMH links.",
+    "edomhLinksNone": "No app opens EDOMH links yet.",
+    "edomhLinksUnsupported": "Not available here (browser, phone or Flatpak). You can still paste an EDOMH link into Import a build."
   },
   "sources": {
     "agriculture": "Agriculture",
@@ -1380,7 +1389,7 @@
     "numberRollsGrade": "Number of rolls at grade {{g}}",
     "openEngineering": "Open engineering",
     "owned": "Owned",
-    "pasteEdsyCoriolisExportHereSlef": "Paste the EDSY or Coriolis export here (SLEF or Loadout JSON)…",
+    "pasteEdsyCoriolisExportHereSlef": "Paste the EDSY or Coriolis export here (SLEF or Loadout JSON) or an EDOMH link (edomh://…)…",
     "pastedText": "the pasted text",
     "progressTrade": "Progress / trade",
     "quantity": "Quantity",
@@ -1394,7 +1403,7 @@
     "tourStops_one": "{{count}} stop · {{fmtLy}} in straight lines, nearest next each time",
     "tourStops_other": "{{count}} stops · {{fmtLy}} in straight lines, nearest next each time",
     "unlock": "to unlock",
-    "unrecognisedFormatEdsyShipExportSlef": "Unrecognised format. In EDSY: Ship → Export → SLEF. In Coriolis: Export → SLEF (or Loadout JSON).",
+    "unrecognisedFormatEdsyShipExportSlef": "Unrecognised format. In EDSY: Ship → Export → SLEF. In Coriolis: Export → SLEF (or Loadout JSON). An EDOMH link (\"Export to EDOMH\") works too.",
     "wishlistEmpty": "Your wishlist is empty.",
     "doneOnShip": "Already done on this ship",
     "nextEngineer": "Go to the next engineer",
@@ -1624,5 +1633,13 @@
     "trade": "Trade",
     "trendHelp": "Average change per day over the last days (your visits, Spansh, EDSM), and the influence expected in {{days}} days if it goes on.",
     "yourActivity": "What you did"
+  },
+  "edomh": {
+    "addToWishlist": "Add to the wishlist",
+    "importQuestion_one": "{{count}} line from EDSY or Coriolis",
+    "importQuestion_other": "{{count}} lines from EDSY or Coriolis",
+    "importTitle": "Add this build to the wishlist?",
+    "nothingToAdd": "This build has no engineering EDCH knows.",
+    "unreadable": "This EDOMH link couldn't be read (only EDSY and Coriolis builds are supported)."
   }
 }

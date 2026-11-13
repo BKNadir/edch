@@ -92,7 +92,9 @@
     "presetExists": "Этот пресет уже существует",
     "presetMissing": "Этого пресета больше нет",
     "builtinPresetNotFound": "Стандартный пресет игры не найден в её установке",
-    "notAPicture": "Это не изображение"
+    "notAPicture": "Это не изображение",
+    "accessDenied": "EDCH не разрешили изменить эту настройку вашей системы.",
+    "unsupported": "Недоступно в этой системе."
   },
   "binds": {
     "axis": "Ось {{name}}",
@@ -256,7 +258,8 @@
     "wing": "Звено",
     "wishlist": "Список желаний",
     "workProgress": "Страница в разработке",
-    "sortHint": "Нажмите для сортировки (ещё раз — обратный порядок, в третий раз — обычный)"
+    "sortHint": "Нажмите для сортировки (ещё раз — обратный порядок, в третий раз — обычный)",
+    "cancel": "Отмена"
   },
   "context": {
     "gameLocationUnknown": "{{fallback}} (позиция в игре неизвестна)"
@@ -1162,7 +1165,13 @@
     "automatic": "Автоматически",
     "buildExport": "Экспорт корабля",
     "preferredBuildSite": "Открывать корабль в",
-    "preferredBuildSiteHelp": "Список желаемого → «Экспорт корабля» открывает ваш текущий корабль, как его описывает игра, на этом сайте."
+    "preferredBuildSiteHelp": "Список желаемого → «Экспорт корабля» открывает ваш текущий корабль, как его описывает игра, на этом сайте.",
+    "edomhLinks": "Открывать ссылки EDOMH в EDCH",
+    "edomhLinksHelp": "Тогда кнопка «Export to EDOMH» в EDSY и Coriolis открывает EDCH, который показывает сборку и спрашивает, прежде чем добавить её в список желаний. Если установлен Odyssey Materials Helper, он не получает эти ссылки, пока это включено; выключение возвращает их ему.",
+    "edomhLinksOurs": "EDCH открывает ссылки EDOMH.",
+    "edomhLinksOther": "Ссылки EDOMH открывает другое приложение (Odyssey Materials Helper?).",
+    "edomhLinksNone": "Пока ни одно приложение не открывает ссылки EDOMH.",
+    "edomhLinksUnsupported": "Здесь недоступно (браузер, телефон или Flatpak). Ссылку EDOMH всё равно можно вставить в «Импорт сборки»."
   },
   "sources": {
     "agriculture": "Сельское хозяйство",
@@ -1372,7 +1381,7 @@
     "numberRollsGrade": "Число бросков на классе {{g}}",
     "openEngineering": "Открыть инженерию",
     "owned": "Есть",
-    "pasteEdsyCoriolisExportHereSlef": "Вставьте сюда экспорт EDSY или Coriolis (SLEF или Loadout JSON)…",
+    "pasteEdsyCoriolisExportHereSlef": "Вставьте сюда экспорт EDSY или Coriolis (SLEF или Loadout JSON) или ссылку EDOMH (edomh://…)…",
     "pastedText": "вставленного текста",
     "progressTrade": "Прогресс / обмен",
     "quantity": "Количество",
@@ -1385,7 +1394,7 @@
     "tourMoreThanLimitSettingsGame": "Маршрут — {{fmtLy}}, больше вашего лимита ({{fmtLy2}}, Настройки → Игра и поиск → Инженеры). Подлетите ближе к инженерам или увеличьте лимит.",
     "tourStops": "Остановок: {{count}} · {{fmtLy}} по прямой, каждый раз к ближайшей",
     "unlock": "открыть",
-    "unrecognisedFormatEdsyShipExportSlef": "Формат не распознан. В EDSY: Ship → Export → SLEF. В Coriolis: Export → SLEF (или Loadout JSON).",
+    "unrecognisedFormatEdsyShipExportSlef": "Формат не распознан. В EDSY: Ship → Export → SLEF. В Coriolis: Export → SLEF (или Loadout JSON). Ссылка EDOMH («Export to EDOMH») тоже подойдёт.",
     "wishlistEmpty": "Ваш список желаний пуст.",
     "doneOnShip": "Уже сделано на этом корабле",
     "nextEngineer": "К следующему инженеру",
@@ -1620,5 +1629,15 @@
     "trade": "Торговля",
     "trendHelp": "Среднее изменение в день за последние дни (ваши визиты, Spansh, EDSM) и ожидаемое влияние через {{days}} дня, если так пойдёт дальше.",
     "yourActivity": "Что вы сделали"
+  },
+  "edomh": {
+    "addToWishlist": "Добавить в список желаний",
+    "importQuestion_few": "{{count}} строки из EDSY или Coriolis",
+    "importQuestion_many": "{{count}} строк из EDSY или Coriolis",
+    "importQuestion_one": "{{count}} строка из EDSY или Coriolis",
+    "importQuestion_other": "{{count}} строки из EDSY или Coriolis",
+    "importTitle": "Добавить эту сборку в список желаний?",
+    "nothingToAdd": "В этой сборке нет инженерии, известной EDCH.",
+    "unreadable": "Не удалось прочитать эту ссылку EDOMH (поддерживаются только сборки EDSY и Coriolis)."
   }
 }

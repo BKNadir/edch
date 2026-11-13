@@ -2,11 +2,11 @@
 // views, keyboard, build site). The Spansh search card also shows in this tab (index.ts).
 
 import { BUILD_SITE_NAMES, type BuildSite } from "../../../features/materials/buildExporter.js";
-import { isRemote } from "../../../platform/bridge.js";
+import { edomhHandlerStatus, type EdomhHandlerStatus, isRemote, setEdomhHandler } from "../../../platform/bridge.js";
 import { lang, LANGS, saveLang, t } from "../../../platform/i18n.js";
 import type { Ctx } from "../../../state/context.js";
 import type { Settings, WishlistMode } from "../../../state/store.js";
-import { h } from "../../../ui/dom.js";
+import { h, toast } from "../../../ui/dom.js";
 import { ALWAYS_SHOWN, NAV } from "../../../ui/menu/pages.js";
 
 /** A labelled drop-down list: `options` are [value, label]; `onChange` gets the value picked. */
@@ -161,5 +161,46 @@ export function buildSiteCard(ctx: Ctx): HTMLElement {
       (buildSite) => ctx.store.updateSettings({ buildSite }),
       t("settings.preferredBuildSiteHelp"),
     ),
+    edomhLinksOption(),
+  );
+}
+
+/**
+ * "Open EDOMH links in EDCH": EDSY's and Coriolis's "Export to EDOMH" buttons then open EDCH,
+ * which asks before adding the build to the wishlist (app/edomhLinks.ts). The state is the
+ * system's own (which app opens these links), read each time the card is drawn.
+ */
+function edomhLinksOption(): HTMLElement {
+  const status = h("p.sub");
+  const box = h("input", { type: "checkbox", disabled: true }) as HTMLInputElement;
+  const show = (state: EdomhHandlerStatus) => {
+    box.checked = state === "ours";
+    box.disabled = state === "unsupported";
+    status.textContent =
+      state === "ours"
+        ? t("settings.edomhLinksOurs")
+        : state === "other"
+          ? t("settings.edomhLinksOther")
+          : state === "none"
+            ? t("settings.edomhLinksNone")
+            : t("settings.edomhLinksUnsupported");
+  };
+  box.onchange = async () => {
+    box.disabled = true;
+    try {
+      show(await setEdomhHandler(box.checked));
+    } catch (error) {
+      // Already in the user's language (platform/bridge.ts translates the backend's codes).
+      toast(String((error as Error)?.message ?? error));
+      show(await edomhHandlerStatus());
+    }
+  };
+  void edomhHandlerStatus().then(show);
+  return h(
+    "div.edomh-option",
+    null,
+    h("label.check", null, box, ` ${t("settings.edomhLinks")}`),
+    h("p.sub", null, t("settings.edomhLinksHelp")),
+    status,
   );
 }

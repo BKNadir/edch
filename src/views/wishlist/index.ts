@@ -8,6 +8,7 @@ import { goToStop, passStop, planTour, stopTour, type Stop, tourProgress } from 
 import { BUILD_SITE_NAMES, buildExportUrl } from "../../features/materials/buildExporter.js";
 import { openUrl } from "../../platform/bridge.js";
 import { extractLoadout, importLoadout } from "../../features/materials/buildImporter.js";
+import { decodeEdomhLink } from "../../features/materials/edomhLink.js";
 import { suggestTrades } from "../../features/materials/trade.js";
 import type { Blueprint } from "../../game/types.js";
 import { gameName, t } from "../../platform/i18n.js";
@@ -83,8 +84,8 @@ export class WishlistView implements View {
       placeholder: t("wishlist.pasteEdsyCoriolisExportHereSlef"),
     });
     const report = h("div.import-report");
-    const run = (text: string, source: string) => {
-      const loadout = extractLoadout(text);
+    const run = async (text: string, source: string) => {
+      const loadout = extractLoadout(text) ?? (await decodeEdomhLink(text));
       if (!loadout) {
         replace(report, h("p.error", null, icon("warn"), " " + t("wishlist.unrecognisedFormatEdsyShipExportSlef")));
         return;
@@ -118,7 +119,7 @@ export class WishlistView implements View {
       accept: ".json,.txt,application/json",
       onchange: async (e: Event) => {
         const f = (e.target as HTMLInputElement).files?.[0];
-        if (f) run(await f.text(), f.name);
+        if (f) await run(await f.text(), f.name);
         (e.target as HTMLInputElement).value = "";
       },
     });
@@ -131,7 +132,11 @@ export class WishlistView implements View {
       h(
         "div.row",
         null,
-        h("button.primary", { onclick: () => run(area.value, t("wishlist.pastedText")) }, t("wishlist.importText")),
+        h(
+          "button.primary",
+          { onclick: () => void run(area.value, t("wishlist.pastedText")) },
+          t("wishlist.importText"),
+        ),
         h("label.ghost.file-btn", null, t("wishlist.chooseFile"), file),
         h(
           "button.ghost",

@@ -92,7 +92,9 @@
     "presetExists": "Diese Voreinstellung existiert bereits",
     "presetMissing": "Diese Voreinstellung existiert nicht mehr",
     "builtinPresetNotFound": "Die Standard-Voreinstellung des Spiels wurde in seiner Installation nicht gefunden",
-    "notAPicture": "Kein Bild"
+    "notAPicture": "Kein Bild",
+    "accessDenied": "EDCH durfte diese Einstellung deines Systems nicht ändern.",
+    "unsupported": "Auf diesem System nicht verfügbar."
   },
   "binds": {
     "axis": "Achse {{name}}",
@@ -256,7 +258,8 @@
     "wing": "Geschwader",
     "wishlist": "Wunschliste",
     "workProgress": "Seite in Entwicklung",
-    "sortHint": "Klicken zum Sortieren (erneut: umgekehrt, ein drittes Mal: übliche Reihenfolge)"
+    "sortHint": "Klicken zum Sortieren (erneut: umgekehrt, ein drittes Mal: übliche Reihenfolge)",
+    "cancel": "Abbrechen"
   },
   "context": {
     "gameLocationUnknown": "{{fallback}} (Spielposition unbekannt)"
@@ -1166,7 +1169,13 @@
     "automatic": "Automatisch",
     "buildExport": "Schiffsexport",
     "preferredBuildSite": "Mein Schiff öffnen in",
-    "preferredBuildSiteHelp": "Wunschliste → „Mein Schiff exportieren“ öffnet dein aktuelles Schiff, wie das Spiel es beschreibt, auf dieser Seite."
+    "preferredBuildSiteHelp": "Wunschliste → „Mein Schiff exportieren“ öffnet dein aktuelles Schiff, wie das Spiel es beschreibt, auf dieser Seite.",
+    "edomhLinks": "EDOMH-Links in EDCH öffnen",
+    "edomhLinksHelp": "Der Knopf „Export to EDOMH“ von EDSY und Coriolis öffnet dann EDCH, das den Build zeigt und fragt, bevor es ihn zur Wunschliste hinzufügt. Ist Odyssey Materials Helper installiert, erhält es diese Links nicht mehr, solange das eingeschaltet ist; Ausschalten gibt sie ihm zurück.",
+    "edomhLinksOurs": "EDCH öffnet EDOMH-Links.",
+    "edomhLinksOther": "Eine andere App (Odyssey Materials Helper?) öffnet EDOMH-Links.",
+    "edomhLinksNone": "Noch keine App öffnet EDOMH-Links.",
+    "edomhLinksUnsupported": "Hier nicht verfügbar (Browser, Handy oder Flatpak). Du kannst einen EDOMH-Link trotzdem unter Build importieren einfügen."
   },
   "sources": {
     "agriculture": "Landwirtschaft",
@@ -1380,7 +1389,7 @@
     "numberRollsGrade": "Anzahl Würfe auf Stufe {{g}}",
     "openEngineering": "Ingenieurwesen öffnen",
     "owned": "Vorhanden",
-    "pasteEdsyCoriolisExportHereSlef": "Füge hier den EDSY- oder Coriolis-Export ein (SLEF oder Loadout-JSON)…",
+    "pasteEdsyCoriolisExportHereSlef": "Füge hier den EDSY- oder Coriolis-Export ein (SLEF oder Loadout-JSON) oder einen EDOMH-Link (edomh://…)…",
     "pastedText": "dem eingefügten Text",
     "progressTrade": "Fortschritt / Tausch",
     "quantity": "Anzahl",
@@ -1394,7 +1403,7 @@
     "tourStops_one": "{{count}} Halt · {{fmtLy}} Luftlinie, jeweils zum nächsten",
     "tourStops_other": "{{count}} Halte · {{fmtLy}} Luftlinie, jeweils zum nächsten",
     "unlock": "freizuschalten",
-    "unrecognisedFormatEdsyShipExportSlef": "Format nicht erkannt. In EDSY: Ship → Export → SLEF. In Coriolis: Export → SLEF (oder Loadout-JSON).",
+    "unrecognisedFormatEdsyShipExportSlef": "Format nicht erkannt. In EDSY: Ship → Export → SLEF. In Coriolis: Export → SLEF (oder Loadout-JSON). Ein EDOMH-Link („Export to EDOMH“) geht auch.",
     "wishlistEmpty": "Deine Wunschliste ist leer.",
     "doneOnShip": "Auf diesem Schiff schon erledigt",
     "nextEngineer": "Zum nächsten Ingenieur",
@@ -1624,5 +1633,13 @@
     "trade": "Handel",
     "trendHelp": "Durchschnittliche Änderung pro Tag in den letzten Tagen (deine Besuche, Spansh, EDSM) und der in {{days}} Tagen erwartete Einfluss, wenn es so weitergeht.",
     "yourActivity": "Was du getan hast"
+  },
+  "edomh": {
+    "addToWishlist": "Zur Wunschliste hinzufügen",
+    "importQuestion_one": "{{count}} Zeile von EDSY oder Coriolis",
+    "importQuestion_other": "{{count}} Zeilen von EDSY oder Coriolis",
+    "importTitle": "Diesen Build zur Wunschliste hinzufügen?",
+    "nothingToAdd": "Dieser Build hat kein Engineering, das EDCH kennt.",
+    "unreadable": "Dieser EDOMH-Link konnte nicht gelesen werden (nur Builds von EDSY und Coriolis werden unterstützt)."
   }
 }

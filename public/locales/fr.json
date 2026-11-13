@@ -92,7 +92,9 @@
     "presetExists": "Ce préréglage existe déjà",
     "presetMissing": "Ce préréglage n'existe plus",
     "builtinPresetNotFound": "Le préréglage par défaut du jeu n'a pas été trouvé dans son installation",
-    "notAPicture": "Ce n'est pas une image"
+    "notAPicture": "Ce n'est pas une image",
+    "accessDenied": "EDCH n'a pas eu le droit de changer ce réglage de ton système.",
+    "unsupported": "Pas disponible sur ce système."
   },
   "binds": {
     "axis": "Axe {{name}}",
@@ -256,7 +258,8 @@
     "wing": "Escadrille",
     "wishlist": "Wishlist",
     "workProgress": "Page en cours de développement",
-    "sortHint": "Clique pour trier (encore : ordre inverse, une 3e fois : ordre habituel)"
+    "sortHint": "Clique pour trier (encore : ordre inverse, une 3e fois : ordre habituel)",
+    "cancel": "Annuler"
   },
   "context": {
     "gameLocationUnknown": "{{fallback}} (position du jeu inconnue)"
@@ -1167,7 +1170,13 @@
     "automatic": "Automatique",
     "buildExport": "Export du vaisseau",
     "preferredBuildSite": "Ouvrir mon vaisseau sur",
-    "preferredBuildSiteHelp": "Wishlist → « Exporter mon vaisseau » ouvre ton vaisseau actuel, tel que le jeu le décrit, sur ce site."
+    "preferredBuildSiteHelp": "Wishlist → « Exporter mon vaisseau » ouvre ton vaisseau actuel, tel que le jeu le décrit, sur ce site.",
+    "edomhLinks": "Ouvrir les liens EDOMH dans EDCH",
+    "edomhLinksHelp": "Le bouton « Export to EDOMH » d'EDSY et de Coriolis ouvre alors EDCH, qui montre le build et demande avant de l'ajouter à la wishlist. Si Odyssey Materials Helper est installé, il ne reçoit plus ces liens tant que c'est activé ; le désactiver les lui rend.",
+    "edomhLinksOurs": "EDCH ouvre les liens EDOMH.",
+    "edomhLinksOther": "Une autre application (Odyssey Materials Helper ?) ouvre les liens EDOMH.",
+    "edomhLinksNone": "Aucune application n'ouvre encore les liens EDOMH.",
+    "edomhLinksUnsupported": "Pas disponible ici (navigateur, téléphone ou Flatpak). Tu peux quand même coller un lien EDOMH dans Importer un build."
   },
   "sources": {
     "agriculture": "Agriculture",
@@ -1382,7 +1391,7 @@
     "numberRollsGrade": "Nombre de jets au grade {{g}}",
     "openEngineering": "Ouvrir l'ingénierie",
     "owned": "Possédé",
-    "pasteEdsyCoriolisExportHereSlef": "Colle ici l'export EDSY ou Coriolis (format SLEF ou Loadout JSON)…",
+    "pasteEdsyCoriolisExportHereSlef": "Colle ici l'export EDSY ou Coriolis (format SLEF ou Loadout JSON) ou un lien EDOMH (edomh://…)…",
     "pastedText": "le texte collé",
     "progressTrade": "Progression / échange",
     "quantity": "Quantité",
@@ -1396,7 +1405,7 @@
     "tourStops_one": "{{count}} arrêt · {{fmtLy}} en ligne droite, du plus proche au suivant",
     "tourStops_other": "{{count}} arrêts · {{fmtLy}} en ligne droite, du plus proche au suivant",
     "unlock": "à débloquer",
-    "unrecognisedFormatEdsyShipExportSlef": "Format non reconnu. Dans EDSY : Ship → Export → SLEF. Dans Coriolis : Export → SLEF (ou JSON du Loadout).",
+    "unrecognisedFormatEdsyShipExportSlef": "Format non reconnu. Dans EDSY : Ship → Export → SLEF. Dans Coriolis : Export → SLEF (ou JSON du Loadout). Un lien EDOMH (« Export to EDOMH ») marche aussi.",
     "wishlistEmpty": "Ta wishlist est vide.",
     "doneOnShip": "Déjà fait sur ce vaisseau",
     "nextEngineer": "Passer à l'ingénieur suivant",
@@ -1626,5 +1635,13 @@
     "trade": "Commerce",
     "trendHelp": "Variation moyenne par jour sur les derniers jours (tes visites, Spansh, EDSM), et l'influence attendue dans {{days}} jours si ça continue.",
     "yourActivity": "Ce que tu as fait"
+  },
+  "edomh": {
+    "addToWishlist": "Ajouter à la wishlist",
+    "importQuestion_one": "{{count}} ligne venant d'EDSY ou Coriolis",
+    "importQuestion_other": "{{count}} lignes venant d'EDSY ou Coriolis",
+    "importTitle": "Ajouter ce build à la wishlist ?",
+    "nothingToAdd": "Ce build n'a pas d'ingénierie qu'EDCH connaît.",
+    "unreadable": "Ce lien EDOMH n'a pas pu être lu (seuls les builds EDSY et Coriolis sont pris en charge)."
   }
 }

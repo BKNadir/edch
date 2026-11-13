@@ -92,7 +92,9 @@
     "presetExists": "Este preajuste ya existe",
     "presetMissing": "Este preajuste ya no existe",
     "builtinPresetNotFound": "No se encontró el preajuste predeterminado del juego en su instalación",
-    "notAPicture": "No es una imagen"
+    "notAPicture": "No es una imagen",
+    "accessDenied": "EDCH no tuvo permiso para cambiar este ajuste de tu sistema.",
+    "unsupported": "No disponible en este sistema."
   },
   "binds": {
     "axis": "Eje {{name}}",
@@ -256,7 +258,8 @@
     "wing": "Ala",
     "wishlist": "Lista de deseos",
     "workProgress": "Página en desarrollo",
-    "sortHint": "Haz clic para ordenar (otra vez: orden inverso, una tercera vez: orden habitual)"
+    "sortHint": "Haz clic para ordenar (otra vez: orden inverso, una tercera vez: orden habitual)",
+    "cancel": "Cancelar"
   },
   "context": {
     "gameLocationUnknown": "{{fallback}} (posición del juego desconocida)"
@@ -1167,7 +1170,13 @@
     "automatic": "Automático",
     "buildExport": "Exportación de la nave",
     "preferredBuildSite": "Abrir mi nave en",
-    "preferredBuildSiteHelp": "Lista de deseos → «Exportar mi nave» abre tu nave actual, tal como la describe el juego, en este sitio."
+    "preferredBuildSiteHelp": "Lista de deseos → «Exportar mi nave» abre tu nave actual, tal como la describe el juego, en este sitio.",
+    "edomhLinks": "Abrir los enlaces EDOMH en EDCH",
+    "edomhLinksHelp": "El botón «Export to EDOMH» de EDSY y Coriolis abre entonces EDCH, que muestra el build y pregunta antes de añadirlo a la lista de deseos. Si Odyssey Materials Helper está instalado, deja de recibir estos enlaces mientras esto esté activado; desactivarlo se los devuelve.",
+    "edomhLinksOurs": "EDCH abre los enlaces EDOMH.",
+    "edomhLinksOther": "Otra aplicación (¿Odyssey Materials Helper?) abre los enlaces EDOMH.",
+    "edomhLinksNone": "Ninguna aplicación abre todavía los enlaces EDOMH.",
+    "edomhLinksUnsupported": "No disponible aquí (navegador, móvil o Flatpak). Aun así puedes pegar un enlace EDOMH en Importar un build."
   },
   "sources": {
     "agriculture": "Agricultura",
@@ -1382,7 +1391,7 @@
     "numberRollsGrade": "Número de tiradas en grado {{g}}",
     "openEngineering": "Abrir ingeniería",
     "owned": "En posesión",
-    "pasteEdsyCoriolisExportHereSlef": "Pega aquí la exportación de EDSY o Coriolis (SLEF o Loadout JSON)…",
+    "pasteEdsyCoriolisExportHereSlef": "Pega aquí la exportación de EDSY o Coriolis (SLEF o Loadout JSON) o un enlace EDOMH (edomh://…)…",
     "pastedText": "el texto pegado",
     "progressTrade": "Progreso / intercambio",
     "quantity": "Cantidad",
@@ -1396,7 +1405,7 @@
     "tourStops_one": "{{count}} parada · {{fmtLy}} en línea recta, cada vez a la más cercana",
     "tourStops_other": "{{count}} paradas · {{fmtLy}} en línea recta, cada vez a la más cercana",
     "unlock": "por desbloquear",
-    "unrecognisedFormatEdsyShipExportSlef": "Formato no reconocido. En EDSY: Ship → Export → SLEF. En Coriolis: Export → SLEF (o JSON del Loadout).",
+    "unrecognisedFormatEdsyShipExportSlef": "Formato no reconocido. En EDSY: Ship → Export → SLEF. En Coriolis: Export → SLEF (o JSON del Loadout). Un enlace EDOMH («Export to EDOMH») también sirve.",
     "wishlistEmpty": "Tu lista de deseos está vacía.",
     "doneOnShip": "Ya hecho en esta nave",
     "nextEngineer": "Pasar al siguiente ingeniero",
@@ -1626,5 +1635,13 @@
     "trade": "Comercio",
     "trendHelp": "Variación media por día en los últimos días (tus visitas, Spansh, EDSM), y la influencia esperada en {{days}} días si sigue así.",
     "yourActivity": "Lo que hiciste"
+  },
+  "edomh": {
+    "addToWishlist": "Añadir a la lista de deseos",
+    "importQuestion_one": "{{count}} línea de EDSY o Coriolis",
+    "importQuestion_other": "{{count}} líneas de EDSY o Coriolis",
+    "importTitle": "¿Añadir este build a la lista de deseos?",
+    "nothingToAdd": "Este build no tiene ninguna ingeniería que EDCH conozca.",
+    "unreadable": "No se pudo leer este enlace EDOMH (solo se admiten builds de EDSY y Coriolis)."
   }
 }

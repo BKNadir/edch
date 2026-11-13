@@ -485,3 +485,21 @@ export async function scanHistory(dir: string, days: number, events: string[]): 
   if (!isTauri() || remote) return [];
   return tauriInvoke<string[]>("scan_history", { dir, days, events });
 }
+
+/** EDOMH links (edomh://…, EDSY's and Coriolis's "Export to EDOMH"): see src-tauri/src/edomh_link.rs. */
+export type EdomhHandlerStatus = "ours" | "other" | "none" | "unsupported";
+/** The EDOMH link EDCH was started with, once (null otherwise, and outside the app). */
+export const takeLaunchLink = (): Promise<string | null> =>
+  isTauri() && !remote ? invoke<string | null>("take_launch_link").catch(() => null) : Promise.resolve(null);
+/** Which app opens EDOMH links on this computer. */
+export const edomhHandlerStatus = (): Promise<EdomhHandlerStatus> =>
+  isTauri() && !remote
+    ? invoke<EdomhHandlerStatus>("edomh_handler_status").catch(() => "unsupported" as const)
+    : Promise.resolve("unsupported");
+/** Makes EDCH open EDOMH links (or stops it); resolves to the new status. */
+export const setEdomhHandler = (enabled: boolean) => invoke<EdomhHandlerStatus>("set_edomh_handler", { enabled });
+/** Calls `cb` with each EDOMH link clicked while EDCH runs. */
+export async function onEdomhLink(cb: (link: string) => void): Promise<void> {
+  if (!isTauri() || remote) return;
+  await window.__TAURI__!.event.listen<string>("edomh-link", (e) => cb(e.payload));
+}

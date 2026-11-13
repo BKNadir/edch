@@ -1705,6 +1705,17 @@ p.notice {
   color: var(--ok);
 }
 
+/* The lines of a build opened from an EDOMH link, in the confirmation dialog (app/edomhLinks.ts). */
+.edomh-lines {
+  max-height: 40vh;
+  overflow-y: auto;
+  margin: 8px 0;
+  padding-left: 20px;
+}
+.edomh-option {
+  margin-top: 12px;
+}
+
 .eng.known {
   border-color: var(--line-2);
 }

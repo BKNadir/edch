@@ -4,7 +4,8 @@
 //! and streams raw lines to the UI (journal), reads the companion files the game rewrites, makes
 //! the HTTP requests the webview can't (http), manages the game's option files (options), runs
 //! the remote access server (remote), shares wing missions (ntfy), handles updates (update), the
-//! window and the game launch (app), and writes the logs (logs).
+//! window and the game launch (app), passes EDOMH build links on (edomh_link), and writes the
+//! logs (logs).
 //!
 //! Errors the user can see are returned as codes ("fileNotFound", "network: <detail>"), shown
 //! in the user's language by the UI (see docs/TRANSLATING.md).
@@ -13,6 +14,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 mod app;
+mod edomh_link;
 mod http;
 mod journal;
 mod logs;
@@ -41,10 +43,13 @@ fn migrate_data_folder() {
 pub fn run() {
     migrate_data_folder();
     logs::init(system::portable());
+    edomh_link::remember_launch_link();
     tauri::Builder::default()
         // EDCH runs once: launching it again brings the open window to the front.
-        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
-            app::show_main(app)
+        .plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
+            app::show_main(app);
+            // Opened again by a click on an EDOMH link: the running EDCH imports it.
+            edomh_link::forward(app, &args);
         }))
         // Reopens the window where it was: position, size, maximised or full screen.
         .plugin(tauri_plugin_window_state::Builder::default().build())
@@ -52,6 +57,9 @@ pub fn run() {
         .manage(Arc::new(journal::WatchState::default()))
         .manage(remote::RemoteState::default())
         .invoke_handler(tauri::generate_handler![
+            edomh_link::take_launch_link,
+            edomh_link::edomh_handler_status,
+            edomh_link::set_edomh_handler,
             journal::default_journal_dir,
             journal::scan_history,
             journal::start_journal,
