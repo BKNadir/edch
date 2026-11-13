@@ -1657,7 +1657,7 @@
   },
   "discord": {
     "addBot": "Usar o bot padrão: adicioná-lo ao meu servidor do Discord",
-    "addBotHelp": "Adicionar o bot exige a permissão Gerenciar servidor nesse servidor. Depois um admin roda /bgs-admin setup faction:… : o bot cria o cargo EDCH-BGS, #edch-sync (os dados dele, só admins) e #edch-bgs (um tópico por sistema, para o cargo). Dê o cargo aos membros que enviam relatórios; /bgs link manda a chave deles por mensagem direta. Um esquadrão que queira sua própria cópia pode hospedá-la a partir do código no GitHub.",
+    "addBotHelp": "Adicionar o bot exige a permissão Gerenciar servidor nesse servidor. Depois um admin roda /bgs setup faction:… : o bot cria o cargo EDCH-BGS, #edch-sync (os dados dele, só admins) e #edch-bgs (um tópico por sistema, para o cargo). Dê o cargo aos membros que enviam relatórios; /bgs link manda a chave deles por mensagem direta. Um esquadrão que queira sua própria cópia pode hospedá-la a partir do código no GitHub.",
     "hostOwn": "Hospedar o seu próprio bot (GitHub)",
     "intro": "O bot do Discord EDCH reúne o trabalho de BGS do seu esquadrão no próprio servidor do Discord dele. Ligado, o EDCH envia a cada 15 minutos o que você fez pela facção do esquadrão, mesmo no modo BGS ou Invisível: só para este bot, que escreve no canal privado do seu esquadrão.",
     "key": "Sua chave",
@@ -1678,7 +1678,7 @@
   "discordError": {
     "badFormat": "O bot não entendeu o relatório: atualize o EDCH ou o bot.",
     "badKey": "Esta não é uma chave válida: rode /bgs link de novo e cole a chave inteira.",
-    "notSetUp": "O bot não está configurado no seu servidor: um admin roda /bgs-admin setup.",
+    "notSetUp": "O bot não está configurado no seu servidor: um admin roda /bgs setup.",
     "otherFaction": "O bot acompanha outra facção diferente da do relatório.",
     "otherServer": "Esta chave é do bot de outro esquadrão.",
     "revoked": "Esta chave foi cancelada: rode /bgs link de novo.",

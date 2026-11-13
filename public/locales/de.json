@@ -1644,7 +1644,7 @@
   },
   "discord": {
     "addBot": "Den Standard-Bot nutzen: zu meinem Discord-Server hinzufügen",
-    "addBotHelp": "Zum Hinzufügen braucht man auf diesem Server das Recht „Server verwalten“. Ein Admin führt dann /bgs-admin setup faction:… aus: Der Bot legt die Rolle EDCH-BGS an, #edch-sync (seine Daten, nur Admins) und #edch-bgs (ein Thread pro System, für die Rolle). Gib die Rolle den Mitgliedern, die berichten; /bgs link schickt ihnen ihren Schlüssel per Direktnachricht. Ein Geschwader, das eine eigene Kopie will, kann sie aus dem Code auf GitHub hosten.",
+    "addBotHelp": "Zum Hinzufügen braucht man auf diesem Server das Recht „Server verwalten“. Ein Admin führt dann /bgs setup faction:… aus: Der Bot legt die Rolle EDCH-BGS an, #edch-sync (seine Daten, nur Admins) und #edch-bgs (ein Thread pro System, für die Rolle). Gib die Rolle den Mitgliedern, die berichten; /bgs link schickt ihnen ihren Schlüssel per Direktnachricht. Ein Geschwader, das eine eigene Kopie will, kann sie aus dem Code auf GitHub hosten.",
     "hostOwn": "Eigenen Bot hosten (GitHub)",
     "intro": "Der Discord-Bot EDCH sammelt die BGS-Arbeit deines Geschwaders auf dessen eigenem Discord-Server. Eingeschaltet sendet EDCH alle 15 Minuten, was du für die Fraktion des Geschwaders getan hast, auch im BGS- oder Unsichtbar-Modus: nur an diesen Bot, der in den privaten Kanal deines Geschwaders schreibt.",
     "key": "Dein Schlüssel",
@@ -1665,7 +1665,7 @@
   "discordError": {
     "badFormat": "Der Bot hat den Bericht nicht verstanden: aktualisiere EDCH oder den Bot.",
     "badKey": "Das ist kein gültiger Schlüssel: führe /bgs link erneut aus und füge den ganzen Schlüssel ein.",
-    "notSetUp": "Der Bot ist auf deinem Server nicht eingerichtet: ein Admin führt /bgs-admin setup aus.",
+    "notSetUp": "Der Bot ist auf deinem Server nicht eingerichtet: ein Admin führt /bgs setup aus.",
     "otherFaction": "Der Bot verfolgt eine andere Fraktion als die des Berichts.",
     "otherServer": "Dieser Schlüssel ist für den Bot eines anderen Geschwaders.",
     "revoked": "Dieser Schlüssel wurde widerrufen: führe /bgs link erneut aus.",
