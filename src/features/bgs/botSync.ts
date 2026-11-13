@@ -1,24 +1,28 @@
 // Sending the member's BGS work to the squadron's Discord bot (EDCH-Discord): only when the member
 // pasted their key and ticked "Send BGS reports" (Sync page). Every 15 minutes, and on request,
 // the actions since the last report that concern the factions the squadron follows go out, one
-// report per faction (features/bgs/report.ts); the bot counts an action sent twice once, so a
-// retry is harmless.
+// report per faction, with the systems visited where one of them is (features/bgs/report.ts);
+// the bot counts an action sent twice once, so a retry is harmless. Then what the squadron's
+// members saw comes back (state/bgsShared.ts) for the BGS page.
 // This is the only place BGS data leaves the PC in BGS or Invisible mode: the member chose this
 // bot, which writes to their squadron's own Discord channel.
 
 import { SOFTWARE_VERSION } from "../../platform/version.js";
 import { log } from "../../platform/logger.js";
 import { trustBot } from "../../platform/bridge.js";
-import { BotError, botFactions, readBotKey, sendBotReport } from "../../services/discordBot.js";
+import { BotError, botFactions, botSystems, readBotKey, sendBotReport } from "../../services/discordBot.js";
+import { recordShared } from "../../state/bgsShared.js";
 import type { Store } from "../../state/store.js";
 import { isHistoryRead } from "../missions/live.js";
-import { bgsReport } from "./report.js";
+import { bgsReport, systemsSeen } from "./report.js";
 
 const EVERY_MS = 15 * 60_000;
 /** The first report goes back this far at most (the journal holds 60 days). */
 const FIRST_REPORT_DAYS = 7;
 /** Actions per call: the bot accepts up to 2000. */
 const CHUNK = 1500;
+/** Systems per report: the bot accepts up to 200. */
+const MAX_SYSTEMS = 200;
 const SENT_KEY = "edch.discord.sent";
 
 /** What the Sync page shows. */
@@ -85,14 +89,22 @@ export async function sendBgsNow(store: Store): Promise<void> {
     const last = lastSentFor(id);
     const from = last && last > oldest ? last : oldest;
     let sent = 0;
+    // The systems seen go once, with the first faction's report (the bot keeps those where any
+    // followed faction is). Only the journal's own visits: never what others shared.
+    let systems = systemsSeen(store.state.activity.bgs.observed, factions, from, to).slice(-MAX_SYSTEMS);
     for (const faction of factions) {
       const report = bgsReport(store.state.activity.bgs.actions, faction, from, to, SOFTWARE_VERSION);
-      for (let start = 0; start < report.actions.length; start += CHUNK)
+      for (let start = 0; start < report.actions.length || systems.length; start += CHUNK) {
         sent += await sendBotReport(settings.discordKey, {
           ...report,
           actions: report.actions.slice(start, start + CHUNK),
+          ...(systems.length ? { systems } : {}),
         });
+        systems = [];
+      }
     }
+    // What the squadron saw, for the BGS page (kept between sessions).
+    recordShared(await botSystems(settings.discordKey));
     // Only once every faction went out: after a failure, the next try covers the same period.
     setLastSent(id, to);
     Object.assign(botSync, { state: "ok", factions, lastSent: to, lastCount: sent, error: undefined });

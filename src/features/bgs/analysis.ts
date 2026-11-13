@@ -15,6 +15,7 @@ import type {
 } from "../../game/activity/bgs.js";
 import type { Vec3 } from "../../game/journal/state.js";
 import type { BgsHistory, KnownSystem, RemoteSource } from "../../state/bgsHistory.js";
+import type { BgsShared, SharedSystem } from "../../state/bgsShared.js";
 
 /** What needs attention in a system. */
 export type BgsAlertKind =
@@ -28,7 +29,7 @@ export type BgsAlertKind =
   | "conflict"
   /** The data is old: what is shown may have changed. */
   | "staleData"
-  /** Nobody of yours went there for a while (from your journal). */
+  /** Nobody of yours went there for a while (your journal, and your squadron's through Discord). */
   | "notVisited"
   /** At the current trend, the faction falls under the retreat line or a rival passes it soon. */
   | "atRisk";
@@ -46,6 +47,9 @@ export const NOT_VISITED_DAYS = 7;
 
 const CONFLICT_STATES = new Set(["War", "CivilWar", "Civil war", "Election"]);
 const DAY = 86_400_000;
+
+/** Where private data comes from: your journal, or your squadron through its Discord bot. */
+export type PrivateSource = "journal" | "discord";
 
 /** One system of the followed faction, as the page shows it. */
 export interface BgsSystemRow {
@@ -71,9 +75,15 @@ export interface BgsSystemRow {
   forecast?: number;
   /** When the shown data was observed, and by whom. */
   dataAt?: string;
-  source: "journal" | RemoteSource;
-  /** Your last visit (journal), if any in the journal kept: the local data, seen by you only. */
+  source: PrivateSource | RemoteSource;
+  /** Your last visit (journal), if any in the journal kept. */
   lastVisit?: string;
+  /**
+   * The private data (not public): your journal's visit or, when newer, what a member of your
+   * squadron saw, received from its Discord bot. Never sent to EDDN or anywhere public.
+   */
+  privateAt?: string;
+  privateSource?: PrivateSource;
   /** The public data (what Spansh or EDSM know, so what everyone sees): when, and from where. */
   publicAt?: string;
   publicSource?: RemoteSource;
@@ -96,7 +106,16 @@ function rowOf(
   factions: FactionPresence[],
   base: Pick<
     BgsSystemRow,
-    "coords" | "distance" | "controlling" | "dataAt" | "source" | "lastVisit" | "publicAt" | "publicSource"
+    | "coords"
+    | "distance"
+    | "controlling"
+    | "dataAt"
+    | "source"
+    | "lastVisit"
+    | "privateAt"
+    | "privateSource"
+    | "publicAt"
+    | "publicSource"
   >,
   conflicts: FactionConflict[],
   now: number,
@@ -121,7 +140,7 @@ function rowOf(
   if (ourConflicts.length || states.some((state) => CONFLICT_STATES.has(state))) alerts.push("conflict");
   const dataAge = ageDays(base.dataAt, now);
   if (dataAge === undefined || dataAge >= STALE_DAYS) alerts.push("staleData");
-  const visitAge = ageDays(base.lastVisit, now);
+  const visitAge = ageDays(base.privateAt, now);
   if (visitAge === undefined || visitAge >= NOT_VISITED_DAYS) alerts.push("notVisited");
   const controls = base.controlling ? same(base.controlling, faction) : false;
   return {
@@ -186,8 +205,14 @@ export function influenceTrend(samples: InfluenceSample[], faction: string, now 
 }
 
 /** All the samples known for a system: your visits (journal) and Spansh's or EDSM's, by date. */
-function samplesOf(visit: SystemObservation | undefined, known: KnownSystem | undefined): InfluenceSample[] {
-  return [...(visit?.history ?? []), ...(known?.history ?? [])].sort((a, b) => a.at.localeCompare(b.at));
+function samplesOf(
+  visit: SystemObservation | undefined,
+  known: KnownSystem | undefined,
+  squadron: SharedSystem | undefined,
+): InfluenceSample[] {
+  return [...(visit?.history ?? []), ...(known?.history ?? []), ...(squadron?.history ?? [])].sort((a, b) =>
+    a.at.localeCompare(b.at),
+  );
 }
 
 /** One view of a system's factions, from wherever it came. */
@@ -202,9 +227,10 @@ interface Snapshot {
 const distanceBetween = (a: Vec3, b: Vec3) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 
 /**
- * The followed faction's systems: those of your journal where it was seen and those Spansh or
- * EDSM gave (kept in `known`). For each, the newest data wins; the trend uses every sample.
- * `from` (your position) gives the distances.
+ * The followed faction's systems: those of your journal where it was seen, those your squadron's
+ * members saw (`shared`, from its Discord bot) and those Spansh or EDSM gave (kept in `known`).
+ * For each, the newest data wins; the trend uses every sample. `from` (your position) gives the
+ * distances.
  */
 export function factionRows(
   faction: string,
@@ -212,14 +238,16 @@ export function factionRows(
   observed: Record<string, SystemObservation>,
   now = Date.now(),
   from?: Vec3,
+  shared: BgsShared = {},
 ): BgsSystemRow[] {
   if (!faction) return [];
   const visits = new Map(Object.values(observed).map((o) => [o.system.toLowerCase(), o]));
-  const names = new Set([...visits.keys(), ...Object.keys(known)]);
+  const names = new Set([...visits.keys(), ...Object.keys(known), ...Object.keys(shared)]);
   const rows: BgsSystemRow[] = [];
   for (const key of names) {
     const visit = visits.get(key);
     const remote = known[key];
+    const squadron = shared[key];
     const candidates: Snapshot[] = [];
     if (visit)
       candidates.push({
@@ -229,6 +257,14 @@ export function factionRows(
         factions: visit.factions,
         conflicts: visit.conflicts,
       });
+    if (squadron)
+      candidates.push({
+        at: squadron.at,
+        source: "discord",
+        controlling: squadron.controlling,
+        factions: squadron.factions,
+        conflicts: squadron.conflicts,
+      });
     if (remote?.latest)
       candidates.push({
         at: remote.latest.at,
@@ -236,14 +272,16 @@ export function factionRows(
         controlling: remote.latest.controlling,
         factions: remote.latest.factions,
         // Only the journal tells a conflict's sides: a visit's are kept until a newer visit.
-        conflicts: visit?.conflicts ?? [],
+        conflicts: (squadron && (!visit || squadron.at > visit.at) ? squadron.conflicts : visit?.conflicts) ?? [],
       });
+    // Private: your visit, or your squadron's when newer.
+    const privateNewest = squadron && (!visit || squadron.at > visit.at) ? "discord" : visit ? "journal" : undefined;
     const newest = candidates.sort((a, b) => (b.at ?? "").localeCompare(a.at ?? ""))[0];
     if (!newest) continue;
     const coords = remote?.coords;
     const row = rowOf(
       faction,
-      visit?.system ?? remote!.system,
+      visit?.system ?? squadron?.system ?? remote!.system,
       newest.factions,
       {
         coords,
@@ -252,6 +290,8 @@ export function factionRows(
         dataAt: newest.at,
         source: newest.source,
         lastVisit: visit?.at,
+        privateAt: privateNewest === "discord" ? squadron!.at : visit?.at,
+        privateSource: privateNewest,
         publicAt: remote?.latest?.at,
         publicSource: remote?.latest?.source,
       },
@@ -259,7 +299,7 @@ export function factionRows(
       now,
     );
     if (!row) continue;
-    addForecast(row, samplesOf(visit, remote), faction, now);
+    addForecast(row, samplesOf(visit, remote, squadron), faction, now);
     rows.push(row);
   }
   return rows.sort(

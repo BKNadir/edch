@@ -1,7 +1,8 @@
 //! EDCH-Discord, the squadron BGS bot (its own repository): EDCH sends a member's BGS reports to
 //! it with the key `/bgs link` gave them. Only two addresses can be reached: the shared bot's,
 //! and one other bot a user confirmed (a squadron's own copy, its address being in the key).
-//! Only two paths, `/v1/config` and `/v1/report`; the key goes in the Authorization header and
+//! Only three paths, `/v1/config`, `/v1/report` and `/v1/systems` (what the squadron's members
+//! saw, to show in the BGS page); the key goes in the Authorization header and
 //! is never written to the logs. Kept apart from the general HTTP command, which the phone can
 //! reach: this one can't be.
 
@@ -17,7 +18,7 @@ pub const SHARED_BOT: &str = "https://edch-discord.default-community.workers.dev
 /// from the settings, and when the user accepts a key naming another bot).
 static TRUSTED_BOT: Mutex<Option<String>> = Mutex::new(None);
 
-const PATHS: [&str; 2] = ["/v1/config", "/v1/report"];
+const PATHS: [&str; 3] = ["/v1/config", "/v1/report", "/v1/systems"];
 const MAX_KEY_LEN: usize = 2000;
 const MAX_REPORT_BYTES: usize = 512 * 1024;
 
@@ -60,7 +61,7 @@ pub fn trust_bot(origin: Option<String>) -> Result<(), String> {
     Ok(())
 }
 
-/// One call to the bot: GET /v1/config, or POST /v1/report with a report.
+/// One call to the bot: GET /v1/config or /v1/systems, or POST /v1/report with a report.
 #[tauri::command]
 pub async fn bot_fetch(origin: String, path: String, key: String, body: Option<String>) -> Result<HttpReply, String> {
     if !valid_origin(&origin) || !reachable(&origin) || !PATHS.contains(&path.as_str()) {

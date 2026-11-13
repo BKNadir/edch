@@ -73,7 +73,8 @@ export function icon(
     | "play"
     | "expand"
     | "eye"
-    | "eyeOff",
+    | "eyeOff"
+    | "chat",
 ): SVGSVGElement {
   const paths: Record<string, string> = {
     copy: "M8 8h11v11H8zM5 16V5h11",
@@ -87,6 +88,7 @@ export function icon(
     play: "M7 5l12 7-12 7z",
     expand: "M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5",
     pin: "M12 21s-6-5.5-6-11a6 6 0 1 1 12 0c0 5.5-6 11-6 11zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+    chat: "M4 5h16v11H10l-5 4v-4H4z",
     eye: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
     eyeOff:
       "M3 3l18 18M10.6 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6A17 17 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2",

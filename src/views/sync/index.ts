@@ -11,6 +11,7 @@ import { h, icon, replace, toast } from "../../ui/dom.js";
 import type { Ctx, View } from "../../state/context.js";
 import type { SyncSettings } from "../../state/syncSettings.js";
 import { shareModeSwitch } from "../shared/shareModeSwitch.js";
+import { clearShared } from "../../state/bgsShared.js";
 
 /** EDMC-style connections: EDDN, EDSM, Inara. */
 export class SyncView implements View {
@@ -201,6 +202,8 @@ export class SyncView implements View {
       store.updateSettings({ sync: { ...store.state.settings.sync, ...patch } });
     if (!key) {
       set({ discordKey: "", discordBot: "", discord: false });
+      // Unlinked: what the squadron shared isn't shown any more.
+      clearShared();
       await trustBot(null).catch(() => undefined);
       this.showDiscordStatus();
       return;
@@ -230,6 +233,9 @@ export class SyncView implements View {
       bot = claims.bot;
     }
     await trustBot(bot || null).catch(() => undefined);
+    // Another server: the previous squadron's systems are not this one's.
+    const previous = readBotKey(store.state.settings.sync.discordKey);
+    if (previous && previous.guildId !== claims.guildId) clearShared();
     set({ discordKey: key, discordBot: bot });
     void sendBgsNow(store);
   }

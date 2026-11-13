@@ -329,3 +329,46 @@ test("bgs tick: the detector's date as ISO, anything else refused", async () => 
   assert.throws(() => decodeTick('"soon"'));
   assert.throws(() => decodeTick("<html>"));
 });
+
+test("bgs private data: your visit, or your squadron's (Discord) when newer; tour and alerts follow it", async () => {
+  const { validSharedSystem } = await import("../dist/js/state/bgsShared.js");
+  const { systemsSeen } = await import("../dist/js/features/bgs/report.js");
+  const { bgs } = journal();
+  const now = Date.parse("2026-11-20T00:00:00Z");
+  const presence = (name, influence, state) => ({ name, influence, state, active: [], pending: [], recovering: [] });
+  const squadron = (system, at, influence) =>
+    validSharedSystem({
+      system,
+      at,
+      controlling: FACTION,
+      factions: [presence(FACTION, influence, "Boom"), presence("Rival Corp", 100 - influence, "None")],
+      conflicts: [],
+      history: [{ at, influences: { [FACTION]: influence } }],
+    });
+  const shared = {
+    // A teammate went to Alpha after you: their data is shown, marked as from Discord.
+    alpha: squadron("Alpha", "2026-11-19T12:00:00.000Z", 52),
+    // A system only a teammate saw.
+    omega: squadron("Omega", "2026-11-19T08:00:00.000Z", 20),
+  };
+  const rows = factionRows(FACTION, {}, bgs.observed, now, [0, 0, 0], shared);
+  const by = Object.fromEntries(rows.map((row) => [row.system, row]));
+  assert.equal(by.Alpha.privateSource, "discord");
+  assert.equal(by.Alpha.influence, 52);
+  assert.equal(by.Alpha.lastVisit, bgs.observed.Alpha.at);
+  assert.equal(by.Omega.source, "discord");
+  // Fresh squadron data: not old, not "not visited", so not in the refresh tour.
+  assert.ok(!by.Alpha.alerts.includes("staleData"));
+  assert.ok(!by.Alpha.alerts.includes("notVisited"));
+  assert.ok(!refreshTour(rows).some((row) => row.system === "Alpha"));
+  // Without it: your own visit, old.
+  const alone = factionRows(FACTION, {}, bgs.observed, now, [0, 0, 0]).find((row) => row.system === "Alpha");
+  assert.equal(alone.privateSource, "journal");
+  assert.ok(alone.alerts.includes("staleData"));
+  // What goes to the bot: only the journal's visits, never the squadron's data.
+  const seen = systemsSeen(bgs.observed, [FACTION], "2026-11-01T00:00:00Z", "2026-11-30T00:00:00Z");
+  assert.ok(seen.length > 0);
+  assert.ok(seen.every((s) => s.system !== "Omega" && s.history === undefined));
+  // A malformed snapshot from the bot is dropped.
+  assert.equal(validSharedSystem({ system: "X", at: "soon", factions: [] }), null);
+});

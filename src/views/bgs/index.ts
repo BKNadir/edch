@@ -20,7 +20,7 @@ import {
 } from "../../state/bgsHistory.js";
 import type { Ctx, View } from "../../state/context.js";
 import { referenceOf } from "../../state/context.js";
-import { callout, fmt, h, replace } from "../../ui/dom.js";
+import { callout, fmt, h, icon, replace } from "../../ui/dom.js";
 import { credits, relTime } from "../../ui/format.js";
 import {
   activityFor,
@@ -34,6 +34,7 @@ import {
 } from "../../features/bgs/analysis.js";
 import { setBgsTourStops, startBgsTour } from "../../features/bgs/tourCopy.js";
 import { systemLink } from "../shared/links.js";
+import { bgsShared } from "../../state/bgsShared.js";
 
 /** Periods of "what you did": since the last BGS tick (when known), the last 24 hours, 7 days. */
 const PERIODS = { tick: 0, day: 86_400_000, week: 7 * 86_400_000 } as const;
@@ -170,7 +171,14 @@ export class BgsView implements View {
     }
 
     const now = Date.now();
-    const rows = factionRows(faction, this.known, this.ctx.store.state.activity.bgs.observed, now);
+    const rows = factionRows(
+      faction,
+      this.known,
+      this.ctx.store.state.activity.bgs.observed,
+      now,
+      undefined,
+      bgsShared(),
+    );
     const due = rows
       .filter((row) => {
         const checked = this.known[row.system.toLowerCase()]?.edsmCheckedAt;
@@ -213,7 +221,7 @@ export class BgsView implements View {
     const { activity, settings, cmdr } = this.ctx.store.state;
     const faction = this.faction;
     const position = cmdr.location?.pos;
-    const rows = factionRows(faction, this.known, activity.bgs.observed, Date.now(), position);
+    const rows = factionRows(faction, this.known, activity.bgs.observed, Date.now(), position, bgsShared());
     this.checkTick();
     const tick = knownTick();
     const period: Period = this.period === "tick" && !tick ? "day" : this.period;
@@ -277,7 +285,9 @@ export class BgsView implements View {
           ? h(
               "p.sub",
               null,
-              rows.some((row) => row.source !== "journal" || this.known[row.system.toLowerCase()])
+              rows.some(
+                (row) => row.source === "spansh" || row.source === "edsm" || this.known[row.system.toLowerCase()],
+              )
                 ? t("bgs.keptData", { days: HISTORY_KEEP_DAYS })
                 : t("bgs.journalOnly"),
             )
@@ -459,7 +469,7 @@ export class BgsView implements View {
                     t("bgs.influence"),
                     t("bgs.rival"),
                     t("bgs.states"),
-                    t("bgs.localData"),
+                    t("bgs.privateData"),
                     t("bgs.publicData"),
                     t("bgs.toDo"),
                   ].map((label) => h("th", null, label)),
@@ -517,14 +527,19 @@ export class BgsView implements View {
                         .filter((a) => a !== "staleData" && a !== "notVisited")
                         .map((a) => h(`span.badge.${SERIOUS.includes(a) ? "warn" : "muted"}`, null, labels[a])),
                     ),
-                    this.ageCell(row.lastVisit, tick, {
+                    this.ageCell(row.privateAt, tick, {
                       bad: row.alerts.includes("notVisited"),
+                      // Seen by a member of the squadron, received from its Discord bot.
+                      note:
+                        row.privateSource === "discord"
+                          ? h("span", { title: t("bgs.fromDiscordHelp") }, icon("chat"), " Discord")
+                          : undefined,
                     }),
                     this.ageCell(row.publicAt, tick, {
-                      bad: row.alerts.includes("staleData") && row.source !== "journal",
+                      bad: row.alerts.includes("staleData") && (row.source === "spansh" || row.source === "edsm"),
                       note: row.publicSource === "edsm" ? "EDSM" : row.publicSource === "spansh" ? "Spansh" : undefined,
-                      // Your visit is newer: the public data doesn't show what you saw yet.
-                      behind: Boolean(row.lastVisit && (!row.publicAt || row.publicAt < row.lastVisit)),
+                      // The private data is newer: the public data doesn't show it yet.
+                      behind: Boolean(row.privateAt && (!row.publicAt || row.publicAt < row.privateAt)),
                     }),
                     h(
                       "td",
@@ -549,7 +564,7 @@ export class BgsView implements View {
   private ageCell(
     at: string | undefined,
     tick: string | undefined,
-    options: { bad?: boolean; note?: string; behind?: boolean },
+    options: { bad?: boolean; note?: string | Node; behind?: boolean },
   ): HTMLElement {
     return h(
       `td${options.bad ? ".bad" : ""}`,

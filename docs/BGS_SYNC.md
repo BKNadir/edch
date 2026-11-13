@@ -4,8 +4,14 @@ The BGS page keeps what you did for a minor faction (`game/activity/bgs.ts`). ED
 Discord; its own repository, `edch-discord`), added to a squadron's server, gathers these reports so teammates see each
 other's work with `/bgs summary`. EDCH sends them only when the member pasted the key `/bgs link`
 gave them and ticked the switch (Sync → Connect to the Discord bot): every 15 minutes, the actions
-since the last report that concern the squadron's faction (`features/bgs/botSync.ts`). It is the
-only place BGS data leaves the PC in BGS or Invisible mode, by the member's choice.
+since the last report that concern the factions the squadron follows, one report per faction,
+and the systems visited where one of them is (`features/bgs/botSync.ts`). It is the only place
+BGS data leaves the PC in BGS or Invisible mode, by the member's choice.
+
+In return, `GET /v1/systems` gives the newest snapshot of each system the squadron's members saw
+over the last 7 days. EDCH keeps it (`state/bgsShared.ts`) and shows it on the BGS page as
+private data, marked "Discord", when it is newer than your own visit. It is never sent to EDDN,
+EDSM, Inara or any public site: EDDN messages are built from your own journal only.
 
 The bot keeps nothing itself: it writes the reports to the private `#edch-sync` channel of the
 squadron's Discord server (admins only), and a readable line per system in `#edch-bgs` (the
@@ -28,6 +34,17 @@ The report is built by `bgsReport()` in `src/features/bgs/report.ts`.
   "actions": [
     { "at": "2026-11-12T16:02:11Z", "kind": "mission", "system": "System", "influence": 3, "credits": 1200000, "against": false },
     { "at": "2026-11-12T16:30:40Z", "kind": "bounty", "system": "System", "credits": 350000, "against": false }
+  ],
+  "systems": [
+    {
+      "at": "2026-11-12T16:00:02Z",
+      "system": "System",
+      "controlling": "Faction name",
+      "factions": [
+        { "name": "Faction name", "influence": 34.2, "state": "Boom", "active": ["Boom"], "pending": [], "recovering": [] }
+      ],
+      "conflicts": [{ "type": "war", "status": "active", "sides": [{ "name": "Faction name", "stake": "Port", "wonDays": 2 }] }]
+    }
   ]
 }
 ```
@@ -40,6 +57,10 @@ The report is built by `bgsReport()` in `src/features/bgs/report.ts`.
     the faction.
   - `credits`: reward, voucher, trade profit or cartography sold; absent for crimes and failures.
   - `against`: the action lowers the faction.
+- `systems` (optional, sent once with the first faction's report): your journal's arrivals in
+  systems where a followed faction is, with what the game showed there (influence in percent,
+  states, conflicts). The bot keeps those where a faction the server follows is, and writes a
+  line in the system's thread only when something changed.
 
 ## What is not in it
 

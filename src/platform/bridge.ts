@@ -508,7 +508,12 @@ export async function onEdomhLink(cb: (link: string) => void): Promise<void> {
 export const trustBot = (origin: string | null) =>
   isTauri() && !remote ? invoke<void>("trust_bot", { origin }) : Promise.resolve();
 /** One call to the bot (GET /v1/config, POST /v1/report); never throws on an HTTP status. */
-export const botFetch = (origin: string, path: "/v1/config" | "/v1/report", key: string, body?: string) =>
+export const botFetch = (
+  origin: string,
+  path: "/v1/config" | "/v1/report" | "/v1/systems",
+  key: string,
+  body?: string,
+) =>
   isTauri() && !remote
     ? invoke<HttpReply>("bot_fetch", { origin, path, key, body: body ?? null })
     : Promise.reject(new Error(t("bridge.availableAppNotDemoMode")));

@@ -7,6 +7,7 @@
 // which reaches only the shared bot and a squadron's own bot the member confirmed.
 
 import { botFetch } from "../platform/bridge.js";
+import { type SharedSystem, validSharedSystem } from "../state/bgsShared.js";
 
 /** The shared bot (EDCH-Discord hosted for every squadron). Same value as discord_bot.rs. */
 export const SHARED_BOT = "https://edch-discord.default-community.workers.dev";
@@ -68,7 +69,11 @@ const KNOWN_ERRORS = new Set([
   "tooLarge",
 ]);
 
-async function call(key: string, path: "/v1/config" | "/v1/report", body?: unknown): Promise<Record<string, unknown>> {
+async function call(
+  key: string,
+  path: "/v1/config" | "/v1/report" | "/v1/systems",
+  body?: unknown,
+): Promise<Record<string, unknown>> {
   const claims = readBotKey(key);
   if (!claims) throw new BotError("badKey");
   const reply = await botFetch(claims.bot, path, key.trim(), body === undefined ? undefined : JSON.stringify(body));
@@ -93,6 +98,16 @@ export async function botFactions(key: string): Promise<string[]> {
   const factions = list.filter((f): f is string => typeof f === "string" && f.trim().length > 0);
   if (!factions.length) throw new BotError("noFaction");
   return factions;
+}
+
+/**
+ * What the squadron's members saw over the last days (the newest snapshot of each system where a
+ * faction the server follows is), checked entry by entry.
+ */
+export async function botSystems(key: string): Promise<SharedSystem[]> {
+  const answer = await call(key, "/v1/systems");
+  const list = Array.isArray(answer.systems) ? answer.systems.slice(0, 500) : [];
+  return list.map(validSharedSystem).filter((s): s is SharedSystem => s !== null);
 }
 
 /** Sends a report; returns how many actions the bot accepted. */

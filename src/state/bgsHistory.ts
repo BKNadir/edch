@@ -52,7 +52,8 @@ const names = (value: unknown) =>
 const percentOrNaN = (value: unknown) =>
   typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 100 ? value : NaN;
 
-function validFaction(raw: any): FactionPresence | null {
+/** A faction as saved or received, checked; null when it has no name. */
+export function validFaction(raw: any): FactionPresence | null {
   const name = text(raw?.name);
   if (!name) return null;
   return {
@@ -65,7 +66,8 @@ function validFaction(raw: any): FactionPresence | null {
   };
 }
 
-function validSample(raw: any): InfluenceSample | null {
+/** An influence sample as saved, checked; null when it holds nothing usable. */
+export function validSample(raw: any): InfluenceSample | null {
   if (!isDate(raw?.at) || !raw.influences || typeof raw.influences !== "object") return null;
   const influences: Record<string, number> = {};
   for (const [name, value] of Object.entries(raw.influences).slice(0, MAX_FACTIONS)) {
