@@ -433,7 +433,7 @@ export class ExplorationView implements View {
                     h("td.num", null, x.first ? fmt(x.first) : ""),
                     h("td.num", null, x.mapped ? fmt(x.mapped) : ""),
                     h("td.num", null, `${credits(x.value)} Cr`),
-                    h("td", null, relTime(x.at)),
+                    h("td", { "data-sort": x.at }, relTime(x.at)),
                   ),
                 ),
               ),

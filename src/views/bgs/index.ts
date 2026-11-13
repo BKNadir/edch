@@ -500,7 +500,7 @@ export class BgsView implements View {
                     ),
                     h(
                       `td${row.alerts.includes("staleData") ? ".bad" : ""}`,
-                      null,
+                      { "data-sort": row.dataAt ?? "" },
                       row.dataAt ? relTime(row.dataAt) : "?",
                       h(
                         "small.sub",
@@ -513,7 +513,7 @@ export class BgsView implements View {
                     ),
                     h(
                       `td${row.alerts.includes("notVisited") ? ".bad" : ""}`,
-                      null,
+                      { "data-sort": row.lastVisit ?? "" },
                       row.lastVisit ? relTime(row.lastVisit) : "—",
                     ),
                     h(

@@ -487,7 +487,7 @@ export class SearchView implements View {
       ),
       h(
         "td.sub",
-        null,
+        { "data-sort": age ?? "" },
         age ? new Date(age.endsWith("Z") || age.includes("+") ? age : `${age}Z`).toLocaleDateString(locale()) : "",
       ),
     );

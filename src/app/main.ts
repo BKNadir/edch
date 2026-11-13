@@ -17,6 +17,7 @@ import { bindAlerts, inStartup, startupAlert } from "../ui/alerts.js";
 import { changelogAfterUpdate } from "../ui/changelog.js";
 import { setupDesktop } from "../ui/desktop.js";
 import { h, replace } from "../ui/dom.js";
+import { installTableSorting } from "../ui/sortableTables.js";
 import { startUpdateChecks } from "../ui/updateBanner.js";
 import { Uploaders } from "../services/sync/index.js";
 import { bindTour } from "../features/engineers/tour.js";
@@ -45,6 +46,7 @@ export async function startApp(code: string, remoteMode: "paired" | null) {
     return;
   }
   watchGameNames(document.body);
+  installTableSorting(document.body);
 
   const store = new Store();
   bindStore(store);

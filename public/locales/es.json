@@ -255,7 +255,8 @@
     "whereBuy": "Dónde comprarlo",
     "wing": "Ala",
     "wishlist": "Lista de deseos",
-    "workProgress": "Página en desarrollo"
+    "workProgress": "Página en desarrollo",
+    "sortHint": "Haz clic para ordenar (otra vez: orden inverso, una tercera vez: orden habitual)"
   },
   "context": {
     "gameLocationUnknown": "{{fallback}} (posición del juego desconocida)"

@@ -591,7 +591,7 @@ export class MissionsView implements View {
                       r.mission.destStation ? `${r.mission.destStation} · ` : "",
                       sys(r.mission.destSystem),
                     ),
-                    h("td", null, relTime(r.mission.expiry)),
+                    h("td", { "data-sort": r.mission.expiry }, relTime(r.mission.expiry)),
                     h(
                       "td",
                       null,

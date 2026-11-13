@@ -255,7 +255,8 @@
     "whereBuy": "Wo kaufen",
     "wing": "Geschwader",
     "wishlist": "Wunschliste",
-    "workProgress": "Seite in Entwicklung"
+    "workProgress": "Seite in Entwicklung",
+    "sortHint": "Klicken zum Sortieren (erneut: umgekehrt, ein drittes Mal: übliche Reihenfolge)"
   },
   "context": {
     "gameLocationUnknown": "{{fallback}} (Spielposition unbekannt)"

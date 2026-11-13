@@ -1209,6 +1209,32 @@ button.link:hover {
   padding: 4px 6px;
   border-bottom: 1px solid var(--line);
 }
+/* Sortable column titles (ui/sortableTables.ts): an arrow shows the sorted column and its order. */
+.table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.table th.sortable:hover,
+.table th.sortable:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+.table th.sortable::after {
+  content: "↕";
+  margin-left: 4px;
+  opacity: 0.35;
+}
+.table th[aria-sort="ascending"]::after {
+  content: "▲";
+  opacity: 1;
+  color: var(--accent);
+}
+.table th[aria-sort="descending"]::after {
+  content: "▼";
+  opacity: 1;
+  color: var(--accent);
+}
 .table td {
   padding: 5px 6px;
   border-bottom: 1px solid var(--line);

@@ -255,7 +255,8 @@
     "whereBuy": "Where to buy it",
     "wing": "Wing",
     "wishlist": "Wishlist",
-    "workProgress": "Work in progress"
+    "workProgress": "Work in progress",
+    "sortHint": "Click to sort (again: reverse, a third time: back to the usual order)"
   },
   "context": {
     "gameLocationUnknown": "{{fallback}} (game location unknown)"

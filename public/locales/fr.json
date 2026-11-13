@@ -255,7 +255,8 @@
     "whereBuy": "Où l'acheter",
     "wing": "Escadrille",
     "wishlist": "Wishlist",
-    "workProgress": "Page en cours de développement"
+    "workProgress": "Page en cours de développement",
+    "sortHint": "Clique pour trier (encore : ordre inverse, une 3e fois : ordre habituel)"
   },
   "context": {
     "gameLocationUnknown": "{{fallback}} (position du jeu inconnue)"

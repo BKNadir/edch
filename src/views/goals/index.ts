@@ -240,7 +240,7 @@ export class GoalsView implements View {
                     h("td", null, g.stationName, " · ", sys(g.starsystemName)),
                     h("td.num", null, `${g.tierReached} / ${g.tierMax}`),
                     h("td.num", null, fmt(g.contributorsNum)),
-                    h("td", null, relTime(g.goalExpiry)),
+                    h("td", { "data-sort": g.goalExpiry }, relTime(g.goalExpiry)),
                     h(
                       "td",
                       null,
