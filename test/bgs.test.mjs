@@ -1,12 +1,22 @@
 // BGS: the journal domain (actions for or against a faction, factions seen on arrival), Spansh's
-// faction systems decoded, the page's rows and alerts, the activity summary, the refresh tour and
+// faction systems and EDSM's influence history decoded, the history kept between sessions, the
+// page's rows, trend, forecast and alerts, the activity summary, the refresh tour, the tick and
 // the report a squadron bot will read later.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { applyActivityEvents } from "../dist/js/game/activity/index.js";
 import { emptyActivity } from "../dist/js/game/activity/state.js";
 import { decodeFactionSystem } from "../dist/js/services/spansh.js";
-import { activityFor, adviceFor, factionRows, knownFactions, refreshTour } from "../dist/js/features/bgs/analysis.js";
+import { decodeEdsmFactions } from "../dist/js/services/edsm.js";
+import { recordSystem, validBgsHistory } from "../dist/js/state/bgsHistory.js";
+import {
+  activityFor,
+  adviceFor,
+  factionRows,
+  influenceTrend,
+  knownFactions,
+  refreshTour,
+} from "../dist/js/features/bgs/analysis.js";
 import { BGS_REPORT_SCHEMA, bgsReport } from "../dist/js/features/bgs/report.js";
 
 const FACTION = "Test Alliance";
@@ -137,35 +147,56 @@ test("spansh faction systems: influence 0–1 or 0–100, dates as ISO, nothing 
 test("bgs rows: the newest data wins, alerts, advice and the refresh tour", () => {
   const { bgs } = journal();
   const now = Date.parse("2026-11-20T00:00:00Z");
-  const spansh = [
-    // Older than the journal's visit: the journal wins.
-    { name: "Alpha", coords: [0, 0, 0], updatedAt: "2026-11-01T00:00:00Z", factions: [] },
+  const presence = (name, influence, state = "None") => ({
+    name,
+    influence,
+    state,
+    active: state === "None" ? [] : [state],
+    pending: [],
+    recovering: [],
+  });
+  const known = {};
+  // Older than the journal's visit: the journal wins.
+  recordSystem(
+    known,
+    "Alpha",
+    { coords: [0, 0, 0], snapshot: { at: "2026-11-01T00:00:00Z", source: "spansh", factions: [] } },
+    now,
+  );
+  recordSystem(
+    known,
+    "Gamma",
     {
-      name: "Gamma",
       coords: [10, 0, 0],
-      updatedAt: "2026-11-19T00:00:00Z",
-      controlling: "Rival Corp",
-      factions: [
-        { name: FACTION, influence: 3, state: "None", active: [], pending: [], recovering: [] },
-        { name: "Rival Corp", influence: 90, state: "None", active: [], pending: [], recovering: [] },
-      ],
+      snapshot: {
+        at: "2026-11-19T00:00:00Z",
+        source: "edsm",
+        controlling: "Rival Corp",
+        factions: [presence(FACTION, 3), presence("Rival Corp", 90)],
+      },
     },
+    now,
+  );
+  recordSystem(
+    known,
+    "Delta",
     {
-      name: "Delta",
       coords: [5, 0, 0],
-      updatedAt: "2026-11-02T00:00:00Z",
-      factions: [
-        { name: FACTION, influence: 30, state: "War", active: ["War"], pending: [], recovering: [] },
-        { name: "Rival Corp", influence: 29, state: "War", active: ["War"], pending: [], recovering: [] },
-      ],
+      snapshot: {
+        at: "2026-11-02T00:00:00Z",
+        source: "spansh",
+        factions: [presence(FACTION, 30, "War"), presence("Rival Corp", 29, "War")],
+      },
     },
-  ];
-  const rows = factionRows(FACTION, spansh, bgs.observed, now);
+    now,
+  );
+  const rows = factionRows(FACTION, known, bgs.observed, now, [0, 0, 0]);
   const by = Object.fromEntries(rows.map((row) => [row.system, row]));
   assert.equal(by.Alpha.source, "journal");
   assert.equal(by.Alpha.influence, 45);
-  assert.equal(by.Alpha.trend, 5);
   assert.ok(by.Alpha.controls);
+  assert.equal(by.Gamma.source, "edsm");
+  assert.equal(by.Gamma.distance, 10);
   assert.ok(by.Gamma.alerts.includes("retreat"));
   assert.ok(by.Delta.alerts.includes("conflict"));
   assert.ok(by.Delta.alerts.includes("staleData"));
@@ -176,6 +207,119 @@ test("bgs rows: the newest data wins, alerts, advice and the refresh tour", () =
   assert.equal(rows[0].system, "Delta");
   const tour = refreshTour(rows, [0, 0, 0]).map((row) => row.system);
   assert.deepEqual(tour, ["Alpha", "Delta"]);
+});
+
+test("bgs trend: average change per day, forecast in 3 days, at risk when a rival passes", () => {
+  const now = Date.parse("2026-11-20T00:00:00Z");
+  const day = (n) => new Date(now - n * 86_400_000).toISOString();
+  const samples = [
+    { at: day(3), influences: { [FACTION]: 40, "Rival Corp": 30 } },
+    { at: day(2), influences: { [FACTION]: 38, "Rival Corp": 32 } },
+    { at: day(1), influences: { [FACTION]: 36, "Rival Corp": 34 } },
+    // Too old for the trend window.
+    { at: day(6), influences: { [FACTION]: 10 } },
+  ];
+  assert.equal(influenceTrend(samples, FACTION, now), -2);
+  assert.equal(influenceTrend(samples, "Rival Corp", now), 2);
+  assert.equal(influenceTrend(samples.slice(0, 1), FACTION, now), undefined);
+  assert.equal(influenceTrend([samples[0], { ...samples[0], at: day(2.9) }], FACTION, now), undefined);
+
+  const known = {};
+  recordSystem(
+    known,
+    "Epsilon",
+    {
+      snapshot: {
+        at: day(1),
+        source: "edsm",
+        factions: [
+          { name: FACTION, influence: 36, state: "None", active: [], pending: [], recovering: [] },
+          { name: "Rival Corp", influence: 34, state: "None", active: [], pending: [], recovering: [] },
+        ],
+      },
+      samples,
+    },
+    now,
+  );
+  // The 6-day-old sample is kept (history: 7 days), only the trend ignores it.
+  assert.equal(known.epsilon.history.length, 4);
+  const [row] = factionRows(FACTION, known, {}, now);
+  assert.equal(row.trend, -2);
+  assert.equal(row.forecast, 30);
+  assert.equal(row.rival.forecastGap, -10);
+  assert.ok(row.alerts.includes("atRisk"));
+});
+
+test("bgs history: kept within 7 days, malformed entries dropped when read back", () => {
+  const now = Date.parse("2026-11-20T00:00:00Z");
+  const known = {};
+  recordSystem(
+    known,
+    "Zeta",
+    {
+      samples: [
+        { at: "2026-11-01T00:00:00Z", influences: { A: 10 } },
+        { at: "2026-11-19T00:00:00Z", influences: { A: 12 } },
+      ],
+    },
+    now,
+  );
+  assert.deepEqual(
+    known.zeta.history.map((s) => s.at),
+    ["2026-11-19T00:00:00Z"],
+  );
+  const back = validBgsHistory(
+    JSON.parse(
+      JSON.stringify({
+        ...known,
+        bad: { system: 42 },
+        odd: {
+          system: "Odd",
+          coords: ["x"],
+          history: [
+            { at: "soon", influences: { A: 1 } },
+            { at: "2026-11-19", influences: { A: 500 } },
+          ],
+        },
+      }),
+    ),
+  );
+  assert.deepEqual(Object.keys(back).sort(), ["odd", "zeta"]);
+  assert.equal(back.odd.coords, undefined);
+  assert.deepEqual(back.odd.history, []);
+  assert.deepEqual(validBgsHistory("[]"), {});
+});
+
+test("edsm factions: influence and its history as percent, newest update, unknown system", () => {
+  const answer = decodeEdsmFactions(
+    "Eta",
+    {
+      controllingFaction: { name: FACTION },
+      factions: [
+        {
+          name: FACTION,
+          influence: 0.41,
+          state: "Boom",
+          activeStates: [{ state: "Boom" }],
+          pendingStates: [{ state: "Expansion", trend: 0 }],
+          lastUpdate: 1_763_500_000,
+          influenceHistory: { 1_763_300_000: 0.39, 1_763_500_000: 0.41, 1_000: 0.1 },
+        },
+        { name: "Rival Corp", influence: 0.59, lastUpdate: 1_763_400_000, influenceHistory: { 1_763_500_000: 0.59 } },
+      ],
+    },
+    1_700_000_000_000,
+  );
+  assert.equal(answer.controlling, FACTION);
+  assert.equal(answer.updatedAt, new Date(1_763_500_000_000).toISOString());
+  assert.equal(answer.factions[0].influence, 41);
+  assert.deepEqual(answer.factions[0].pending, ["Expansion"]);
+  assert.equal(answer.factions[1].state, "None");
+  assert.deepEqual(
+    answer.history.map((s) => s.influences),
+    [{ [FACTION]: 39 }, { [FACTION]: 41, "Rival Corp": 59 }],
+  );
+  assert.equal(decodeEdsmFactions("Nowhere", []), null);
 });
 
 test("bgs tick: the detector's date as ISO, anything else refused", async () => {

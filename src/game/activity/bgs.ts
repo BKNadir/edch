@@ -55,6 +55,12 @@ export interface FactionConflict {
   sides: { name: string; stake: string; wonDays: number }[];
 }
 
+/** Each faction's influence (percent) in a system at one moment. */
+export interface InfluenceSample {
+  at: string;
+  influences: Record<string, number>;
+}
+
 /** A system's factions as the journal last showed them, with the influences of earlier visits. */
 export interface SystemObservation {
   system: string;
@@ -63,7 +69,7 @@ export interface SystemObservation {
   factions: FactionPresence[];
   conflicts: FactionConflict[];
   /** Earlier visits (oldest first): when, and each faction's influence then. */
-  history: { at: string; influences: Record<string, number> }[];
+  history: InfluenceSample[];
 }
 
 export interface BgsJournal {

@@ -1,9 +1,11 @@
 // What EDSM knows about a system (public data, no key needed): bodies already reported by
-// other commanders, who discovered them, and the system's estimated cartographic value.
+// other commanders, who discovered them, and the system's estimated cartographic value; and for
+// the BGS page, a system's minor factions with their influence history.
 
 import { httpFetch } from "../platform/bridge.js";
 import { t } from "../platform/i18n.js";
 import { log } from "../platform/logger.js";
+import type { FactionPresence, InfluenceSample } from "../game/activity/bgs.js";
 
 export interface EdsmBody {
   name: string;
@@ -92,4 +94,69 @@ export function edsmSystem(system: string): Promise<EdsmSystem> {
   })().finally(() => pending.delete(key));
   pending.set(key, job);
   return job;
+}
+
+/** A system's minor factions as EDSM knows them, with each faction's influence history. */
+export interface EdsmFactions {
+  system: string;
+  /** The newest update among the factions (UTC), when EDSM has one. */
+  updatedAt?: string;
+  controlling?: string;
+  factions: FactionPresence[];
+  /** Influence samples (percent), oldest first. */
+  history: InfluenceSample[];
+}
+
+const stateList = (list: unknown): string[] =>
+  Array.isArray(list) ? list.map((entry) => String(entry?.state ?? "")).filter(Boolean) : [];
+/** EDSM gives influence as 0–1. */
+const edsmPercent = (value: unknown) =>
+  typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 1 ? Math.round(value * 1000) / 10 : NaN;
+const unixToIso = (seconds: number) => new Date(seconds * 1000).toISOString();
+
+/** EDSM's api-system-v1/factions answer (with showHistory=1), decoded; null for an unknown system. */
+export function decodeEdsmFactions(system: string, raw: any, since = 0): EdsmFactions | null {
+  const list: any[] = Array.isArray(raw?.factions) ? raw.factions : [];
+  if (!list.length) return null;
+  let newest = 0;
+  const samples = new Map<number, Record<string, number>>();
+  const factions: FactionPresence[] = [];
+  for (const f of list) {
+    const name = typeof f?.name === "string" ? f.name : "";
+    if (!name) continue;
+    if (typeof f.lastUpdate === "number" && f.lastUpdate > newest) newest = f.lastUpdate;
+    factions.push({
+      name,
+      influence: edsmPercent(f.influence),
+      state: typeof f.state === "string" && f.state ? f.state : "None",
+      active: stateList(f.activeStates),
+      pending: stateList(f.pendingStates),
+      recovering: stateList(f.recoveringStates),
+    });
+    const history = f.influenceHistory && typeof f.influenceHistory === "object" ? f.influenceHistory : {};
+    for (const [time, value] of Object.entries(history)) {
+      const seconds = Number(time);
+      const influence = edsmPercent(value);
+      if (!Number.isFinite(seconds) || seconds * 1000 < since || !Number.isFinite(influence)) continue;
+      const sample = samples.get(seconds) ?? {};
+      sample[name] = influence;
+      samples.set(seconds, sample);
+    }
+  }
+  const controller = raw?.controllingFaction;
+  return {
+    system,
+    updatedAt: newest ? unixToIso(newest) : undefined,
+    controlling: typeof controller?.name === "string" ? controller.name : undefined,
+    factions,
+    history: [...samples]
+      .sort((a, b) => a[0] - b[0])
+      .map(([seconds, influences]) => ({ at: unixToIso(seconds), influences })),
+  };
+}
+
+/** What EDSM knows of a system's factions (no cache: the BGS page keeps what it needs). */
+export async function edsmFactions(system: string, since = 0): Promise<EdsmFactions | null> {
+  const raw = await get(`api-system-v1/factions?systemName=${encodeURIComponent(system)}&showHistory=1`);
+  return decodeEdsmFactions(system, raw, since);
 }

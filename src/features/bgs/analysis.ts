@@ -1,13 +1,20 @@
-// The BGS page's logic: the followed faction's systems (from the journal's own visits and from
-// Spansh, the newer one wins), what needs attention in each (expansion, retreat, a rival close
-// behind, conflicts, old data, a system not visited for long), what to do there, the order to
-// visit them in, and what the commander did for the faction. Pure functions.
+// The BGS page's logic: the followed faction's systems (from the journal's own visits, Spansh and
+// EDSM, the newest data wins), their influence trend and forecast, what needs attention in each
+// (expansion, retreat, a rival close behind, conflicts, a bad trend, old data, a system not
+// visited for long), what to do there, the order to visit them in, and what the commander did
+// for the faction. Pure functions.
 // Credit: the patrol priority and the data-age rules follow Cyberpunk Philou's BGS prototype
 // (pull request #2).
 
-import type { BgsAction, FactionConflict, FactionPresence, SystemObservation } from "../../game/activity/bgs.js";
+import type {
+  BgsAction,
+  FactionConflict,
+  FactionPresence,
+  InfluenceSample,
+  SystemObservation,
+} from "../../game/activity/bgs.js";
 import type { Vec3 } from "../../game/journal/state.js";
-import type { FactionSystem } from "../../services/spansh.js";
+import type { BgsHistory, KnownSystem, RemoteSource } from "../../state/bgsHistory.js";
 
 /** What needs attention in a system. */
 export type BgsAlertKind =
@@ -22,7 +29,9 @@ export type BgsAlertKind =
   /** The data is old: what is shown may have changed. */
   | "staleData"
   /** Nobody of yours went there for a while (from your journal). */
-  | "notVisited";
+  | "notVisited"
+  /** At the current trend, the faction falls under the retreat line or a rival passes it soon. */
+  | "atRisk";
 
 /** Influence (percent) from which a faction can expand. */
 export const EXPANSION_AT = 75;
@@ -51,13 +60,18 @@ export interface BgsSystemRow {
   active: string[];
   pending: string[];
   recovering: string[];
-  /** The other faction closest in influence, and the gap in points (positive: we're ahead). */
-  rival?: { name: string; influence: number; gap: number };
-  /** Change of influence since the previous visit you made (points), from the journal. */
+  /**
+   * The other faction closest in influence, and the gap in points (positive: we're ahead); the
+   * forecast gap is the one expected in FORECAST_DAYS days at both factions' trends.
+   */
+  rival?: { name: string; influence: number; gap: number; forecastGap?: number };
+  /** Average change of influence per day (points), over the last days' samples. */
   trend?: number;
+  /** Influence expected in FORECAST_DAYS days at that trend (percent). */
+  forecast?: number;
   /** When the shown data was observed, and by whom. */
   dataAt?: string;
-  source: "journal" | "spansh";
+  source: "journal" | RemoteSource;
   /** Your last visit (journal), if any in the journal kept. */
   lastVisit?: string;
   conflicts: FactionConflict[];
@@ -77,7 +91,7 @@ function rowOf(
   faction: string,
   system: string,
   factions: FactionPresence[],
-  base: Pick<BgsSystemRow, "coords" | "distance" | "controlling" | "dataAt" | "source" | "lastVisit" | "trend">,
+  base: Pick<BgsSystemRow, "coords" | "distance" | "controlling" | "dataAt" | "source" | "lastVisit">,
   conflicts: FactionConflict[],
   now: number,
 ): BgsSystemRow | null {
@@ -132,93 +146,138 @@ function priorityOf(alerts: BgsAlertKind[], controls: boolean, visitAge?: number
   return score;
 }
 
-/** Change of the faction's influence between your last two visits with different values. */
-function trendOf(observation: SystemObservation | undefined, faction: string): number | undefined {
-  const samples = observation?.history.filter((sample) =>
-    Object.keys(sample.influences).some((name) => same(name, faction)),
-  );
-  if (!samples || samples.length < 2) return undefined;
-  const value = (sample: (typeof samples)[number]) =>
-    Object.entries(sample.influences).find(([name]) => same(name, faction))![1];
-  return Math.round((value(samples.at(-1)!) - value(samples.at(-2)!)) * 10) / 10;
-}
+/** Days of samples the trend is computed on (about three BGS days and the one before). */
+export const TREND_WINDOW_DAYS = 4;
+/** How far ahead the forecast looks (days). */
+export const FORECAST_DAYS = 3;
 
 /**
- * The followed faction's systems: Spansh's list (when loaded) and the systems of your journal
- * where it was seen. For each, the newest data wins (your own visit, or Spansh's).
+ * A faction's average change of influence per day (points), over the samples of the last
+ * TREND_WINDOW_DAYS days: the slope of a least-squares line, so one odd sample weighs little.
+ * Undefined with fewer than two samples or less than half a day between the first and the last.
+ */
+export function influenceTrend(samples: InfluenceSample[], faction: string, now = Date.now()): number | undefined {
+  const since = now - TREND_WINDOW_DAYS * DAY;
+  const points: [number, number][] = [];
+  for (const sample of samples) {
+    const time = Date.parse(sample.at);
+    if (!Number.isFinite(time) || time < since) continue;
+    const entry = Object.entries(sample.influences).find(([name]) => same(name, faction));
+    if (entry && Number.isFinite(entry[1])) points.push([time / DAY, entry[1]]);
+  }
+  if (points.length < 2) return undefined;
+  const days = points.map(([x]) => x);
+  if (Math.max(...days) - Math.min(...days) < 0.5) return undefined;
+  const meanX = days.reduce((a, b) => a + b, 0) / points.length;
+  const meanY = points.reduce((a, [, y]) => a + y, 0) / points.length;
+  let covariance = 0;
+  let variance = 0;
+  for (const [x, y] of points) {
+    covariance += (x - meanX) * (y - meanY);
+    variance += (x - meanX) ** 2;
+  }
+  return variance ? Math.round((covariance / variance) * 100) / 100 : undefined;
+}
+
+/** All the samples known for a system: your visits (journal) and Spansh's or EDSM's, by date. */
+function samplesOf(visit: SystemObservation | undefined, known: KnownSystem | undefined): InfluenceSample[] {
+  return [...(visit?.history ?? []), ...(known?.history ?? [])].sort((a, b) => a.at.localeCompare(b.at));
+}
+
+/** One view of a system's factions, from wherever it came. */
+interface Snapshot {
+  at?: string;
+  source: BgsSystemRow["source"];
+  controlling?: string;
+  factions: FactionPresence[];
+  conflicts: FactionConflict[];
+}
+
+const distanceBetween = (a: Vec3, b: Vec3) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+
+/**
+ * The followed faction's systems: those of your journal where it was seen and those Spansh or
+ * EDSM gave (kept in `known`). For each, the newest data wins; the trend uses every sample.
+ * `from` (your position) gives the distances.
  */
 export function factionRows(
   faction: string,
-  spansh: FactionSystem[] | undefined,
+  known: BgsHistory,
   observed: Record<string, SystemObservation>,
   now = Date.now(),
+  from?: Vec3,
 ): BgsSystemRow[] {
   if (!faction) return [];
-  const rows = new Map<string, BgsSystemRow>();
-  const observedBy = new Map(Object.values(observed).map((o) => [o.system.toLowerCase(), o]));
-  for (const system of spansh ?? []) {
-    const visit = observedBy.get(system.name.toLowerCase());
-    const journalNewer = visit && (!system.updatedAt || visit.at > system.updatedAt);
-    const row = journalNewer
-      ? rowOf(
-          faction,
-          system.name,
-          visit.factions,
-          {
-            coords: system.coords,
-            distance: system.distance,
-            controlling: visit.controlling,
-            dataAt: visit.at,
-            source: "journal",
-            lastVisit: visit.at,
-            trend: trendOf(visit, faction),
-          },
-          visit.conflicts,
-          now,
-        )
-      : rowOf(
-          faction,
-          system.name,
-          system.factions,
-          {
-            coords: system.coords,
-            distance: system.distance,
-            controlling: system.controlling,
-            dataAt: system.updatedAt,
-            source: "spansh",
-            lastVisit: visit?.at,
-            trend: trendOf(visit, faction),
-          },
-          visit?.conflicts ?? [],
-          now,
-        );
-    if (row) rows.set(system.name.toLowerCase(), row);
-  }
-  // Systems of your journal Spansh didn't give (not loaded yet, or not found).
-  for (const visit of observedBy.values()) {
-    if (rows.has(visit.system.toLowerCase())) continue;
+  const visits = new Map(Object.values(observed).map((o) => [o.system.toLowerCase(), o]));
+  const names = new Set([...visits.keys(), ...Object.keys(known)]);
+  const rows: BgsSystemRow[] = [];
+  for (const key of names) {
+    const visit = visits.get(key);
+    const remote = known[key];
+    const candidates: Snapshot[] = [];
+    if (visit)
+      candidates.push({
+        at: visit.at,
+        source: "journal",
+        controlling: visit.controlling,
+        factions: visit.factions,
+        conflicts: visit.conflicts,
+      });
+    if (remote?.latest)
+      candidates.push({
+        at: remote.latest.at,
+        source: remote.latest.source,
+        controlling: remote.latest.controlling,
+        factions: remote.latest.factions,
+        // Only the journal tells a conflict's sides: a visit's are kept until a newer visit.
+        conflicts: visit?.conflicts ?? [],
+      });
+    const newest = candidates.sort((a, b) => (b.at ?? "").localeCompare(a.at ?? ""))[0];
+    if (!newest) continue;
+    const coords = remote?.coords;
     const row = rowOf(
       faction,
-      visit.system,
-      visit.factions,
+      visit?.system ?? remote!.system,
+      newest.factions,
       {
-        controlling: visit.controlling,
-        dataAt: visit.at,
-        source: "journal",
-        lastVisit: visit.at,
-        trend: trendOf(visit, faction),
+        coords,
+        distance: coords && from ? Math.round(distanceBetween(coords, from) * 100) / 100 : undefined,
+        controlling: newest.controlling,
+        dataAt: newest.at,
+        source: newest.source,
+        lastVisit: visit?.at,
       },
-      visit.conflicts,
+      newest.conflicts,
       now,
     );
-    if (row) rows.set(visit.system.toLowerCase(), row);
+    if (!row) continue;
+    addForecast(row, samplesOf(visit, remote), faction, now);
+    rows.push(row);
   }
-  return [...rows.values()].sort(
+  return rows.sort(
     (a, b) =>
       b.priority - a.priority ||
       (a.distance ?? Infinity) - (b.distance ?? Infinity) ||
       a.system.localeCompare(b.system),
   );
+}
+
+/** Trend, forecast in FORECAST_DAYS days, and the "at risk" alert when it goes badly. */
+function addForecast(row: BgsSystemRow, samples: InfluenceSample[], faction: string, now: number) {
+  const trend = influenceTrend(samples, faction, now);
+  if (trend === undefined || row.influence === undefined) return;
+  row.trend = trend;
+  row.forecast = Math.min(100, Math.max(0, Math.round((row.influence + trend * FORECAST_DAYS) * 10) / 10));
+  if (row.rival) {
+    const rivalTrend = influenceTrend(samples, row.rival.name, now) ?? 0;
+    row.rival.forecastGap = Math.round((row.rival.gap + (trend - rivalTrend) * FORECAST_DAYS) * 10) / 10;
+  }
+  const falling = row.influence >= RETREAT_BELOW && row.forecast < RETREAT_BELOW;
+  const overtaken = row.rival !== undefined && row.rival.gap > 0 && (row.rival.forecastGap ?? 1) <= 0;
+  if (falling || overtaken) {
+    row.alerts.push("atRisk");
+    row.priority += 20;
+  }
 }
 
 /** Factions seen in your journal, most seen first (to pick the one to follow). */

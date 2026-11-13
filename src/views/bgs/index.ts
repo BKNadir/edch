@@ -1,13 +1,23 @@
-// BGS page: follow a minor faction. Its systems (your own visits from the journal, and Spansh's
-// data on request), what needs attention in each and what to do there, what you did for it in
-// the last day or week, and a tour of the systems whose data is old. Nothing is sent from here:
-// in BGS or Invisible mode, the tour reads fresh data but shares nothing (services/sync).
+// BGS page: follow a minor faction. Its systems (your own visits from the journal; Spansh's list
+// and EDSM's influence history on request, kept between sessions), the trend and forecast of
+// each, what needs attention and what to do there, what you did for it since the tick or over
+// a day or a week, and a tour of the systems whose data is old. Nothing is sent from here: in
+// BGS or Invisible mode, the tour reads fresh data but shares nothing (services/sync).
 
 import { HISTORY_DAYS } from "../../game/activity/index.js";
 import { gameName, t } from "../../platform/i18n.js";
 import { log } from "../../platform/logger.js";
 import { knownTick, refreshTick } from "../../services/bgsTick.js";
-import { factionSystems, fmtLy, type FactionSystems } from "../../services/spansh.js";
+import { edsmFactions } from "../../services/edsm.js";
+import { factionSystems, fmtLy } from "../../services/spansh.js";
+import {
+  type BgsHistory,
+  HISTORY_KEEP_DAYS,
+  loadBgsHistory,
+  recordSystem,
+  sampleOf,
+  saveBgsHistory,
+} from "../../state/bgsHistory.js";
 import type { Ctx, View } from "../../state/context.js";
 import { referenceOf } from "../../state/context.js";
 import { callout, fmt, h, replace } from "../../ui/dom.js";
@@ -15,6 +25,7 @@ import { credits, relTime } from "../../ui/format.js";
 import {
   activityFor,
   adviceFor,
+  FORECAST_DAYS,
   type BgsAlertKind,
   type BgsSystemRow,
   factionRows,
@@ -34,6 +45,7 @@ const ALERT_LABELS = (): Record<BgsAlertKind, string> => ({
   conflict: t("bgs.alertConflict"),
   staleData: t("bgs.alertStaleData"),
   notVisited: t("bgs.alertNotVisited"),
+  atRisk: t("bgs.alertAtRisk"),
 });
 
 const ADVICE_LABELS = (): Record<string, string> => ({
@@ -49,15 +61,35 @@ const ADVICE_LABELS = (): Record<string, string> => ({
 });
 
 /** Alerts that make a row stand out (the others are informative). */
-const SERIOUS: BgsAlertKind[] = ["retreat", "conflict", "rivalClose"];
+const SERIOUS: BgsAlertKind[] = ["retreat", "conflict", "rivalClose", "atRisk"];
+
+/** EDSM is asked about this many systems at most per update, nearest to trouble first. */
+const EDSM_MAX_PER_UPDATE = 40;
+/** A system EDSM was asked about this recently is skipped (its data changes once a day). */
+const EDSM_RECHECK_MS = 2 * 3_600_000;
+/** Pause between two EDSM requests, to stay well under its rate limit. */
+const EDSM_PAUSE_MS = 400;
+/** EDSM failing this many times in a row ends the update. */
+const EDSM_MAX_FAILURES = 3;
+
+const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Where an update stands, and how it ended. */
+type Progress = { step: "spansh"; found: number; total: number } | { step: "edsm"; done: number; total: number };
+interface UpdateResult {
+  spansh?: { count: number; total: number; partial: boolean };
+  spanshFailed: boolean;
+  edsm: number;
+  edsmFailed: boolean;
+}
 
 export class BgsView implements View {
   private root?: HTMLElement;
   private period: Period = "tick";
-  /** Spansh's list for a faction, loaded on request (kept while EDCH runs). */
-  private loaded?: { faction: string; result: FactionSystems };
-  private loading?: { found: number; total: number };
-  private failed = false;
+  /** What Spansh and EDSM told, kept between sessions (state/bgsHistory.ts). */
+  private known: BgsHistory = loadBgsHistory();
+  private loading?: Progress;
+  private result?: UpdateResult;
 
   constructor(private ctx: Ctx) {}
 
@@ -89,27 +121,80 @@ export class BgsView implements View {
     const name = faction.trim().slice(0, 120);
     if (name === this.faction) return;
     this.ctx.store.updateSettings({ bgs: { faction: name } });
-    this.failed = false;
+    this.result = undefined;
     this.render();
   }
 
-  private async loadSystems() {
+  /**
+   * The update, on request only: Spansh's list of the faction's systems, then EDSM's influence
+   * history for those that need it most. Everything read is kept (state/bgsHistory.ts); nothing
+   * is sent about the commander.
+   */
+  private async updateSystems() {
     const faction = this.faction;
     if (!faction || this.loading) return;
-    this.loading = { found: 0, total: 0 };
-    this.failed = false;
+    const result: UpdateResult = { spanshFailed: false, edsm: 0, edsmFailed: false };
+    this.loading = { step: "spansh", found: 0, total: 0 };
+    this.result = undefined;
     this.render();
     try {
-      const result = await factionSystems(faction, referenceOf(this.ctx), (found, total) => {
-        this.loading = { found, total };
+      const list = await factionSystems(faction, referenceOf(this.ctx), (found, total) => {
+        this.loading = { step: "spansh", found, total };
         this.render();
       });
-      this.loaded = { faction, result };
+      for (const system of list.systems) {
+        const sample = system.updatedAt ? sampleOf(system.updatedAt, system.factions) : null;
+        recordSystem(this.known, system.name, {
+          coords: system.coords,
+          snapshot: system.updatedAt
+            ? { at: system.updatedAt, source: "spansh", controlling: system.controlling, factions: system.factions }
+            : undefined,
+          samples: sample ? [sample] : [],
+        });
+      }
+      result.spansh = { count: list.systems.length, total: list.total, partial: list.partial };
+      saveBgsHistory(this.known);
     } catch (error) {
       log.warn("bgs", `Spansh faction search failed: ${(error as Error)?.message ?? error}`);
-      this.failed = true;
+      result.spanshFailed = true;
     }
+
+    const now = Date.now();
+    const rows = factionRows(faction, this.known, this.ctx.store.state.activity.bgs.observed, now);
+    const due = rows
+      .filter((row) => {
+        const checked = this.known[row.system.toLowerCase()]?.edsmCheckedAt;
+        return !checked || now - Date.parse(checked) >= EDSM_RECHECK_MS;
+      })
+      .slice(0, EDSM_MAX_PER_UPDATE);
+    const since = now - HISTORY_KEEP_DAYS * 86_400_000;
+    let failures = 0;
+    for (const [index, row] of due.entries()) {
+      this.loading = { step: "edsm", done: index, total: due.length };
+      this.render();
+      try {
+        const answer = await edsmFactions(row.system, since);
+        recordSystem(this.known, row.system, {
+          snapshot: answer?.updatedAt
+            ? { at: answer.updatedAt, source: "edsm", controlling: answer.controlling, factions: answer.factions }
+            : undefined,
+          samples: answer?.history ?? [],
+          edsmCheckedAt: new Date().toISOString(),
+        });
+        if (answer) result.edsm += 1;
+        failures = 0;
+      } catch (error) {
+        log.warn("bgs", `EDSM factions failed: ${(error as Error)?.message ?? error}`);
+        if (++failures >= EDSM_MAX_FAILURES) {
+          result.edsmFailed = true;
+          break;
+        }
+      }
+      await pause(EDSM_PAUSE_MS);
+    }
+    saveBgsHistory(this.known);
     this.loading = undefined;
+    this.result = result;
     this.render();
   }
 
@@ -117,20 +202,20 @@ export class BgsView implements View {
     if (!this.root) return;
     const { activity, settings, cmdr } = this.ctx.store.state;
     const faction = this.faction;
-    const spansh = this.loaded && this.loaded.faction === faction ? this.loaded.result : undefined;
-    const rows = factionRows(faction, spansh?.systems, activity.bgs.observed);
+    const position = cmdr.location?.pos;
+    const rows = factionRows(faction, this.known, activity.bgs.observed, Date.now(), position);
     this.checkTick();
     const tick = knownTick();
     const period: Period = this.period === "tick" && !tick ? "day" : this.period;
     const since = period === "tick" ? tick! : new Date(Date.now() - PERIODS[period]).toISOString();
     const done = faction ? activityFor(activity.bgs.actions, faction, since) : [];
-    const tour = refreshTour(rows, cmdr.location?.pos);
+    const tour = refreshTour(rows, position);
     const shareMode = settings.sync.shareMode;
 
     replace(
       this.root,
       h("header.view-head", null, h("div", null, h("h1", null, t("bgs.title")), h("p.sub", null, t("bgs.subtitle")))),
-      this.factionCard(faction, activity.bgs.observed, spansh),
+      this.factionCard(faction, activity.bgs.observed, rows),
       faction ? this.alertsSummary(rows) : null,
       faction ? this.activityCard(done, period, tick) : null,
       faction ? this.systemsCard(rows, tick) : null,
@@ -141,7 +226,7 @@ export class BgsView implements View {
   private factionCard(
     faction: string,
     observed: Parameters<typeof knownFactions>[0],
-    spansh: FactionSystems | undefined,
+    rows: BgsSystemRow[],
   ): HTMLElement {
     const known = knownFactions(observed);
     const listId = "bgs-known-factions";
@@ -159,21 +244,33 @@ export class BgsView implements View {
           null,
           h("span.spinner"),
           " ",
-          t("bgs.loading", { found: this.loading.found, total: this.loading.total || "…" }),
+          this.loading.step === "spansh"
+            ? t("bgs.loading", { found: this.loading.found, total: this.loading.total || "…" })
+            : t("bgs.loadingEdsm", { done: this.loading.done, total: this.loading.total }),
         )
-      : this.failed
-        ? h("p.sub.bad", null, t("bgs.loadFailed"))
-        : spansh
+      : this.result
+        ? h(
+            "p.sub",
+            null,
+            this.result.spanshFailed
+              ? h("span.bad", null, t("bgs.loadFailed"))
+              : this.result.spansh?.partial
+                ? t("bgs.loadedPartial", { count: this.result.spansh.count, total: this.result.spansh.total })
+                : t("bgs.loaded", { count: this.result.spansh?.count ?? 0 }),
+            " ",
+            this.result.edsmFailed
+              ? h("span.bad", null, t("bgs.edsmFailed"))
+              : t("bgs.edsmUpdated", { count: this.result.edsm }),
+          )
+        : faction
           ? h(
               "p.sub",
               null,
-              spansh.partial
-                ? t("bgs.loadedPartial", { count: spansh.systems.length, total: spansh.total })
-                : t("bgs.loaded", { count: spansh.systems.length }),
+              rows.some((row) => row.source !== "journal" || this.known[row.system.toLowerCase()])
+                ? t("bgs.keptData", { days: HISTORY_KEEP_DAYS })
+                : t("bgs.journalOnly"),
             )
-          : faction
-            ? h("p.sub", null, t("bgs.journalOnly"))
-            : null;
+          : null;
     return h(
       "section.card",
       null,
@@ -189,7 +286,7 @@ export class BgsView implements View {
         ),
         h(
           "button.primary",
-          { disabled: !faction || Boolean(this.loading), onclick: () => void this.loadSystems() },
+          { disabled: !faction || Boolean(this.loading), onclick: () => void this.updateSystems() },
           t("bgs.loadFromSpansh"),
         ),
       ),
@@ -214,7 +311,7 @@ export class BgsView implements View {
           h("strong", null, fmt(rows.filter((row) => row.controls).length)),
           h("span.sub", null, t("bgs.controlled")),
         ),
-        (["conflict", "retreat", "rivalClose", "expansion", "staleData"] as BgsAlertKind[]).map((kind) =>
+        (["conflict", "atRisk", "retreat", "rivalClose", "expansion", "staleData"] as BgsAlertKind[]).map((kind) =>
           h("div.stat", null, h("strong", null, fmt(count(kind))), h("span.sub", null, labels[kind])),
         ),
       ),
@@ -310,10 +407,22 @@ export class BgsView implements View {
     const labels = ALERT_LABELS();
     const advice = ADVICE_LABELS();
     const percent = (n?: number) => (n === undefined ? "?" : `${n.toFixed(1)} %`);
-    const trend = (n?: number) =>
-      n === undefined || n === 0
+    /** The trend per day and the forecast, e.g. "▼ 1.2/d → 38.4 % in 3 d". */
+    const trend = (row: BgsSystemRow) =>
+      row.trend === undefined
         ? null
-        : h(`span.${n > 0 ? "ok" : "bad"}`, null, ` ${n > 0 ? "▲" : "▼"} ${Math.abs(n).toFixed(1)}`);
+        : h(
+            "div",
+            { title: t("bgs.trendHelp", { days: FORECAST_DAYS }) },
+            h(
+              `span.${row.trend > 0 ? "ok" : row.trend < 0 ? "bad" : "sub"}`,
+              null,
+              `${row.trend > 0 ? "▲" : row.trend < 0 ? "▼" : "="} ${t("bgs.perDay", { value: Math.abs(row.trend).toFixed(1) })}`,
+            ),
+            row.forecast === undefined
+              ? null
+              : h("small.sub", null, ` → ${percent(row.forecast)} ${t("bgs.inDays", { days: FORECAST_DAYS })}`),
+          );
     const states = (row: BgsSystemRow) =>
       [...new Set([row.state, ...row.active].filter((s) => s && s !== "None"))].map((s) => gameName(s));
     return h(
@@ -359,7 +468,7 @@ export class BgsView implements View {
                       row.controls ? h("span.badge.hit", { title: t("bgs.controlsHelp") }, t("bgs.controls")) : null,
                       row.distance !== undefined ? h("small.sub", null, ` ${fmtLy(row.distance)}`) : null,
                     ),
-                    h("td", null, percent(row.influence), trend(row.trend)),
+                    h("td", null, percent(row.influence), trend(row)),
                     h(
                       "td",
                       null,
@@ -368,6 +477,13 @@ export class BgsView implements View {
                             "span",
                             { title: row.rival.name },
                             `${row.rival.gap >= 0 ? "+" : ""}${row.rival.gap.toFixed(1)} · ${row.rival.name}`,
+                            row.rival.forecastGap === undefined
+                              ? null
+                              : h(
+                                  `small.${row.rival.forecastGap <= 0 ? "bad" : "sub"}`,
+                                  null,
+                                  ` → ${row.rival.forecastGap >= 0 ? "+" : ""}${row.rival.forecastGap.toFixed(1)} ${t("bgs.inDays", { days: FORECAST_DAYS })}`,
+                                ),
                           )
                         : "—",
                     ),
@@ -386,7 +502,11 @@ export class BgsView implements View {
                       `td${row.alerts.includes("staleData") ? ".bad" : ""}`,
                       null,
                       row.dataAt ? relTime(row.dataAt) : "?",
-                      h("small.sub", null, ` ${row.source === "journal" ? t("bgs.sourceJournal") : "Spansh"}`),
+                      h(
+                        "small.sub",
+                        null,
+                        ` ${row.source === "journal" ? t("bgs.sourceJournal") : row.source === "edsm" ? "EDSM" : "Spansh"}`,
+                      ),
                       tick && row.dataAt && row.dataAt < tick
                         ? h("span.badge.muted", { title: t("bgs.beforeTickHelp") }, t("bgs.beforeTick"))
                         : null,
