@@ -32,6 +32,7 @@ import {
   knownFactions,
   refreshTour,
 } from "../../features/bgs/analysis.js";
+import { setBgsTourStops, startBgsTour } from "../../features/bgs/tourCopy.js";
 import { systemLink } from "../shared/links.js";
 
 /** Periods of "what you did": since the last BGS tick (when known), the last 24 hours, 7 days. */
@@ -219,6 +220,7 @@ export class BgsView implements View {
     const since = period === "tick" ? tick! : new Date(Date.now() - PERIODS[period]).toISOString();
     const done = faction ? activityFor(activity.bgs.actions, faction, since) : [];
     const tour = refreshTour(rows, position);
+    setBgsTourStops(tour.map((row) => row.system));
     const shareMode = settings.sync.shareMode;
 
     replace(
@@ -567,6 +569,7 @@ export class BgsView implements View {
       null,
       h("h3", null, t("bgs.refreshTour")),
       h("p.sub", null, t("bgs.refreshTourHelp")),
+      tour.length ? h("p.sub", null, t("bgs.tourAutoCopyHelp")) : null,
       shareMode === "normal"
         ? null
         : shareMode === "bgs"
@@ -577,7 +580,13 @@ export class BgsView implements View {
             "ol.bgs-tour",
             null,
             tour.map((row) =>
-              h("li", null, systemLink(row.system), h("small.sub", null, ` ${row.dataAt ? relTime(row.dataAt) : "?"}`)),
+              h(
+                "li",
+                // Clicking a stop starts the tour: arriving there copies the next one.
+                { onclick: () => startBgsTour(row.system) },
+                systemLink(row.system),
+                h("small.sub", null, ` ${row.dataAt ? relTime(row.dataAt) : "?"}`),
+              ),
             ),
           )
         : h("p.sub", null, t("bgs.nothingToRefresh")),
