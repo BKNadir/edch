@@ -1421,34 +1421,6 @@ small.grade {
   display: none;
 }
 
-/* Settings → Hailport: where the link stands (cards/hailport.ts). */
-.hailport-state {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  color: var(--text-soft);
-}
-.hailport-state .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--muted);
-}
-.hailport-state.connected .dot {
-  background: var(--ok);
-  box-shadow: 0 0 0 3px var(--ok-dim);
-}
-.hailport-state.connecting .dot,
-.hailport-state.approval .dot {
-  background: var(--accent);
-}
-.hailport-state.refused .dot,
-.hailport-state.removed .dot,
-.hailport-state.outdated .dot {
-  background: var(--bad);
-}
-
 /* ==================== SYNC NAVIGATION SEARCH ====================
    Switches and counters, then the Sync, Navigation and Search pages, build import and engineer ranks. */
 

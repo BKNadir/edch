@@ -362,35 +362,6 @@ export async function onNtfy(
     b();
   };
 }
-/** Whether this build offers the Hailport link (not the portable exe, not the phone or demo). */
-export const hailportAvailable = () =>
-  !remote && isTauri() ? invoke<boolean>("hailport_available").catch(() => false) : Promise.resolve(false);
-/** Opens the link to Hailport on this PC (replacing any previous one); returns its generation. */
-export const hailportConnect = (port: number) => invoke<number>("hailport_connect", { port });
-export const hailportDisconnect = () => invoke<void>("hailport_disconnect").catch(() => undefined);
-/** Sends one protocol message (JSON text) on the link of `generation`. */
-export const hailportSend = (generation: number, text: string) => invoke<void>("hailport_send", { generation, text });
-/**
- * Listens to the Hailport link: each message received (JSON text), and when it opens or closes
- * (with Hailport's close code, if any). Returns the function that stops listening.
- */
-export async function onHailport(
-  message: (generation: number, text: string) => void,
-  status: (generation: number, state: "open" | "closed", code: number | null) => void,
-): Promise<() => void> {
-  const ev = window.__TAURI__!.event;
-  const a = await ev.listen<{ generation: number; text: string }>("hailport-message", (e) =>
-    message(e.payload.generation, e.payload.text),
-  );
-  const b = await ev.listen<{ generation: number; state: "open" | "closed"; code: number | null }>(
-    "hailport-status",
-    (e) => status(e.payload.generation, e.payload.state, e.payload.code),
-  );
-  return () => {
-    a();
-    b();
-  };
-}
 export const clipboardWrite = (text: string) => invoke<void>("clipboard_write", { text });
 export const gameRunning = () => invoke<string>("game_running").catch(() => "");
 /** Is Elite Dangerous the window in front: "yes", "no", or "unknown" (not on Windows). */

@@ -117,30 +117,6 @@ export async function initTexts(code: string, texts: Record<string, Texts>) {
   } as any);
 }
 
-/**
- * The language to write in for someone else (Hailport speaks): `code` when EDCH has it (its
- * texts loaded on demand), else English. Returns the language used.
- */
-export async function useTextsOf(code: string): Promise<string> {
-  const wanted = LANGS.some((l) => l.code === code) ? code : DEFAULT_LANG;
-  if (!i18next.hasResourceBundle(wanted, "translation")) {
-    const texts = await fetchJson<Texts>(`locales/${wanted}.json`);
-    if (!texts) return DEFAULT_LANG;
-    i18next.addResourceBundle(wanted, "translation", texts, true, true);
-  }
-  return wanted;
-}
-
-/** Text for `key` in language `code` (loaded with useTextsOf; English when missing). */
-export function tIn(code: string, key: string, variables?: Record<string, unknown>): string {
-  return i18next.t(key, { ...(variables ?? {}), lng: code } as any) as string;
-}
-
-/** A game name in language `code`: translated when it is the app's language, else in English. */
-export function gameNameIn(code: string, name: string): string {
-  return code === current.code ? gameName(name) : name;
-}
-
 /** Loads the app texts and the game names for `code`. */
 export async function initI18n(code: string) {
   const wanted = LANGS.some((l) => l.code === code) ? code : DEFAULT_LANG;

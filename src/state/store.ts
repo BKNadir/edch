@@ -11,7 +11,6 @@ import type { Blueprint } from "../game/types.js";
 import type { WatchStatus } from "../platform/bridge.js";
 import { type SyncSettings } from "./syncSettings.js";
 import { DEFAULT_SYNC } from "./syncSettings.js";
-import { DEFAULT_HAILPORT, type HailportSettings, validHailportSettings } from "./hailportSettings.js";
 
 export interface Settings {
   journalDir: string;
@@ -25,8 +24,6 @@ export interface Settings {
   fallbackSystem: string;
   largePadOnly: boolean;
   sync: SyncSettings;
-  /** Link to Hailport, the voice assistant. */
-  hailport: HailportSettings;
   remote: RemoteSettings;
   /** Look for a new release on GitHub at start-up and every few hours. */
   autoUpdate: boolean;
@@ -303,7 +300,6 @@ const DEFAULT_SETTINGS: Settings = {
   fallbackSystem: "Sol",
   largePadOnly: false,
   sync: DEFAULT_SYNC,
-  hailport: DEFAULT_HAILPORT,
   remote: DEFAULT_REMOTE,
   autoUpdate: true,
   updatePreReleases: false,
@@ -388,7 +384,6 @@ export class Store {
         return {
           ...loaded,
           sync: { ...DEFAULT_SYNC, ...(loaded.sync ?? {}) },
-          hailport: validHailportSettings(loaded.hailport),
           remote: { ...DEFAULT_REMOTE, ...(loaded.remote ?? {}) },
           notify: { ...DEFAULT_NOTIFY, ...(loaded.notify ?? {}) },
           wing: { ...DEFAULT_WING, ...(loaded.wing ?? {}) },

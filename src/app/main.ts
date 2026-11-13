@@ -27,7 +27,6 @@ import { bindLinks } from "../views/shared/links.js";
 import { setHere } from "../views/shared/resultsTable.js";
 import { initFocus } from "./focus.js";
 import { replayJournal, setWatch, startJournalFeed } from "./journalFeed.js";
-import { startHailport } from "./hailport.js";
 import { runRemoteClient, setupRemoteHost } from "./remote.js";
 import { startShell } from "./shell.js";
 
@@ -102,6 +101,5 @@ export async function startApp(code: string, remoteMode: "paired" | null) {
   void changelogAfterUpdate(store);
   startUpdateChecks(store);
   setupLive(store);
-  void startHailport(ctx);
   await startJournalFeed(store, sync, capacityOf);
 }

@@ -41,7 +41,6 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 - **Minage** : résultats des prospecteurs en direct avec alertes pour tes cibles et les cœurs, tonnage de la session ; une recherche façon Merit Miner pour savoir où miner et vendre dans les systèmes de ta puissance.
 - **Powerplay et session** : mérites de la semaine et de la session, état Powerplay du système actuel ; crédits gagnés par activité depuis ta connexion.
 - **Accès distant** : ouvre EDCH sur ton téléphone ou ta tablette en scannant un QR code. Un serveur local (désactivé par défaut) sert l'appli sur ton réseau. Seuls les appareils qui ont scanné le QR code y accèdent : l'IP du PC ne suffit pas. « Nouveau code » déconnecte tous les appareils. L'interface s'adapte au téléphone (navigation en bas, panneaux plein écran), et les modifications de la wishlist faites sur le téléphone reviennent sur le PC. Il peut aussi ouvrir une page seule dans un navigateur, pour un 2e écran, et un mode plein écran n'affiche que la page en cours.
-- **Assistant vocal** : relié à Hailport, un assistant vocal sur ton PC, EDCH répond à la voix : ouvrir une page, copier le prochain système, calculer un itinéraire, trouver le marchand de matériaux ou le service le plus proche, compter un matériau, résumer les missions ou la colonisation, et il annonce les amarrages, la fin d'un itinéraire, les missions sur le point d'expirer et les chantiers terminés. Désactivé par défaut ; absent de la version portable.
 - **Thèmes** : thèmes prêts à l'emploi (dont un thème clair « Jour »), couleurs libres et mode OLED. Les couleurs trop claires ou trop foncées pour être lues sont ajustées automatiquement.
 - **Mises à jour automatiques** : EDCH vérifie sur GitHub si une nouvelle version existe, affiche un bandeau, télécharge l'installateur à ta demande (somme de contrôle vérifiée) et se relance pour terminer. Désactivable dans les Paramètres.
 - **Synchro façon EDMC** : envoi en direct vers **EDDN** (marchés, équipements, chantiers navals, sauts, scans, routes), **EDSM** et **Inara** (avec ta clé API). Les règles d'EDDN sont respectées : données personnelles retirées, position recoupée, aucun renvoi d'un message refusé, rien de l'historique.
@@ -67,7 +66,6 @@ EDCH lit le journal du jeu sur ton PC. Voici tout ce qui en sort, et vers où :
 - **ntfy.sh** (seulement si tu actives le partage d'escadrille) : tes missions d'escadrille, chiffrées avec le code de l'escadrille avant de quitter ton PC.
 - **GitHub** : seulement pour vérifier si une nouvelle version existe (désactivable dans les Paramètres).
 - **Accès distant** : reste sur ton réseau local ; désactivé par défaut et protégé par le QR code.
-- **Hailport** (seulement si tu l'actives dans les Réglages) : reste sur ton PC (127.0.0.1). EDCH lui donne ta position, ton vaisseau, ton itinéraire, tes missions et ta cargaison en résumé, jamais ton nom de commandant, ton escadrille ni tes clés. Si Hailport utilise un modèle de langue en ligne, ces informations partent vers ce service.
 
 Rien d'autre n'est collecté ni envoyé. Tes réglages, clés et wishlist sont stockés dans `%LOCALAPPDATA%\EDCompanionHelper`.
 

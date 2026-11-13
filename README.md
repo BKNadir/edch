@@ -41,7 +41,6 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
 - **Mining**: live prospector results with alerts for your targets and motherlodes, session tonnage; a Merit Miner-style search for where to mine and sell in your power's systems.
 - **Powerplay and session**: merits this week and this session, current system's Powerplay state; credits earned by activity since you logged in.
 - **Remote access**: open EDCH on your phone or tablet by scanning a QR code. A local server (off by default) serves the app on your network; only devices that scanned the QR code are let in, because the PC's IP alone isn't enough. "New code" disconnects every device. The interface adapts to phones (bottom navigation, full-screen panels), and wishlist edits on the phone sync back to the PC. It can also open one page alone in a browser, for a second screen, and a full-screen mode shows only the current page.
-- **Voice assistant**: linked to Hailport, a voice assistant on your PC, EDCH answers by voice: open a page, copy the next system, plot a route, find the nearest material trader or service, count a material, sum up missions or colonisation, and it announces dockings, the end of a route, missions about to expire and finished construction sites. Off by default; not in the portable version.
 - **Themes**: ready-made themes (including a light "Day" theme), your own colours and an OLED mode. Colours too light or too dark to read are adjusted automatically.
 - **Automatic updates**: EDCH checks GitHub for a new release, shows a banner, downloads the installer on request (checksum verified) and restarts itself to finish. Can be turned off in Settings.
 - **EDMC-style sync**: live uploads to **EDDN** (markets, outfitting, shipyards, jumps, scans, routes), **EDSM** and **Inara** (with your API key). EDDN's rules are followed: personal data removed, location cross-checked, a rejected message is never resent, nothing from your history.
@@ -67,7 +66,6 @@ EDCH reads your game journal on your PC. Here is everything that leaves it, and 
 - **ntfy.sh** (only if you enable wing sharing): your wing missions, encrypted with the wing code before leaving your PC.
 - **GitHub**: only to check whether a new version exists (can be turned off in Settings).
 - **Remote access**: stays on your local network; off by default and protected by the QR code.
-- **Hailport** (only if you turn it on in Settings): stays on your PC (127.0.0.1). EDCH tells it your location, ship, route, missions and cargo totals, never your commander name, your wing or your keys. If Hailport uses an online language model, this goes to that service.
 
 Nothing else is collected or sent. Your settings, keys and wishlist are stored in `%LOCALAPPDATA%\EDCompanionHelper`.
 

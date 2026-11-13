@@ -19,12 +19,6 @@ type CapacityOf = (id: string) => number | undefined;
 
 let replaying = true;
 
-/** Listeners of the live journal events (not the start-up replay), after the store took them. */
-const liveListeners: ((events: Json[]) => void)[] = [];
-export function onLiveJournal(listener: (events: Json[]) => void) {
-  liveListeners.push(listener);
-}
-
 /** Rebuilds the commander's state from the journal (start-up, or after a folder change). */
 export function replayJournal(store: Store) {
   store.state.cmdr = emptyState();
@@ -113,14 +107,6 @@ export async function startJournalFeed(store: Store, sync: Uploaders, capacityOf
       if (events.some((e) => e.event === "ShipLocker" && !e.Items)) {
         readCompanionFile(store, "ShipLocker.json", (json) => applyLocker(store.state.cmdr, json));
       }
-      if (!b.replay && events.length)
-        for (const listener of liveListeners) {
-          try {
-            listener(events);
-          } catch (error) {
-            log.warn("journal", `Live event listener failed: ${(error as Error)?.message ?? error}`);
-          }
-        }
       if (changed) {
         store.notify();
         if (!replaying) {

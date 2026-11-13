@@ -62,7 +62,7 @@ never from a layer above.** `tools/check-layers.cjs` enforces it (run by `npm te
 | `game/` | The game itself, pure functions: journal events → state, game data, demo journal | `journal/`, `activity/`, `data.ts`, `exobio.ts`, `types.ts` |
 | `state/` | The app's state and settings | `store.ts`, `context.ts`, `themeSettings.ts`, `syncSettings.ts` |
 | `ui/` | Shared display pieces: DOM helper, dialogs, banners, theme, menu, formats | `dom.ts`, `dialog.ts`, `alerts.ts`, `notifier.ts`, `menu/` |
-| `services/` | Other sites and servers | `spansh.ts`, `edsm.ts`, `eddn.ts`, `sync/` (EDDN, EDSM, Inara uploaders), `wing.ts`, `remoteServer.ts`, `hailport/` (voice assistant) |
+| `services/` | Other sites and servers | `spansh.ts`, `edsm.ts`, `eddn.ts`, `sync/` (EDDN, EDSM, Inara uploaders), `wing.ts`, `remoteServer.ts` |
 | `features/` | Calculations and logic behind the pages, without the page itself | `navigation/`, `engineers/`, `materials/`, `mining/`, `controls/`, `missions/`, `dataGaps/` (game data EDCH lacks, see below) |
 | `views/` | One folder per page (`index.ts` is the page), plus `shared/` and `detail/` (right panel) | `views/navigation/`, `views/settings/cards/` |
 | `app/` | Start-up and wiring: layout, top bar, journal feed, remote access | `main.ts`, `shell.ts`, `header.ts`, `journalFeed.ts`, `remote.ts` |
@@ -133,7 +133,6 @@ wins, and several rules rely on that. Don't move existing rules around.
 | `app.rs` | Window behaviour, tray, is the game running, launching the game |
 | `remote.rs` | Local web server for phones and second screens (pairing, state, actions) |
 | `ntfy.rs` | Wing missions shared through ntfy.sh (encrypted) |
-| `hailport.rs` | Link to Hailport, the voice assistant on the same PC (`hailport` feature; `hailport_off.rs` without it, for the portable exe). See [HAILPORT.md](HAILPORT.md) |
 | `update.rs` | Update check, download and install from GitHub releases |
 | `logs.rs` | Log files (standard and debug), with private data removed |
 | `picture_cache.rs` | Controller pictures of the Controls page, kept unchanged next to the logs folder |

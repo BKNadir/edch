@@ -36,8 +36,7 @@ list. If Prettier complains, run `npm run format`.
   journal; settings go through `state/store.ts` (saved in `localStorage` by the store). Small
   per-feature keys are fine when they follow the existing pattern (`edch.<name>`).
 - **No new dependency** (npm or Cargo) without the maintainer's agreement. The front end has none at
-  run time except the vendored i18next. `tungstenite` (Hailport link) is optional, behind the
-  `hailport` Cargo feature: the portable exe is built without it (`--no-default-features`).
+  run time except the vendored i18next.
 - **No private data in logs or anywhere it can leave the PC**: API keys, the remote access secret
   or QR code, the wing code, the Windows user name or home path, full IP addresses, the Wi-Fi name,
   typed text. Log through `platform/logger.ts` (front end) and `logs.rs` (backend), which redact;
@@ -53,9 +52,9 @@ list. If Prettier complains, run `npm run format`.
   `.github/workflows/build.yml` only.
 - **No Windows pop-ups** (message boxes, native dialogs): use the app's own dialogs (`ui/dialog.ts`),
   banners and notifications.
-- **No new network host, no change to the content security policy, no change to the wing, remote or
-  Hailport protocols** ([docs/HAILPORT.md](docs/HAILPORT.md)) without the maintainer's agreement.
-  Hosts the UI may reach are an allow-list in `src-tauri/src/http.rs`. Nothing may contact a server at start-up for users who didn't enable the
+- **No new network host, no change to the content security policy, no change to the wing or remote
+  protocols** without the maintainer's agreement. Hosts the UI may reach are an allow-list in
+  `src-tauri/src/http.rs`. Nothing may contact a server at start-up for users who didn't enable the
   feature.
 - **Don't push to `main`, publish a release, rename release files or cancel builds.** Only the
   maintainer decides. Work on a `prerelease/<version>` branch (see Releases).
@@ -139,6 +138,8 @@ the user can see are returned as codes and translated by the UI (`backend.<code>
   the release notes and the update banner.
 - A push to `prerelease/<version>` publishes a pre-release (`v<version>-pre.<run>`). Releases are
   published from `main` by the maintainer only (commit containing `[release]`).
+- Unfinished features wait on the `beta/features` branch (not built by CI, kept out of the
+  pre-releases) until beta builds exist. Today: the Hailport voice assistant link.
 
 ## Keeping this file current
 

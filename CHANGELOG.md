@@ -5,7 +5,6 @@ and EDCH shows it in the update banner.
 
 ## 0.10.12
 
-- Hailport (voice assistant): EDCH can be linked to Hailport on the same PC (Settings → General, off by default). By voice: open a page, copy the next system, plot a route, find the nearest material trader or service, count a material, sum up missions or colonisation, change what is shared; Hailport can announce dockings, jumps left, the end of a route, missions about to expire and finished construction sites. EDCH never tells it your commander name, your wing or your keys. Not in the portable version.
 - New share mode switch in the top bar (also on the Sync page): Normal, BGS or Invisible. BGS keeps your BGS work private: EDDN, EDSM and Inara no longer get the factions, their influence, states and conflicts, nor your missions, vouchers, trade or data sold (jumps, scans and markets are still shared). Invisible shares nothing at all. The mode stays as you set it after a restart, and switching drops what was still waiting to be sent. It only hides what you send: other players in the same system can still share its state.
 - Colonisation: new "To source" column (and total): what is still to buy or find once your hold and your carriers are delivered.
 - Colonisation: your squadron's carrier is shown and counted only when "Show the squadron carrier" is ticked (kept after a restart).
