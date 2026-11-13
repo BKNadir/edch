@@ -1656,8 +1656,9 @@
     "unreadable": "Não foi possível ler este link EDOMH (só builds do EDSY e do Coriolis são suportados)."
   },
   "discord": {
-    "addBot": "Adicionar o bot ao meu servidor do Discord",
-    "addBotHelp": "O Discord pede a permissão Gerenciar servidor nesse servidor. Depois crie um canal privado #edch-bgs e rode /bgs setup nele.",
+    "addBot": "Usar o bot padrão: adicioná-lo ao meu servidor do Discord",
+    "addBotHelp": "Adicionar o bot exige a permissão Gerenciar servidor nesse servidor. Depois crie um canal privado #edch-bgs e rode /bgs setup nele. Um esquadrão que queira sua própria cópia pode hospedá-la a partir do código no GitHub.",
+    "hostOwn": "Hospedar o seu próprio bot (GitHub)",
     "intro": "O bot do Discord EDCH reúne o trabalho de BGS do seu esquadrão no próprio servidor do Discord dele. Ligado, o EDCH envia a cada 15 minutos o que você fez pela facção do esquadrão, mesmo no modo BGS ou Invisível: só para este bot, que escreve no canal privado do seu esquadrão.",
     "key": "Sua chave",
     "keyHelp": "No Discord do seu esquadrão: /bgs link. Guarde-a só para você: ela envia relatórios em seu nome.",

@@ -4,7 +4,7 @@
 import { locale, t } from "../../platform/i18n.js";
 import { openUrl, trustBot } from "../../platform/bridge.js";
 import { botSync, sendBgsNow } from "../../features/bgs/botSync.js";
-import { botInviteUrl, readBotKey, SHARED_BOT } from "../../services/discordBot.js";
+import { BOT_SOURCE, readBotKey, SHARED_BOT, SHARED_BOT_INVITE } from "../../services/discordBot.js";
 import { dialog } from "../../ui/dialog.js";
 import { relTime } from "../../ui/format.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
@@ -168,7 +168,6 @@ export class SyncView implements View {
       placeholder: "edch1.…",
       onchange: (e: Event) => void this.setDiscordKey((e.target as HTMLInputElement).value.trim(), keyInput),
     }) as HTMLInputElement;
-    const invite = botInviteUrl();
     return h(
       "section.card",
       null,
@@ -183,13 +182,15 @@ export class SyncView implements View {
       ),
       h("label.field", null, h("span", null, t("discord.key")), keyInput, h("small", null, t("discord.keyHelp"))),
       this.discordStatus,
+      h("div.row", null, h("button.ghost", { onclick: () => void sendBgsNow(store) }, t("discord.sendNow"))),
+      // No bot on the squadron's server yet: the shared one, or the code to host one's own.
       h(
         "div.row",
         null,
-        h("button.ghost", { onclick: () => void sendBgsNow(store) }, t("discord.sendNow")),
-        invite ? h("button.inline-link", { onclick: () => openUrl(invite) }, t("discord.addBot")) : null,
+        h("button.inline-link", { onclick: () => openUrl(SHARED_BOT_INVITE) }, t("discord.addBot")),
+        h("button.inline-link", { onclick: () => openUrl(BOT_SOURCE) }, t("discord.hostOwn")),
       ),
-      invite ? h("p.sub", null, t("discord.addBotHelp")) : null,
+      h("p.sub", null, t("discord.addBotHelp")),
     );
   }
 

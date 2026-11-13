@@ -11,10 +11,12 @@ import { botFetch } from "../platform/bridge.js";
 /** The shared bot (EDCH-Discord hosted for every squadron). Same value as discord_bot.rs. */
 export const SHARED_BOT = "https://edch-discord.default-community.workers.dev";
 /**
- * The shared bot's Discord application, for the link that adds it to a server ("" until the
- * application exists: the link isn't shown).
+ * The link that adds the shared bot to a Discord server: the application's own install link
+ * (Discord asks for the Manage Server right there, scopes and permissions are set in the app).
  */
-export const SHARED_BOT_APPLICATION_ID = "";
+export const SHARED_BOT_INVITE = "https://discord.com/oauth2/authorize?client_id=1570896049889869915";
+/** The bot's code, for a squadron that hosts its own copy. */
+export const BOT_SOURCE = "https://github.com/BKNadir/edch-discord";
 
 /** What a key says (not checked: only the bot can check its signature). */
 export interface BotKey {
@@ -91,12 +93,4 @@ export async function botFaction(key: string): Promise<string> {
 export async function sendBotReport(key: string, report: unknown): Promise<number> {
   const answer = await call(key, "/v1/report", report);
   return typeof answer.accepted === "number" ? answer.accepted : 0;
-}
-
-/** The link that adds the shared bot to a Discord server (Discord asks for Manage Server there). */
-export function botInviteUrl(): string | null {
-  if (!SHARED_BOT_APPLICATION_ID) return null;
-  // See it, send, read history, manage and pin messages: what #edch-bgs needs.
-  const permissions = (1n << 10n) | (1n << 11n) | (1n << 13n) | (1n << 16n) | (1n << 51n);
-  return `https://discord.com/oauth2/authorize?client_id=${SHARED_BOT_APPLICATION_ID}&scope=bot%20applications.commands&permissions=${permissions}`;
 }
