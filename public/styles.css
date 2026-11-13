@@ -4342,6 +4342,18 @@ body.menu-editing .sidebar span {
 .bgs-table tr.bgs-attention td:first-child {
   box-shadow: inset 3px 0 0 var(--warn-text);
 }
+/* A cell's second line (control badge and distance, trend, forecast): kept on one line. */
+.bgs-table .bgs-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.bgs-table .bgs-line .badge {
+  margin: 0;
+}
 .bgs-tour {
   margin: 8px 0 0;
   padding-left: 22px;

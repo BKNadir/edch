@@ -2,7 +2,7 @@
 
 [English](README.md) · **Français** · [Deutsch](README.de.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [Русский](README.ru.md) · [Code signing policy (politique de signature)](CODE_SIGNING_POLICY.md)
 
-Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en temps réel et, pour chaque matériau d'ingénierie, te dit **où le trouver, avec de vrais systèmes cliquables autour de toi**.
+Compagnon léger pour **Elite Dangerous** (Windows et Linux, x64 et ARM). Il lit le journal du jeu en temps réel et, pour chaque matériau d'ingénierie, te dit **où le trouver, avec de vrais systèmes cliquables autour de toi**.
 
 ## ⚠️ À lire avant d'utiliser EDCH
 
@@ -12,7 +12,7 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 
 **EDCH ne fonctionnerait pas sans le travail des autres.** Les données, les traductions et les recherches viennent de projets créés et maintenus bénévolement par des membres de la communauté : Spansh, EDDN et EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDAssets, EDSY, Coriolis… Si EDCH t'est utile, pense à les remercier, à les soutenir ou à contribuer à leurs projets. Le détail est dans [Crédits](#crédits) et dans le fichier [NOTICE](NOTICE).
 
-![Fiche d'un matériau : échanges et systèmes en Boom/Expansion (données de démo)](docs/materials.png)
+![Les matériaux d'ingénierie, avec ce qu'il manque encore pour la wishlist (données de démo)](docs/materials.png)
 
 ## Ce qu'il fait
 
@@ -25,12 +25,12 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
   - Clic sur un système : il est copié, prêt à coller dans la carte galactique. Liens Spansh et Inara à côté.
 - **Trader de matériaux le plus proche** du bon type, avec des **suggestions d'échange** calculées sur ton stock (taux du jeu, en tenant compte de ce que ta wishlist réserve).
 - **Ingénierie** : toutes les modifications, effets expérimentaux, synthèses, courtiers technologiques et améliorations Odyssey, avec ce que tu possèdes déjà.
-- **Wishlist** : ajoute des modifications (grades, nombre de jets, quantité). Elle calcule ce qu'il manque et le meilleur échange pour le combler. Chaque ligne indique l'ingénieur connu le plus proche qui peut la faire, et une **tournée des ingénieurs** enchaîne les arrêts avec un itinéraire Spansh, les matériaux qui manquent à chaque arrêt et, en option, le prochain saut copié dès ton arrivée. Les lignes avancent toutes seules quand le jeu applique une modification.
-- **Ingénieurs** : statut et rang lus dans le journal, système copiable, distance, et conditions de déblocage cochées automatiquement quand le journal permet de les vérifier (casier Odyssey, soute, matériaux).
+- **Wishlist** : ajoute des modifications (grades, nombre de jets, quantité). Elle calcule ce qu'il manque et le meilleur échange pour le combler. Chaque ligne indique l'ingénieur connu le plus proche qui peut la faire. Les lignes que ton vaisseau a déjà sont marquées comme faites, et les lignes avancent toutes seules quand le jeu applique une modification. Un bouton **Simple / Avancé** : Avancé montre chaque ligne et les matériaux nécessaires ; Simple montre seulement la **tournée des ingénieurs**, les ingénieurs à visiter (le plus proche d'abord) avec les matériaux qui manquent encore à chaque arrêt. Clique sur un ingénieur et son système est copié pour la carte de la galaxie ; une fois l'ingénierie faite chez lui, le système suivant est copié tout seul. **Exporter mon vaisseau vers EDSY** (ou Coriolis) ouvre ton vaisseau actuel sur le site de build.
+- **Ingénieurs** : statut et rang lus dans le journal, système copiable, distance, et conditions de déblocage cochées automatiquement quand le journal permet de les vérifier (casier Odyssey, soute, matériaux). Le jeu complète les données d'EDCH : chaque ingénierie du journal (qui a fait quelle modification, à quel grade) est retenue.
 - **Import de build** : colle ou choisis un export **EDSY** ou **Coriolis** (SLEF ou Loadout JSON). Chaque module ingénié et son effet expérimental vont dans la wishlist. Tu peux aussi repartir de ton vaisseau actuel.
-- **Recherche façon Inara** : où acheter ou vendre une marchandise (par prix ou par distance), un vaisseau, un module (classe et note) ou un service (Interstellar Factors, courtier technologique, trader…) autour de toi.
+- **Recherche façon Inara** : où acheter ou vendre une marchandise (par prix ou par distance), un vaisseau, un module (classe et note) ou un service (Interstellar Factors, courtier technologique, trader…) autour de toi. Un onglet **Faction** trouve les systèmes où une faction mineure est présente ou au contrôle, selon son état. Chaque station affiche son type en icône (Coriolis, Orbis, avant-poste, carrier, port planétaire…).
 - **Navigation** : portée de saut de ton vaisseau (vide, plein, chargé, maintenant, cargaison simulée), itinéraire avec boost neutron via Spansh, et Fleet Carrier (sauts, tritium et durée, en estimation rapide ou en plan Spansh détaillé avec ravitaillements).
-- **Commandes & contrôleurs** : lit tes raccourcis (préréglage actif, y compris des préréglages différents pour le vaisseau, le SRV et à pied) et dessine chaque périphérique. Le clavier est dessiné touche par touche (QWERTY, AZERTY ou QWERTZ) et la manette Xbox ou PlayStation avec des repères numérotés. Les HOTAS, joysticks et manettes reconnus (environ 60 modèles : VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) sont affichés sur la photo du modèle, avec l'action écrite dans la case de chaque bouton. Les gabarits viennent d'EDRefCard et sont chargés depuis son dépôt GitHub. Pour un modèle non reconnu, tu choisis le gabarit le plus proche ; sinon, un schéma simple en axes, chapeaux et boutons s'affiche. Chaque commande a sa légende et une couleur par mode, avec des filtres Vaisseau / SRV / À pied, une recherche et une fiche imprimable. Choisis ton clavier (AZERTY, QWERTY ou QWERTZ) et son format (ISO ou ANSI).
+- **Commandes & contrôleurs** : lit tes raccourcis (préréglage actif, y compris des préréglages différents pour le vaisseau, le SRV et à pied) et dessine chaque périphérique. Le clavier est dessiné touche par touche (QWERTY, AZERTY ou QWERTZ) et la manette Xbox ou PlayStation avec des repères numérotés. Les HOTAS, joysticks et manettes reconnus (environ 60 modèles : VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) sont affichés sur la photo du modèle, avec l'action écrite dans la case de chaque bouton. Les gabarits viennent d'EDRefCard et sont chargés depuis son dépôt GitHub. Pour un modèle non reconnu, tu choisis le gabarit le plus proche ; sinon, un schéma simple en axes, chapeaux et boutons s'affiche. Chaque commande a sa légende et une couleur par mode, avec des filtres Vaisseau / SRV / À pied, une recherche et une fiche imprimable. Choisis ton clavier (AZERTY, QWERTY ou QWERTZ) et son format (ISO ou ANSI). **Configurer** fait une copie de tes préréglages nommée `…_EDCH` (ceux du jeu ne sont jamais modifiés) et te laisse changer une commande en cliquant dessus sur le dessin ou en l'actionnant sur ton périphérique ; appuie sur n'importe quel bouton ou touche et la page montre ce qu'il fait. Les préréglages par défaut du jeu sont affichés aussi.
 - **Sauvegarde de la configuration** : exporte tes raccourcis (et tes réglages graphiques) en zip dans Documents\EDCH, et les restaure en un clic. Ta configuration actuelle est sauvegardée automatiquement avant chaque import.
 - **Missions** : chaque mission en cours avec son objectif, sa destination, le temps restant et sa progression ; les missions de massacre empilées avec les éliminations qu'il reste par faction donneuse.
 - Pour les missions d'approvisionnement et de minage, où se procurer la marchandise : stations classées selon le prix, la distance et la fraîcheur des données du marché, avec le bénéfice estimé, et les points chauds les plus proches pour les missions de minage.
@@ -39,36 +39,42 @@ Compagnon léger pour **Elite Dangerous** (Windows). Il lit le journal du jeu en
 - **Objectifs communautaires** : ta contribution, ta tranche de récompense et le palier des objectifs que tu as rejoints ; tous les objectifs en cours via Inara avec ta clé API.
 - **Exploration** : valeur des données cartographiques non vendues, aide aux prélèvements d'exobiologie (distance aux prélèvements précédents comparée à la portée de la colonie), espèces possibles et valeurs pour chaque planète à signaux biologiques, analyses non vendues.
 - **Minage** : résultats des prospecteurs en direct avec alertes pour tes cibles et les cœurs, tonnage de la session ; une recherche façon Merit Miner pour savoir où miner et vendre dans les systèmes de ta puissance.
-- **Powerplay et session** : mérites de la semaine et de la session, état Powerplay du système actuel ; crédits gagnés par activité depuis ta connexion.
+- **Powerplay et session** : mérites de la semaine et de la session, état Powerplay du système actuel ; crédits gagnés par activité depuis ta connexion. Un bouton **Remettre les compteurs à zéro** relance les compteurs de session, de minage ou de Powerplay.
+- **Thargoïdes** : les Thargoïdes que tu as abattus par type de vaisseau (éclaireurs, Cyclope, Basilic, Méduse, Hydre…), pendant la session et sur les 60 derniers jours de journal, avec leurs obligations, et les zones de conflit AX où tu es entré.
+- **BGS** : suis une faction mineure. Ses systèmes avec l'influence, l'écart avec la rivale la plus proche, les états et des alertes (conflit, risque de retraite, rivale proche, expansion possible, données anciennes), que faire dans chaque système, et la **tendance** : la variation moyenne d'influence par jour et l'influence attendue dans 3 jours, avec une alerte « En danger d'ici 3 jours ». Ce que tu as fait pour elle depuis le tick BGS, sur 24 h ou 7 jours (missions et leur influence, primes, obligations de combat, commerce, cartographie, et ce qui a compté contre elle), et une tournée de rafraîchissement des systèmes aux données anciennes. Ton journal est lu en premier ; « Mettre à jour » charge les systèmes de la faction depuis Spansh et leur historique d'influence depuis EDSM (gardé 7 jours).
 - **Accès distant** : ouvre EDCH sur ton téléphone ou ta tablette en scannant un QR code. Un serveur local (désactivé par défaut) sert l'appli sur ton réseau. Seuls les appareils qui ont scanné le QR code y accèdent : l'IP du PC ne suffit pas. « Nouveau code » déconnecte tous les appareils. L'interface s'adapte au téléphone (navigation en bas, panneaux plein écran), et les modifications de la wishlist faites sur le téléphone reviennent sur le PC. Il peut aussi ouvrir une page seule dans un navigateur, pour un 2e écran, et un mode plein écran n'affiche que la page en cours.
 - **Thèmes** : thèmes prêts à l'emploi (dont un thème clair « Jour »), couleurs libres et mode OLED. Les couleurs trop claires ou trop foncées pour être lues sont ajustées automatiquement.
+- **Interface** : le menu est groupé selon l'usage en jeu et se réorganise (glisse les pages, cache-les, choisis celles que montre le téléphone). **Tous les tableaux se trient** : clique sur le titre d'une colonne, encore pour inverser l'ordre, une troisième fois pour l'ordre habituel.
 - **Mises à jour automatiques** : EDCH vérifie sur GitHub si une nouvelle version existe, affiche un bandeau, télécharge l'installateur à ta demande (somme de contrôle vérifiée) et se relance pour terminer. Désactivable dans les Paramètres.
-- **Synchro façon EDMC** : envoi en direct vers **EDDN** (marchés, équipements, chantiers navals, sauts, scans, routes), **EDSM** et **Inara** (avec ta clé API). Les règles d'EDDN sont respectées : données personnelles retirées, position recoupée, aucun renvoi d'un message refusé, rien de l'historique.
+- **Synchro façon EDMC** : envoi en direct vers **EDDN** (marchés, équipements, chantiers navals, sauts, scans, routes), **EDSM** et **Inara** (avec ta clé API). Les règles d'EDDN sont respectées : données personnelles retirées, position recoupée, aucun renvoi d'un message refusé, rien de l'historique. Un sélecteur de **mode de partage** dans la barre du haut : **Normal**, **BGS** (factions, influence, états et conflits, tes missions et leurs récompenses restent privés : rien n'en part vers EDDN, EDSM ou Inara) ou **Invisible** (rien n'est envoyé du tout).
 
 ![Le clavier dessiné en AZERTY ISO, avec ses raccourcis (raccourcis de démo)](docs/controls.png)
 
 <p>
-<img src="docs/wishlist.png" width="49%" alt="La wishlist avec la tournée des ingénieurs">
+<img src="docs/wishlist.png" width="49%" alt="La wishlist en mode Avancé : chaque ligne et les matériaux nécessaires">
+<img src="docs/phone.png" width="23%" alt="La tournée des ingénieurs (mode Simple) sur un téléphone, par l'accès distant">
+</p>
+<p>
+<img src="docs/bgs.png" width="49%" alt="La page BGS : les systèmes d'une faction, alertes, tendance et prévision (données de démo)">
 <img src="docs/colonisation.png" width="49%" alt="Colonisation : soutes et chantier de construction">
 </p>
 <p>
 <img src="docs/day-theme.png" width="68%" alt="La page Ingénieurs avec le thème clair « Jour »">
-<img src="docs/phone.png" width="29%" alt="La wishlist sur un téléphone (accès distant)">
 </p>
 
 ## Données et vie privée
 
 EDCH lit le journal du jeu sur ton PC. Voici tout ce qui en sort, et vers où :
 
-- **Spansh** : tes recherches (système, matériau, marchandise…) et ta position comme point de départ.
+- **Spansh** : tes recherches (système, matériau, marchandise, faction mineure…) et ta position comme point de départ.
 - **EDDN** (activé par défaut, comme EDMC ; désactivable dans Synchro) : marchés, équipement, chantiers, sauts et scans, sans tes données personnelles, comme EDDN l'exige.
-- **EDSM et Inara** : rien tant que tu n'as pas saisi ta propre clé API dans Synchro. Tes clés restent sur ton PC.
+- **EDSM et Inara** : rien sur toi tant que tu n'as pas saisi ta propre clé API dans Synchro ; tes clés restent sur ton PC. EDCH lit aussi les données publiques d'EDSM quand tu le demandes (les corps d'un système sur la page Exploration, l'historique d'influence d'une faction sur la page BGS) : seul le nom du système est envoyé.
 - **ntfy.sh** (seulement si tu actives le partage d'escadrille) : tes missions d'escadrille, chiffrées avec le code de l'escadrille avant de quitter ton PC.
 - **tick.edcd.io** (seulement quand la page BGS est affichée, avec une faction suivie) : demande l'heure du dernier tick BGS. Rien n'est envoyé avec.
 - **GitHub** : seulement pour vérifier si une nouvelle version existe (désactivable dans les Paramètres).
 - **Accès distant** : reste sur ton réseau local ; désactivé par défaut et protégé par le QR code.
 
-Rien d'autre n'est collecté ni envoyé. Tes réglages, clés et wishlist sont stockés dans `%LOCALAPPDATA%\EDCompanionHelper`.
+Rien d'autre n'est collecté ni envoyé. Tes réglages, clés, wishlist et l'historique de la page BGS (7 jours) sont stockés dans `%LOCALAPPDATA%\EDCompanionHelper`.
 
 **Les fichiers du jeu** : EDCH lit le journal et les fichiers que le jeu écrit à côté (`Status.json`, `Cargo.json`, `Market.json`…), et tes fichiers de commandes (`Options\Bindings`) pour les afficher, les exporter et les importer ; il n'écrit un fichier de commandes que pour ses propres préréglages (nommés `…_EDCH`), jamais ceux du jeu. Dans le dossier d'installation du jeu, les **seuls** fichiers qu'EDCH touche sont les préréglages de commandes par défaut (`ControlSchemes\*.binds`), **en lecture seule**, pour les afficher sur la page Commandes et les copier. Rien d'autre du jeu n'est lu ni modifié.
 
@@ -80,7 +86,7 @@ Pour ajouter ou corriger une traduction, modifie `public/locales/<langue>.json` 
 
 ## Installer
 
-Télécharge l'installateur (`.exe` ou `.msi`) dans les [Releases](../../releases), ou la version portable `EDCH_<version>_x64-portable.exe` : rien à installer, lance-la depuis n'importe quel dossier (elle te prévient quand une nouvelle version sort et ouvre la page de la release). Windows 10/11 a déjà WebView2.
+Télécharge l'installateur (`.exe` ou `.msi`) dans les [Releases](../../releases), ou la version portable `EDCH_<version>_x64-portable.exe` : rien à installer, lance-la depuis n'importe quel dossier (elle te prévient quand une nouvelle version sort et ouvre la page de la release). Windows 10/11 a déjà WebView2. Windows sur ARM a son propre installateur et son exe portable (`arm64`) ; Linux sur ARM ses `.AppImage`, `.deb` et `.rpm` (`aarch64`). La mise à jour automatique choisit la version de ton processeur.
 
 **Linux** (Steam/Proton, Steam Deck compris) : chaque release contient aussi un `.AppImage` (toutes distributions : rends-le exécutable et lance-le), un `.deb` (Debian, Ubuntu, Mint, Pop!_OS), un `.rpm` (Fedora, openSUSE), un `PKGBUILD` pour Arch Linux et dérivées (`makepkg -si` dans le dossier où tu l'as enregistré) et un `.flatpak` expérimental (`flatpak install EDCH_….flatpak`). EDCH trouve tout seul le journal dans le dossier Proton de Steam. Sur Linux, les mises à jour ne s'installent pas automatiquement : EDCH ouvre la page de la release.
 
@@ -92,7 +98,7 @@ Au premier lancement, le dossier du journal est détecté tout seul (`%USERPROFI
 
 ## Développer
 
-Prérequis : Node 20+, Rust stable, et les [prérequis Tauri](https://tauri.app/start/prerequisites/) pour Windows.
+Prérequis : Node 20+, Rust stable, et les [prérequis Tauri](https://tauri.app/start/prerequisites/) pour ton système.
 
 ```bash
 npm install
@@ -107,13 +113,14 @@ Structure :
 - `src/` : interface TypeScript sans framework, en couches (platform, game, state, ui, services, features, views, app) ; `src-tauri/` : backend Rust (journal, HTTP, fichiers d'options, serveur d'accès distant, mises à jour), sans logique de jeu. Voir [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) et [CONTRIBUTING.md](CONTRIBUTING.md) (en anglais).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py` : régénèrent les données de `public/` (voir NOTICE).
 
-Un build Windows se lance à chaque push sur `main`. Pour publier une version, pousse un tag comme `v0.10.13` : la Release est publiée et les copies installées proposent la mise à jour.
+Chaque push sur `main` ou sur une branche `prerelease/<version>` construit toutes les plateformes ; un push sur `prerelease/<version>` publie aussi une pré-release (proposée à ceux qui ont coché « Proposer aussi les pré-releases »). Pour publier une version, pousse un tag comme `v0.10.13` : la Release est publiée et les copies installées proposent la mise à jour.
 
 ## Feuille de route
 
 - Connexion Frontier (cAPI, OAuth) pour la flotte, le stock et le Fleet Carrier : il faut un Client ID Frontier.
 - EDDN : schémas restants (codexentry, approachsettlement, fssbodysignals, fsssignaldiscovered…).
 - Itinéraire de farm optimisé pour la wishlist.
+- BGS : partager le travail BGS avec ton escadron par un bot (à activer, désactivé par défaut).
 
 ## Soutenir EDCH
 
@@ -121,4 +128,4 @@ EDCH est gratuit, sans publicité, et le restera. Il est conçu, testé et maint
 
 ## Crédits
 
-Données : EDCD/FDevIDs et msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Noms du jeu traduits : Elite Dangerous Almanac (MIT) et EDEngineer. Noms des commandes et gabarits des périphériques : EDRefCard (Richard Buckle, Jason Bramley — edrefcard2, MIT). Icônes des stations et animation de chargement : EDAssets (SpyTec, MIT). Recherches : Spansh (EDDN). Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel et non commercial. Détails dans [NOTICE](NOTICE).
+Données : EDCD/FDevIDs et msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Noms du jeu traduits : Elite Dangerous Almanac (MIT) et EDEngineer. Noms des commandes et gabarits des périphériques : EDRefCard (Richard Buckle, Jason Bramley — edrefcard2, MIT). Icônes des stations et animation de chargement : EDAssets (SpyTec, MIT). Recherches : Spansh (EDDN). Historique d'influence des factions mineures : EDSM. Tick BGS : le détecteur de tick d'EDCD. La page BGS est partie du prototype de Cyberpunk Philou. Elite Dangerous est une marque de Frontier Developments plc. Outil communautaire non officiel et non commercial. Détails dans [NOTICE](NOTICE).

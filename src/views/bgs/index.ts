@@ -415,13 +415,13 @@ export class BgsView implements View {
             "div",
             { title: t("bgs.trendHelp", { days: FORECAST_DAYS }) },
             h(
-              `span.${row.trend > 0 ? "ok" : row.trend < 0 ? "bad" : "sub"}`,
+              `div.bgs-line.${row.trend > 0 ? "ok" : row.trend < 0 ? "bad" : "sub"}`,
               null,
               `${row.trend > 0 ? "▲" : row.trend < 0 ? "▼" : "="} ${t("bgs.perDay", { value: Math.abs(row.trend).toFixed(1) })}`,
             ),
             row.forecast === undefined
               ? null
-              : h("small.sub", null, ` → ${percent(row.forecast)} ${t("bgs.inDays", { days: FORECAST_DAYS })}`),
+              : h("div.bgs-line.sub", null, `→ ${percent(row.forecast)} ${t("bgs.inDays", { days: FORECAST_DAYS })}`),
           );
     const states = (row: BgsSystemRow) =>
       [...new Set([row.state, ...row.active].filter((s) => s && s !== "None"))].map((s) => gameName(s));
@@ -465,8 +465,16 @@ export class BgsView implements View {
                       "td",
                       null,
                       systemLink(row.system),
-                      row.controls ? h("span.badge.hit", { title: t("bgs.controlsHelp") }, t("bgs.controls")) : null,
-                      row.distance !== undefined ? h("small.sub", null, ` ${fmtLy(row.distance)}`) : null,
+                      row.controls || row.distance !== undefined
+                        ? h(
+                            "div.bgs-line",
+                            null,
+                            row.controls
+                              ? h("span.badge.hit", { title: t("bgs.controlsHelp") }, t("bgs.controls"))
+                              : null,
+                            row.distance !== undefined ? h("small.sub", null, fmtLy(row.distance)) : null,
+                          )
+                        : null,
                     ),
                     h("td", null, percent(row.influence), trend(row)),
                     h(
@@ -480,9 +488,9 @@ export class BgsView implements View {
                             row.rival.forecastGap === undefined
                               ? null
                               : h(
-                                  `small.${row.rival.forecastGap <= 0 ? "bad" : "sub"}`,
+                                  `div.bgs-line.${row.rival.forecastGap <= 0 ? "bad" : "sub"}`,
                                   null,
-                                  ` → ${row.rival.forecastGap >= 0 ? "+" : ""}${row.rival.forecastGap.toFixed(1)} ${t("bgs.inDays", { days: FORECAST_DAYS })}`,
+                                  `→ ${row.rival.forecastGap >= 0 ? "+" : ""}${row.rival.forecastGap.toFixed(1)} ${t("bgs.inDays", { days: FORECAST_DAYS })}`,
                                 ),
                           )
                         : "—",
@@ -503,9 +511,9 @@ export class BgsView implements View {
                       { "data-sort": row.dataAt ?? "" },
                       row.dataAt ? relTime(row.dataAt) : "?",
                       h(
-                        "small.sub",
+                        "div.bgs-line.sub",
                         null,
-                        ` ${row.source === "journal" ? t("bgs.sourceJournal") : row.source === "edsm" ? "EDSM" : "Spansh"}`,
+                        `${row.source === "journal" ? t("bgs.sourceJournal") : row.source === "edsm" ? "EDSM" : "Spansh"}`,
                       ),
                       tick && row.dataAt && row.dataAt < tick
                         ? h("span.badge.muted", { title: t("bgs.beforeTickHelp") }, t("bgs.beforeTick"))

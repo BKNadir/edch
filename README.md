@@ -2,7 +2,7 @@
 
 **English** · [Français](README.fr.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [Русский](README.ru.md) · [Code signing policy](CODE_SIGNING_POLICY.md)
 
-A lightweight companion for **Elite Dangerous** (Windows). It reads the game journal in real time and, for every engineering material, tells you **where to find it, with real clickable systems around you**.
+A lightweight companion for **Elite Dangerous** (Windows and Linux, x64 and ARM). It reads the game journal in real time and, for every engineering material, tells you **where to find it, with real clickable systems around you**.
 
 ## ⚠️ Read this first
 
@@ -12,7 +12,7 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
 
 **EDCH would not work without other people's work.** Its data, translations and searches come from projects built and maintained by volunteers in the community: Spansh, EDDN and EDCD, EDSM, Inara, EDEngineer, Odyssey Materials Helper, Elite Dangerous Almanac, EDRefCard, EDAssets, EDSY, Coriolis… If EDCH is useful to you, please thank them, support them or contribute to their projects. Details are in [Credits](#credits) and in [NOTICE](NOTICE).
 
-![A material's page: trades and systems in Boom/Expansion (demo data)](docs/materials.png)
+![Engineering materials, with what the wishlist still needs (demo data)](docs/materials.png)
 
 ## What it does
 
@@ -25,12 +25,12 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
   - Click a system: it is copied, ready to paste into the galaxy map. Spansh and Inara links next to it.
 - **Nearest material trader** of the right type, with **trade suggestions** computed from your stock (game rates, taking into account what your wishlist reserves).
 - **Engineering**: every modification, experimental effect, synthesis, technology broker unlock and Odyssey upgrade, with what you already own.
-- **Wishlist**: add modifications (grades, number of rolls, quantity). It works out what is missing and the best trade to cover it. Each line shows the nearest engineer you know who can do it, and an **engineer tour** chains the stops with a Spansh route, the materials still missing at each stop and, optionally, the next jump copied as soon as you arrive. Lines move on by themselves when the game applies a modification.
-- **Engineers**: status and rank read from the journal, copyable system, distance, and unlock conditions ticked automatically when the journal can check them (Odyssey locker, cargo, materials).
+- **Wishlist**: add modifications (grades, number of rolls, quantity). It works out what is missing and the best trade to cover it. Each line shows the nearest engineer you know who can do it. Lines your ship already has show as done, and lines move on by themselves when the game applies a modification. A **Simple / Advanced** switch: Advanced shows every line and the materials needed; Simple shows only the **engineer tour**, the engineers to visit (nearest first) with the materials still missing at each stop. Click an engineer and their system is copied for the galaxy map; once the engineering is done there, the next system is copied by itself. **Export my ship to EDSY** (or Coriolis) opens your current ship in the build site.
+- **Engineers**: status and rank read from the journal, copyable system, distance, and unlock conditions ticked automatically when the journal can check them (Odyssey locker, cargo, materials). The game completes EDCH's data: each engineering in the journal (who did which modification, at which grade) is remembered.
 - **Build import**: paste or pick an **EDSY** or **Coriolis** export (SLEF or Loadout JSON). Every engineered module and its experimental effect goes into the wishlist. You can also start from your current ship.
-- **Inara-style search**: where to buy or sell a commodity (by price or distance), a ship, a module (class and rating) or a service (Interstellar Factors, technology broker, material trader…) around you.
+- **Inara-style search**: where to buy or sell a commodity (by price or distance), a ship, a module (class and rating) or a service (Interstellar Factors, technology broker, material trader…) around you. A **Faction** tab finds the systems where a minor faction is present or in control, by faction state. Each station shows its type as an icon (Coriolis, Orbis, outpost, carrier, planetary port…).
 - **Navigation**: your ship's jump range (empty, full, laden, right now, simulated cargo), neutron-boosted route via Spansh, and fleet carrier (jumps, tritium and time, as a quick estimate or a detailed Spansh plan with restock stops).
-- **Controls & devices**: reads your bindings (active preset, including different presets for ship, SRV and on foot) and draws each device. The keyboard is drawn key by key (QWERTY, AZERTY or QWERTZ) and the Xbox or PlayStation pad with numbered markers. Recognised HOTAS, joysticks and pads (about 60 models: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) are shown on the model's picture, with the action written in each button's box. Templates come from EDRefCard and are loaded from its GitHub repository. For an unrecognised model you pick the closest template; otherwise a simple axes / hats / buttons diagram is shown. Every control has its legend and a colour per mode, with Ship / SRV / On foot filters, a search and a printable sheet. Pick your keyboard (AZERTY, QWERTY or QWERTZ) and its format (ISO or ANSI).
+- **Controls & devices**: reads your bindings (active preset, including different presets for ship, SRV and on foot) and draws each device. The keyboard is drawn key by key (QWERTY, AZERTY or QWERTZ) and the Xbox or PlayStation pad with numbered markers. Recognised HOTAS, joysticks and pads (about 60 models: VKB, Virpil, Thrustmaster, Saitek/Logitech, CH…) are shown on the model's picture, with the action written in each button's box. Templates come from EDRefCard and are loaded from its GitHub repository. For an unrecognised model you pick the closest template; otherwise a simple axes / hats / buttons diagram is shown. Every control has its legend and a colour per mode, with Ship / SRV / On foot filters, a search and a printable sheet. Pick your keyboard (AZERTY, QWERTY or QWERTZ) and its format (ISO or ANSI). **Configure** makes a copy of your presets named `…_EDCH` (the game's own are never changed) and lets you rebind a control by clicking it on the drawing or pressing it on your device; press any button or key and the page shows what it does. The game's default presets are shown too.
 - **Configuration backup**: exports your bindings (and graphics settings) to a zip in Documents\EDCH and restores them in one click. Your current configuration is backed up automatically before every import.
 - **Missions**: every active mission with its objective, destination, time left and progress; stacked massacre missions with the kills each issuing faction still needs.
 - For sourcing and mining missions, where to get the goods: stations ranked on price, distance and freshness of the market data, with the estimated profit, and the nearest hotspots for mining missions.
@@ -39,36 +39,42 @@ A lightweight companion for **Elite Dangerous** (Windows). It reads the game jou
 - **Community goals**: your contribution, reward band and tier for the goals you joined; all current goals through Inara with your API key.
 - **Exploration**: value of unsold cartographic data, exobiology sampling help (distance from the previous samples against the colony range), possible species and values for each planet with biological signals, unsold analyses.
 - **Mining**: live prospector results with alerts for your targets and motherlodes, session tonnage; a Merit Miner-style search for where to mine and sell in your power's systems.
-- **Powerplay and session**: merits this week and this session, current system's Powerplay state; credits earned by activity since you logged in.
+- **Powerplay and session**: merits this week and this session, current system's Powerplay state; credits earned by activity since you logged in. A **Reset counters** button starts the session, mining or Powerplay counters again.
+- **Thargoids**: the Thargoids you killed by ship type (scouts, Cyclops, Basilisk, Medusa, Hydra…), this session and over the last 60 days of journal, with their bonds, and the AX conflict zones you entered.
+- **BGS**: follow a minor faction. Its systems with influence, the gap to the closest rival, states and alerts (conflict, retreat risk, rival close, expansion possible, old data), what to do in each system, and the **trend**: the average change of influence per day and the influence expected in 3 days, with an "at risk within 3 days" alert. What you did for it since the BGS tick, over 24 hours or 7 days (missions and their influence, bounties, combat bonds, trade, cartography, and what counted against it), and a refresh tour of the systems whose data is old. Your journal is read first; "Update" loads the faction's systems from Spansh and their influence history from EDSM (kept 7 days).
 - **Remote access**: open EDCH on your phone or tablet by scanning a QR code. A local server (off by default) serves the app on your network; only devices that scanned the QR code are let in, because the PC's IP alone isn't enough. "New code" disconnects every device. The interface adapts to phones (bottom navigation, full-screen panels), and wishlist edits on the phone sync back to the PC. It can also open one page alone in a browser, for a second screen, and a full-screen mode shows only the current page.
 - **Themes**: ready-made themes (including a light "Day" theme), your own colours and an OLED mode. Colours too light or too dark to read are adjusted automatically.
+- **Interface**: the menu is grouped by use in game and can be reordered (drag pages, hide them, choose which ones the phone shows). **Every table can be sorted**: click a column title, again to reverse the order, a third time for the usual order.
 - **Automatic updates**: EDCH checks GitHub for a new release, shows a banner, downloads the installer on request (checksum verified) and restarts itself to finish. Can be turned off in Settings.
-- **EDMC-style sync**: live uploads to **EDDN** (markets, outfitting, shipyards, jumps, scans, routes), **EDSM** and **Inara** (with your API key). EDDN's rules are followed: personal data removed, location cross-checked, a rejected message is never resent, nothing from your history.
+- **EDMC-style sync**: live uploads to **EDDN** (markets, outfitting, shipyards, jumps, scans, routes), **EDSM** and **Inara** (with your API key). EDDN's rules are followed: personal data removed, location cross-checked, a rejected message is never resent, nothing from your history. A **share mode** switch in the top bar: **Normal**, **BGS** (factions, influence, states and conflicts, your missions and their rewards stay private: nothing about them goes to EDDN, EDSM or Inara) or **Invisible** (nothing is sent at all).
 
 ![The keyboard drawn as AZERTY ISO, with its bindings (demo bindings)](docs/controls.png)
 
 <p>
-<img src="docs/wishlist.png" width="49%" alt="The wishlist with the engineer tour">
+<img src="docs/wishlist.png" width="49%" alt="The wishlist in Advanced mode: each line and the materials needed">
+<img src="docs/phone.png" width="23%" alt="The engineer tour (Simple mode) on a phone, through remote access">
+</p>
+<p>
+<img src="docs/bgs.png" width="49%" alt="The BGS page: a faction's systems, alerts, trend and forecast (demo data)">
 <img src="docs/colonisation.png" width="49%" alt="Colonisation: holds and a construction site">
 </p>
 <p>
 <img src="docs/day-theme.png" width="68%" alt="The Engineers page in the light Day theme">
-<img src="docs/phone.png" width="29%" alt="The wishlist on a phone (remote access)">
 </p>
 
 ## Data and privacy
 
 EDCH reads your game journal on your PC. Here is everything that leaves it, and where to:
 
-- **Spansh**: your searches (system, material, commodity…) and your position as their starting point.
+- **Spansh**: your searches (system, material, commodity, minor faction…) and your position as their starting point.
 - **EDDN** (on by default, like EDMC; can be turned off in Sync): market, outfitting, shipyard, jump and scan data, with your personal details removed, as EDDN requires.
-- **EDSM and Inara**: nothing unless you enter your own API key in Sync. Your keys stay on your PC.
+- **EDSM and Inara**: nothing about you unless you enter your own API key in Sync; your keys stay on your PC. EDCH also reads EDSM's public data when you ask for it (a system's bodies on the Exploration page, a faction's influence history on the BGS page): only the system's name is sent.
 - **ntfy.sh** (only if you enable wing sharing): your wing missions, encrypted with the wing code before leaving your PC.
 - **tick.edcd.io** (only while the BGS page is shown, with a faction followed): asks the time of the last BGS tick. Nothing is sent with it.
 - **GitHub**: only to check whether a new version exists (can be turned off in Settings).
 - **Remote access**: stays on your local network; off by default and protected by the QR code.
 
-Nothing else is collected or sent. Your settings, keys and wishlist are stored in `%LOCALAPPDATA%\EDCompanionHelper`.
+Nothing else is collected or sent. Your settings, keys, wishlist and the BGS page's history (7 days) are stored in `%LOCALAPPDATA%\EDCompanionHelper`.
 
 **The game's files**: EDCH reads the journal and the files the game writes next to it (`Status.json`, `Cargo.json`, `Market.json`…), and your control files (`Options\Bindings`) to show, export and import them; it writes a control file only for its own presets (named `…_EDCH`), never the game's. In the game's installation folder, the **only** files EDCH touches are the default control presets (`ControlSchemes\*.binds`), **read-only**, to show them on the Controls page and copy them. Nothing else of the game is read or changed.
 
@@ -80,7 +86,7 @@ To add or fix a translation, edit `public/locales/<language>.json` (English is t
 
 ## Install
 
-Download the installer (`.exe` or `.msi`) from [Releases](../../releases), or the portable version `EDCH_<version>_x64-portable.exe`: nothing to install, run it from any folder (it tells you when a new version is out and opens the release page). Windows 10/11 already has WebView2.
+Download the installer (`.exe` or `.msi`) from [Releases](../../releases), or the portable version `EDCH_<version>_x64-portable.exe`: nothing to install, run it from any folder (it tells you when a new version is out and opens the release page). Windows 10/11 already has WebView2. Windows on ARM has its own installer and portable exe (`arm64`); Linux on ARM its `.AppImage`, `.deb` and `.rpm` (`aarch64`). The automatic update picks the build of your processor.
 
 **Linux** (Steam/Proton, Steam Deck included): each release also has an `.AppImage` (any distribution: make it executable and run it), a `.deb` (Debian, Ubuntu, Mint, Pop!_OS), an `.rpm` (Fedora, openSUSE), a `PKGBUILD` for Arch Linux and derivatives (`makepkg -si` in the folder where you saved it), and an experimental `.flatpak` (`flatpak install EDCH_….flatpak`). EDCH finds the journal in Steam's Proton folder by itself. Updates aren't installed automatically on Linux: EDCH opens the release page.
 
@@ -92,7 +98,7 @@ On first launch the journal folder is detected automatically (`%USERPROFILE%\Sav
 
 ## Development
 
-Requirements: Node 20+, stable Rust, and the [Tauri prerequisites](https://tauri.app/start/prerequisites/) for Windows.
+Requirements: Node 20+, stable Rust, and the [Tauri prerequisites](https://tauri.app/start/prerequisites/) for your system.
 
 ```bash
 npm install
@@ -107,13 +113,14 @@ Layout:
 - `src/`: framework-free TypeScript UI, in layers (platform, game, state, ui, services, features, views, app); `src-tauri/`: Rust backend (journal, HTTP, option files, remote access server, updates), with no game logic. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-A Windows build runs on every push to `main`. To publish a version, push a tag such as `v0.10.13` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
+Every push to `main` or to a `prerelease/<version>` branch builds every platform; a push to `prerelease/<version>` also publishes a pre-release (offered to those who ticked "Also offer pre-releases"). To publish a version, push a tag such as `v0.10.13` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
 
 ## Roadmap
 
 - Frontier login (cAPI, OAuth) for fleet, stock and fleet carrier: needs a Frontier Client ID.
 - EDDN: remaining schemas (codexentry, approachsettlement, fssbodysignals, fsssignaldiscovered…).
 - Optimised farming route for the wishlist.
+- BGS: share the BGS work with your squadron through a bot (opt-in, off by default).
 
 ## Support EDCH
 
@@ -121,4 +128,4 @@ EDCH is free, without ads, and will stay that way. It is designed, tested and ma
 
 ## Credits
 
-Data: EDCD/FDevIDs and msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Localized game names: Elite Dangerous Almanac (MIT) and EDEngineer. Control names and device templates: EDRefCard (Richard Buckle, Jason Bramley — edrefcard2, MIT). Station icons and loading animation: EDAssets (SpyTec, MIT). Searches: Spansh (EDDN). Elite Dangerous is a trademark of Frontier Developments plc. Unofficial, non-commercial community tool. Details in [NOTICE](NOTICE).
+Data: EDCD/FDevIDs and msarilar/EDEngineer (MIT), via dseelinger/d47 (MIT). Localized game names: Elite Dangerous Almanac (MIT) and EDEngineer. Control names and device templates: EDRefCard (Richard Buckle, Jason Bramley — edrefcard2, MIT). Station icons and loading animation: EDAssets (SpyTec, MIT). Searches: Spansh (EDDN). Minor faction influence history: EDSM. BGS tick: EDCD's tick detector. The BGS page started from Cyberpunk Philou's prototype. Elite Dangerous is a trademark of Frontier Developments plc. Unofficial, non-commercial community tool. Details in [NOTICE](NOTICE).
