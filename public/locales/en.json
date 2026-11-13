@@ -1645,7 +1645,7 @@
   "discord": {
     "addBot": "Add the bot to my Discord server",
     "addBotHelp": "Discord asks for the Manage Server right on that server. Then create a private #edch-bgs channel and run /bgs setup there.",
-    "intro": "EDCH-Discord gathers your squadron's BGS work in its own Discord server. With this on, EDCH sends what you did for the squadron's faction every 15 minutes, even in BGS or Invisible mode: only to this bot, which writes to your squadron's private channel.",
+    "intro": "The EDCH Discord bot gathers your squadron's BGS work in its own Discord server. With this on, EDCH sends what you did for the squadron's faction every 15 minutes, even in BGS or Invisible mode: only to this bot, which writes to your squadron's private channel.",
     "key": "Your key",
     "keyHelp": "In your squadron's Discord: /bgs link. Keep it to yourself: it reports in your name.",
     "lastSent_one": "Last report {{time}}: {{count}} action.",

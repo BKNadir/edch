@@ -1645,7 +1645,7 @@
   "discord": {
     "addBot": "Den Bot zu meinem Discord-Server hinzufügen",
     "addBotHelp": "Discord verlangt dort das Recht „Server verwalten“. Lege dann einen privaten Kanal #edch-bgs an und führe dort /bgs setup aus.",
-    "intro": "EDCH-Discord sammelt die BGS-Arbeit deines Geschwaders auf dessen eigenem Discord-Server. Eingeschaltet sendet EDCH alle 15 Minuten, was du für die Fraktion des Geschwaders getan hast, auch im BGS- oder Unsichtbar-Modus: nur an diesen Bot, der in den privaten Kanal deines Geschwaders schreibt.",
+    "intro": "Der Discord-Bot EDCH sammelt die BGS-Arbeit deines Geschwaders auf dessen eigenem Discord-Server. Eingeschaltet sendet EDCH alle 15 Minuten, was du für die Fraktion des Geschwaders getan hast, auch im BGS- oder Unsichtbar-Modus: nur an diesen Bot, der in den privaten Kanal deines Geschwaders schreibt.",
     "key": "Dein Schlüssel",
     "keyHelp": "Im Discord deines Geschwaders: /bgs link. Behalte ihn für dich: Er sendet Berichte in deinem Namen.",
     "lastSent_one": "Letzter Bericht {{time}}: {{count}} Aktion.",

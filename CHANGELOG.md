@@ -5,7 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.13
 
-- Sync: connect to the squadron's Discord bot (EDCH-Discord). Paste the key `/bgs link` gives you and tick the switch: every 15 minutes EDCH sends what you did for the squadron's faction, and `/bgs summary` shows the squadron's work system by system. The bot keeps nothing itself: reports go to a private channel of your squadron's server. Off by default; a squadron's own copy of the bot is accepted after you confirm it.
+- Sync: connect to EDCH's Discord bot, added to your squadron's server. Paste the key `/bgs link` gives you and tick the switch: every 15 minutes EDCH sends what you did for the squadron's faction, and `/bgs summary` shows the squadron's work system by system. The bot keeps nothing itself: reports go to a private channel of your squadron's server. Off by default; a squadron's own copy of the bot is accepted after you confirm it.
 - EDOMH links: EDSY's and Coriolis's "Export to EDOMH" links can open EDCH (Settings → Preferences → Build export, off by default, for your user only). The wishlist opens and shows the build's engineering, and asks before adding it. An EDOMH link can also be pasted into Import a build. Mk II thrusters are recognised when importing a build.
 - Wishlist: the engineer tour is shown in Simple mode only; Advanced keeps the lines and the materials.
 - Every table can be sorted: click a column title to sort by it, again to reverse the order, a third time to get the usual order back. The sort is kept when the table refreshes.

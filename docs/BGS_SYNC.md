@@ -1,7 +1,7 @@
 # BGS report for a squadron bot
 
-The BGS page keeps what you did for a minor faction (`game/activity/bgs.ts`). **EDCH-Discord**, the
-squadron bot (its own repository, `edch-discord`), gathers these reports so teammates see each
+The BGS page keeps what you did for a minor faction (`game/activity/bgs.ts`). EDCH's Discord bot (named **EDCH** in
+Discord; its own repository, `edch-discord`), added to a squadron's server, gathers these reports so teammates see each
 other's work with `/bgs summary`. EDCH sends them only when the member pasted the key `/bgs link`
 gave them and ticked the switch (Sync → Connect to the Discord bot): every 15 minutes, the actions
 since the last report that concern the squadron's faction (`features/bgs/botSync.ts`). It is the

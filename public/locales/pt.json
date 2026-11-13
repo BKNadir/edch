@@ -1658,7 +1658,7 @@
   "discord": {
     "addBot": "Adicionar o bot ao meu servidor do Discord",
     "addBotHelp": "O Discord pede a permissão Gerenciar servidor nesse servidor. Depois crie um canal privado #edch-bgs e rode /bgs setup nele.",
-    "intro": "O EDCH-Discord reúne o trabalho de BGS do seu esquadrão no próprio servidor do Discord dele. Ligado, o EDCH envia a cada 15 minutos o que você fez pela facção do esquadrão, mesmo no modo BGS ou Invisível: só para este bot, que escreve no canal privado do seu esquadrão.",
+    "intro": "O bot do Discord EDCH reúne o trabalho de BGS do seu esquadrão no próprio servidor do Discord dele. Ligado, o EDCH envia a cada 15 minutos o que você fez pela facção do esquadrão, mesmo no modo BGS ou Invisível: só para este bot, que escreve no canal privado do seu esquadrão.",
     "key": "Sua chave",
     "keyHelp": "No Discord do seu esquadrão: /bgs link. Guarde-a só para você: ela envia relatórios em seu nome.",
     "lastSent_one": "Último relatório {{time}}: {{count}} ação.",
