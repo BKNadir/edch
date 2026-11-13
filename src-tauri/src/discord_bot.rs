@@ -11,7 +11,7 @@ use crate::http::{request, HttpReply};
 use crate::logs;
 
 /// The shared bot (EDCH-Discord hosted for every squadron).
-pub const SHARED_BOT: &str = "https://edch-discord.bknadir.workers.dev";
+pub const SHARED_BOT: &str = "https://edch-discord.default-community.workers.dev";
 
 /// The address of a squadron's own copy, once the user confirmed it (set by the page at start-up
 /// from the settings, and when the user accepts a key naming another bot).

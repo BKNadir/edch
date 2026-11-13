@@ -9,7 +9,7 @@
 import { botFetch } from "../platform/bridge.js";
 
 /** The shared bot (EDCH-Discord hosted for every squadron). Same value as discord_bot.rs. */
-export const SHARED_BOT = "https://edch-discord.bknadir.workers.dev";
+export const SHARED_BOT = "https://edch-discord.default-community.workers.dev";
 /**
  * The shared bot's Discord application, for the link that adds it to a server ("" until the
  * application exists: the link isn't shown).
