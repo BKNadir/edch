@@ -72,8 +72,11 @@ export interface BgsSystemRow {
   /** When the shown data was observed, and by whom. */
   dataAt?: string;
   source: "journal" | RemoteSource;
-  /** Your last visit (journal), if any in the journal kept. */
+  /** Your last visit (journal), if any in the journal kept: the local data, seen by you only. */
   lastVisit?: string;
+  /** The public data (what Spansh or EDSM know, so what everyone sees): when, and from where. */
+  publicAt?: string;
+  publicSource?: RemoteSource;
   conflicts: FactionConflict[];
   alerts: BgsAlertKind[];
   /** Priority to visit (higher first): an indication, not a measure of a threat. */
@@ -91,7 +94,10 @@ function rowOf(
   faction: string,
   system: string,
   factions: FactionPresence[],
-  base: Pick<BgsSystemRow, "coords" | "distance" | "controlling" | "dataAt" | "source" | "lastVisit">,
+  base: Pick<
+    BgsSystemRow,
+    "coords" | "distance" | "controlling" | "dataAt" | "source" | "lastVisit" | "publicAt" | "publicSource"
+  >,
   conflicts: FactionConflict[],
   now: number,
 ): BgsSystemRow | null {
@@ -246,6 +252,8 @@ export function factionRows(
         dataAt: newest.at,
         source: newest.source,
         lastVisit: visit?.at,
+        publicAt: remote?.latest?.at,
+        publicSource: remote?.latest?.source,
       },
       newest.conflicts,
       now,

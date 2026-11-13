@@ -4351,6 +4351,9 @@ body.menu-editing .sidebar span {
   font-size: 12px;
   white-space: nowrap;
 }
+.bgs-table .bgs-behind {
+  color: var(--warn-text);
+}
 .bgs-table .bgs-line .badge {
   margin: 0;
 }

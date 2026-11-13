@@ -72,6 +72,15 @@ const EDSM_PAUSE_MS = 400;
 /** EDSM failing this many times in a row ends the update. */
 const EDSM_MAX_FAILURES = 3;
 
+/** A compact age: "12 min", "5 h", "1 d 12 h" (the BGS moves by the day, so no seconds). */
+function ageShort(at: string, now = Date.now()): string {
+  const minutes = Math.max(0, Math.floor((now - Date.parse(at)) / 60_000));
+  if (minutes < 60) return t("bgs.ageMinutes", { minutes });
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return t("bgs.ageHours", { hours });
+  return t("bgs.ageDays", { days: Math.floor(hours / 24), hours: hours % 24 });
+}
+
 const pause = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** Where an update stands, and how it ended. */
@@ -448,8 +457,8 @@ export class BgsView implements View {
                     t("bgs.influence"),
                     t("bgs.rival"),
                     t("bgs.states"),
-                    t("bgs.data"),
-                    t("bgs.lastVisit"),
+                    t("bgs.localData"),
+                    t("bgs.publicData"),
                     t("bgs.toDo"),
                   ].map((label) => h("th", null, label)),
                 ),
@@ -506,24 +515,15 @@ export class BgsView implements View {
                         .filter((a) => a !== "staleData" && a !== "notVisited")
                         .map((a) => h(`span.badge.${SERIOUS.includes(a) ? "warn" : "muted"}`, null, labels[a])),
                     ),
-                    h(
-                      `td${row.alerts.includes("staleData") ? ".bad" : ""}`,
-                      { "data-sort": row.dataAt ?? "" },
-                      row.dataAt ? relTime(row.dataAt) : "?",
-                      h(
-                        "div.bgs-line.sub",
-                        null,
-                        `${row.source === "journal" ? t("bgs.sourceJournal") : row.source === "edsm" ? "EDSM" : "Spansh"}`,
-                      ),
-                      tick && row.dataAt && row.dataAt < tick
-                        ? h("span.badge.muted", { title: t("bgs.beforeTickHelp") }, t("bgs.beforeTick"))
-                        : null,
-                    ),
-                    h(
-                      `td${row.alerts.includes("notVisited") ? ".bad" : ""}`,
-                      { "data-sort": row.lastVisit ?? "" },
-                      row.lastVisit ? relTime(row.lastVisit) : "—",
-                    ),
+                    this.ageCell(row.lastVisit, tick, {
+                      bad: row.alerts.includes("notVisited"),
+                    }),
+                    this.ageCell(row.publicAt, tick, {
+                      bad: row.alerts.includes("staleData") && row.source !== "journal",
+                      note: row.publicSource === "edsm" ? "EDSM" : row.publicSource === "spansh" ? "Spansh" : undefined,
+                      // Your visit is newer: the public data doesn't show what you saw yet.
+                      behind: Boolean(row.lastVisit && (!row.publicAt || row.publicAt < row.lastVisit)),
+                    }),
                     h(
                       "td",
                       null,
@@ -537,6 +537,27 @@ export class BgsView implements View {
             ),
           )
         : h("p.sub", null, t("bgs.noSystems")),
+    );
+  }
+
+  /**
+   * A data age cell, "1 d 12 h", with where it comes from, "before tick" when it was seen before
+   * the last BGS tick, and for public data a note when your own visit is newer.
+   */
+  private ageCell(
+    at: string | undefined,
+    tick: string | undefined,
+    options: { bad?: boolean; note?: string; behind?: boolean },
+  ): HTMLElement {
+    return h(
+      `td${options.bad ? ".bad" : ""}`,
+      { "data-sort": at ?? "", title: at ? new Date(at).toLocaleString() : undefined },
+      at ? ageShort(at) : "—",
+      at && options.note ? h("div.bgs-line.sub", null, options.note) : null,
+      at && tick && at < tick
+        ? h("div.bgs-line", null, h("span.badge.muted", { title: t("bgs.beforeTickHelp") }, t("bgs.beforeTick")))
+        : null,
+      options.behind ? h("div.bgs-line.bgs-behind", { title: t("bgs.publicBehindHelp") }, t("bgs.publicBehind")) : null,
     );
   }
 
