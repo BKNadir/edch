@@ -9,7 +9,7 @@ only place BGS data leaves the PC in BGS or Invisible mode, by the member's choi
 
 The bot keeps nothing itself: it writes the reports to the private `#edch-sync` channel of the
 squadron's Discord server (admins only), and a readable line per system in `#edch-bgs` (the
-`EDCH-BGS` role). EDCH reaches only the shared bot and a squadron's own bot the member
+`BGS` role). EDCH reaches only the shared bot and a squadron's own bot the member
 confirmed (`src-tauri/src/discord_bot.rs`); the key is never written to the logs.
 
 The report is built by `bgsReport()` in `src/features/bgs/report.ts`.
