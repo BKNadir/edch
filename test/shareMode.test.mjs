@@ -40,6 +40,21 @@ test("BGS mode: the BGS actions aren't shared, other events are", () => {
   assert.equal(shareableEvent(scan, "bgs"), scan);
 });
 
+test("BGS mode: signals lose the faction and state that spawned them; wing deliveries stay private", () => {
+  const signal = shareableEvent(
+    {
+      event: "FSSSignalDiscovered",
+      SignalName: "$Warzone_PointRace_Med;",
+      SpawningFaction: "Some Faction",
+      SpawningState: "$FactionState_War;",
+      SpawningState_Localised: "War",
+    },
+    "bgs",
+  );
+  assert.deepEqual(signal, { event: "FSSSignalDiscovered", SignalName: "$Warzone_PointRace_Med;" });
+  assert.equal(shareableEvent({ event: "CargoDepot", MissionID: 1 }, "bgs"), null);
+});
+
 test("invisible mode: nothing is shared", () => {
   assert.equal(shareableEvent(jump, "invisible"), null);
   assert.equal(shareableEvent({ event: "Scan" }, "invisible"), null);

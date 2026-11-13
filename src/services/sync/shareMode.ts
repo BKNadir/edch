@@ -6,8 +6,21 @@
 import type { ShareMode } from "../../state/syncSettings.js";
 import type { Json } from "./common.js";
 
-/** Fields of the location events (FSDJump, Location, CarrierJump, Docked…) that tell the BGS. */
-export const BGS_FIELDS = ["Factions", "Conflicts", "SystemFaction", "StationFaction"] as const;
+/**
+ * Fields that tell the BGS: factions, influence, states and conflicts of the location events
+ * (FSDJump, Location, CarrierJump, Docked, ApproachSettlement…), and the faction and state that
+ * spawned a signal (FSSSignalDiscovered: conflict zones, convoys…).
+ */
+export const BGS_FIELDS = [
+  "Factions",
+  "Conflicts",
+  "SystemFaction",
+  "StationFaction",
+  "SpawningFaction",
+  "SpawningFaction_Localised",
+  "SpawningState",
+  "SpawningState_Localised",
+] as const;
 
 /** Events that tell the BGS work done (they move a faction's influence): never shared in "bgs". */
 export const BGS_ACTION_EVENTS = new Set([
@@ -16,6 +29,7 @@ export const BGS_ACTION_EVENTS = new Set([
   "MissionFailed",
   "MissionAbandoned",
   "MissionRedirected",
+  "CargoDepot",
   "RedeemVoucher",
   "Bounty",
   "FactionKillBond",
