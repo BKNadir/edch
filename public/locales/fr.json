@@ -1646,7 +1646,7 @@
   },
   "discord": {
     "addBot": "Utiliser le bot par défaut : l'ajouter à mon serveur Discord",
-    "addBotHelp": "Ajouter le bot demande le droit Gérer le serveur sur ce serveur. Crée ensuite un salon privé #edch-bgs et lance /bgs setup dedans. Une escadrille qui veut sa propre copie peut l'héberger à partir du code sur GitHub.",
+    "addBotHelp": "Ajouter le bot demande le droit Gérer le serveur sur ce serveur. Lance ensuite /bgs setup faction:… : le bot crée le rôle BGS et le salon privé #edch-bgs, puis tu donnes le rôle aux membres qui font les rapports. Une escadrille qui veut sa propre copie peut l'héberger à partir du code sur GitHub.",
     "hostOwn": "Héberger ton propre bot (GitHub)",
     "intro": "Le bot Discord EDCH rassemble le travail BGS de ton escadrille sur son propre serveur Discord. Activé, EDCH envoie toutes les 15 minutes ce que tu as fait pour la faction de l'escadrille, même en mode BGS ou Invisible : uniquement à ce bot, qui écrit dans le salon privé de ton escadrille.",
     "key": "Ta clé",

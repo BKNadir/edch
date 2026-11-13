@@ -1646,7 +1646,7 @@
   },
   "discord": {
     "addBot": "Usar el bot predeterminado: añadirlo a mi servidor de Discord",
-    "addBotHelp": "Añadir el bot requiere el permiso Gestionar servidor en ese servidor. Luego crea un canal privado #edch-bgs y ejecuta /bgs setup en él. Un escuadrón que quiera su propia copia puede alojarla a partir del código en GitHub.",
+    "addBotHelp": "Añadir el bot requiere el permiso Gestionar servidor en ese servidor. Luego ejecuta /bgs setup faction:… : el bot crea el rol BGS y el canal privado #edch-bgs, y tú das el rol a los miembros que envían informes. Un escuadrón que quiera su propia copia puede alojarla a partir del código en GitHub.",
     "hostOwn": "Alojar tu propio bot (GitHub)",
     "intro": "El bot de Discord EDCH reúne el trabajo de BGS de tu escuadrón en su propio servidor de Discord. Activado, EDCH envía cada 15 minutos lo que hiciste por la facción del escuadrón, incluso en modo BGS o Invisible: solo a este bot, que escribe en el canal privado de tu escuadrón.",
     "key": "Tu clave",
