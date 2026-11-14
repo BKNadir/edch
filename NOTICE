@@ -59,6 +59,8 @@ Station icons and loading animation
 Live data
 ---------
 - Spansh (spansh.co.uk) — galaxy, body and station searches, built from EDDN.
+- EDSM (edsm.net) — the list of the game's minor factions (public/data/factions.txt, from its nightly
+  dump of populated systems, tools/gen-factions.mjs), offered while typing on the Search page.
 - Ardent Insight (ardent-insight.com, Iain Collins) — commodity prices from EDDN, compared with Spansh's
   when looking for where to sell. Only its public API is called; no code is used.
 

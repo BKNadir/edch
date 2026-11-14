@@ -1665,6 +1665,42 @@ p.notice {
   display: grid;
   gap: 8px;
 }
+/* Suggestions under a text field (Search → Faction). */
+.suggest-box {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+.suggest-box > input {
+  flex: 1;
+}
+.suggest-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  margin: 4px 0 0;
+  padding: 4px;
+  list-style: none;
+  max-height: 320px;
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.suggest-list li {
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.suggest-list li:hover,
+.suggest-list li.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
 /* A small number field in a row of options (Search: minimum demand). */
 input.num-small {
   width: 7em;

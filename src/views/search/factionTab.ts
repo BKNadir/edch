@@ -7,6 +7,35 @@ import { type Ctx } from "../../state/context.js";
 import { referenceField, searchReference } from "./reference.js";
 import { h, icon, replace } from "../../ui/dom.js";
 import { resultRow } from "../shared/resultsTable.js";
+import { exactFaction, factionIndex, matchFactions, type FactionIndex } from "../../features/search/factionNames.js";
+import { suggestBox } from "../../ui/suggestBox.js";
+import { log } from "../../platform/logger.js";
+
+/** Every faction of the game (public/data/factions.txt), loaded the first time the tab opens. */
+let allFactions: Promise<string[]> | undefined;
+
+function loadFactions(): Promise<string[]> {
+  return (allFactions ??= fetch("data/factions.txt")
+    .then((r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.text();
+    })
+    .then((text) => text.split("\n").filter(Boolean))
+    .catch((error) => {
+      log.warn("search", `Faction list unavailable, journal factions only: ${String(error?.message ?? error)}`);
+      return [];
+    }));
+}
+
+/** The journal's factions first, then the game's; rebuilt when the journal knows new ones. */
+let index: { known: string[]; value: FactionIndex } | undefined;
+
+async function factionsOf(ctx: Ctx): Promise<FactionIndex> {
+  const known = ctx.store.state.cmdr.knownFactions ?? [];
+  const all = await loadFactions();
+  if (index?.known !== known) index = { known, value: factionIndex(known, all) };
+  return index.value;
+}
 
 /** Faction states Spansh knows, by their English game name (shown with the game's translation). */
 const FACTION_STATES = [
@@ -39,16 +68,25 @@ let runId = 0;
 /** The tab's form; results go to `out`. */
 export function factionForm(ctx: Ctx, out: HTMLElement): HTMLElement {
   const run = () => void runSearch(ctx, out);
-  const known = ctx.store.state.cmdr.knownFactions ?? [];
+  // The list is ready by the time a name is typed; until then, the journal's factions.
+  let ready: FactionIndex = factionIndex(ctx.store.state.cmdr.knownFactions ?? []);
+  void factionsOf(ctx).then((value) => (ready = value));
   const input = h("input.big", {
     type: "text",
     value: query.faction,
-    list: "dl-factions",
     placeholder: t("search.factionName"),
     spellcheck: false,
     oninput: (e: Event) => (query.faction = (e.target as HTMLInputElement).value),
     onkeydown: (e: KeyboardEvent) => e.key === "Enter" && run(),
-  });
+  }) as HTMLInputElement;
+  const field = suggestBox(
+    input,
+    (text) => matchFactions(ready, text),
+    (value) => {
+      query.faction = value;
+      run();
+    },
+  );
   const presence = (ownerOnly: boolean, label: string) =>
     h(
       "label.check",
@@ -78,12 +116,7 @@ export function factionForm(ctx: Ctx, out: HTMLElement): HTMLElement {
   return h(
     "div",
     null,
-    h(
-      "datalist#dl-factions",
-      null,
-      known.map((name) => h("option", { value: name })),
-    ),
-    h("div.row", null, input, h("button.primary", { onclick: run }, icon("search"), " " + t("common.search"))),
+    h("div.row", null, field, h("button.primary", { onclick: run }, icon("search"), " " + t("common.search"))),
     h(
       "div.row.opts",
       null,
@@ -112,8 +145,8 @@ export function factionForm(ctx: Ctx, out: HTMLElement): HTMLElement {
 async function runSearch(ctx: Ctx, out: HTMLElement) {
   const faction = query.faction.trim();
   if (!faction) return;
-  // A faction typed with other capitals than the journal's: use the journal's spelling.
-  const known = (ctx.store.state.cmdr.knownFactions ?? []).find((n) => n.toLowerCase() === faction.toLowerCase());
+  // Spansh wants the exact spelling: a name typed with other capitals or accents gets the game's.
+  const known = exactFaction(await factionsOf(ctx), faction);
   const id = ++runId;
   replace(out, h("p.sub", null, h("span.spinner"), " " + t("common.searchingSpansh")));
   try {
