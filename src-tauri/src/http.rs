@@ -1,4 +1,4 @@
-//! HTTP for the UI: requests to a short list of allowed hosts (Spansh, Ardent, EDDN, EDSM, Inara, ntfy),
+//! HTTP for the UI: requests to a short list of allowed hosts (Spansh, Ardent, EliteBGS, EDDN, EDSM, Inara, ntfy),
 //! made from Rust because the webview can't reach them (CORS). URLs are redacted in the logs.
 
 use serde::Serialize;
@@ -13,11 +13,12 @@ pub struct HttpReply {
 }
 
 /// Hosts the UI may talk to. Everything else is refused.
-const ALLOWED_HOSTS: [&str; 9] = [
+const ALLOWED_HOSTS: [&str; 10] = [
     "https://ntfy.sh/",
     "https://spansh.co.uk/",
     "https://www.spansh.co.uk/",
     "https://api.ardent-insight.com/",
+    "https://elitebgs.app/",
     "https://eddn.edcd.io:4430/",
     "https://www.edsm.net/",
     "https://inara.cz/",
@@ -190,6 +191,7 @@ mod tests {
             "https://api.ardent-insight.com/v2/system/name/Sol/commodity/name/gold/nearby/imports"
         ));
         assert!(!allowed("https://ardent-insight.com/"));
+        assert!(allowed("https://elitebgs.app/api/ebgs/v5/factions?name=Diavol"));
         assert!(allowed("https://tick.edcd.io/api/tick"));
         assert!(!allowed("https://edcd.io/"));
         assert!(!allowed("https://spansh.co.uk.example.com/api"));

@@ -1708,7 +1708,8 @@
     "tourInvisibleMode": "Mode invisible : rien du tout n'est envoyé pendant cette tournée. Seule cette page est mise à jour.",
     "trade": "Commerce",
     "trendHelp": "Variation moyenne par jour sur les derniers jours (tes visites, Spansh, EDSM), et l'influence attendue dans {{days}} jours si ça continue.",
-    "yourActivity": "Ce que tu as fait"
+    "yourActivity": "Ce que tu as fait",
+    "eliteBgsLoaded": "EliteBGS : {{count}} systèmes ({{added}} absents de Spansh)."
   },
   "edomh": {
     "addToWishlist": "Ajouter à la wishlist",

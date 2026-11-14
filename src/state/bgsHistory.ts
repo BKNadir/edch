@@ -15,11 +15,11 @@ const MAX_FACTIONS = 30;
 const DAY = 86_400_000;
 
 /** Where the newest data of a system came from. */
-export type RemoteSource = "spansh" | "edsm";
+export type RemoteSource = "spansh" | "edsm" | "elitebgs";
 
 /** A system as Spansh or EDSM last showed it. */
 export interface RemoteSnapshot {
-  /** When the data was observed (by whoever reported it to Spansh or EDSM). */
+  /** When the data was observed (by whoever reported it to Spansh, EDSM or EliteBGS). */
   at: string;
   source: RemoteSource;
   controlling?: string;
@@ -85,7 +85,7 @@ function validSystem(raw: any): KnownSystem | null {
       ? (raw.coords as Vec3)
       : undefined;
   const latest =
-    raw.latest && isDate(raw.latest.at) && (raw.latest.source === "spansh" || raw.latest.source === "edsm")
+    raw.latest && isDate(raw.latest.at) && ["spansh", "edsm", "elitebgs"].includes(raw.latest.source)
       ? {
           at: raw.latest.at,
           source: raw.latest.source as RemoteSource,

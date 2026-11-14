@@ -1719,7 +1719,8 @@
     "tourInvisibleMode": "Modo invisível: nada é enviado durante esta rota. Só esta página é atualizada.",
     "trade": "Comércio",
     "trendHelp": "Variação média por dia nos últimos dias (suas visitas, Spansh, EDSM), e a influência esperada em {{days}} dias se continuar assim.",
-    "yourActivity": "O que você fez"
+    "yourActivity": "O que você fez",
+    "eliteBgsLoaded": "EliteBGS: {{count}} sistemas ({{added}} fora do Spansh)."
   },
   "edomh": {
     "addToWishlist": "Adicionar à lista de desejos",

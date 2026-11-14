@@ -1706,7 +1706,8 @@
     "tourInvisibleMode": "Unsichtbar-Modus: während dieser Runde wird gar nichts gesendet. Nur diese Seite wird aktualisiert.",
     "trade": "Handel",
     "trendHelp": "Durchschnittliche Änderung pro Tag in den letzten Tagen (deine Besuche, Spansh, EDSM) und der in {{days}} Tagen erwartete Einfluss, wenn es so weitergeht.",
-    "yourActivity": "Was du getan hast"
+    "yourActivity": "Was du getan hast",
+    "eliteBgsLoaded": "EliteBGS: {{count}} Systeme ({{added}} nicht bei Spansh)."
   },
   "edomh": {
     "addToWishlist": "Zur Wunschliste hinzufügen",

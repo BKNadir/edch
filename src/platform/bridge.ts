@@ -220,6 +220,11 @@ function parse(reply: HttpReply, what: string): any {
   }
 }
 
+/** GET from EliteBGS's API (BGS data from EDDN); `path` after "/api/ebgs/v5/". */
+export async function eliteBgsGet(path: string): Promise<any> {
+  return parse(await httpFetch("GET", `https://elitebgs.app/api/ebgs/v5/${path}`), "EliteBGS");
+}
+
 /** GET from Ardent Insight's API (commodity prices from EDDN); `path` after "/v2/". */
 export async function ardentGet(path: string): Promise<any> {
   return parse(await httpFetch("GET", `https://api.ardent-insight.com/v2/${path}`), "Ardent");

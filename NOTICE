@@ -63,6 +63,8 @@ Live data
   dump of populated systems, tools/gen-factions.mjs), offered while typing on the Search page.
 - Ardent Insight (ardent-insight.com, Iain Collins) — commodity prices from EDDN, compared with Spansh's
   when looking for where to sell. Only its public API is called; no code is used.
+- EliteBGS (elitebgs.app, Sayak Mukhopadhyay) — a minor faction's systems, influence and states, from EDDN,
+  merged with Spansh's on the BGS page. Only its public API is called; no code is used.
 
 v0.7 additions:
 - dseelinger/d47 (MIT, Copyright (c) 2026 Doug Seelinger) — exobiology catalogue (species, values,

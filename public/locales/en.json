@@ -1706,7 +1706,8 @@
     "tourInvisibleMode": "Invisible mode: nothing at all is sent during this tour. Only this page is updated.",
     "trade": "Trade",
     "trendHelp": "Average change per day over the last days (your visits, Spansh, EDSM), and the influence expected in {{days}} days if it goes on.",
-    "yourActivity": "What you did"
+    "yourActivity": "What you did",
+    "eliteBgsLoaded": "EliteBGS: {{count}} systems ({{added}} not on Spansh)."
   },
   "edomh": {
     "addToWishlist": "Add to the wishlist",

@@ -20,6 +20,9 @@ import {
 } from "../../state/bgsHistory.js";
 import type { Ctx, View } from "../../state/context.js";
 import { referenceOf } from "../../state/context.js";
+import { eliteBgsFactionSystems } from "../../services/eliteBgs.js";
+import { eliteBgsSnapshot } from "../../features/bgs/eliteBgsMerge.js";
+
 import { callout, fmt, h, icon, replace } from "../../ui/dom.js";
 import { credits, relTime } from "../../ui/format.js";
 import {
@@ -35,6 +38,12 @@ import {
 import { setBgsTourStops, startBgsTour } from "../../features/bgs/tourCopy.js";
 import { systemLink } from "../shared/links.js";
 import { bgsShared } from "../../state/bgsShared.js";
+
+/** Site names shown next to public data (the same in every language). */
+const PUBLIC_SOURCE_LABELS: Record<string, string> = { spansh: "Spansh", edsm: "EDSM", elitebgs: "EliteBGS" };
+
+/** Data from a public site (Spansh, EDSM, EliteBGS), as opposed to your journal or your squadron. */
+const isPublicSource = (source: string) => source === "spansh" || source === "edsm" || source === "elitebgs";
 
 /** Periods of "what you did": since the last BGS tick (when known), the last 24 hours, 7 days. */
 const PERIODS = { tick: 0, day: 86_400_000, week: 7 * 86_400_000 } as const;
@@ -90,6 +99,8 @@ type Progress = { step: "spansh"; found: number; total: number } | { step: "edsm
 interface UpdateResult {
   spansh?: { count: number; total: number; partial: boolean };
   spanshFailed: boolean;
+  /** EliteBGS's systems, and how many of them Spansh didn't have. */
+  eliteBgs?: { count: number; added: number };
   edsm: number;
   edsmFailed: boolean;
 }
@@ -152,12 +163,14 @@ export class BgsView implements View {
     this.loading = { step: "spansh", found: 0, total: 0 };
     this.result = undefined;
     this.render();
+    const spanshNames = new Set<string>();
     try {
       const list = await factionSystems(faction, referenceOf(this.ctx), (found, total) => {
         this.loading = { step: "spansh", found, total };
         this.render();
       });
       for (const system of list.systems) {
+        spanshNames.add(system.name.toLowerCase());
         const sample = system.updatedAt ? sampleOf(system.updatedAt, system.factions) : null;
         recordSystem(this.known, system.name, {
           coords: system.coords,
@@ -173,6 +186,19 @@ export class BgsView implements View {
       log.warn("bgs", `Spansh faction search failed: ${(error as Error)?.message ?? error}`);
       result.spanshFailed = true;
     }
+
+    // EliteBGS: systems Spansh missed, and more recent influence for those it has.
+    const fromEliteBgs = await eliteBgsFactionSystems(faction);
+    let added = 0;
+    for (const system of fromEliteBgs) {
+      const key = system.name.toLowerCase();
+      if (!spanshNames.has(key)) added += 1;
+      const snapshot = eliteBgsSnapshot(system, this.known[key]?.latest);
+      const sample = snapshot ? sampleOf(snapshot.at, snapshot.factions) : null;
+      recordSystem(this.known, system.name, { coords: system.coords, snapshot, samples: sample ? [sample] : [] });
+    }
+    result.eliteBgs = { count: fromEliteBgs.length, added };
+    if (fromEliteBgs.length) saveBgsHistory(this.known);
 
     const now = Date.now();
     const rows = factionRows(
@@ -285,6 +311,9 @@ export class BgsView implements View {
                 ? t("bgs.loadedPartial", { count: this.result.spansh.count, total: this.result.spansh.total })
                 : t("bgs.loaded", { count: this.result.spansh?.count ?? 0 }),
             " ",
+            this.result.eliteBgs?.count
+              ? t("bgs.eliteBgsLoaded", { count: this.result.eliteBgs.count, added: this.result.eliteBgs.added }) + " "
+              : "",
             this.result.edsmFailed
               ? h("span.bad", null, t("bgs.edsmFailed"))
               : t("bgs.edsmUpdated", { count: this.result.edsm }),
@@ -293,9 +322,7 @@ export class BgsView implements View {
           ? h(
               "p.sub",
               null,
-              rows.some(
-                (row) => row.source === "spansh" || row.source === "edsm" || this.known[row.system.toLowerCase()],
-              )
+              rows.some((row) => isPublicSource(row.source) || this.known[row.system.toLowerCase()])
                 ? t("bgs.keptData", { days: HISTORY_KEEP_DAYS })
                 : t("bgs.journalOnly"),
             )
@@ -544,8 +571,8 @@ export class BgsView implements View {
                           : undefined,
                     }),
                     this.ageCell(row.publicAt, tick, {
-                      bad: row.alerts.includes("staleData") && (row.source === "spansh" || row.source === "edsm"),
-                      note: row.publicSource === "edsm" ? "EDSM" : row.publicSource === "spansh" ? "Spansh" : undefined,
+                      bad: row.alerts.includes("staleData") && isPublicSource(row.source),
+                      note: row.publicSource ? PUBLIC_SOURCE_LABELS[row.publicSource] : undefined,
                       // The private data is newer: the public data doesn't show it yet.
                       behind: Boolean(row.privateAt && (!row.publicAt || row.publicAt < row.privateAt)),
                     }),
