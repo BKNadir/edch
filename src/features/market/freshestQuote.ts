@@ -1,5 +1,5 @@
-// Where to sell a commodity: Spansh and Ardent both collect market prices from EDDN, each with its
-// own delays. For every market both know, the most recently seen price wins.
+// Where to sell or buy a commodity: Spansh and Ardent both collect market prices from EDDN, each
+// with its own delays. For every market both know, the most recently seen price wins.
 
 import type { ArdentQuote } from "../../services/ardent.js";
 import { validDataAge } from "../../state/dataAge.js";
@@ -13,6 +13,7 @@ export const QUOTE_SOURCE_LABELS: Record<QuoteSource, string> = { spansh: "Spans
 /** A market's price for a commodity. */
 export interface MarketQuote {
   price: number;
+  /** Tonnes the market wants (selling), or has in stock (buying). */
   demand: number;
   /** When the market was last seen (ISO date), when known. */
   updated?: string;

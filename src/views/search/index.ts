@@ -14,12 +14,19 @@ import { fmtLy, inaraSystem } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
 import { openUrl } from "../../platform/bridge.js";
 import { factionForm } from "./factionTab.js";
-import { ardentSellQuotes } from "../../services/ardent.js";
+import { ardentBuyQuotes, ardentSellQuotes } from "../../services/ardent.js";
+import {
+  ARRIVAL_CHOICES,
+  STATION_SORTS,
+  arrivalAllowed,
+  stationOrder,
+  type SortableStation,
+  type StationSort,
+} from "../../features/search/stationSort.js";
 import {
   ARDENT_STATION_TYPES,
   QUOTE_SOURCE_LABELS,
   ardentStationAllowed,
-  bestRecentFirst,
   quoteTime,
   freshestQuote,
   meetsDemand,
@@ -70,6 +77,10 @@ const SERVICES: [string, string][] = [
   ["Apex Interstellar", "Apex Interstellar"],
   ["Frontline Solutions", "Frontline Solutions"],
 ];
+/** A number from Spansh's or Ardent's JSON, or undefined. */
+const numberOrUndefined = (value: unknown) =>
+  value === null || value === undefined || value === "" || Number.isNaN(Number(value)) ? undefined : Number(value);
+
 /** Short names of the trader and broker kinds, shown next to a station. */
 const KIND_LABELS: Record<string, string> = {
   raw: t("search.kindRaw"),
@@ -94,9 +105,32 @@ export class SearchView implements View {
   private out = h("div.search-out");
   private form = h("div.search-form");
   private tabs = h("div.segmented");
-  private opts = { largePad: false, carriers: false, planetary: true, sortPrice: true, minQty: 1 };
+  private opts = { largePad: false, carriers: false, planetary: true, minQty: 1, maxArrival: 0 };
+  /** The sort chosen on each tab (its first choice by default). */
+  private sorts: Partial<Record<keyof typeof STATION_SORTS, StationSort>> = {};
+
+  /** The sort of `tab`, one it offers. */
+  private sortOf(tab: keyof typeof STATION_SORTS): StationSort {
+    const offered: readonly StationSort[] = STATION_SORTS[tab];
+    const chosen = this.sorts[tab];
+    return chosen && offered.includes(chosen) ? chosen : offered[0];
+  }
   /** Selling: the price kept for each Spansh result (the most recent of Spansh's and Ardent's). */
   private quotes = new Map<Json, MarketQuote>();
+
+  /** Runs the search again after a sort or filter change, when one was already made. */
+  private rerun() {
+    if (this.tab !== "faction" && this.values[this.tab].trim() && this.out.childElementCount) void this.run();
+  }
+
+  /** A sort's name on `tab` ("Lowest price" when buying, "Best price" when selling…). */
+  private sortLabel(tab: keyof typeof STATION_SORTS, sort: StationSort): string {
+    if (sort === "price") return tab === "sell" ? t("search.sortPriceBest") : t("search.sortPriceLowest");
+    if (sort === "volume") return tab === "sell" ? t("search.sortDemand") : t("search.sortStock");
+    if (sort === "distance") return t("search.sortDistance");
+    if (sort === "recent") return t("search.sortRecent");
+    return t("search.sortArrival");
+  }
 
   /** The "minimum demand" setting (at least 1 t). */
   private minDemand(): number {
@@ -209,7 +243,7 @@ export class SearchView implements View {
         oninput: (e: Event) => (this.values[tab] = (e.target as HTMLInputElement).value),
         onkeydown: (e: KeyboardEvent) => e.key === "Enter" && this.run(),
       });
-    const check = (key: "largePad" | "carriers" | "planetary" | "sortPrice", label: string) =>
+    const check = (key: "largePad" | "carriers" | "planetary", label: string) =>
       h(
         "label.check",
         null,
@@ -281,9 +315,44 @@ export class SearchView implements View {
         check("largePad", t("search.lPadOnly")),
         check("carriers", t("search.includeFleetCarriers")),
         check("planetary", t("search.includePlanetaryPorts")),
-        tab === "buy" || tab === "sell"
-          ? check("sortPrice", tab === "buy" ? t("search.sortLowestPrice") : t("search.sortBestPrice"))
-          : null,
+        h(
+          "label.check",
+          null,
+          t("search.maxArrival") + " ",
+          h(
+            "select",
+            {
+              onchange: (e: Event) => {
+                this.opts.maxArrival = Number((e.target as HTMLSelectElement).value);
+                this.rerun();
+              },
+            },
+            ARRIVAL_CHOICES.map((ls) =>
+              h(
+                "option",
+                { value: String(ls), selected: ls === this.opts.maxArrival },
+                ls ? t("common.ls", { locale: fmt(ls) }) : t("search.anyArrival"),
+              ),
+            ),
+          ),
+        ),
+        h(
+          "label.check",
+          null,
+          t("search.sortBy") + " ",
+          h(
+            "select",
+            {
+              onchange: (e: Event) => {
+                this.sorts[tab] = (e.target as HTMLSelectElement).value as StationSort;
+                this.rerun();
+              },
+            },
+            STATION_SORTS[tab].map((sort: StationSort) =>
+              h("option", { value: sort, selected: sort === this.sortOf(tab) }, this.sortLabel(tab, sort)),
+            ),
+          ),
+        ),
         tab === "sell"
           ? h(
               "label.check",
@@ -410,48 +479,62 @@ export class SearchView implements View {
     }
 
     const ref = searchReference(this.ctx);
-    const body: Json = {
+    const sort = this.sortOf(tab);
+    const body = (page: number): Json => ({
       filters: f,
       sort: [{ distance: { direction: "asc" } }],
-      size: tab === "buy" || tab === "sell" ? 50 : 20,
-      page: 0,
+      size: 100,
+      page,
       ...(ref.coords
         ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } }
         : { reference_system: ref.system }),
-    };
+    });
     replace(this.out, h("p.sub", null, h("span.spinner"), " " + t("common.searchingSpansh")));
     const id = ++this.runId;
     try {
-      const res = await spanshPost("stations/search", body);
+      // Sorted on something else than distance: the 300 nearest stations rather than 100, so the
+      // best ones of the zone are there (Spansh sorts on distance only).
+      const pages = sort === "distance" ? 1 : 3;
+      const answers: Json[] = [];
+      for (let page = 0; page < pages; page++) {
+        const res = await spanshPost("stations/search", body(page));
+        answers.push(res);
+        if (!Array.isArray(res?.results) || res.results.length < 100) break;
+      }
       if (id !== this.runId) return;
-      let rows: Json[] = Array.isArray(res?.results) ? res.results : [];
+      const res = answers[0];
+      let rows: Json[] = answers.flatMap((a) => (Array.isArray(a?.results) ? a.results : []));
       const settings = this.ctx.store.state.settings;
       const quoteOf = (r: Json) =>
         (r.market ?? []).find((x: Json) => String(x.commodity).toLowerCase() === name.toLowerCase());
-      // Selling: each market's most recent price between Spansh's and Ardent's.
+      // Buying and selling: each market's most recent price between Spansh's and Ardent's, and the
+      // best recent markets of the zone that only Ardent returned.
       const quotes = new Map<Json, MarketQuote>();
-      if (tab === "sell") {
+      if (tab === "buy" || tab === "sell") {
+        const buying = tab === "buy";
+        const minVolume = buying ? this.opts.minQty : this.minDemand();
         const symbol = g.commodities.find((c) => c.name.toLowerCase() === name.toLowerCase())?.id;
+        const ask = buying ? ardentBuyQuotes : ardentSellQuotes;
         const ardent =
           symbol && ref.system
-            ? await ardentSellQuotes(ref.system, symbol, settings.maxDistance, settings.maxAgeDays, this.minDemand())
+            ? await ask(ref.system, symbol, settings.maxDistance, settings.maxAgeDays, minVolume)
             : new Map();
         if (id !== this.runId) return;
         for (const r of rows) {
           const m = quoteOf(r);
           if (!m) continue;
           const spansh: MarketQuote = {
-            price: Number(m.sell_price),
-            demand: Number(m.demand ?? 0),
+            price: Number(buying ? m.buy_price : m.sell_price),
+            demand: Number((buying ? m.supply : m.demand) ?? 0),
             updated: r.market_updated_at ?? r.updated_at,
             source: "spansh",
           };
           quotes.set(r, freshestQuote(spansh, ardent.get(Number(r.market_id))));
         }
-        // Recent markets only Ardent returned, drawn like Spansh's results.
         const known = new Set(rows.map((r) => Number(r.market_id)));
         for (const quote of ardent.values()) {
           if (known.has(quote.marketId) || !ardentStationAllowed(quote, this.opts)) continue;
+          // Drawn like Spansh's results.
           const row: Json = {
             name: quote.station,
             system_name: quote.system,
@@ -462,32 +545,34 @@ export class SearchView implements View {
             distance: quote.distance,
             distance_to_arrival: quote.arrival,
             market_id: quote.marketId,
-            market: [{ commodity: name, sell_price: quote.price, demand: quote.demand }],
+            market: [{ commodity: name }],
           };
           rows.push(row);
           quotes.set(row, { price: quote.price, demand: quote.demand, updated: quote.updated, source: "ardent" });
         }
         rows = rows.filter((r) => {
           const q = quotes.get(r);
-          return q && meetsDemand(q, this.minDemand()) && recentEnough(q.updated, settings.maxAgeDays);
+          return q && meetsDemand(q, minVolume) && recentEnough(q.updated, settings.maxAgeDays);
         });
-      } else if (tab === "buy")
-        rows = rows.filter((r) => recentEnough(r.market_updated_at ?? r.updated_at, settings.maxAgeDays));
-      this.quotes = quotes;
-      if ((tab === "buy" || tab === "sell") && this.opts.sortPrice) {
-        const price = (r: Json) => {
-          const m = quoteOf(r);
-          return m ? Number(m.buy_price) : NaN;
-        };
-        const seen = (r: Json) => quoteTime(r.market_updated_at ?? r.updated_at);
-        // Best price first, then the most recently seen.
-        rows =
-          tab === "sell"
-            ? rows.sort((a, b) => bestRecentFirst(quotes.get(a)!, quotes.get(b)!))
-            : rows.filter((r) => !Number.isNaN(price(r))).sort((a, b) => price(a) - price(b) || seen(b) - seen(a));
-      } else if (tab === "sell") {
-        rows.sort((a, b) => Number(a.distance ?? Infinity) - Number(b.distance ?? Infinity));
       }
+      this.quotes = quotes;
+      rows = rows.filter((r) => arrivalAllowed(numberOrUndefined(r.distance_to_arrival), this.opts.maxArrival));
+      const shipPrice = (r: Json) =>
+        (r.ships ?? []).find((x: Json) => String(x.name).toLowerCase() === name.toLowerCase())?.price;
+      const sortable = (r: Json): SortableStation => {
+        const q = quotes.get(r);
+        return {
+          price: q ? q.price : tab === "ship" ? numberOrUndefined(shipPrice(r)) : undefined,
+          volume: q?.demand,
+          distance: numberOrUndefined(r.distance),
+          arrival: numberOrUndefined(r.distance_to_arrival),
+          seen: quoteTime(q?.updated ?? r.market_updated_at ?? r.updated_at),
+        };
+      };
+      const order = stationOrder(sort, tab !== "sell");
+      const keyed = rows.map((r) => ({ r, k: sortable(r) }));
+      keyed.sort((a, b) => order(a.k, b.k));
+      rows = keyed.map((x) => x.r).slice(0, tab === "buy" || tab === "sell" ? 100 : 50);
       if (!rows.length) {
         replace(
           this.out,
@@ -506,7 +591,10 @@ export class SearchView implements View {
         h(
           "p.sub",
           null,
-          t("search.matchingStationsShown", { count: fmt(Number(res.count ?? rows.length)), count2: rows.length }),
+          t("search.matchingStationsShown", {
+            count: fmt(Math.max(Number(res?.count ?? 0), rows.length)),
+            count2: rows.length,
+          }),
         ),
         h(
           "table.table.search-table",
@@ -555,8 +643,8 @@ export class SearchView implements View {
         detail =
           tab === "buy"
             ? [
-                h("strong", null, t("search.cr", { buyPrice: fmt(m.buy_price) })),
-                " " + t("search.stock", { supply: fmt(m.supply) }),
+                h("strong", null, t("search.cr", { buyPrice: fmt(this.quotes.get(r)?.price ?? m.buy_price) })),
+                " " + t("search.stock", { supply: fmt(this.quotes.get(r)?.demand ?? m.supply) }),
               ]
             : [
                 h("strong", null, t("search.cr", { buyPrice: fmt(this.quotes.get(r)?.price ?? m.sell_price) })),
@@ -584,7 +672,7 @@ export class SearchView implements View {
       detail = [r.type ?? "", kind ? ` · ${KIND_LABELS[kind.kind]}` : ""];
     }
     const pad = r.has_large_pad ? "L" : r.medium_pads > 0 ? "M" : r.small_pads > 0 ? "S" : "?";
-    const quote = tab === "sell" ? this.quotes.get(r) : undefined;
+    const quote = tab === "buy" || tab === "sell" ? this.quotes.get(r) : undefined;
     const age =
       quote?.updated ?? r.market_updated_at ?? r.outfitting_updated_at ?? r.shipyard_updated_at ?? r.updated_at;
     return h(

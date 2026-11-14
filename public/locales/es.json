@@ -1055,8 +1055,6 @@
     "shipEGKraitMkiiAnaconda": "Nave (p. ej. Krait MkII, Anaconda)",
     "ships": "Naves",
     "shipyard": "Astillero",
-    "sortBestPrice": "Ordenar por mejor precio",
-    "sortLowestPrice": "Ordenar por precio más bajo",
     "stock": "· {{supply}} en existencias",
     "updated": "Act.",
     "faction": "Facción",
@@ -1080,7 +1078,17 @@
     "kindManufactured": "manufacturados",
     "kindEncoded": "codificados",
     "kindGuardian": "guardián",
-    "kindHuman": "humano"
+    "kindHuman": "humano",
+    "sortBy": "Ordenar por",
+    "sortDistance": "Distancia",
+    "sortRecent": "Más reciente",
+    "sortArrival": "Distancia a la estrella",
+    "sortDemand": "Demanda",
+    "sortStock": "Existencias",
+    "maxArrival": "Distancia máx. a la estrella",
+    "anyArrival": "Cualquiera",
+    "sortPriceBest": "Mejor precio",
+    "sortPriceLowest": "Precio más bajo"
   },
   "session": {
     "bounties": "Recompensas",

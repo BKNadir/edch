@@ -1051,8 +1051,6 @@
     "shipEGKraitMkiiAnaconda": "Корабль (например, Krait MkII, Anaconda)",
     "ships": "Корабли",
     "shipyard": "Верфь",
-    "sortBestPrice": "Сначала лучшая цена",
-    "sortLowestPrice": "Сначала дешёвые",
     "stock": "· в наличии {{supply}}",
     "updated": "Обновлено",
     "faction": "Фракция",
@@ -1075,7 +1073,17 @@
     "kindManufactured": "промышленные",
     "kindEncoded": "данные",
     "kindGuardian": "Стражи",
-    "kindHuman": "человеческий"
+    "kindHuman": "человеческий",
+    "sortBy": "Сортировать",
+    "sortDistance": "Расстояние",
+    "sortRecent": "Самые свежие",
+    "sortArrival": "Расстояние до звезды",
+    "sortDemand": "Спрос",
+    "sortStock": "Запас",
+    "maxArrival": "Макс. расстояние до звезды",
+    "anyArrival": "Любое",
+    "sortPriceBest": "Лучшая цена",
+    "sortPriceLowest": "Самая низкая цена"
   },
   "session": {
     "bounties": "Награды за головы",

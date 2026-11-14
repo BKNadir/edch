@@ -12,6 +12,7 @@ and EDCH shows it in the update banner.
 - Settings: a minimum demand for selling (also on the Search page), and one "maximum data age" (1 day to 3 months) for trade and system searches: older prices and faction states are left out.
 - Search: material traders (raw, manufactured, encoded) and technology brokers (Guardian, human) can be searched by kind, found from the station's economy, and results show each one's kind. A reference system can be typed to search from somewhere else than your position ("My position" goes back).
 - Search → Faction: every faction of the game is offered while typing (a list of about 78,000 from EDSM, bundled), whatever the capitals or accents; the search uses the game's exact spelling.
+- Search: a "Sort by" choice on every tab (best or lowest price, distance, demand or stock, most recent, distance to the star) and a maximum distance to the star. When sorting on something else than distance, the 300 nearest stations are looked at instead of 100; buying, like selling, also asks Ardent for the best recent prices of the whole zone. Column titles still sort what is shown.
 
 ## 0.10.13
 

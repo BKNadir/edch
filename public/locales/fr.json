@@ -1055,8 +1055,6 @@
     "shipEGKraitMkiiAnaconda": "Vaisseau (ex. Krait MkII, Anaconda)",
     "ships": "Vaisseaux",
     "shipyard": "Chantier naval",
-    "sortBestPrice": "Trier par meilleur prix",
-    "sortLowestPrice": "Trier par prix le plus bas",
     "stock": "· {{supply}} en stock",
     "updated": "Màj",
     "faction": "Faction",
@@ -1080,7 +1078,17 @@
     "kindManufactured": "manufacturés",
     "kindEncoded": "encodés",
     "kindGuardian": "gardien",
-    "kindHuman": "humain"
+    "kindHuman": "humain",
+    "sortBy": "Trier par",
+    "sortDistance": "Distance",
+    "sortRecent": "Plus récent",
+    "sortArrival": "Distance à l'étoile",
+    "sortDemand": "Demande",
+    "sortStock": "Stock",
+    "maxArrival": "Distance à l'étoile max",
+    "anyArrival": "Toutes",
+    "sortPriceBest": "Meilleur prix",
+    "sortPriceLowest": "Prix le plus bas"
   },
   "session": {
     "bounties": "Primes",
