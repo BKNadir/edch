@@ -29,7 +29,15 @@ export interface SyncSettings {
    * reaches no other bot address.
    */
   discordBot: string;
+  /**
+   * When BGS reports go to the bot: right after a new action or arrival ("now", a few seconds to
+   * group a burst), or every 5 or 15 minutes. What the squadron saw comes back at the same time.
+   */
+  discordEvery: DiscordEvery;
 }
+
+/** How often the BGS reports go to the squadron's Discord bot. */
+export type DiscordEvery = "now" | "5min" | "15min";
 
 export const DEFAULT_SYNC: SyncSettings = {
   shareMode: "normal",
@@ -42,4 +50,5 @@ export const DEFAULT_SYNC: SyncSettings = {
   discord: false,
   discordKey: "",
   discordBot: "",
+  discordEvery: "now",
 };

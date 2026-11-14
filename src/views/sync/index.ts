@@ -3,13 +3,13 @@
 
 import { locale, t } from "../../platform/i18n.js";
 import { openUrl, trustBot } from "../../platform/bridge.js";
-import { botSync, sendBgsNow } from "../../features/bgs/botSync.js";
+import { botLog, botSync, discordEvery, sendBgsNow } from "../../features/bgs/botSync.js";
 import { BOT_SOURCE, readBotKey, SHARED_BOT } from "../../services/discordBot.js";
 import { dialog } from "../../ui/dialog.js";
 import { relTime } from "../../ui/format.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
 import type { Ctx, View } from "../../state/context.js";
-import type { SyncSettings } from "../../state/syncSettings.js";
+import type { DiscordEvery, SyncSettings } from "../../state/syncSettings.js";
 import { shareModeSwitch } from "../shared/shareModeSwitch.js";
 import { clearShared } from "../../state/bgsShared.js";
 
@@ -182,6 +182,24 @@ export class SyncView implements View {
         }),
       ),
       h("label.field", null, h("span", null, t("discord.key")), keyInput, h("small", null, t("discord.keyHelp"))),
+      h(
+        "label.field",
+        null,
+        h("span", null, t("discord.every")),
+        h(
+          "select",
+          {
+            onchange: (e: Event) => set({ discordEvery: (e.target as HTMLSelectElement).value as DiscordEvery }),
+          },
+          (
+            [
+              ["now", t("discord.everyNow")],
+              ["5min", t("discord.every5")],
+              ["15min", t("discord.every15")],
+            ] as [DiscordEvery, string][]
+          ).map(([value, label]) => h("option", { value, selected: discordEvery(s.discordEvery) === value }, label)),
+        ),
+      ),
       this.discordStatus,
       h("div.row", null, h("button.ghost", { onclick: () => void sendBgsNow(store) }, t("discord.sendNow"))),
       // No bot on the squadron's server yet: the guide to host one's own.
@@ -271,22 +289,44 @@ export class SyncView implements View {
       replace(this.activity, h("p.sub", null, t("common.availableAppNotDemoMode")));
       return;
     }
-    const counter = (name: string) =>
+    const counter = (name: string, sent: number, failed: number) =>
       h(
         "div.counter",
         null,
-        h("strong", null, String(stats.sent[name] ?? 0)),
+        h("strong", null, String(sent)),
         h("span", null, name),
-        stats.failed[name] ? h("small.bad", null, t("sync.failed", { count: stats.failed[name] })) : null,
+        failed ? h("small.bad", null, t("sync.failed", { count: failed })) : null,
       );
+    const service = (name: string) => counter(name, stats.sent[name] ?? 0, stats.failed[name] ?? 0);
+    // The Discord bot's exchanges, in the same list (what was sent or received, never the key).
+    const discordLines = botLog.entries.map((e) => ({
+      at: e.at,
+      ok: e.ok,
+      service: "Discord",
+      what: e.error
+        ? t(`discordError.${e.error}`)
+        : e.what === "report"
+          ? t("discord.logReport", { count: e.count, systems: e.systems ?? 0 })
+          : t("discord.logSystems", { count: e.count }),
+      detail: undefined as string | undefined,
+    }));
+    const lines = [...stats.log, ...discordLines].sort((a, b) => b.at - a.at).slice(0, 60);
+    const discordOn = this.ctx.store.state.settings.sync.discord || botLog.entries.length > 0;
     replace(
       this.activity,
-      h("div.counters", null, counter("EDDN"), counter("EDSM"), counter("Inara")),
-      stats.log.length
+      h(
+        "div.counters",
+        null,
+        service("EDDN"),
+        service("EDSM"),
+        service("Inara"),
+        discordOn ? counter("Discord", botLog.sent, botLog.failed) : null,
+      ),
+      lines.length
         ? h(
             "ul.sync-log",
             null,
-            stats.log.map((l) =>
+            lines.map((l) =>
               h(
                 "li",
                 { class: l.ok ? "ok" : "bad" },

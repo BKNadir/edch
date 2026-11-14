@@ -31,3 +31,12 @@ test("bot key: other texts, plain http or odd addresses refused", () => {
   assert.equal(readBotKey(key({ ...CLAIMS, g: "server" })), null);
   assert.equal(readBotKey(key(CLAIMS, "not base64!")), null);
 });
+
+test("bot reports: the chosen period, an unknown value read as immediately", async () => {
+  const { discordEvery } = await import("../dist/js/features/bgs/botSync.js");
+  assert.equal(discordEvery("5min"), "5min");
+  assert.equal(discordEvery("15min"), "15min");
+  assert.equal(discordEvery("now"), "now");
+  assert.equal(discordEvery(undefined), "now");
+  assert.equal(discordEvery("hourly"), "now");
+});
