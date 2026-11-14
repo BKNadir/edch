@@ -4,9 +4,11 @@
 import { fold, gameEnglish, gameName, resolveGameName, t } from "../../platform/i18n.js";
 import { locale } from "../../platform/i18n.js";
 import { spanshPost } from "../../platform/bridge.js";
-import { h, icon, fmt, replace } from "../../ui/dom.js";
+import { h, icon, fmt, replace, toast } from "../../ui/dom.js";
 import { stationIcon } from "../../ui/stationIcon.js";
 import { relTime } from "../../ui/format.js";
+import { dialog } from "../../ui/dialog.js";
+import { fitModules, sameModule, stationSells, type WantedModule } from "../../features/search/fitModules.js";
 import { referenceOf, type Ctx, type View } from "../../state/context.js";
 import { referenceField } from "../shared/referenceField.js";
 import { SERVICE_KINDS, serviceKindOf } from "../../game/serviceKinds.js";
@@ -33,7 +35,8 @@ import {
   recentEnough,
   type MarketQuote,
 } from "../../features/market/freshestQuote.js";
-import { sellFiltersNote } from "../shared/marketFilters.js";
+import { priceAgeLabel, sellFiltersNote } from "../shared/marketFilters.js";
+import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
 
 type Json = Record<string, any>;
 type Tab = "buy" | "sell" | "ship" | "module" | "service" | "faction";
@@ -147,8 +150,62 @@ export class SearchView implements View {
   /** Only the latest search may show its results (an older, slower answer is dropped). */
   private runId = 0;
   private rating = "";
+  /** The modules of the last module search (shown on each result). */
+  private wantedModules: WantedModule[] = [];
+  /** Modules tab: the modules a station must all sell (a fit), empty for a single module search. */
+  private moduleList: WantedModule[] = [];
 
   constructor(private ctx: Ctx) {}
+
+  /** Adds the module typed (with its class and rating) to the list; false when the name is unknown. */
+  private addModule(): boolean {
+    const typed = this.values.module.trim();
+    if (!typed) return false;
+    const found = resolveGameName(gameEnglish(typed), this.ctx.game.data.modules).name;
+    if (!found) {
+      toast(t("search.moduleUnknown", { name: typed }));
+      return false;
+    }
+    const wanted = { name: found, cls: this.cls, rating: this.rating };
+    if (!this.moduleList.some((m) => sameModule(m, wanted))) this.moduleList.push(wanted);
+    this.values.module = "";
+    this.renderForm();
+    return true;
+  }
+
+  /** Asks for a fit to paste (EDSY, Coriolis, SLEF, journal Loadout) and lists its modules. */
+  private async importFit() {
+    const area = h("textarea.fit-paste", {
+      rows: 8,
+      placeholder: t("search.fitPastePlaceholder"),
+    }) as HTMLTextAreaElement;
+    const answer = await dialog(
+      t("search.importFit"),
+      [h("p.sub", null, t("search.importFitHelp")), area],
+      [
+        { label: t("common.cancel"), value: "" },
+        { label: t("search.importFitButton"), primary: true, value: "ok" },
+      ],
+    );
+    if (answer !== "ok") return;
+    const fit = fitModules(area.value, this.ctx.game.data.modules);
+    if (!fit) {
+      toast(t("search.fitUnreadable"));
+      return;
+    }
+    for (const m of fit.modules) if (!this.moduleList.some((x) => sameModule(x, m))) this.moduleList.push(m);
+    toast(
+      fit.unknown
+        ? t("search.fitImportedSome", { count: fit.modules.length, unknown: fit.unknown })
+        : t("search.fitImported", { count: fit.modules.length }),
+    );
+    this.renderForm();
+  }
+
+  /** "Frame Shift Drive 5A", "Beam Laser 3": a wanted module in a few words. */
+  private moduleLabel(m: WantedModule): string {
+    return `${gameName(m.name)}${m.cls || m.rating ? ` ${m.cls}${m.rating}` : ""}`;
+  }
 
   mount(root: HTMLElement) {
     this.root = root;
@@ -264,6 +321,11 @@ export class SearchView implements View {
         null,
         input("dl-modules", t("search.moduleEGFrameShiftDrive")),
         h(
+          "button.ghost",
+          { title: t("search.addModuleHelp"), onclick: () => this.addModule() },
+          "+ " + t("search.addModule"),
+        ),
+        h(
           "select",
           {
             title: t("search.moduleClass"),
@@ -303,6 +365,45 @@ export class SearchView implements View {
         main,
         h("button.primary", { onclick: () => this.run() }, icon("search"), " " + t("common.search")),
       ),
+      tab === "module"
+        ? h(
+            "div.row.opts.fit-modules",
+            null,
+            this.moduleList.length
+              ? this.moduleList.map((m, i) =>
+                  h(
+                    "span.chip",
+                    null,
+                    this.moduleLabel(m),
+                    h(
+                      "button.icon-btn",
+                      {
+                        title: t("common.remove"),
+                        onclick: () => {
+                          this.moduleList.splice(i, 1);
+                          this.renderForm();
+                        },
+                      },
+                      icon("close"),
+                    ),
+                  ),
+                )
+              : h("span.sub", null, t("search.moduleListHelp")),
+            h("button.ghost", { onclick: () => void this.importFit() }, t("search.importFit")),
+            this.moduleList.length
+              ? h(
+                  "button.ghost",
+                  {
+                    onclick: () => {
+                      this.moduleList = [];
+                      this.renderForm();
+                    },
+                  },
+                  t("search.clearModules"),
+                )
+              : null,
+          )
+        : null,
       h(
         "div.row.opts",
         null,
@@ -353,6 +454,48 @@ export class SearchView implements View {
             ),
           ),
         ),
+        tab === "buy"
+          ? h(
+              "label.check",
+              null,
+              t("search.minStock") + " ",
+              h("input.num-small", {
+                type: "number",
+                min: "1",
+                step: "100",
+                value: String(this.opts.minQty),
+                onchange: (e: Event) => {
+                  this.opts.minQty = Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1));
+                  this.rerun();
+                },
+              }),
+            )
+          : null,
+        tab !== "service"
+          ? h(
+              "label.check",
+              null,
+              t("search.maxAge") + " ",
+              h(
+                "select",
+                {
+                  title: t("market.dataAgeHelp"),
+                  onchange: (e: Event) => {
+                    this.ctx.store.updateSettings({ maxAgeDays: Number((e.target as HTMLSelectElement).value) });
+                    this.renderForm();
+                    this.rerun();
+                  },
+                },
+                DATA_AGE_CHOICES.map((days) =>
+                  h(
+                    "option",
+                    { value: String(days), selected: days === this.ctx.store.state.settings.maxAgeDays },
+                    priceAgeLabel(days),
+                  ),
+                ),
+              ),
+            )
+          : null,
         tab === "sell"
           ? h(
               "label.check",
@@ -400,7 +543,8 @@ export class SearchView implements View {
     const tab = this.tab;
     if (tab === "faction") return;
     const typed = this.values[tab].trim();
-    if (!typed) return;
+    if (!typed && !(tab === "module" && this.moduleList.length)) return;
+    let wantedModules: WantedModule[] = [];
     // Names can be typed in the app's language or in English; Spansh only knows English.
     const value = gameEnglish(typed);
     const g = this.ctx.game.data;
@@ -463,12 +607,25 @@ export class SearchView implements View {
       name = found;
       f.ships = { value: [name] };
     } else if (tab === "module") {
-      const found = pick(g.modules, (x) => t("search.severalModulesMatch", { x }));
-      if (!found) return;
-      name = found;
-      const group: Json = { name: { value: [name, ...(g.moduleAliases[name] ?? [])] } };
-      if (this.cls) group.class = { value: [this.cls] };
-      if (this.rating) group.rating = { value: [this.rating] };
+      // A module typed and a list: it joins the list. Spansh is asked for the first module; the
+      // stations that also sell all the others are kept here.
+      if (typed) {
+        const found = pick(g.modules, (x) => t("search.severalModulesMatch", { x }));
+        if (!found) return;
+        name = found;
+        const wanted = { name, cls: this.cls, rating: this.rating };
+        if (this.moduleList.length && !this.moduleList.some((m) => sameModule(m, wanted))) {
+          this.moduleList.push(wanted);
+          this.values.module = "";
+          this.renderForm();
+        }
+      }
+      wantedModules = this.moduleList.length ? [...this.moduleList] : [{ name, cls: this.cls, rating: this.rating }];
+      const first = wantedModules[0];
+      name = first.name;
+      const group: Json = { name: { value: [first.name, ...(g.moduleAliases[first.name] ?? [])] } };
+      if (first.cls) group.class = { value: [first.cls] };
+      if (first.rating) group.rating = { value: [first.rating] };
       f.modules = [group];
     } else {
       // A trader or broker kind ("Material Trader|raw"): the service at stations of its economies.
@@ -494,7 +651,7 @@ export class SearchView implements View {
     try {
       // Sorted on something else than distance: the 300 nearest stations rather than 100, so the
       // best ones of the zone are there (Spansh sorts on distance only).
-      const pages = sort === "distance" ? 1 : 3;
+      const pages = sort === "distance" && wantedModules.length < 2 ? 1 : 3;
       const answers: Json[] = [];
       for (let page = 0; page < pages; page++) {
         const res = await spanshPost("stations/search", body(page));
@@ -557,6 +714,10 @@ export class SearchView implements View {
       }
       this.quotes = quotes;
       rows = rows.filter((r) => arrivalAllowed(numberOrUndefined(r.distance_to_arrival), this.opts.maxArrival));
+      // A whole fit: only the stations selling every module of the list.
+      if (wantedModules.length > 1)
+        rows = rows.filter((r) => wantedModules.every((m) => stationSells(r.modules ?? [], m, g.moduleAliases)));
+      this.wantedModules = wantedModules;
       // Ships and modules sold change too: the "data age" setting, as for markets.
       if (tab === "ship" || tab === "module") {
         const seenAt = (r: Json) => (tab === "ship" ? r.shipyard_updated_at : r.outfitting_updated_at) ?? r.updated_at;
@@ -612,17 +773,12 @@ export class SearchView implements View {
               null,
               h("th", null, t("common.station")),
               h("th.num", null, t("common.distance")),
-              h(
-                "th",
-                null,
-                tab === "buy"
-                  ? t("search.buyPriceStock")
-                  : tab === "sell"
-                    ? t("search.sellPriceDemand")
-                    : tab === "service"
-                      ? t("common.type")
-                      : t("search.details"),
-              ),
+              ...(tab === "buy" || tab === "sell"
+                ? [
+                    h("th.num", null, tab === "buy" ? t("search.buyPriceColumn") : t("search.sellPriceColumn")),
+                    h("th.num", null, tab === "buy" ? t("search.stockColumn") : t("search.demandColumn")),
+                  ]
+                : [h("th", null, tab === "service" ? t("common.type") : t("search.details"))]),
               h("th", null, t("search.padArrival")),
               h("th", null, t("search.updated")),
             ),
@@ -642,22 +798,23 @@ export class SearchView implements View {
 
   private row(r: Json, tab: Tab, name: string): HTMLElement {
     let detail: (string | HTMLElement)[] = [];
+    // Buying and selling: the price and the quantity in columns of their own.
+    let market: HTMLElement[] = [];
     if (tab === "buy" || tab === "sell") {
-      const m = (r.market ?? []).find((x: Json) => String(x.commodity).toLowerCase() === name.toLowerCase());
-      if (m)
-        detail =
-          tab === "buy"
-            ? [
-                h("strong", null, t("search.cr", { buyPrice: fmt(this.quotes.get(r)?.price ?? m.buy_price) })),
-                " " + t("search.stock", { supply: fmt(this.quotes.get(r)?.demand ?? m.supply) }),
-              ]
-            : [
-                h("strong", null, t("search.cr", { buyPrice: fmt(this.quotes.get(r)?.price ?? m.sell_price) })),
-                " " + t("search.demand", { demand: fmt(this.quotes.get(r)?.demand ?? m.demand) }),
-              ];
+      const q = this.quotes.get(r);
+      market = [
+        h(
+          "td.num",
+          { "data-sort": String(q?.price ?? "") },
+          q ? h("strong", null, t("search.cr", { buyPrice: fmt(q.price) })) : "",
+        ),
+        h("td.num", { "data-sort": String(q?.demand ?? "") }, q ? `${fmt(q.demand)} t` : ""),
+      ];
     } else if (tab === "ship") {
       const s = (r.ships ?? []).find((x: Json) => String(x.name).toLowerCase() === name.toLowerCase());
       detail = [s?.price ? h("strong", null, t("search.cr", { buyPrice: fmt(s.price) })) : t("search.sale")];
+    } else if (tab === "module" && this.wantedModules.length > 1) {
+      detail = [t("search.allModulesSold", { count: this.wantedModules.length })];
     } else if (tab === "module") {
       const mods = (r.modules ?? []).filter(
         (x: Json) =>
@@ -703,7 +860,7 @@ export class SearchView implements View {
         ),
       ),
       h("td.num", null, fmtLy(Number(r.distance))),
-      h("td", null, detail),
+      ...(market.length ? market : [h("td", null, detail)]),
       h(
         "td",
         null,
