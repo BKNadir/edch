@@ -2448,6 +2448,52 @@ circle[data-control-key].pressed {
   background: var(--accent-dim);
   color: var(--accent);
 }
+/* First-run introduction (after the language screen). */
+.intro-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+}
+.intro-screen {
+  max-width: 720px;
+}
+.intro-features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+}
+.intro-features li {
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+}
+.intro-features b {
+  color: var(--accent);
+}
+.intro-features span {
+  color: var(--text-soft);
+  font-size: 13px;
+}
+.intro-screen .callout {
+  width: 100%;
+  text-align: left;
+}
+.intro-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 .field select {
   max-width: 220px;
 }
@@ -2747,6 +2793,9 @@ circle[data-control-key].pressed {
   }
   .lang-grid {
     grid-template-columns: 1fr 1fr;
+  }
+  .intro-features {
+    grid-template-columns: 1fr;
   }
   .sync-head {
     gap: 10px;

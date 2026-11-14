@@ -1,6 +1,6 @@
 [package]
 name = "edch"
-version = "0.10.13"
+version = "0.10.14"
 description = "Elite Dangerous companion: materials, engineering and where to find them"
 authors = ["BKNadir"]
 edition = "2021"

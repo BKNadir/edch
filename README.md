@@ -114,7 +114,7 @@ Layout:
 - `src/`: framework-free TypeScript UI, in layers (platform, game, state, ui, services, features, views, app); `src-tauri/`: Rust backend (journal, HTTP, option files, remote access server, updates), with no game logic. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 - `tools/gen_data.py`, `tools/gen_binds.py`, `tools/gen_game_locales.py`: regenerate the data in `public/` (see NOTICE).
 
-Every push to `main` or to a `prerelease/<version>` branch builds every platform; a push to `prerelease/<version>` also publishes a pre-release (offered to those who ticked "Also offer pre-releases"). To publish a version, push a tag such as `v0.10.13` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
+Every push to `main` or to a `prerelease/<version>` branch builds every platform; a push to `prerelease/<version>` also publishes a pre-release (offered to those who ticked "Also offer pre-releases"). To publish a version, push a tag such as `v0.10.14` (or push to `main` a commit whose message contains `[release]`): the Release is published and installed copies offer the update. Write the version's changes in [CHANGELOG.md](CHANGELOG.md) first: that section becomes the release notes shown in the update banner.
 
 ## Roadmap
 

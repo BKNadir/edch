@@ -4,6 +4,7 @@
 
 import { forgetRemoteToken, installerLanguage, isTauri, remoteFetch, remoteState } from "./platform/bridge.js";
 import { h, replace } from "./ui/dom.js";
+import { showIntro } from "./ui/intro.js";
 import { browserLang, guessLang, initI18n, LANGS, saveLang, savedLang, t } from "./platform/i18n.js";
 
 /** Served by EDCH's local server? "paired" when this device holds the current secret. */
@@ -37,20 +38,24 @@ async function boot() {
   // A phone served by EDCH's local server follows the PC's language until it picks its own.
   const remoteMode = isTauri() ? null : await detectRemote();
   let code = savedLang();
+  // First run on this PC: after the language, a short introduction.
+  let firstRun = false;
   if (remoteMode) {
     // A phone is the PC's screen elsewhere: same language, no language screen.
     code = (remoteMode === "paired" ? await remoteLanguage() : null) ?? code ?? browserLang();
   } else if (!code || !LANGS.some((l) => l.code === code)) {
     code = await pickLanguage(app, guessLang(await installerLanguage()));
     saveLang(code);
+    firstRun = true;
   }
   await initI18n(code);
+  const openSettings = firstRun ? await showIntro(app) : false;
   if (remoteMode === "unpaired") {
     replace(app, unpairedScreen());
     return;
   }
   const { startApp } = await import("./app/main.js");
-  await startApp(code, remoteMode);
+  await startApp(code, remoteMode, openSettings);
 }
 
 /** Shown on a phone that reached the local server without (or with an outdated) QR code. */

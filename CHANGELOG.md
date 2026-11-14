@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## 0.10.14
+
+- First start: after choosing the language, a short introduction presents what EDCH does (materials and engineering, navigation, activities, sharing) and invites you to take a minute in Settings; "Open Settings" goes straight there.
+
 ## 0.10.13
 
 - Logs: wing members' names (wing events, wing notifications) are no longer written; the BGS page, the refresh tour and the Discord bot log what they do in debug mode.

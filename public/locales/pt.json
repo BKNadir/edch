@@ -579,6 +579,23 @@
     "whenUseful": "Quando é útil?",
     "wiFiEthernetAddressSelectedPick": "o endereço Wi-Fi ou Ethernet está selecionado: escolha \"Tailscale\" na lista \"Endereço do PC\". Se o Tailscale não aparece na lista, ele não estava ativo quando a página abriu: abra-a de novo."
   },
+  "intro": {
+    "activitiesText": "Missões, mineração, colonização, Powerplay, Thargoids e BGS, cada um na sua página.",
+    "activitiesTitle": "Atividades",
+    "engineeringText": "Seus materiais, o que cada projeto precisa, os engenheiros a visitar e onde encontrar o que falta.",
+    "engineeringTitle": "Materiais e engenharia",
+    "later": "Você pode mudar tudo isso depois nas Configurações.",
+    "lead": "O EDCH lê o diário do jogo enquanto você joga e mantém cada página atualizada sozinho. Veja o que ele pode fazer por você:",
+    "navigationText": "Rotas por estrelas de nêutrons e de fleet carrier, e o próximo sistema copiado para você: é só colar.",
+    "navigationTitle": "Navegação",
+    "openSettings": "Abrir as Configurações",
+    "settingsText": "Confira a pasta do diário do jogo, a página inicial, o tema e o tamanho, as notificações e as páginas mostradas no menu. O EDCH fica muito mais útil quando está ajustado ao seu jeito de jogar.",
+    "settingsTitle": "Antes de começar: passe um minuto nas Configurações",
+    "sharingText": "EDDN, EDSM e Inara, o bot do Discord da sua esquadrilha e o seu celular como segunda tela.",
+    "sharingTitle": "Compartilhamento",
+    "start": "Começar",
+    "welcome": "Bem-vindo, Comandante"
+  },
   "links": {
     "copiedPasteGalaxyMap": "\"{{system}}\" copiado — cole no mapa da galáxia",
     "copiedPcPasteGalaxyMap": "\"{{system}}\" copiado no PC — cole no mapa galáctico",

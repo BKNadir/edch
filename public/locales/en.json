@@ -577,6 +577,23 @@
     "whenUseful": "When is it useful?",
     "wiFiEthernetAddressSelectedPick": "the Wi-Fi or Ethernet address is selected: pick \"Tailscale\" in the \"PC address\" list. If Tailscale isn't in the list, it wasn't running when the page opened: open the page again."
   },
+  "intro": {
+    "activitiesText": "Missions, mining, colonisation, Powerplay, Thargoids and BGS, each on its own page.",
+    "activitiesTitle": "Activities",
+    "engineeringText": "Your materials, what each blueprint needs, the engineers to visit and where to find what's missing.",
+    "engineeringTitle": "Materials and engineering",
+    "later": "You can change all of this later in Settings.",
+    "lead": "EDCH reads your game journal while you play and keeps every page up to date on its own. Here is what it can do for you:",
+    "navigationText": "Neutron and fleet carrier routes, and the next system copied for you so you only have to paste it.",
+    "navigationTitle": "Navigation",
+    "openSettings": "Open Settings",
+    "settingsText": "Check the game's journal folder, the start page, the theme and size, the notifications and the pages shown in the menu. EDCH is far more useful once it's set up the way you play.",
+    "settingsTitle": "Before you start: take a minute in Settings",
+    "sharingText": "EDDN, EDSM and Inara, your squadron's Discord bot, and your phone as a second screen.",
+    "sharingTitle": "Sharing",
+    "start": "Start",
+    "welcome": "Welcome, Commander"
+  },
   "links": {
     "copiedPasteGalaxyMap": "\"{{system}}\" copied — paste it in the galaxy map",
     "copiedPcPasteGalaxyMap": "\"{{system}}\" copied on the PC — paste it in the galaxy map",

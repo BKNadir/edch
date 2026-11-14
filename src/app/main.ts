@@ -34,7 +34,7 @@ import { runRemoteClient, setupRemoteHost } from "./remote.js";
 import { startShell } from "./shell.js";
 
 /** Starts the app once the language is loaded (called by boot.ts). */
-export async function startApp(code: string, remoteMode: "paired" | null) {
+export async function startApp(code: string, remoteMode: "paired" | null, openSettings = false) {
   const app = document.getElementById("app")!;
   captureErrors();
   captureActions();
@@ -82,6 +82,8 @@ export async function startApp(code: string, remoteMode: "paired" | null) {
   );
   ctx.sync = sync;
 
+  // Chosen on the first-run introduction: Settings first.
+  if (openSettings) store.state.view = "settings";
   startShell(app, ctx, remoteMode, () => replayJournal(store));
 
   if (!isTauri()) {
