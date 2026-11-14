@@ -1067,7 +1067,19 @@
     "factionStatesHelp": "Nur Systeme, in denen die Fraktion in einem der angehakten Zustände ist (ihr Hauptzustand). Keiner angehakt: jeder Zustand.",
     "noFactionSystems": "Kein System für {{faction}} mit diesen Optionen gefunden. Prüfe den genauen Namen der Fraktion.",
     "factionSystemsShown_one": "{{count}} System ({{shown}} angezeigt)",
-    "factionSystemsShown_other": "{{count}} Systeme ({{shown}} angezeigt)"
+    "factionSystemsShown_other": "{{count}} Systeme ({{shown}} angezeigt)",
+    "referenceSystem": "Bezugssystem",
+    "referenceHere": "Meine Position",
+    "materialTraderRaw": "Materialhändler: Rohstoffe",
+    "materialTraderManufactured": "Materialhändler: hergestellte Materialien",
+    "materialTraderEncoded": "Materialhändler: Daten",
+    "technologyBrokerGuardian": "Technologiemakler: Guardian",
+    "technologyBrokerHuman": "Technologiemakler: menschlich",
+    "kindRaw": "Rohstoffe",
+    "kindManufactured": "hergestellt",
+    "kindEncoded": "Daten",
+    "kindGuardian": "Guardian",
+    "kindHuman": "menschlich"
   },
   "session": {
     "bounties": "Kopfgelder",

@@ -10,6 +10,7 @@ and EDCH shows it in the update banner.
 - Controls: action names in French when EDCH is in French (contributed by philippe015), with the game's names for modules (chaff launcher, shield cell bank, heat sink launcher); search works in English too. German, Spanish, Portuguese and Russian names are AI translations, using the game's names where EDCH has them; checks against the game are welcome.
 - Where to sell a commodity (Search, Mining): prices now come from Spansh and Ardent Insight together, market by market, keeping the most recently seen one; recent markets only Ardent knows are added. Best price first, then the most recent; the demand and how old each price is (with its source) are shown.
 - Settings: a minimum demand for selling (also on the Search page), and one "maximum data age" (1 day to 3 months) for trade and system searches: older prices and faction states are left out.
+- Search: material traders (raw, manufactured, encoded) and technology brokers (Guardian, human) can be searched by kind, found from the station's economy, and results show each one's kind. A reference system can be typed to search from somewhere else than your position ("My position" goes back).
 
 ## 0.10.13
 

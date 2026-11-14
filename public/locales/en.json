@@ -1067,7 +1067,19 @@
     "factionStatesHelp": "Only the systems where the faction is in one of the ticked states (its main state). None ticked: any state.",
     "noFactionSystems": "No system found for {{faction}} with these options. Check the faction's exact name.",
     "factionSystemsShown_one": "{{count}} system ({{shown}} shown)",
-    "factionSystemsShown_other": "{{count}} systems ({{shown}} shown)"
+    "factionSystemsShown_other": "{{count}} systems ({{shown}} shown)",
+    "referenceSystem": "Reference system",
+    "referenceHere": "My position",
+    "materialTraderRaw": "Material Trader: raw",
+    "materialTraderManufactured": "Material Trader: manufactured",
+    "materialTraderEncoded": "Material Trader: encoded",
+    "technologyBrokerGuardian": "Technology Broker: Guardian",
+    "technologyBrokerHuman": "Technology Broker: human",
+    "kindRaw": "raw",
+    "kindManufactured": "manufactured",
+    "kindEncoded": "encoded",
+    "kindGuardian": "Guardian",
+    "kindHuman": "human"
   },
   "session": {
     "bounties": "Bounties",

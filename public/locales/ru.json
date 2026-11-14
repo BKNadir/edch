@@ -1063,7 +1063,19 @@
     "factionStates": "Состояния фракции",
     "factionStatesHelp": "Только системы, где фракция в одном из отмеченных состояний (основное состояние). Ничего не отмечено: любое состояние.",
     "noFactionSystems": "Для {{faction}} с этими параметрами систем не найдено. Проверьте точное название фракции.",
-    "factionSystemsShown": "Систем: {{count}} (показано {{shown}})"
+    "factionSystemsShown": "Систем: {{count}} (показано {{shown}})",
+    "referenceSystem": "Опорная система",
+    "referenceHere": "Моё местоположение",
+    "materialTraderRaw": "Торговец материалами: сырьё",
+    "materialTraderManufactured": "Торговец материалами: промышленные",
+    "materialTraderEncoded": "Торговец материалами: данные",
+    "technologyBrokerGuardian": "Технологический брокер: Стражи",
+    "technologyBrokerHuman": "Технологический брокер: человеческий",
+    "kindRaw": "сырьё",
+    "kindManufactured": "промышленные",
+    "kindEncoded": "данные",
+    "kindGuardian": "Стражи",
+    "kindHuman": "человеческий"
   },
   "session": {
     "bounties": "Награды за головы",

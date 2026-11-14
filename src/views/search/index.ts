@@ -7,7 +7,9 @@ import { spanshPost } from "../../platform/bridge.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { stationIcon } from "../../ui/stationIcon.js";
 import { relTime } from "../../ui/format.js";
-import { referenceOf, type Ctx, type View } from "../../state/context.js";
+import { type Ctx, type View } from "../../state/context.js";
+import { referenceField, searchReference } from "./reference.js";
+import { SERVICE_KINDS, serviceKindOf } from "../../game/serviceKinds.js";
 import { fmtLy, inaraSystem } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
 import { openUrl } from "../../platform/bridge.js";
@@ -48,7 +50,12 @@ const CARRIER = "Drake-Class Carrier";
 const SERVICES: [string, string][] = [
   ["Interstellar Factors Contact", "Interstellar Factors"],
   ["Material Trader", t("search.materialTrader")],
+  ["Material Trader|raw", t("search.materialTraderRaw")],
+  ["Material Trader|manufactured", t("search.materialTraderManufactured")],
+  ["Material Trader|encoded", t("search.materialTraderEncoded")],
   ["Technology Broker", t("common.technologyBroker")],
+  ["Technology Broker|guardian", t("search.technologyBrokerGuardian")],
+  ["Technology Broker|human", t("search.technologyBrokerHuman")],
   ["Universal Cartographics", "Universal Cartographics"],
   ["Vista Genomics", "Vista Genomics"],
   ["Black Market", t("search.blackMarket")],
@@ -63,6 +70,14 @@ const SERVICES: [string, string][] = [
   ["Apex Interstellar", "Apex Interstellar"],
   ["Frontline Solutions", "Frontline Solutions"],
 ];
+/** Short names of the trader and broker kinds, shown next to a station. */
+const KIND_LABELS: Record<string, string> = {
+  raw: t("search.kindRaw"),
+  manufactured: t("search.kindManufactured"),
+  encoded: t("search.kindEncoded"),
+  guardian: t("search.kindGuardian"),
+  human: t("search.kindHuman"),
+};
 const CLASSES = ["", "0", "1", "2", "3", "4", "5", "6", "7", "8"];
 const RATINGS = ["", "A", "B", "C", "D", "E", "F", "G", "H", "I"];
 
@@ -149,7 +164,7 @@ export class SearchView implements View {
     const where = this.form.querySelector(".opts .sub");
     if (where)
       where.textContent = t("common.aroundLyMax", {
-        label: referenceOf(this.ctx).label,
+        label: searchReference(this.ctx).label,
         maxDistance: this.ctx.store.state.settings.maxDistance,
       });
   }
@@ -254,6 +269,11 @@ export class SearchView implements View {
         main,
         h("button.primary", { onclick: () => this.run() }, icon("search"), " " + t("common.search")),
       ),
+      h(
+        "div.row.opts",
+        null,
+        referenceField(this.ctx, () => this.update()),
+      ),
       tab === "sell" ? h("p.sub", null, sellFiltersNote(this.ctx.store.state.settings)) : null,
       h(
         "div.row.opts",
@@ -274,10 +294,12 @@ export class SearchView implements View {
                 min: "1",
                 step: "100",
                 value: String(this.minDemand()),
-                onchange: (e: Event) =>
+                onchange: (e: Event) => {
                   this.ctx.store.updateSettings({
                     minSellDemand: Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1)),
-                  }),
+                  });
+                  this.renderForm();
+                },
               }),
             )
           : null,
@@ -285,7 +307,7 @@ export class SearchView implements View {
           "span.sub",
           null,
           t("common.aroundLyMax", {
-            label: referenceOf(this.ctx).label,
+            label: searchReference(this.ctx).label,
             maxDistance: this.ctx.store.state.settings.maxDistance,
           }),
         ),
@@ -380,10 +402,14 @@ export class SearchView implements View {
       if (this.rating) group.rating = { value: [this.rating] };
       f.modules = [group];
     } else {
-      f.services = [{ name: { value: [value] } }];
+      // A trader or broker kind ("Material Trader|raw"): the service at stations of its economies.
+      const [service, kindName] = this.values.service.split("|");
+      const kind = SERVICE_KINDS.find((k) => k.service === service && k.kind === kindName);
+      f.services = [{ name: { value: [service] } }];
+      if (kind) f.primary_economy = { value: kind.economies };
     }
 
-    const ref = referenceOf(this.ctx);
+    const ref = searchReference(this.ctx);
     const body: Json = {
       filters: f,
       sort: [{ distance: { direction: "asc" } }],
@@ -551,7 +577,12 @@ export class SearchView implements View {
           .map((x: Json) => `${x.class ?? ""}${x.rating ?? ""}`)
           .join(" · ") || t("search.available"),
       ];
-    } else detail = [r.type ?? ""];
+    } else {
+      // A trader's or broker's kind follows the station's economy.
+      const service = this.values.service.split("|")[0];
+      const kind = serviceKindOf(service, r.primary_economy);
+      detail = [r.type ?? "", kind ? ` · ${KIND_LABELS[kind.kind]}` : ""];
+    }
     const pad = r.has_large_pad ? "L" : r.medium_pads > 0 ? "M" : r.small_pads > 0 ? "S" : "?";
     const quote = tab === "sell" ? this.quotes.get(r) : undefined;
     const age =

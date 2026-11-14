@@ -1068,7 +1068,19 @@
     "factionStatesHelp": "Seulement les systèmes où la faction est dans un des états cochés (son état principal). Aucun coché : tous les états.",
     "noFactionSystems": "Aucun système trouvé pour {{faction}} avec ces options. Vérifie le nom exact de la faction.",
     "factionSystemsShown_one": "{{count}} système ({{shown}} affiché)",
-    "factionSystemsShown_other": "{{count}} systèmes ({{shown}} affichés)"
+    "factionSystemsShown_other": "{{count}} systèmes ({{shown}} affichés)",
+    "referenceSystem": "Système de référence",
+    "referenceHere": "Ma position",
+    "materialTraderRaw": "Trader de matériaux : bruts",
+    "materialTraderManufactured": "Trader de matériaux : manufacturés",
+    "materialTraderEncoded": "Trader de matériaux : encodés",
+    "technologyBrokerGuardian": "Courtier technologique : gardien",
+    "technologyBrokerHuman": "Courtier technologique : humain",
+    "kindRaw": "bruts",
+    "kindManufactured": "manufacturés",
+    "kindEncoded": "encodés",
+    "kindGuardian": "gardien",
+    "kindHuman": "humain"
   },
   "session": {
     "bounties": "Primes",
