@@ -1649,9 +1649,8 @@
     "unreadable": "Ce lien EDOMH n'a pas pu être lu (seuls les builds EDSY et Coriolis sont pris en charge)."
   },
   "discord": {
-    "addBot": "Utiliser le bot par défaut : l'ajouter à mon serveur Discord",
-    "addBotHelp": "Ajouter le bot demande le droit Gérer le serveur sur ce serveur. Un admin lance ensuite /bgs setup (le bot crée le rôle BGS, #edch-sync pour ses données, admins seulement, et #edch-bgs, un fil par système, pour le rôle) puis /bgs faction add pour la faction de l'escadrille, et encore pour les factions alliées. Donne le rôle aux membres qui font les rapports ; /bgs link leur envoie leur clé en message privé. EDCH envoie un rapport pour chaque faction suivie. Une escadrille qui veut sa propre copie peut l'héberger à partir du code sur GitHub.",
-    "hostOwn": "Héberger ton propre bot (GitHub)",
+    "addBotHelp": "Chaque escadrille héberge sa propre copie du bot (le guide derrière le lien explique comment) et l'ajoute à son serveur Discord, ce qui demande le droit Gérer le serveur. Un admin lance ensuite /bgs setup (le bot crée le rôle BGS, #edch-sync pour ses données, admins seulement, et #edch-bgs, un forum avec un post par système, pour le rôle) puis /bgs faction add pour la faction de l'escadrille, et encore pour les factions alliées. Donne le rôle aux membres qui font les rapports ; /bgs link leur envoie leur clé en message privé. EDCH envoie un rapport pour chaque faction suivie.",
+    "hostOwn": "Héberger ton propre bot",
     "intro": "Le bot Discord EDCH rassemble le travail BGS de ton escadrille sur son propre serveur Discord. Activé, EDCH envoie toutes les 15 minutes ce que tu as fait pour la faction de l'escadrille, même en mode BGS ou Invisible : uniquement à ce bot, qui écrit dans le salon privé de ton escadrille.",
     "key": "Ta clé",
     "keyHelp": "Dans le Discord de ton escadrille : /bgs link. Garde-la pour toi : elle envoie des rapports en ton nom.",

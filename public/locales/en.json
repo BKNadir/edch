@@ -1647,9 +1647,8 @@
     "unreadable": "This EDOMH link couldn't be read (only EDSY and Coriolis builds are supported)."
   },
   "discord": {
-    "addBot": "Use the default bot: add it to my Discord server",
-    "addBotHelp": "Adding the bot needs the Manage Server right on that server. Then an admin runs /bgs setup (the bot creates the BGS role, #edch-sync for its data, admins only, and #edch-bgs, one thread per system, for the role) and /bgs faction add for the squadron's faction, and again for allied ones. Give the role to the members who report; /bgs link sends them their key by direct message. EDCH sends a report for each faction followed. A squadron that wants its own copy can host it from the GitHub code.",
-    "hostOwn": "Host your own bot (GitHub)",
+    "addBotHelp": "Each squadron hosts its own copy of the bot (the guide behind the link explains how) and adds it to its Discord server, which needs the Manage Server right there. Then an admin runs /bgs setup (the bot creates the BGS role, #edch-sync for its data, admins only, and #edch-bgs, a forum with a post per system, for the role) and /bgs faction add for the squadron's faction, and again for allied ones. Give the role to the members who report; /bgs link sends them their key by direct message. EDCH sends a report for each faction followed.",
+    "hostOwn": "Host your own bot",
     "intro": "The EDCH Discord bot gathers your squadron's BGS work in its own Discord server. With this on, EDCH sends what you did for the squadron's faction every 15 minutes, even in BGS or Invisible mode: only to this bot, which writes to your squadron's private channel.",
     "key": "Your key",
     "keyHelp": "In your squadron's Discord: /bgs link. Keep it to yourself: it reports in your name.",

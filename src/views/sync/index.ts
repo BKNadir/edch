@@ -4,7 +4,7 @@
 import { locale, t } from "../../platform/i18n.js";
 import { openUrl, trustBot } from "../../platform/bridge.js";
 import { botSync, sendBgsNow } from "../../features/bgs/botSync.js";
-import { BOT_SOURCE, readBotKey, SHARED_BOT, SHARED_BOT_INVITE } from "../../services/discordBot.js";
+import { BOT_SOURCE, readBotKey, SHARED_BOT } from "../../services/discordBot.js";
 import { dialog } from "../../ui/dialog.js";
 import { relTime } from "../../ui/format.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
@@ -154,7 +154,7 @@ export class SyncView implements View {
 
   /**
    * "Connect to the Discord bot": the key from `/bgs link`, the switch that sends the BGS reports,
-   * and the link that adds the shared bot to a server (Discord asks for the Manage Server right).
+   * and the link to the guide for hosting the squadron's own bot.
    */
   private discordCard(toggle: (checked: boolean, onChange: (v: boolean) => void) => HTMLElement): HTMLElement {
     const store = this.ctx.store;
@@ -184,13 +184,8 @@ export class SyncView implements View {
       h("label.field", null, h("span", null, t("discord.key")), keyInput, h("small", null, t("discord.keyHelp"))),
       this.discordStatus,
       h("div.row", null, h("button.ghost", { onclick: () => void sendBgsNow(store) }, t("discord.sendNow"))),
-      // No bot on the squadron's server yet: the shared one, or the code to host one's own.
-      h(
-        "div.row",
-        null,
-        h("button.inline-link", { onclick: () => openUrl(SHARED_BOT_INVITE) }, t("discord.addBot")),
-        h("button.inline-link", { onclick: () => openUrl(BOT_SOURCE) }, t("discord.hostOwn")),
-      ),
+      // No bot on the squadron's server yet: the guide to host one's own.
+      h("div.row", null, h("button.inline-link", { onclick: () => openUrl(BOT_SOURCE) }, t("discord.hostOwn"))),
       h("p.sub", null, t("discord.addBotHelp")),
     );
   }

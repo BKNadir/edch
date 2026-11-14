@@ -11,12 +11,7 @@ import { type SharedSystem, validSharedSystem } from "../state/bgsShared.js";
 
 /** The shared bot (EDCH-Discord hosted for every squadron). Same value as discord_bot.rs. */
 export const SHARED_BOT = "https://edch-discord.default-community.workers.dev";
-/**
- * The link that adds the shared bot to a Discord server: the application's own install link
- * (Discord asks for the Manage Server right there, scopes and permissions are set in the app).
- */
-export const SHARED_BOT_INVITE = "https://discord.com/oauth2/authorize?client_id=1570896049889869915";
-/** The bot's code, for a squadron that hosts its own copy. */
+/** The bot's code and hosting guide, for a squadron that hosts its own copy. */
 export const BOT_SOURCE = "https://github.com/BKNadir/edch-discord";
 
 /** What a key says (not checked: only the bot can check its signature). */

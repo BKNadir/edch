@@ -1647,9 +1647,8 @@
     "unreadable": "Dieser EDOMH-Link konnte nicht gelesen werden (nur Builds von EDSY und Coriolis werden unterstützt)."
   },
   "discord": {
-    "addBot": "Den Standard-Bot nutzen: zu meinem Discord-Server hinzufügen",
-    "addBotHelp": "Zum Hinzufügen braucht man auf diesem Server das Recht „Server verwalten“. Ein Admin führt dann /bgs setup aus (der Bot legt die Rolle BGS an, #edch-sync für seine Daten, nur Admins, und #edch-bgs, ein Thread pro System, für die Rolle) und /bgs faction add für die Fraktion des Geschwaders, und erneut für verbündete. Gib die Rolle den Mitgliedern, die berichten; /bgs link schickt ihnen ihren Schlüssel per Direktnachricht. EDCH sendet für jede verfolgte Fraktion einen Bericht. Ein Geschwader, das eine eigene Kopie will, kann sie aus dem Code auf GitHub hosten.",
-    "hostOwn": "Eigenen Bot hosten (GitHub)",
+    "addBotHelp": "Jedes Geschwader hostet seine eigene Kopie des Bots (die Anleitung hinter dem Link erklärt, wie) und fügt sie seinem Discord-Server hinzu, wofür man dort das Recht „Server verwalten“ braucht. Ein Admin führt dann /bgs setup aus (der Bot legt die Rolle BGS an, #edch-sync für seine Daten, nur Admins, und #edch-bgs, ein Forum mit einem Beitrag pro System, für die Rolle) und /bgs faction add für die Fraktion des Geschwaders, und erneut für verbündete. Gib die Rolle den Mitgliedern, die berichten; /bgs link schickt ihnen ihren Schlüssel per Direktnachricht. EDCH sendet für jede verfolgte Fraktion einen Bericht.",
+    "hostOwn": "Eigenen Bot hosten",
     "intro": "Der Discord-Bot EDCH sammelt die BGS-Arbeit deines Geschwaders auf dessen eigenem Discord-Server. Eingeschaltet sendet EDCH alle 15 Minuten, was du für die Fraktion des Geschwaders getan hast, auch im BGS- oder Unsichtbar-Modus: nur an diesen Bot, der in den privaten Kanal deines Geschwaders schreibt.",
     "key": "Dein Schlüssel",
     "keyHelp": "Im Discord deines Geschwaders: /bgs link. Behalte ihn für dich: Er sendet Berichte in deinem Namen.",

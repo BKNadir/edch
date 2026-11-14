@@ -1660,9 +1660,8 @@
     "unreadable": "Não foi possível ler este link EDOMH (só builds do EDSY e do Coriolis são suportados)."
   },
   "discord": {
-    "addBot": "Usar o bot padrão: adicioná-lo ao meu servidor do Discord",
-    "addBotHelp": "Adicionar o bot exige a permissão Gerenciar servidor nesse servidor. Depois um admin roda /bgs setup (o bot cria o cargo BGS, #edch-sync para os dados dele, só admins, e #edch-bgs, um tópico por sistema, para o cargo) e /bgs faction add para a facção do esquadrão, e de novo para as aliadas. Dê o cargo aos membros que enviam relatórios; /bgs link manda a chave deles por mensagem direta. O EDCH envia um relatório para cada facção acompanhada. Um esquadrão que queira sua própria cópia pode hospedá-la a partir do código no GitHub.",
-    "hostOwn": "Hospedar o seu próprio bot (GitHub)",
+    "addBotHelp": "Cada esquadrão hospeda a própria cópia do bot (o guia por trás do link explica como) e a adiciona ao servidor do Discord dele, o que exige a permissão Gerenciar servidor. Depois um admin roda /bgs setup (o bot cria o cargo BGS, #edch-sync para os dados dele, só admins, e #edch-bgs, um fórum com uma postagem por sistema, para o cargo) e /bgs faction add para a facção do esquadrão, e de novo para as aliadas. Dê o cargo aos membros que enviam relatórios; /bgs link manda a chave deles por mensagem direta. O EDCH envia um relatório para cada facção acompanhada.",
+    "hostOwn": "Hospedar o seu próprio bot",
     "intro": "O bot do Discord EDCH reúne o trabalho de BGS do seu esquadrão no próprio servidor do Discord dele. Ligado, o EDCH envia a cada 15 minutos o que você fez pela facção do esquadrão, mesmo no modo BGS ou Invisível: só para este bot, que escreve no canal privado do seu esquadrão.",
     "key": "Sua chave",
     "keyHelp": "No Discord do seu esquadrão: /bgs link. Guarde-a só para você: ela envia relatórios em seu nome.",
