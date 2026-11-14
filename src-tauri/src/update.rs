@@ -91,8 +91,8 @@ fn github_json(url: &str) -> Result<Option<serde_json::Value>, String> {
     }
 }
 
-/// The architecture in this build's installer name ("EDCH_0.10.10_x64-setup.exe",
-/// "EDCH_0.10.10_arm64-setup.exe").
+/// The architecture in this build's installer name ("EDCH_0.10.14_windows_x64-setup.exe",
+/// "EDCH_0.10.14_windows_arm64-setup.exe"; before 0.10.14 without "windows").
 const ARCH: &str = if cfg!(target_arch = "aarch64") {
     "_arm64-"
 } else {

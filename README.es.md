@@ -87,7 +87,7 @@ Para añadir o corregir una traducción, edita `public/locales/<idioma>.json` (e
 
 ## Instalación
 
-Descarga el instalador (`.exe` o `.msi`) desde [Releases](../../releases), o la versión portátil `EDCH_<version>_x64-portable.exe`: sin instalación, ejecútala desde cualquier carpeta (avisa cuando sale una nueva versión y abre la página de la release). Windows 10/11 ya incluye WebView2. Windows en ARM tiene su propio instalador y exe portable (`arm64`); Linux en ARM sus `.AppImage`, `.deb` y `.rpm` (`aarch64`). La actualización automática elige la versión de tu procesador.
+Descarga el instalador (`.exe` o `.msi`) desde [Releases](../../releases), o la versión portátil `EDCH_<version>_windows_x64-portable.exe`: sin instalación, ejecútala desde cualquier carpeta (avisa cuando sale una nueva versión y abre la página de la release). Windows 10/11 ya incluye WebView2. Windows en ARM tiene su propio instalador y exe portable (`arm64`); Linux en ARM sus `.AppImage`, `.deb` y `.rpm` (`arm64`). La actualización automática elige la versión de tu procesador.
 
 **Linux** (Steam/Proton, Steam Deck incluido): cada release incluye también un `.AppImage` (cualquier distribución: hazlo ejecutable y lánzalo), un `.deb` (Debian, Ubuntu, Mint, Pop!_OS), un `.rpm` (Fedora, openSUSE), un `PKGBUILD` para Arch Linux y derivadas (`makepkg -si` en la carpeta donde lo guardaste) y un `.flatpak` experimental (`flatpak install EDCH_….flatpak`). EDCH encuentra solo el diario en la carpeta Proton de Steam. En Linux, las actualizaciones no se instalan automáticamente: EDCH abre la página de la release.
 

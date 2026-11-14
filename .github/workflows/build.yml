@@ -95,7 +95,7 @@ jobs:
         shell: bash
         run: |
           version=$(node -p "require('./src-tauri/tauri.conf.json').version")
-          file="EDCH_${version}_x64-portable.exe"
+          file="EDCH_${version}_windows_x64-portable.exe"
           cp src-tauri/target/release/edch.exe "$file"
           echo "file=$file" >> "$GITHUB_OUTPUT"
 
@@ -105,6 +105,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload "${{ steps.rel.outputs.tag }}" "${{ steps.portable.outputs.file }}" --clobber -R "${{ github.repository }}"
+
+      # Release file names with the system and the processor (tools/release-assets.mjs).
+      - name: Rename the release files
+        if: steps.tauri.outputs.releaseId != ''
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node tools/release-assets.mjs "${{ steps.rel.outputs.tag }}" "$(node -p "require('./src-tauri/tauri.conf.json').version")"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -219,6 +227,14 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload "${{ steps.rel.outputs.tag }}" PKGBUILD --clobber -R "${{ github.repository }}"
 
+      # Release file names with the system and the processor (tools/release-assets.mjs).
+      - name: Rename the release files
+        if: steps.tauri.outputs.releaseId != ''
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node tools/release-assets.mjs "${{ steps.rel.outputs.tag }}" "$(node -p "require('./src-tauri/tauri.conf.json').version")"
+
       - uses: actions/upload-artifact@v4
         with:
           name: edch-linux
@@ -231,7 +247,7 @@ jobs:
           if-no-files-found: error
 
   # Windows on ARM (arm64), cross-compiled on the x64 runner: NSIS installer and portable exe,
-  # "arm64" in their names. Experimental: a failure here doesn't block the release.
+  # "windows_arm64" in their names. Experimental: a failure here doesn't block the release.
   windows-arm:
     needs: windows
     runs-on: windows-latest
@@ -301,7 +317,7 @@ jobs:
         id: portable
         shell: bash
         run: |
-          file="EDCH_${{ steps.notes.outputs.version }}_arm64-portable.exe"
+          file="EDCH_${{ steps.notes.outputs.version }}_windows_arm64-portable.exe"
           cp src-tauri/target/aarch64-pc-windows-msvc/release/edch.exe "$file"
           echo "file=$file" >> "$GITHUB_OUTPUT"
 
@@ -312,6 +328,14 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release upload "${{ steps.rel.outputs.tag }}" "${{ steps.portable.outputs.file }}" --clobber -R "${{ github.repository }}"
 
+      # Release file names with the system and the processor (tools/release-assets.mjs).
+      - name: Rename the release files
+        if: steps.tauri.outputs.releaseId != ''
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node tools/release-assets.mjs "${{ steps.rel.outputs.tag }}" "$(node -p "require('./src-tauri/tauri.conf.json').version")"
+
       - uses: actions/upload-artifact@v4
         with:
           name: edch-windows-arm64
@@ -320,8 +344,8 @@ jobs:
             src-tauri/target/aarch64-pc-windows-msvc/release/bundle/nsis/*.exe
           if-no-files-found: error
 
-  # Linux on ARM (aarch64), built on GitHub's ARM runner: AppImage, .deb and .rpm, "aarch64" or
-  # "arm64" in their names. Experimental: a failure here doesn't block the release.
+  # Linux on ARM (aarch64), built on GitHub's ARM runner: AppImage, .deb and .rpm, "linux_arm64"
+  # in their names. Experimental: a failure here doesn't block the release.
   linux-arm:
     needs: windows
     runs-on: ubuntu-22.04-arm
@@ -387,6 +411,14 @@ jobs:
           releaseDraft: false
           prerelease: ${{ steps.rel.outputs.pre == 'true' }}
 
+      # Release file names with the system and the processor (tools/release-assets.mjs).
+      - name: Rename the release files
+        if: steps.tauri.outputs.releaseId != ''
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node tools/release-assets.mjs "${{ steps.rel.outputs.tag }}" "$(node -p "require('./src-tauri/tauri.conf.json').version")"
+
       - uses: actions/upload-artifact@v4
         with:
           name: edch-linux-arm64
@@ -427,5 +459,5 @@ jobs:
           version=$(sed -n 's/.*"version": "\(.*\)".*/\1/p' src-tauri/tauri.conf.json | head -1)
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           if ! command -v gh >/dev/null; then dnf install -y gh || (curl -sL https://github.com/cli/cli/releases/download/v2.62.0/gh_2.62.0_linux_amd64.tar.gz | tar xz && cp gh_*/bin/gh /usr/local/bin/); fi
-          cp EDCH.flatpak "EDCH_${version}_x86_64.flatpak"
-          gh release upload "v${version}" "EDCH_${version}_x86_64.flatpak" --clobber -R "${{ github.repository }}"
+          cp EDCH.flatpak "EDCH_${version}_linux_x64.flatpak"
+          gh release upload "v${version}" "EDCH_${version}_linux_x64.flatpak" --clobber -R "${{ github.repository }}"

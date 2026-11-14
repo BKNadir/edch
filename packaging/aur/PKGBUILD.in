@@ -12,7 +12,7 @@ depends=('webkit2gtk-4.1' 'gtk3' 'libsoup3' 'openssl' 'xdotool' 'hicolor-icon-th
 optdepends=('libayatana-appindicator: icon in the notification area')
 provides=('edch')
 conflicts=('edch')
-source=("https://github.com/BKNadir/edch/releases/download/v${pkgver}/EDCH_${pkgver}_amd64.deb")
+source=("https://github.com/BKNadir/edch/releases/download/v${pkgver}/EDCH_${pkgver}_linux_x64.deb")
 sha256sums=('@SHA256@')
 
 package() {

@@ -6,6 +6,7 @@ and EDCH shows it in the update banner.
 ## 0.10.14
 
 - First start: after choosing the language, a short introduction presents what EDCH does (materials and engineering, navigation, activities, sharing) and invites you to take a minute in Settings; "Open Settings" goes straight there. About → "show it again" brings it back any time.
+- Release files now say which system and processor they are for: `EDCH_<version>_windows_x64-setup.exe`, `…_windows_x64-portable.exe`, `…_windows_arm64-setup.exe`, `…_linux_x64.AppImage`, `…_linux_arm64.deb`… Installed copies still find their update.
 
 ## 0.10.13
 
