@@ -1668,7 +1668,7 @@
     "off": "Les rapports sont coupés : active l'interrupteur pour les envoyer.",
     "otherBot": "Cette clé vient d'un autre bot que celui d'EDCH : {{host}}. Tes rapports BGS iront à ce bot et à la personne qui le fait tourner. Ne lui fais confiance que si c'est le bot de ton escadrille.",
     "otherBotTitle": "Un autre bot",
-    "sendNow": "Envoyer maintenant",
+    "sendNow": "Synchroniser maintenant",
     "sending": "Envoi…",
     "title": "Connexion au bot Discord",
     "trustBot": "Faire confiance à ce bot"

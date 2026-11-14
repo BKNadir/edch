@@ -1666,7 +1666,7 @@
     "off": "Reports are off: tick the switch to send them.",
     "otherBot": "This key comes from another bot than EDCH's: {{host}}. Your BGS reports will go to it, and to whoever runs it. Trust it only if it is your squadron's own bot.",
     "otherBotTitle": "Another bot",
-    "sendNow": "Send now",
+    "sendNow": "Sync now",
     "sending": "Sending…",
     "title": "Connect to the Discord bot",
     "trustBot": "Trust this bot"

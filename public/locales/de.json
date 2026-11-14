@@ -1666,7 +1666,7 @@
     "off": "Berichte sind aus: schalte den Schalter ein, um sie zu senden.",
     "otherBot": "Dieser Schlüssel stammt von einem anderen Bot als dem von EDCH: {{host}}. Deine BGS-Berichte gehen an ihn und an den, der ihn betreibt. Vertraue ihm nur, wenn es der Bot deines Geschwaders ist.",
     "otherBotTitle": "Ein anderer Bot",
-    "sendNow": "Jetzt senden",
+    "sendNow": "Jetzt synchronisieren",
     "sending": "Wird gesendet…",
     "title": "Mit dem Discord-Bot verbinden",
     "trustBot": "Diesem Bot vertrauen"

@@ -1668,7 +1668,7 @@
     "off": "Los informes están desactivados: activa el interruptor para enviarlos.",
     "otherBot": "Esta clave viene de otro bot distinto del de EDCH: {{host}}. Tus informes de BGS irán a él y a quien lo gestione. Confía en él solo si es el bot de tu escuadrón.",
     "otherBotTitle": "Otro bot",
-    "sendNow": "Enviar ahora",
+    "sendNow": "Sincronizar ahora",
     "sending": "Enviando…",
     "title": "Conectar con el bot de Discord",
     "trustBot": "Confiar en este bot"

@@ -1679,7 +1679,7 @@
     "off": "Os relatórios estão desligados: ligue a chave para enviá-los.",
     "otherBot": "Esta chave vem de outro bot que não o do EDCH: {{host}}. Seus relatórios de BGS vão para ele e para quem o administra. Confie nele só se for o bot do seu esquadrão.",
     "otherBotTitle": "Outro bot",
-    "sendNow": "Enviar agora",
+    "sendNow": "Sincronizar agora",
     "sending": "Enviando…",
     "title": "Conectar ao bot do Discord",
     "trustBot": "Confiar neste bot"
