@@ -642,6 +642,20 @@
     "unexpectedErrorStartUp": "Erreur inattendue au démarrage",
     "waitingGame": "En attente du jeu"
   },
+  "market": {
+    "dataAge": "Âge maximal des données",
+    "dataAgeHelp": "Commerce et recherche de systèmes : les prix des marchandises et les états des factions (boom, guerre…) vus il y a plus longtemps sont ignorés.",
+    "daysShort": "{{days}} j",
+    "minDemand": "Demande minimale (t)",
+    "minDemandHelp": "Où vendre une marchandise (Recherche, Minage) : seulement les marchés qui en veulent au moins autant de tonnes.",
+    "oneDay": "1 jour",
+    "oneMonth": "1 mois",
+    "oneWeek": "1 semaine",
+    "sellFiltersNote": "Prix de {{age}} maximum, le plus récent entre Spansh et Ardent ; demande d'au moins {{demand}} t (Paramètres).",
+    "threeDays": "3 jours",
+    "threeMonths": "3 mois",
+    "twoWeeks": "2 semaines"
+  },
   "materials": {
     "engineeringMaterials": "Matériaux d'ingénierie",
     "guardianThargoidData": "Données Gardiens / Thargoid",
@@ -1110,7 +1124,6 @@
     "hideNotificationAreaNextClock": "Masquer dans la zone de notification (à côté de l'horloge)",
     "hideTabSoundStaysIfTicked": "Masquer la languette (le son reste actif s'il est coché)",
     "highPopulation1000000Default": "« Haute population » : 1 000 000 par défaut.",
-    "ignoresOlderFactionStatesBoomWar": "Ignore les états de faction plus vieux (Boom, Guerre…). 0 = pas de limite.",
     "interfaceLanguage": "Langue de l'interface",
     "interfaceSize": "Taille de l'interface",
     "journalFolder": "Dossier du journal",
@@ -1125,7 +1138,6 @@
     "listen": "Écouter",
     "mainColour": "Couleur principale",
     "materialModuleEffectNamesFollowGame": "Les noms des matériaux, modules et effets suivent la traduction du jeu ; les noms des commandes restent ceux du jeu en anglais.",
-    "maxBgsDataAgeDays": "Données BGS max. (jours)",
     "maxDistanceLy": "Distance max (al)",
     "maxTourDistanceLy": "Distance max. de la tournée (al)",
     "minPopulationHighGradeEmissions": "Population min. pour les émissions d'intensité élevée",

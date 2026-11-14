@@ -641,6 +641,20 @@
     "unexpectedErrorStartUp": "Unerwarteter Fehler beim Start",
     "waitingGame": "Warte auf das Spiel"
   },
+  "market": {
+    "dataAge": "Maximales Datenalter",
+    "dataAgeHelp": "Handel und Systemsuche: Warenpreise und Fraktionszustände (Boom, Krieg…), die vor längerer Zeit gesehen wurden, werden ignoriert.",
+    "daysShort": "{{days}} T",
+    "minDemand": "Mindestnachfrage (t)",
+    "minDemandHelp": "Wo du eine Ware verkaufst (Suche, Bergbau): nur Märkte, die mindestens so viele Tonnen wollen.",
+    "oneDay": "1 Tag",
+    "oneMonth": "1 Monat",
+    "oneWeek": "1 Woche",
+    "sellFiltersNote": "Preise höchstens {{age}} alt, der neueste von Spansh und Ardent; Nachfrage von mindestens {{demand}} t (Einstellungen).",
+    "threeDays": "3 Tage",
+    "threeMonths": "3 Monate",
+    "twoWeeks": "2 Wochen"
+  },
   "materials": {
     "engineeringMaterials": "Ingenieursmaterialien",
     "guardianThargoidData": "Guardian-/Thargoiden-Daten",
@@ -1109,7 +1123,6 @@
     "hideNotificationAreaNextClock": "Im Infobereich ausblenden (neben der Uhr)",
     "hideTabSoundStaysIfTicked": "Reiter ausblenden (der Ton bleibt aktiv, wenn angehakt)",
     "highPopulation1000000Default": "„Hohe Bevölkerung“: standardmäßig 1.000.000.",
-    "ignoresOlderFactionStatesBoomWar": "Ignoriert ältere Fraktionszustände (Boom, Krieg…). 0 = keine Grenze.",
     "interfaceLanguage": "Sprache der Oberfläche",
     "interfaceSize": "Größe der Oberfläche",
     "journalFolder": "Journal-Ordner",
@@ -1124,7 +1137,6 @@
     "listen": "Anhören",
     "mainColour": "Hauptfarbe",
     "materialModuleEffectNamesFollowGame": "Namen von Materialien, Modulen und Effekten folgen der Übersetzung des Spiels; Befehlsnamen bleiben wie im englischen Spiel.",
-    "maxBgsDataAgeDays": "Max. Alter der BGS-Daten (Tage)",
     "maxDistanceLy": "Max. Entfernung (Lj)",
     "maxTourDistanceLy": "Max. Tour-Distanz (Lj)",
     "minPopulationHighGradeEmissions": "Min. Bevölkerung für hochgradige Emissionen",

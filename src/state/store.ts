@@ -2,6 +2,7 @@
 // the journal and the activity, saved in localStorage. Pages subscribe to it and redraw.
 
 import { log } from "../platform/logger.js";
+import { validDataAge } from "./dataAge.js";
 import { type ThemeSettings } from "./themeSettings.js";
 import { DEFAULT_THEME, validTheme } from "./themeSettings.js";
 import { emptyActivity, type ActivityState } from "../game/activity/state.js";
@@ -19,7 +20,12 @@ export interface Settings {
   hgeMinPopulation: number;
   /** Search radius around you, light years. */
   maxDistance: number;
-  /** Ignore Spansh BGS data older than this many days for state-based searches. */
+  /** Where to sell a commodity: only markets that want at least this many tonnes. */
+  minSellDemand: number;
+  /**
+   * Data older than this many days is left out, for trade (commodity prices) and system searches
+   * (faction states); 0 keeps everything.
+   */
   maxAgeDays: number;
   /** Used when the game hasn't told us where we are yet. */
   fallbackSystem: string;
@@ -299,6 +305,7 @@ const DEFAULT_SETTINGS: Settings = {
   journalDir: "",
   hgeMinPopulation: 1_000_000,
   maxDistance: 300,
+  minSellDemand: 1,
   maxAgeDays: 3,
   fallbackSystem: "Sol",
   largePadOnly: false,
@@ -387,6 +394,7 @@ export class Store {
         const loaded = load<Settings>("edc.settings", DEFAULT_SETTINGS);
         return {
           ...loaded,
+          maxAgeDays: validDataAge(loaded.maxAgeDays),
           sync: { ...DEFAULT_SYNC, ...(loaded.sync ?? {}) },
           bgs: validBgsSettings(loaded.bgs),
           remote: { ...DEFAULT_REMOTE, ...(loaded.remote ?? {}) },

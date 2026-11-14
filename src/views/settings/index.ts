@@ -2,6 +2,8 @@
 // cards that are not in cards/ (language, updates, journal folder, Spansh search).
 
 import { defaultJournalDir, isRemote, isTauri, logsOpen, startJournal, updateMode } from "../../platform/bridge.js";
+import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
+import { priceAgeLabel } from "../shared/marketFilters.js";
 import { t } from "../../platform/i18n.js";
 import { setDebugLog } from "../../platform/logger.js";
 import type { Ctx, View } from "../../state/context.js";
@@ -175,12 +177,23 @@ export class SettingsView implements View {
           t("settings.highPopulation1000000Default"),
           { min: "0", step: "100000" },
         ),
-        number(
-          t("settings.maxBgsDataAgeDays"),
-          s.maxAgeDays,
-          "maxAgeDays",
-          t("settings.ignoresOlderFactionStatesBoomWar"),
-          { min: "0", max: "60" },
+        number(t("market.minDemand"), s.minSellDemand, "minSellDemand", t("market.minDemandHelp"), {
+          min: "1",
+          step: "100",
+        }),
+        h(
+          "label.field",
+          null,
+          h("span", null, t("market.dataAge")),
+          h(
+            "select",
+            { onchange: (e: Event) => set({ maxAgeDays: Number((e.target as HTMLSelectElement).value) }) },
+            // A value saved before these choices (5 days…) stays selectable.
+            [...new Set<number>([...DATA_AGE_CHOICES, s.maxAgeDays])].map((days) =>
+              h("option", { value: String(days), selected: days === s.maxAgeDays }, priceAgeLabel(days)),
+            ),
+          ),
+          h("small", null, t("market.dataAgeHelp")),
         ),
         h(
           "label.field",

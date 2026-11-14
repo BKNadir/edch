@@ -220,6 +220,11 @@ function parse(reply: HttpReply, what: string): any {
   }
 }
 
+/** GET from Ardent Insight's API (commodity prices from EDDN); `path` after "/v2/". */
+export async function ardentGet(path: string): Promise<any> {
+  return parse(await httpFetch("GET", `https://api.ardent-insight.com/v2/${path}`), "Ardent");
+}
+
 /** POST a Spansh JSON search (systems/bodies/stations). */
 export async function spanshPost(endpoint: string, body: unknown): Promise<any> {
   return parse(await spanshFetch("POST", `https://spansh.co.uk/api/${endpoint}`, JSON.stringify(body)), "Spansh");

@@ -2,6 +2,7 @@
 // (Spansh), and the Powerplay "Merit Miner" search.
 
 import { findRingSpots, findSellSpots, type RingSpot, type SellSpot } from "../../features/mining/miningSpots.js";
+import { sellFiltersNote } from "../shared/marketFilters.js";
 import { gameName, locale, t } from "../../platform/i18n.js";
 import { type Ctx, referenceOf, type View } from "../../state/context.js";
 import type { MiningSettings } from "../../state/store.js";
@@ -430,7 +431,12 @@ export class MiningView implements View {
         this.error && this.tab === "prospect" ? h("p.error", null, this.error) : null,
       ),
       this.found
-        ? spotResults(this.found, { mine: t("mining.whereMine"), sell: t("mining.whereSell") }, this.methodFilter())
+        ? spotResults(
+            this.found,
+            { mine: t("mining.whereMine"), sell: t("mining.whereSell") },
+            this.methodFilter(),
+            sellFiltersNote(this.ctx.store.state.settings),
+          )
         : null,
     );
   }
@@ -559,6 +565,7 @@ export class MiningView implements View {
           sell: t("mining.whereSell2", { power: r.power }),
         },
         this.methodFilter(),
+        sellFiltersNote(this.ctx.store.state.settings),
       ),
     );
   }

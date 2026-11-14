@@ -645,6 +645,20 @@
     "unexpectedErrorStartUp": "Erro inesperado ao iniciar",
     "waitingGame": "Aguardando o jogo"
   },
+  "market": {
+    "dataAge": "Idade máxima dos dados",
+    "dataAgeHelp": "Comércio e busca de sistemas: preços de mercadorias e estados de facções (prosperidade, guerra…) vistos há mais tempo são ignorados.",
+    "daysShort": "{{days}} d",
+    "minDemand": "Demanda mínima (t)",
+    "minDemandHelp": "Onde vender uma mercadoria (Busca, Mineração): só os mercados que querem pelo menos essa quantidade de toneladas.",
+    "oneDay": "1 dia",
+    "oneMonth": "1 mês",
+    "oneWeek": "1 semana",
+    "sellFiltersNote": "Preços de no máximo {{age}}, o mais recente entre Spansh e Ardent; demanda de pelo menos {{demand}} t (Configurações).",
+    "threeDays": "3 dias",
+    "threeMonths": "3 meses",
+    "twoWeeks": "2 semanas"
+  },
   "materials": {
     "engineeringMaterials": "Materiais de engenharia",
     "guardianThargoidData": "Dados Guardiões / Thargoid",
@@ -1116,7 +1130,6 @@
     "hideNotificationAreaNextClock": "Ocultar na área de notificação (ao lado do relógio)",
     "hideTabSoundStaysIfTicked": "Ocultar a aba (o som continua ativo se marcado)",
     "highPopulation1000000Default": "\"População alta\": 1.000.000 por padrão.",
-    "ignoresOlderFactionStatesBoomWar": "Ignora estados de facção mais antigos (Prosperidade, Guerra…). 0 = sem limite.",
     "interfaceLanguage": "Idioma da interface",
     "interfaceSize": "Tamanho da interface",
     "journalFolder": "Pasta do diário",
@@ -1131,7 +1144,6 @@
     "listen": "Ouvir",
     "mainColour": "Cor principal",
     "materialModuleEffectNamesFollowGame": "Os nomes de materiais, módulos e efeitos seguem a tradução do jogo; os nomes dos controles ficam como no jogo em inglês.",
-    "maxBgsDataAgeDays": "Idade máx. dos dados BGS (dias)",
     "maxDistanceLy": "Distância máx. (al)",
     "maxTourDistanceLy": "Distância máx. da rota (al)",
     "minPopulationHighGradeEmissions": "População mín. para emissões de alto grau",

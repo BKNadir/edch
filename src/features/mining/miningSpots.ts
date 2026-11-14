@@ -3,6 +3,14 @@
 // MAX_RADIUS) so the commander knows how far the nearest spot is.
 
 import { spanshPost } from "../../platform/bridge.js";
+import { ardentSellQuotes } from "../../services/ardent.js";
+import {
+  bestRecentFirst,
+  freshestQuote,
+  meetsDemand,
+  recentEnough,
+  type QuoteSource,
+} from "../market/freshestQuote.js";
 import { referenceOf, type Ctx } from "../../state/context.js";
 import { t } from "../../platform/i18n.js";
 
@@ -143,6 +151,14 @@ export interface SellSpot {
   largePad?: boolean;
   state?: string;
   updated?: string;
+  /** Where the price comes from: the most recent of Spansh's and Ardent's. */
+  source: QuoteSource;
+}
+
+/** The game's symbol of a commodity from its name ("Low Temperature Diamonds" → "lowtemperaturediamond"). */
+export function commodityId(ctx: Ctx, name: string): string | undefined {
+  const wanted = name.toLowerCase();
+  return ctx.game.data.commodities.find((c) => c.name.toLowerCase() === wanted)?.id;
 }
 
 /** Radius steps tried when nothing is found: the setting, then wider. */
@@ -202,45 +218,88 @@ export async function findRingSpots(
   return { spots: [], radius: MAX_RADIUS, widened: true };
 }
 
-/** Stations buying `mineral`, best price first; `radius` is the radius that gave results. */
+/**
+ * Stations buying `mineral`, best price first (then the most recently seen); `radius` is the radius
+ * that gave results. Each price is the most recent of Spansh's and Ardent's, and recent markets only
+ * Ardent knows are added when no other filter applies (a power's systems: Ardent can't tell). Only
+ * markets wanting at least the "minimum demand" setting, seen within the "data age" setting, are kept.
+ */
 export async function findSellSpots(
   ctx: Ctx,
   mineral: string,
   extra: Json = {},
 ): Promise<{ spots: SellSpot[]; radius: number; widened: boolean }> {
-  const start = ctx.store.state.settings.maxDistance;
+  const { maxDistance: start, minSellDemand, maxAgeDays } = ctx.store.state.settings;
+  const minDemand = Math.max(1, minSellDemand);
+  const id = commodityId(ctx, mineral);
+  const system = referenceOf(ctx).system;
+  const addArdentOnly = Object.keys(extra).length === 0;
   for (const r of radii(start)) {
-    const res = await spanshPost("stations/search", {
-      filters: {
-        ...extra,
-        distance: { min: "0", max: String(r) },
-        market: [{ name: mineral, demand: { value: ["1", "1000000000"], comparison: "<=>" } }],
-      },
-      sort: [{ distance: { direction: "asc" } }],
-      size: 100,
-      page: 0,
-      ...where(ctx),
-    });
+    const [res, ardent] = await Promise.all([
+      spanshPost("stations/search", {
+        filters: {
+          ...extra,
+          distance: { min: "0", max: String(r) },
+          market: [{ name: mineral, demand: { value: [String(minDemand), "1000000000"], comparison: "<=>" } }],
+        },
+        sort: [{ distance: { direction: "asc" } }],
+        size: 100,
+        page: 0,
+        ...where(ctx),
+      }),
+      id && system ? ardentSellQuotes(system, id, r, maxAgeDays, minDemand) : Promise.resolve(new Map()),
+    ]);
     const spots: SellSpot[] = [];
+    const seen = new Set<number>();
     for (const s of (res?.results ?? []) as Json[]) {
-      const quote = ((s.market ?? []) as Json[]).find(
+      const found = ((s.market ?? []) as Json[]).find(
         (x) => String(x.commodity).toLowerCase() === mineral.toLowerCase(),
       );
-      if (!quote || !quote.sell_price) continue;
+      if (!found || !found.sell_price) continue;
+      seen.add(Number(s.market_id));
+      const quote = freshestQuote(
+        {
+          price: Number(found.sell_price),
+          demand: Number(found.demand ?? 0),
+          updated: s.market_updated_at ?? s.updated_at,
+          source: "spansh",
+        },
+        ardent.get(Number(s.market_id)),
+      );
+      if (!meetsDemand(quote, minDemand) || !recentEnough(quote.updated, maxAgeDays)) continue;
       spots.push({
         mineral,
         station: String(s.name ?? ""),
         system: String(s.system_name ?? ""),
-        price: Number(quote.sell_price),
-        demand: Number(quote.demand ?? 0),
+        price: quote.price,
+        demand: quote.demand,
         distance: typeof s.distance === "number" ? s.distance : undefined,
         arrival: typeof s.distance_to_arrival === "number" ? s.distance_to_arrival : undefined,
         largePad: Boolean(s.has_large_pad),
         state: s.system_power_state,
-        updated: s.market_updated_at ?? s.updated_at,
+        updated: quote.updated,
+        source: quote.source,
       });
     }
-    if (spots.length) return { spots: spots.sort((a, b) => b.price - a.price), radius: r, widened: r > start };
+    if (addArdentOnly)
+      for (const quote of ardent.values()) {
+        if (seen.has(quote.marketId)) continue;
+        const asQuote = { ...quote, source: "ardent" as const };
+        if (!meetsDemand(asQuote, minDemand) || !recentEnough(quote.updated, maxAgeDays)) continue;
+        spots.push({
+          mineral,
+          station: quote.station,
+          system: quote.system,
+          price: quote.price,
+          demand: quote.demand,
+          distance: quote.distance,
+          arrival: quote.arrival,
+          largePad: quote.padSize === 3,
+          updated: quote.updated,
+          source: "ardent",
+        });
+      }
+    if (spots.length) return { spots: spots.sort(bestRecentFirst), radius: r, widened: r > start };
   }
   return { spots: [], radius: MAX_RADIUS, widened: true };
 }

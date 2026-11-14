@@ -17,6 +17,7 @@ import { gameName, t } from "../../platform/i18n.js";
 import { fmt, h, icon } from "../../ui/dom.js";
 import { relTime } from "../../ui/format.js";
 import type { SpotResults } from "./index.js";
+import { QUOTE_SOURCE_LABELS } from "../../features/market/freshestQuote.js";
 import { sys } from "../missions/index.js";
 
 /** The mining types shown: a click on a type's chip hides or shows it. */
@@ -30,6 +31,7 @@ export function spotResults(
   r: SpotResults,
   title: { mine: string; sell: string },
   filter: MethodFilter,
+  sellNote?: string,
 ): HTMLElement[] {
   const hidden = new Set(filter.hidden);
   const shownMethods = (mineral: string, ringType?: string) =>
@@ -175,6 +177,7 @@ export function spotResults(
     "section.card.sell-zone",
     null,
     h("h3", null, title.sell),
+    sellNote ? h("p.sub", null, sellNote) : null,
     r.sell.map((m) => {
       const hot = new Set(r.mine.find((x) => x.mineral === m.mineral)?.spots.map((x) => x.system) ?? []);
       return h(
@@ -216,7 +219,9 @@ export function spotResults(
                         null,
                         x.station,
                         x.largePad ? h("span.badge.muted", null, "L") : null,
-                        x.updated ? h("div.sub", null, relTime(x.updated)) : null,
+                        x.updated
+                          ? h("div.sub", null, `${relTime(x.updated)} · ${QUOTE_SOURCE_LABELS[x.source]}`)
+                          : null,
                       ),
                       h(
                         "td",

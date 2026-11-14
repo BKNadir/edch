@@ -639,6 +639,20 @@
     "unexpectedErrorStartUp": "Непредвиденная ошибка при запуске",
     "waitingGame": "Ожидание игры"
   },
+  "market": {
+    "dataAge": "Максимальная давность данных",
+    "dataAgeHelp": "Торговля и поиск систем: цены на товары и состояния фракций (бум, война…), замеченные раньше этого срока, не учитываются.",
+    "daysShort": "{{days}} дн.",
+    "minDemand": "Минимальный спрос (т)",
+    "minDemandHelp": "Где продать товар (Поиск, Добыча): только рынки, которым нужно не меньше стольких тонн.",
+    "oneDay": "1 день",
+    "oneMonth": "1 месяц",
+    "oneWeek": "1 неделя",
+    "sellFiltersNote": "Цены давностью не больше {{age}}, самые свежие из Spansh и Ardent; спрос не меньше {{demand}} т (Настройки).",
+    "threeDays": "3 дня",
+    "threeMonths": "3 месяца",
+    "twoWeeks": "2 недели"
+  },
   "materials": {
     "engineeringMaterials": "Инженерные материалы",
     "guardianThargoidData": "Данные Стражей / таргоидов",
@@ -1105,7 +1119,6 @@
     "hideNotificationAreaNextClock": "Скрыть в области уведомлений (рядом с часами)",
     "hideTabSoundStaysIfTicked": "Скрыть вкладку (звук остаётся, если включён)",
     "highPopulation1000000Default": "«Высокое население»: по умолчанию 1 000 000.",
-    "ignoresOlderFactionStatesBoomWar": "Игнорирует более старые состояния фракций (бум, война…). 0 = без ограничения.",
     "interfaceLanguage": "Язык интерфейса",
     "interfaceSize": "Размер интерфейса",
     "journalFolder": "Папка журнала",
@@ -1120,7 +1133,6 @@
     "listen": "Прослушать",
     "mainColour": "Основной цвет",
     "materialModuleEffectNamesFollowGame": "Названия материалов, модулей и эффектов следуют переводу игры; названия команд остаются как в английской версии.",
-    "maxBgsDataAgeDays": "Макс. возраст данных BGS (дни)",
     "maxDistanceLy": "Макс. расстояние (св. лет)",
     "maxTourDistanceLy": "Макс. длина маршрута (св. лет)",
     "minPopulationHighGradeEmissions": "Мин. население для высокоуровневого излучения",

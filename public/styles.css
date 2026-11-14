@@ -1665,6 +1665,11 @@ p.notice {
   display: grid;
   gap: 8px;
 }
+/* A small number field in a row of options (Search: minimum demand). */
+input.num-small {
+  width: 7em;
+  margin-left: 4px;
+}
 .search-table td {
   vertical-align: middle;
 }

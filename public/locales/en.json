@@ -641,6 +641,20 @@
     "unexpectedErrorStartUp": "Unexpected error at start-up",
     "waitingGame": "Waiting for the game"
   },
+  "market": {
+    "dataAge": "Maximum data age",
+    "dataAgeHelp": "Trade and system searches: commodity prices and faction states (boom, war…) seen longer ago than this are left out.",
+    "daysShort": "{{days}} d",
+    "minDemand": "Minimum demand (t)",
+    "minDemandHelp": "Where to sell a commodity (Search, Mining): only markets wanting at least this many tonnes.",
+    "oneDay": "1 day",
+    "oneMonth": "1 month",
+    "oneWeek": "1 week",
+    "sellFiltersNote": "Prices up to {{age}} old, the most recent of Spansh and Ardent; demand of at least {{demand}} t (Settings).",
+    "threeDays": "3 days",
+    "threeMonths": "3 months",
+    "twoWeeks": "2 weeks"
+  },
   "materials": {
     "engineeringMaterials": "Engineering materials",
     "guardianThargoidData": "Guardian / Thargoid data",
@@ -1109,7 +1123,6 @@
     "hideNotificationAreaNextClock": "Hide in the notification area (next to the clock)",
     "hideTabSoundStaysIfTicked": "Hide the tab (the sound stays on if ticked)",
     "highPopulation1000000Default": "\"High population\": 1,000,000 by default.",
-    "ignoresOlderFactionStatesBoomWar": "Ignores older faction states (Boom, War…). 0 = no limit.",
     "interfaceLanguage": "Interface language",
     "interfaceSize": "Interface size",
     "journalFolder": "Journal folder",
@@ -1124,7 +1137,6 @@
     "listen": "Listen",
     "mainColour": "Main colour",
     "materialModuleEffectNamesFollowGame": "Material, module and effect names follow the game's translation; control names stay as in the English game.",
-    "maxBgsDataAgeDays": "Max BGS data age (days)",
     "maxDistanceLy": "Max distance (ly)",
     "maxTourDistanceLy": "Max. tour distance (ly)",
     "minPopulationHighGradeEmissions": "Min. population for High Grade Emissions",

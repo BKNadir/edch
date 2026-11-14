@@ -1,6 +1,7 @@
 // Spansh search API: turns a "where to find" rule into a Spansh query near the reference
 // system, runs it (with a short cache) and returns systems, bodies or stations with their distance.
 
+import { validDataAge } from "../state/dataAge.js";
 import { gameName, locale, t } from "../platform/i18n.js";
 import { spanshPost } from "../platform/bridge.js";
 import type { Vec3 } from "../game/journal/state.js";
@@ -81,7 +82,7 @@ export function buildRequest(f: Finder, ref: Reference, s: Settings): Record<str
   const filters: Record<string, unknown> = {
     ...(f.filters ?? {}),
     distance: { min: "0", max: String(s.maxDistance) },
-    ...(f.fresh && s.maxAgeDays > 0 ? freshness(s.maxAgeDays) : {}),
+    ...(f.fresh ? freshness(validDataAge(s.maxAgeDays)) : {}),
   };
   return {
     filters,

@@ -642,6 +642,20 @@
     "unexpectedErrorStartUp": "Error inesperado al iniciar",
     "waitingGame": "Esperando al juego"
   },
+  "market": {
+    "dataAge": "Antigüedad máxima de los datos",
+    "dataAgeHelp": "Comercio y búsqueda de sistemas: se ignoran los precios de mercancías y los estados de facciones (auge, guerra…) vistos hace más tiempo.",
+    "daysShort": "{{days}} d",
+    "minDemand": "Demanda mínima (t)",
+    "minDemandHelp": "Dónde vender una mercancía (Búsqueda, Minería): solo los mercados que quieren al menos estas toneladas.",
+    "oneDay": "1 día",
+    "oneMonth": "1 mes",
+    "oneWeek": "1 semana",
+    "sellFiltersNote": "Precios de {{age}} como máximo, el más reciente entre Spansh y Ardent; demanda de al menos {{demand}} t (Ajustes).",
+    "threeDays": "3 días",
+    "threeMonths": "3 meses",
+    "twoWeeks": "2 semanas"
+  },
   "materials": {
     "engineeringMaterials": "Materiales de ingeniería",
     "guardianThargoidData": "Datos guardianes / thargoid",
@@ -1110,7 +1124,6 @@
     "hideNotificationAreaNextClock": "Ocultar en el área de notificación (junto al reloj)",
     "hideTabSoundStaysIfTicked": "Ocultar la pestaña (el sonido sigue activo si está marcado)",
     "highPopulation1000000Default": "«Población alta»: 1 000 000 por defecto.",
-    "ignoresOlderFactionStatesBoomWar": "Ignora estados de facción más antiguos (Auge, Guerra…). 0 = sin límite.",
     "interfaceLanguage": "Idioma de la interfaz",
     "interfaceSize": "Tamaño de la interfaz",
     "journalFolder": "Carpeta del diario",
@@ -1125,7 +1138,6 @@
     "listen": "Escuchar",
     "mainColour": "Color principal",
     "materialModuleEffectNamesFollowGame": "Los nombres de materiales, módulos y efectos siguen la traducción del juego; los nombres de los controles se mantienen como en el juego en inglés.",
-    "maxBgsDataAgeDays": "Antigüedad máx. de datos BGS (días)",
     "maxDistanceLy": "Distancia máx. (al)",
     "maxTourDistanceLy": "Distancia máx. de la ruta (al)",
     "minPopulationHighGradeEmissions": "Población mín. para emisiones de alto grado",

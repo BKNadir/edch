@@ -1,6 +1,7 @@
 // Where to get the goods a mission asks for: stations that sell them (ranked on price, distance and
 // how fresh the market data is) and, for minerals, the nearest rings with a hotspot.
 
+import { recentEnough } from "../market/freshestQuote.js";
 import { spanshPost } from "../../platform/bridge.js";
 import { referenceOf, type Ctx } from "../../state/context.js";
 
@@ -78,6 +79,8 @@ export async function findSupply(ctx: Ctx, commodity: string, need: number): Pro
     const q = ((r.market ?? []) as Json[]).find((x) => String(x.commodity).toLowerCase() === commodity.toLowerCase());
     if (!q || !q.buy_price) continue;
     const updated = r.market_updated_at ?? r.updated_at;
+    // The "data age" setting, as everywhere commodities are traded.
+    if (!recentEnough(updated, s.maxAgeDays, now)) continue;
     const ageDays = updated
       ? Math.max(
           0,
