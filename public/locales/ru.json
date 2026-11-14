@@ -651,7 +651,8 @@
     "sellFiltersNote": "Цены давностью не больше {{age}}, самые свежие из Spansh и Ardent; спрос не меньше {{demand}} т (Настройки).",
     "threeDays": "3 дня",
     "threeMonths": "3 месяца",
-    "twoWeeks": "2 недели"
+    "twoWeeks": "2 недели",
+    "ardentRadius": "Цены Ardent: до {{distance}} св. лет."
   },
   "materials": {
     "engineeringMaterials": "Инженерные материалы",
@@ -1083,7 +1084,9 @@
     "maxArrival": "Макс. расстояние до звезды",
     "anyArrival": "Любое",
     "sortPriceBest": "Лучшая цена",
-    "sortPriceLowest": "Самая низкая цена"
+    "sortPriceLowest": "Самая низкая цена",
+    "referenceHereHelp": "Искать от вашего местоположения ({{system}})",
+    "referenceUnknown": "{{system}}: системы с таким названием нет."
   },
   "session": {
     "bounties": "Награды за головы",
@@ -1313,7 +1316,8 @@
     "factionCount": "фракций: {{count}}",
     "controlsSystem": "Контролирует систему",
     "influence": "Влияние {{value}} %",
-    "controlledBy": "Контролирует: {{faction}}"
+    "controlledBy": "Контролирует: {{faction}}",
+    "oldData": "Устаревшие данные"
   },
   "support": {
     "button": "Поддержать проект на Ko-fi",

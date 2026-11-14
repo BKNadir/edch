@@ -1,5 +1,7 @@
 // Suggestions under a text field, updated as you type: arrows to move, Enter or a click to pick,
 // Escape to close. For lists too long for a <datalist> (and the same on every system's webview).
+// The suggestions can come from a list in memory (instantly) or from a site (`delayMs` after the
+// last key, an older answer dropped).
 
 import { h, replace } from "./dom.js";
 
@@ -9,12 +11,15 @@ import { h, replace } from "./dom.js";
  */
 export function suggestBox(
   input: HTMLInputElement,
-  suggest: (text: string) => string[],
+  suggest: (text: string) => string[] | Promise<string[]>,
   picked: (value: string) => void,
+  delayMs = 0,
 ): HTMLElement {
   const list = h("ul.suggest-list", { role: "listbox", hidden: true });
   let items: string[] = [];
   let active = -1;
+  let asked = 0;
+  let timer: number | undefined;
 
   const close = () => {
     list.hidden = true;
@@ -49,10 +54,23 @@ export function suggestBox(
   };
 
   input.setAttribute("autocomplete", "off");
-  input.addEventListener("input", () => {
-    items = suggest(input.value);
+  const refresh = async () => {
+    const id = ++asked;
+    let found: string[] = [];
+    try {
+      found = await suggest(input.value);
+    } catch {
+      found = [];
+    }
+    if (id !== asked || document.activeElement !== input) return;
+    items = found;
     active = -1;
     draw();
+  };
+  input.addEventListener("input", () => {
+    window.clearTimeout(timer);
+    if (delayMs > 0) timer = window.setTimeout(() => void refresh(), delayMs);
+    else void refresh();
   });
   // Capture: runs before the field's own Enter handler (a search), which a pick replaces.
   input.addEventListener(

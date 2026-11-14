@@ -653,7 +653,8 @@
     "sellFiltersNote": "Preise höchstens {{age}} alt, der neueste von Spansh und Ardent; Nachfrage von mindestens {{demand}} t (Einstellungen).",
     "threeDays": "3 Tage",
     "threeMonths": "3 Monate",
-    "twoWeeks": "2 Wochen"
+    "twoWeeks": "2 Wochen",
+    "ardentRadius": "Preise von Ardent: bis {{distance}} Lj."
   },
   "materials": {
     "engineeringMaterials": "Ingenieursmaterialien",
@@ -1087,7 +1088,9 @@
     "maxArrival": "Max. Entfernung zum Stern",
     "anyArrival": "Beliebig",
     "sortPriceBest": "Bester Preis",
-    "sortPriceLowest": "Niedrigster Preis"
+    "sortPriceLowest": "Niedrigster Preis",
+    "referenceHereHelp": "Von deiner Position aus suchen ({{system}})",
+    "referenceUnknown": "{{system}}: kein System mit diesem Namen."
   },
   "session": {
     "bounties": "Kopfgelder",
@@ -1318,7 +1321,8 @@
     "factionCount_other": "{{count}} Fraktionen",
     "controlsSystem": "Kontrolliert das System",
     "influence": "Einfluss {{value}} %",
-    "controlledBy": "Kontrolliert von {{faction}}"
+    "controlledBy": "Kontrolliert von {{faction}}",
+    "oldData": "Alte Daten"
   },
   "support": {
     "button": "Projekt auf Ko-fi unterstützen",

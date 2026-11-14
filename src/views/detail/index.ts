@@ -5,6 +5,7 @@ import { gameName, t } from "../../platform/i18n.js";
 import { CATEGORY_LABELS, siteText } from "../../game/data.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { ownedOf, referenceOf, reserved, type Ctx } from "../../state/context.js";
+import { referenceField, refreshReferenceField } from "../shared/referenceField.js";
 import { distance, fmtLy } from "../../services/spansh.js";
 import { findersFor, traderFinder } from "../../features/materials/sources.js";
 import { suggestTrades } from "../../features/materials/trade.js";
@@ -33,8 +34,16 @@ export class DetailPanel {
   private head = h("div.detail-head");
   private trades = h("div.detail-trades");
   private body = h("div.detail-body");
+  /** Where the sources' distances are measured from (shared with the other pages). */
+  private reference: HTMLElement;
 
-  constructor(private ctx: Ctx) {}
+  constructor(private ctx: Ctx) {
+    this.reference = h(
+      "div.detail-reference",
+      null,
+      referenceField(ctx, () => this.update()),
+    );
+  }
 
   mount(root: HTMLElement) {
     this.root = root;
@@ -66,10 +75,11 @@ export class DetailPanel {
     ]);
     if (sig !== this.signature) {
       this.signature = sig;
-      replace(root, this.head, this.trades, this.body);
+      replace(root, this.head, this.reference, this.trades, this.body);
       this.renderBody(m);
       root.scrollTop = 0;
     }
+    refreshReferenceField(this.reference, this.ctx);
     this.renderHead(m);
     this.renderTrades(m);
   }

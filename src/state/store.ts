@@ -299,6 +299,13 @@ export interface AppState {
   selected?: string; // material id in the detail panel
   /** Elite Dangerous on the PC: "game", "launcher" or "" (not running); undefined = unknown. */
   game?: string;
+  /**
+   * A system typed as the reference of searches (distances are measured from it), or "" for the
+   * commander's position. Kept while EDCH runs, shared by every page.
+   */
+  referenceSystem: string;
+  /** Its coordinates, when Spansh gave them (pages that measure distances themselves need them). */
+  referenceCoords?: [number, number, number];
 }
 
 const DEFAULT_SETTINGS: Settings = {
@@ -405,6 +412,7 @@ export class Store {
           engineers: { ...DEFAULT_ENGINEER_SETTINGS, ...(loaded.engineers ?? {}) },
         };
       })(),
+      referenceSystem: "",
       wishlist: validWishItems(loadArray<unknown>("edc.wishlist")),
       view: (() => {
         try {
@@ -444,6 +452,13 @@ export class Store {
 
   select(id?: string) {
     this.state.selected = id;
+    this.notify();
+  }
+
+  /** Sets the reference system of searches ("" goes back to the commander's position). */
+  setReferenceSystem(name: string, coords?: [number, number, number]) {
+    this.state.referenceSystem = name.trim();
+    this.state.referenceCoords = name.trim() ? coords : undefined;
     this.notify();
   }
 

@@ -1665,6 +1665,20 @@ p.notice {
   display: grid;
   gap: 8px;
 }
+/* "Reference system" field (Search, Mining, Engineers, a material's sources). */
+.reference-field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.reference-field .suggest-box {
+  flex: 0 0 260px;
+}
+.reference-problem {
+  flex-basis: 100%;
+  color: var(--bad-text);
+}
 /* Suggestions under a text field (Search → Faction). */
 .suggest-box {
   position: relative;

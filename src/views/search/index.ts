@@ -7,8 +7,8 @@ import { spanshPost } from "../../platform/bridge.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { stationIcon } from "../../ui/stationIcon.js";
 import { relTime } from "../../ui/format.js";
-import { type Ctx, type View } from "../../state/context.js";
-import { referenceField, searchReference } from "./reference.js";
+import { referenceOf, type Ctx, type View } from "../../state/context.js";
+import { referenceField } from "../shared/referenceField.js";
 import { SERVICE_KINDS, serviceKindOf } from "../../game/serviceKinds.js";
 import { fmtLy, inaraSystem } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
@@ -198,7 +198,7 @@ export class SearchView implements View {
     const where = this.form.querySelector(".opts .sub");
     if (where)
       where.textContent = t("common.aroundLyMax", {
-        label: searchReference(this.ctx).label,
+        label: referenceOf(this.ctx).label,
         maxDistance: this.ctx.store.state.settings.maxDistance,
       });
   }
@@ -376,7 +376,7 @@ export class SearchView implements View {
           "span.sub",
           null,
           t("common.aroundLyMax", {
-            label: searchReference(this.ctx).label,
+            label: referenceOf(this.ctx).label,
             maxDistance: this.ctx.store.state.settings.maxDistance,
           }),
         ),
@@ -478,7 +478,7 @@ export class SearchView implements View {
       if (kind) f.primary_economy = { value: kind.economies };
     }
 
-    const ref = searchReference(this.ctx);
+    const ref = referenceOf(this.ctx);
     const sort = this.sortOf(tab);
     const body = (page: number): Json => ({
       filters: f,
@@ -557,6 +557,11 @@ export class SearchView implements View {
       }
       this.quotes = quotes;
       rows = rows.filter((r) => arrivalAllowed(numberOrUndefined(r.distance_to_arrival), this.opts.maxArrival));
+      // Ships and modules sold change too: the "data age" setting, as for markets.
+      if (tab === "ship" || tab === "module") {
+        const seenAt = (r: Json) => (tab === "ship" ? r.shipyard_updated_at : r.outfitting_updated_at) ?? r.updated_at;
+        rows = rows.filter((r) => recentEnough(seenAt(r), settings.maxAgeDays));
+      }
       const shipPrice = (r: Json) =>
         (r.ships ?? []).find((x: Json) => String(x.name).toLowerCase() === name.toLowerCase())?.price;
       const sortable = (r: Json): SortableStation => {
@@ -674,7 +679,9 @@ export class SearchView implements View {
     const pad = r.has_large_pad ? "L" : r.medium_pads > 0 ? "M" : r.small_pads > 0 ? "S" : "?";
     const quote = tab === "buy" || tab === "sell" ? this.quotes.get(r) : undefined;
     const age =
-      quote?.updated ?? r.market_updated_at ?? r.outfitting_updated_at ?? r.shipyard_updated_at ?? r.updated_at;
+      quote?.updated ??
+      (tab === "ship" ? r.shipyard_updated_at : tab === "module" ? r.outfitting_updated_at : r.market_updated_at) ??
+      r.updated_at;
     return h(
       "tr",
       null,
@@ -706,7 +713,7 @@ export class SearchView implements View {
         "td.sub",
         { "data-sort": age ?? "" },
         age
-          ? tab === "buy" || tab === "sell"
+          ? tab !== "service"
             ? Number.isFinite(quoteTime(age))
               ? relTime(new Date(quoteTime(age)).toISOString())
               : ""

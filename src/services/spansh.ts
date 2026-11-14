@@ -3,7 +3,7 @@
 
 import { validDataAge } from "../state/dataAge.js";
 import { gameName, locale, t } from "../platform/i18n.js";
-import { spanshPost } from "../platform/bridge.js";
+import { spanshGet, spanshPost } from "../platform/bridge.js";
 import type { Vec3 } from "../game/journal/state.js";
 import type { Finder } from "../features/materials/sources.js";
 import type { Settings } from "../state/store.js";
@@ -231,6 +231,8 @@ export interface FactionQuery {
   ownerOnly: boolean;
   /** Faction states wanted (English game names); empty: any state. */
   states: string[];
+  /** The "data age" setting: older systems are marked, their influence and states may have changed. */
+  maxAgeDays?: number;
 }
 
 /** The faction's presence in a Spansh system result. */
@@ -257,6 +259,8 @@ function factionRow(r: any, q: FactionQuery): ResultRow {
   if (typeof presence.influence === "number")
     badges.push({ text: t("spansh.influence", { value: oneDecimal(presence.influence * 100) }) });
   for (const st of states) badges.push({ text: gameName(st), tone: wanted.has(st) ? "hit" : "muted" });
+  if (q.maxAgeDays && !recentEnoughDate(r.updated_at, q.maxAgeDays))
+    badges.push({ text: t("spansh.oldData"), tone: "warn" });
   const sub: string[] = [];
   if (r.controlling_minor_faction && !controls(r, q.faction))
     sub.push(t("spansh.controlledBy", { faction: r.controlling_minor_faction }));
@@ -277,11 +281,12 @@ function factionRow(r: any, q: FactionQuery): ResultRow {
 
 /**
  * Systems where a minor faction is present (or that it controls), nearest first, optionally only
- * where it is in one of `states`. Spansh filters on the faction's main state.
+ * where it is in one of `states` (main or active).
  */
 export async function searchFaction(q: FactionQuery, ref: Reference): Promise<FinderResult> {
+  // States are checked here, on the faction's main and active states: Spansh only filters on the
+  // main one, which left out systems where a wanted state is active alongside another.
   const presence: Record<string, unknown> = { name: { value: [q.faction] } };
-  if (q.states.length) presence.state = { value: q.states };
   const request = (filters: Record<string, unknown>, size: number) => ({
     filters: { minor_faction_presences: [presence], ...filters },
     sort: [{ distance: { direction: "asc" } }],
@@ -289,19 +294,39 @@ export async function searchFaction(q: FactionQuery, ref: Reference): Promise<Fi
     page: 0,
     ...reference(ref),
   });
+  const size = q.states.length ? 200 : 100;
   let data: any;
   if (q.ownerOnly) {
     try {
-      data = await spanshPost("systems/search", request({ controlling_minor_faction: { value: [q.faction] } }, 50));
+      data = await spanshPost("systems/search", request({ controlling_minor_faction: { value: [q.faction] } }, size));
     } catch {
       // Not every Spansh version filters on the controlling faction: filter the presences here.
       data = await spanshPost("systems/search", request({}, 200));
     }
-  } else data = await spanshPost("systems/search", request({}, 50));
+  } else data = await spanshPost("systems/search", request({}, size));
   let results: any[] = Array.isArray(data?.results) ? data.results : [];
   if (q.ownerOnly) results = results.filter((r) => controls(r, q.faction));
+  if (q.states.length) results = results.filter((r) => hasState(presenceOf(r, q.faction), q.states));
   const rows = results.map((r) => factionRow(r, q));
-  return { rows, total: q.ownerOnly ? rows.length : num(data?.count) || rows.length };
+  const filtered = q.ownerOnly || q.states.length > 0;
+  return { rows, total: filtered ? rows.length : num(data?.count) || rows.length };
+}
+
+/** Whether a faction's presence is in one of `states`, as its main state or an active one. */
+export function hasState(presence: any, states: string[]): boolean {
+  if (!presence) return false;
+  const current = [presence.state, ...(Array.isArray(presence.active_states) ? presence.active_states : [])].map(
+    (st: unknown) => String(st ?? "").toLowerCase(),
+  );
+  return states.some((st) => current.includes(st.toLowerCase()));
+}
+
+/** Whether a Spansh date is within the last `days` days. */
+function recentEnoughDate(updated: unknown, days: number): boolean {
+  if (typeof updated !== "string") return false;
+  const iso = updated.replace(" ", "T");
+  const time = Date.parse(/[zZ]|[+-]\d\d(:?\d\d)?$/.test(iso) ? iso.replace(/([+-]\d\d)$/, "$1:00") : `${iso}Z`);
+  return !Number.isNaN(time) && Date.now() - time <= days * 86_400_000;
 }
 
 export function distance(a?: Vec3, b?: Vec3 | null): number | undefined {
@@ -432,4 +457,25 @@ export async function factionSystems(
     if (systems.size === before) break;
   }
   return { systems: [...systems.values()], total: total || systems.size, partial: !complete };
+}
+
+/** A system's exact name and coordinates from a name typed with any capitals (Spansh), or null. */
+export async function findSystem(name: string): Promise<{ name: string; coords: Vec3 } | null> {
+  const res = await spanshPost("systems/search", {
+    filters: { distance: { min: "0", max: "1" } },
+    sort: [{ distance: { direction: "asc" } }],
+    size: 1,
+    page: 0,
+    reference_system: name.trim(),
+  });
+  const r = res?.reference ?? res?.results?.[0];
+  if (!r || typeof r.x !== "number") return null;
+  return { name: typeof r.name === "string" && r.name ? r.name : name.trim(), coords: [r.x, r.y, r.z] };
+}
+
+/** System names starting with `typed` (Spansh's suggestions), for the fields where one is typed. */
+export async function suggestSystems(typed: string): Promise<string[]> {
+  const res = await spanshGet(`systems/field_values/system_names?q=${encodeURIComponent(typed.trim())}`);
+  const values: unknown[] = Array.isArray(res?.values) ? res.values : Array.isArray(res) ? res : [];
+  return values.filter((v): v is string => typeof v === "string").slice(0, 12);
 }

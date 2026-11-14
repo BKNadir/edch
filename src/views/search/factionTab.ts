@@ -3,8 +3,8 @@
 
 import { gameName, locale, t } from "../../platform/i18n.js";
 import { searchFaction } from "../../services/spansh.js";
-import { type Ctx } from "../../state/context.js";
-import { referenceField, searchReference } from "./reference.js";
+import { referenceOf, type Ctx } from "../../state/context.js";
+import { referenceField } from "../shared/referenceField.js";
 import { h, icon, replace } from "../../ui/dom.js";
 import { resultRow } from "../shared/resultsTable.js";
 import { exactFaction, factionIndex, matchFactions, type FactionIndex } from "../../features/search/factionNames.js";
@@ -122,14 +122,14 @@ export function factionForm(ctx: Ctx, out: HTMLElement): HTMLElement {
       null,
       presence(false, t("search.factionPresent")),
       presence(true, t("search.factionOwner")),
-      h("span.sub.faction-from", null, t("search.nearestFrom", { label: searchReference(ctx).label })),
+      h("span.sub.faction-from", null, t("search.nearestFrom", { label: referenceOf(ctx).label })),
     ),
     h(
       "div.row.opts",
       null,
       referenceField(ctx, () => {
         const from = document.querySelector(".faction-from");
-        if (from) from.textContent = t("search.nearestFrom", { label: searchReference(ctx).label });
+        if (from) from.textContent = t("search.nearestFrom", { label: referenceOf(ctx).label });
       }),
     ),
     h(
@@ -151,8 +151,13 @@ async function runSearch(ctx: Ctx, out: HTMLElement) {
   replace(out, h("p.sub", null, h("span.spinner"), " " + t("common.searchingSpansh")));
   try {
     const res = await searchFaction(
-      { faction: known ?? faction, ownerOnly: query.ownerOnly, states: [...query.states] },
-      searchReference(ctx),
+      {
+        faction: known ?? faction,
+        ownerOnly: query.ownerOnly,
+        states: [...query.states],
+        maxAgeDays: ctx.store.state.settings.maxAgeDays,
+      },
+      referenceOf(ctx),
     );
     if (id !== runId) return;
     if (!res.rows.length) {

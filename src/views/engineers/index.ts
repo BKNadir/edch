@@ -3,6 +3,7 @@
 
 import { h, icon, fmt, replace } from "../../ui/dom.js";
 import { referenceOf, type Ctx, type View } from "../../state/context.js";
+import { referenceField, refreshReferenceField } from "../shared/referenceField.js";
 import { distance, fmtLy, inaraSystem } from "../../services/spansh.js";
 import { openUrl } from "../../platform/bridge.js";
 import { engineerText } from "../../game/data.js";
@@ -48,7 +49,11 @@ export class EngineersView implements View {
   private root?: HTMLElement;
   private mode: "ship" | "foot" = "ship";
   private filter: Filter = "all";
-  constructor(private ctx: Ctx) {}
+  /** Made once: the page redraws on every journal event, the field keeps what is being typed. */
+  private reference: HTMLElement;
+  constructor(private ctx: Ctx) {
+    this.reference = referenceField(ctx, () => this.update());
+  }
 
   mount(root: HTMLElement) {
     this.root = root;
@@ -123,6 +128,7 @@ export class EngineersView implements View {
           ),
         ),
       ),
+      h("div.row.opts", null, (refreshReferenceField(this.reference, this.ctx), this.reference)),
       Object.keys(this.ctx.store.state.cmdr.engineers).length
         ? null
         : h("div.notice", null, icon("warn"), " " + t("engineers.statusesUnknownTheyComeEngineerprogressEvent")),

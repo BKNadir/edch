@@ -20,6 +20,9 @@ export interface View {
 
 /** Where searches are measured from: the current system, else the fallback in settings. */
 export function referenceOf(ctx: Ctx): Reference {
+  // A system typed as the reference (any page's "Reference system" field) comes first.
+  const { referenceSystem: typed, referenceCoords } = ctx.store.state;
+  if (typed) return { coords: referenceCoords, system: typed, label: typed };
   const loc = ctx.store.state.cmdr.location;
   if (loc?.pos) return { coords: loc.pos, system: loc.system, label: loc.system };
   const fallback = ctx.store.state.settings.fallbackSystem || "Sol";

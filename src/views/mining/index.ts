@@ -3,6 +3,7 @@
 
 import { findRingSpots, findSellSpots, type RingSpot, type SellSpot } from "../../features/mining/miningSpots.js";
 import { sellFiltersNote } from "../shared/marketFilters.js";
+import { referenceField, refreshReferenceField } from "../shared/referenceField.js";
 import { gameName, locale, t } from "../../platform/i18n.js";
 import { type Ctx, referenceOf, type View } from "../../state/context.js";
 import type { MiningSettings } from "../../state/store.js";
@@ -110,7 +111,11 @@ export class MiningView implements View {
   private finding = false;
   private running = false;
   private error = "";
-  constructor(private ctx: Ctx) {}
+  /** Made once: the page redraws often, the field keeps what is being typed. */
+  private reference: HTMLElement;
+  constructor(private ctx: Ctx) {
+    this.reference = referenceField(ctx, () => this.render());
+  }
 
   mount(root: HTMLElement) {
     this.root = root;
@@ -428,6 +433,7 @@ export class MiningView implements View {
           ),
           h("span.sub", null, t("mining.around", { place: referenceOf(this.ctx).label })),
         ),
+        (refreshReferenceField(this.reference, this.ctx), this.reference),
         this.error && this.tab === "prospect" ? h("p.error", null, this.error) : null,
       ),
       this.found
@@ -500,6 +506,7 @@ export class MiningView implements View {
               t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: st.settings.maxDistance }),
             ),
           ),
+          (refreshReferenceField(this.reference, this.ctx), this.reference),
         ),
         this.error ? h("p.error", null, this.error) : null,
       ),
