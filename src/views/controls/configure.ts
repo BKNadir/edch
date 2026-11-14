@@ -217,7 +217,9 @@ export class ConfigureSession {
               .filter((action) => {
                 if (!wanted) return true;
                 const name = actionName(this.meta, action);
-                return [name, englishActionName(this.meta, action), gameText(name), action].some((text) => fold(text).includes(wanted));
+                return [name, englishActionName(this.meta, action), gameText(name), action].some((text) =>
+                  fold(text).includes(wanted),
+                );
               })
               .map((action) => {
                 const group = groupOf(this.meta, action);

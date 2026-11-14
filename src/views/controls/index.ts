@@ -4,7 +4,8 @@
 import {
   actionName,
   englishActionName,
-  setActionNamesForLocale,
+  ACTION_NAME_LANGUAGES,
+  setActionNames,
   type Bind,
   type BindsMeta,
   comboLabel,
@@ -33,6 +34,7 @@ import {
 } from "../../platform/bridge.js";
 import { fold, gameText, lang, t } from "../../platform/i18n.js";
 import type { Ctx, View } from "../../state/context.js";
+import { log } from "../../platform/logger.js";
 import { dialog } from "../../ui/dialog.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
 import { keepPicture, keptPictureName, keptPictureUrl } from "../../services/controllerPictures.js";
@@ -60,16 +62,25 @@ const loadMeta = () =>
     return r.json();
   }));
 
-/** The optional French action-name dictionary follows EDCH's existing UI language. */
-let frenchNamesPromise: Promise<Record<string, string>> | undefined;
+/** The action names in a language (public/data/binds.<code>.json), loaded once; {} without one. */
+const actionNames = new Map<string, Promise<Record<string, string>>>();
 
-function loadFrenchNames(): Promise<Record<string, string>> {
-  return (frenchNamesPromise ??= fetch("data/binds.fr.json")
-    .then((response) => {
-      if (!response.ok) throw new Error("French controls labels unavailable");
-      return response.json() as Promise<Record<string, string>>;
-    })
-    .catch(() => ({})));
+function loadActionNames(code: string): Promise<Record<string, string>> {
+  if (!(ACTION_NAME_LANGUAGES as readonly string[]).includes(code)) return Promise.resolve({});
+  let names = actionNames.get(code);
+  if (!names) {
+    names = fetch(`data/binds.${code}.json`)
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json() as Promise<Record<string, string>>;
+      })
+      .catch((error) => {
+        log.warn("controls", `Action names (${code}) unavailable, English shown: ${String(error?.message ?? error)}`);
+        return {};
+      });
+    actionNames.set(code, names);
+  }
+  return names;
 }
 
 export class ControlsView implements View {
@@ -119,9 +130,8 @@ export class ControlsView implements View {
     try {
       const meta = await loadMeta();
       this.meta = meta;
-      // EDCH reloads the UI when its language changes. Do not use a second language setting.
-      const uiLanguage = lang().code;
-      setActionNamesForLocale(uiLanguage, uiLanguage === "fr" ? await loadFrenchNames() : {});
+      // Action names in EDCH's language (the UI is drawn again when the language changes).
+      setActionNames(await loadActionNames(lang().code));
       await this.load();
       this.stopWatching ??= watchPresses(
         meta,
@@ -288,9 +298,15 @@ export class ControlsView implements View {
       if (!q) return true;
       const name = actionName(meta, b.action);
       const combo = comboLabel(meta, b);
-      return [name, englishActionName(meta, b.action), gameText(name), combo, gameText(combo), b.action, GROUP_LABELS[g] ?? g].some((candidate) =>
-        fold(candidate).includes(q),
-      );
+      return [
+        name,
+        englishActionName(meta, b.action),
+        gameText(name),
+        combo,
+        gameText(combo),
+        b.action,
+        GROUP_LABELS[g] ?? g,
+      ].some((candidate) => fold(candidate).includes(q));
     });
   }
 

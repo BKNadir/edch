@@ -190,19 +190,23 @@ export function groupOf(meta: BindsMeta, action: string): string {
   );
 }
 
-/** Original EDRefCard name; remains searchable regardless of the EDCH interface language. */
+/** The English name (EDRefCard's): always searchable, whatever EDCH's language. */
 export function englishActionName(meta: BindsMeta, action: string): string {
   return meta.controls[action]?.n ?? action.replace(/(?<=[a-z0-9])(?=[A-Z])/g, " ").replace(/_/g, " ");
 }
 
+/** Languages with a file of action names, public/data/binds.<code>.json (English is binds.json's). */
+export const ACTION_NAME_LANGUAGES = ["fr"] as const;
+
+/** Action names in EDCH's language (action id → name), empty in English. */
 let localizedActionNames: Readonly<Record<string, string>> = {};
 
-/** Select names from the main EDCH language; game action IDs and .binds are not modified. */
-export function setActionNamesForLocale(locale: string, frenchNames: Readonly<Record<string, string>> = {}): void {
-  localizedActionNames = locale === "fr" ? frenchNames : {};
+/** Sets the action names of EDCH's language; the game's action ids and .binds files never change. */
+export function setActionNames(names: Readonly<Record<string, string>>): void {
+  localizedActionNames = names;
 }
 
-/** French action name when EDCH is in French, with the original English as fallback. */
+/** An action's name in EDCH's language, or the English one when that language has none for it. */
 export function actionName(meta: BindsMeta, action: string): string {
   return localizedActionNames[action] ?? englishActionName(meta, action);
 }
