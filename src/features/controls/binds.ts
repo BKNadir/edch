@@ -196,7 +196,7 @@ export function englishActionName(meta: BindsMeta, action: string): string {
 }
 
 /** Languages with a file of action names, public/data/binds.<code>.json (English is binds.json's). */
-export const ACTION_NAME_LANGUAGES = ["fr"] as const;
+export const ACTION_NAME_LANGUAGES = ["fr", "de", "es", "pt", "ru"] as const;
 
 /** Action names in EDCH's language (action id → name), empty in English. */
 let localizedActionNames: Readonly<Record<string, string>> = {};
