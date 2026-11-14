@@ -3,6 +3,8 @@
 
 import {
   actionName,
+  englishActionName,
+  setActionNamesForLocale,
   type Bind,
   type BindsMeta,
   comboLabel,
@@ -29,7 +31,7 @@ import {
   readOptionFile,
   revealPath,
 } from "../../platform/bridge.js";
-import { fold, gameText, t } from "../../platform/i18n.js";
+import { fold, gameText, lang, t } from "../../platform/i18n.js";
 import type { Ctx, View } from "../../state/context.js";
 import { dialog } from "../../ui/dialog.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
@@ -57,6 +59,18 @@ const loadMeta = () =>
     if (!r.ok) throw new Error(`binds.json: HTTP ${r.status}`);
     return r.json();
   }));
+
+/** The optional French action-name dictionary follows EDCH's existing UI language. */
+let frenchNamesPromise: Promise<Record<string, string>> | undefined;
+
+function loadFrenchNames(): Promise<Record<string, string>> {
+  return (frenchNamesPromise ??= fetch("data/binds.fr.json")
+    .then((response) => {
+      if (!response.ok) throw new Error("French controls labels unavailable");
+      return response.json() as Promise<Record<string, string>>;
+    })
+    .catch(() => ({})));
+}
 
 export class ControlsView implements View {
   private meta?: BindsMeta;
@@ -105,6 +119,9 @@ export class ControlsView implements View {
     try {
       const meta = await loadMeta();
       this.meta = meta;
+      // EDCH reloads the UI when its language changes. Do not use a second language setting.
+      const uiLanguage = lang().code;
+      setActionNamesForLocale(uiLanguage, uiLanguage === "fr" ? await loadFrenchNames() : {});
       await this.load();
       this.stopWatching ??= watchPresses(
         meta,
@@ -271,7 +288,7 @@ export class ControlsView implements View {
       if (!q) return true;
       const name = actionName(meta, b.action);
       const combo = comboLabel(meta, b);
-      return [name, gameText(name), combo, gameText(combo), b.action, GROUP_LABELS[g] ?? g].some((candidate) =>
+      return [name, englishActionName(meta, b.action), gameText(name), combo, gameText(combo), b.action, GROUP_LABELS[g] ?? g].some((candidate) =>
         fold(candidate).includes(q),
       );
     });

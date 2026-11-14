@@ -190,8 +190,21 @@ export function groupOf(meta: BindsMeta, action: string): string {
   );
 }
 
-export function actionName(meta: BindsMeta, action: string): string {
+/** Original EDRefCard name; remains searchable regardless of the EDCH interface language. */
+export function englishActionName(meta: BindsMeta, action: string): string {
   return meta.controls[action]?.n ?? action.replace(/(?<=[a-z0-9])(?=[A-Z])/g, " ").replace(/_/g, " ");
+}
+
+let localizedActionNames: Readonly<Record<string, string>> = {};
+
+/** Select names from the main EDCH language; game action IDs and .binds are not modified. */
+export function setActionNamesForLocale(locale: string, frenchNames: Readonly<Record<string, string>> = {}): void {
+  localizedActionNames = locale === "fr" ? frenchNames : {};
+}
+
+/** French action name when EDCH is in French, with the original English as fallback. */
+export function actionName(meta: BindsMeta, action: string): string {
+  return localizedActionNames[action] ?? englishActionName(meta, action);
 }
 
 export function deviceInfo(meta: BindsMeta, id: string): { label: string; kind: DeviceKind } {
