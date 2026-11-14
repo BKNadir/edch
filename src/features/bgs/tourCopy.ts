@@ -8,6 +8,7 @@ import { t } from "../../platform/i18n.js";
 import type { Store } from "../../state/store.js";
 import { toast } from "../../ui/dom.js";
 import { notify } from "../../ui/notifier.js";
+import { log } from "../../platform/logger.js";
 
 /** The tour's systems in visiting order, as the BGS page last drew them. */
 let stops: string[] = [];
@@ -24,6 +25,7 @@ export function setBgsTourStops(systems: string[]) {
 /** A system of the tour was clicked: the tour is in progress, heading there. */
 export function startBgsTour(system: string) {
   target = system;
+  log.debug("bgs", `Refresh tour started: ${stops.length} stop(s)`);
 }
 
 /** The system to copy when you go back to the game, while the tour is in progress. */
@@ -43,6 +45,7 @@ export function bgsTourArrival(store: Store, system: string) {
   if (!target || !same(target, system)) return;
   const next = stopAfter(system);
   target = next;
+  log.debug("bgs", next ? "Refresh tour: arrived, next stop" : "Refresh tour: done");
   const settings = store.state.settings;
   if (!next) {
     toast(t("bgs.tourDone"));

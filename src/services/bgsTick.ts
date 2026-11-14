@@ -35,6 +35,7 @@ export function refreshTick(now = Date.now()): Promise<string | undefined> {
       const reply = await httpFetch("GET", TICK_URL);
       if (reply.status !== 200) throw new Error(`HTTP ${reply.status}`);
       tickAt = decodeTick(reply.body);
+      log.debug("bgs", `BGS tick: ${tickAt ?? "unreadable answer"}`);
     } catch (error) {
       log.warn("bgs", `BGS tick unknown: ${(error as Error)?.message ?? error}`);
     }

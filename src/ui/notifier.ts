@@ -100,10 +100,15 @@ export function clearAlerts() {
   refresh();
 }
 
-/** Plays the chosen sound and/or flashes the tab, and keeps the message in the panel. */
-export function notify(text: string, opts: { sound?: boolean } = {}) {
+/**
+ * Plays the chosen sound and/or flashes the tab, and keeps the message in the panel. `hide`: words
+ * of the message kept out of the log (another commander's name).
+ */
+export function notify(text: string, opts: { sound?: boolean; hide?: string[] } = {}) {
   if (!store) return;
-  log.info("notify", text);
+  let logged = text;
+  for (const word of opts.hide ?? []) if (word) logged = logged.split(word).join("***");
+  log.info("notify", logged);
   const n = store.state.settings.notify;
   alerts.unshift({ at: new Date().toISOString(), text });
   alerts.length = Math.min(alerts.length, 15);

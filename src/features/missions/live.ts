@@ -128,20 +128,23 @@ export async function syncWing() {
   log.info("wing", "Wing link started");
   link = new WingLink(want, wingMe, {
     newMission: (row, by) => {
-      if (store.state.settings.wing.notifyNew) notify(t("live.newWingMission", { by, title: row.mission.title }));
+      if (store.state.settings.wing.notifyNew)
+        notify(t("live.newWingMission", { by, title: row.mission.title }), { hide: [by] });
     },
     everyone: (row) => {
       if (store.state.settings.wing.notifyAll) notify(t("live.wholeWingAccepted", { title: row.mission.title }));
     },
     accepted: (row, by) => {
-      if (store.state.settings.wing.notifyAccept) notify(t("live.accepted", { by, title: row.mission.title }));
+      if (store.state.settings.wing.notifyAccept)
+        notify(t("live.accepted", { by, title: row.mission.title }), { hide: [by] });
     },
     left: (name, reason) => {
       log.info("wing", `A wing member left (${reason ?? "?"})`);
       if (!store.state.settings.wing.notifyLeave) return;
-      if (reason === "closed") notify(t("live.closedEdch", { name }));
-      else if (reason === "wing") notify(t("live.leftWingGame", { name }));
-      else notify(t("live.stoppedWingSharing", { name }));
+      // The member's name is shown, never logged.
+      if (reason === "closed") notify(t("live.closedEdch", { name }), { hide: [name] });
+      else if (reason === "wing") notify(t("live.leftWingGame", { name }), { hide: [name] });
+      else notify(t("live.stoppedWingSharing", { name }), { hide: [name] });
     },
     changed: () => {
       enrichFromWing();

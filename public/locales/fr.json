@@ -1525,7 +1525,7 @@
   "thargoids": {
     "axZonesEntered": "Zones de conflit AX visitées",
     "bonds": "Obligations",
-    "howTypesAreKnown": "Le journal du jeu ne nomme ni le Thargoïde détruit ni ceux autour de vous : EDCH reconnaît le type à l'obligation de combat (éclaireur 80 000 Cr, Glaive ou Scythe 4,5 M, Cyclops 8 M, Orthrus 15 M, Basilisk 24 M, Medusa 40 M, Hydra 60 M). Les éclaireurs (Marauder, Berserker, Inciter, Regenerator…) rapportent tous à peu près la même obligation et sont comptés ensemble, de même que le Glaive et le Scythe.",
+    "howTypesAreKnown": "Le journal du jeu ne nomme ni le Thargoïde détruit ni ceux autour de toi : EDCH reconnaît le type à l'obligation de combat (éclaireur 80 000 Cr, Glaive ou Scythe 4,5 M, Cyclops 8 M, Orthrus 15 M, Basilisk 24 M, Medusa 40 M, Hydra 60 M). Les éclaireurs (Marauder, Berserker, Inciter, Regenerator…) rapportent tous à peu près la même obligation et sont comptés ensemble, de même que le Glaive et le Scythe.",
     "kills": "Thargoïdes détruits",
     "lastDays": "{{count}} derniers jours",
     "subtitle": "Thargoïdes détruits, par type de vaisseau, et zones de conflit AX visitées.",

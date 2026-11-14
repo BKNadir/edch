@@ -72,6 +72,7 @@ export interface SystemObservation {
   history: InfluenceSample[];
 }
 
+/** What the journal tells about the BGS: your actions, the systems seen and their names. */
 export interface BgsJournal {
   actions: BgsAction[];
   /** By system name. */
@@ -82,6 +83,7 @@ export interface BgsJournal {
   stationFaction?: string;
 }
 
+/** The BGS state before any journal line is read. */
 export const emptyBgs = (): BgsJournal => ({ actions: [], observed: {}, systemNames: {} });
 
 /** Bounds: two months of actions at a busy pace, and the systems of a long patrol area. */

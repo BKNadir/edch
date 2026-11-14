@@ -1,9 +1,10 @@
 # BGS report for a squadron bot
 
 The BGS page keeps what you did for a minor faction (`game/activity/bgs.ts`). EDCH's Discord bot (named **EDCH** in
-Discord; its own repository, `edch-discord`), added to a squadron's server, gathers these reports so teammates see each
+Discord; its own repository, `edch-discord`; each squadron hosts its own copy), added to a squadron's server, gathers these reports so teammates see each
 other's work with `/bgs summary`. EDCH sends them only when the member pasted the key `/bgs link`
-gave them and ticked the switch (Sync → Connect to the Discord bot): every 15 minutes, the actions
+gave them and ticked the switch (Sync → Connect to the Discord bot): a few seconds after a new
+action or arrival, or every 5 or 15 minutes (the member's choice, `discordEvery`), the actions
 since the last report that concern the factions the squadron follows, one report per faction,
 and the systems visited where one of them is (`features/bgs/botSync.ts`). It is the only place
 BGS data leaves the PC in BGS or Invisible mode, by the member's choice.
@@ -15,7 +16,7 @@ EDSM, Inara or any public site: EDDN messages are built from your own journal on
 
 The bot keeps nothing itself: it writes the reports to the private `#edch-sync` channel of the
 squadron's Discord server (admins only), and a readable line per system in `#edch-bgs` (the
-`BGS` role). EDCH reaches only the shared bot and a squadron's own bot the member
+`BGS` role, read-only; a forum with a post per system where the server allows forums). EDCH reaches only the shared bot and a squadron's own bot the member
 confirmed (`src-tauri/src/discord_bot.rs`); the key is never written to the logs.
 
 The report is built by `bgsReport()` in `src/features/bgs/report.ts`.

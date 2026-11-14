@@ -52,7 +52,9 @@ export function eventDetail(ev: Record<string, any>): string | null {
   if (e === "Missions") return `${e} active=${(ev.Active ?? []).map((m: any) => m.MissionID).join(",")}`;
   if (e.startsWith("Mission"))
     return `${e} ${pick("MissionID", "Name", "Wing", "Faction", "DestinationSystem", "DestinationStation", "KillCount", "Count", "Expiry")}`;
-  if (e.startsWith("Wing")) return `${e} ${pick("Name", "Others")}`;
+  // Other commanders' names stay out of the logs: only how many.
+  if (e.startsWith("Wing"))
+    return `${e}${ev.Name ? " (a commander)" : ""}${Array.isArray(ev.Others) ? ` others=${ev.Others.length}` : ""}`;
   if (e === "Docked" || e === "Market") return `${e} ${pick("StationName", "StationType", "MarketID", "StarSystem")}`;
   if (e === "MarketBuy" || e === "MarketSell")
     return `${e} ${pick("MarketID", "Type", "Count", "BuyPrice", "SellPrice")}`;

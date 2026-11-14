@@ -94,6 +94,10 @@ interface UpdateResult {
   edsmFailed: boolean;
 }
 
+/**
+ * The BGS page: the followed faction's systems (influence, rival, states, private and public data,
+ * what to do), the refresh tour, and what you did for the faction.
+ */
 export class BgsView implements View {
   private root?: HTMLElement;
   private period: Period = "tick";
@@ -211,6 +215,10 @@ export class BgsView implements View {
       await pause(EDSM_PAUSE_MS);
     }
     saveBgsHistory(this.known);
+    log.info(
+      "bgs",
+      `Update: Spansh ${result.spanshFailed ? "failed" : `${result.spansh?.count ?? 0} system(s)`}, EDSM ${result.edsm}/${due.length}${result.edsmFailed ? " (stopped after failures)" : ""}`,
+    );
     this.loading = undefined;
     this.result = result;
     this.render();

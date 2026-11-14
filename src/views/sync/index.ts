@@ -12,6 +12,7 @@ import type { Ctx, View } from "../../state/context.js";
 import type { DiscordEvery, SyncSettings } from "../../state/syncSettings.js";
 import { shareModeSwitch } from "../shared/shareModeSwitch.js";
 import { clearShared } from "../../state/bgsShared.js";
+import { log } from "../../platform/logger.js";
 
 /** EDMC-style connections: EDDN, EDSM, Inara. */
 export class SyncView implements View {
@@ -217,6 +218,7 @@ export class SyncView implements View {
       set({ discordKey: "", discordBot: "", discord: false });
       // Unlinked: what the squadron shared isn't shown any more.
       clearShared();
+      log.info("discord", "Discord bot unlinked");
       await trustBot(null).catch(() => undefined);
       this.showDiscordStatus();
       return;
@@ -250,6 +252,8 @@ export class SyncView implements View {
     const previous = readBotKey(store.state.settings.sync.discordKey);
     if (previous && previous.guildId !== claims.guildId) clearShared();
     set({ discordKey: key, discordBot: bot });
+    // Never the key itself, nor the server or member it names.
+    log.info("discord", `Discord bot linked (${bot ? "a squadron's own bot, confirmed" : "the shared bot"})`);
     void sendBgsNow(store);
   }
 

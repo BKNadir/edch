@@ -6,6 +6,7 @@
 // read back.
 
 import type { FactionConflict, FactionPresence, InfluenceSample } from "../game/activity/bgs.js";
+import { log } from "../platform/logger.js";
 import { HISTORY_KEEP_DAYS, sampleOf, validFaction, validSample } from "./bgsHistory.js";
 
 const STORAGE_KEY = "edch.bgs.shared";
@@ -123,13 +124,15 @@ export function recordShared(snapshots: SharedSystem[], now = Date.now()) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(shared));
   } catch {
-    // Storage full or unavailable: kept for this session.
+    log.warn("bgs", "Squadron's systems not saved (storage full or unavailable): kept for this session");
   }
+  log.debug("bgs", `Squadron's systems: ${snapshots.length} received, ${Object.keys(shared).length} kept`);
 }
 
 /** Forgets what the squadron shared (the member unlinked the bot). */
 export function clearShared() {
   shared = {};
+  log.info("bgs", "Squadron's systems forgotten (bot unlinked or another server)");
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch {

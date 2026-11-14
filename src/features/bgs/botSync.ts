@@ -47,6 +47,7 @@ export interface BotSyncStatus {
   error?: string;
 }
 
+/** Where the reports stand, for the Sync page (updated by `sendBgsNow`). */
 export const botSync: BotSyncStatus = { state: "off" };
 
 /** One exchange with the bot, for the Sync page's activity list (nothing private in it). */
@@ -130,6 +131,7 @@ export async function sendBgsNow(store: Store): Promise<void> {
     const from = last && last > oldest ? last : oldest;
     let sent = 0;
     const systemsSent = systemsSeen(store.state.activity.bgs.observed, factions, from, to).length;
+    log.debug("discord", `Report: ${factions.length} faction(s), ${systemsSent} system(s) seen since ${from}`);
     // The systems seen go once, with the first faction's report (the bot keeps those where any
     // followed faction is). Only the journal's own visits: never what others shared.
     let systems = systemsSeen(store.state.activity.bgs.observed, factions, from, to).slice(-MAX_SYSTEMS);
@@ -150,6 +152,7 @@ export async function sendBgsNow(store: Store): Promise<void> {
     const received = await botSystems(settings.discordKey);
     recordShared(received);
     logBot({ ok: true, what: "systems", count: received.length });
+    log.debug("discord", `Systems received from the squadron: ${received.length}`);
     // Only once every faction went out: after a failure, the next try covers the same period.
     setLastSent(id, to);
     Object.assign(botSync, { state: "ok", factions, lastSent: to, lastCount: sent, error: undefined });
@@ -185,6 +188,7 @@ export function startBotSync(store: Store) {
     clearInterval(first);
     void sendBgsNow(store);
   }, 10_000);
+  log.debug("discord", `Reports: ${discordEvery(store.state.settings.sync.discordEvery)}`);
   // Every 5 or 15 minutes, as chosen ("now" also checks every 15 minutes, for the squadron's news).
   setInterval(() => {
     const every = discordEvery(store.state.settings.sync.discordEvery);
@@ -202,6 +206,7 @@ export function startBotSync(store: Store) {
     mark = next;
     if (discordEvery(settings.discordEvery) !== "now") return;
     clearTimeout(soon);
+    log.debug("discord", "New BGS action or arrival: report in a few seconds");
     soon = setTimeout(() => void sendBgsNow(store), SOON_MS);
   });
 }

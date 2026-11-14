@@ -8,6 +8,7 @@ import type { BgsAction, FactionConflict, FactionPresence, SystemObservation } f
 export const BGS_REPORT_SCHEMA = "edch.bgs.report";
 export const BGS_REPORT_VERSION = 1;
 
+/** A report as sent to the bot (docs/BGS_SYNC.md, version 1). */
 export interface BgsReport {
   schema: typeof BGS_REPORT_SCHEMA;
   version: typeof BGS_REPORT_VERSION;

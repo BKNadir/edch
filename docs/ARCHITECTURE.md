@@ -60,12 +60,12 @@ never from a layer above.** `tools/check-layers.cjs` enforces it (run by `npm te
 | --- | --- | --- |
 | `platform/` | What touches the computer: calls to Rust, logs, translations, version | `bridge.ts`, `logger.ts`, `i18n.ts`, `version.ts` |
 | `game/` | The game itself, pure functions: journal events → state, game data, demo journal | `journal/`, `activity/`, `data.ts`, `exobio.ts`, `types.ts` |
-| `state/` | The app's state and settings | `store.ts`, `context.ts`, `themeSettings.ts`, `syncSettings.ts` |
-| `ui/` | Shared display pieces: DOM helper, dialogs, banners, theme, menu, formats | `dom.ts`, `dialog.ts`, `alerts.ts`, `notifier.ts`, `menu/` |
-| `services/` | Other sites and servers | `spansh.ts`, `edsm.ts`, `eddn.ts`, `sync/` (EDDN, EDSM, Inara uploaders), `wing.ts`, `remoteServer.ts` |
-| `features/` | Calculations and logic behind the pages, without the page itself | `navigation/`, `engineers/`, `materials/`, `mining/`, `controls/`, `missions/`, `bgs/` (faction rows, alerts, report for the bot: see [BGS_SYNC.md](BGS_SYNC.md)), `dataGaps/` (game data EDCH lacks, see below) |
+| `state/` | The app's state and settings | `store.ts`, `context.ts`, `themeSettings.ts`, `syncSettings.ts`, `bgsHistory.ts` (Spansh and EDSM faction data, 7 days), `bgsShared.ts` (what the squadron saw, from its Discord bot) |
+| `ui/` | Shared display pieces: DOM helper, dialogs, banners, theme, menu, formats | `dom.ts`, `dialog.ts`, `alerts.ts`, `notifier.ts`, `menu/`, `sortableTables.ts` (every `table.table` sorts by column) |
+| `services/` | Other sites and servers | `spansh.ts`, `edsm.ts`, `eddn.ts`, `sync/` (EDDN, EDSM, Inara uploaders), `wing.ts`, `remoteServer.ts`, `bgsTick.ts` (tick.edcd.io), `discordBot.ts` (the squadron's bot: keys, config, reports, systems) |
+| `features/` | Calculations and logic behind the pages, without the page itself | `navigation/`, `engineers/`, `materials/`, `mining/`, `controls/`, `missions/`, `bgs/` (faction rows, alerts, refresh tour, report for the bot and when it goes: see [BGS_SYNC.md](BGS_SYNC.md)), `dataGaps/` (game data EDCH lacks, see below) |
 | `views/` | One folder per page (`index.ts` is the page), plus `shared/` and `detail/` (right panel) | `views/navigation/`, `views/settings/cards/` |
-| `app/` | Start-up and wiring: layout, top bar, journal feed, remote access | `main.ts`, `shell.ts`, `header.ts`, `journalFeed.ts`, `remote.ts` |
+| `app/` | Start-up and wiring: layout, top bar, journal feed, remote access | `main.ts`, `shell.ts`, `header.ts`, `journalFeed.ts`, `remote.ts`, `edomhLinks.ts` (EDOMH links opened in EDCH) |
 
 `src/boot.ts`, the entry point, picks the language and loads its texts **before** importing the
 rest of the app (`import("./app/main.js")`), so every module, including module-level constants,
@@ -135,6 +135,8 @@ wins, and several rules rely on that. Don't move existing rules around.
 | `ntfy.rs` | Wing missions shared through ntfy.sh (encrypted) |
 | `update.rs` | Update check, download and install from GitHub releases |
 | `logs.rs` | Log files (standard and debug), with private data removed |
+| `discord_bot.rs` | The squadron's Discord bot: only its address (the shared one or one the user confirmed), only `/v1/config`, `/v1/report`, `/v1/systems`; the key never logged |
+| `edomh_link.rs` | Registers EDCH for `edomh://` links (EDSY's and Coriolis's "Export to EDOMH") when the user asks, and passes them to the running EDCH |
 | `picture_cache.rs` | Controller pictures of the Controls page, kept unchanged next to the logs folder |
 
 Windows and Linux differences stay inside the backend, behind `#[cfg(target_os = "…")]`: journal
@@ -164,6 +166,9 @@ These hold everywhere, front end and backend:
   user name or home folder, full IP addresses, the Wi-Fi name, or anything typed in a field.
   `logs.rs` (`sanitize`, `redact`) and `platform/logger.ts` enforce it; keep using them.
 - API keys and paths are never sent to phones (`app/remote.ts`, `snapshot`).
+- The Discord bot key is masked in the logs (`edch1.***`). In BGS or Invisible mode, BGS data
+  goes only to the squadron's own bot, when the member linked it; what the squadron shares back
+  (`state/bgsShared.ts`) is shown, never sent on (EDDN is built from the journal only).
 - EDCH never reads or changes the game's code or data files; it only reads the journal and
   companion files, and the option files the user exports or imports. It writes a binding file only
   for its own presets (`…_EDCH`, Controls → Configure). In the game's installation folder, the only

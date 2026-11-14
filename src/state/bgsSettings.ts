@@ -1,5 +1,6 @@
 // Settings of the BGS page: the minor faction you follow.
 
+/** The BGS page's settings, saved with the others (state/store.ts). */
 export interface BgsSettings {
   /** The minor faction followed on the BGS page (as the game writes it); empty: none chosen yet. */
   faction: string;
