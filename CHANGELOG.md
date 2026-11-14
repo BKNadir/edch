@@ -3,6 +3,10 @@
 The release build copies the section of the version it publishes into the GitHub release,
 and EDCH shows it in the update banner.
 
+## Unreleased
+
+- Controls: French action names automatically follow the EDCH interface language; English fallback and bilingual search; key bindings remain unchanged.
+
 ## 0.10.13
 
 - Logs: wing members' names (wing events, wing notifications) are no longer written; the BGS page, the refresh tour and the Discord bot log what they do in debug mode.
