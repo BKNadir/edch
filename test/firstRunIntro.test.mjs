@@ -1,5 +1,6 @@
 // The first-run introduction: drawn in the chosen language, and its two buttons tell start-up
-// whether to open Settings first. A small stand-in for the DOM is enough for h().
+// whether to open Settings first; the About page can show it again above the app. A small
+// stand-in for the DOM is enough for h().
 import "./i18n-setup.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -28,6 +29,9 @@ class FakeElement {
   addEventListener(type, handler) {
     (this.listeners[type] ??= []).push(handler);
   }
+  remove() {
+    this.removed = true;
+  }
   click() {
     for (const handler of this.listeners.click ?? []) handler();
   }
@@ -50,7 +54,15 @@ globalThis.document ??= {
   createTextNode: (text) => ({ textContent: text }),
 };
 
-const { showIntro } = await import("../dist/js/ui/intro.js");
+const body = new FakeElement("body");
+globalThis.document.body ??= body;
+const keyHandlers = new Set();
+globalThis.window ??= {
+  addEventListener: (type, handler) => type === "keydown" && keyHandlers.add(handler),
+  removeEventListener: (type, handler) => keyHandlers.delete(handler),
+};
+
+const { replayIntro, showIntro } = await import("../dist/js/ui/intro.js");
 
 const buttons = (app) => [...app.all()].filter((el) => el.tagName === "BUTTON");
 
@@ -77,4 +89,19 @@ test("intro: 'Open Settings' asks start-up to show Settings, 'Start' doesn't", a
   const straight = showIntro(second);
   buttons(second)[1].click();
   assert.equal(await straight, false);
+});
+
+test("intro from About: shown above the app, closed by its buttons or Escape", async () => {
+  const toSettings = replayIntro();
+  const overlay = body.children.at(-1);
+  assert.match(overlay.className, /intro-overlay/);
+  buttons(overlay)[0].click();
+  assert.equal(await toSettings, true);
+  assert.equal(overlay.removed, true);
+  assert.equal(keyHandlers.size, 0);
+
+  const escaped = replayIntro();
+  for (const handler of keyHandlers) handler({ key: "Escape" });
+  assert.equal(await escaped, false);
+  assert.equal(body.children.at(-1).removed, true);
 });

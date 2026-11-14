@@ -2458,6 +2458,14 @@ circle[data-control-key].pressed {
 .intro-screen {
   max-width: 720px;
 }
+/* The introduction shown again from the About page, above the app. */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: var(--bg);
+  display: flex;
+}
 .intro-features {
   list-style: none;
   margin: 0;

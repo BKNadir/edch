@@ -47,3 +47,23 @@ export function showIntro(app: HTMLElement): Promise<boolean> {
     );
   });
 }
+
+/**
+ * Shows the introduction again over the app (from the About page), and closes it on either button
+ * or Escape. Resolves `true` when the player chose to open Settings.
+ */
+export async function replayIntro(): Promise<boolean> {
+  const overlay = h("div.intro-overlay", { role: "dialog", "aria-modal": "true" });
+  document.body.appendChild(overlay);
+  let closeWithEscape: (e: KeyboardEvent) => void = () => {};
+  const escaped = new Promise<boolean>((resolve) => {
+    closeWithEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") resolve(false);
+    };
+    window.addEventListener("keydown", closeWithEscape);
+  });
+  const openSettings = await Promise.race([showIntro(overlay), escaped]);
+  window.removeEventListener("keydown", closeWithEscape);
+  overlay.remove();
+  return openSettings;
+}

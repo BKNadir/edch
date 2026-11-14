@@ -5,7 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.14
 
-- First start: after choosing the language, a short introduction presents what EDCH does (materials and engineering, navigation, activities, sharing) and invites you to take a minute in Settings; "Open Settings" goes straight there.
+- First start: after choosing the language, a short introduction presents what EDCH does (materials and engineering, navigation, activities, sharing) and invites you to take a minute in Settings; "Open Settings" goes straight there. About → "show it again" brings it back any time.
 
 ## 0.10.13
 

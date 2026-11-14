@@ -51,7 +51,9 @@
     "eddiTranslatedRanksStates": "Переводы названий состояний фракций, рангов и некоторых товаров",
     "contributors": "Участники",
     "thanksContributors": "Спасибо участникам:",
-    "stationIcons": "Значки станций (Coriolis, Orbis, Ocellus, аванпосты, порты…), перерисованные по образцу игровых, и анимация загрузки"
+    "stationIcons": "Значки станций (Coriolis, Orbis, Ocellus, аванпосты, порты…), перерисованные по образцу игровых, и анимация загрузки",
+    "introShownFirstStart": "Экран приветствия при первом запуске:",
+    "showIntroAgain": "показать снова"
   },
   "alerts": {
     "logs": "Журналы"

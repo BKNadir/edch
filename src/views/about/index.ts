@@ -6,6 +6,7 @@ import { missingDataCard } from "./missingDataCard.js";
 import { h, icon, replace, toast } from "../../ui/dom.js";
 import { SOFTWARE_VERSION } from "../../platform/version.js";
 import { showChangelog } from "../../ui/changelog.js";
+import { replayIntro } from "../../ui/intro.js";
 import type { Ctx, View } from "../../state/context.js";
 import { t } from "../../platform/i18n.js";
 
@@ -127,7 +128,6 @@ export class AboutView implements View {
   constructor(private ctx: Ctx) {}
 
   mount(root: HTMLElement) {
-    void this.ctx;
     replace(
       root,
       h(
@@ -200,6 +200,22 @@ export class AboutView implements View {
               h("button.inline-link", { onclick: () => showChangelog() }, t("about.version2")),
               " · ",
               h("button.inline-link", { onclick: () => openUrl(`${REPO}/releases`) }, "Releases"),
+            ),
+            h(
+              "li",
+              null,
+              "👋 ",
+              h("span", null, t("about.introShownFirstStart")),
+              " ",
+              h(
+                "button.inline-link",
+                {
+                  onclick: async () => {
+                    if (await replayIntro()) this.ctx.store.setView("settings");
+                  },
+                },
+                t("about.showIntroAgain"),
+              ),
             ),
           ),
         ),
