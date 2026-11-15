@@ -6,10 +6,14 @@
 import { fold, gameName } from "../../platform/i18n.js";
 import { exactFaction, type FactionIndex } from "./factionNames.js";
 
-/** What was typed, and the game's English name to search for. */
-export type AutoTarget =
-  | { kind: "commodity" | "ship" | "module" | "service" | "faction"; name: string }
-  | { kind: "system"; name: string };
+/** What a typed name can be. */
+export type AutoKind = "commodity" | "ship" | "module" | "service" | "faction" | "system";
+
+/** What was typed, and the name to search for (the game's English name, or the system typed). */
+export interface AutoTarget {
+  kind: AutoKind;
+  name: string;
+}
 
 /** The names Auto knows, by kind (English game names; services as [value, label]). */
 export interface AutoNames {
@@ -20,8 +24,11 @@ export interface AutoNames {
   factions?: FactionIndex;
 }
 
+/** How a name is shown in the app's language. */
+type Label = (name: string) => string;
+
 /** The English name in `names` that `typed` stands for (in English or translated), if any. */
-function findName(names: string[], typed: string, label: (name: string) => string = gameName): string | undefined {
+function findName(names: string[], typed: string, label: Label = gameName): string | undefined {
   const wanted = fold(typed);
   return names.find((name) => fold(name) === wanted || fold(label(name)) === wanted);
 }
