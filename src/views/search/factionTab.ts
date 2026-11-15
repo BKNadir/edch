@@ -8,35 +8,8 @@ import { referenceField } from "../shared/referenceField.js";
 import { h, icon, replace } from "../../ui/dom.js";
 import { resultRow } from "../shared/resultsTable.js";
 import { showPagedList } from "../shared/pagedList.js";
-import { exactFaction, factionIndex, matchFactions, type FactionIndex } from "../../features/search/factionNames.js";
-import { suggestBox } from "../../ui/suggestBox.js";
-import { log } from "../../platform/logger.js";
-
-/** Every faction of the game (public/data/factions.txt), loaded the first time the tab opens. */
-let allFactions: Promise<string[]> | undefined;
-
-function loadFactions(): Promise<string[]> {
-  return (allFactions ??= fetch("data/factions.txt")
-    .then((r) => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      return r.text();
-    })
-    .then((text) => text.split("\n").filter(Boolean))
-    .catch((error) => {
-      log.warn("search", `Faction list unavailable, journal factions only: ${String(error?.message ?? error)}`);
-      return [];
-    }));
-}
-
-/** The journal's factions first, then the game's; rebuilt when the journal knows new ones (Auto uses it too). */
-let index: { known: string[]; value: FactionIndex } | undefined;
-
-export async function factionsOf(ctx: Ctx): Promise<FactionIndex> {
-  const known = ctx.store.state.cmdr.knownFactions ?? [];
-  const all = await loadFactions();
-  if (index?.known !== known) index = { known, value: factionIndex(known, all) };
-  return index.value;
-}
+import { exactFaction } from "../../features/search/factionNames.js";
+import { factionField, factionsOf } from "../shared/factionField.js";
 
 /** Faction states Spansh knows, by their English game name (shown with the game's translation). */
 const FACTION_STATES = [
@@ -69,9 +42,6 @@ let runId = 0;
 /** The tab's form; results go to `out`. */
 export function factionForm(ctx: Ctx, out: HTMLElement): HTMLElement {
   const run = () => void runSearch(ctx, out);
-  // The list is ready by the time a name is typed; until then, the journal's factions.
-  let ready: FactionIndex = factionIndex(ctx.store.state.cmdr.knownFactions ?? []);
-  void factionsOf(ctx).then((value) => (ready = value));
   const input = h("input.big", {
     type: "text",
     value: query.faction,
@@ -80,14 +50,10 @@ export function factionForm(ctx: Ctx, out: HTMLElement): HTMLElement {
     oninput: (e: Event) => (query.faction = (e.target as HTMLInputElement).value),
     onkeydown: (e: KeyboardEvent) => e.key === "Enter" && run(),
   }) as HTMLInputElement;
-  const field = suggestBox(
-    input,
-    (text) => matchFactions(ready, text),
-    (value) => {
-      query.faction = value;
-      run();
-    },
-  );
+  const field = factionField(ctx, input, (name) => {
+    query.faction = name;
+    run();
+  });
   const presence = (ownerOnly: boolean, label: string) =>
     h(
       "label.check",

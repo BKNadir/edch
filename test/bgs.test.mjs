@@ -9,14 +9,7 @@ import { emptyActivity } from "../dist/js/game/activity/state.js";
 import { decodeFactionSystem } from "../dist/js/services/spansh.js";
 import { decodeEdsmFactions } from "../dist/js/services/edsm.js";
 import { recordSystem, validBgsHistory } from "../dist/js/state/bgsHistory.js";
-import {
-  activityFor,
-  adviceFor,
-  factionRows,
-  influenceTrend,
-  knownFactions,
-  refreshTour,
-} from "../dist/js/features/bgs/analysis.js";
+import { activityFor, adviceFor, factionRows, influenceTrend, refreshTour } from "../dist/js/features/bgs/analysis.js";
 import { BGS_REPORT_SCHEMA, bgsReport } from "../dist/js/features/bgs/report.js";
 
 const FACTION = "Test Alliance";
@@ -99,7 +92,6 @@ test("bgs journal: actions for and against each faction, influence history per v
   assert.equal(alpha.factions[0].influence, 45);
   assert.deepEqual(alpha.factions[0].active, ["Boom"]);
   assert.equal(alpha.history.length, 2);
-  assert.deepEqual(knownFactions(bgs.observed), ["Rival Corp", "Small Ones", FACTION].sort());
 });
 
 test("bgs activity: one row per system, missions by influence, the rest in credits", () => {

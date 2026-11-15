@@ -33,11 +33,11 @@ import {
   type BgsAlertKind,
   type BgsSystemRow,
   factionRows,
-  knownFactions,
   refreshTour,
 } from "../../features/bgs/analysis.js";
 import { setBgsTourStops, startBgsTour } from "../../features/bgs/tourCopy.js";
 import { systemLink } from "../shared/links.js";
+import { factionField } from "../shared/factionField.js";
 import { bgsShared } from "../../state/bgsShared.js";
 import { STALE_DAY_CHOICES } from "../../state/bgsSettings.js";
 
@@ -280,7 +280,7 @@ export class BgsView implements View {
     replace(
       this.root,
       h("header.view-head", null, h("div", null, h("h1", null, t("bgs.title")), h("p.sub", null, t("bgs.subtitle")))),
-      this.factionCard(faction, activity.bgs.observed, rows),
+      this.factionCard(faction, rows),
       faction ? this.alertsSummary(rows) : null,
       faction ? this.activityCard(done, period, tick) : null,
       faction ? this.systemsCard(this.filtered(rows), tick) : null,
@@ -288,21 +288,18 @@ export class BgsView implements View {
     );
   }
 
-  private factionCard(
-    faction: string,
-    observed: Parameters<typeof knownFactions>[0],
-    rows: BgsSystemRow[],
-  ): HTMLElement {
-    const known = knownFactions(observed);
-    const listId = "bgs-known-factions";
+  private factionCard(faction: string, rows: BgsSystemRow[]): HTMLElement {
     const input = h("input", {
       type: "text",
       value: faction,
-      list: listId,
       maxlength: "120",
+      spellcheck: false,
       placeholder: t("bgs.factionPlaceholder"),
       onchange: (e: Event) => this.setFaction((e.target as HTMLInputElement).value),
-    });
+      onkeydown: (e: KeyboardEvent) => e.key === "Enter" && this.setFaction((e.target as HTMLInputElement).value),
+    }) as HTMLInputElement;
+    // The journal's factions, then every faction of the game, suggested while typing.
+    const field = factionField(this.ctx, input, (name) => this.setFaction(name));
     const status = this.loading
       ? h(
           "p.sub",
@@ -348,12 +345,7 @@ export class BgsView implements View {
       h(
         "div.row",
         null,
-        input,
-        h(
-          "datalist",
-          { id: listId },
-          known.slice(0, 200).map((name) => h("option", { value: name })),
-        ),
+        field,
         h(
           "button.primary",
           { disabled: !faction || Boolean(this.loading), onclick: () => void this.updateSystems() },

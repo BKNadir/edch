@@ -9,6 +9,7 @@ import { gameName, locale, t } from "../../platform/i18n.js";
 import { type Ctx, referenceOf, type View } from "../../state/context.js";
 import type { MiningSettings } from "../../state/store.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { duration, relTime } from "../../ui/format.js";
 import { type MethodFilter, spotResults } from "./spotResults.js";
 import { miningSinceReset, resetMiningCounters } from "../../state/sessionReset.js";
@@ -446,34 +447,40 @@ export class MiningView implements View {
           t("mining.ringsHotspotChosenMineralNearestFirst", {
             maxDistance: fmt(this.range()),
           }),
+          debugSource("Spansh"),
         ),
+        // The mineral and where from, spaced like the Search page's forms.
         h(
-          "div.row",
+          "div.search-form",
           null,
           h(
-            "select",
-            {
-              onchange: (e: Event) => (
-                (this.findMineral = (e.target as HTMLSelectElement).value),
-                (this.found = null),
-                this.render()
-              ),
-            },
-            MINERALS.map(([n]) => h("option", { value: n, selected: n === this.findMineral }, gameName(n))),
+            "div.row",
+            null,
+            h(
+              "select",
+              {
+                onchange: (e: Event) => (
+                  (this.findMineral = (e.target as HTMLSelectElement).value),
+                  (this.found = null),
+                  this.render()
+                ),
+              },
+              MINERALS.map(([n]) => h("option", { value: n, selected: n === this.findMineral }, gameName(n))),
+            ),
+            h(
+              "button.primary",
+              { disabled: this.finding, onclick: run },
+              this.finding ? t("mining.searching") : t("common.search"),
+            ),
+            h("span.sub", null, t("mining.around", { place: referenceOf(this.ctx).label })),
           ),
           h(
-            "button.primary",
-            { disabled: this.finding, onclick: run },
-            this.finding ? t("mining.searching") : t("common.search"),
+            "div.row.opts",
+            null,
+            (refreshReferenceField(this.reference, this.ctx), this.reference),
+            this.rangeField(),
+            this.demandField(),
           ),
-          h("span.sub", null, t("mining.around", { place: referenceOf(this.ctx).label })),
-        ),
-        h(
-          "div.row.opts",
-          null,
-          (refreshReferenceField(this.reference, this.ctx), this.reference),
-          this.rangeField(),
-          this.demandField(),
         ),
         this.error && this.tab === "prospect" ? h("p.error", null, this.error) : null,
       ),
@@ -500,7 +507,7 @@ export class MiningView implements View {
         "section.card",
         null,
         h("h3", null, t("mining.whereMineSellPowerSSystems")),
-        h("p.sub", null, t("mining.findsStationsSystemsControlledChosenPower")),
+        h("p.sub", null, t("mining.findsStationsSystemsControlledChosenPower"), debugSource("Spansh")),
         h(
           "div.merit-form",
           null,
@@ -533,26 +540,34 @@ export class MiningView implements View {
               ),
             ),
           ),
+          // The search button and where from, spaced like the Search page's forms.
           h(
-            "div.row",
+            "div.search-form",
             null,
             h(
-              "button.primary",
-              { disabled: this.running || !power || !s.minerals.length, onclick: () => this.search(power, s.minerals) },
-              this.running ? t("mining.searching") : t("common.search"),
-            ),
-            h(
-              "span.sub",
+              "div.row",
               null,
-              t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: this.range() }),
+              h(
+                "button.primary",
+                {
+                  disabled: this.running || !power || !s.minerals.length,
+                  onclick: () => this.search(power, s.minerals),
+                },
+                this.running ? t("mining.searching") : t("common.search"),
+              ),
+              h(
+                "span.sub",
+                null,
+                t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: this.range() }),
+              ),
             ),
-          ),
-          h(
-            "div.row.opts",
-            null,
-            (refreshReferenceField(this.reference, this.ctx), this.reference),
-            this.rangeField(),
-            this.demandField(),
+            h(
+              "div.row.opts",
+              null,
+              (refreshReferenceField(this.reference, this.ctx), this.reference),
+              this.rangeField(),
+              this.demandField(),
+            ),
           ),
         ),
         this.error ? h("p.error", null, this.error) : null,

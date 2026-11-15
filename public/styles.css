@@ -3142,6 +3142,14 @@ span.warn,
 div + .card {
   margin-top: 12px;
 }
+/* A row of controls right above a block of cards (Engineers: the reference system): the same space
+   as between cards. In a form laid out as a grid (Search), the grid's gap spaces them already. */
+.row + [class*="-grid"] {
+  margin-top: 12px;
+}
+.search-form > .row + [class*="-grid"] {
+  margin-top: 0;
+}
 /* Cards laid out in a grid (engineers, missions, goals…): the grid's gap spaces them, so the
    margin above for stacked cards would push all but the first one down. */
 [class*="-grid"] > .card {
@@ -4304,6 +4312,7 @@ body.focus-mode .focus-exit {
 }
 .faction-states .opts {
   gap: 4px 16px;
+  margin-top: 6px;
 }
 
 /* Phones: rows of controls wrap instead of pushing the page wider. */

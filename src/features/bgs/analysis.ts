@@ -331,14 +331,6 @@ function addForecast(row: BgsSystemRow, samples: InfluenceSample[], faction: str
   }
 }
 
-/** Factions seen in your journal, most seen first (to pick the one to follow). */
-export function knownFactions(observed: Record<string, SystemObservation>): string[] {
-  const count = new Map<string, number>();
-  for (const observation of Object.values(observed))
-    for (const f of observation.factions) count.set(f.name, (count.get(f.name) ?? 0) + 1);
-  return [...count].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([name]) => name);
-}
-
 /** What helps the faction in a state (keys of the "bgs.advice*" texts). */
 const ADVICE_BY_STATE: Record<string, string> = {
   War: "conflictZones",
