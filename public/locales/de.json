@@ -1129,7 +1129,12 @@
     "autoCommodity": "Ware",
     "autoShip": "Schiff",
     "autoModule": "Modul",
-    "autoService": "Dienst"
+    "autoService": "Dienst",
+    "systemNamePlaceholder": "Systemname oder sein Anfang (z. B. LHS), oder leer lassen",
+    "systemNameEverywhere": "Alle Systeme mit diesem Namen in der Galaxie, die nächsten zu {{label}} zuerst",
+    "systemBodyType": "Himmelskörper",
+    "systemVolcanism": "Vulkanismus",
+    "anyVolcanism": "Beliebiger Vulkanismus"
   },
   "session": {
     "bounties": "Kopfgelder",

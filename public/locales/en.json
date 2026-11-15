@@ -1129,7 +1129,12 @@
     "autoCommodity": "Commodity",
     "autoShip": "Ship",
     "autoModule": "Module",
-    "autoService": "Service"
+    "autoService": "Service",
+    "systemNamePlaceholder": "System name or its beginning (e.g. LHS), or leave empty",
+    "systemNameEverywhere": "Every system with this name in the galaxy, nearest to {{label}} first",
+    "systemBodyType": "Body",
+    "systemVolcanism": "Volcanism",
+    "anyVolcanism": "Any volcanism"
   },
   "session": {
     "bounties": "Bounties",

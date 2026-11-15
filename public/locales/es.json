@@ -1130,7 +1130,12 @@
     "autoCommodity": "Mercancía",
     "autoShip": "Nave",
     "autoModule": "Módulo",
-    "autoService": "Servicio"
+    "autoService": "Servicio",
+    "systemNamePlaceholder": "Nombre del sistema o su comienzo (p. ej. LHS), o déjalo vacío",
+    "systemNameEverywhere": "Todos los sistemas con este nombre en la galaxia, los más cercanos a {{label}} primero",
+    "systemBodyType": "Cuerpo",
+    "systemVolcanism": "Vulcanismo",
+    "anyVolcanism": "Cualquier vulcanismo"
   },
   "session": {
     "bounties": "Recompensas",

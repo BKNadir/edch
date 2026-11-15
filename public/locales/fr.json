@@ -1130,7 +1130,12 @@
     "autoCommodity": "Marchandise",
     "autoShip": "Vaisseau",
     "autoModule": "Module",
-    "autoService": "Service"
+    "autoService": "Service",
+    "systemNamePlaceholder": "Nom du système ou son début (ex. LHS), ou laisse vide",
+    "systemNameEverywhere": "Tous les systèmes de ce nom dans la galaxie, les plus proches de {{label}} d'abord",
+    "systemBodyType": "Corps",
+    "systemVolcanism": "Volcanisme",
+    "anyVolcanism": "Tout volcanisme"
   },
   "session": {
     "bounties": "Primes",

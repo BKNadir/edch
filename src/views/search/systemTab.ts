@@ -1,10 +1,14 @@
-// Search page, Systems tab: systems around the reference system with a star type, Powerplay,
-// allegiance, government, economy, security, faction state, station type or number of bodies,
-// nearest first, a page at a time (services/systemSearch.ts).
+// Search page, Systems tab: systems with a name (or its beginning, suggested while typing), a star
+// type, a body type, a volcanism, Powerplay, allegiance, government, economy, security, faction
+// state, station type or number of bodies, nearest first, a page at a time
+// (services/systemSearch.ts). Within the range, or anywhere when a name is typed.
 
 import { gameName, locale, t } from "../../platform/i18n.js";
 import {
   ALLEGIANCES,
+  ANY_VOLCANISM,
+  BODY_TYPES,
+  VOLCANISMS,
   ECONOMIES,
   FACTION_STATES,
   GOVERNMENTS,
@@ -19,6 +23,8 @@ import {
   type SystemCriteria,
 } from "../../services/systemSearch.js";
 import { referenceOf, type Ctx } from "../../state/context.js";
+import { suggestSystems } from "../../services/spansh.js";
+import { suggestBox } from "../../ui/suggestBox.js";
 import { h, icon, replace } from "../../ui/dom.js";
 import { referenceField } from "../shared/referenceField.js";
 import { radiusField, rangeOf } from "../shared/radiusField.js";
@@ -37,11 +43,12 @@ let runId = 0;
 
 /** A select of `values` (game names) for `key`, with "any" first. */
 function choice(
-  key: Exclude<keyof SystemCriteria, "minBodies">,
+  key: Exclude<keyof SystemCriteria, "minBodies" | "name">,
   label: string,
   values: string[],
   sorted = true,
   labelOf: (value: string) => string = gameName,
+  first: HTMLElement | null = null,
 ): HTMLElement {
   const shown = sorted ? [...values].sort((a, b) => labelOf(a).localeCompare(labelOf(b), locale())) : values;
   return h(
@@ -52,6 +59,7 @@ function choice(
       "select",
       { onchange: (e: Event) => (criteria[key] = (e.target as HTMLSelectElement).value || undefined) },
       h("option", { value: "" }, t("search.systemAny")),
+      first,
       shown.map((v) => h("option", { value: v, selected: criteria[key] === v }, labelOf(v))),
     ),
   );
@@ -63,14 +71,49 @@ export function systemForm(ctx: Ctx, out: HTMLElement): HTMLElement {
   const range = () => rangeOf(ownRange, ctx.store.state.settings.maxDistance);
   const around = h("span.sub", null, t("common.aroundLyMax", { label: referenceOf(ctx).label, maxDistance: range() }));
   const refreshAround = () =>
-    (around.textContent = t("common.aroundLyMax", { label: referenceOf(ctx).label, maxDistance: range() }));
+    (around.textContent = criteria.name?.trim()
+      ? t("search.systemNameEverywhere", { label: referenceOf(ctx).label })
+      : t("common.aroundLyMax", { label: referenceOf(ctx).label, maxDistance: range() }));
+  // A name or its beginning, suggested while typing; Enter or a suggestion searches.
+  const nameInput = h("input.big", {
+    type: "text",
+    value: criteria.name ?? "",
+    placeholder: t("search.systemNamePlaceholder"),
+    spellcheck: false,
+    oninput: (e: Event) => {
+      criteria.name = (e.target as HTMLInputElement).value || undefined;
+      refreshAround();
+    },
+    onkeydown: (e: KeyboardEvent) => e.key === "Enter" && run(),
+  }) as HTMLInputElement;
+  const nameField = suggestBox(
+    nameInput,
+    (typed) => (typed.trim().length >= 3 ? suggestSystems(typed) : []),
+    (value) => {
+      criteria.name = value;
+      refreshAround();
+      run();
+    },
+    300,
+  );
+  refreshAround();
   return h(
     "div",
     null,
+    h("div.row", null, nameField, h("button.primary", { onclick: run }, icon("search"), " " + t("common.search"))),
     h(
       "div.row.opts",
       null,
       choice("starType", t("search.systemStar"), STAR_TYPES, false),
+      choice("bodyType", t("search.systemBodyType"), BODY_TYPES, false),
+      choice(
+        "volcanism",
+        t("search.systemVolcanism"),
+        VOLCANISMS,
+        true,
+        gameName,
+        h("option", { value: ANY_VOLCANISM, selected: criteria.volcanism === ANY_VOLCANISM }, t("search.anyVolcanism")),
+      ),
       choice("stationType", t("search.systemStation"), SYSTEM_STATION_TYPES),
       h(
         "label.check",
@@ -87,7 +130,6 @@ export function systemForm(ctx: Ctx, out: HTMLElement): HTMLElement {
           },
         }),
       ),
-      h("button.primary", { onclick: run }, icon("search"), " " + t("common.search")),
     ),
     h(
       "div.row.opts",

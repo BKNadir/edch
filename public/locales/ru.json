@@ -1128,7 +1128,12 @@
     "autoCommodity": "Товар",
     "autoShip": "Корабль",
     "autoModule": "Модуль",
-    "autoService": "Услуга"
+    "autoService": "Услуга",
+    "systemNamePlaceholder": "Название системы или его начало (например, LHS), или оставьте пустым",
+    "systemNameEverywhere": "Все системы с этим названием в галактике, сначала ближайшие к {{label}}",
+    "systemBodyType": "Тело",
+    "systemVolcanism": "Вулканизм",
+    "anyVolcanism": "Любой вулканизм"
   },
   "session": {
     "bounties": "Награды за головы",

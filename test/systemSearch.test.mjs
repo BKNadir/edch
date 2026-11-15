@@ -173,3 +173,24 @@ test("system page: a body's rings, reserve, landing, atmosphere and hotspots", a
   assert.equal(mercury.gravity, 0.3755);
   assert.equal(decodeBodyDetail({}), null);
 });
+
+test("system search: a name searches the whole galaxy; star and body types are both required", async () => {
+  const { systemFilters, volcanismFilters, ANY_VOLCANISM, VOLCANISMS } =
+    await import("../dist/js/services/systemSearch.js");
+  assert.deepEqual(systemFilters({ name: "LHS", starType: "M (Red dwarf) Star", bodyType: "Earth-like world" }, 100), {
+    name: { value: "LHS" },
+    bodies: [
+      { type: { value: ["Star"] }, subtype: { value: ["M (Red dwarf) Star"] } },
+      { subtype: { value: ["Earth-like world"] } },
+    ],
+  });
+  assert.deepEqual(volcanismFilters({ volcanism: "Major Water Geysers", bodyType: "Icy body" }, 50), {
+    distance: { min: "0", max: "50" },
+    volcanism_type: { value: ["Major Water Geysers"] },
+    subtype: { value: ["Icy body"] },
+  });
+  const any = volcanismFilters({ volcanism: ANY_VOLCANISM, name: "LHS" }, 50);
+  assert.deepEqual(any.system_name, { value: "LHS" });
+  assert.equal(any.volcanism_type.value.length, VOLCANISMS.length);
+  assert.ok(!any.volcanism_type.value.includes("No volcanism"));
+});

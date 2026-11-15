@@ -1,6 +1,7 @@
-// Search → Systems: systems around the reference system that match a few criteria (a star type
-// among their bodies, Powerplay, allegiance, government, economy, security, the controlling
-// faction's state, a station type, a minimum number of bodies), nearest first (Spansh).
+// Search → Systems: systems that match a few criteria (a name or its beginning, a star type and a
+// body type among their bodies, a volcanism, Powerplay, allegiance, government, economy, security,
+// the controlling faction's state, a station type, a minimum number of bodies), nearest first
+// (Spansh). Within the range, or anywhere when a name is typed.
 //
 // The field names and values are the ones Spansh's systems search takes
 // (spansh.co.uk/api/systems/searchable_fields and …/field_values/<field>).
@@ -20,6 +21,15 @@ import {
 
 /** What a system must have; an empty or missing criterion doesn't filter. */
 export interface SystemCriteria {
+  /** The system's name or its beginning ("LHS" finds every LHS system); the range then no longer applies. */
+  name?: string;
+  /** A planet of this kind among the system's bodies ("Earth-like world"). */
+  bodyType?: string;
+  /**
+   * A body with this volcanism ("Major Silicate Vapour Geysers"), or ANY_VOLCANISM. Spansh only
+   * filters volcanism on bodies: the systems are found from their bodies first.
+   */
+  volcanism?: string;
   /** A star of this kind among the system's bodies ("Neutron Star"). */
   starType?: string;
   /** The Powerplay power controlling the system. */
@@ -62,6 +72,56 @@ export const STAR_TYPES = [
   "S-type Star",
   "Supermassive Black Hole",
 ];
+
+/** Planet kinds Spansh knows, most sought first. */
+export const BODY_TYPES = [
+  "Earth-like world",
+  "Water world",
+  "Ammonia world",
+  "Water giant",
+  "High metal content world",
+  "Metal-rich body",
+  "Rocky body",
+  "Rocky Ice world",
+  "Icy body",
+  "Class I gas giant",
+  "Class II gas giant",
+  "Class III gas giant",
+  "Class IV gas giant",
+  "Class V gas giant",
+  "Gas giant with water-based life",
+  "Gas giant with ammonia-based life",
+  "Helium-rich gas giant",
+  "Helium gas giant",
+];
+
+/** Volcanism values Spansh knows (bodies/field_values/volcanism_type), "No volcanism" left out. */
+export const VOLCANISMS = [
+  "Carbon Dioxide Geysers",
+  "Major Carbon Dioxide Geysers",
+  "Minor Carbon Dioxide Geysers",
+  "Silicate Vapour Geysers",
+  "Major Silicate Vapour Geysers",
+  "Minor Silicate Vapour Geysers",
+  "Water Geysers",
+  "Major Water Geysers",
+  "Minor Water Geysers",
+  "Metallic Magma",
+  "Major Metallic Magma",
+  "Minor Metallic Magma",
+  "Rocky Magma",
+  "Major Rocky Magma",
+  "Minor Rocky Magma",
+  "Water Magma",
+  "Major Water Magma",
+  "Minor Water Magma",
+  "Minor Ammonia Magma",
+  "Minor Methane Magma",
+  "Minor Nitrogen Magma",
+];
+
+/** The volcanism choice "any volcanism at all". */
+export const ANY_VOLCANISM = "*";
 
 export const POWERS = [
   "A. Lavigny-Duval",
@@ -159,9 +219,18 @@ const one = (value: string | undefined) => (value ? { value: [value] } : undefin
 
 /** The Spansh filters for `criteria` within `range` light years. */
 export function systemFilters(criteria: SystemCriteria, range: number): Record<string, unknown> {
-  const filters: Record<string, unknown> = { distance: { min: "0", max: String(range) } };
+  const name = criteria.name?.trim();
+  // A name searches the whole galaxy: "LHS" finds every LHS system, nearest first.
+  const filters: Record<string, unknown> = name
+    ? { name: { value: name } }
+    : { distance: { min: "0", max: String(range) } };
   const put = (field: string, value: unknown) => value !== undefined && (filters[field] = value);
-  put("bodies", criteria.starType ? [{ type: one("Star"), subtype: one(criteria.starType) }] : undefined);
+  // Each entry is a body the system must have (Spansh wants them all).
+  const bodies = [
+    ...(criteria.starType ? [{ type: one("Star"), subtype: one(criteria.starType) }] : []),
+    ...(criteria.bodyType ? [{ subtype: one(criteria.bodyType) }] : []),
+  ];
+  put("bodies", bodies.length ? bodies : undefined);
   put("controlling_power", one(criteria.power));
   put("power_state", one(criteria.powerState));
   put("allegiance", one(criteria.allegiance));
@@ -219,6 +288,37 @@ export function systemRow(r: any, criteria: SystemCriteria, maxAgeDays?: number)
   };
 }
 
+/** Bodies pages read at most to find the systems with a volcanism (100 bodies each). */
+const VOLCANISM_PAGES = 5;
+
+/** The bodies/search filters for a volcanism (and the planet kind, the name or the range). */
+export function volcanismFilters(criteria: SystemCriteria, range: number): Record<string, unknown> {
+  const name = criteria.name?.trim();
+  return {
+    ...(name ? { system_name: { value: name } } : { distance: { min: "0", max: String(range) } }),
+    volcanism_type: { value: criteria.volcanism === ANY_VOLCANISM ? VOLCANISMS : [criteria.volcanism] },
+    ...(criteria.bodyType ? { subtype: one(criteria.bodyType) } : {}),
+  };
+}
+
+/** The id64 of the systems (nearest first) that have a body with the wanted volcanism. */
+async function volcanicSystems(criteria: SystemCriteria, ref: Reference, range: number): Promise<string[]> {
+  const ids = new Set<string>();
+  for (let page = 0; page < VOLCANISM_PAGES; page++) {
+    const data: any = await spanshPost("bodies/search", {
+      filters: volcanismFilters(criteria, range),
+      sort: [{ distance: { direction: "asc" } }],
+      size: 100,
+      page,
+      ...reference(ref),
+    });
+    const bodies: any[] = Array.isArray(data?.results) ? data.results : [];
+    for (const b of bodies) if (b?.system_id64 != null) ids.add(String(b.system_id64));
+    if (bodies.length < 100) break;
+  }
+  return [...ids];
+}
+
 /** One page (SYSTEMS_PAGE_SIZE systems) of the systems matching `criteria`, nearest to `ref` first. */
 export async function searchSystems(
   criteria: SystemCriteria,
@@ -227,8 +327,15 @@ export async function searchSystems(
   page: number,
   maxAgeDays?: number,
 ): Promise<FinderResult> {
+  const filters = systemFilters(criteria, range);
+  if (criteria.volcanism) {
+    // Spansh filters volcanism on bodies only: the systems with such a body, then the rest.
+    const ids = await volcanicSystems(criteria, ref, range);
+    if (!ids.length) return { rows: [], total: 0 };
+    filters.id64 = { value: ids };
+  }
   const data: any = await spanshPost("systems/search", {
-    filters: systemFilters(criteria, range),
+    filters,
     sort: [{ distance: { direction: "asc" } }],
     size: SYSTEMS_PAGE_SIZE,
     page,
