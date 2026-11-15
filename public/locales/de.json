@@ -641,19 +641,21 @@
     "waitingGame": "Warte auf das Spiel"
   },
   "market": {
+    "ardentRadius": "Preise von Ardent: bis {{distance}} Lj.",
     "dataAge": "Maximales Datenalter",
     "dataAgeHelp": "Handel und Systemsuche: Warenpreise und Fraktionszustände (Boom, Krieg…), die vor längerer Zeit gesehen wurden, werden ignoriert.",
     "daysShort": "{{days}} T",
     "minDemand": "Mindestnachfrage (t)",
     "minDemandHelp": "Wo du eine Ware verkaufst (Suche, Bergbau): nur Märkte, die mindestens so viele Tonnen wollen.",
+    "minSupply": "Mindestangebot (t)",
+    "minSupplyHelp": "Wo du eine Ware kaufst (Suche): nur Märkte, die mindestens so viele Tonnen vorrätig haben.",
     "oneDay": "1 Tag",
     "oneMonth": "1 Monat",
     "oneWeek": "1 Woche",
     "sellFiltersNote": "Preise höchstens {{age}} alt, der neueste von Spansh und Ardent; Nachfrage von mindestens {{demand}} t (Einstellungen).",
     "threeDays": "3 Tage",
     "threeMonths": "3 Monate",
-    "twoWeeks": "2 Wochen",
-    "ardentRadius": "Preise von Ardent: bis {{distance}} Lj."
+    "twoWeeks": "2 Wochen"
   },
   "materials": {
     "engineeringMaterials": "Ingenieursmaterialien",
@@ -1100,7 +1102,8 @@
     "rangeUnit": "Lj",
     "rangeHelp": "Lichtjahre um das Bezugssystem. Leer: {{distance}} Lj, der Standardwert aus den Einstellungen.",
     "matchingStationsPage": "{{count}} passende Stationen · {{from}}–{{to}} angezeigt",
-    "factionSystemsPage": "{{count}} Systeme · {{from}}–{{to}} angezeigt"
+    "factionSystemsPage": "{{count}} Systeme · {{from}}–{{to}} angezeigt",
+    "minDemand": "Mindestnachfrage (t)"
   },
   "session": {
     "bounties": "Kopfgelder",

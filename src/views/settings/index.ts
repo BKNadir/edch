@@ -181,6 +181,10 @@ export class SettingsView implements View {
           min: "1",
           step: "100",
         }),
+        number(t("market.minSupply"), s.minBuySupply, "minBuySupply", t("market.minSupplyHelp"), {
+          min: "1",
+          step: "100",
+        }),
         h(
           "label.field",
           null,

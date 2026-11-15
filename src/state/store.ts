@@ -20,8 +20,10 @@ export interface Settings {
   hgeMinPopulation: number;
   /** Search radius around you, light years. */
   maxDistance: number;
-  /** Where to sell a commodity: only markets that want at least this many tonnes. */
+  /** Selling a commodity: only markets that want at least this many tonnes. */
   minSellDemand: number;
+  /** Buying a commodity: only markets that have at least this many tonnes in stock. */
+  minBuySupply: number;
   /**
    * Data older than this many days is left out, for trade (commodity prices) and system searches
    * (faction states); 0 keeps everything.
@@ -313,6 +315,7 @@ const DEFAULT_SETTINGS: Settings = {
   hgeMinPopulation: 1_000_000,
   maxDistance: 300,
   minSellDemand: 1,
+  minBuySupply: 1,
   maxAgeDays: 3,
   fallbackSystem: "Sol",
   largePadOnly: false,

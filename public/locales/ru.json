@@ -639,19 +639,21 @@
     "waitingGame": "Ожидание игры"
   },
   "market": {
+    "ardentRadius": "Цены Ardent: до {{distance}} св. лет.",
     "dataAge": "Максимальная давность данных",
     "dataAgeHelp": "Торговля и поиск систем: цены на товары и состояния фракций (бум, война…), замеченные раньше этого срока, не учитываются.",
     "daysShort": "{{days}} дн.",
     "minDemand": "Минимальный спрос (т)",
     "minDemandHelp": "Где продать товар (Поиск, Добыча): только рынки, которым нужно не меньше стольких тонн.",
+    "minSupply": "Минимальное предложение (т)",
+    "minSupplyHelp": "Где купить товар (Поиск): только рынки, где в запасе не меньше стольких тонн.",
     "oneDay": "1 день",
     "oneMonth": "1 месяц",
     "oneWeek": "1 неделя",
     "sellFiltersNote": "Цены давностью не больше {{age}}, самые свежие из Spansh и Ardent; спрос не меньше {{demand}} т (Настройки).",
     "threeDays": "3 дня",
     "threeMonths": "3 месяца",
-    "twoWeeks": "2 недели",
-    "ardentRadius": "Цены Ardent: до {{distance}} св. лет."
+    "twoWeeks": "2 недели"
   },
   "materials": {
     "engineeringMaterials": "Инженерные материалы",
@@ -1097,7 +1099,8 @@
     "rangeUnit": "св. лет",
     "rangeHelp": "Световые годы вокруг опорной системы. Пусто: {{distance}} св. лет, значение по умолчанию из настроек.",
     "matchingStationsPage": "Подходящих станций: {{count}} · показаны {{from}}–{{to}}",
-    "factionSystemsPage": "Систем: {{count}} · показаны {{from}}–{{to}}"
+    "factionSystemsPage": "Систем: {{count}} · показаны {{from}}–{{to}}",
+    "minDemand": "Мин. спрос (т)"
   },
   "session": {
     "bounties": "Награды за головы",

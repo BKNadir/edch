@@ -124,7 +124,7 @@ export class SearchView implements View {
   private out = h("div.search-out");
   private form = h("div.search-form");
   private tabs = h("div.segmented");
-  private opts = { largePad: false, carriers: false, planetary: true, minQty: 1, maxArrival: 0 };
+  private opts = { largePad: false, carriers: false, planetary: true, maxArrival: 0 };
   /** The sort chosen on each tab (its first choice by default). */
   private sorts: Partial<Record<keyof typeof STATION_SORTS, StationSort>> = {};
 
@@ -157,6 +157,12 @@ export class SearchView implements View {
   /** How far the searches look around the reference system. */
   private range(): number {
     return rangeOf(this.ownRange, this.ctx.store.state.settings.maxDistance);
+  }
+
+  /** The minimum quantity of `tab` (at least 1 t): the supply setting when buying, demand when selling. */
+  private minQuantity(tab: Tab): number {
+    const s = this.ctx.store.state.settings;
+    return Math.max(1, Math.floor(Number(tab === "buy" ? s.minBuySupply : s.minSellDemand) || 1));
   }
 
   /** The "minimum demand" setting (at least 1 t). */
@@ -464,9 +470,12 @@ export class SearchView implements View {
                 type: "number",
                 min: "1",
                 step: "100",
-                value: String(this.opts.minQty),
+                value: String(this.minQuantity("buy")),
                 onchange: (e: Event) => {
-                  this.opts.minQty = Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1));
+                  this.ctx.store.updateSettings({
+                    minBuySupply: Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1)),
+                  });
+                  this.renderForm();
                   this.rerun();
                 },
               }),
@@ -501,7 +510,7 @@ export class SearchView implements View {
           ? h(
               "label.check",
               null,
-              t("market.minDemand") + " ",
+              t("search.minDemand") + " ",
               h("input.num-small", {
                 type: "number",
                 min: "1",
@@ -596,7 +605,7 @@ export class SearchView implements View {
         {
           name,
           [tab === "buy" ? "supply" : "demand"]: {
-            value: [String(tab === "buy" ? this.opts.minQty : this.minDemand()), "1000000000"],
+            value: [String(this.minQuantity(tab)), "1000000000"],
             comparison: "<=>",
           },
         },
@@ -667,7 +676,7 @@ export class SearchView implements View {
       const quoteOf = (r: Json) =>
         (r.market ?? []).find((x: Json) => String(x.commodity).toLowerCase() === name.toLowerCase());
       const buying = tab === "buy";
-      const minVolume = buying ? this.opts.minQty : this.minDemand();
+      const minVolume = this.minQuantity(tab);
       // Buying and selling: Ardent's prices of the whole zone, asked once.
       let ardent = new Map<number, ArdentQuote>();
       if (tab === "buy" || tab === "sell") {

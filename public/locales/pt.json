@@ -645,19 +645,21 @@
     "waitingGame": "Aguardando o jogo"
   },
   "market": {
+    "ardentRadius": "Preços do Ardent: até {{distance}} al.",
     "dataAge": "Idade máxima dos dados",
     "dataAgeHelp": "Comércio e busca de sistemas: preços de mercadorias e estados de facções (prosperidade, guerra…) vistos há mais tempo são ignorados.",
     "daysShort": "{{days}} d",
     "minDemand": "Demanda mínima (t)",
-    "minDemandHelp": "Onde vender uma mercadoria (Busca, Mineração): só os mercados que querem pelo menos essa quantidade de toneladas.",
+    "minDemandHelp": "Onde vender uma mercadoria (Busca, Mineração): só os mercados que pedem pelo menos essa quantidade de toneladas.",
+    "minSupply": "Oferta mínima (t)",
+    "minSupplyHelp": "Onde comprar uma mercadoria (Busca): só os mercados que têm pelo menos essa quantidade de toneladas em estoque.",
     "oneDay": "1 dia",
     "oneMonth": "1 mês",
     "oneWeek": "1 semana",
     "sellFiltersNote": "Preços de no máximo {{age}}, o mais recente entre Spansh e Ardent; demanda de pelo menos {{demand}} t (Configurações).",
     "threeDays": "3 dias",
     "threeMonths": "3 meses",
-    "twoWeeks": "2 semanas",
-    "ardentRadius": "Preços do Ardent: até {{distance}} al."
+    "twoWeeks": "2 semanas"
   },
   "materials": {
     "engineeringMaterials": "Materiais de engenharia",
@@ -1107,7 +1109,8 @@
     "rangeUnit": "al",
     "rangeHelp": "Anos-luz em volta do sistema de referência. Vazio: {{distance}} al, o padrão das Configurações.",
     "matchingStationsPage": "{{count}} estações correspondem · {{from}} a {{to}} mostradas",
-    "factionSystemsPage": "{{count}} sistemas · {{from}} a {{to}} mostrados"
+    "factionSystemsPage": "{{count}} sistemas · {{from}} a {{to}} mostrados",
+    "minDemand": "Demanda mínima (t)"
   },
   "session": {
     "bounties": "Recompensas",

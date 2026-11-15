@@ -641,19 +641,21 @@
     "waitingGame": "Waiting for the game"
   },
   "market": {
+    "ardentRadius": "Ardent's prices: up to {{distance}} ly.",
     "dataAge": "Maximum data age",
     "dataAgeHelp": "Trade and system searches: commodity prices and faction states (boom, war…) seen longer ago than this are left out.",
     "daysShort": "{{days}} d",
     "minDemand": "Minimum demand (t)",
-    "minDemandHelp": "Where to sell a commodity (Search, Mining): only markets wanting at least this many tonnes.",
+    "minDemandHelp": "Where to sell a commodity (Search, Mining): only markets that want at least this many tonnes.",
+    "minSupply": "Minimum supply (t)",
+    "minSupplyHelp": "Where to buy a commodity (Search): only markets that have at least this many tonnes in stock.",
     "oneDay": "1 day",
     "oneMonth": "1 month",
     "oneWeek": "1 week",
     "sellFiltersNote": "Prices up to {{age}} old, the most recent of Spansh and Ardent; demand of at least {{demand}} t (Settings).",
     "threeDays": "3 days",
     "threeMonths": "3 months",
-    "twoWeeks": "2 weeks",
-    "ardentRadius": "Ardent's prices: up to {{distance}} ly."
+    "twoWeeks": "2 weeks"
   },
   "materials": {
     "engineeringMaterials": "Engineering materials",
@@ -1100,7 +1102,8 @@
     "rangeUnit": "ly",
     "rangeHelp": "Light years around the reference system. Empty: {{distance}} ly, the default set in Settings.",
     "matchingStationsPage": "{{count}} matching stations · {{from}}–{{to}} shown",
-    "factionSystemsPage": "{{count}} systems · {{from}}–{{to}} shown"
+    "factionSystemsPage": "{{count}} systems · {{from}}–{{to}} shown",
+    "minDemand": "Minimum demand (t)"
   },
   "session": {
     "bounties": "Bounties",
