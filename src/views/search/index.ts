@@ -16,6 +16,7 @@ import { fmtLy, inaraSystem } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
 import { openUrl } from "../../platform/bridge.js";
 import { factionForm } from "./factionTab.js";
+import { systemForm } from "./systemTab.js";
 import { ardentBuyQuotes, ardentSellQuotes, type ArdentQuote } from "../../services/ardent.js";
 import { pager } from "../shared/pager.js";
 import {
@@ -40,7 +41,9 @@ import { priceAgeLabel } from "../shared/marketFilters.js";
 import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
 
 type Json = Record<string, any>;
-type Tab = "buy" | "sell" | "ship" | "module" | "service" | "faction";
+type Tab = "buy" | "sell" | "ship" | "module" | "service" | "system" | "faction";
+/** The tabs with their own form (not the station search). */
+type OwnFormTab = "system" | "faction";
 /** The Commodity tab's two modes, switched by a toggle. */
 type CommodityMode = "buy" | "sell";
 
@@ -159,7 +162,8 @@ export class SearchView implements View {
 
   /** Runs the search again after a sort or filter change, when one was already made. */
   private rerun() {
-    if (this.tab !== "faction" && this.values[this.tab].trim() && this.out.childElementCount) void this.run();
+    if (this.tab !== "faction" && this.tab !== "system" && this.values[this.tab].trim() && this.out.childElementCount)
+      void this.run();
   }
 
   /** A sort's name on `tab` ("Lowest price" when buying, "Best price" when selling…). */
@@ -185,7 +189,7 @@ export class SearchView implements View {
     return Math.max(1, Math.floor(Number(tab === "buy" ? s.minBuySupply : s.minSellDemand) || 1));
   }
 
-  private values: Record<Exclude<Tab, "faction">, string> = {
+  private values: Record<Exclude<Tab, OwnFormTab>, string> = {
     buy: "",
     sell: "",
     ship: "",
@@ -288,6 +292,7 @@ export class SearchView implements View {
       ["ship", t("search.ships")],
       ["module", t("common.modules")],
       ["service", t("search.services")],
+      ["system", t("search.systemsTab")],
       ["faction", t("search.faction")],
     ];
     replace(
@@ -343,6 +348,10 @@ export class SearchView implements View {
   private renderForm() {
     if (this.tab === "faction") {
       replace(this.form, factionForm(this.ctx, this.out));
+      return;
+    }
+    if (this.tab === "system") {
+      replace(this.form, systemForm(this.ctx, this.out));
       return;
     }
     const tab = this.tab;
@@ -613,7 +622,7 @@ export class SearchView implements View {
 
   private async run() {
     const tab = this.tab;
-    if (tab === "faction") return;
+    if (tab === "faction" || tab === "system") return;
     const typed = this.values[tab].trim();
     if (!typed && !(tab === "module" && this.moduleList.length)) return;
     let wantedModules: WantedModule[] = [];

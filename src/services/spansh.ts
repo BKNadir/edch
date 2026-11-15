@@ -48,9 +48,11 @@ function remember(key: string, value: FinderResult) {
   while (cache.size > CACHE_SIZE) cache.delete(cache.keys().next().value!);
 }
 
-const num = (n: unknown) => (typeof n === "number" ? n : Number(n ?? NaN));
+/** A number from Spansh (numbers or numeric strings), NaN when missing. */
+export const num = (n: unknown) => (typeof n === "number" ? n : Number(n ?? NaN));
 const oneDecimal = (n: number) => n.toLocaleString(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-const fmtPop = (n: number) =>
+/** "1.2 bn pop.", "350 k pop.": a population in a few characters. */
+export const fmtPop = (n: number) =>
   n >= 1e9
     ? t("spansh.bnPop", { value: oneDecimal(n / 1e9) })
     : n >= 1e6
@@ -68,7 +70,8 @@ const SECURITY_LABELS: Record<string, string> = {
 
 export const inaraSystem = (name: string) => `https://inara.cz/elite/starsystem/?search=${encodeURIComponent(name)}`;
 
-function reference(ref: Reference): Record<string, unknown> {
+/** The Spansh fields placing a search around `ref` (its coordinates, else its name, else Sol). */
+export function reference(ref: Reference): Record<string, unknown> {
   if (ref.coords) return { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } };
   return { reference_system: ref.system ?? "Sol" };
 }
@@ -344,7 +347,7 @@ export function hasState(presence: any, states: string[]): boolean {
 }
 
 /** Whether a Spansh date is within the last `days` days. */
-function recentEnoughDate(updated: unknown, days: number): boolean {
+export function recentEnoughDate(updated: unknown, days: number): boolean {
   if (typeof updated !== "string") return false;
   const iso = updated.replace(" ", "T");
   const time = Date.parse(/[zZ]|[+-]\d\d(:?\d\d)?$/.test(iso) ? iso.replace(/([+-]\d\d)$/, "$1:00") : `${iso}Z`);
