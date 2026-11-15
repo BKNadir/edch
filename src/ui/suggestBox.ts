@@ -90,5 +90,6 @@ export function suggestBox(
     true,
   );
   input.addEventListener("blur", close);
-  return h("div.suggest-box", null, input, list);
+  // A main search field (input.big) keeps its width rules on the box that now holds it.
+  return h(input.classList.contains("big") ? "div.suggest-box.big" : "div.suggest-box", null, input, list);
 }

@@ -118,7 +118,7 @@ export function factionForm(ctx: Ctx, out: HTMLElement): HTMLElement {
     ),
   );
   return h(
-    "div",
+    "div.search-form",
     null,
     h("div.row", null, field, h("button.primary", { onclick: run }, icon("search"), " " + t("common.search"))),
     h(

@@ -41,7 +41,13 @@ let ownRange: number | undefined;
 /** Only the latest search may show its results (an older, slower answer is dropped). */
 let runId = 0;
 
-/** A select of `values` (game names) for `key`, with "any" first. */
+/** One criterion: its name above its control, so that all criteria line up in a grid. */
+function criterion(label: string, control: HTMLElement): HTMLElement {
+  // A long name is cut on a narrow screen; the tooltip still shows it whole.
+  return h("label.criterion", null, h("span", { title: label }, label), control);
+}
+
+/** A criterion chosen in a list of `values` (game names), with "any" first. */
 function choice(
   key: Exclude<keyof SystemCriteria, "minBodies" | "name">,
   label: string,
@@ -51,18 +57,29 @@ function choice(
   first: HTMLElement | null = null,
 ): HTMLElement {
   const shown = sorted ? [...values].sort((a, b) => labelOf(a).localeCompare(labelOf(b), locale())) : values;
-  return h(
-    "label.check",
-    null,
-    label + " ",
-    h(
-      "select",
-      { onchange: (e: Event) => (criteria[key] = (e.target as HTMLSelectElement).value || undefined) },
-      h("option", { value: "" }, t("search.systemAny")),
-      first,
-      shown.map((v) => h("option", { value: v, selected: criteria[key] === v }, labelOf(v))),
-    ),
+  const select = h(
+    "select",
+    { onchange: (e: Event) => (criteria[key] = (e.target as HTMLSelectElement).value || undefined) },
+    h("option", { value: "" }, t("search.systemAny")),
+    first,
+    shown.map((v) => h("option", { value: v, selected: criteria[key] === v }, labelOf(v))),
   );
+  return criterion(label, select);
+}
+
+/** The least number of bodies, empty for any. */
+function minBodiesField(): HTMLElement {
+  const input = h("input", {
+    type: "number",
+    min: "0",
+    step: "1",
+    value: criteria.minBodies ? String(criteria.minBodies) : "",
+    onchange: (e: Event) => {
+      const value = Math.floor(Number((e.target as HTMLInputElement).value));
+      criteria.minBodies = value > 0 ? value : undefined;
+    },
+  });
+  return criterion(t("search.systemMinBodies"), input);
 }
 
 /** The tab's form; results go to `out`. */
@@ -97,49 +114,26 @@ export function systemForm(ctx: Ctx, out: HTMLElement): HTMLElement {
     300,
   );
   refreshAround();
+  const anyVolcanism = h(
+    "option",
+    { value: ANY_VOLCANISM, selected: criteria.volcanism === ANY_VOLCANISM },
+    t("search.anyVolcanism"),
+  );
   return h(
-    "div",
+    "div.search-form",
     null,
     h("div.row", null, nameField, h("button.primary", { onclick: run }, icon("search"), " " + t("common.search"))),
+    // The system itself, then Powerplay, then its politics: one grid, so the columns line up.
     h(
-      "div.row.opts",
+      "div.criteria-grid",
       null,
       choice("starType", t("search.systemStar"), STAR_TYPES, false),
       choice("bodyType", t("search.systemBodyType"), BODY_TYPES, false),
-      choice(
-        "volcanism",
-        t("search.systemVolcanism"),
-        VOLCANISMS,
-        true,
-        gameName,
-        h("option", { value: ANY_VOLCANISM, selected: criteria.volcanism === ANY_VOLCANISM }, t("search.anyVolcanism")),
-      ),
+      choice("volcanism", t("search.systemVolcanism"), VOLCANISMS, true, gameName, anyVolcanism),
       choice("stationType", t("search.systemStation"), SYSTEM_STATION_TYPES),
-      h(
-        "label.check",
-        null,
-        t("search.systemMinBodies") + " ",
-        h("input.num-small", {
-          type: "number",
-          min: "0",
-          step: "1",
-          value: criteria.minBodies ? String(criteria.minBodies) : "",
-          onchange: (e: Event) => {
-            const value = Math.floor(Number((e.target as HTMLInputElement).value));
-            criteria.minBodies = value > 0 ? value : undefined;
-          },
-        }),
-      ),
-    ),
-    h(
-      "div.row.opts",
-      null,
+      minBodiesField(),
       choice("power", t("search.systemPower"), POWERS),
       choice("powerState", t("search.systemPowerState"), POWER_STATES, false),
-    ),
-    h(
-      "div.row.opts",
-      null,
       choice("allegiance", t("search.systemAllegiance"), ALLEGIANCES),
       choice("government", t("search.systemGovernment"), GOVERNMENTS),
       choice("economy", t("search.systemEconomy"), ECONOMIES),

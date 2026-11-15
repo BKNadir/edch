@@ -1705,7 +1705,8 @@ p.notice {
   flex-wrap: wrap;
 }
 .search-form input.big,
-.search-form select.big {
+.search-form select.big,
+.search-form .suggest-box.big {
   flex: 1;
   min-width: 280px;
   width: auto;
@@ -1715,6 +1716,28 @@ p.notice {
 }
 .opts {
   gap: 16px;
+}
+/* Search criteria (Search → Systems): each name above its control, in columns that line up
+   (two per line on a phone, see the phone rules). */
+.criteria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px 14px;
+}
+.criterion {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  color: var(--muted);
+}
+.criterion > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.search-form .criterion select,
+.criterion input {
+  width: 100%;
 }
 .search-out {
   margin-top: 14px;
@@ -2890,10 +2913,14 @@ circle[data-control-key].pressed {
     grid-template-columns: 1fr;
   }
   .search-form input.big,
-  .search-form select.big {
+  .search-form select.big,
+  .search-form .suggest-box.big {
     min-width: 0;
     width: 100%;
     flex-basis: 100%;
+  }
+  .criteria-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .opts {
     gap: 8px 14px;
