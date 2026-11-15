@@ -1825,7 +1825,18 @@
     "planets": "Planeten",
     "bodiesPartial": "Bisher sind nur {{known}} davon bekannt.",
     "allBodies": "Alle Himmelskörper",
-    "openPage": "Systemdetails: {{name}}"
+    "openPage": "Systemdetails: {{name}}",
+    "bodiesUnavailable": "Ring- und Landedetails nicht verfügbar: {{error}}",
+    "loadingBodies": "Ringe und landbare Himmelskörper werden geladen…",
+    "rings": "Ringe ({{count}})",
+    "body": "Himmelskörper",
+    "ringTypes": "Typ",
+    "reserve": "Vorkommen",
+    "signals": "Signale",
+    "landable": "Landbare Himmelskörper ({{count}})",
+    "atmosphere": "Atmosphäre",
+    "gravity": "Schwerkraft",
+    "noAtmosphere": "Keine"
   },
   "debug": {
     "source": "Quelle: {{sources}}",

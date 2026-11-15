@@ -6,7 +6,13 @@
 import { gameName, t } from "../../platform/i18n.js";
 import { log } from "../../platform/logger.js";
 import { distance, fmtLy, fmtPop, inaraSystem } from "../../services/spansh.js";
-import { securityLabel, systemDetails, type SystemDetails } from "../../services/systemSearch.js";
+import {
+  securityLabel,
+  systemBodies,
+  systemDetails,
+  type BodyDetail,
+  type SystemDetails,
+} from "../../services/systemSearch.js";
 import type { Ctx, View } from "../../state/context.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
 import { debugSource } from "../../ui/debugSource.js";
@@ -47,6 +53,9 @@ export class SystemView implements View {
   private name = "";
   private from = "search";
   private details?: SystemDetails | null;
+  /** The bodies' detail (rings, landing, signals), asked once the system is found. */
+  private bodyDetail?: BodyDetail[];
+  private bodyError = "";
   private error = "";
   private loading = false;
   /** Only the latest lookup may draw its answer. */
@@ -81,13 +90,32 @@ export class SystemView implements View {
       const found = await systemDetails(name);
       if (id !== this.lookup) return;
       this.details = found;
-      if (found) this.name = found.name;
+      this.bodyDetail = undefined;
+      this.bodyError = "";
+      if (found) {
+        this.name = found.name;
+        if (found.id64) void this.loadBodies(found.id64, id);
+      }
     } catch (e) {
       if (id !== this.lookup) return;
       this.error = String((e as Error)?.message ?? e);
       log.warn("system", `Lookup failed: ${this.error}`);
     }
     this.loading = false;
+    this.render();
+  }
+
+  /** Rings, landable bodies and signals: a second request, drawn when it answers. */
+  private async loadBodies(id64: string, id: number) {
+    try {
+      const bodies = await systemBodies(id64);
+      if (id !== this.lookup) return;
+      this.bodyDetail = bodies;
+    } catch (e) {
+      if (id !== this.lookup) return;
+      this.bodyError = String((e as Error)?.message ?? e);
+      log.warn("system", `Bodies lookup failed: ${this.bodyError}`);
+    }
     this.render();
   }
 
@@ -134,6 +162,8 @@ export class SystemView implements View {
       this.powerplay(d),
       this.factions(d),
       this.stations(d),
+      this.rings(),
+      this.landable(),
       this.bodies(d),
     );
   }
@@ -370,6 +400,114 @@ export class SystemView implements View {
             ),
           )
         : null,
+    );
+  }
+
+  /** Signals as short badges ("Platinum ×2", "Biological ×3"). */
+  private signalBadges(signals: BodyDetail["signals"]): HTMLElement[] {
+    return signals.map((s) => h("span.badge.hit", null, `${gameName(s.name)} ×${s.count}`));
+  }
+
+  /** Bodies with rings: ring types, reserve, hotspots. */
+  private rings(): HTMLElement | null {
+    if (this.bodyError) return h("p.sub", null, t("system.bodiesUnavailable", { error: this.bodyError }));
+    if (!this.bodyDetail)
+      return this.details?.id64 ? h("p.sub", null, h("span.spinner"), " " + t("system.loadingBodies")) : null;
+    const ringed = this.bodyDetail.filter((b) => b.rings.length);
+    if (!ringed.length) return null;
+    return h(
+      "section.card",
+      null,
+      h("h3", null, t("system.rings", { count: ringed.length }), debugSource("Spansh")),
+      scrolling(
+        h(
+          "table.table",
+          null,
+          h(
+            "thead",
+            null,
+            h(
+              "tr",
+              null,
+              h("th", null, t("system.body")),
+              h("th", null, t("system.ringTypes")),
+              h("th", null, t("system.reserve")),
+              h("th.num", null, t("system.distance")),
+              h("th", null, t("system.signals")),
+            ),
+          ),
+          h(
+            "tbody",
+            null,
+            ringed.map((b) =>
+              h(
+                "tr",
+                null,
+                h("td", { "data-no-tr": "" }, b.name),
+                h("td", null, [...new Set(b.rings)].map((r) => gameName(r)).join(", ")),
+                h("td", null, b.reserve ? gameName(b.reserve) : "—"),
+                h(
+                  "td.num",
+                  null,
+                  b.distance !== undefined ? t("common.ls", { locale: fmt(Math.round(b.distance)) }) : "—",
+                ),
+                h("td", null, h("div.services", null, this.signalBadges(b.signals))),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /** Bodies you can land on: kind, atmosphere, gravity, signals (biological, geological…). */
+  private landable(): HTMLElement | null {
+    const landable = this.bodyDetail?.filter((b) => b.landable) ?? [];
+    if (!landable.length) return null;
+    return h(
+      "section.card",
+      null,
+      h("h3", null, t("system.landable", { count: landable.length }), debugSource("Spansh")),
+      scrolling(
+        h(
+          "table.table",
+          null,
+          h(
+            "thead",
+            null,
+            h(
+              "tr",
+              null,
+              h("th", null, t("system.body")),
+              h("th", null, t("common.type")),
+              h("th", null, t("system.atmosphere")),
+              h("th.num", null, t("system.gravity")),
+              h("th.num", null, t("system.distance")),
+              h("th", null, t("system.signals")),
+            ),
+          ),
+          h(
+            "tbody",
+            null,
+            landable.map((b) =>
+              h(
+                "tr",
+                null,
+                h("td", { "data-no-tr": "" }, b.name),
+                h("td", null, gameName(b.subtype || b.type)),
+                h("td", null, b.atmosphere ? gameName(b.atmosphere) : t("system.noAtmosphere")),
+                h("td.num", null, b.gravity !== undefined ? `${fmt(Math.round(b.gravity * 100) / 100)} g` : "—"),
+                h(
+                  "td.num",
+                  null,
+                  b.distance !== undefined ? t("common.ls", { locale: fmt(Math.round(b.distance)) }) : "—",
+                ),
+                h("td", null, h("div.services", null, this.signalBadges(b.signals))),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 

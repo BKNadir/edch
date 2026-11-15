@@ -1827,7 +1827,18 @@
     "planets": "Planetas",
     "bodiesPartial": "Por ahora solo se conocen {{known}}.",
     "allBodies": "Todos los cuerpos",
-    "openPage": "Ficha del sistema: {{name}}"
+    "openPage": "Ficha del sistema: {{name}}",
+    "bodiesUnavailable": "Detalles de anillos y aterrizaje no disponibles: {{error}}",
+    "loadingBodies": "Cargando anillos y cuerpos aterrizables…",
+    "rings": "Anillos ({{count}})",
+    "body": "Cuerpo",
+    "ringTypes": "Tipo",
+    "reserve": "Reserva",
+    "signals": "Señales",
+    "landable": "Cuerpos aterrizables ({{count}})",
+    "atmosphere": "Atmósfera",
+    "gravity": "Gravedad",
+    "noAtmosphere": "Ninguna"
   },
   "debug": {
     "source": "fuente: {{sources}}",

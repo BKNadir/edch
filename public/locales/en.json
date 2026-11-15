@@ -1825,7 +1825,18 @@
     "planets": "Planets",
     "bodiesPartial": "Only {{known}} of them are known so far.",
     "allBodies": "Every body",
-    "openPage": "System details: {{name}}"
+    "openPage": "System details: {{name}}",
+    "bodiesUnavailable": "Ring and landing details unavailable: {{error}}",
+    "loadingBodies": "Loading rings and landable bodies…",
+    "rings": "Rings ({{count}})",
+    "body": "Body",
+    "ringTypes": "Type",
+    "reserve": "Reserve",
+    "signals": "Signals",
+    "landable": "Landable bodies ({{count}})",
+    "atmosphere": "Atmosphere",
+    "gravity": "Gravity",
+    "noAtmosphere": "None"
   },
   "debug": {
     "source": "source: {{sources}}",

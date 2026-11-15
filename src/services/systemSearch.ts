@@ -404,3 +404,72 @@ export async function systemDetails(name: string): Promise<SystemDetails | null>
   const record = records.find(same);
   return record ? decodeSystemDetails(record) : null;
 }
+
+/** A body of the system page's detail: rings, reserve, landing, atmosphere and signals. */
+export interface BodyDetail {
+  name: string;
+  type: string;
+  subtype: string;
+  /** Light seconds from the arrival star. */
+  distance?: number;
+  landable: boolean;
+  /** Spansh's atmosphere ("Thin Ammonia"), undefined when none. */
+  atmosphere?: string;
+  /** Surface gravity in g, when known. */
+  gravity?: number;
+  /** Ring types ("Icy", "Metal Rich"…), one per ring. */
+  rings: string[];
+  /** Reserve level of the rings ("Pristine"…). */
+  reserve?: string;
+  /** Signals on the body or its rings: name ("Biological", "Platinum"…) and count. */
+  signals: { name: string; count: number }[];
+}
+
+/** Bodies per Spansh page, and pages read at most (the largest systems have a few hundred). */
+const BODY_PAGE = 100;
+const BODY_PAGES = 5;
+
+/** A Spansh bodies/search record as the system page needs it. */
+export function decodeBodyDetail(b: any): BodyDetail | null {
+  const name = text(b?.name);
+  if (!name) return null;
+  const rings: any[] = Array.isArray(b.rings) ? b.rings : [];
+  const signals = [
+    ...(Array.isArray(b.signals) ? b.signals : []),
+    ...rings.flatMap((r) => (Array.isArray(r?.signals) ? r.signals : [])),
+  ]
+    .filter((s: any) => text(s?.name) && num(s?.count) > 0)
+    .map((s: any) => ({ name: String(s.name), count: num(s.count) }));
+  return {
+    name,
+    type: text(b.type) ?? "",
+    subtype: text(b.subtype) ?? "",
+    distance: finite(b.distance_to_arrival),
+    landable: Boolean(b.is_landable),
+    atmosphere: text(b.atmosphere) && !/^no atmosphere$/i.test(b.atmosphere) ? b.atmosphere : undefined,
+    gravity: finite(b.gravity),
+    rings: rings.map((r) => text(r?.type)).filter((x): x is string => Boolean(x)),
+    reserve: text(b.reserve_level),
+    signals,
+  };
+}
+
+/** Every body of the system `id64` with its rings, landing and signals, nearest to the star first. */
+export async function systemBodies(id64: string): Promise<BodyDetail[]> {
+  const bodies: BodyDetail[] = [];
+  for (let page = 0; page < BODY_PAGES; page++) {
+    const data: any = await spanshPost("bodies/search", {
+      filters: { system_id64: { value: [id64] } },
+      sort: [{ distance_to_arrival: { direction: "asc" } }],
+      size: BODY_PAGE,
+      page,
+    });
+    const records: any[] = Array.isArray(data?.results) ? data.results : [];
+    for (const record of records) {
+      const body = decodeBodyDetail(record);
+      if (body) bodies.push(body);
+    }
+    if (records.length < BODY_PAGE) break;
+  }
+  return bodies;
+}

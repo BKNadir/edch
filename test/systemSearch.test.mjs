@@ -132,3 +132,44 @@ test("system page: a Spansh record becomes the page's data, nearest stations and
   );
   assert.equal(decodeSystemDetails({}), null);
 });
+
+test("system page: a body's rings, reserve, landing, atmosphere and hotspots", async () => {
+  const { decodeBodyDetail } = await import("../dist/js/services/systemSearch.js");
+  const ringed = decodeBodyDetail({
+    name: "Barnard's Star 5",
+    type: "Planet",
+    subtype: "Class I gas giant",
+    distance_to_arrival: 2500,
+    is_landable: false,
+    reserve_level: "Depleted",
+    rings: [
+      {
+        type: "Metal Rich",
+        signals: [
+          { count: 2, name: "Painite" },
+          { count: 1, name: "Platinum" },
+        ],
+      },
+      { type: "Icy", signals: [{ count: 1, name: "Tritium" }] },
+    ],
+    signals: [{ count: 6, name: "Human" }],
+  });
+  assert.deepEqual(ringed.rings, ["Metal Rich", "Icy"]);
+  assert.equal(ringed.reserve, "Depleted");
+  assert.deepEqual(
+    ringed.signals.map((s) => s.name),
+    ["Human", "Painite", "Platinum", "Tritium"],
+  );
+  const mercury = decodeBodyDetail({
+    name: "Mercury",
+    type: "Planet",
+    subtype: "Metal-rich body",
+    is_landable: true,
+    atmosphere: "No atmosphere",
+    gravity: 0.3755,
+  });
+  assert.equal(mercury.landable, true);
+  assert.equal(mercury.atmosphere, undefined);
+  assert.equal(mercury.gravity, 0.3755);
+  assert.equal(decodeBodyDetail({}), null);
+});

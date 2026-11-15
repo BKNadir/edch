@@ -1828,7 +1828,18 @@
     "planets": "Планеты",
     "bodiesPartial": "Пока известны только {{known}} из них.",
     "allBodies": "Все тела",
-    "openPage": "Карточка системы: {{name}}"
+    "openPage": "Карточка системы: {{name}}",
+    "bodiesUnavailable": "Сведения о кольцах и посадке недоступны: {{error}}",
+    "loadingBodies": "Загрузка колец и тел для посадки…",
+    "rings": "Кольца ({{count}})",
+    "body": "Тело",
+    "ringTypes": "Тип",
+    "reserve": "Запасы",
+    "signals": "Сигналы",
+    "landable": "Тела для посадки ({{count}})",
+    "atmosphere": "Атмосфера",
+    "gravity": "Гравитация",
+    "noAtmosphere": "Нет"
   },
   "debug": {
     "source": "источник: {{sources}}",

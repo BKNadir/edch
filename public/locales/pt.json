@@ -1838,7 +1838,18 @@
     "planets": "Planetas",
     "bodiesPartial": "Por enquanto só {{known}} são conhecidos.",
     "allBodies": "Todos os corpos",
-    "openPage": "Ficha do sistema: {{name}}"
+    "openPage": "Ficha do sistema: {{name}}",
+    "bodiesUnavailable": "Detalhes de anéis e pouso indisponíveis: {{error}}",
+    "loadingBodies": "Carregando anéis e corpos com pouso…",
+    "rings": "Anéis ({{count}})",
+    "body": "Corpo",
+    "ringTypes": "Tipo",
+    "reserve": "Reserva",
+    "signals": "Sinais",
+    "landable": "Corpos com pouso ({{count}})",
+    "atmosphere": "Atmosfera",
+    "gravity": "Gravidade",
+    "noAtmosphere": "Nenhuma"
   },
   "debug": {
     "source": "fonte: {{sources}}",
