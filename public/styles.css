@@ -4660,3 +4660,36 @@ body.menu-editing .sidebar span {
 .sys-info:focus-visible::before {
   opacity: 1;
 }
+
+/* ==================== NOTCHED SCREENS (iPhone…) ====================
+   The page is drawn under the status bar (viewport-fit=cover with a translucent status bar, see
+   index.html): the top bar, the full-screen panels and the side edges keep clear of the notch and
+   the rounded corners. On other screens the safe-area insets are 0 and nothing changes. */
+.topbar {
+  height: calc(54px + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: calc(18px + env(safe-area-inset-left, 0px));
+  padding-right: calc(18px + env(safe-area-inset-right, 0px));
+}
+.intro-overlay {
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px)
+    env(safe-area-inset-left, 0px);
+}
+.dialog-overlay {
+  padding: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-right, 0px))
+    calc(16px + env(safe-area-inset-bottom, 0px)) calc(16px + env(safe-area-inset-left, 0px));
+}
+@media (max-width: 760px) {
+  .topbar {
+    height: auto;
+    padding: calc(8px + env(safe-area-inset-top, 0px)) calc(12px + env(safe-area-inset-right, 0px)) 8px
+      calc(12px + env(safe-area-inset-left, 0px));
+  }
+  .content {
+    padding-left: calc(12px + env(safe-area-inset-left, 0px));
+    padding-right: calc(12px + env(safe-area-inset-right, 0px));
+  }
+  .detail-head {
+    padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  }
+}

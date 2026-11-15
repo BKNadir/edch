@@ -5,6 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.14
 
+- iPhone (remote access): the page no longer slides under the status bar and the notch; the top bar, full-screen panels and dialogs keep clear of them.
 - First start: after choosing the language, a short introduction presents what EDCH does (materials and engineering, navigation, activities, sharing) and invites you to take a minute in Settings; "Open Settings" goes straight there. About → "show it again" brings it back any time.
 - Release files now say which system and processor they are for: `EDCH_<version>_windows_x64-setup.exe`, `…_windows_x64-portable.exe`, `…_windows_arm64-setup.exe`, `…_linux_x64.AppImage`, `…_linux_arm64.deb`… Installed copies still find their update.
 - Controls: action names in French when EDCH is in French (contributed by philippe015), with the game's names for modules (chaff launcher, shield cell bank, heat sink launcher); search works in English too. German, Spanish, Portuguese and Russian names are AI translations, using the game's names where EDCH has them; checks against the game are welcome.
