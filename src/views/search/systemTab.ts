@@ -29,9 +29,10 @@ import { h, icon, replace } from "../../ui/dom.js";
 import { referenceField } from "../shared/referenceField.js";
 import { radiusField, rangeOf } from "../shared/radiusField.js";
 import { resultRow } from "../shared/resultsTable.js";
-import { pager } from "../shared/pager.js";
+import type { ResultRow } from "../../services/spansh.js";
+import { showPagedList } from "../shared/pagedList.js";
 
-/** Pages Spansh is asked for at most (the nearest 1000 systems). */
+/** Spansh pages asked for at most (the nearest 1000 systems). */
 const MAX_PAGES = 20;
 
 /** What was chosen, kept while the app runs. */
@@ -84,7 +85,7 @@ function minBodiesField(): HTMLElement {
 
 /** The tab's form; results go to `out`. */
 export function systemForm(ctx: Ctx, out: HTMLElement): HTMLElement {
-  const run = () => void runSearch(ctx, out, 0);
+  const run = () => void runSearch(ctx, out);
   const range = () => rangeOf(ownRange, ctx.store.state.settings.maxDistance);
   const around = h("span.sub", null, t("common.aroundLyMax", { label: referenceOf(ctx).label, maxDistance: range() }));
   const refreshAround = () =>
@@ -154,39 +155,39 @@ export function systemForm(ctx: Ctx, out: HTMLElement): HTMLElement {
   );
 }
 
-async function runSearch(ctx: Ctx, out: HTMLElement, page: number) {
+/** Searches the systems matching the criteria and shows them a page at a time. */
+async function runSearch(ctx: Ctx, out: HTMLElement) {
   const id = ++runId;
   replace(out, h("p.sub", null, h("span.spinner"), " " + t("common.searching")));
+  const reference = referenceOf(ctx);
+  const range = rangeOf(ownRange, ctx.store.state.settings.maxDistance);
+  const { maxAgeDays } = ctx.store.state.settings;
+  // Spansh answers SYSTEMS_PAGE_SIZE systems at a time: the next ones are asked when the pages
+  // shown go past those received, up to MAX_PAGES of them.
+  const rows: ResultRow[] = [];
+  let total = 0;
+  let spanshPage = 0;
+  const fetchNext = async () => {
+    const answer = await searchSystems(criteria, reference, range, spanshPage++, maxAgeDays);
+    total = answer.total;
+    rows.push(...answer.rows);
+    return answer.rows.length > 0;
+  };
+  const hasMore = () => rows.length < Math.min(total, MAX_PAGES * SYSTEMS_PAGE_SIZE) && spanshPage < MAX_PAGES;
   try {
-    const res = await searchSystems(
-      criteria,
-      referenceOf(ctx),
-      rangeOf(ownRange, ctx.store.state.settings.maxDistance),
-      page,
-      ctx.store.state.settings.maxAgeDays,
-    );
+    await fetchNext();
     if (id !== runId) return;
-    if (!res.rows.length) {
+    if (!rows.length) {
       replace(out, h("p.empty", null, t("search.noSystems")));
       return;
     }
-    const pages = Math.min(MAX_PAGES, Math.ceil(res.total / SYSTEMS_PAGE_SIZE));
-    replace(
+    await showPagedList(
       out,
-      h(
-        "p.sub",
-        null,
-        t("search.systemsPage", {
-          count: res.total,
-          from: page * SYSTEMS_PAGE_SIZE + 1,
-          to: page * SYSTEMS_PAGE_SIZE + res.rows.length,
-        }),
-      ),
-      h("div.results", null, res.rows.map(resultRow)),
-      pager(page, pages, false, (wanted) => {
-        void runSearch(ctx, out, wanted);
-        out.scrollIntoView({ block: "start", behavior: "smooth" });
-      }),
+      { rows: () => rows, total: () => total, hasMore, more: fetchNext, limit: MAX_PAGES * SYSTEMS_PAGE_SIZE },
+      {
+        summary: (from, to, count) => t("search.systemsPage", { count, from, to }),
+        draw: (shown) => h("div.results", null, shown.map(resultRow)),
+      },
     );
   } catch (e) {
     if (id !== runId) return;

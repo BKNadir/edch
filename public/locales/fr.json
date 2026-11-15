@@ -1802,7 +1802,9 @@
   "pager": {
     "label": "Pages",
     "previous": "Précédent",
-    "next": "Suivant"
+    "next": "Suivant",
+    "auto": "Auto",
+    "linesPerPage": "Lignes par page"
   },
   "system": {
     "title": "Système",

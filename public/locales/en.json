@@ -1800,7 +1800,9 @@
   "pager": {
     "label": "Pages",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "auto": "Auto",
+    "linesPerPage": "Lines per page"
   },
   "system": {
     "title": "System",

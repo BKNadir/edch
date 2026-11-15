@@ -7,13 +7,10 @@ import { referenceOf, type Ctx } from "../../state/context.js";
 import { referenceField } from "../shared/referenceField.js";
 import { h, icon, replace } from "../../ui/dom.js";
 import { resultRow } from "../shared/resultsTable.js";
-import { pager } from "../shared/pager.js";
+import { showPagedList } from "../shared/pagedList.js";
 import { exactFaction, factionIndex, matchFactions, type FactionIndex } from "../../features/search/factionNames.js";
 import { suggestBox } from "../../ui/suggestBox.js";
 import { log } from "../../platform/logger.js";
-
-/** Systems per page. */
-const PAGE_SIZE = 50;
 
 /** Every faction of the game (public/data/factions.txt), loaded the first time the tab opens. */
 let allFactions: Promise<string[]> | undefined;
@@ -175,28 +172,14 @@ async function runSearch(ctx: Ctx, out: HTMLElement) {
       return;
     }
     // A page at a time (all the systems are already here).
-    const show = (page: number) => {
-      const pages = Math.ceil(res.rows.length / PAGE_SIZE);
-      const at = Math.max(0, Math.min(page, pages - 1));
-      replace(
-        out,
-        h(
-          "p.sub",
-          null,
-          t("search.factionSystemsPage", {
-            count: res.total,
-            from: at * PAGE_SIZE + 1,
-            to: Math.min(res.rows.length, (at + 1) * PAGE_SIZE),
-          }),
-        ),
-        h("div.results", null, res.rows.slice(at * PAGE_SIZE, (at + 1) * PAGE_SIZE).map(resultRow)),
-        pager(at, pages, false, (wanted) => {
-          show(wanted);
-          out.scrollIntoView({ block: "start", behavior: "smooth" });
-        }),
-      );
-    };
-    show(0);
+    await showPagedList(
+      out,
+      { rows: () => res.rows, total: () => res.total },
+      {
+        summary: (from, to, count) => t("search.factionSystemsPage", { count, from, to }),
+        draw: (rows) => h("div.results", null, rows.map(resultRow)),
+      },
+    );
   } catch (e) {
     if (id !== runId) return;
     replace(out, h("p.error", null, icon("warn"), ` ${String((e as Error).message ?? e)}`));

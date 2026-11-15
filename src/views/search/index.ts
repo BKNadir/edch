@@ -22,7 +22,7 @@ import { log } from "../../platform/logger.js";
 import { openSystemPage, systemInfo } from "../shared/links.js";
 import { systemForm } from "./systemTab.js";
 import { ardentBuyQuotes, ardentSellQuotes, type ArdentQuote } from "../../services/ardent.js";
-import { pager } from "../shared/pager.js";
+import { showPagedList } from "../shared/pagedList.js";
 import {
   ARRIVAL_CHOICES,
   STATION_SORTS,
@@ -107,9 +107,6 @@ const SERVICES: [string, string][] = [
   ["Apex Interstellar", "Apex Interstellar"],
   ["Frontline Solutions", "Frontline Solutions"],
 ];
-/** Results per page. */
-const PAGE_SIZE = 50;
-
 /** A search's results: all received so far (in the order chosen), and how to get more. */
 interface StationResults {
   tab: Tab;
@@ -940,82 +937,61 @@ export class SearchView implements View {
         hasMore: () => moreAtSpansh,
       };
       this.results = shown;
-      this.showPage(0);
+      this.showResults();
     } catch (e) {
       if (id !== this.runId) return;
       replace(this.out, h("p.error", null, icon("warn"), ` ${String((e as Error).message ?? e)}`));
     }
   }
 
-  /** Draws page `page` (50 results each) of the last search, with the pages under it. */
-  private showPage(page: number) {
+  /** Draws the last search's results, a page at a time (views/shared/pagedList.ts). */
+  private showResults() {
     const res = this.results;
     if (!res) return;
-    const { tab, name, rows } = res;
-    if (!rows.length) {
+    const { tab, name } = res;
+    if (!res.rows.length) {
       replace(
         this.out,
         h("p.empty", null, t("search.nothingFoundWithinLyIncreaseDistance", { maxDistance: this.range() })),
       );
       return;
     }
-    const pages = Math.ceil(rows.length / PAGE_SIZE);
-    const at = Math.min(page, pages - 1);
-    const go = async (wanted: number) => {
-      // Past the results received: the next ones are asked first.
-      if (wanted >= pages && res.hasMore()) {
-        replace(this.pagerSlot(), h("span.spinner"), " " + t("common.searching"));
-        await res.more();
-      }
-      this.showPage(wanted);
-      this.out.scrollIntoView({ block: "start", behavior: "smooth" });
-    };
-    const nav = pager(at, pages, res.hasMore(), (wanted) => void go(wanted));
-    replace(
+    void showPagedList(
       this.out,
-      h(
-        "p.sub",
-        null,
-        t("search.matchingStationsPage", {
-          count: fmt(Math.max(res.total(), rows.length)),
-          from: fmt(at * PAGE_SIZE + 1),
-          to: fmt(Math.min(rows.length, (at + 1) * PAGE_SIZE)),
-        }),
-      ),
-      h(
-        "table.table.search-table",
-        null,
-        h(
-          "thead",
-          null,
+      { rows: () => res.rows, total: res.total, hasMore: res.hasMore, more: res.more },
+      {
+        summary: (from, to, count) =>
+          t("search.matchingStationsPage", { count: fmt(count), from: fmt(from), to: fmt(to) }),
+        draw: (rows) =>
           h(
-            "tr",
+            "table.table.search-table",
             null,
-            h("th", null, t("common.station")),
-            h("th.num", null, t("common.distance")),
-            ...(tab === "buy" || tab === "sell"
-              ? [
-                  h("th.num", null, tab === "buy" ? t("search.buyPriceColumn") : t("search.sellPriceColumn")),
-                  h("th.num", null, tab === "buy" ? t("search.stockColumn") : t("search.demandColumn")),
-                ]
-              : [h("th", null, tab === "service" ? t("common.type") : t("search.details"))]),
-            h("th", null, t("search.padArrival")),
-            h("th", null, t("search.updated")),
+            h(
+              "thead",
+              null,
+              h(
+                "tr",
+                null,
+                h("th", null, t("common.station")),
+                h("th.num", null, t("common.distance")),
+                ...(tab === "buy" || tab === "sell"
+                  ? [
+                      h("th.num", null, tab === "buy" ? t("search.buyPriceColumn") : t("search.sellPriceColumn")),
+                      h("th.num", null, tab === "buy" ? t("search.stockColumn") : t("search.demandColumn")),
+                    ]
+                  : [h("th", null, tab === "service" ? t("common.type") : t("search.details"))]),
+                h("th", null, t("search.padArrival")),
+                h("th", null, t("search.updated")),
+              ),
+            ),
+            h(
+              "tbody",
+              null,
+              rows.map((r) => this.row(r, tab, name)),
+            ),
           ),
-        ),
-        h(
-          "tbody",
-          null,
-          rows.slice(at * PAGE_SIZE, (at + 1) * PAGE_SIZE).map((r) => this.row(r, tab, name)),
-        ),
-      ),
-      h("div.pager-slot", null, nav),
+      },
     );
-  }
-
-  /** Where the pages are drawn (a spinner goes there while more results come). */
-  private pagerSlot(): HTMLElement {
-    return this.out.querySelector<HTMLElement>(".pager-slot") ?? this.out;
   }
 
   private row(r: Json, tab: Tab, name: string): HTMLElement {

@@ -1758,6 +1758,22 @@ p.notice {
   flex-basis: 100%;
   color: var(--bad-text);
 }
+/* Above a list shown a page at a time (views/shared/pagedList.ts): how many lines, the page links
+   and the lines per page, on one line that wraps on narrow screens. */
+.paged-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 10px;
+}
+.paged-bar .pager {
+  margin-top: 0;
+}
+.page-size select {
+  width: auto;
+}
 /* Pages of a long result list (Search). */
 .pager {
   display: flex;

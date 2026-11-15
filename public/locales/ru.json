@@ -1807,7 +1807,9 @@
   "pager": {
     "label": "Страницы",
     "previous": "Назад",
-    "next": "Далее"
+    "next": "Далее",
+    "auto": "Авто",
+    "linesPerPage": "Строк на странице"
   },
   "system": {
     "title": "Система",
