@@ -181,8 +181,9 @@ export async function findRingSpots(
   ctx: Ctx,
   mineral: string,
   extra: Json = {},
+  range = ctx.store.state.settings.maxDistance,
 ): Promise<{ spots: RingSpot[]; radius: number; widened: boolean }> {
-  const start = ctx.store.state.settings.maxDistance;
+  const start = range;
   for (const r of radii(start)) {
     const res = await spanshPost("bodies/search", {
       filters: { ...extra, distance: { min: "0", max: String(r) }, ring_signals: { name: { value: [mineral] } } },
@@ -228,8 +229,10 @@ export async function findSellSpots(
   ctx: Ctx,
   mineral: string,
   extra: Json = {},
+  range = ctx.store.state.settings.maxDistance,
 ): Promise<{ spots: SellSpot[]; radius: number; widened: boolean }> {
-  const { maxDistance: start, minSellDemand, maxAgeDays } = ctx.store.state.settings;
+  const { minSellDemand, maxAgeDays } = ctx.store.state.settings;
+  const start = range;
   const minDemand = Math.max(1, minSellDemand);
   const id = commodityId(ctx, mineral);
   const system = referenceOf(ctx).system;

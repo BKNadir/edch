@@ -11,6 +11,7 @@ import { dialog } from "../../ui/dialog.js";
 import { fitModules, sameModule, stationSells, type WantedModule } from "../../features/search/fitModules.js";
 import { referenceOf, type Ctx, type View } from "../../state/context.js";
 import { referenceField } from "../shared/referenceField.js";
+import { radiusField, rangeOf } from "../shared/radiusField.js";
 import { SERVICE_KINDS, serviceKindOf } from "../../game/serviceKinds.js";
 import { fmtLy, inaraSystem } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
@@ -135,6 +136,14 @@ export class SearchView implements View {
     return t("search.sortArrival");
   }
 
+  /** The range typed on this page (light years), or undefined for the Settings default. */
+  private ownRange?: number;
+
+  /** How far the searches look around the reference system. */
+  private range(): number {
+    return rangeOf(this.ownRange, this.ctx.store.state.settings.maxDistance);
+  }
+
   /** The "minimum demand" setting (at least 1 t). */
   private minDemand(): number {
     return Math.max(1, Math.floor(Number(this.ctx.store.state.settings.minSellDemand) || 1));
@@ -256,7 +265,7 @@ export class SearchView implements View {
     if (where)
       where.textContent = t("common.aroundLyMax", {
         label: referenceOf(this.ctx).label,
-        maxDistance: this.ctx.store.state.settings.maxDistance,
+        maxDistance: this.range(),
       });
   }
 
@@ -408,8 +417,13 @@ export class SearchView implements View {
         "div.row.opts",
         null,
         referenceField(this.ctx, () => this.update()),
+        radiusField(this.ownRange, this.ctx.store.state.settings.maxDistance, (range) => {
+          this.ownRange = range;
+          this.renderForm();
+          this.rerun();
+        }),
       ),
-      tab === "sell" ? h("p.sub", null, sellFiltersNote(this.ctx.store.state.settings)) : null,
+      tab === "sell" ? h("p.sub", null, sellFiltersNote(this.ctx.store.state.settings, this.range())) : null,
       h(
         "div.row.opts",
         null,
@@ -520,7 +534,7 @@ export class SearchView implements View {
           null,
           t("common.aroundLyMax", {
             label: referenceOf(this.ctx).label,
-            maxDistance: this.ctx.store.state.settings.maxDistance,
+            maxDistance: this.range(),
           }),
         ),
       ),
@@ -528,8 +542,7 @@ export class SearchView implements View {
   }
 
   private filters(): Json {
-    const s = this.ctx.store.state.settings;
-    const f: Json = { distance: { min: "0", max: String(s.maxDistance) } };
+    const f: Json = { distance: { min: "0", max: String(this.range()) } };
     if (this.opts.largePad) f.has_large_pad = { value: ["true"] };
     if (!this.opts.carriers || !this.opts.planetary) {
       const types = STATION_TYPES.filter((ty) => this.opts.planetary || !/planetary|settlement|surface/i.test(ty));
@@ -674,7 +687,7 @@ export class SearchView implements View {
         const ask = buying ? ardentBuyQuotes : ardentSellQuotes;
         const ardent =
           symbol && ref.system
-            ? await ask(ref.system, symbol, settings.maxDistance, settings.maxAgeDays, minVolume)
+            ? await ask(ref.system, symbol, this.range(), settings.maxAgeDays, minVolume)
             : new Map();
         if (id !== this.runId) return;
         for (const r of rows) {
@@ -746,7 +759,7 @@ export class SearchView implements View {
             "p.empty",
             null,
             t("search.nothingFoundWithinLyIncreaseDistance", {
-              maxDistance: this.ctx.store.state.settings.maxDistance,
+              maxDistance: this.range(),
             }),
           ),
         );

@@ -68,3 +68,22 @@ test("fit: a station sells a module under its name or an alias, class and rating
   assert.ok(!stationSells(outfitting, { name: "Frame Shift Drive", cls: "6", rating: "A" }, aliases));
   assert.ok(stationSells(outfitting, { name: "Beam Laser", cls: "3", rating: "" }, aliases));
 });
+
+test("fit: Inara's SLEF export (capitalised symbols) is read too", () => {
+  const inara = JSON.stringify([
+    {
+      header: { appName: "Inara", appVersion: "1.0" },
+      data: {
+        Ship: "Anaconda",
+        Modules: [
+          { Slot: "HugeHardpoint1", Item: "Hpt_BeamLaser_Gimbal_Huge" },
+          { Slot: "FrameShiftDrive", Item: "Int_Hyperdrive_Size6_Class5" },
+        ],
+      },
+    },
+  ]);
+  assert.deepEqual(
+    fitModules(inara, KNOWN).modules.map((m) => `${m.name} ${m.cls}${m.rating}`),
+    ["Beam Laser 4", "Frame Shift Drive 6A"],
+  );
+});

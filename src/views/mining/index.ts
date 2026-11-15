@@ -4,6 +4,7 @@
 import { findRingSpots, findSellSpots, type RingSpot, type SellSpot } from "../../features/mining/miningSpots.js";
 import { sellFiltersNote } from "../shared/marketFilters.js";
 import { referenceField, refreshReferenceField } from "../shared/referenceField.js";
+import { radiusField, rangeOf } from "../shared/radiusField.js";
 import { gameName, locale, t } from "../../platform/i18n.js";
 import { type Ctx, referenceOf, type View } from "../../state/context.js";
 import type { MiningSettings } from "../../state/store.js";
@@ -113,6 +114,20 @@ export class MiningView implements View {
   private error = "";
   /** Made once: the page redraws often, the field keeps what is being typed. */
   private reference: HTMLElement;
+  /** The range typed on this page (light years), or undefined for the Settings default. */
+  private ownRange?: number;
+
+  /** How far the searches look around the reference system (widened when nothing is found). */
+  private range(): number {
+    return rangeOf(this.ownRange, this.ctx.store.state.settings.maxDistance);
+  }
+
+  private rangeField(): HTMLElement {
+    return radiusField(this.ownRange, this.ctx.store.state.settings.maxDistance, (range) => {
+      this.ownRange = range;
+      this.render();
+    });
+  }
   constructor(private ctx: Ctx) {
     this.reference = referenceField(ctx, () => this.render());
   }
@@ -409,7 +424,7 @@ export class MiningView implements View {
           "p.sub",
           null,
           t("mining.ringsHotspotChosenMineralNearestFirst", {
-            maxDistance: fmt(this.ctx.store.state.settings.maxDistance),
+            maxDistance: fmt(this.range()),
           }),
         ),
         h(
@@ -433,7 +448,7 @@ export class MiningView implements View {
           ),
           h("span.sub", null, t("mining.around", { place: referenceOf(this.ctx).label })),
         ),
-        (refreshReferenceField(this.reference, this.ctx), this.reference),
+        h("div.row.opts", null, (refreshReferenceField(this.reference, this.ctx), this.reference), this.rangeField()),
         this.error && this.tab === "prospect" ? h("p.error", null, this.error) : null,
       ),
       this.found
@@ -441,7 +456,7 @@ export class MiningView implements View {
             this.found,
             { mine: t("mining.whereMine"), sell: t("mining.whereSell") },
             this.methodFilter(),
-            sellFiltersNote(this.ctx.store.state.settings),
+            sellFiltersNote(this.ctx.store.state.settings, this.range()),
           )
         : null,
     );
@@ -503,10 +518,10 @@ export class MiningView implements View {
             h(
               "span.sub",
               null,
-              t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: st.settings.maxDistance }),
+              t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: this.range() }),
             ),
           ),
-          (refreshReferenceField(this.reference, this.ctx), this.reference),
+          h("div.row.opts", null, (refreshReferenceField(this.reference, this.ctx), this.reference), this.rangeField()),
         ),
         this.error ? h("p.error", null, this.error) : null,
       ),
@@ -535,13 +550,13 @@ export class MiningView implements View {
     for (const mineral of minerals) {
       const ringable = MINERALS.find(([n]) => n === mineral)?.[1];
       const [rings, buyers] = await Promise.all([
-        ringable ? findRingSpots(this.ctx, mineral, extra) : Promise.resolve(null),
-        findSellSpots(this.ctx, mineral, extra),
+        ringable ? findRingSpots(this.ctx, mineral, extra, this.range()) : Promise.resolve(null),
+        findSellSpots(this.ctx, mineral, extra, this.range()),
       ]);
       mine.push({ mineral, ringable: Boolean(ringable), ...(rings ?? { spots: [], radius: 0, widened: false }) });
       sell.push({ mineral, ...buyers });
     }
-    return { mine, sell, start: this.ctx.store.state.settings.maxDistance };
+    return { mine, sell, start: this.range() };
   }
 
   /** The mining types shown in the results; hiding one is kept in the settings. */
@@ -572,7 +587,7 @@ export class MiningView implements View {
           sell: t("mining.whereSell2", { power: r.power }),
         },
         this.methodFilter(),
-        sellFiltersNote(this.ctx.store.state.settings),
+        sellFiltersNote(this.ctx.store.state.settings, this.range()),
       ),
     );
   }

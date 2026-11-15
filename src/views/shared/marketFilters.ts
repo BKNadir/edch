@@ -18,13 +18,13 @@ export function priceAgeLabel(days: number): string {
 }
 
 /** "Prices up to 1 month old (Spansh and Ardent, the most recent), demand of at least 100 t." */
-export function sellFiltersNote(settings: Settings): string {
+export function sellFiltersNote(settings: Settings, range = settings.maxDistance): string {
   const note = t("market.sellFiltersNote", {
     age: priceAgeLabel(settings.maxAgeDays),
     demand: fmt(Math.max(1, settings.minSellDemand)),
   });
   // Ardent answers up to 500 ly: say so when the search radius is wider.
-  return settings.maxDistance > ARDENT_MAX_DISTANCE
+  return range > ARDENT_MAX_DISTANCE
     ? `${note} ${t("market.ardentRadius", { distance: fmt(ARDENT_MAX_DISTANCE) })}`
     : note;
 }
