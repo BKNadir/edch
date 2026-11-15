@@ -61,12 +61,7 @@ const CARRIER = "Drake-Class Carrier";
 const SERVICES: [string, string][] = [
   ["Interstellar Factors Contact", "Interstellar Factors"],
   ["Material Trader", t("search.materialTrader")],
-  ["Material Trader|raw", t("search.materialTraderRaw")],
-  ["Material Trader|manufactured", t("search.materialTraderManufactured")],
-  ["Material Trader|encoded", t("search.materialTraderEncoded")],
   ["Technology Broker", t("common.technologyBroker")],
-  ["Technology Broker|guardian", t("search.technologyBrokerGuardian")],
-  ["Technology Broker|human", t("search.technologyBrokerHuman")],
   ["Universal Cartographics", "Universal Cartographics"],
   ["Vista Genomics", "Vista Genomics"],
   ["Black Market", t("search.blackMarket")],
@@ -180,6 +175,8 @@ export class SearchView implements View {
   /** Only the latest search may show its results (an older, slower answer is dropped). */
   private runId = 0;
   private rating = "";
+  /** Trader and broker kinds unticked on the Services tab (all are shown by default). */
+  private hiddenKinds = new Set<string>();
   /** The last search's results, drawn a page at a time. */
   private results?: StationResults;
   /** The modules of the last module search (shown on each result). */
@@ -356,7 +353,12 @@ export class SearchView implements View {
     else
       main = h(
         "select.big",
-        { onchange: (e: Event) => (this.values.service = (e.target as HTMLSelectElement).value) },
+        {
+          onchange: (e: Event) => {
+            this.values.service = (e.target as HTMLSelectElement).value;
+            this.renderForm();
+          },
+        },
         SERVICES.map(([v, l]) => h("option", { value: v, selected: v === this.values.service }, l)),
       );
 
@@ -368,6 +370,29 @@ export class SearchView implements View {
         main,
         h("button.primary", { onclick: () => this.run() }, icon("search"), " " + t("common.search")),
       ),
+      tab === "service" && SERVICE_KINDS.some((k) => k.service === this.values.service)
+        ? h(
+            "div.row.opts.service-kinds",
+            null,
+            h("span.sub", null, t("search.serviceKinds")),
+            SERVICE_KINDS.filter((k) => k.service === this.values.service).map((k) =>
+              h(
+                "button.chip.toggle",
+                {
+                  class: this.hiddenKinds.has(k.kind) ? "" : "on",
+                  "aria-pressed": String(!this.hiddenKinds.has(k.kind)),
+                  onclick: () => {
+                    if (this.hiddenKinds.has(k.kind)) this.hiddenKinds.delete(k.kind);
+                    else this.hiddenKinds.add(k.kind);
+                    this.renderForm();
+                    this.rerun();
+                  },
+                },
+                KIND_LABELS[k.kind],
+              ),
+            ),
+          )
+        : null,
       tab === "module"
         ? h(
             "div.row.opts.fit-modules",
@@ -637,11 +662,13 @@ export class SearchView implements View {
       if (first.rating) group.rating = { value: [first.rating] };
       f.modules = [group];
     } else {
-      // A trader or broker kind ("Material Trader|raw"): the service at stations of its economies.
-      const [service, kindName] = this.values.service.split("|");
-      const kind = SERVICE_KINDS.find((k) => k.service === service && k.kind === kindName);
+      // Traders and brokers: only the kinds ticked (all of them: no filter, unknown kinds too).
+      const service = this.values.service;
       f.services = [{ name: { value: [service] } }];
-      if (kind) f.primary_economy = { value: kind.economies };
+      const kinds = SERVICE_KINDS.filter((k) => k.service === service);
+      const ticked = kinds.filter((k) => !this.hiddenKinds.has(k.kind));
+      if (ticked.length && ticked.length < kinds.length)
+        f.primary_economy = { value: ticked.flatMap((k) => k.economies) };
     }
 
     const ref = referenceOf(this.ctx);
@@ -882,7 +909,7 @@ export class SearchView implements View {
       ];
     } else {
       // A trader's or broker's kind follows the station's economy.
-      const service = this.values.service.split("|")[0];
+      const service = this.values.service;
       const kind = serviceKindOf(service, r.primary_economy);
       detail = [r.type ?? "", kind ? ` · ${KIND_LABELS[kind.kind]}` : ""];
     }
