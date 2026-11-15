@@ -36,11 +36,34 @@ import {
   recentEnough,
   type MarketQuote,
 } from "../../features/market/freshestQuote.js";
-import { priceAgeLabel, sellFiltersNote } from "../shared/marketFilters.js";
+import { priceAgeLabel } from "../shared/marketFilters.js";
 import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
 
 type Json = Record<string, any>;
 type Tab = "buy" | "sell" | "ship" | "module" | "service" | "faction";
+/** The Commodity tab's two modes, switched by a toggle. */
+type CommodityMode = "buy" | "sell";
+
+/** Where the Commodity tab's last mode is kept, so the tab comes back to it. */
+const COMMODITY_MODE_KEY = "edch.searchCommodityMode";
+
+/** The Commodity tab's last mode ("buy" when none was kept or storage is unavailable). */
+function savedCommodityMode(): CommodityMode {
+  try {
+    return localStorage.getItem(COMMODITY_MODE_KEY) === "sell" ? "sell" : "buy";
+  } catch {
+    return "buy";
+  }
+}
+
+/** Keeps the Commodity tab's mode for the next visit. */
+function saveCommodityMode(mode: CommodityMode) {
+  try {
+    localStorage.setItem(COMMODITY_MODE_KEY, mode);
+  } catch {
+    /* not kept: the tab opens on Buy next time */
+  }
+}
 
 const STATION_TYPES = [
   "Asteroid base",
@@ -115,7 +138,9 @@ export function presetSearch(tab: "buy" | "sell", value: string) {
 
 export class SearchView implements View {
   private root?: HTMLElement;
-  private tab: Tab = "buy";
+  /** The Commodity tab's mode: buying or selling. */
+  private commodityMode: CommodityMode = savedCommodityMode();
+  private tab: Tab = this.commodityMode;
   private out = h("div.search-out");
   private form = h("div.search-form");
   private tabs = h("div.segmented");
@@ -160,10 +185,6 @@ export class SearchView implements View {
     return Math.max(1, Math.floor(Number(tab === "buy" ? s.minBuySupply : s.minSellDemand) || 1));
   }
 
-  /** The "minimum demand" setting (at least 1 t). */
-  private minDemand(): number {
-    return Math.max(1, Math.floor(Number(this.ctx.store.state.settings.minSellDemand) || 1));
-  }
   private values: Record<Exclude<Tab, "faction">, string> = {
     buy: "",
     sell: "",
@@ -238,7 +259,8 @@ export class SearchView implements View {
       this.out,
     );
     if (pending) {
-      this.tab = pending.tab;
+      this.tab = this.commodityMode = pending.tab;
+      saveCommodityMode(pending.tab);
       this.values[pending.tab] = gameName(pending.value);
     }
     this.renderTabs();
@@ -262,8 +284,7 @@ export class SearchView implements View {
 
   private renderTabs() {
     const labels: [Tab, string][] = [
-      ["buy", t("search.buyCommodity")],
-      ["sell", t("search.sellCommodity")],
+      [this.commodityMode, t("search.commodityTab")],
       ["ship", t("search.ships")],
       ["module", t("common.modules")],
       ["service", t("search.services")],
@@ -279,6 +300,41 @@ export class SearchView implements View {
             onclick: () => ((this.tab = tab), this.renderTabs(), this.renderForm(), replace(this.out)),
           },
           l,
+        ),
+      ),
+    );
+  }
+
+  /** Switches the Commodity tab between buying and selling, keeping the commodity typed. */
+  private setCommodityMode(mode: CommodityMode) {
+    if (mode === this.commodityMode && this.tab === mode) return;
+    this.values[mode] = this.values[this.tab === "buy" || this.tab === "sell" ? this.tab : this.commodityMode];
+    this.tab = this.commodityMode = mode;
+    saveCommodityMode(mode);
+    this.renderTabs();
+    this.renderForm();
+    replace(this.out);
+    this.rerun();
+  }
+
+  /** The Buy / Sell toggle of the Commodity tab. */
+  private commodityModeSwitch(): HTMLElement {
+    const modes: [CommodityMode, string][] = [
+      ["buy", t("search.modeBuy")],
+      ["sell", t("search.modeSell")],
+    ];
+    return h(
+      "div.segmented.commodity-mode",
+      { role: "group" },
+      modes.map(([mode, label]) =>
+        h(
+          "button",
+          {
+            class: this.tab === mode ? "active" : "",
+            "aria-pressed": String(this.tab === mode),
+            onclick: () => this.setCommodityMode(mode),
+          },
+          label,
         ),
       ),
     );
@@ -367,6 +423,7 @@ export class SearchView implements View {
       h(
         "div.row",
         null,
+        tab === "buy" || tab === "sell" ? this.commodityModeSwitch() : null,
         main,
         h("button.primary", { onclick: () => this.run() }, icon("search"), " " + t("common.search")),
       ),
@@ -441,7 +498,6 @@ export class SearchView implements View {
           this.rerun();
         }),
       ),
-      tab === "sell" ? h("p.sub", null, sellFiltersNote(this.ctx.store.state.settings, this.range())) : null,
       h(
         "div.row.opts",
         null,
@@ -486,20 +542,21 @@ export class SearchView implements View {
             ),
           ),
         ),
-        tab === "buy"
+        tab === "buy" || tab === "sell"
           ? h(
               "label.check",
               null,
-              t("search.minStock") + " ",
+              (tab === "buy" ? t("search.minStock") : t("search.minDemand")) + " ",
               h("input.num-small", {
                 type: "number",
                 min: "1",
                 step: "100",
-                value: String(this.minQuantity("buy")),
+                value: String(this.minQuantity(tab)),
                 onchange: (e: Event) => {
-                  this.ctx.store.updateSettings({
-                    minBuySupply: Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1)),
-                  });
+                  const quantity = Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1));
+                  this.ctx.store.updateSettings(
+                    tab === "buy" ? { minBuySupply: quantity } : { minSellDemand: quantity },
+                  );
                   this.renderForm();
                   this.rerun();
                 },
@@ -529,25 +586,6 @@ export class SearchView implements View {
                   ),
                 ),
               ),
-            )
-          : null,
-        tab === "sell"
-          ? h(
-              "label.check",
-              null,
-              t("search.minDemand") + " ",
-              h("input.num-small", {
-                type: "number",
-                min: "1",
-                step: "100",
-                value: String(this.minDemand()),
-                onchange: (e: Event) => {
-                  this.ctx.store.updateSettings({
-                    minSellDemand: Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1)),
-                  });
-                  this.renderForm();
-                },
-              }),
             )
           : null,
         h(

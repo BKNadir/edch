@@ -20,6 +20,7 @@ and EDCH shows it in the update banner.
 - While searching or loading, EDCH just says "Searching…" or "Loading…", without naming a site.
 - Results in pages: Search (50 stations a page, the next ones asked for when the last page is reached), Search → Faction (every system read, 50 a page), and "More results" under the search lists of a material's sources.
 - Settings → Updates: the "Update available" button now starts the update right away (download, then restart), like "Update" in the banner, instead of only showing the banner. Portable and Linux versions open the release page.
+- Search: "Buy a commodity" and "Sell a commodity" become one **Commodity** tab with a Buy / Sell toggle and the same filters in the same place; the commodity typed is kept when switching, and the tab comes back to the last mode used.
 - BGS page: "Update" also asks EliteBGS (public BGS database from EDDN) for the faction's systems: those Spansh misses are added, and a more recent influence and state replaces older data (other factions' influence kept).
 
 ## 0.10.13
