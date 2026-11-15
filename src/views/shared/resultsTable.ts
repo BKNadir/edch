@@ -10,7 +10,6 @@ import { debugSource } from "../../ui/debugSource.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../../services/spansh.js";
 import type { Finder } from "../../features/materials/sources.js";
 import type { Settings } from "../../state/store.js";
-import { showPagedList } from "./pagedList.js";
 
 /** A system name was clicked (see links.ts: copy, and open Navigation if chosen in Settings). */
 export const copySystem = (system: string) => openSystem(system);
@@ -96,9 +95,6 @@ export function resultRow(r: ResultRow): HTMLElement {
   );
 }
 
-/** Results a "where to find" section loads at most, in one Spansh request. */
-const FINDER_MAX_LOAD = 100;
-
 /** A finder section that loads its Spansh results by itself. */
 export function finderSection(
   f: Finder,
@@ -129,10 +125,9 @@ export function finderSection(
   );
   if (f.type === "info") return section;
 
-  // The nearest results in one request, up to the "results loaded per search" setting (at most a
-  // hundred, in one request); the pages are then drawn from them with no new request.
-  // The best-share bodies of a material are picked from the finder's own number.
-  const loaded: Finder = f.materialName ? f : { ...f, size: Math.min(FINDER_MAX_LOAD, settings.searchLoad) };
+  // Only the nearest few places (Settings → "Places shown per source"), so the page stays short.
+  // The best-share bodies of a material are picked among the finder's own number first.
+  const loaded: Finder = f.materialName ? f : { ...f, size: settings.sourceCount };
   const load = () => {
     status.replaceChildren(h("span.spinner"), t("common.searching"));
     list.replaceChildren();
@@ -156,14 +151,7 @@ export function finderSection(
             h("span.sub", null, t("results.matchingSystems", { locale: res.total.toLocaleString(locale()) })),
           );
         }
-        void showPagedList(
-          list,
-          { rows: () => res.rows, total: () => res.rows.length },
-          {
-            summary: (from, to, count) => t("pager.linesShown", { from, to, count }),
-            draw: (shown) => h("div.results", null, shown.map(resultRow)),
-          },
-        );
+        list.replaceChildren(h("div.results", null, res.rows.slice(0, settings.sourceCount).map(resultRow)));
       })
       .catch((err) => {
         status.replaceChildren();

@@ -4,6 +4,7 @@
 import { log } from "../platform/logger.js";
 import { validDataAge } from "./dataAge.js";
 import { DEFAULT_SEARCH_LOAD, validSearchLoad } from "./searchLoad.js";
+import { DEFAULT_SOURCE_COUNT, validSourceCount } from "./sourceCount.js";
 import { type ThemeSettings } from "./themeSettings.js";
 import { DEFAULT_THEME, validTheme } from "./themeSettings.js";
 import { emptyActivity, type ActivityState } from "../game/activity/state.js";
@@ -31,10 +32,12 @@ export interface Settings {
    */
   maxAgeDays: number;
   /**
-   * Searches (stations, systems, a material's sources) load the nearest results up to this many,
+   * Searches (stations, systems) load their first results up to this many,
    * once; sorting and changing page then need no new request (state/searchLoad.ts).
    */
   searchLoad: number;
+  /** A material's page: the nearest places shown for each way to get it (state/sourceCount.ts). */
+  sourceCount: number;
   /** Used when the game hasn't told us where we are yet. */
   fallbackSystem: string;
   largePadOnly: boolean;
@@ -324,6 +327,7 @@ const DEFAULT_SETTINGS: Settings = {
   minBuySupply: 1,
   maxAgeDays: 3,
   searchLoad: DEFAULT_SEARCH_LOAD,
+  sourceCount: DEFAULT_SOURCE_COUNT,
   fallbackSystem: "Sol",
   largePadOnly: false,
   sync: DEFAULT_SYNC,
@@ -413,6 +417,7 @@ export class Store {
           ...loaded,
           maxAgeDays: validDataAge(loaded.maxAgeDays),
           searchLoad: validSearchLoad(loaded.searchLoad),
+          sourceCount: validSourceCount(loaded.sourceCount),
           sync: startSyncSettings(loaded.sync),
           bgs: validBgsSettings(loaded.bgs),
           remote: { ...DEFAULT_REMOTE, ...(loaded.remote ?? {}) },

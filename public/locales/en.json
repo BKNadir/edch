@@ -1195,6 +1195,8 @@
     "exeLnkShortcutMinedlauncherTipRight": "An .exe, a .lnk shortcut, or MinEdLauncher. Tip: right-click the file → \"Copy as path\", then paste here (without the quotes).",
     "searchLoad": "Results loaded per search",
     "searchLoadHelp": "A search loads the nearest results up to this number, once: sorting them and changing page is then instant, with no new request. Don't set it too high, so searches stay fast.",
+    "sourceCount": "Places shown per source",
+    "sourceCountHelp": "On a material's page, the nearest places shown for each way to get it.",
     "fallbackSystem": "Fallback system",
     "fromPhoneAlsoCopyPhoneS": "From the phone, also copy to the phone's clipboard",
     "gameJournal": "Game journal",

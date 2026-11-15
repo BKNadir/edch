@@ -1195,6 +1195,8 @@
     "exeLnkShortcutMinedlauncherTipRight": "Eine .exe, eine .lnk-Verknüpfung oder MinEdLauncher. Tipp: Rechtsklick auf die Datei → „Als Pfad kopieren“, dann hier einfügen (ohne Anführungszeichen).",
     "searchLoad": "Geladene Ergebnisse pro Suche",
     "searchLoadHelp": "Eine Suche lädt einmalig die nächstgelegenen Ergebnisse bis zu dieser Anzahl: Sortieren und Blättern geht danach sofort, ohne neue Anfrage. Wähle keinen zu hohen Wert, damit die Suche schnell bleibt.",
+    "sourceCount": "Angezeigte Orte pro Quelle",
+    "sourceCountHelp": "Auf der Seite eines Materials die Zahl der nächsten Orte für jede Art, es zu bekommen.",
     "fallbackSystem": "Ersatzsystem",
     "fromPhoneAlsoCopyPhoneS": "Vom Handy aus auch in die Zwischenablage des Handys kopieren",
     "gameJournal": "Spiel-Journal",

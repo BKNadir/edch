@@ -1202,6 +1202,8 @@
     "exeLnkShortcutMinedlauncherTipRight": "Um .exe, um atalho .lnk ou o MinEdLauncher. Dica: clique direito no arquivo → \"Copiar como caminho\" e cole aqui (sem as aspas).",
     "searchLoad": "Resultados carregados por busca",
     "searchLoadHelp": "Uma busca carrega uma única vez os resultados mais próximos até este número: ordenar e mudar de página fica instantâneo, sem nova requisição. Não coloque um valor alto demais, para que as buscas continuem rápidas.",
+    "sourceCount": "Locais mostrados por fonte",
+    "sourceCountHelp": "Na página de um material, os locais mais próximos mostrados para cada forma de obtê-lo.",
     "fallbackSystem": "Sistema reserva",
     "fromPhoneAlsoCopyPhoneS": "Pelo celular, copiar também para a área de transferência do celular",
     "gameJournal": "Diário do jogo",

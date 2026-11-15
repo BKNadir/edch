@@ -4,6 +4,7 @@
 import { defaultJournalDir, isRemote, isTauri, logsOpen, startJournal, updateMode } from "../../platform/bridge.js";
 import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
 import { SEARCH_LOAD_CHOICES } from "../../state/searchLoad.js";
+import { SOURCE_COUNT_CHOICES } from "../../state/sourceCount.js";
 import { priceAgeLabel } from "../shared/marketFilters.js";
 import { t } from "../../platform/i18n.js";
 import { setDebugLog } from "../../platform/logger.js";
@@ -212,6 +213,19 @@ export class SettingsView implements View {
             ),
           ),
           h("small", null, t("settings.searchLoadHelp")),
+        ),
+        h(
+          "label.field",
+          null,
+          h("span", null, t("settings.sourceCount")),
+          h(
+            "select",
+            { onchange: (e: Event) => set({ sourceCount: Number((e.target as HTMLSelectElement).value) }) },
+            SOURCE_COUNT_CHOICES.map((count) =>
+              h("option", { value: String(count), selected: count === s.sourceCount }, String(count)),
+            ),
+          ),
+          h("small", null, t("settings.sourceCountHelp")),
         ),
         h(
           "label.field",

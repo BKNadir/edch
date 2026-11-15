@@ -1196,6 +1196,8 @@
     "exeLnkShortcutMinedlauncherTipRight": "Un .exe, un raccourci .lnk, ou MinEdLauncher. Astuce : clic droit sur le fichier → « Copier en tant que chemin d'accès », puis colle ici (sans les guillemets).",
     "searchLoad": "Résultats chargés par recherche",
     "searchLoadHelp": "Une recherche charge les résultats les plus proches jusqu'à ce nombre, une seule fois : les trier et changer de page est ensuite instantané, sans nouvelle requête. Ne mets pas une valeur trop élevée, pour que les recherches restent rapides.",
+    "sourceCount": "Lieux affichés par source",
+    "sourceCountHelp": "Sur la page d'un matériau, le nombre de lieux les plus proches montrés pour chaque façon de l'obtenir.",
     "fallbackSystem": "Système de repli",
     "fromPhoneAlsoCopyPhoneS": "Depuis le téléphone, copier aussi dans le presse-papiers du téléphone",
     "gameJournal": "Journal du jeu",
