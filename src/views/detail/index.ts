@@ -4,6 +4,7 @@
 import { gameName, t } from "../../platform/i18n.js";
 import { CATEGORY_LABELS, siteText } from "../../game/data.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
+import { debugSource, journalSource } from "../../ui/debugSource.js";
 import { ownedOf, referenceOf, reserved, type Ctx } from "../../state/context.js";
 import { referenceField, refreshReferenceField } from "../shared/referenceField.js";
 import { distance, fmtLy } from "../../services/spansh.js";
@@ -124,6 +125,7 @@ export class DetailPanel {
           null,
           h("strong", null, fmt(owned)),
           cap ? ` / ${cap}` : "",
+          debugSource(journalSource(), m.ledger === "ship" ? "Materials" : "ShipLocker"),
           need ? h("span.badge.warn", null, t("detail.neededWishlist", { need: fmt(need) })) : null,
         ),
         cap ? h("div.bar", null, h("span", { style: { width: `${Math.min(100, (owned / cap) * 100)}%` } })) : null,
@@ -144,7 +146,7 @@ export class DetailPanel {
     }
     replace(
       this.trades,
-      h("h3", null, t("detail.tradeSuggestions")),
+      h("h3", null, t("detail.tradeSuggestions"), debugSource("EDCH")),
       list.length
         ? h(
             "ul.trades",
@@ -196,7 +198,7 @@ export class DetailPanel {
         h(
           "section.finder",
           null,
-          h("div.finder-head", null, h("h4", null, t("detail.knownFarmingSites"))),
+          h("div.finder-head", null, h("h4", null, t("detail.knownFarmingSites"), debugSource("d47"))),
           h(
             "div.results",
             null,
@@ -254,7 +256,12 @@ export class DetailPanel {
     return h(
       "section.used",
       null,
-      h("h3", null, list.length === 1 ? t("detail.used1Recipe") : t("detail.usedRecipes", { count: list.length })),
+      h(
+        "h3",
+        null,
+        list.length === 1 ? t("detail.used1Recipe") : t("detail.usedRecipes", { count: list.length }),
+        debugSource("EDEngineer / d47"),
+      ),
       [...groups.entries()].map(([kind, byModule]) =>
         h(
           "details",

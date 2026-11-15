@@ -114,7 +114,13 @@ export function finderSection(
   const section = h(
     `section.finder.${f.type}`,
     null,
-    h("div.finder-head", null, h("h4", null, f.title), status, f.type === "info" ? null : refresh),
+    h(
+      "div.finder-head",
+      null,
+      h("h4", null, f.title, debugSource(f.type === "info" ? "EDEngineer / d47" : "Spansh")),
+      status,
+      f.type === "info" ? null : refresh,
+    ),
     f.hint && !opts.compact ? h("p.hint", null, f.hint) : null,
     f.type === "info" ? null : list,
   );

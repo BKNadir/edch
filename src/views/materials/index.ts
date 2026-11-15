@@ -4,6 +4,7 @@
 import { gameName, nameMatches, t } from "../../platform/i18n.js";
 import { CATEGORY_LABELS } from "../../game/data.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
+import { debugSource, journalSource } from "../../ui/debugSource.js";
 import { reserved, type Ctx, type View } from "../../state/context.js";
 import type { Material } from "../../game/types.js";
 
@@ -36,7 +37,14 @@ export class MaterialsView implements View {
       h(
         "header.view-head",
         null,
-        h("h1", null, t("materials.engineeringMaterials")),
+        h(
+          "h1",
+          null,
+          t("materials.engineeringMaterials"),
+          // Your stock comes from the journal; the materials, grades and recipes from bundled data.
+          debugSource(journalSource(), "Materials, ShipLocker"),
+          debugSource("EDEngineer / d47"),
+        ),
         h("div.toolbar", null, h("label.search-wrap", null, icon("search"), search), this.tabs),
       ),
       this.list,
