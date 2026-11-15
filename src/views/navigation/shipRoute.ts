@@ -77,7 +77,8 @@ export async function plotShipNow(
       ),
       h(
         "table.table.route",
-        null,
+        // A route is read from start to end: never paged.
+        { "data-no-paging": true },
         h(
           "thead",
           null,

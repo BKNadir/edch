@@ -1017,7 +1017,6 @@
     "updated1HAgo": "обн. < 1 ч назад",
     "updatedDAgo": "обн. {{value}} д назад",
     "updatedHAgo": "обн. {{hours}} ч назад",
-    "moreResults": "Ещё результаты (осталось: {{count}})",
     "lastUpdated": "Когда эти данные обновлялись последний раз",
     "yourOwnData": "Из вашей игры"
   },
@@ -1809,7 +1808,8 @@
     "previous": "Назад",
     "next": "Далее",
     "auto": "Авто",
-    "linesPerPage": "Строк на странице"
+    "linesPerPage": "Строк на странице",
+    "linesShown": "Строки {{from}}–{{to}} из {{count}}"
   },
   "system": {
     "title": "Система",

@@ -10,7 +10,7 @@ import { debugSource } from "../../ui/debugSource.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../../services/spansh.js";
 import type { Finder } from "../../features/materials/sources.js";
 import type { Settings } from "../../state/store.js";
-import { log } from "../../platform/logger.js";
+import { showPagedList } from "./pagedList.js";
 
 /** A system name was clicked (see links.ts: copy, and open Navigation if chosen in Settings). */
 export const copySystem = (system: string) => openSystem(system);
@@ -103,7 +103,7 @@ export function finderSection(
   settings: Settings,
   opts: { compact?: boolean } = {},
 ): HTMLElement {
-  const list = h("div.results");
+  const list = h("div.finder-results");
   const status = h("span.status");
   let force = false;
   const refresh = h(
@@ -144,41 +144,32 @@ export function finderSection(
           );
           return;
         }
-        list.replaceChildren(...res.rows.map(resultRow));
         if (res.total > res.rows.length && f.type === "systems") {
           status.replaceChildren(
             h("span.sub", null, t("results.matchingSystems", { locale: res.total.toLocaleString(locale()) })),
           );
         }
-        // The next results, a page at a time (not for the best-share bodies, already picked).
-        let shown = res.rows.length;
-        let page = 0;
-        const moreButton = (): HTMLElement | null =>
-          res.total > shown && !f.materialName
-            ? h(
-                "button.ghost.small.results-more",
-                {
-                  onclick: async (e: Event) => {
-                    const button = e.currentTarget as HTMLButtonElement;
-                    button.disabled = true;
-                    button.replaceChildren(h("span.spinner"), t("common.searching"));
-                    try {
-                      const next = await runFinder(f, ref, settings, false, ++page);
-                      shown += next.rows.length;
-                      const after = next.rows.length ? moreButton() : null;
-                      button.replaceWith(...next.rows.map(resultRow), ...(after ? [after] : []));
-                    } catch (err) {
-                      button.disabled = false;
-                      button.replaceChildren(t("common.retry"));
-                      log.warn("results", `Next results failed: ${String((err as Error)?.message ?? err)}`);
-                    }
-                  },
-                },
-                t("results.moreResults", { count: res.total - shown }),
-              )
-            : null;
-        const more = moreButton();
-        if (more) list.append(more);
+        // A page at a time when they don't fit on the screen; the next results are asked for when
+        // a page needs them (not for the best-share bodies, already picked).
+        const rows = [...res.rows];
+        let spanshPage = 0;
+        void showPagedList(
+          list,
+          {
+            rows: () => rows,
+            total: () => res.total,
+            hasMore: () => !f.materialName && rows.length < res.total,
+            more: async () => {
+              const next = await runFinder(f, ref, settings, false, ++spanshPage);
+              rows.push(...next.rows);
+              return next.rows.length > 0;
+            },
+          },
+          {
+            summary: (from, to, count) => t("pager.linesShown", { from, to, count }),
+            draw: (shown) => h("div.results", null, shown.map(resultRow)),
+          },
+        );
       })
       .catch((err) => {
         status.replaceChildren();

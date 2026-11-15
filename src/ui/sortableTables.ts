@@ -15,7 +15,7 @@ type Direction = "ascending" | "descending";
 const choices = new Map<string, { column: number; direction: Direction }>();
 
 /** A table is known by its column titles: the same table redrawn keeps its sort. */
-function tableKey(table: HTMLTableElement): string {
+export function tableKey(table: HTMLTableElement): string {
   return table.dataset.sortId ?? [...headerCells(table)].map((th) => th.textContent?.trim() ?? "").join("|");
 }
 

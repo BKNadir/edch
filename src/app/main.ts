@@ -18,6 +18,7 @@ import { changelogAfterUpdate } from "../ui/changelog.js";
 import { setupDesktop } from "../ui/desktop.js";
 import { h, replace } from "../ui/dom.js";
 import { installTableSorting } from "../ui/sortableTables.js";
+import { installTablePaging } from "../ui/pagedTables.js";
 import { startUpdateChecks } from "../ui/updateBanner.js";
 import { Uploaders } from "../services/sync/index.js";
 import { bindTour } from "../features/engineers/tour.js";
@@ -49,6 +50,7 @@ export async function startApp(code: string, remoteMode: "paired" | null, openSe
   }
   watchGameNames(document.body);
   installTableSorting(document.body);
+  installTablePaging(document.body);
 
   const store = new Store();
   bindStore(store);

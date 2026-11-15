@@ -1,8 +1,8 @@
 // Pages of a long result list: "‹ Previous · 1 2 3 … · Next ›". When the source has more results
 // than received, "Next" on the last page asks for them (`more`).
 
-import { t } from "../../platform/i18n.js";
-import { h } from "../../ui/dom.js";
+import { t } from "../platform/i18n.js";
+import { h } from "./dom.js";
 
 /**
  * The page links for page `at` of `pages` (0-based); `more` when results beyond the last page can

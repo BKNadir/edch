@@ -965,7 +965,8 @@ export class SearchView implements View {
         draw: (rows) =>
           h(
             "table.table.search-table",
-            null,
+            // Already a page of the results (views/shared/pagedList.ts).
+            { "data-no-paging": true },
             h(
               "thead",
               null,

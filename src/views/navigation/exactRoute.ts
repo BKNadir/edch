@@ -31,7 +31,8 @@ export function renderExact(ctx: Ctx, out: HTMLElement, r: GalaxyRoute, tank: nu
     h("p.sub", null, auto ? t("navigation.autoCopyNextSystemArrival") : t("navigation.autoCopyNextSystemOffSettings")),
     h(
       "table.table.route.exact",
-      null,
+      // A route is read from start to end: never paged.
+      { "data-no-paging": true },
       h(
         "thead",
         null,

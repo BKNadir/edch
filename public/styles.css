@@ -1758,7 +1758,7 @@ p.notice {
   flex-basis: 100%;
   color: var(--bad-text);
 }
-/* Above a list shown a page at a time (views/shared/pagedList.ts): how many lines, the page links
+/* Above a list or table shown a page at a time (views/shared/pagedList.ts, ui/pagedTables.ts): how many lines, the page links
    and the lines per page, on one line that wraps on narrow screens. */
 .paged-bar {
   display: flex;
@@ -1773,6 +1773,13 @@ p.notice {
 }
 .page-size select {
   width: auto;
+}
+/* Lines of a paged table out of the page shown (ui/pagedTables.ts). */
+.table tr[data-off-page] {
+  display: none;
+}
+.table-pages-bottom .pager {
+  margin-bottom: 4px;
 }
 /* Pages of a long result list (Search). */
 .pager {
@@ -1789,10 +1796,6 @@ p.notice {
 .pager-gap {
   color: var(--muted);
   padding: 0 2px;
-}
-.results-more {
-  justify-self: start;
-  margin-top: 6px;
 }
 /* Suggestions under a text field (Search → Faction). */
 .suggest-box {

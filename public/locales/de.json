@@ -1018,7 +1018,6 @@
     "updated1HAgo": "vor < 1 Std. aktualisiert",
     "updatedDAgo": "vor {{value}} Tg. aktualisiert",
     "updatedHAgo": "vor {{hours}} Std. aktualisiert",
-    "moreResults": "Weitere Ergebnisse ({{count}} übrig)",
     "lastUpdated": "Letzte Aktualisierung dieser Daten",
     "yourOwnData": "Aus deinem eigenen Spiel"
   },
@@ -1802,7 +1801,8 @@
     "previous": "Zurück",
     "next": "Weiter",
     "auto": "Auto",
-    "linesPerPage": "Zeilen pro Seite"
+    "linesPerPage": "Zeilen pro Seite",
+    "linesShown": "Zeilen {{from}}–{{to}} von {{count}}"
   },
   "system": {
     "title": "System",

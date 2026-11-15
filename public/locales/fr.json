@@ -1019,7 +1019,6 @@
     "updated1HAgo": "màj < 1 h",
     "updatedDAgo": "màj il y a {{value}} j",
     "updatedHAgo": "màj il y a {{hours}} h",
-    "moreResults": "Plus de résultats ({{count}} restants)",
     "lastUpdated": "Date de la dernière mise à jour de ces données",
     "yourOwnData": "Vu dans ton jeu"
   },
@@ -1804,7 +1803,8 @@
     "previous": "Précédent",
     "next": "Suivant",
     "auto": "Auto",
-    "linesPerPage": "Lignes par page"
+    "linesPerPage": "Lignes par page",
+    "linesShown": "Lignes {{from}} à {{to}} sur {{count}}"
   },
   "system": {
     "title": "Système",

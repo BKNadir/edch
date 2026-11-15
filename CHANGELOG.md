@@ -5,7 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.14
 
-- Search results (stations, systems, faction): the page links are now above the list, and below it too when the page is taller than the screen. You choose 10, 50 or 100 lines a page, or "Auto" to show as many as fit on the screen; the choice is kept for every list.
+- Long lists and tables, everywhere: a list that fits on the screen is shown whole; a longer one is shown a page at a time, with the page links above it (and below it too when a page is taller than the screen). You choose 10, 50 or 100 lines a page, or "Auto" (the default) to show as many as fit on the screen; the choice is kept for every list. Sorting a table still sorts all its lines. Routes are always shown whole. A material's sources get pages instead of the "more results" button.
 - Search → Systems: the criteria are laid out in even columns, each name above its list (two per line on a phone); the Faction tab gets the same spacing as the other tabs, and on a phone the search field takes the full width with the button below.
 - iPhone (remote access): the page no longer slides under the status bar and the notch; the top bar, full-screen panels and dialogs keep clear of them.
 - First start: after choosing the language, a short introduction presents what EDCH does (materials and engineering, navigation, activities, sharing) and invites you to take a minute in Settings; "Open Settings" goes straight there. About → "show it again" brings it back any time.
