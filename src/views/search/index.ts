@@ -27,6 +27,7 @@ import {
   ARRIVAL_CHOICES,
   STATION_SORTS,
   arrivalAllowed,
+  spanshMarketSort,
   stationOrder,
   type SortableStation,
   type StationSort,
@@ -799,9 +800,24 @@ export class SearchView implements View {
 
     const ref = referenceOf(this.ctx);
     const sort = this.sortOf(tab);
+    const commodity = tab === "buy" || tab === "sell";
+    if (commodity) {
+      // Only markets seen within the data age: old prices would take the first places.
+      const now = Date.now();
+      f.market_updated_at = {
+        value: [
+          new Date(now - this.ctx.store.state.settings.maxAgeDays * 86_400_000).toISOString(),
+          new Date(now).toISOString(),
+        ],
+        comparison: "<=>",
+      };
+    }
+    // Spansh sorts a commodity's markets itself, so the first page holds the best ones of the
+    // whole zone, not only of the nearest stations.
+    const spanshSort = commodity ? spanshMarketSort(sort, tab === "buy", name) : undefined;
     const body = (page: number): Json => ({
       filters: f,
-      sort: [{ distance: { direction: "asc" } }],
+      sort: [spanshSort ?? { distance: { direction: "asc" } }],
       size: 100,
       page,
       ...(ref.coords
@@ -822,7 +838,7 @@ export class SearchView implements View {
         answers.push(res);
         moreAtSpansh = Array.isArray(res?.results) && res.results.length === 100;
       };
-      const firstPages = sort === "distance" && wantedModules.length < 2 ? 1 : 3;
+      const firstPages = (sort === "distance" || spanshSort) && wantedModules.length < 2 ? 1 : 3;
       while (nextPage < firstPages && moreAtSpansh) await fetchPage();
       if (id !== this.runId) return;
       const settings = this.ctx.store.state.settings;

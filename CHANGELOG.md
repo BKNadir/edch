@@ -30,6 +30,7 @@ and EDCH shows it in the update banner.
 - The pages no longer explain where their information comes from (Spansh, Ardent, EDSM, EliteBGS, the journal…). In **debug mode** only, a small badge in a colour of its own names the source (Spansh, Inara, Journal…) next to each piece of information, the Materials page and a material's panel included; its tooltip gives the details.
 - Engineers (and other pages laid out in cards): the first card is no longer higher than the others on its row.
 - Search → Faction: each system shows the most recent data among Spansh, EliteBGS and EDSM (EDSM checked for the nearest systems whose data is more than a day old), so a new state such as an expansion appears sooner; systems only EliteBGS knows are added.
+- Search → Commodity: Spansh sorts the markets itself (best price, largest supply or demand, most recent, closest to the star) and only returns markets seen within the data age, so the results are the best of the whole range, not only of the nearest stations.
 - BGS page: "Update" also asks EliteBGS (public BGS database from EDDN) for the faction's systems: those Spansh misses are added, and a more recent influence and state replaces older data (other factions' influence kept).
 
 ## 0.10.13

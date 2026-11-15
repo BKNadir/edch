@@ -1,6 +1,7 @@
-// Search page: how its station results are ordered and filtered once received. Spansh is asked for
-// the nearest stations (more of them when sorting on something else than distance) and Ardent for
-// the best prices of the whole zone (buying and selling); this puts them in the order chosen.
+// Search page: how its station results are ordered and filtered once received. For a commodity,
+// Spansh sorts the markets itself (spanshMarketSort); otherwise it is asked for the nearest
+// stations (more of them when sorting on something else than distance). Ardent gives the best
+// prices of the zone too; this puts everything in the order chosen.
 
 /** What a station result is sorted on. */
 export type StationSort = "price" | "distance" | "volume" | "recent" | "arrival";
@@ -56,3 +57,30 @@ export function stationOrder(sort: StationSort, buying: boolean) {
 /** Whether a station is close enough to its arrival star (`maxLs` 0: any distance; unknown: kept). */
 export const arrivalAllowed = (arrival: number | undefined, maxLs: number) =>
   !(maxLs > 0) || arrival === undefined || arrival <= maxLs;
+
+/**
+ * How Spansh sorts a commodity's markets for `sort` (field names checked against
+ * spansh.co.uk/api/stations/sortable_fields): cheapest first when buying, best paid first when
+ * selling, largest supply or demand, most recent, closest to the arrival star; distance is
+ * Spansh's own default (undefined).
+ */
+export function spanshMarketSort(
+  sort: StationSort,
+  buying: boolean,
+  commodity: string,
+): Record<string, unknown> | undefined {
+  switch (sort) {
+    case "price":
+      return buying
+        ? { market_buy_price: [{ name: commodity, direction: "asc" }] }
+        : { market_sell_price: [{ name: commodity, direction: "desc" }] };
+    case "volume":
+      return { [buying ? "market_supply" : "market_demand"]: [{ name: commodity, direction: "desc" }] };
+    case "recent":
+      return { market_updated_at: { direction: "desc" } };
+    case "arrival":
+      return { distance_to_arrival: { direction: "asc" } };
+    default:
+      return undefined;
+  }
+}
