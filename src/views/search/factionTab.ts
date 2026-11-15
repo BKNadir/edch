@@ -31,10 +31,10 @@ function loadFactions(): Promise<string[]> {
     }));
 }
 
-/** The journal's factions first, then the game's; rebuilt when the journal knows new ones. */
+/** The journal's factions first, then the game's; rebuilt when the journal knows new ones (Auto uses it too). */
 let index: { known: string[]; value: FactionIndex } | undefined;
 
-async function factionsOf(ctx: Ctx): Promise<FactionIndex> {
+export async function factionsOf(ctx: Ctx): Promise<FactionIndex> {
   const known = ctx.store.state.cmdr.knownFactions ?? [];
   const all = await loadFactions();
   if (index?.known !== known) index = { known, value: factionIndex(known, all) };
@@ -144,6 +144,12 @@ export function factionForm(ctx: Ctx, out: HTMLElement): HTMLElement {
       h("div.row.opts", null, stateChips),
     ),
   );
+}
+
+/** Searches the systems of `faction` straight away (Search → Auto found a faction's name). */
+export function searchFactionNow(ctx: Ctx, out: HTMLElement, faction: string) {
+  query.faction = faction;
+  void runSearch(ctx, out);
 }
 
 async function runSearch(ctx: Ctx, out: HTMLElement) {

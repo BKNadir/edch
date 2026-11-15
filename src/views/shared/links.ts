@@ -10,6 +10,7 @@ import type { Store } from "../../state/store.js";
 import { focusModule } from "../engineering/index.js";
 import { setDestination } from "../navigation/index.js";
 import { presetSearch } from "../search/index.js";
+import { presetSystemPage } from "../system/index.js";
 
 let store: Store | null = null;
 /** Engineer → the system of their workshop. */
@@ -53,6 +54,14 @@ export function openModule(module: string) {
   log.debug("link", `module "${module}"`);
   focusModule(gameEnglish(module));
   store.setView("engineering");
+}
+
+/** Opens the system page of `name` ("Back" returns to the page shown now). */
+export function openSystemPage(name: string) {
+  if (!store) return;
+  log.debug("link", `system page "${name}"`);
+  presetSystemPage(name, store.state.view);
+  store.setView("system");
 }
 
 /** A commodity was clicked: search where to buy it. */

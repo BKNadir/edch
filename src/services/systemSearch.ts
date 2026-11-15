@@ -5,7 +5,7 @@
 // The field names and values are the ones Spansh's systems search takes
 // (spansh.co.uk/api/systems/searchable_fields and …/field_values/<field>).
 
-import { gameName, t } from "../platform/i18n.js";
+import { fold, gameName, t } from "../platform/i18n.js";
 import { spanshPost } from "../platform/bridge.js";
 import {
   fmtPop,
@@ -236,4 +236,171 @@ export async function searchSystems(
   });
   const results: any[] = Array.isArray(data?.results) ? data.results : [];
   return { rows: results.map((r) => systemRow(r, criteria, maxAgeDays)), total: num(data?.count) || results.length };
+}
+
+/** A station of a system page. */
+export interface SystemStation {
+  name: string;
+  /** Spansh's type ("Orbis Starport"). */
+  type: string;
+  /** Light seconds from the arrival star. */
+  distance?: number;
+  /** "L", "M", "S" or undefined when unknown. */
+  largestPad?: "L" | "M" | "S";
+  faction?: string;
+  services: string[];
+}
+
+/** A minor faction present in the system. */
+export interface SystemFaction {
+  name: string;
+  /** Percent, NaN when unknown. */
+  influence: number;
+  state?: string;
+  allegiance?: string;
+  government?: string;
+  controls: boolean;
+}
+
+/** A star or planet of the system. */
+export interface SystemBody {
+  name: string;
+  type: string;
+  subtype: string;
+  distance?: number;
+  mainStar: boolean;
+}
+
+/** What the system page shows. */
+export interface SystemDetails {
+  name: string;
+  id64?: string;
+  coords?: [number, number, number];
+  allegiance?: string;
+  government?: string;
+  economy?: string;
+  secondEconomy?: string;
+  security?: string;
+  population: number;
+  needsPermit: boolean;
+  colonised?: boolean;
+  beingColonised?: boolean;
+  controllingFaction?: string;
+  /** Powerplay: the controlling power and its state, the powers present, the cycle's progress. */
+  power?: string;
+  powerState?: string;
+  powers: string[];
+  /** 0–100, when Spansh has it. */
+  controlProgress?: number;
+  reinforcement?: number;
+  undermining?: number;
+  thargoidState?: string;
+  bodyCount: number;
+  bodies: SystemBody[];
+  stations: SystemStation[];
+  factions: SystemFaction[];
+  updatedAt?: string;
+}
+
+const text = (v: unknown) => (typeof v === "string" && v && v !== "None" ? v : undefined);
+/** A Spansh date ("2026-11-14 10:00:00+00") as ISO 8601, or undefined. */
+const isoDate = (v: unknown) => {
+  const raw = text(v);
+  if (!raw) return undefined;
+  const time = Date.parse(raw.replace(" ", "T").replace(/([+-]\d\d)$/, "$1:00"));
+  return Number.isFinite(time) ? new Date(time).toISOString() : undefined;
+};
+const finite = (v: unknown) => (Number.isFinite(num(v)) ? num(v) : undefined);
+
+/** A Spansh systems/search record as the system page needs it. */
+export function decodeSystemDetails(r: any): SystemDetails | null {
+  const name = text(r?.name);
+  if (!name) return null;
+  const controller = text(r.controlling_minor_faction) ?? text(r.controlling_minor_faction?.name);
+  const factions: SystemFaction[] = (Array.isArray(r.minor_faction_presences) ? r.minor_faction_presences : [])
+    .filter((f: any) => text(f?.name))
+    .map((f: any) => {
+      const value = finite(f.influence);
+      return {
+        name: f.name,
+        influence: value === undefined ? NaN : Math.round((value <= 1 ? value * 100 : value) * 10) / 10,
+        state: text(f.state),
+        allegiance: text(f.allegiance),
+        government: text(f.government),
+        controls: f.name === controller,
+      };
+    })
+    .sort((a: SystemFaction, b: SystemFaction) => (b.influence || 0) - (a.influence || 0));
+  const stations: SystemStation[] = (Array.isArray(r.stations) ? r.stations : [])
+    .filter((s: any) => text(s?.name))
+    .map((s: any) => ({
+      name: s.name,
+      type: text(s.type) ?? "",
+      distance: finite(s.distance_to_arrival),
+      largestPad:
+        num(s.large_pads) > 0 || s.has_large_pad
+          ? "L"
+          : num(s.medium_pads) > 0
+            ? "M"
+            : num(s.small_pads) > 0
+              ? "S"
+              : undefined,
+      faction: text(s.controlling_minor_faction),
+      services: Array.isArray(s.services) ? s.services.filter((x: unknown) => typeof x === "string") : [],
+    }))
+    .sort((a: SystemStation, b: SystemStation) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
+  const bodies: SystemBody[] = (Array.isArray(r.bodies) ? r.bodies : [])
+    .filter((b: any) => text(b?.name))
+    .map((b: any) => ({
+      name: b.name,
+      type: text(b.type) ?? "",
+      subtype: text(b.subtype) ?? "",
+      distance: finite(b.distance_to_arrival),
+      mainStar: Boolean(b.is_main_star),
+    }))
+    .sort((a: SystemBody, b: SystemBody) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
+  const progress = finite(r.power_state_control_progress);
+  const coords = [r.x, r.y, r.z].map(num);
+  return {
+    name,
+    id64: r.id64 == null ? undefined : String(r.id64),
+    coords: coords.every(Number.isFinite) ? (coords as [number, number, number]) : undefined,
+    allegiance: text(r.allegiance),
+    government: text(r.government),
+    economy: text(r.primary_economy),
+    secondEconomy: text(r.secondary_economy),
+    security: text(r.security),
+    population: finite(r.population) ?? 0,
+    needsPermit: Boolean(r.needs_permit),
+    colonised: typeof r.is_colonised === "boolean" ? r.is_colonised : undefined,
+    beingColonised: Boolean(r.is_being_colonised),
+    controllingFaction: controller,
+    power: text(r.controlling_power),
+    powerState: text(r.power_state),
+    powers: Array.isArray(r.power) ? r.power.filter((p: unknown) => typeof p === "string") : [],
+    controlProgress:
+      progress === undefined ? undefined : Math.round((progress <= 1 ? progress * 100 : progress) * 10) / 10,
+    reinforcement: finite(r.power_state_reinforcement),
+    undermining: finite(r.power_state_undermining),
+    thargoidState: text(r.thargoid_war_state),
+    bodyCount: finite(r.body_count) ?? bodies.length,
+    bodies,
+    stations,
+    factions,
+    updatedAt: isoDate(r.updated_at),
+  };
+}
+
+/**
+ * The system named `name` (any capitals), with its bodies, stations and factions, or null.
+ * Spansh's name filter ignores capitals but also returns similar names: the exact one is kept.
+ */
+export async function systemDetails(name: string): Promise<SystemDetails | null> {
+  const wanted = name.trim();
+  if (!wanted) return null;
+  const data: any = await spanshPost("systems/search", { filters: { name: { value: wanted } }, size: 10, page: 0 });
+  const records: any[] = Array.isArray(data?.results) ? data.results : [];
+  const same = (r: any) => typeof r?.name === "string" && fold(r.name) === fold(wanted);
+  const record = records.find(same);
+  return record ? decodeSystemDetails(record) : null;
 }

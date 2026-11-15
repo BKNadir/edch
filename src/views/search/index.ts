@@ -15,7 +15,10 @@ import { SERVICE_KINDS, serviceKindOf } from "../../game/serviceKinds.js";
 import { fmtLy, inaraSystem } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
 import { openUrl } from "../../platform/bridge.js";
-import { factionForm } from "./factionTab.js";
+import { factionForm, factionsOf, searchFactionNow } from "./factionTab.js";
+import { guessSearch } from "../../features/search/autoSearch.js";
+import { log } from "../../platform/logger.js";
+import { openSystemPage } from "../shared/links.js";
 import { systemForm } from "./systemTab.js";
 import { ardentBuyQuotes, ardentSellQuotes, type ArdentQuote } from "../../services/ardent.js";
 import { pager } from "../shared/pager.js";
@@ -41,7 +44,7 @@ import { priceAgeLabel } from "../shared/marketFilters.js";
 import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
 
 type Json = Record<string, any>;
-type Tab = "buy" | "sell" | "ship" | "module" | "service" | "system" | "faction";
+type Tab = "auto" | "buy" | "sell" | "ship" | "module" | "service" | "system" | "faction";
 /** The tabs with their own form (not the station search). */
 type OwnFormTab = "system" | "faction";
 /** The Commodity tab's two modes, switched by a toggle. */
@@ -143,7 +146,8 @@ export class SearchView implements View {
   private root?: HTMLElement;
   /** The Commodity tab's mode: buying or selling. */
   private commodityMode: CommodityMode = savedCommodityMode();
-  private tab: Tab = this.commodityMode;
+  /** Auto first: it recognises what is typed and switches to the right tab. */
+  private tab: Tab = "auto";
   private out = h("div.search-out");
   private form = h("div.search-form");
   private tabs = h("div.segmented");
@@ -190,6 +194,7 @@ export class SearchView implements View {
   }
 
   private values: Record<Exclude<Tab, OwnFormTab>, string> = {
+    auto: "",
     buy: "",
     sell: "",
     ship: "",
@@ -254,6 +259,14 @@ export class SearchView implements View {
         null,
         g.modules.map((s) => h("option", { value: gameName(s) })),
       ),
+      h(
+        "datalist#dl-auto",
+        null,
+        g.commodities.map((c) => h("option", { value: gameName(c.name) }, t("search.autoCommodity"))),
+        g.ships.map((s) => h("option", { value: s }, t("search.autoShip"))),
+        g.modules.map((s) => h("option", { value: gameName(s) }, t("search.autoModule"))),
+        SERVICES.map(([, label]) => h("option", { value: label }, t("search.autoService"))),
+      ),
     );
     replace(
       root,
@@ -288,6 +301,7 @@ export class SearchView implements View {
 
   private renderTabs() {
     const labels: [Tab, string][] = [
+      ["auto", t("search.autoTab")],
       [this.commodityMode, t("search.commodityTab")],
       ["ship", t("search.ships")],
       ["module", t("common.modules")],
@@ -377,6 +391,19 @@ export class SearchView implements View {
         ` ${label}`,
       );
 
+    if (tab === "auto") {
+      replace(
+        this.form,
+        h(
+          "div.row",
+          null,
+          input("dl-auto", t("search.autoPlaceholder")),
+          h("button.primary", { onclick: () => this.run() }, icon("search"), " " + t("common.search")),
+        ),
+        h("p.sub", null, t("search.autoHelp")),
+      );
+      return;
+    }
     let main: HTMLElement;
     if (tab === "buy" || tab === "sell") main = input("dl-commodities", t("search.commodityEGTritiumGoldLow"));
     else if (tab === "ship") main = input("dl-ships", t("search.shipEGKraitMkiiAnaconda"));
@@ -620,8 +647,59 @@ export class SearchView implements View {
     return f;
   }
 
-  private async run() {
+  /**
+   * Auto: finds what was typed (commodity, ship, module, service, faction) and runs that tab's
+   * search; anything else opens the page of the system with that name.
+   */
+  private async runAuto(): Promise<void> {
+    const typed = this.values.auto.trim();
+    if (!typed) return;
+    const g = this.ctx.game.data;
+    const target = guessSearch(typed, {
+      commodities: g.commodities.map((c) => c.name),
+      ships: g.ships,
+      modules: g.modules,
+      services: SERVICES,
+      factions: await factionsOf(this.ctx),
+    });
+    if (!target) return;
+    log.debug("search", `auto: ${target.kind}`);
+    const show = (tab: Tab) => {
+      this.tab = tab;
+      this.renderTabs();
+      this.renderForm();
+    };
+    switch (target.kind) {
+      case "commodity":
+        this.values[this.commodityMode] = gameName(target.name);
+        show(this.commodityMode);
+        return this.run();
+      case "ship":
+        this.values.ship = target.name;
+        show("ship");
+        return this.run();
+      case "module":
+        this.values.module = gameName(target.name);
+        this.moduleList = [];
+        show("module");
+        return this.run();
+      case "service":
+        this.values.service = target.name;
+        show("service");
+        return this.run();
+      case "faction":
+        // The name first, so the Faction form shows it.
+        searchFactionNow(this.ctx, this.out, target.name);
+        show("faction");
+        return;
+      case "system":
+        openSystemPage(target.name);
+    }
+  }
+
+  private async run(): Promise<void> {
     const tab = this.tab;
+    if (tab === "auto") return this.runAuto();
     if (tab === "faction" || tab === "system") return;
     const typed = this.values[tab].trim();
     if (!typed && !(tab === "module" && this.moduleList.length)) return;

@@ -68,3 +68,67 @@ test("system search: a result shows the main star, Powerplay, the wanted star an
   assert.match(row.sub.join(" "), /45/);
   assert.ok(row.links.some((l) => l.url.endsWith("/system/42")));
 });
+
+test("system page: a Spansh record becomes the page's data, nearest stations and bodies first", async () => {
+  const { decodeSystemDetails } = await import("../dist/js/services/systemSearch.js");
+  const d = decodeSystemDetails({
+    name: "Sol",
+    id64: 10477373803,
+    x: 0,
+    y: 0,
+    z: 0,
+    allegiance: "Federation",
+    security: "High",
+    population: 22780919531,
+    needs_permit: true,
+    controlling_minor_faction: "Mother Gaia",
+    controlling_power: "Jerome Archer",
+    power: ["Jerome Archer", "Aisling Duval"],
+    power_state: "Stronghold",
+    power_state_control_progress: 0.547506,
+    body_count: 40,
+    updated_at: "2026-11-14 23:38:39+00",
+    minor_faction_presences: [
+      { name: "Aegis Core", influence: 0.00996, state: "None" },
+      { name: "Mother Gaia", influence: 0.6, state: "Boom" },
+    ],
+    stations: [
+      { name: "Daedalus", type: "Orbis Starport", distance_to_arrival: 156.1, large_pads: 6, services: ["Market"] },
+      { name: "Abraham Lincoln", type: "Orbis Starport", distance_to_arrival: 497 },
+      { name: "Outpost", type: "Outpost", distance_to_arrival: 12, medium_pads: 1, small_pads: 2 },
+    ],
+    bodies: [
+      { name: "Saturn", type: "Planet", subtype: "Class I gas giant", distance_to_arrival: 4713 },
+      { name: "Sol", type: "Star", subtype: "G (White-Yellow) Star", distance_to_arrival: 0, is_main_star: true },
+    ],
+  });
+  assert.equal(d.name, "Sol");
+  assert.equal(d.id64, "10477373803");
+  assert.deepEqual(d.coords, [0, 0, 0]);
+  assert.equal(d.needsPermit, true);
+  assert.equal(d.controlProgress, 54.8);
+  assert.equal(d.updatedAt, "2026-11-14T23:38:39.000Z");
+  assert.deepEqual(
+    d.factions.map((f) => [f.name, f.influence, f.controls]),
+    [
+      ["Mother Gaia", 60, true],
+      ["Aegis Core", 1, false],
+    ],
+  );
+  assert.deepEqual(
+    d.stations.map((s) => [s.name, s.largestPad]),
+    [
+      ["Outpost", "M"],
+      ["Daedalus", "L"],
+      ["Abraham Lincoln", undefined],
+    ],
+  );
+  assert.deepEqual(
+    d.bodies.map((b) => [b.name, b.mainStar]),
+    [
+      ["Sol", true],
+      ["Saturn", false],
+    ],
+  );
+  assert.equal(decodeSystemDetails({}), null);
+});

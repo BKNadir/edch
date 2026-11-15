@@ -10,6 +10,7 @@ import { AboutView } from "../views/about/index.js";
 import { ColonisationView } from "../views/colonisation/index.js";
 import { ControlsView } from "../views/controls/index.js";
 import { DetailPanel } from "../views/detail/index.js";
+import { SystemView } from "../views/system/index.js";
 import { EngineeringView } from "../views/engineering/index.js";
 import { EngineersView } from "../views/engineers/index.js";
 import { ExplorationView } from "../views/exploration/index.js";
@@ -52,6 +53,7 @@ function createViews(ctx: Ctx, replayJournal: () => void): Record<string, View> 
     wishlist: new WishlistView(ctx),
     engineers: new EngineersView(ctx),
     search: new SearchView(ctx),
+    system: new SystemView(ctx),
     navigation: new NavigationView(ctx),
     sync: new SyncView(ctx),
     controls: new ControlsView(ctx),
