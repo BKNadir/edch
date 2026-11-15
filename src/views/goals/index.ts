@@ -4,6 +4,7 @@
 import type { CommunityGoal } from "../../game/activity/state.js";
 import { httpFetch, openUrl } from "../../platform/bridge.js";
 import { fmt, h, replace } from "../../ui/dom.js";
+import { debugSource, journalSource } from "../../ui/debugSource.js";
 import { SOFTWARE_NAME } from "../../platform/version.js";
 import { SOFTWARE_VERSION } from "../../platform/version.js";
 import { relTime } from "../../ui/format.js";
@@ -97,12 +98,7 @@ export class GoalsView implements View {
       h(
         "header.view-head",
         null,
-        h(
-          "div",
-          null,
-          h("h1", null, t("common.communityGoals")),
-          h("p.sub", null, t("goals.participationReadFromGameJournal")),
-        ),
+        h("div", null, h("h1", null, t("common.communityGoals"), debugSource(journalSource()))),
       ),
       live.length
         ? h(
@@ -192,12 +188,7 @@ export class GoalsView implements View {
       h(
         "div.sync-head",
         null,
-        h(
-          "div",
-          null,
-          h("h3", null, t("goals.allCurrentGoals")),
-          h("p.sub", null, t("goals.throughInaraApiKeySyncPage")),
-        ),
+        h("div", null, h("h3", null, t("goals.allCurrentGoals"), debugSource("Inara"))),
         h(
           "button.ghost",
           { onclick: () => this.loadInara(), disabled: this.loading },

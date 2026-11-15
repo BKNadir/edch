@@ -153,10 +153,7 @@ export class NavigationView implements View {
       );
       card()?.classList.toggle("exact", on);
       const help = card()?.querySelector(".nav-mode-help");
-      if (help)
-        help.textContent = on
-          ? t("navigation.spanshPlotsShipFsdMassTanks")
-          : t("navigation.spanshRouteNeutronStarBoostsLike");
+      if (help) help.textContent = on ? t("navigation.exactRouteHelp") : t("navigation.neutronRouteHelp");
     };
 
     // ---- carrier ----
@@ -280,7 +277,7 @@ export class NavigationView implements View {
                     Number(hold.value) || 0,
                   ),
               },
-              t("navigation.plotSpansh"),
+              t("navigation.plot"),
             ),
             h(
               "button.ghost",
@@ -355,10 +352,7 @@ export class NavigationView implements View {
       return;
     }
     this.plottingExact = true;
-    replace(
-      this.routeOut,
-      h("p.sub", null, h("span.spinner"), " " + t("navigation.spanshPlottingExactRouteFuelIncluded")),
-    );
+    replace(this.routeOut, h("p.sub", null, h("span.spinner"), " " + t("navigation.plottingExactRoute")));
     try {
       const r = await plotGalaxy(params, o, (n) => {
         if (n % 4 === 3)
@@ -368,7 +362,7 @@ export class NavigationView implements View {
               "p.sub",
               null,
               h("span.spinner"),
-              " " + t("navigation.spanshPlottingExactRouteFuelIncluded2", { value: Math.round((n + 1) * 1.5) }),
+              " " + t("navigation.plottingExactRouteSeconds", { value: Math.round((n + 1) * 1.5) }),
             ),
           );
       });
@@ -382,7 +376,7 @@ export class NavigationView implements View {
           "p.error",
           null,
           icon("warn"),
-          /unable to find route/i.test(msg) ? " " + t("navigation.spanshFoundNoRouteShipNot") : ` ${msg}`,
+          /unable to find route/i.test(msg) ? " " + t("navigation.noRouteWithShip") : ` ${msg}`,
         ),
       );
     } finally {

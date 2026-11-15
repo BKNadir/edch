@@ -6,6 +6,7 @@ import { HISTORY_DAYS } from "../../game/activity/index.js";
 import type { ThargoidKill } from "../../game/activity/state.js";
 import { killsByType, type ThargoidType } from "../../game/activity/thargoids.js";
 import { fmt, h, replace } from "../../ui/dom.js";
+import { debugSource, journalSource } from "../../ui/debugSource.js";
 import { credits, relTime } from "../../ui/format.js";
 import type { Ctx, View } from "../../state/context.js";
 import { t } from "../../platform/i18n.js";
@@ -64,7 +65,13 @@ export class ThargoidsView implements View {
       h(
         "header.view-head",
         null,
-        h("div", null, h("h1", null, t("thargoids.title")), h("p.sub", null, t("thargoids.subtitle"))),
+        h(
+          "div",
+          null,
+          // The journal doesn't name Thargoids: the type comes from the bond's reward.
+          h("h1", null, t("thargoids.title"), debugSource(`${journalSource()} (FactionKillBond, Bounty)`)),
+          h("p.sub", null, t("thargoids.subtitle")),
+        ),
         activity.session.start
           ? resetCountersButton(
               () => resetThargoidCounters(activity),
@@ -147,7 +154,6 @@ export class ThargoidsView implements View {
             )
           : null,
       ),
-      h("section.card", null, h("p.sub", null, t("thargoids.howTypesAreKnown"))),
     );
   }
 }

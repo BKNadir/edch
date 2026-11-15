@@ -6,6 +6,7 @@ import { t } from "../../platform/i18n.js";
 import { fmtLy } from "../../services/spansh.js";
 import type { Ctx } from "../../state/context.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { hours, stat } from "./widgets.js";
 import { copySystem } from "../shared/resultsTable.js";
 import { systemInfo } from "../shared/links.js";
@@ -37,7 +38,7 @@ export function renderExact(ctx: Ctx, out: HTMLElement, r: GalaxyRoute, tank: nu
         h(
           "tr",
           null,
-          h("th", null, t("common.system")),
+          h("th", null, t("common.system"), debugSource("Spansh")),
           h("th.num", null, t("navigation.jump")),
           h("th.num", null, t("common.left")),
           h("th", null, t("navigation.fuel")),

@@ -24,6 +24,7 @@ import { eliteBgsFactionSystems } from "../../services/eliteBgs.js";
 import { eliteBgsSnapshot } from "../../features/bgs/eliteBgsMerge.js";
 
 import { callout, fmt, h, icon, replace } from "../../ui/dom.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { credits, relTime } from "../../ui/format.js";
 import {
   activityFor,
@@ -298,8 +299,8 @@ export class BgsView implements View {
           h("span.spinner"),
           " ",
           this.loading.step === "spansh"
-            ? t("bgs.loading", { found: this.loading.found, total: this.loading.total || "…" })
-            : t("bgs.loadingEdsm", { done: this.loading.done, total: this.loading.total }),
+            ? [t("bgs.loading", { found: this.loading.found, total: this.loading.total || "…" }), debugSource("Spansh")]
+            : [t("bgs.loadingHistory", { done: this.loading.done, total: this.loading.total }), debugSource("EDSM")],
         )
       : this.result
         ? h(
@@ -310,13 +311,17 @@ export class BgsView implements View {
               : this.result.spansh?.partial
                 ? t("bgs.loadedPartial", { count: this.result.spansh.count, total: this.result.spansh.total })
                 : t("bgs.loaded", { count: this.result.spansh?.count ?? 0 }),
+            debugSource(
+              "Spansh",
+              this.result.eliteBgs?.count
+                ? `EliteBGS ${this.result.eliteBgs.count} (+${this.result.eliteBgs.added})`
+                : undefined,
+            ),
             " ",
-            this.result.eliteBgs?.count
-              ? t("bgs.eliteBgsLoaded", { count: this.result.eliteBgs.count, added: this.result.eliteBgs.added }) + " "
-              : "",
             this.result.edsmFailed
-              ? h("span.bad", null, t("bgs.edsmFailed"))
-              : t("bgs.edsmUpdated", { count: this.result.edsm }),
+              ? h("span.bad", null, t("bgs.historyFailed"))
+              : t("bgs.historyUpdated", { count: this.result.edsm }),
+            debugSource("EDSM"),
           )
         : faction
           ? h(
@@ -343,7 +348,7 @@ export class BgsView implements View {
         h(
           "button.primary",
           { disabled: !faction || Boolean(this.loading), onclick: () => void this.updateSystems() },
-          t("bgs.loadFromSpansh"),
+          t("bgs.update"),
         ),
       ),
       status,
@@ -605,7 +610,9 @@ export class BgsView implements View {
       `td${options.bad ? ".bad" : ""}`,
       { "data-sort": at ?? "", title: at ? new Date(at).toLocaleString() : undefined },
       at ? ageShort(at) : "—",
-      at && options.note ? h("div.bgs-line.sub", null, options.note) : null,
+      at && options.note
+        ? h("div.bgs-line.sub", null, typeof options.note === "string" ? debugSource(options.note) : options.note)
+        : null,
       at && tick && at < tick
         ? h("div.bgs-line", null, h("span.badge.muted", { title: t("bgs.beforeTickHelp") }, t("bgs.beforeTick")))
         : null,

@@ -7,6 +7,7 @@ import { t } from "../../platform/i18n.js";
 import { fmtLy } from "../../services/spansh.js";
 import type { Ctx } from "../../state/context.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { coordsOf, type Json } from "./index.js";
 import { hours, stat } from "./widgets.js";
 import { copySystem } from "../shared/resultsTable.js";
@@ -17,7 +18,7 @@ export async function estimateShip(out: HTMLElement, from: string, to: string, r
   replace(out, h("p.sub", null, h("span.spinner"), " " + t("navigation.lookingUpCoordinates")));
   try {
     const [a, b] = await Promise.all([coordsOf(from), coordsOf(to)]);
-    if (!a || !b) throw new Error(t("navigation.systemNotFoundSpansh"));
+    if (!a || !b) throw new Error(t("navigation.systemNotFound"));
     const d = Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
     const jumps = Math.ceil(d / range);
     replace(
@@ -45,7 +46,7 @@ export async function plotShipNow(
   efficiency: number,
   supercharge: 4 | 6,
 ) {
-  replace(out, h("p.sub", null, h("span.spinner"), " " + t("common.spanshPlottingRoute")));
+  replace(out, h("p.sub", null, h("span.spinner"), " " + t("common.plottingRoute")));
   try {
     const res: Json = await spanshJob("route", [
       ["from", from],
@@ -83,7 +84,7 @@ export async function plotShipNow(
           h(
             "tr",
             null,
-            h("th", null, t("common.system")),
+            h("th", null, t("common.system"), debugSource("Spansh")),
             h("th.num", null, t("common.distance")),
             h("th.num", null, t("common.left")),
             h("th.num", null, t("navigation.jumps")),

@@ -24,6 +24,8 @@ export interface ResultRow {
   badges: { text: string; tone?: "hit" | "warn" | "muted" }[];
   links: { label: string; url: string }[];
   updated?: string;
+  /** Where the line comes from, shown in debug mode only (Spansh when missing). */
+  source?: string;
   /** A station's type as Spansh writes it ("Orbis Starport"), for its icon. */
   stationType?: string;
 }

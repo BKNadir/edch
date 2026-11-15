@@ -15,6 +15,7 @@ import {
 import { openUrl } from "../../platform/bridge.js";
 import { gameName, t } from "../../platform/i18n.js";
 import { fmt, h, icon } from "../../ui/dom.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { relTime } from "../../ui/format.js";
 import type { SpotResults } from "./index.js";
 import { QUOTE_SOURCE_LABELS } from "../../features/market/freshestQuote.js";
@@ -31,7 +32,7 @@ export function spotResults(
   r: SpotResults,
   title: { mine: string; sell: string },
   filter: MethodFilter,
-  sellNote?: string,
+  sellNote?: HTMLElement,
 ): HTMLElement[] {
   const hidden = new Set(filter.hidden);
   const shownMethods = (mineral: string, ringType?: string) =>
@@ -177,7 +178,7 @@ export function spotResults(
     "section.card.sell-zone",
     null,
     h("h3", null, title.sell),
-    sellNote ? h("p.sub", null, sellNote) : null,
+    sellNote ?? null,
     r.sell.map((m) => {
       const hot = new Set(r.mine.find((x) => x.mineral === m.mineral)?.spots.map((x) => x.system) ?? []);
       return h(
@@ -220,7 +221,7 @@ export function spotResults(
                         x.station,
                         x.largePad ? h("span.badge.muted", null, "L") : null,
                         x.updated
-                          ? h("div.sub", null, `${relTime(x.updated)} · ${QUOTE_SOURCE_LABELS[x.source]}`)
+                          ? h("div.sub", null, relTime(x.updated), debugSource(QUOTE_SOURCE_LABELS[x.source]))
                           : null,
                       ),
                       h(

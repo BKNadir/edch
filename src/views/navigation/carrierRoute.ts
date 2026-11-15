@@ -6,6 +6,7 @@ import { spanshJob } from "../../platform/bridge.js";
 import { t } from "../../platform/i18n.js";
 import { fmtLy } from "../../services/spansh.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { coordsOf, type Json } from "./index.js";
 import { hours, stat } from "./widgets.js";
 import { copySystem } from "../shared/resultsTable.js";
@@ -23,7 +24,7 @@ export async function estimateCarrier(
   replace(out, h("p.sub", null, h("span.spinner"), " " + t("navigation.lookingUpCoordinates")));
   try {
     const [a, b] = await Promise.all([coordsOf(from), coordsOf(to)]);
-    if (!a || !b) throw new Error(t("navigation.systemNotFoundSpansh"));
+    if (!a || !b) throw new Error(t("navigation.systemNotFound"));
     const d = Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
     const est = carrierEstimate(d, used);
     const missing = Math.max(0, est.fuel - tank - hold);
@@ -55,7 +56,7 @@ export async function plotCarrierNow(
   tank: number,
   hold: number,
 ) {
-  replace(out, h("p.sub", null, h("span.spinner"), " " + t("navigation.spanshPlottingCarrierRoute")));
+  replace(out, h("p.sub", null, h("span.spinner"), " " + t("navigation.plottingCarrierRoute")));
   try {
     const res: Json = await spanshJob("fleetcarrier/route", [
       ["source", from],
@@ -90,7 +91,7 @@ export async function plotCarrierNow(
           h(
             "tr",
             null,
-            h("th", null, t("common.system")),
+            h("th", null, t("common.system"), debugSource("Spansh")),
             h("th.num", null, t("navigation.jump")),
             h("th.num", null, t("common.left")),
             h("th.num", null, t("common.tritium")),

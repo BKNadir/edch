@@ -252,7 +252,7 @@ export async function spanshJob(
   );
   if (submitted.error) throw new Error(String(submitted.error));
   const job = submitted.job;
-  if (!job) throw new Error(t("bridge.spanshReturnedNoJobNumber"));
+  if (!job) throw new Error(t("bridge.plotNoJob"));
   for (let i = 0; i < 120; i++) {
     await new Promise((r) => setTimeout(r, 1500));
     onWait?.(i);
@@ -261,9 +261,9 @@ export async function spanshJob(
     // The exact (galaxy) plotter also says "state": still running until it is "completed".
     if (res.status === "ok" && res.state && res.state !== "completed" && !res.result) continue;
     if (res.status === "ok" && res.result) return res.result;
-    throw new Error(String(res.error ?? t("bridge.spanshPlotFailed", { status: res.status ?? "?" })));
+    throw new Error(String(res.error ?? t("bridge.plotFailed", { status: res.status ?? "?" })));
   }
-  throw new Error(t("bridge.spanshStillPlottingAfter3Minutes"));
+  throw new Error(t("bridge.plotTooLong"));
 }
 
 export interface OptionFile {

@@ -878,6 +878,26 @@ button:disabled {
   gap: 4px;
   min-width: 220px;
 }
+/* Debug mode only (ui/debugSource.ts): where a piece of information comes from, in a colour that
+   stands out from the theme (--debug). Hidden for everyone else. */
+.debug-source {
+  display: none;
+}
+.debug-sources .debug-source {
+  display: inline-block;
+  margin: 0 4px;
+  padding: 0 6px;
+  border: 1px dashed var(--debug, #ff3df2);
+  border-radius: 4px;
+  color: var(--debug, #ff3df2);
+  font:
+    600 11px/1.6 ui-monospace,
+    "Cascadia Mono",
+    Consolas,
+    monospace;
+  white-space: nowrap;
+  vertical-align: middle;
+}
 /* A station type written next to its icon (system page). */
 .with-icon {
   display: inline-flex;
@@ -3694,6 +3714,19 @@ label.check.disabled {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 12px;
+}
+/* A hold's detail table scrolls inside the card instead of widening it. */
+.hold {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+.hold-detail summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 13px;
+}
+.hold-detail .table tr.needed td {
+  background: var(--accent-dim);
 }
 .hold {
   border: 1px solid var(--line);

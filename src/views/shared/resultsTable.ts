@@ -6,6 +6,7 @@ import { openUrl } from "../../platform/bridge.js";
 import { openSystem, systemInfo } from "./links.js";
 import { h, icon } from "../../ui/dom.js";
 import { stationIcon } from "../../ui/stationIcon.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../../services/spansh.js";
 import type { Finder } from "../../features/materials/sources.js";
 import type { Settings } from "../../state/store.js";
@@ -72,12 +73,13 @@ export function resultRow(r: ResultRow): HTMLElement {
         return me.system && me.system.toLowerCase() === r.system.toLowerCase()
           ? h(
               "span.badge.ok",
-              { title: t("results.dataReadFromJournal") },
+              { title: t("results.yourOwnData") },
               me.seenAt ? t("results.areHereSeen", { sinceText: sinceText(me.seenAt) }) : t("common.areHere"),
             )
           : null;
       })(),
-      r.updated ? h("span.sub.age", { title: t("results.whenSpanshLastUpdatedSystemData") }, ago(r.updated)) : null,
+      r.updated ? h("span.sub.age", { title: t("results.lastUpdated") }, ago(r.updated)) : null,
+      debugSource(r.source ?? "Spansh"),
       h(
         "span.links",
         null,

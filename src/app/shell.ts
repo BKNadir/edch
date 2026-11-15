@@ -6,6 +6,7 @@ import { h, replace } from "../ui/dom.js";
 import { excludedHere, renderMenu } from "../ui/menu/editMenu.js";
 import { NAV, visibleNav } from "../ui/menu/pages.js";
 import { applyTheme } from "../ui/theme.js";
+import { setDebugSources } from "../ui/debugSource.js";
 import { AboutView } from "../views/about/index.js";
 import { ColonisationView } from "../views/colonisation/index.js";
 import { ControlsView } from "../views/controls/index.js";
@@ -115,7 +116,11 @@ export function startShell(app: HTMLElement, ctx: Ctx, remoteMode: "paired" | nu
     detail.update();
   };
   applyTheme(store.state.settings.theme);
-  store.subscribe((st) => applyTheme(st.settings.theme));
+  setDebugSources(store.state.settings.debugLog);
+  store.subscribe((st) => {
+    applyTheme(st.settings.theme);
+    setDebugSources(st.settings.debugLog);
+  });
   // Interface size (PC and phone).
   let scale = 0;
   const applyScale = () => {

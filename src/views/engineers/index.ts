@@ -2,6 +2,7 @@
 // what it takes to unlock the ones not known yet.
 
 import { h, icon, fmt, replace } from "../../ui/dom.js";
+import { debugSource, journalSource } from "../../ui/debugSource.js";
 import { referenceOf, type Ctx, type View } from "../../state/context.js";
 import { referenceField, refreshReferenceField } from "../shared/referenceField.js";
 import { distance, fmtLy, inaraSystem } from "../../services/spansh.js";
@@ -99,11 +100,8 @@ export class EngineersView implements View {
           h(
             "p.sub",
             null,
-            t("engineers.unlockedStatusReadFromJournalEngineerprogress", {
-              unlockedCount,
-              count: all.length,
-              label: ref.label,
-            }),
+            t("engineers.unlockedSortedFrom", { unlockedCount, count: all.length, label: ref.label }),
+            debugSource(`${journalSource()} (EngineerProgress)`),
           ),
         ),
         h(

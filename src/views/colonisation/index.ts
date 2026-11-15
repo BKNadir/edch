@@ -10,6 +10,10 @@ import { presetSearch } from "../search/index.js";
 import { busy, sys } from "../missions/index.js";
 import { spanshGet, spanshPost } from "../../platform/bridge.js";
 import { log } from "../../platform/logger.js";
+import { debugSource, journalSource } from "../../ui/debugSource.js";
+
+/** Lines shown in a hold before "Detail" unfolds the rest. */
+const HOLD_LINES = 5;
 
 /** A carrier's market as Spansh last saw it (data players send through EDDN when docking). */
 interface CarrierMarket {
@@ -116,7 +120,7 @@ export class ColonisationView implements View {
         buying: market
           .filter((m) => Number(m.demand) > 0)
           .map((m) => ({ id: toId(String(m.commodity)), name: String(m.commodity), count: Number(m.demand) })),
-        error: r ? undefined : t("colonisation.unknownSpansh"),
+        error: r ? undefined : t("colonisation.marketUnknown"),
       });
       log.debug(
         "carrier",
@@ -160,7 +164,7 @@ export class ColonisationView implements View {
           "div",
           null,
           h("h1", null, t("common.colonisation")),
-          h("p.sub", null, t("colonisation.constructionSitesTrackedFromJournalWhat")),
+          h("p.sub", null, t("colonisation.constructionSitesIntro")),
         ),
         h(
           "div.view-head-options",
@@ -246,8 +250,9 @@ export class ColonisationView implements View {
           }
         : market;
     if (m.loading && !m.updated && !m.selling.length)
-      return h("p.sub", null, h("span.spinner"), " " + t("colonisation.carrierMarketSpansh"));
-    if (m.error) return h("p.sub", null, t("colonisation.marketSpansh", { error: m.error }));
+      return h("p.sub", null, h("span.spinner"), " " + t("colonisation.carrierMarketLoading"));
+    if (m.error)
+      return h("p.sub", null, t("colonisation.marketUnavailable", { error: m.error }), debugSource("Spansh"));
     const line = (x: { id: string; name: string; count: number }) =>
       h(
         "li",
@@ -258,9 +263,12 @@ export class ColonisationView implements View {
     return h(
       "div.carrier-market",
       null,
-      m.source === "journal"
-        ? h("p.sub", null, t("colonisation.marketJournal", { value: m.updated ? relTime(m.updated) : "?" }))
-        : h("p.sub", null, t("colonisation.marketSpanshData", { value: m.updated ? relTime(m.updated) : "?" })),
+      h(
+        "p.sub",
+        null,
+        t("colonisation.marketUpdated", { value: m.updated ? relTime(m.updated) : "?" }),
+        debugSource(m.source === "journal" ? `${journalSource()} (Market.json)` : "Spansh"),
+      ),
       m.selling.length
         ? [h("small.sub", null, t("colonisation.saleStock")), h("ul.hold-list", null, m.selling.map(line))]
         : null,
@@ -274,32 +282,20 @@ export class ColonisationView implements View {
   /** Ship hold, own fleet carrier and squadron carrier, side by side. */
   private holds(depots: Depot[], capacity: number): HTMLElement {
     const cmdr = this.ctx.store.state.cmdr;
-    const needed = new Set(depots.flatMap((d) => d.resources.filter((r) => r.required > r.provided).map((r) => r.id)));
+    // What your active construction sites still need, by commodity.
+    const stillNeeded = new Map<string, number>();
+    for (const d of depots)
+      if (!d.complete && !d.failed)
+        for (const r of d.resources)
+          if (r.required > r.provided) stillNeeded.set(r.id, (stillNeeded.get(r.id) ?? 0) + r.required - r.provided);
     const name = (id: string, label?: string) => gameName(this.commodity(id, label ?? id));
-    const list = (items: [string, number, string?][]) =>
-      items.length
-        ? h(
-            "ul.hold-list",
-            null,
-            items
-              .sort((a, b) => Number(needed.has(b[0])) - Number(needed.has(a[0])) || b[1] - a[1])
-              .map(([id, n, label]) =>
-                h(
-                  "li",
-                  { class: needed.has(id) ? "needed" : "" },
-                  h("span", null, name(id, label)),
-                  h("strong", null, `${fmt(n)} t`),
-                ),
-              ),
-          )
-        : h("p.empty", null, t("colonisation.empty"));
     const shipItems = Object.entries(cmdr.cargo ?? {}).filter(([, n]) => n > 0) as [string, number][];
     const shipUsed = shipItems.reduce((s, [, n]) => s + n, 0);
     const cards: HTMLElement[] = [
       h(
         "div.hold",
         null,
-        h("h4", null, t("common.ship")),
+        h("h4", null, t("common.ship"), debugSource(`${journalSource()} (Cargo.json)`)),
         h(
           "p.sub",
           null,
@@ -308,7 +304,10 @@ export class ColonisationView implements View {
         capacity
           ? h("div.bar", null, h("span", { style: { width: `${Math.min(100, (shipUsed / capacity) * 100)}%` } }))
           : null,
-        list(shipItems),
+        this.holdContents(shipItems, stillNeeded, name, {
+          total: capacity || shipUsed,
+          footer: capacity ? [[t("colonisation.freeSpace"), Math.max(0, capacity - shipUsed)]] : [],
+        }),
       ),
     ];
     for (const c of this.carriers()) {
@@ -321,12 +320,23 @@ export class ColonisationView implements View {
           null,
           h("h4", null, c.mine ? t("colonisation.myFleetCarrier") : t("colonisation.squadronCarrier")),
           h("p.sub", { "data-no-tr": "" }, c.name),
+          debugSource(
+            `${journalSource()} (CargoTransfer, MarketBuy/Sell)`,
+            t("colonisation.debugSince", { when: relTime(c.since) }),
+          ),
           c.total !== undefined
-            ? h("p.sub", null, t("colonisation.tGoodsGame", { total: fmt(c.total), relTime: relTime(c.totalAt) }))
+            ? h(
+                "p.sub",
+                null,
+                t("colonisation.tGoods", { total: fmt(c.total), relTime: relTime(c.totalAt) }),
+                debugSource("CarrierStats"),
+              )
             : null,
-          list(items),
-          unknown ? h("p.sub", null, t("colonisation.tNotIdentified", { unknown: fmt(unknown) })) : null,
-          this.marketBlock(c, needed, name),
+          this.holdContents(items, stillNeeded, name, {
+            total: c.total ?? known,
+            footer: unknown ? [[t("colonisation.notIdentified"), unknown]] : [],
+          }),
+          this.marketBlock(c, new Set(stillNeeded.keys()), name),
         ),
       );
     }
@@ -335,10 +345,92 @@ export class ColonisationView implements View {
       null,
       h("h3", null, t("colonisation.holds")),
       h("div.hold-grid", null, cards),
-      this.carriers().length
-        ? h("p.sub", null, t("colonisation.gameJournalDoesnTListCarrier"))
-        : h("p.sub", null, t("colonisation.dockFleetCarrierSquadronSTransfer")),
+      this.carriers().length ? null : h("p.sub", null, t("colonisation.dockFleetCarrierSquadronSTransfer")),
     );
+  }
+
+  /**
+   * What a hold carries: the first lines (what your sites need first, then the biggest), and a
+   * "Detail" that unfolds every commodity with its category, its share of the hold and what your
+   * sites still need of it.
+   */
+  private holdContents(
+    items: [string, number, string?][],
+    stillNeeded: Map<string, number>,
+    name: (id: string, label?: string) => string,
+    options: { total: number; footer: [string, number][] },
+  ): HTMLElement | HTMLElement[] {
+    if (!items.length && !options.footer.length) return h("p.empty", null, t("colonisation.empty"));
+    const sorted = [...items].sort(
+      (a, b) => Number(stillNeeded.has(b[0])) - Number(stillNeeded.has(a[0])) || b[1] - a[1],
+    );
+    const line = ([id, n, label]: [string, number, string?]) =>
+      h(
+        "li",
+        { class: stillNeeded.has(id) ? "needed" : "" },
+        h("span", null, name(id, label)),
+        h("strong", null, `${fmt(n)} t`),
+      );
+    const shown = sorted.slice(0, HOLD_LINES);
+    const hidden = sorted.length - shown.length;
+    const share = (n: number) => (options.total > 0 ? `${fmt(Math.round((n / options.total) * 1000) / 10)} %` : "—");
+    const category = (id: string) => {
+      const found = this.ctx.game.data.commodities.find((c) => c.id === id)?.category;
+      return found ? gameName(found) : "—";
+    };
+    return [
+      items.length ? h("ul.hold-list", null, shown.map(line)) : h("p.empty", null, t("colonisation.empty")),
+      hidden ? h("p.sub", null, t("colonisation.moreLines", { count: hidden })) : null,
+      ...options.footer.map(([label, n]) => h("p.sub", null, `${label} : ${fmt(n)} t`)),
+      items.length
+        ? h(
+            "details.hold-detail",
+            null,
+            h("summary", null, t("colonisation.showDetail")),
+            h(
+              "div.table-wrap",
+              null,
+              h(
+                "table.table",
+                null,
+                h(
+                  "thead",
+                  null,
+                  h(
+                    "tr",
+                    null,
+                    h("th", null, t("colonisation.commodity")),
+                    h("th", null, t("colonisation.category")),
+                    h("th.num", null, t("colonisation.quantity")),
+                    h("th.num", null, t("colonisation.shareOfHold")),
+                    h("th.num", null, t("colonisation.forYourSites")),
+                  ),
+                ),
+                h(
+                  "tbody",
+                  null,
+                  sorted.map(([id, n, label]) => {
+                    const need = stillNeeded.get(id);
+                    return h(
+                      "tr",
+                      { class: need ? "needed" : "" },
+                      h("td", null, name(id, label)),
+                      h("td", null, category(id)),
+                      h("td.num", null, `${fmt(n)} t`),
+                      h("td.num", null, share(n)),
+                      h(
+                        "td.num",
+                        { title: need ? t("colonisation.forYourSitesHelp", { count: fmt(need) }) : undefined },
+                        need ? `${fmt(need)} t` : "—",
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ),
+          )
+        : null,
+    ].filter((x): x is NonNullable<typeof x> => Boolean(x));
   }
 
   private depot(d: Depot, capacity: number): HTMLElement {

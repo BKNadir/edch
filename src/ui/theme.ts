@@ -54,6 +54,16 @@ export function applyTheme(theme: ThemeSettings) {
   const panelBg = light ? toHex(rgb(bg).map((v) => v + (255 - v) * 0.6) as Rgb) : bg;
   const accent = readable(safe(theme.accent, DEFAULT_THEME.accent), panelBg, light ? 4.5 : 3);
   const cyan = readable(safe(theme.cyan, DEFAULT_THEME.cyan), panelBg, 4.5);
+  // Debug mode's source labels: the candidate furthest from both theme colours, made readable.
+  const distanceTo = (a: string, b: string) => rgb(a).reduce((sum, v, i) => sum + (v - rgb(b)[i]) ** 2, 0);
+  const debugColour = readable(
+    ["#ff3df2", "#a6ff00", "#ffe600"].sort(
+      (a, b) =>
+        Math.min(distanceTo(b, accent), distanceTo(b, cyan)) - Math.min(distanceTo(a, accent), distanceTo(a, cyan)),
+    )[0],
+    panelBg,
+    4.5,
+  );
   const mix = light
     ? (pct: number) => `color-mix(in srgb, ${bg}, #ffffff ${pct}%)`
     : (pct: number) => `color-mix(in srgb, ${bg}, #9fb4cc ${pct}%)`;
@@ -68,6 +78,7 @@ export function applyTheme(theme: ThemeSettings) {
     // Text on an accent background: black or white, whichever reads better.
     "--on-accent": contrast(accent, "#000000") >= contrast(accent, "#ffffff") ? "#140a00" : "#ffffff",
     "--cyan": cyan,
+    "--debug": debugColour,
     "--cyan-dim": `color-mix(in srgb, ${cyan} 12%, transparent)`,
     "--bg": bg,
     "--panel": theme.oled ? "#000000" : light ? mix(60) : mix(5),

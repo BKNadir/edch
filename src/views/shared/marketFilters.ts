@@ -1,7 +1,8 @@
-// The "where to sell" settings in words: the minimum demand and the age of prices, shown above
-// results (Mining, Search) and in Settings.
+// The "where to sell" settings in words: the minimum demand and the age of prices, shown with
+// the Mining results.
 
-import { fmt } from "../../ui/dom.js";
+import { fmt, h } from "../../ui/dom.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { t } from "../../platform/i18n.js";
 import type { Settings } from "../../state/store.js";
 import { ARDENT_MAX_DISTANCE } from "../../services/ardent.js";
@@ -17,14 +18,18 @@ export function priceAgeLabel(days: number): string {
   return t("market.daysShort", { days });
 }
 
-/** "Prices up to 1 month old (Spansh and Ardent, the most recent), demand of at least 100 t." */
-export function sellFiltersNote(settings: Settings, range = settings.maxDistance): string {
-  const note = t("market.sellFiltersNote", {
-    age: priceAgeLabel(settings.maxAgeDays),
-    demand: fmt(Math.max(1, settings.minSellDemand)),
-  });
-  // Ardent answers up to 500 ly: say so when the search radius is wider.
-  return range > ARDENT_MAX_DISTANCE
-    ? `${note} ${t("market.ardentRadius", { distance: fmt(ARDENT_MAX_DISTANCE) })}`
-    : note;
+/**
+ * "Prices up to 1 month old; demand of at least 100 t." In debug mode, where the prices come from
+ * (the most recent of Spansh and Ardent, Ardent only up to 500 ly).
+ */
+export function sellFiltersNote(settings: Settings, range = settings.maxDistance): HTMLElement {
+  return h(
+    "p.sub",
+    null,
+    t("market.sellFiltersNote", {
+      age: priceAgeLabel(settings.maxAgeDays),
+      demand: fmt(Math.max(1, settings.minSellDemand)),
+    }),
+    debugSource("Spansh + Ardent", range > ARDENT_MAX_DISTANCE ? `Ardent ≤ ${fmt(ARDENT_MAX_DISTANCE)} ly` : null),
+  );
 }

@@ -9,6 +9,7 @@ import { distance, fmtLy, fmtPop, inaraSystem } from "../../services/spansh.js";
 import { securityLabel, systemDetails, type SystemDetails } from "../../services/systemSearch.js";
 import type { Ctx, View } from "../../state/context.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { relTime } from "../../ui/format.js";
 import { stationIcon } from "../../ui/stationIcon.js";
 import { systemLink } from "../shared/links.js";
@@ -108,7 +109,7 @@ export class SystemView implements View {
       h(
         "div",
         null,
-        h("h1", null, d?.name ?? this.name),
+        h("h1", null, d?.name ?? this.name, d ? debugSource("Spansh") : null),
         h("p.sub", null, d ? this.subtitle(d) : this.loading ? t("system.loading") : ""),
       ),
       back,

@@ -5,6 +5,7 @@ import { fold, gameEnglish, gameName, resolveGameName, t } from "../../platform/
 import { locale } from "../../platform/i18n.js";
 import { spanshPost } from "../../platform/bridge.js";
 import { h, icon, fmt, replace, toast } from "../../ui/dom.js";
+import { debugSource } from "../../ui/debugSource.js";
 import { stationIcon } from "../../ui/stationIcon.js";
 import { relTime } from "../../ui/format.js";
 import { sameModule, stationSells, type WantedModule } from "../../features/search/fitModules.js";
@@ -1082,7 +1083,7 @@ export class SearchView implements View {
               : ""
             : new Date(age.endsWith("Z") || age.includes("+") ? age : `${age}Z`).toLocaleDateString(locale())
           : "",
-        quote ? h("div", null, QUOTE_SOURCE_LABELS[quote.source]) : null,
+        quote ? debugSource(QUOTE_SOURCE_LABELS[quote.source]) : null,
       ),
     );
   }
