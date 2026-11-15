@@ -25,6 +25,7 @@ import { systemForm } from "./systemTab.js";
 import { ardentBuyQuotes, ardentSellQuotes, type ArdentQuote } from "../../services/ardent.js";
 import {
   ARRIVAL_CHOICES,
+  spanshMarketSort,
   STATION_SORTS,
   arrivalAllowed,
   stationOrder,
@@ -113,8 +114,10 @@ interface StationResults {
   rows: Json[];
   /** How many stations Spansh counts in all. */
   total: number;
-  /** How many of them were loaded (the nearest ones, up to the setting). */
+  /** How many of them were loaded, up to the setting. */
   loaded: number;
+  /** Whether those are the nearest ones (else the first in the "Sort by" order, Spansh sorting). */
+  nearest: boolean;
   /** Puts the rows in the "Sort by" order chosen now. */
   reorder: () => void;
 }
@@ -163,6 +166,10 @@ export class SearchView implements View {
     const offered: readonly StationSort[] = STATION_SORTS[tab];
     const chosen = this.sorts[tab];
     return chosen && offered.includes(chosen) ? chosen : offered[0];
+  }
+  /** The name of the "Sort by" choice of a commodity tab (results not sorted by Spansh: none). */
+  private sortedBy(tab: Tab): string {
+    return tab === "buy" || tab === "sell" ? this.sortLabel(tab, this.sortOf(tab)) : "";
   }
   /** Results drawn so far, each a new search or "Sort by" order (see showResults). */
   private drawnOrders = 0;
@@ -575,8 +582,10 @@ export class SearchView implements View {
             {
               onchange: (e: Event) => {
                 this.sorts[tab] = (e.target as HTMLSelectElement).value as StationSort;
-                // The results already here are put in the new order: no new request.
-                if (this.results?.tab === tab) {
+                // A commodity: Spansh picks the stations in that order, so it is asked again.
+                // Otherwise the results already here are put in the new order, with no request.
+                if (tab === "buy" || tab === "sell") this.rerun();
+                else if (this.results?.tab === tab) {
                   this.results.reorder();
                   this.showResults();
                 }
@@ -818,9 +827,12 @@ export class SearchView implements View {
         comparison: "<=>",
       };
     }
+    // A commodity: Spansh sorts the markets on the "Sort by" choice itself, so the stations loaded
+    // are the best of the zone for it (the largest supply first by default); otherwise the nearest.
+    const spanshSort = commodity ? spanshMarketSort(this.sortOf(tab), tab === "buy", name) : undefined;
     const body = (page: number): Json => ({
       filters: f,
-      sort: [{ distance: { direction: "asc" } }],
+      sort: [spanshSort ?? { distance: { direction: "asc" } }],
       size: SPANSH_PAGE_SIZE,
       page,
       ...(ref.coords
@@ -830,8 +842,8 @@ export class SearchView implements View {
     replace(this.out, h("p.sub", null, h("span.spinner"), " " + t("common.searching")));
     const id = ++this.runId;
     try {
-      // The nearest stations, up to the number set in Settings, asked once: sorting them and
-      // changing page is then done here, with no new request.
+      // The first stations in that order, up to the number set in Settings, asked once: sorting
+      // them by column and changing page is then done here, with no new request.
       const answers: Json[] = [await spanshPost("stations/search", body(0))];
       const wanted = Math.min(
         Math.ceil(this.ctx.store.state.settings.searchLoad / SPANSH_PAGE_SIZE),
@@ -935,6 +947,7 @@ export class SearchView implements View {
         rows: results(),
         total: Number(answers[0]?.count ?? 0),
         loaded: answers.reduce((sum, a) => sum + (Array.isArray(a?.results) ? a.results.length : 0), 0),
+        nearest: !spanshSort,
         reorder: () => (shown.rows = results()),
       };
       this.results = shown;
@@ -960,11 +973,17 @@ export class SearchView implements View {
       );
       return;
     }
-    // When Spansh has more than were loaded, the count says these are the nearest ones.
+    // When Spansh has more than were loaded, the count says which ones these are.
     const count =
-      res.total > res.loaded
-        ? t("search.nearestStationsLoaded", { count: fmt(rows.length), total: fmt(res.total) })
-        : t("search.matchingStations", { count: fmt(rows.length) });
+      res.total <= res.loaded
+        ? t("search.matchingStations", { count: fmt(rows.length) })
+        : res.nearest
+          ? t("search.nearestStationsLoaded", { count: fmt(rows.length), total: fmt(res.total) })
+          : t("search.firstStationsLoaded", {
+              count: fmt(rows.length),
+              total: fmt(res.total),
+              sort: this.sortedBy(tab),
+            });
     replace(
       this.out,
       h("p.sub", null, count),

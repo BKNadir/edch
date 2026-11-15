@@ -1102,6 +1102,7 @@
     "range": "Alcance",
     "rangeUnit": "al",
     "rangeHelp": "Años luz alrededor del sistema de referencia. Vacío: {{distance}} al, el valor por defecto de los Ajustes.",
+    "firstStationsLoaded": "Las {{count}} primeras estaciones de {{total}}, ordenadas por «{{sort}}»",
     "matchingStations": "{{count}} estaciones coinciden",
     "nearestStationsLoaded": "Las {{count}} estaciones más cercanas de {{total}}",
     "factionSystemsPage": "{{count}} sistemas · {{from}} a {{to}} mostrados",

@@ -1102,6 +1102,7 @@
     "range": "Portée",
     "rangeUnit": "al",
     "rangeHelp": "Années-lumière autour du système de référence. Vide : {{distance}} al, la valeur par défaut des Paramètres.",
+    "firstStationsLoaded": "Les {{count}} premières stations sur {{total}}, triées par « {{sort}} »",
     "matchingStations": "{{count}} stations correspondent",
     "nearestStationsLoaded": "Les {{count}} stations les plus proches sur {{total}}",
     "factionSystemsPage": "{{count}} systèmes · {{from}} à {{to}} affichés",

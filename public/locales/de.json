@@ -1101,6 +1101,7 @@
     "range": "Reichweite",
     "rangeUnit": "Lj",
     "rangeHelp": "Lichtjahre um das Bezugssystem. Leer: {{distance}} Lj, der Standardwert aus den Einstellungen.",
+    "firstStationsLoaded": "Die ersten {{count}} von {{total}} passenden Stationen nach „{{sort}}“",
     "matchingStations": "{{count}} passende Stationen",
     "nearestStationsLoaded": "Die {{count}} nächsten von {{total}} passenden Stationen",
     "factionSystemsPage": "{{count}} Systeme · {{from}}–{{to}} angezeigt",

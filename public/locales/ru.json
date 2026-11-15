@@ -1100,6 +1100,7 @@
     "range": "Радиус",
     "rangeUnit": "св. лет",
     "rangeHelp": "Световые годы вокруг опорной системы. Пусто: {{distance}} св. лет, значение по умолчанию из настроек.",
+    "firstStationsLoaded": "Первые {{count}} из {{total}} подходящих станций по «{{sort}}»",
     "matchingStations": "Подходящих станций: {{count}}",
     "nearestStationsLoaded": "{{count}} ближайших из {{total}} подходящих станций",
     "factionSystemsPage": "Систем: {{count}} · показаны {{from}}–{{to}}",

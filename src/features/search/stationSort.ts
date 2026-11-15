@@ -1,14 +1,16 @@
-// Search page: how its station results are ordered and filtered once received. Spansh is asked
-// once for the nearest stations (up to the "results loaded per search" setting) and Ardent for the
-// best prices of the zone; this puts everything in the order chosen, without asking again.
+// Search page: how its station results are ordered and filtered. Spansh is asked once for the
+// first stations (up to the "results loaded per search" setting) in the "Sort by" order when it
+// can sort on it (a commodity's supply, demand, price…: spanshMarketSort), the nearest ones
+// otherwise; Ardent for the best prices of the zone. This puts everything in the order chosen;
+// the column sorts are then done on these results, without asking again.
 
 /** What a station result is sorted on. */
 export type StationSort = "price" | "distance" | "volume" | "recent" | "arrival";
 
 /** The sorts each kind of search offers, the first one being its default. */
 export const STATION_SORTS = {
-  buy: ["price", "distance", "volume", "recent", "arrival"],
-  sell: ["price", "distance", "volume", "recent", "arrival"],
+  buy: ["volume", "price", "distance", "recent", "arrival"],
+  sell: ["volume", "price", "distance", "recent", "arrival"],
   ship: ["distance", "price", "arrival"],
   module: ["distance", "arrival"],
   service: ["distance", "arrival"],
@@ -56,3 +58,30 @@ export function stationOrder(sort: StationSort, buying: boolean) {
 /** Whether a station is close enough to its arrival star (`maxLs` 0: any distance; unknown: kept). */
 export const arrivalAllowed = (arrival: number | undefined, maxLs: number) =>
   !(maxLs > 0) || arrival === undefined || arrival <= maxLs;
+
+/**
+ * How Spansh sorts a commodity's markets for `sort` (field names checked against
+ * spansh.co.uk/api/stations/sortable_fields): cheapest first when buying, best paid first when
+ * selling, largest supply or demand, most recent, closest to the arrival star; distance is
+ * Spansh's own default (undefined).
+ */
+export function spanshMarketSort(
+  sort: StationSort,
+  buying: boolean,
+  commodity: string,
+): Record<string, unknown> | undefined {
+  switch (sort) {
+    case "price":
+      return buying
+        ? { market_buy_price: [{ name: commodity, direction: "asc" }] }
+        : { market_sell_price: [{ name: commodity, direction: "desc" }] };
+    case "volume":
+      return { [buying ? "market_supply" : "market_demand"]: [{ name: commodity, direction: "desc" }] };
+    case "recent":
+      return { market_updated_at: { direction: "desc" } };
+    case "arrival":
+      return { distance_to_arrival: { direction: "asc" } };
+    default:
+      return undefined;
+  }
+}

@@ -1101,6 +1101,7 @@
     "range": "Range",
     "rangeUnit": "ly",
     "rangeHelp": "Light years around the reference system. Empty: {{distance}} ly, the default set in Settings.",
+    "firstStationsLoaded": "The first {{count}} of {{total}} matching stations by “{{sort}}”",
     "matchingStations": "{{count}} matching stations",
     "nearestStationsLoaded": "The {{count}} nearest of {{total}} matching stations",
     "factionSystemsPage": "{{count}} systems · {{from}}–{{to}} shown",

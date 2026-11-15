@@ -5,7 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.14
 
-- Search (stations, systems) and a material's sources: one search loads the nearest results, 500 by default (Settings → "Results loaded per search"); sorting them by any column, changing "Sort by" and changing page are then instant, with no new request. The count says when only the nearest ones were loaded.
+- Search (stations, systems) and a material's sources: one search loads the first results, 500 by default (Settings → "Results loaded per search"); sorting them by any column and changing page are then instant, with no new request. A commodity search asks Spansh for the stations in the "Sort by" order (the largest supply or demand first by default, changing it searches again), other searches for the nearest ones; the count says which ones were loaded.
 - BGS: the followed faction's name is suggested as you type, from the factions seen in your journal and every faction of the game (as on Search → Faction); suggestions now show on every system.
 - Layout: the reference system no longer touches the engineers' cards, and the Mining search forms are spaced like the Search page's.
 - Long lists and tables, everywhere: a list that fits on the screen is shown whole; a longer one is shown a page at a time, with the page links above it (and below it too when a page is taller than the screen). You choose 10, 50 or 100 lines a page, or "Auto" (the default) to show as many as fit on the screen under what is above the list, so the whole page is seen without scrolling and changing page doesn't move it; the choice is kept for every list. Sorting a table still sorts all its lines. Routes are always shown whole. A material's sources get pages instead of the "more results" button.
