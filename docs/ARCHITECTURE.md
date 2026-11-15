@@ -136,7 +136,7 @@ wins, and several rules rely on that. Don't move existing rules around.
 | `update.rs` | Update check, download and install from GitHub releases |
 | `logs.rs` | Log files (standard and debug), with private data removed |
 | `discord_bot.rs` | The squadron's Discord bot: only its address (the shared one or one the user confirmed), only `/v1/config`, `/v1/report`, `/v1/systems`; the key never logged |
-| `edomh_link.rs` | Registers EDCH for `edomh://` links (EDSY's and Coriolis's "Export to EDOMH") when the user asks, and passes them to the running EDCH |
+| `app_links.rs` | Links that open EDCH: registers it for `edomh://` links (EDSY's and Coriolis's "Export to EDOMH") when the user asks, and for its own `edch://` links (the Frontier login's return) when a login starts; passes them to the running EDCH |
 | `picture_cache.rs` | Controller pictures of the Controls page, kept unchanged next to the logs folder |
 
 Windows and Linux differences stay inside the backend, behind `#[cfg(target_os = "…")]`: journal

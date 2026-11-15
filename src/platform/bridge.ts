@@ -496,7 +496,7 @@ export async function scanHistory(dir: string, days: number, events: string[]): 
   return tauriInvoke<string[]>("scan_history", { dir, days, events });
 }
 
-/** EDOMH links (edomh://…, EDSY's and Coriolis's "Export to EDOMH"): see src-tauri/src/edomh_link.rs. */
+/** EDOMH links (edomh://…, EDSY's and Coriolis's "Export to EDOMH"): see src-tauri/src/app_links.rs. */
 export type EdomhHandlerStatus = "ours" | "other" | "none" | "unsupported";
 /** The EDOMH link EDCH was started with, once (null otherwise, and outside the app). */
 export const takeLaunchLink = (): Promise<string | null> =>
@@ -512,6 +512,20 @@ export const setEdomhHandler = (enabled: boolean) => invoke<EdomhHandlerStatus>(
 export async function onEdomhLink(cb: (link: string) => void): Promise<void> {
   if (!isTauri() || remote) return;
   await window.__TAURI__!.event.listen<string>("edomh-link", (e) => cb(e.payload));
+}
+
+/**
+ * EDCH's own links (edch://frontier/?code=…, the Frontier login's return): makes EDCH open them
+ * before a login. "unsupported" (or outside the app): the player pastes the link instead.
+ */
+export const registerEdchLinks = (): Promise<EdomhHandlerStatus> =>
+  isTauri() && !remote
+    ? invoke<EdomhHandlerStatus>("register_edch_links").catch(() => "unsupported" as const)
+    : Promise.resolve("unsupported");
+/** Calls `cb` with each EDCH link opened while EDCH runs (the Frontier login's return). */
+export async function onEdchLink(cb: (link: string) => void): Promise<void> {
+  if (!isTauri() || remote) return;
+  await window.__TAURI__!.event.listen<string>("edch-link", (e) => cb(e.payload));
 }
 
 /** EDCH-Discord (src-tauri/src/discord_bot.rs): the squadron bot that receives BGS reports. */
