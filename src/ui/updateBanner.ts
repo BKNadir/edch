@@ -211,14 +211,21 @@ export async function findUpdate(): Promise<UpdateInfo | null> {
   return info;
 }
 
-/** Shows the update banner for `info` (Settings → "Update available"). */
-export function offerUpdate(info: UpdateInfo) {
+/**
+ * Starts the update to `info` straight away (Settings → "Update available"), like the banner's
+ * "Update" button: the installer is downloaded and the banner shows the progress, then the
+ * restart; without an installer (portable, Linux) the release page opens.
+ */
+export function startUpdate(info: UpdateInfo) {
   if (phase.kind === "downloading" || phase.kind === "ready") {
     render();
     return;
   }
-  phase = { kind: "available", info };
-  render();
+  if (selfInstall()) {
+    void download(info);
+    return;
+  }
+  void openUrl(info.page || "https://github.com/BKNadir/edch/releases/latest");
 }
 
 /** Checks GitHub now. `manual`: also report "up to date" and errors, and ignore a skipped version. */

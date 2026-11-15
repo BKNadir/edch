@@ -1,13 +1,13 @@
 // Settings → General → Updates: the exact version installed (a pre-release says so), automatic
 // checks, pre-releases, and an "Update available" button when GitHub has one for this build
-// (checked quietly when the card is drawn, no notification).
+// (checked quietly when the card is drawn, no notification) that starts the update right away.
 
 import { t } from "../../../platform/i18n.js";
 import { buildTag, isPreReleaseTag, SOFTWARE_VERSION } from "../../../platform/version.js";
 import type { Ctx } from "../../../state/context.js";
 import type { Settings } from "../../../state/store.js";
 import { h, icon, replace } from "../../../ui/dom.js";
-import { checkForUpdate, findUpdate, offerUpdate } from "../../../ui/updateBanner.js";
+import { checkForUpdate, findUpdate, startUpdate } from "../../../ui/updateBanner.js";
 
 /** `updateMode`: "installer", "portable" or another platform (no self-install). */
 export function updatesCard(ctx: Ctx, updateMode: string): HTMLElement {
@@ -65,7 +65,7 @@ async function showInstalledVersion(line: HTMLElement) {
   );
 }
 
-/** Asks GitHub quietly; an update found becomes a button that opens the update banner. */
+/** Asks GitHub quietly; an update found becomes a button that starts it (download, then restart). */
 async function showAvailableUpdate(slot: HTMLElement) {
   replace(slot);
   try {
@@ -75,7 +75,7 @@ async function showAvailableUpdate(slot: HTMLElement) {
       slot,
       h(
         "button.primary",
-        { onclick: () => offerUpdate(info) },
+        { onclick: () => startUpdate(info) },
         icon("star"),
         " " + t("settings.updateAvailable", { version: info.version }),
       ),
