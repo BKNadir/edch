@@ -128,6 +128,26 @@ export class MiningView implements View {
       this.render();
     });
   }
+  /** The "minimum demand" setting, also here: where to sell what is mined. */
+  private demandField(): HTMLElement {
+    return h(
+      "label.check",
+      { title: t("market.minDemandHelp") },
+      t("search.minDemand") + " ",
+      h("input.num-small", {
+        type: "number",
+        min: "1",
+        step: "100",
+        value: String(Math.max(1, this.ctx.store.state.settings.minSellDemand)),
+        onchange: (e: Event) => {
+          this.ctx.store.updateSettings({
+            minSellDemand: Math.max(1, Math.floor(Number((e.target as HTMLInputElement).value) || 1)),
+          });
+          this.render();
+        },
+      }),
+    );
+  }
   constructor(private ctx: Ctx) {
     this.reference = referenceField(ctx, () => this.render());
   }
@@ -448,7 +468,13 @@ export class MiningView implements View {
           ),
           h("span.sub", null, t("mining.around", { place: referenceOf(this.ctx).label })),
         ),
-        h("div.row.opts", null, (refreshReferenceField(this.reference, this.ctx), this.reference), this.rangeField()),
+        h(
+          "div.row.opts",
+          null,
+          (refreshReferenceField(this.reference, this.ctx), this.reference),
+          this.rangeField(),
+          this.demandField(),
+        ),
         this.error && this.tab === "prospect" ? h("p.error", null, this.error) : null,
       ),
       this.found
@@ -521,7 +547,13 @@ export class MiningView implements View {
               t("common.aroundLyMax", { label: referenceOf(this.ctx).label, maxDistance: this.range() }),
             ),
           ),
-          h("div.row.opts", null, (refreshReferenceField(this.reference, this.ctx), this.reference), this.rangeField()),
+          h(
+            "div.row.opts",
+            null,
+            (refreshReferenceField(this.reference, this.ctx), this.reference),
+            this.rangeField(),
+            this.demandField(),
+          ),
         ),
         this.error ? h("p.error", null, this.error) : null,
       ),
