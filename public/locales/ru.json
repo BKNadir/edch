@@ -1009,7 +1009,8 @@
     "updated1HAgo": "обн. < 1 ч назад",
     "updatedDAgo": "обн. {{value}} д назад",
     "updatedHAgo": "обн. {{hours}} ч назад",
-    "whenSpanshLastUpdatedSystemData": "Когда Spansh последний раз обновил систему (данные игроков через EDDN)"
+    "whenSpanshLastUpdatedSystemData": "Когда Spansh последний раз обновил систему (данные игроков через EDDN)",
+    "moreResults": "Ещё результаты (осталось: {{count}})"
   },
   "search": {
     "anyClass": "Любой класс",
@@ -1024,7 +1025,6 @@
     "includeFleetCarriers": "Включая корабли-носители",
     "includePlanetaryPorts": "Включая планетарные порты",
     "lPadOnly": "Только площадка L",
-    "matchingStationsShown": "Подходящих станций: {{count}} · показано {{count2}}",
     "materialTrader": "Торговец материалами",
     "moduleClass": "Класс",
     "moduleEGFrameShiftDrive": "Модуль (например, FSD, Усилитель щита)",
@@ -1057,7 +1057,6 @@
     "factionStates": "Состояния фракции",
     "factionStatesHelp": "Только системы, где фракция в одном из отмеченных состояний (основное состояние). Ничего не отмечено: любое состояние.",
     "noFactionSystems": "Для {{faction}} с этими параметрами систем не найдено. Проверьте точное название фракции.",
-    "factionSystemsShown": "Систем: {{count}} (показано {{shown}})",
     "referenceSystem": "Опорная система",
     "referenceHere": "Моё местоположение",
     "materialTraderRaw": "Торговец материалами: сырьё",
@@ -1096,7 +1095,9 @@
     "maxAge": "Данные не старше",
     "range": "Радиус",
     "rangeUnit": "св. лет",
-    "rangeHelp": "Световые годы вокруг опорной системы. Пусто: {{distance}} св. лет, значение по умолчанию из настроек."
+    "rangeHelp": "Световые годы вокруг опорной системы. Пусто: {{distance}} св. лет, значение по умолчанию из настроек.",
+    "matchingStationsPage": "Подходящих станций: {{count}} · показаны {{from}}–{{to}}",
+    "factionSystemsPage": "Систем: {{count}} · показаны {{from}}–{{to}}"
   },
   "session": {
     "bounties": "Награды за головы",
@@ -1754,5 +1755,10 @@
     "tooLarge": "Отчёт слишком большой для бота.",
     "unavailable": "Не удалось связаться с ботом: EDCH попробует снова через 15 минут.",
     "unknownVersion": "Бот не знает этот формат отчёта: обновите EDCH или бота."
+  },
+  "pager": {
+    "label": "Страницы",
+    "previous": "Назад",
+    "next": "Далее"
   }
 }

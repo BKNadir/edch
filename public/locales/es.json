@@ -1013,7 +1013,8 @@
     "updated1HAgo": "act. hace < 1 h",
     "updatedDAgo": "act. hace {{value}} d",
     "updatedHAgo": "act. hace {{hours}} h",
-    "whenSpanshLastUpdatedSystemData": "Última actualización de este sistema en Spansh (datos enviados por los jugadores a través de EDDN)"
+    "whenSpanshLastUpdatedSystemData": "Última actualización de este sistema en Spansh (datos enviados por los jugadores a través de EDDN)",
+    "moreResults": "Más resultados (quedan {{count}})"
   },
   "search": {
     "anyClass": "Cualquier clase",
@@ -1028,7 +1029,6 @@
     "includeFleetCarriers": "Incluir Fleet Carriers",
     "includePlanetaryPorts": "Incluir puertos planetarios",
     "lPadOnly": "Solo plataforma L",
-    "matchingStationsShown": "{{count}} estaciones coinciden · {{count2}} mostradas",
     "materialTrader": "Comerciante de materiales",
     "moduleClass": "Clase",
     "moduleEGFrameShiftDrive": "Módulo (p. ej. Motor de distorsión, Potenciador de escudos)",
@@ -1061,8 +1061,6 @@
     "factionStates": "Estados de la facción",
     "factionStatesHelp": "Solo los sistemas donde la facción está en uno de los estados marcados (su estado principal). Ninguno marcado: cualquier estado.",
     "noFactionSystems": "No se encontró ningún sistema para {{faction}} con estas opciones. Comprueba el nombre exacto de la facción.",
-    "factionSystemsShown_one": "{{count}} sistema ({{shown}} mostrado)",
-    "factionSystemsShown_other": "{{count}} sistemas ({{shown}} mostrados)",
     "referenceSystem": "Sistema de referencia",
     "referenceHere": "Mi posición",
     "materialTraderRaw": "Comerciante de materiales: en bruto",
@@ -1101,7 +1099,9 @@
     "maxAge": "Datos de menos de",
     "range": "Alcance",
     "rangeUnit": "al",
-    "rangeHelp": "Años luz alrededor del sistema de referencia. Vacío: {{distance}} al, el valor por defecto de los Ajustes."
+    "rangeHelp": "Años luz alrededor del sistema de referencia. Vacío: {{distance}} al, el valor por defecto de los Ajustes.",
+    "matchingStationsPage": "{{count}} estaciones coinciden · {{from}} a {{to}} mostradas",
+    "factionSystemsPage": "{{count}} sistemas · {{from}} a {{to}} mostrados"
   },
   "session": {
     "bounties": "Recompensas",
@@ -1756,5 +1756,10 @@
     "tooLarge": "El informe era demasiado grande para el bot.",
     "unavailable": "No se pudo contactar con el bot: EDCH lo intentará de nuevo en 15 minutos.",
     "unknownVersion": "El bot no conoce este formato de informe: actualiza EDCH o el bot."
+  },
+  "pager": {
+    "label": "Páginas",
+    "previous": "Anterior",
+    "next": "Siguiente"
   }
 }

@@ -1019,7 +1019,8 @@
     "updated1HAgo": "atual. há < 1 h",
     "updatedDAgo": "atual. há {{value}} d",
     "updatedHAgo": "atual. há {{hours}} h",
-    "whenSpanshLastUpdatedSystemData": "Última atualização deste sistema no Spansh (dados enviados pelos jogadores pelo EDDN)"
+    "whenSpanshLastUpdatedSystemData": "Última atualização deste sistema no Spansh (dados enviados pelos jogadores pelo EDDN)",
+    "moreResults": "Mais resultados (faltam {{count}})"
   },
   "search": {
     "anyClass": "Qualquer classe",
@@ -1034,7 +1035,6 @@
     "includeFleetCarriers": "Incluir Fleet Carriers",
     "includePlanetaryPorts": "Incluir portos planetários",
     "lPadOnly": "Só plataforma G",
-    "matchingStationsShown": "{{count}} estações correspondem · {{count2}} exibidas",
     "materialTrader": "Comerciante de materiais",
     "moduleClass": "Classe",
     "moduleEGFrameShiftDrive": "Módulo (ex. Motor de distorção de fase, Potenciador de escudo)",
@@ -1067,8 +1067,6 @@
     "factionStates": "Estados da facção",
     "factionStatesHelp": "Só os sistemas em que a facção está em um dos estados marcados (seu estado principal). Nenhum marcado: qualquer estado.",
     "noFactionSystems": "Nenhum sistema encontrado para {{faction}} com essas opções. Confira o nome exato da facção.",
-    "factionSystemsShown_one": "{{count}} sistema ({{shown}} mostrado)",
-    "factionSystemsShown_other": "{{count}} sistemas ({{shown}} mostrados)",
     "referenceSystem": "Sistema de referência",
     "referenceHere": "Minha posição",
     "materialTraderRaw": "Comerciante de materiais: brutos",
@@ -1107,7 +1105,9 @@
     "maxAge": "Dados de no máximo",
     "range": "Alcance",
     "rangeUnit": "al",
-    "rangeHelp": "Anos-luz em volta do sistema de referência. Vazio: {{distance}} al, o padrão das Configurações."
+    "rangeHelp": "Anos-luz em volta do sistema de referência. Vazio: {{distance}} al, o padrão das Configurações.",
+    "matchingStationsPage": "{{count}} estações correspondem · {{from}} a {{to}} mostradas",
+    "factionSystemsPage": "{{count}} sistemas · {{from}} a {{to}} mostrados"
   },
   "session": {
     "bounties": "Recompensas",
@@ -1767,5 +1767,10 @@
     "tooLarge": "O relatório era grande demais para o bot.",
     "unavailable": "Não foi possível acessar o bot: o EDCH tenta de novo em 15 minutos.",
     "unknownVersion": "O bot não conhece este formato de relatório: atualize o EDCH ou o bot."
+  },
+  "pager": {
+    "label": "Páginas",
+    "previous": "Anterior",
+    "next": "Próxima"
   }
 }

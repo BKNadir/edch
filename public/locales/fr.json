@@ -1013,7 +1013,8 @@
     "updated1HAgo": "màj < 1 h",
     "updatedDAgo": "màj il y a {{value}} j",
     "updatedHAgo": "màj il y a {{hours}} h",
-    "whenSpanshLastUpdatedSystemData": "Date de la dernière mise à jour de ce système chez Spansh (données envoyées par les joueurs via EDDN)"
+    "whenSpanshLastUpdatedSystemData": "Date de la dernière mise à jour de ce système chez Spansh (données envoyées par les joueurs via EDDN)",
+    "moreResults": "Plus de résultats ({{count}} restants)"
   },
   "search": {
     "anyClass": "Toute classe",
@@ -1028,7 +1029,6 @@
     "includeFleetCarriers": "Inclure les Fleet Carriers",
     "includePlanetaryPorts": "Inclure les ports planétaires",
     "lPadOnly": "Pad L seulement",
-    "matchingStationsShown": "{{count}} stations correspondent · {{count2}} affichées",
     "materialTrader": "Trader de matériaux",
     "moduleClass": "Classe",
     "moduleEGFrameShiftDrive": "Module (ex. Réacteur FSD, Survolteur de bouclier)",
@@ -1061,8 +1061,6 @@
     "factionStates": "États de la faction",
     "factionStatesHelp": "Seulement les systèmes où la faction est dans un des états cochés (son état principal). Aucun coché : tous les états.",
     "noFactionSystems": "Aucun système trouvé pour {{faction}} avec ces options. Vérifie le nom exact de la faction.",
-    "factionSystemsShown_one": "{{count}} système ({{shown}} affiché)",
-    "factionSystemsShown_other": "{{count}} systèmes ({{shown}} affichés)",
     "referenceSystem": "Système de référence",
     "referenceHere": "Ma position",
     "materialTraderRaw": "Trader de matériaux : bruts",
@@ -1101,7 +1099,9 @@
     "maxAge": "Données de moins de",
     "range": "Portée",
     "rangeUnit": "al",
-    "rangeHelp": "Années-lumière autour du système de référence. Vide : {{distance}} al, la valeur par défaut des Paramètres."
+    "rangeHelp": "Années-lumière autour du système de référence. Vide : {{distance}} al, la valeur par défaut des Paramètres.",
+    "matchingStationsPage": "{{count}} stations correspondent · {{from}} à {{to}} affichées",
+    "factionSystemsPage": "{{count}} systèmes · {{from}} à {{to}} affichés"
   },
   "session": {
     "bounties": "Primes",
@@ -1756,5 +1756,10 @@
     "tooLarge": "Le rapport était trop gros pour le bot.",
     "unavailable": "Le bot n'a pas pu être joint : EDCH réessaie dans 15 minutes.",
     "unknownVersion": "Le bot ne connaît pas ce format de rapport : mets à jour EDCH ou le bot."
+  },
+  "pager": {
+    "label": "Pages",
+    "previous": "Précédent",
+    "next": "Suivant"
   }
 }

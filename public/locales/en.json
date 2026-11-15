@@ -1012,7 +1012,8 @@
     "updated1HAgo": "updated < 1 h ago",
     "updatedDAgo": "updated {{value}} d ago",
     "updatedHAgo": "updated {{hours}} h ago",
-    "whenSpanshLastUpdatedSystemData": "When Spansh last updated this system (data sent by players through EDDN)"
+    "whenSpanshLastUpdatedSystemData": "When Spansh last updated this system (data sent by players through EDDN)",
+    "moreResults": "More results ({{count}} left)"
   },
   "search": {
     "anyClass": "Any class",
@@ -1027,7 +1028,6 @@
     "includeFleetCarriers": "Include Fleet Carriers",
     "includePlanetaryPorts": "Include planetary ports",
     "lPadOnly": "L pad only",
-    "matchingStationsShown": "{{count}} matching stations · {{count2}} shown",
     "materialTrader": "Material trader",
     "moduleClass": "Class",
     "moduleEGFrameShiftDrive": "Module (e.g. Frame Shift Drive, Shield Booster)",
@@ -1060,8 +1060,6 @@
     "factionStates": "Faction states",
     "factionStatesHelp": "Only the systems where the faction is in one of the ticked states (its main state). None ticked: any state.",
     "noFactionSystems": "No system found for {{faction}} with these options. Check the faction's exact name.",
-    "factionSystemsShown_one": "{{count}} system ({{shown}} shown)",
-    "factionSystemsShown_other": "{{count}} systems ({{shown}} shown)",
     "referenceSystem": "Reference system",
     "referenceHere": "My position",
     "materialTraderRaw": "Material Trader: raw",
@@ -1100,7 +1098,9 @@
     "maxAge": "Data at most",
     "range": "Range",
     "rangeUnit": "ly",
-    "rangeHelp": "Light years around the reference system. Empty: {{distance}} ly, the default set in Settings."
+    "rangeHelp": "Light years around the reference system. Empty: {{distance}} ly, the default set in Settings.",
+    "matchingStationsPage": "{{count}} matching stations · {{from}}–{{to}} shown",
+    "factionSystemsPage": "{{count}} systems · {{from}}–{{to}} shown"
   },
   "session": {
     "bounties": "Bounties",
@@ -1754,5 +1754,10 @@
     "tooLarge": "The report was too large for the bot.",
     "unavailable": "The bot couldn't be reached: EDCH tries again in 15 minutes.",
     "unknownVersion": "The bot doesn't know this report format: update EDCH or the bot."
+  },
+  "pager": {
+    "label": "Pages",
+    "previous": "Previous",
+    "next": "Next"
   }
 }

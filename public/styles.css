@@ -1679,6 +1679,26 @@ p.notice {
   flex-basis: 100%;
   color: var(--bad-text);
 }
+/* Pages of a long result list (Search). */
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+.pager button {
+  min-width: 36px;
+}
+.pager-gap {
+  color: var(--muted);
+  padding: 0 2px;
+}
+.results-more {
+  justify-self: start;
+  margin-top: 6px;
+}
 /* Suggestions under a text field (Search → Faction). */
 .suggest-box {
   position: relative;

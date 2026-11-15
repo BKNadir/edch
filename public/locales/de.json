@@ -1012,7 +1012,8 @@
     "updated1HAgo": "vor < 1 Std. aktualisiert",
     "updatedDAgo": "vor {{value}} Tg. aktualisiert",
     "updatedHAgo": "vor {{hours}} Std. aktualisiert",
-    "whenSpanshLastUpdatedSystemData": "Letzte Aktualisierung dieses Systems bei Spansh (Daten, die Spieler über EDDN senden)"
+    "whenSpanshLastUpdatedSystemData": "Letzte Aktualisierung dieses Systems bei Spansh (Daten, die Spieler über EDDN senden)",
+    "moreResults": "Weitere Ergebnisse ({{count}} übrig)"
   },
   "search": {
     "anyClass": "Jede Klasse",
@@ -1027,7 +1028,6 @@
     "includeFleetCarriers": "Fleet Carrier einbeziehen",
     "includePlanetaryPorts": "Planetare Häfen einbeziehen",
     "lPadOnly": "Nur L-Pad",
-    "matchingStationsShown": "{{count}} passende Stationen · {{count2}} angezeigt",
     "materialTrader": "Materialhändler",
     "moduleClass": "Klasse",
     "moduleEGFrameShiftDrive": "Modul (z. B. Frameshiftantrieb, Schild-Booster)",
@@ -1060,8 +1060,6 @@
     "factionStates": "Fraktionszustände",
     "factionStatesHelp": "Nur Systeme, in denen die Fraktion in einem der angehakten Zustände ist (ihr Hauptzustand). Keiner angehakt: jeder Zustand.",
     "noFactionSystems": "Kein System für {{faction}} mit diesen Optionen gefunden. Prüfe den genauen Namen der Fraktion.",
-    "factionSystemsShown_one": "{{count}} System ({{shown}} angezeigt)",
-    "factionSystemsShown_other": "{{count}} Systeme ({{shown}} angezeigt)",
     "referenceSystem": "Bezugssystem",
     "referenceHere": "Meine Position",
     "materialTraderRaw": "Materialhändler: Rohstoffe",
@@ -1100,7 +1098,9 @@
     "maxAge": "Daten höchstens",
     "range": "Reichweite",
     "rangeUnit": "Lj",
-    "rangeHelp": "Lichtjahre um das Bezugssystem. Leer: {{distance}} Lj, der Standardwert aus den Einstellungen."
+    "rangeHelp": "Lichtjahre um das Bezugssystem. Leer: {{distance}} Lj, der Standardwert aus den Einstellungen.",
+    "matchingStationsPage": "{{count}} passende Stationen · {{from}}–{{to}} angezeigt",
+    "factionSystemsPage": "{{count}} Systeme · {{from}}–{{to}} angezeigt"
   },
   "session": {
     "bounties": "Kopfgelder",
@@ -1754,5 +1754,10 @@
     "tooLarge": "Der Bericht war zu groß für den Bot.",
     "unavailable": "Der Bot war nicht erreichbar: EDCH versucht es in 15 Minuten erneut.",
     "unknownVersion": "Der Bot kennt dieses Berichtsformat nicht: aktualisiere EDCH oder den Bot."
+  },
+  "pager": {
+    "label": "Seiten",
+    "previous": "Zurück",
+    "next": "Weiter"
   }
 }

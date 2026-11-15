@@ -16,7 +16,8 @@ import { fmtLy, inaraSystem } from "../../services/spansh.js";
 import { copySystem } from "../shared/resultsTable.js";
 import { openUrl } from "../../platform/bridge.js";
 import { factionForm } from "./factionTab.js";
-import { ardentBuyQuotes, ardentSellQuotes } from "../../services/ardent.js";
+import { ardentBuyQuotes, ardentSellQuotes, type ArdentQuote } from "../../services/ardent.js";
+import { pager } from "../shared/pager.js";
 import {
   ARRIVAL_CHOICES,
   STATION_SORTS,
@@ -80,6 +81,21 @@ const SERVICES: [string, string][] = [
   ["Apex Interstellar", "Apex Interstellar"],
   ["Frontline Solutions", "Frontline Solutions"],
 ];
+/** Results per page. */
+const PAGE_SIZE = 50;
+
+/** A search's results: all received so far (in the order chosen), and how to get more. */
+interface StationResults {
+  tab: Tab;
+  name: string;
+  rows: Json[];
+  /** How many stations the source counts in all. */
+  total: () => number;
+  /** Asks for the next results; false when there are none. */
+  more: () => Promise<boolean>;
+  hasMore: () => boolean;
+}
+
 /** A number from Spansh's or Ardent's JSON, or undefined. */
 const numberOrUndefined = (value: unknown) =>
   value === null || value === undefined || value === "" || Number.isNaN(Number(value)) ? undefined : Number(value);
@@ -158,6 +174,8 @@ export class SearchView implements View {
   /** Only the latest search may show its results (an older, slower answer is dropped). */
   private runId = 0;
   private rating = "";
+  /** The last search's results, drawn a page at a time. */
+  private results?: StationResults;
   /** The modules of the last module search (shown on each result). */
   private wantedModules: WantedModule[] = [];
   /** Modules tab: the modules a station must all sell (a fit), empty for a single module search. */
@@ -632,150 +650,194 @@ export class SearchView implements View {
     const id = ++this.runId;
     try {
       // Sorted on something else than distance: the 300 nearest stations rather than 100, so the
-      // best ones of the zone are there (Spansh sorts on distance only).
-      const pages = sort === "distance" && wantedModules.length < 2 ? 1 : 3;
+      // best ones of the zone are there (Spansh sorts on distance only). More pages come when the
+      // last page of results is reached.
       const answers: Json[] = [];
-      for (let page = 0; page < pages; page++) {
-        const res = await spanshPost("stations/search", body(page));
+      let nextPage = 0;
+      let moreAtSpansh = true;
+      const fetchPage = async () => {
+        const res = await spanshPost("stations/search", body(nextPage++));
         answers.push(res);
-        if (!Array.isArray(res?.results) || res.results.length < 100) break;
-      }
+        moreAtSpansh = Array.isArray(res?.results) && res.results.length === 100;
+      };
+      const firstPages = sort === "distance" && wantedModules.length < 2 ? 1 : 3;
+      while (nextPage < firstPages && moreAtSpansh) await fetchPage();
       if (id !== this.runId) return;
-      const res = answers[0];
-      let rows: Json[] = answers.flatMap((a) => (Array.isArray(a?.results) ? a.results : []));
       const settings = this.ctx.store.state.settings;
       const quoteOf = (r: Json) =>
         (r.market ?? []).find((x: Json) => String(x.commodity).toLowerCase() === name.toLowerCase());
-      // Buying and selling: each market's most recent price between Spansh's and Ardent's, and the
-      // best recent markets of the zone that only Ardent returned.
-      const quotes = new Map<Json, MarketQuote>();
+      const buying = tab === "buy";
+      const minVolume = buying ? this.opts.minQty : this.minDemand();
+      // Buying and selling: Ardent's prices of the whole zone, asked once.
+      let ardent = new Map<number, ArdentQuote>();
       if (tab === "buy" || tab === "sell") {
-        const buying = tab === "buy";
-        const minVolume = buying ? this.opts.minQty : this.minDemand();
         const symbol = g.commodities.find((c) => c.name.toLowerCase() === name.toLowerCase())?.id;
         const ask = buying ? ardentBuyQuotes : ardentSellQuotes;
-        const ardent =
-          symbol && ref.system
-            ? await ask(ref.system, symbol, this.range(), settings.maxAgeDays, minVolume)
-            : new Map();
+        if (symbol && ref.system) ardent = await ask(ref.system, symbol, this.range(), settings.maxAgeDays, minVolume);
         if (id !== this.runId) return;
-        for (const r of rows) {
-          const m = quoteOf(r);
-          if (!m) continue;
-          const spansh: MarketQuote = {
-            price: Number(buying ? m.buy_price : m.sell_price),
-            demand: Number((buying ? m.supply : m.demand) ?? 0),
-            updated: r.market_updated_at ?? r.updated_at,
-            source: "spansh",
-          };
-          quotes.set(r, freshestQuote(spansh, ardent.get(Number(r.market_id))));
+      }
+      // Every result received so far, merged, filtered and in the order chosen.
+      const results = (): Json[] => {
+        let rows: Json[] = answers.flatMap((a) => (Array.isArray(a?.results) ? a.results : []));
+        // Buying and selling: each market's most recent price between Spansh's and Ardent's, and
+        // the best recent markets of the zone that only Ardent returned.
+        const quotes = new Map<Json, MarketQuote>();
+        if (tab === "buy" || tab === "sell") {
+          for (const r of rows) {
+            const m = quoteOf(r);
+            if (!m) continue;
+            const spansh: MarketQuote = {
+              price: Number(buying ? m.buy_price : m.sell_price),
+              demand: Number((buying ? m.supply : m.demand) ?? 0),
+              updated: r.market_updated_at ?? r.updated_at,
+              source: "spansh",
+            };
+            quotes.set(r, freshestQuote(spansh, ardent.get(Number(r.market_id))));
+          }
+          const known = new Set(rows.map((r) => Number(r.market_id)));
+          for (const quote of ardent.values()) {
+            if (known.has(quote.marketId) || !ardentStationAllowed(quote, this.opts)) continue;
+            // Drawn like Spansh's results.
+            const row: Json = {
+              name: quote.station,
+              system_name: quote.system,
+              type: ARDENT_STATION_TYPES[quote.stationType] ?? quote.stationType,
+              has_large_pad: quote.padSize === 3,
+              medium_pads: quote.padSize >= 2 ? 1 : 0,
+              small_pads: quote.padSize >= 1 ? 1 : 0,
+              distance: quote.distance,
+              distance_to_arrival: quote.arrival,
+              market_id: quote.marketId,
+              market: [{ commodity: name }],
+            };
+            rows.push(row);
+            quotes.set(row, { price: quote.price, demand: quote.demand, updated: quote.updated, source: "ardent" });
+          }
+          rows = rows.filter((r) => {
+            const q = quotes.get(r);
+            return q && meetsDemand(q, minVolume) && recentEnough(q.updated, settings.maxAgeDays);
+          });
         }
-        const known = new Set(rows.map((r) => Number(r.market_id)));
-        for (const quote of ardent.values()) {
-          if (known.has(quote.marketId) || !ardentStationAllowed(quote, this.opts)) continue;
-          // Drawn like Spansh's results.
-          const row: Json = {
-            name: quote.station,
-            system_name: quote.system,
-            type: ARDENT_STATION_TYPES[quote.stationType] ?? quote.stationType,
-            has_large_pad: quote.padSize === 3,
-            medium_pads: quote.padSize >= 2 ? 1 : 0,
-            small_pads: quote.padSize >= 1 ? 1 : 0,
-            distance: quote.distance,
-            distance_to_arrival: quote.arrival,
-            market_id: quote.marketId,
-            market: [{ commodity: name }],
-          };
-          rows.push(row);
-          quotes.set(row, { price: quote.price, demand: quote.demand, updated: quote.updated, source: "ardent" });
+        this.quotes = quotes;
+        rows = rows.filter((r) => arrivalAllowed(numberOrUndefined(r.distance_to_arrival), this.opts.maxArrival));
+        // A whole fit: only the stations selling every module of the list.
+        if (wantedModules.length > 1)
+          rows = rows.filter((r) => wantedModules.every((m) => stationSells(r.modules ?? [], m, g.moduleAliases)));
+        // Ships and modules sold change too: the "data age" setting, as for markets.
+        if (tab === "ship" || tab === "module") {
+          const seenAt = (r: Json) =>
+            (tab === "ship" ? r.shipyard_updated_at : r.outfitting_updated_at) ?? r.updated_at;
+          rows = rows.filter((r) => recentEnough(seenAt(r), settings.maxAgeDays));
         }
-        rows = rows.filter((r) => {
+        const shipPrice = (r: Json) =>
+          (r.ships ?? []).find((x: Json) => String(x.name).toLowerCase() === name.toLowerCase())?.price;
+        const sortable = (r: Json): SortableStation => {
           const q = quotes.get(r);
-          return q && meetsDemand(q, minVolume) && recentEnough(q.updated, settings.maxAgeDays);
-        });
-      }
-      this.quotes = quotes;
-      rows = rows.filter((r) => arrivalAllowed(numberOrUndefined(r.distance_to_arrival), this.opts.maxArrival));
-      // A whole fit: only the stations selling every module of the list.
-      if (wantedModules.length > 1)
-        rows = rows.filter((r) => wantedModules.every((m) => stationSells(r.modules ?? [], m, g.moduleAliases)));
-      this.wantedModules = wantedModules;
-      // Ships and modules sold change too: the "data age" setting, as for markets.
-      if (tab === "ship" || tab === "module") {
-        const seenAt = (r: Json) => (tab === "ship" ? r.shipyard_updated_at : r.outfitting_updated_at) ?? r.updated_at;
-        rows = rows.filter((r) => recentEnough(seenAt(r), settings.maxAgeDays));
-      }
-      const shipPrice = (r: Json) =>
-        (r.ships ?? []).find((x: Json) => String(x.name).toLowerCase() === name.toLowerCase())?.price;
-      const sortable = (r: Json): SortableStation => {
-        const q = quotes.get(r);
-        return {
-          price: q ? q.price : tab === "ship" ? numberOrUndefined(shipPrice(r)) : undefined,
-          volume: q?.demand,
-          distance: numberOrUndefined(r.distance),
-          arrival: numberOrUndefined(r.distance_to_arrival),
-          seen: quoteTime(q?.updated ?? r.market_updated_at ?? r.updated_at),
+          return {
+            price: q ? q.price : tab === "ship" ? numberOrUndefined(shipPrice(r)) : undefined,
+            volume: q?.demand,
+            distance: numberOrUndefined(r.distance),
+            arrival: numberOrUndefined(r.distance_to_arrival),
+            seen: quoteTime(q?.updated ?? r.market_updated_at ?? r.updated_at),
+          };
         };
+        const order = stationOrder(sort, tab !== "sell");
+        const keyed = rows.map((r) => ({ r, k: sortable(r) }));
+        keyed.sort((a, b) => order(a.k, b.k));
+        return keyed.map((x) => x.r);
       };
-      const order = stationOrder(sort, tab !== "sell");
-      const keyed = rows.map((r) => ({ r, k: sortable(r) }));
-      keyed.sort((a, b) => order(a.k, b.k));
-      rows = keyed.map((x) => x.r).slice(0, tab === "buy" || tab === "sell" ? 100 : 50);
-      if (!rows.length) {
-        replace(
-          this.out,
-          h(
-            "p.empty",
-            null,
-            t("search.nothingFoundWithinLyIncreaseDistance", {
-              maxDistance: this.range(),
-            }),
-          ),
-        );
-        return;
-      }
-      replace(
-        this.out,
-        h(
-          "p.sub",
-          null,
-          t("search.matchingStationsShown", {
-            count: fmt(Math.max(Number(res?.count ?? 0), rows.length)),
-            count2: rows.length,
-          }),
-        ),
-        h(
-          "table.table.search-table",
-          null,
-          h(
-            "thead",
-            null,
-            h(
-              "tr",
-              null,
-              h("th", null, t("common.station")),
-              h("th.num", null, t("common.distance")),
-              ...(tab === "buy" || tab === "sell"
-                ? [
-                    h("th.num", null, tab === "buy" ? t("search.buyPriceColumn") : t("search.sellPriceColumn")),
-                    h("th.num", null, tab === "buy" ? t("search.stockColumn") : t("search.demandColumn")),
-                  ]
-                : [h("th", null, tab === "service" ? t("common.type") : t("search.details"))]),
-              h("th", null, t("search.padArrival")),
-              h("th", null, t("search.updated")),
-            ),
-          ),
-          h(
-            "tbody",
-            null,
-            rows.map((r) => this.row(r, tab, name)),
-          ),
-        ),
-      );
+      this.wantedModules = wantedModules;
+      const shown: StationResults = {
+        tab,
+        name,
+        rows: results(),
+        total: () => Number(answers[0]?.count ?? 0),
+        more: async () => {
+          if (!moreAtSpansh) return false;
+          await fetchPage();
+          if (id !== this.runId) return false;
+          shown.rows = results();
+          return true;
+        },
+        hasMore: () => moreAtSpansh,
+      };
+      this.results = shown;
+      this.showPage(0);
     } catch (e) {
       if (id !== this.runId) return;
       replace(this.out, h("p.error", null, icon("warn"), ` ${String((e as Error).message ?? e)}`));
     }
+  }
+
+  /** Draws page `page` (50 results each) of the last search, with the pages under it. */
+  private showPage(page: number) {
+    const res = this.results;
+    if (!res) return;
+    const { tab, name, rows } = res;
+    if (!rows.length) {
+      replace(
+        this.out,
+        h("p.empty", null, t("search.nothingFoundWithinLyIncreaseDistance", { maxDistance: this.range() })),
+      );
+      return;
+    }
+    const pages = Math.ceil(rows.length / PAGE_SIZE);
+    const at = Math.min(page, pages - 1);
+    const go = async (wanted: number) => {
+      // Past the results received: the next ones are asked first.
+      if (wanted >= pages && res.hasMore()) {
+        replace(this.pagerSlot(), h("span.spinner"), " " + t("common.searching"));
+        await res.more();
+      }
+      this.showPage(wanted);
+      this.out.scrollIntoView({ block: "start", behavior: "smooth" });
+    };
+    const nav = pager(at, pages, res.hasMore(), (wanted) => void go(wanted));
+    replace(
+      this.out,
+      h(
+        "p.sub",
+        null,
+        t("search.matchingStationsPage", {
+          count: fmt(Math.max(res.total(), rows.length)),
+          from: fmt(at * PAGE_SIZE + 1),
+          to: fmt(Math.min(rows.length, (at + 1) * PAGE_SIZE)),
+        }),
+      ),
+      h(
+        "table.table.search-table",
+        null,
+        h(
+          "thead",
+          null,
+          h(
+            "tr",
+            null,
+            h("th", null, t("common.station")),
+            h("th.num", null, t("common.distance")),
+            ...(tab === "buy" || tab === "sell"
+              ? [
+                  h("th.num", null, tab === "buy" ? t("search.buyPriceColumn") : t("search.sellPriceColumn")),
+                  h("th.num", null, tab === "buy" ? t("search.stockColumn") : t("search.demandColumn")),
+                ]
+              : [h("th", null, tab === "service" ? t("common.type") : t("search.details"))]),
+            h("th", null, t("search.padArrival")),
+            h("th", null, t("search.updated")),
+          ),
+        ),
+        h(
+          "tbody",
+          null,
+          rows.slice(at * PAGE_SIZE, (at + 1) * PAGE_SIZE).map((r) => this.row(r, tab, name)),
+        ),
+      ),
+      h("div.pager-slot", null, nav),
+    );
+  }
+
+  /** Where the pages are drawn (a spinner goes there while more results come). */
+  private pagerSlot(): HTMLElement {
+    return this.out.querySelector<HTMLElement>(".pager-slot") ?? this.out;
   }
 
   private row(r: Json, tab: Tab, name: string): HTMLElement {

@@ -9,6 +9,7 @@ import { stationIcon } from "../../ui/stationIcon.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../../services/spansh.js";
 import type { Finder } from "../../features/materials/sources.js";
 import type { Settings } from "../../state/store.js";
+import { log } from "../../platform/logger.js";
 
 /** A system name was clicked (see links.ts: copy, and open Navigation if chosen in Settings). */
 export const copySystem = (system: string) => openSystem(system);
@@ -140,6 +141,35 @@ export function finderSection(
             h("span.sub", null, t("results.matchingSystems", { locale: res.total.toLocaleString(locale()) })),
           );
         }
+        // The next results, a page at a time (not for the best-share bodies, already picked).
+        let shown = res.rows.length;
+        let page = 0;
+        const moreButton = (): HTMLElement | null =>
+          res.total > shown && !f.materialName
+            ? h(
+                "button.ghost.small.results-more",
+                {
+                  onclick: async (e: Event) => {
+                    const button = e.currentTarget as HTMLButtonElement;
+                    button.disabled = true;
+                    button.replaceChildren(h("span.spinner"), t("common.searching"));
+                    try {
+                      const next = await runFinder(f, ref, settings, false, ++page);
+                      shown += next.rows.length;
+                      const after = next.rows.length ? moreButton() : null;
+                      button.replaceWith(...next.rows.map(resultRow), ...(after ? [after] : []));
+                    } catch (err) {
+                      button.disabled = false;
+                      button.replaceChildren(t("common.retry"));
+                      log.warn("results", `Next results failed: ${String((err as Error)?.message ?? err)}`);
+                    }
+                  },
+                },
+                t("results.moreResults", { count: res.total - shown }),
+              )
+            : null;
+        const more = moreButton();
+        if (more) list.append(more);
       })
       .catch((err) => {
         status.replaceChildren();

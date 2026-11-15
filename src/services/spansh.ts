@@ -78,7 +78,8 @@ function freshness(days: number): Record<string, unknown> {
   return { updated_at: { comparison: "<=>", value: [cutoff, "2999-12-31T00:00:00"] } };
 }
 
-export function buildRequest(f: Finder, ref: Reference, s: Settings): Record<string, unknown> {
+/** The Spansh request of a finder; `page` for the results after the first ones. */
+export function buildRequest(f: Finder, ref: Reference, s: Settings, page = 0): Record<string, unknown> {
   const filters: Record<string, unknown> = {
     ...(f.filters ?? {}),
     distance: { min: "0", max: String(s.maxDistance) },
@@ -88,7 +89,7 @@ export function buildRequest(f: Finder, ref: Reference, s: Settings): Record<str
     filters,
     sort: [{ distance: { direction: "asc" } }],
     size: f.size ?? (f.type === "bodies" ? 30 : 10),
-    page: 0,
+    page,
     ...reference(ref),
   };
 }
@@ -198,9 +199,15 @@ function stationRow(r: any): ResultRow {
   };
 }
 
-export async function runFinder(f: Finder, ref: Reference, s: Settings, force = false): Promise<FinderResult> {
+export async function runFinder(
+  f: Finder,
+  ref: Reference,
+  s: Settings,
+  force = false,
+  page = 0,
+): Promise<FinderResult> {
   if (f.type === "info") return { rows: [], total: 0 };
-  const body = buildRequest(f, ref, s);
+  const body = buildRequest(f, ref, s, page);
   const cacheKey = `${f.type}:${JSON.stringify(body)}`;
   const hit = cache.get(cacheKey);
   if (hit && !force && Date.now() - hit.at < TTL) return hit.value;
@@ -285,32 +292,47 @@ function factionRow(r: any, q: FactionQuery): ResultRow {
  */
 export async function searchFaction(q: FactionQuery, ref: Reference): Promise<FinderResult> {
   // States are checked here, on the faction's main and active states: Spansh only filters on the
-  // main one, which left out systems where a wanted state is active alongside another.
+  // main one, which left out systems where a wanted state is active alongside another. Every page
+  // is read (up to FACTION_SEARCH_PAGES), so the results can be shown a page at a time.
   const presence: Record<string, unknown> = { name: { value: [q.faction] } };
-  const request = (filters: Record<string, unknown>, size: number) => ({
+  const request = (filters: Record<string, unknown>, page: number) => ({
     filters: { minor_faction_presences: [presence], ...filters },
     sort: [{ distance: { direction: "asc" } }],
-    size,
-    page: 0,
+    size: 100,
+    page,
     ...reference(ref),
   });
-  const size = q.states.length ? 200 : 100;
-  let data: any;
+  const readAll = async (filters: Record<string, unknown>) => {
+    const results: any[] = [];
+    let count = 0;
+    for (let page = 0; page < FACTION_SEARCH_PAGES; page++) {
+      const data: any = await spanshPost("systems/search", request(filters, page));
+      const found: any[] = Array.isArray(data?.results) ? data.results : [];
+      count = num(data?.count) || count;
+      results.push(...found);
+      if (found.length < 100) break;
+    }
+    return { results, count };
+  };
+  let data: { results: any[]; count: number };
   if (q.ownerOnly) {
     try {
-      data = await spanshPost("systems/search", request({ controlling_minor_faction: { value: [q.faction] } }, size));
+      data = await readAll({ controlling_minor_faction: { value: [q.faction] } });
     } catch {
       // Not every Spansh version filters on the controlling faction: filter the presences here.
-      data = await spanshPost("systems/search", request({}, 200));
+      data = await readAll({});
     }
-  } else data = await spanshPost("systems/search", request({}, size));
-  let results: any[] = Array.isArray(data?.results) ? data.results : [];
+  } else data = await readAll({});
+  let results = data.results;
   if (q.ownerOnly) results = results.filter((r) => controls(r, q.faction));
   if (q.states.length) results = results.filter((r) => hasState(presenceOf(r, q.faction), q.states));
   const rows = results.map((r) => factionRow(r, q));
   const filtered = q.ownerOnly || q.states.length > 0;
-  return { rows, total: filtered ? rows.length : num(data?.count) || rows.length };
+  return { rows, total: filtered ? rows.length : data.count || rows.length };
 }
+
+/** Pages of 100 read at most for a faction search (Search → Faction). */
+const FACTION_SEARCH_PAGES = 10;
 
 /** Whether a faction's presence is in one of `states`, as its main state or an active one. */
 export function hasState(presence: any, states: string[]): boolean {
