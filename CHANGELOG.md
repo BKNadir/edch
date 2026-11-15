@@ -17,6 +17,7 @@ and EDCH shows it in the update banner.
 - Search → Buy / Sell: price and supply (or demand) in separate columns, a minimum supply when buying, and the data age right in the form. Search → Modules: several modules at once ("Add") to find a station that sells them all.
 - Every search (Search tabs, Mining) has its own "Range": empty, it uses the default from Settings (General). Wishlist: ship builds exported from Inara (SLEF) import like EDSY and Coriolis ones.
 - Share modes: two left, **Invisible** and **Normal**. Invisible publishes nothing, not even to EDDN, while EDCH still reads all public data; switching to Normal asks for confirmation. EDCH now starts in Invisible mode; Settings → General can choose Normal or the last mode used. The former BGS mode becomes Invisible.
+- While searching or loading, EDCH just says "Searching…" or "Loading…", without naming a site.
 - BGS page: "Update" also asks EliteBGS (public BGS database from EDDN) for the faction's systems: those Spansh misses are added, and a more recent influence and state replaces older data (other factions' influence kept).
 
 ## 0.10.13

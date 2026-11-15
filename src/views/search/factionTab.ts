@@ -148,7 +148,7 @@ async function runSearch(ctx: Ctx, out: HTMLElement) {
   // Spansh wants the exact spelling: a name typed with other capitals or accents gets the game's.
   const known = exactFaction(await factionsOf(ctx), faction);
   const id = ++runId;
-  replace(out, h("p.sub", null, h("span.spinner"), " " + t("common.searchingSpansh")));
+  replace(out, h("p.sub", null, h("span.spinner"), " " + t("common.searching")));
   try {
     const res = await searchFaction(
       {

@@ -628,7 +628,7 @@ export class SearchView implements View {
         ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } }
         : { reference_system: ref.system }),
     });
-    replace(this.out, h("p.sub", null, h("span.spinner"), " " + t("common.searchingSpansh")));
+    replace(this.out, h("p.sub", null, h("span.spinner"), " " + t("common.searching")));
     const id = ++this.runId;
     try {
       // Sorted on something else than distance: the 300 nearest stations rather than 100, so the

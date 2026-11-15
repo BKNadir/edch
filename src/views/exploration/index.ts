@@ -285,7 +285,7 @@ export class ExplorationView implements View {
         sys(system),
         err
           ? h("p.sub", null, t("exploration.edsmUnavailable", { err }))
-          : h("p.sub", null, h("span.spinner"), " " + t("exploration.searchingEdsm")),
+          : h("p.sub", null, h("span.spinner"), " " + t("common.searching")),
       );
     }
     return h("section.card.edsm", null, head, sys(system), ...this.edsmBody(data));

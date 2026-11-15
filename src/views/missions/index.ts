@@ -237,7 +237,7 @@ export class MissionsView implements View {
           /mining/i.test(m.name) ? " " + t("missions.whereGetBuyMine") : " " + t("common.whereBuy"),
         ),
       );
-    if (st.loading) return h("div.mission-source", null, h("span.spinner"), " " + t("common.searchingSpansh"));
+    if (st.loading) return h("div.mission-source", null, h("span.spinner"), " " + t("common.searching"));
     return h(
       "div.mission-source",
       null,

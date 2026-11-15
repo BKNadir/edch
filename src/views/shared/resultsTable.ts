@@ -117,7 +117,7 @@ export function finderSection(
   if (f.type === "info") return section;
 
   const load = () => {
-    status.replaceChildren(h("span.spinner"), t("common.searchingSpansh"));
+    status.replaceChildren(h("span.spinner"), t("common.searching"));
     list.replaceChildren();
     runFinder(f, ref, settings, force)
       .then((res) => {

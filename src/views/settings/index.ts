@@ -164,7 +164,7 @@ export class SettingsView implements View {
       h(
         "section.card",
         { "data-tab": "preferences" },
-        h("h3", null, t("settings.systemSearchSpansh")),
+        h("h3", null, t("settings.systemSearch")),
         number(t("settings.maxDistanceLy"), s.maxDistance, "maxDistance", t("settings.searchRadiusAroundLocation"), {
           min: "10",
           max: "5000",
