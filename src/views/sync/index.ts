@@ -76,7 +76,6 @@ export class SyncView implements View {
             "ul.share-mode-help",
             null,
             h("li", null, h("strong", null, t("shareMode.normal")), " — ", t("shareMode.normalHelp")),
-            h("li", null, h("strong", null, t("shareMode.bgs")), " — ", t("shareMode.bgsHelp")),
             h("li", null, h("strong", null, t("shareMode.invisible")), " — ", t("shareMode.invisibleHelp")),
           ),
           h("p.sub", null, t("shareMode.othersStillShare")),

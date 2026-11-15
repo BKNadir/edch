@@ -1608,14 +1608,20 @@
     "typeUnknown": "Andere (unbekannte Anleihe)"
   },
   "shareMode": {
-    "bgs": "BGS",
-    "bgsHelp": "Deine BGS-Arbeit bleibt privat: Fraktionen, ihr Einfluss, ihre Zustände und Konflikte werden nicht geteilt, ebenso wenig deine Missionen, Kopfgelder und Anleihen, Handel oder verkaufte Daten. Sprünge, Scans und Märkte schon.",
-    "intro": "Was EDCH an EDDN, EDSM und Inara sendet. Der Schalter ist auch in der oberen Leiste und bleibt nach einem Neustart so eingestellt.",
+    "confirmButton": "Zu Normal wechseln",
+    "confirmText": "Ab jetzt wird geteilt, was du im Spiel tust: EDDN (Sprünge, Märkte, Scans…) und EDSM und Inara, wenn du sie aktiviert hast. Andere Spieler sehen es in ihren Werkzeugen.",
+    "confirmTitle": "In den Normalmodus wechseln?",
+    "intro": "Was EDCH an EDDN, EDSM und Inara sendet. Der Schalter ist auch in der oberen Leiste; der Modus beim Start wird unter Einstellungen → Allgemein festgelegt.",
     "invisible": "Unsichtbar",
-    "invisibleHelp": "Nichts wird geteilt: kein Sprung, kein Markt, gar nichts. Was noch gesendet werden sollte, wird verworfen.",
+    "invisibleHelp": "Nichts von dem, was du tust, wird veröffentlicht, nicht einmal an EDDN: kein Sprung, kein Markt, nichts. EDCH liest trotzdem alle öffentlichen Daten (Spansh, Ardent, EliteBGS, EDSM…). Was auf das Senden wartete, wird verworfen.",
     "normal": "Normal",
-    "normalHelp": "Alles, was die aktivierten Dienste annehmen, wird geteilt.",
+    "normalHelp": "Alles, was die aktivierten Dienste annehmen, wird geteilt (EDDN, und EDSM oder Inara, wenn du sie aktiviert hast).",
     "othersStillShare": "Das verbirgt nur, was du sendest: Andere Spieler im selben System können seinen Zustand weiterhin teilen.",
+    "startHelp": "Unsichtbar veröffentlicht nichts, bis du Normal wählst (mit einer Bestätigung).",
+    "startInvisible": "Unsichtbar (empfohlen)",
+    "startLast": "Der zuletzt genutzte Modus",
+    "startNormal": "Normal",
+    "startTitle": "Freigabemodus beim Start",
     "title": "Was du teilst"
   },
   "bgs": {
@@ -1698,7 +1704,6 @@
     "tickUnknown": "Die Zeit des letzten BGS-Ticks ist noch nicht bekannt.",
     "title": "BGS",
     "toDo": "Was tun",
-    "tourBgsMode": "BGS-Modus: was du auf dieser Runde siehst, bleibt auf deinem PC. Nichts über Fraktionen wird an EDDN, EDSM oder Inara gesendet.",
     "tourInvisibleMode": "Unsichtbar-Modus: während dieser Runde wird gar nichts gesendet. Nur diese Seite wird aktualisiert.",
     "trade": "Handel",
     "trendHelp": "Durchschnittliche Änderung pro Tag in den letzten Tagen (deine Besuche, Spansh, EDSM) und der in {{days}} Tagen erwartete Einfluss, wenn es so weitergeht.",

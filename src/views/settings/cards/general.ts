@@ -1,8 +1,10 @@
-// Settings → General: application behaviour (closing the window, start page, updates…).
+// Settings → General: application behaviour (closing the window, the share mode at start-up,
+// what's new after an update…).
 
 import { t } from "../../../platform/i18n.js";
 import type { Ctx } from "../../../state/context.js";
 import type { Settings } from "../../../state/store.js";
+import type { StartShareMode } from "../../../state/syncSettings.js";
 import { showChangelog } from "../../../ui/changelog.js";
 import { h } from "../../../ui/dom.js";
 
@@ -10,6 +12,11 @@ import { h } from "../../../ui/dom.js";
 export function appCard(ctx: Ctx, rerender: () => void): HTMLElement {
   const s = ctx.store.state.settings;
   const set = (patch: Partial<Settings>) => ctx.store.updateSettings(patch);
+  const START_MODES: [StartShareMode, string][] = [
+    ["invisible", t("shareMode.startInvisible")],
+    ["normal", t("shareMode.startNormal")],
+    ["last", t("shareMode.startLast")],
+  ];
   const options: [Settings["closeBehavior"], string][] = [
     ["quit", t("settings.quitEdch")],
     ["minimize", t("settings.minimiseTaskbar")],
@@ -43,6 +50,25 @@ export function appCard(ctx: Ctx, rerender: () => void): HTMLElement {
         onchange: (e: Event) => set({ showChangelog: (e.target as HTMLInputElement).checked }),
       }),
       " " + t("settings.showWhatSNewAfterUpdate"),
+    ),
+    h(
+      "label.field",
+      null,
+      h("span", null, t("shareMode.startTitle")),
+      h(
+        "select",
+        {
+          onchange: (e: Event) =>
+            set({
+              sync: {
+                ...ctx.store.state.settings.sync,
+                startShareMode: (e.target as HTMLSelectElement).value as StartShareMode,
+              },
+            }),
+        },
+        START_MODES.map(([v, l]) => h("option", { value: v, selected: s.sync.startShareMode === v }, l)),
+      ),
+      h("small", null, t("shareMode.startHelp")),
     ),
     h("div.row", null, h("button.ghost", { onclick: () => showChangelog() }, t("settings.seeWhatSNewVersion"))),
     h("p.sub", null, t("settings.edchOnlyOpensOnceLaunchingAgain")),

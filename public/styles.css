@@ -4517,13 +4517,10 @@ body.menu-editing .sidebar span {
   color: var(--text);
   font-weight: 600;
 }
-.share-mode.bgs,
 .share-mode.invisible {
   border-color: var(--accent);
 }
-.share-mode.bgs .icon,
 .share-mode.invisible .icon,
-.share-mode.bgs .share-mode-option.on,
 .share-mode.invisible .share-mode-option.on {
   color: var(--accent);
 }

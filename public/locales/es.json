@@ -1610,14 +1610,20 @@
     "typeUnknown": "Otro (bono desconocido)"
   },
   "shareMode": {
-    "bgs": "BGS",
-    "bgsHelp": "Tu trabajo BGS queda privado: no se comparten las facciones, su influencia, estados y conflictos, ni tus misiones, recompensas y bonos, comercio o datos vendidos. Los saltos, escaneos y mercados sí.",
-    "intro": "Lo que EDCH envía a EDDN, EDSM e Inara. El selector también está en la barra superior y se mantiene tras reiniciar.",
+    "confirmButton": "Pasar a Normal",
+    "confirmText": "A partir de ahora se comparte lo que haces en el juego: EDDN (saltos, mercados, escaneos…), y EDSM e Inara si los activaste. Otros jugadores lo verán en sus herramientas.",
+    "confirmTitle": "¿Pasar al modo Normal?",
+    "intro": "Lo que EDCH envía a EDDN, EDSM e Inara. El selector también está en la barra superior; el modo al iniciar se elige en Ajustes → General.",
     "invisible": "Invisible",
-    "invisibleHelp": "No se comparte nada: ni saltos, ni mercados, nada. Lo que esperaba ser enviado se descarta.",
+    "invisibleHelp": "Nada de lo que haces se publica, ni siquiera en EDDN: ni saltos, ni mercados, nada. EDCH sigue leyendo todos los datos públicos (Spansh, Ardent, EliteBGS, EDSM…). Lo que esperaba para enviarse se descarta.",
     "normal": "Normal",
-    "normalHelp": "Se comparte todo lo que aceptan los servicios activados.",
+    "normalHelp": "Se comparte todo lo que aceptan los servicios activados (EDDN, y EDSM o Inara si los activaste).",
     "othersStillShare": "Esto solo oculta lo que tú envías: otros jugadores que pasen por el mismo sistema pueden seguir compartiendo su estado.",
+    "startHelp": "Invisible no publica nada hasta que elijas Normal (con una confirmación).",
+    "startInvisible": "Invisible (recomendado)",
+    "startLast": "El último modo usado",
+    "startNormal": "Normal",
+    "startTitle": "Modo de compartir al iniciar",
     "title": "Lo que compartes"
   },
   "bgs": {
@@ -1700,7 +1706,6 @@
     "tickUnknown": "Aún no se conoce la hora del último tick del BGS.",
     "title": "BGS",
     "toDo": "Qué hacer",
-    "tourBgsMode": "Modo BGS: lo que veas en esta ronda se queda en tu PC. No se envía nada sobre las facciones a EDDN, EDSM ni Inara.",
     "tourInvisibleMode": "Modo invisible: no se envía nada durante esta ronda. Solo se actualiza esta página.",
     "trade": "Comercio",
     "trendHelp": "Variación media por día en los últimos días (tus visitas, Spansh, EDSM), y la influencia esperada en {{days}} días si sigue así.",

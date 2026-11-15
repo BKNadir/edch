@@ -11,7 +11,7 @@ import { emptyState, type CommanderState } from "../game/journal/state.js";
 import type { Blueprint } from "../game/types.js";
 import type { WatchStatus } from "../platform/bridge.js";
 import { type SyncSettings } from "./syncSettings.js";
-import { DEFAULT_SYNC } from "./syncSettings.js";
+import { DEFAULT_SYNC, startSyncSettings } from "./syncSettings.js";
 import { type BgsSettings, DEFAULT_BGS, validBgsSettings } from "./bgsSettings.js";
 
 export interface Settings {
@@ -402,7 +402,7 @@ export class Store {
         return {
           ...loaded,
           maxAgeDays: validDataAge(loaded.maxAgeDays),
-          sync: { ...DEFAULT_SYNC, ...(loaded.sync ?? {}) },
+          sync: startSyncSettings(loaded.sync),
           bgs: validBgsSettings(loaded.bgs),
           remote: { ...DEFAULT_REMOTE, ...(loaded.remote ?? {}) },
           notify: { ...DEFAULT_NOTIFY, ...(loaded.notify ?? {}) },

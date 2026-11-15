@@ -620,11 +620,7 @@ export class BgsView implements View {
       h("h3", null, t("bgs.refreshTour")),
       h("p.sub", null, t("bgs.refreshTourHelp")),
       tour.length ? h("p.sub", null, t("bgs.tourAutoCopyHelp")) : null,
-      shareMode === "normal"
-        ? null
-        : shareMode === "bgs"
-          ? callout("info", t("shareMode.bgs"), t("bgs.tourBgsMode"))
-          : callout("info", t("shareMode.invisible"), t("bgs.tourInvisibleMode")),
+      shareMode === "normal" ? null : callout("info", t("shareMode.invisible"), t("bgs.tourInvisibleMode")),
       tour.length
         ? h(
             "ol.bgs-tour",

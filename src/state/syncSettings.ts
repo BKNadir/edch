@@ -5,15 +5,18 @@
 /**
  * What EDCH shares with EDDN, EDSM and Inara (the switch in the top bar):
  * - "normal": everything each enabled service takes;
- * - "bgs": no BGS data (factions, influence, states, conflicts, and the actions that move
- *   influence: missions, vouchers, trade, cartography…), so your BGS work isn't published;
- * - "invisible": nothing at all.
+ * - "invisible": nothing at all, not even with EDDN (public data is still read).
  */
-export type ShareMode = "normal" | "bgs" | "invisible";
+export type ShareMode = "normal" | "invisible";
+
+/** The share mode EDCH starts in: always invisible or normal, or the last one used. */
+export type StartShareMode = ShareMode | "last";
 
 export interface SyncSettings {
-  /** What is shared with the three services (kept after a restart). */
+  /** What is shared with the three services. */
   shareMode: ShareMode;
+  /** The mode at start-up: invisible (the default), normal, or the last one used. */
+  startShareMode: StartShareMode;
   eddn: boolean;
   edsm: boolean;
   edsmCommander: string;
@@ -40,7 +43,8 @@ export interface SyncSettings {
 export type DiscordEvery = "now" | "5min" | "15min";
 
 export const DEFAULT_SYNC: SyncSettings = {
-  shareMode: "normal",
+  shareMode: "invisible",
+  startShareMode: "invisible",
   eddn: true,
   edsm: false,
   edsmCommander: "",
@@ -52,3 +56,16 @@ export const DEFAULT_SYNC: SyncSettings = {
   discordBot: "",
   discordEvery: "now",
 };
+
+/**
+ * The Sync settings as saved, with the mode EDCH starts in: the chosen start mode, or the last one
+ * used. The former "bgs" mode (it shared everything but the BGS data) becomes invisible.
+ */
+export function startSyncSettings(saved: Partial<SyncSettings> | undefined): SyncSettings {
+  const sync = { ...DEFAULT_SYNC, ...(saved ?? {}) };
+  const start: StartShareMode = ["normal", "invisible", "last"].includes(sync.startShareMode)
+    ? sync.startShareMode
+    : "invisible";
+  const last: ShareMode = sync.shareMode === "normal" ? "normal" : "invisible";
+  return { ...sync, startShareMode: start, shareMode: start === "last" ? last : start };
+}
