@@ -2,7 +2,7 @@
 // optionally only where it is in some states (Famine, Expansion…), nearest first (Spansh).
 
 import { gameName, locale, t } from "../../platform/i18n.js";
-import { searchFaction } from "../../services/spansh.js";
+import { searchFactionFreshest } from "../../features/search/factionSources.js";
 import { referenceOf, type Ctx } from "../../state/context.js";
 import { referenceField } from "../shared/referenceField.js";
 import { h, icon, replace } from "../../ui/dom.js";
@@ -160,7 +160,7 @@ async function runSearch(ctx: Ctx, out: HTMLElement) {
   const id = ++runId;
   replace(out, h("p.sub", null, h("span.spinner"), " " + t("common.searching")));
   try {
-    const res = await searchFaction(
+    const res = await searchFactionFreshest(
       {
         faction: known ?? faction,
         ownerOnly: query.ownerOnly,
