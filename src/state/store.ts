@@ -3,6 +3,7 @@
 
 import { log } from "../platform/logger.js";
 import { validDataAge } from "./dataAge.js";
+import { DEFAULT_SEARCH_LOAD, validSearchLoad } from "./searchLoad.js";
 import { type ThemeSettings } from "./themeSettings.js";
 import { DEFAULT_THEME, validTheme } from "./themeSettings.js";
 import { emptyActivity, type ActivityState } from "../game/activity/state.js";
@@ -29,6 +30,11 @@ export interface Settings {
    * (faction states); 0 keeps everything.
    */
   maxAgeDays: number;
+  /**
+   * Searches (stations, systems, a material's sources) load the nearest results up to this many,
+   * once; sorting and changing page then need no new request (state/searchLoad.ts).
+   */
+  searchLoad: number;
   /** Used when the game hasn't told us where we are yet. */
   fallbackSystem: string;
   largePadOnly: boolean;
@@ -317,6 +323,7 @@ const DEFAULT_SETTINGS: Settings = {
   minSellDemand: 1,
   minBuySupply: 1,
   maxAgeDays: 3,
+  searchLoad: DEFAULT_SEARCH_LOAD,
   fallbackSystem: "Sol",
   largePadOnly: false,
   sync: DEFAULT_SYNC,
@@ -405,6 +412,7 @@ export class Store {
         return {
           ...loaded,
           maxAgeDays: validDataAge(loaded.maxAgeDays),
+          searchLoad: validSearchLoad(loaded.searchLoad),
           sync: startSyncSettings(loaded.sync),
           bgs: validBgsSettings(loaded.bgs),
           remote: { ...DEFAULT_REMOTE, ...(loaded.remote ?? {}) },

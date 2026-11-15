@@ -3,12 +3,13 @@
 
 import { defaultJournalDir, isRemote, isTauri, logsOpen, startJournal, updateMode } from "../../platform/bridge.js";
 import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
+import { SEARCH_LOAD_CHOICES } from "../../state/searchLoad.js";
 import { priceAgeLabel } from "../shared/marketFilters.js";
 import { t } from "../../platform/i18n.js";
 import { setDebugLog } from "../../platform/logger.js";
 import type { Ctx, View } from "../../state/context.js";
 import type { Settings } from "../../state/store.js";
-import { h, replace, toast } from "../../ui/dom.js";
+import { fmt, h, replace, toast } from "../../ui/dom.js";
 import { appearanceCard, pagesCard } from "./cards/display.js";
 import { engineersCard, launchCard, navigationCard } from "./cards/game.js";
 import { appCard } from "./cards/general.js";
@@ -198,6 +199,19 @@ export class SettingsView implements View {
             ),
           ),
           h("small", null, t("market.dataAgeHelp")),
+        ),
+        h(
+          "label.field",
+          null,
+          h("span", null, t("settings.searchLoad")),
+          h(
+            "select",
+            { onchange: (e: Event) => set({ searchLoad: Number((e.target as HTMLSelectElement).value) }) },
+            SEARCH_LOAD_CHOICES.map((count) =>
+              h("option", { value: String(count), selected: count === s.searchLoad }, fmt(count)),
+            ),
+          ),
+          h("small", null, t("settings.searchLoadHelp")),
         ),
         h(
           "label.field",

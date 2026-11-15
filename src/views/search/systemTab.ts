@@ -19,7 +19,6 @@ import {
   securityLabel,
   STAR_TYPES,
   SYSTEM_STATION_TYPES,
-  SYSTEMS_PAGE_SIZE,
   type SystemCriteria,
 } from "../../services/systemSearch.js";
 import { referenceOf, type Ctx } from "../../state/context.js";
@@ -29,11 +28,7 @@ import { h, icon, replace } from "../../ui/dom.js";
 import { referenceField } from "../shared/referenceField.js";
 import { radiusField, rangeOf } from "../shared/radiusField.js";
 import { resultRow } from "../shared/resultsTable.js";
-import type { ResultRow } from "../../services/spansh.js";
 import { showPagedList } from "../shared/pagedList.js";
-
-/** Spansh pages asked for at most (the nearest 1000 systems). */
-const MAX_PAGES = 20;
 
 /** What was chosen, kept while the app runs. */
 const criteria: SystemCriteria = {};
@@ -162,20 +157,15 @@ async function runSearch(ctx: Ctx, out: HTMLElement) {
   const reference = referenceOf(ctx);
   const range = rangeOf(ownRange, ctx.store.state.settings.maxDistance);
   const { maxAgeDays } = ctx.store.state.settings;
-  // Spansh answers SYSTEMS_PAGE_SIZE systems at a time: the next ones are asked when the pages
-  // shown go past those received, up to MAX_PAGES of them.
-  const rows: ResultRow[] = [];
-  let total = 0;
-  let spanshPage = 0;
-  const fetchNext = async () => {
-    const answer = await searchSystems(criteria, reference, range, spanshPage++, maxAgeDays);
-    total = answer.total;
-    rows.push(...answer.rows);
-    return answer.rows.length > 0;
-  };
-  const hasMore = () => rows.length < Math.min(total, MAX_PAGES * SYSTEMS_PAGE_SIZE) && spanshPage < MAX_PAGES;
   try {
-    await fetchNext();
+    // The nearest systems up to the setting, asked once; the pages are then drawn from them.
+    const { rows, total } = await searchSystems(
+      criteria,
+      reference,
+      range,
+      ctx.store.state.settings.searchLoad,
+      maxAgeDays,
+    );
     if (id !== runId) return;
     if (!rows.length) {
       replace(out, h("p.empty", null, t("search.noSystems")));
@@ -183,8 +173,13 @@ async function runSearch(ctx: Ctx, out: HTMLElement) {
     }
     await showPagedList(
       out,
-      { rows: () => rows, total: () => total, hasMore, more: fetchNext, limit: MAX_PAGES * SYSTEMS_PAGE_SIZE },
+      { rows: () => rows, total: () => rows.length },
       {
+        // When Spansh has more than were loaded, the count says these are the nearest ones.
+        header: () =>
+          total > rows.length
+            ? h("p.sub", null, t("search.nearestSystemsLoaded", { count: rows.length, total }))
+            : null,
         summary: (from, to, count) => t("search.systemsPage", { count, from, to }),
         draw: (shown) => h("div.results", null, shown.map(resultRow)),
       },

@@ -23,12 +23,10 @@ import { log } from "../../platform/logger.js";
 import { openSystemPage, systemInfo } from "../shared/links.js";
 import { systemForm } from "./systemTab.js";
 import { ardentBuyQuotes, ardentSellQuotes, type ArdentQuote } from "../../services/ardent.js";
-import { showPagedList } from "../shared/pagedList.js";
 import {
   ARRIVAL_CHOICES,
   STATION_SORTS,
   arrivalAllowed,
-  spanshMarketSort,
   stationOrder,
   type SortableStation,
   type StationSort,
@@ -108,17 +106,22 @@ const SERVICES: [string, string][] = [
   ["Apex Interstellar", "Apex Interstellar"],
   ["Frontline Solutions", "Frontline Solutions"],
 ];
-/** A search's results: all received so far (in the order chosen), and how to get more. */
+/** A search's results: the nearest stations loaded once, filtered, in the "Sort by" order. */
 interface StationResults {
   tab: Tab;
   name: string;
   rows: Json[];
-  /** How many stations the source counts in all. */
-  total: () => number;
-  /** Asks for the next results; false when there are none. */
-  more: () => Promise<boolean>;
-  hasMore: () => boolean;
+  /** How many stations Spansh counts in all. */
+  total: number;
+  /** How many of them were loaded (the nearest ones, up to the setting). */
+  loaded: number;
+  /** Puts the rows in the "Sort by" order chosen now. */
+  reorder: () => void;
 }
+
+/** Stations per Spansh request, and requests sent together. */
+const SPANSH_PAGE_SIZE = 100;
+const PARALLEL_PAGES = 3;
 
 /** A number from Spansh's or Ardent's JSON, or undefined. */
 const numberOrUndefined = (value: unknown) =>
@@ -161,6 +164,8 @@ export class SearchView implements View {
     const chosen = this.sorts[tab];
     return chosen && offered.includes(chosen) ? chosen : offered[0];
   }
+  /** Results drawn so far, each a new search or "Sort by" order (see showResults). */
+  private drawnOrders = 0;
   /** Selling: the price kept for each Spansh result (the most recent of Spansh's and Ardent's). */
   private quotes = new Map<Json, MarketQuote>();
 
@@ -570,7 +575,11 @@ export class SearchView implements View {
             {
               onchange: (e: Event) => {
                 this.sorts[tab] = (e.target as HTMLSelectElement).value as StationSort;
-                this.rerun();
+                // The results already here are put in the new order: no new request.
+                if (this.results?.tab === tab) {
+                  this.results.reorder();
+                  this.showResults();
+                }
               },
             },
             STATION_SORTS[tab].map((sort: StationSort) =>
@@ -797,7 +806,6 @@ export class SearchView implements View {
     }
 
     const ref = referenceOf(this.ctx);
-    const sort = this.sortOf(tab);
     const commodity = tab === "buy" || tab === "sell";
     if (commodity) {
       // Only markets seen within the data age: old prices would take the first places.
@@ -810,13 +818,10 @@ export class SearchView implements View {
         comparison: "<=>",
       };
     }
-    // Spansh sorts a commodity's markets itself, so the first page holds the best ones of the
-    // whole zone, not only of the nearest stations.
-    const spanshSort = commodity ? spanshMarketSort(sort, tab === "buy", name) : undefined;
     const body = (page: number): Json => ({
       filters: f,
-      sort: [spanshSort ?? { distance: { direction: "asc" } }],
-      size: 100,
+      sort: [{ distance: { direction: "asc" } }],
+      size: SPANSH_PAGE_SIZE,
       page,
       ...(ref.coords
         ? { reference_coords: { x: ref.coords[0], y: ref.coords[1], z: ref.coords[2] } }
@@ -825,19 +830,19 @@ export class SearchView implements View {
     replace(this.out, h("p.sub", null, h("span.spinner"), " " + t("common.searching")));
     const id = ++this.runId;
     try {
-      // Sorted on something else than distance: the 300 nearest stations rather than 100, so the
-      // best ones of the zone are there (Spansh sorts on distance only). More pages come when the
-      // last page of results is reached.
-      const answers: Json[] = [];
-      let nextPage = 0;
-      let moreAtSpansh = true;
-      const fetchPage = async () => {
-        const res = await spanshPost("stations/search", body(nextPage++));
-        answers.push(res);
-        moreAtSpansh = Array.isArray(res?.results) && res.results.length === 100;
-      };
-      const firstPages = (sort === "distance" || spanshSort) && wantedModules.length < 2 ? 1 : 3;
-      while (nextPage < firstPages && moreAtSpansh) await fetchPage();
+      // The nearest stations, up to the number set in Settings, asked once: sorting them and
+      // changing page is then done here, with no new request.
+      const answers: Json[] = [await spanshPost("stations/search", body(0))];
+      const wanted = Math.min(
+        Math.ceil(this.ctx.store.state.settings.searchLoad / SPANSH_PAGE_SIZE),
+        Math.ceil(Number(answers[0]?.count ?? 0) / SPANSH_PAGE_SIZE),
+      );
+      // The other pages a few at a time, so Spansh isn't flooded.
+      for (let page = 1; page < wanted; page += PARALLEL_PAGES) {
+        if (id !== this.runId) return;
+        const batch = Array.from({ length: Math.min(PARALLEL_PAGES, wanted - page) }, (_, i) => page + i);
+        answers.push(...(await Promise.all(batch.map((n) => spanshPost("stations/search", body(n))))));
+      }
       if (id !== this.runId) return;
       const settings = this.ctx.store.state.settings;
       const quoteOf = (r: Json) =>
@@ -917,7 +922,8 @@ export class SearchView implements View {
             seen: quoteTime(q?.updated ?? r.market_updated_at ?? r.updated_at),
           };
         };
-        const order = stationOrder(sort, tab !== "sell");
+        // The "Sort by" choice now: changing it orders these results again, with no new request.
+        const order = stationOrder(this.sortOf(tab), tab !== "sell");
         const keyed = rows.map((r) => ({ r, k: sortable(r) }));
         keyed.sort((a, b) => order(a.k, b.k));
         return keyed.map((x) => x.r);
@@ -927,15 +933,9 @@ export class SearchView implements View {
         tab,
         name,
         rows: results(),
-        total: () => Number(answers[0]?.count ?? 0),
-        more: async () => {
-          if (!moreAtSpansh) return false;
-          await fetchPage();
-          if (id !== this.runId) return false;
-          shown.rows = results();
-          return true;
-        },
-        hasMore: () => moreAtSpansh,
+        total: Number(answers[0]?.count ?? 0),
+        loaded: answers.reduce((sum, a) => sum + (Array.isArray(a?.results) ? a.results.length : 0), 0),
+        reorder: () => (shown.rows = results()),
       };
       this.results = shown;
       this.showResults();
@@ -945,106 +945,57 @@ export class SearchView implements View {
     }
   }
 
-  /** Draws the last search's results, a page at a time (views/shared/pagedList.ts). */
+  /**
+   * Draws the last search's results: the whole table, which pages itself when taller than the
+   * screen (ui/pagedTables.ts) and sorts all its lines by any column (ui/sortableTables.ts).
+   */
   private showResults() {
     const res = this.results;
     if (!res) return;
-    const { tab, name } = res;
-    if (!res.rows.length) {
+    const { tab, name, rows } = res;
+    if (!rows.length) {
       replace(
         this.out,
         h("p.empty", null, t("search.nothingFoundWithinLyIncreaseDistance", { maxDistance: this.range() })),
       );
       return;
     }
-    void showPagedList(
+    // When Spansh has more than were loaded, the count says these are the nearest ones.
+    const count =
+      res.total > res.loaded
+        ? t("search.nearestStationsLoaded", { count: fmt(rows.length), total: fmt(res.total) })
+        : t("search.matchingStations", { count: fmt(rows.length) });
+    replace(
       this.out,
-      { rows: () => res.rows, total: res.total, hasMore: res.hasMore, more: res.more },
-      {
-        summary: (from, to, count) =>
-          t("search.matchingStationsPage", { count: fmt(count), from: fmt(from), to: fmt(to) }),
-        draw: (rows) =>
+      h("p.sub", null, count),
+      h(
+        "table.table.search-table",
+        // A new search or "Sort by" choice starts on page 1, without a column sort left over.
+        { "data-sort-id": `search-results-${++this.drawnOrders}` },
+        h(
+          "thead",
+          null,
           h(
-            "table.table.search-table",
-            // Already a page of the results (views/shared/pagedList.ts).
-            { "data-no-paging": true },
-            h(
-              "thead",
-              null,
-              h(
-                "tr",
-                null,
-                h("th", { "data-no-sort": true }, t("common.station")),
-                this.sortTitle(tab, "distance", t("common.distance"), true),
-                ...(tab === "buy" || tab === "sell"
-                  ? [
-                      this.sortTitle(
-                        tab,
-                        "price",
-                        tab === "buy" ? t("search.buyPriceColumn") : t("search.sellPriceColumn"),
-                        true,
-                      ),
-                      this.sortTitle(
-                        tab,
-                        "volume",
-                        tab === "buy" ? t("search.stockColumn") : t("search.demandColumn"),
-                        true,
-                      ),
-                    ]
-                  : [h("th", { "data-no-sort": true }, tab === "service" ? t("common.type") : t("search.details"))]),
-                this.sortTitle(tab, "arrival", t("search.padArrival")),
-                this.sortTitle(tab, "recent", t("search.updated")),
-              ),
-            ),
-            h(
-              "tbody",
-              null,
-              rows.map((r) => this.row(r, tab, name)),
-            ),
+            "tr",
+            null,
+            h("th", null, t("common.station")),
+            h("th.num", null, t("common.distance")),
+            ...(tab === "buy" || tab === "sell"
+              ? [
+                  h("th.num", null, tab === "buy" ? t("search.buyPriceColumn") : t("search.sellPriceColumn")),
+                  h("th.num", null, tab === "buy" ? t("search.stockColumn") : t("search.demandColumn")),
+                ]
+              : [h("th", null, tab === "service" ? t("common.type") : t("search.details"))]),
+            h("th", null, t("search.padArrival")),
+            h("th", null, t("search.updated")),
           ),
-      },
-    );
-  }
-
-  /**
-   * A column title of the results. The results come a page at a time from the sites, so sorting
-   * only the page shown would mislead: a click picks that column in "Sort by" and searches again,
-   * which orders all the results. A column with no such sort is a plain title.
-   */
-  private sortTitle(tab: Tab, sort: StationSort, label: string, numeric = false): HTMLElement {
-    if (!(tab in STATION_SORTS)) return h(numeric ? "th.num" : "th", { "data-no-sort": true }, label);
-    return this.stationSortTitle(tab as keyof typeof STATION_SORTS, sort, label, numeric);
-  }
-
-  private stationSortTitle(
-    tab: keyof typeof STATION_SORTS,
-    sort: StationSort,
-    label: string,
-    numeric: boolean,
-  ): HTMLElement {
-    const offered: readonly StationSort[] = STATION_SORTS[tab];
-    const tag = numeric ? "th.num" : "th";
-    // Marked so the tables' own sorting (ui/sortableTables.ts) leaves it alone.
-    if (!offered.includes(sort)) return h(tag, { "data-no-sort": true }, label);
-    const chosen = () => {
-      if (this.sortOf(tab) === sort) return;
-      this.sorts[tab] = sort;
-      this.renderForm();
-      this.rerun();
-    };
-    // Each sort has one direction: the best first (cheapest when buying, nearest, largest…).
-    const ascending = sort === "distance" || sort === "arrival" || (sort === "price" && tab !== "sell");
-    return h(
-      `${tag}.sortable`,
-      {
-        "data-no-sort": true,
-        tabIndex: 0,
-        title: t("search.sortAllHint"),
-        "aria-sort": this.sortOf(tab) === sort ? (ascending ? "ascending" : "descending") : undefined,
-        onclick: chosen,
-        onkeydown: (e: KeyboardEvent) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), chosen()),
-      },
-      label,
+        ),
+        h(
+          "tbody",
+          null,
+          rows.map((r) => this.row(r, tab, name)),
+        ),
+      ),
     );
   }
 
@@ -1112,11 +1063,12 @@ export class SearchView implements View {
           icon("link"),
         ),
       ),
-      h("td.num", null, fmtLy(Number(r.distance))),
+      h("td.num", { "data-sort": String(numberOrUndefined(r.distance) ?? "") }, fmtLy(Number(r.distance))),
       ...(market.length ? market : [h("td", null, detail)]),
       h(
         "td",
-        null,
+        // Sorted on the distance to the arrival star.
+        { "data-sort": String(numberOrUndefined(r.distance_to_arrival) ?? "") },
         `${pad} · ${r.distance_to_arrival !== undefined ? t("common.ls", { locale: fmt(Math.round(Number(r.distance_to_arrival))) }) : "?"}`,
       ),
       h(

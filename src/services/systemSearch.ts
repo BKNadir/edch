@@ -212,8 +212,9 @@ export const SYSTEM_STATION_TYPES = [
   "Mega ship",
 ];
 
-/** Systems per page. */
-export const SYSTEMS_PAGE_SIZE = 50;
+/** Systems per Spansh request, and requests sent together. */
+const SYSTEMS_PAGE_SIZE = 100;
+const PARALLEL_PAGES = 3;
 
 const one = (value: string | undefined) => (value ? { value: [value] } : undefined);
 
@@ -319,12 +320,15 @@ async function volcanicSystems(criteria: SystemCriteria, ref: Reference, range: 
   return [...ids];
 }
 
-/** One page (SYSTEMS_PAGE_SIZE systems) of the systems matching `criteria`, nearest to `ref` first. */
+/**
+ * The systems matching `criteria`, nearest to `ref` first, up to `limit` (the "results loaded per
+ * search" setting), asked once: the page shows them a page at a time without asking again.
+ */
 export async function searchSystems(
   criteria: SystemCriteria,
   ref: Reference,
   range: number,
-  page: number,
+  limit: number,
   maxAgeDays?: number,
 ): Promise<FinderResult> {
   const filters = systemFilters(criteria, range);
@@ -334,15 +338,24 @@ export async function searchSystems(
     if (!ids.length) return { rows: [], total: 0 };
     filters.id64 = { value: ids };
   }
-  const data: any = await spanshPost("systems/search", {
-    filters,
-    sort: [{ distance: { direction: "asc" } }],
-    size: SYSTEMS_PAGE_SIZE,
-    page,
-    ...reference(ref),
-  });
-  const results: any[] = Array.isArray(data?.results) ? data.results : [];
-  return { rows: results.map((r) => systemRow(r, criteria, maxAgeDays)), total: num(data?.count) || results.length };
+  const page = (n: number): Promise<any> =>
+    spanshPost("systems/search", {
+      filters,
+      sort: [{ distance: { direction: "asc" } }],
+      size: SYSTEMS_PAGE_SIZE,
+      page: n,
+      ...reference(ref),
+    });
+  const answers: any[] = [await page(0)];
+  const total = num(answers[0]?.count);
+  const wanted = Math.min(Math.ceil(limit / SYSTEMS_PAGE_SIZE), Math.ceil(total / SYSTEMS_PAGE_SIZE));
+  // The other pages a few at a time, so Spansh isn't flooded.
+  for (let n = 1; n < wanted; n += PARALLEL_PAGES) {
+    const batch = Array.from({ length: Math.min(PARALLEL_PAGES, wanted - n) }, (_, i) => n + i);
+    answers.push(...(await Promise.all(batch.map(page))));
+  }
+  const results: any[] = answers.flatMap((a) => (Array.isArray(a?.results) ? a.results : [])).slice(0, limit);
+  return { rows: results.map((r) => systemRow(r, criteria, maxAgeDays)), total: total || results.length };
 }
 
 /** A station of a system page. */

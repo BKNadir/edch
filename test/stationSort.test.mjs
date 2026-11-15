@@ -33,16 +33,3 @@ test("station sort: distance to star filter", () => {
   assert.ok(arrivalAllowed(250000, 0), "0: any distance");
   assert.ok(arrivalAllowed(undefined, 1000), "unknown: kept");
 });
-
-test("Spansh sorts a commodity's markets: cheapest when buying, best paid when selling", async () => {
-  const { spanshMarketSort } = await import("../dist/js/features/search/stationSort.js");
-  assert.deepEqual(spanshMarketSort("price", true, "Gold"), { market_buy_price: [{ name: "Gold", direction: "asc" }] });
-  assert.deepEqual(spanshMarketSort("price", false, "Gold"), {
-    market_sell_price: [{ name: "Gold", direction: "desc" }],
-  });
-  assert.deepEqual(spanshMarketSort("volume", false, "Gold"), {
-    market_demand: [{ name: "Gold", direction: "desc" }],
-  });
-  assert.deepEqual(spanshMarketSort("recent", true, "Gold"), { market_updated_at: { direction: "desc" } });
-  assert.equal(spanshMarketSort("distance", true, "Gold"), undefined);
-});

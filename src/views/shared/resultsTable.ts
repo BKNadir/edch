@@ -96,6 +96,9 @@ export function resultRow(r: ResultRow): HTMLElement {
   );
 }
 
+/** Results a "where to find" section loads at most, in one Spansh request. */
+const FINDER_MAX_LOAD = 100;
+
 /** A finder section that loads its Spansh results by itself. */
 export function finderSection(
   f: Finder,
@@ -126,10 +129,14 @@ export function finderSection(
   );
   if (f.type === "info") return section;
 
+  // The nearest results in one request, up to the "results loaded per search" setting (at most a
+  // hundred, in one request); the pages are then drawn from them with no new request.
+  // The best-share bodies of a material are picked from the finder's own number.
+  const loaded: Finder = f.materialName ? f : { ...f, size: Math.min(FINDER_MAX_LOAD, settings.searchLoad) };
   const load = () => {
     status.replaceChildren(h("span.spinner"), t("common.searching"));
     list.replaceChildren();
-    runFinder(f, ref, settings, force)
+    runFinder(loaded, ref, settings, force)
       .then((res) => {
         force = false;
         status.replaceChildren();
@@ -149,22 +156,9 @@ export function finderSection(
             h("span.sub", null, t("results.matchingSystems", { locale: res.total.toLocaleString(locale()) })),
           );
         }
-        // A page at a time when they don't fit on the screen; the next results are asked for when
-        // a page needs them (not for the best-share bodies, already picked).
-        const rows = [...res.rows];
-        let spanshPage = 0;
         void showPagedList(
           list,
-          {
-            rows: () => rows,
-            total: () => res.total,
-            hasMore: () => !f.materialName && rows.length < res.total,
-            more: async () => {
-              const next = await runFinder(f, ref, settings, false, ++spanshPage);
-              rows.push(...next.rows);
-              return next.rows.length > 0;
-            },
-          },
+          { rows: () => res.rows, total: () => res.rows.length },
           {
             summary: (from, to, count) => t("pager.linesShown", { from, to, count }),
             draw: (shown) => h("div.results", null, shown.map(resultRow)),
