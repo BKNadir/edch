@@ -3,7 +3,7 @@
 
 import { locale, t } from "../../platform/i18n.js";
 import { openUrl } from "../../platform/bridge.js";
-import { openSystem } from "./links.js";
+import { openSystem, systemInfo } from "./links.js";
 import { h, icon } from "../../ui/dom.js";
 import { stationIcon } from "../../ui/stationIcon.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../../services/spansh.js";
@@ -53,6 +53,7 @@ export function resultRow(r: ResultRow): HTMLElement {
         stationIcon(r.stationType),
         h("span", null, r.title),
       ),
+      systemInfo(r.system),
       h("span.dist", null, fmtLy(r.distance)),
     ),
     h(

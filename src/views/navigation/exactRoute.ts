@@ -8,6 +8,7 @@ import type { Ctx } from "../../state/context.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
 import { hours, stat } from "./widgets.js";
 import { copySystem } from "../shared/resultsTable.js";
+import { systemInfo } from "../shared/links.js";
 
 export function renderExact(ctx: Ctx, out: HTMLElement, r: GalaxyRoute, tank: number, hasScoop: boolean) {
   const auto = ctx.store.state.settings.navAutoCopy;
@@ -53,6 +54,7 @@ export function renderExact(ctx: Ctx, out: HTMLElement, r: GalaxyRoute, tank: nu
               "td",
               null,
               h("button.sys", { onclick: () => copySystem(j.system) }, icon("copy"), h("span", null, j.system)),
+              systemInfo(j.system),
               j.neutron ? h("span.badge.hit", null, "Neutron") : null,
               j.mustRefuel
                 ? h("span.badge.warn", { title: t("navigation.scoopHereFuelIsnTEnough") }, t("navigation.refuel"))

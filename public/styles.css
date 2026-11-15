@@ -4549,3 +4549,40 @@ body.menu-editing .sidebar span {
   padding-left: 18px;
   line-height: 1.5;
 }
+
+/* The button after a system name that opens its page: the game's system map (orrery) icon from
+   EDAssets (img/system-map.svg), in the theme's colour, brighter on hover. */
+.sys-info {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin-left: 2px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  vertical-align: middle;
+  position: relative;
+}
+.sys-info::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: var(--accent);
+  opacity: 0.75;
+  -webkit-mask: url(img/system-map.svg) center / contain no-repeat;
+  mask: url(img/system-map.svg) center / contain no-repeat;
+}
+.sys-info:hover,
+.sys-info:focus-visible {
+  background: var(--accent-dim);
+}
+/* In a result line the name and the distance sit at both ends: the button stays with the name. */
+.result-main .sys-info {
+  margin-right: auto;
+}
+.sys-info:hover::before,
+.sys-info:focus-visible::before {
+  opacity: 1;
+}

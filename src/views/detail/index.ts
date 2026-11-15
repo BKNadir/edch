@@ -12,7 +12,7 @@ import { suggestTrades } from "../../features/materials/trade.js";
 import type { Blueprint, Material } from "../../game/types.js";
 import { copySystem, finderSection } from "../shared/resultsTable.js";
 import { addToWishlist } from "../wishlist/index.js";
-import { moduleLink } from "../shared/links.js";
+import { moduleLink, systemInfo } from "../shared/links.js";
 
 const KIND_LABELS: Record<string, string> = {
   modification: t("detail.modifications"),
@@ -213,6 +213,7 @@ export class DetailPanel {
                     icon("copy"),
                     h("span", null, `${site.system} ${site.body}`),
                   ),
+                  systemInfo(site.system),
                   h("span.dist", null, fmtLy(d)),
                 ),
                 h(

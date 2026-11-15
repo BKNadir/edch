@@ -1823,6 +1823,7 @@
     "stars": "Estrellas",
     "planets": "Planetas",
     "bodiesPartial": "Spansh solo conoce {{known}} por ahora.",
-    "allBodies": "Todos los cuerpos"
+    "allBodies": "Todos los cuerpos",
+    "openPage": "Ficha del sistema: {{name}}"
   }
 }

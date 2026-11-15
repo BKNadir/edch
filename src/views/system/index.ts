@@ -152,7 +152,7 @@ export class SystemView implements View {
     return h(
       "div.row.system-actions",
       null,
-      systemLink(d.name, { navigate: false, text: t("system.copyName") }),
+      systemLink(d.name, { navigate: false, text: t("system.copyName"), info: false }),
       h(
         "button.ghost",
         {

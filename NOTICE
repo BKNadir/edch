@@ -34,13 +34,15 @@ Key bindings
   vendored in tools/sources/edrefcard (tools/gen_binds.py). The device pictures are loaded at run
   time from that repository on GitHub and kept on the PC.
 
-Station icons and loading animation
------------------------------------
+Station icons, system map icon and loading animation
+----------------------------------------------------
 - SpyTec/EDAssets (MIT, Copyright (c) 2015 Eric "SpyTec" Gustavsson, commit 5a9b2f8) — the Coriolis,
   Orbis, Ocellus, asteroid base, outpost, megaship, planetary port and settlement icons
   (public/static/img/stations and settlements), redrawn from the game's icons; recoloured and given a
-  common line thickness in src/ui/stationIcon.ts; and the loading animation EDLoader1
-  (public/img/ed-loader.svg). The game's designs are Frontier Developments'.
+  common line thickness in src/ui/stationIcon.ts; the loading animation EDLoader1
+  (public/img/ed-loader.svg); and the system map (orrery) icon (public/static/img/galaxy-map/
+  orrery_map.svg), cleaned up with thicker lines in public/img/system-map.svg. The game's designs
+  are Frontier Developments'.
 
   The MIT License (MIT)
   Copyright (c) 2015 Eric "SpyTec" Gustavsson

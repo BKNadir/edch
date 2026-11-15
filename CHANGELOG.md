@@ -25,6 +25,7 @@ and EDCH shows it in the update banner.
 - Search opens on a new **Auto** tab: type a commodity, ship, module, service or faction (in the app's language, any capitals) and EDCH switches to the right tab with its filters and searches; a system name opens its page.
 - New **system page** (first version): allegiance, government, economy, security, population, permit and colonisation; Powerplay (controlling power, state, control progress, reinforcement and undermining, other powers present); the minor factions with influence and state; the stations with type, largest pad, distance and main services (fleet carriers counted); the stars and planets. Buttons copy the name, plot a route, search around it, or open it on Spansh, Inara or EDSM.
 - French: the material trader is now called "Commerçant de matériaux", the name French players use (the game's contact is "Commerce de matériaux").
+- A small **system map icon** (the game's orrery icon) after every system name — search results, Systems tab, Mining, Engineers, BGS, missions, routes, the material panel and your position in the header — opens that system's page.
 - BGS page: "Update" also asks EliteBGS (public BGS database from EDDN) for the faction's systems: those Spansh misses are added, and a more recent influence and state replaces older data (other factions' influence kept).
 
 ## 0.10.13

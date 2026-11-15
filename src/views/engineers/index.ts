@@ -9,7 +9,7 @@ import { openUrl } from "../../platform/bridge.js";
 import { engineerText } from "../../game/data.js";
 import type { Engineer } from "../../game/types.js";
 import type { EngineerStatus } from "../../game/journal/state.js";
-import { moduleLink, openSystem } from "../shared/links.js";
+import { moduleLink, openSystem, systemInfo } from "../shared/links.js";
 import { t } from "../../platform/i18n.js";
 
 const PROGRESS_LABELS: Record<string, string> = {
@@ -187,6 +187,7 @@ export class EngineersView implements View {
           icon("copy"),
           h("span", null, e.system),
         ),
+        systemInfo(e.system),
         h("span.dist", null, fmtLy(d)),
         h(
           "button.link",

@@ -1834,6 +1834,7 @@
     "stars": "Estrelas",
     "planets": "Planetas",
     "bodiesPartial": "O Spansh só conhece {{known}} deles por enquanto.",
-    "allBodies": "Todos os corpos"
+    "allBodies": "Todos os corpos",
+    "openPage": "Ficha do sistema: {{name}}"
   }
 }

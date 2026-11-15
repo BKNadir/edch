@@ -79,14 +79,41 @@ export function openMaterial(id: string) {
   store.select(id);
 }
 
-export const systemLink = (name?: string, opts: { navigate?: boolean; title?: string; text?: string } = {}) =>
+/**
+ * The small system map button (the game's orrery icon) next to a system name: opens the system
+ * page of `name`.
+ */
+export const systemInfo = (name?: string) =>
   name
-    ? h(
-        "button.sys",
-        { title: opts.title ?? t("common.copy", { name }), onclick: () => openSystem(name, opts) },
-        icon("copy"),
-        h("span", null, opts.text ?? name),
-      )
+    ? h("button.sys-info", {
+        type: "button",
+        title: t("system.openPage", { name }),
+        "aria-label": t("system.openPage", { name }),
+        onclick: (e: Event) => {
+          e.stopPropagation();
+          openSystemPage(name);
+        },
+      })
+    : null;
+
+/**
+ * A system name that copies it (or sends it to navigation) when clicked, followed by the button
+ * that opens its page (left out with `info: false`).
+ */
+export const systemLink = (
+  name?: string,
+  opts: { navigate?: boolean; title?: string; text?: string; info?: boolean } = {},
+) =>
+  name
+    ? [
+        h(
+          "button.sys",
+          { title: opts.title ?? t("common.copy", { name }), onclick: () => openSystem(name, opts) },
+          icon("copy"),
+          h("span", null, opts.text ?? name),
+        ),
+        opts.info === false ? null : systemInfo(name),
+      ]
     : null;
 
 /** An engineer was clicked: copy the system of their workshop (like a system link). */

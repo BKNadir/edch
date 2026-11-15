@@ -10,6 +10,7 @@ import { fmt, h, icon, replace } from "../../ui/dom.js";
 import { coordsOf, type Json } from "./index.js";
 import { hours, stat } from "./widgets.js";
 import { copySystem } from "../shared/resultsTable.js";
+import { systemInfo } from "../shared/links.js";
 
 export async function estimateShip(out: HTMLElement, from: string, to: string, range: number) {
   if (!from || !to || !range) return replace(out, h("p.error", null, t("navigation.enterStartDestinationRange")));
@@ -99,6 +100,7 @@ export async function plotShipNow(
                 "td",
                 null,
                 h("button.sys", { onclick: () => copySystem(j.system) }, icon("copy"), h("span", null, j.system)),
+                systemInfo(j.system),
                 j.neutron_star ? h("span.badge.hit", null, "Neutron") : null,
               ),
               h("td.num", null, fmtLy(Number(j.distance_jumped ?? 0))),

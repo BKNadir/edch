@@ -18,7 +18,7 @@ import { openUrl } from "../../platform/bridge.js";
 import { factionForm, factionsOf, searchFactionNow } from "./factionTab.js";
 import { guessSearch } from "../../features/search/autoSearch.js";
 import { log } from "../../platform/logger.js";
-import { openSystemPage } from "../shared/links.js";
+import { openSystemPage, systemInfo } from "../shared/links.js";
 import { systemForm } from "./systemTab.js";
 import { ardentBuyQuotes, ardentSellQuotes, type ArdentQuote } from "../../services/ardent.js";
 import { pager } from "../shared/pager.js";
@@ -1057,6 +1057,7 @@ export class SearchView implements View {
           stationIcon(r.type),
           h("span", null, `${r.name} | ${r.system_name}`),
         ),
+        systemInfo(r.system_name),
         h(
           "button.link",
           { title: t("search.openInara"), onclick: () => openUrl(inaraSystem(r.system_name)) },

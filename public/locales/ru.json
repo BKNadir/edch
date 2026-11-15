@@ -1822,6 +1822,7 @@
     "stars": "Звёзды",
     "planets": "Планеты",
     "bodiesPartial": "Spansh пока знает только {{known}} из них.",
-    "allBodies": "Все тела"
+    "allBodies": "Все тела",
+    "openPage": "Карточка системы: {{name}}"
   }
 }

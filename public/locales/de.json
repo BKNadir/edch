@@ -1821,6 +1821,7 @@
     "stars": "Sterne",
     "planets": "Planeten",
     "bodiesPartial": "Spansh kennt bisher nur {{known}} davon.",
-    "allBodies": "Alle Himmelskörper"
+    "allBodies": "Alle Himmelskörper",
+    "openPage": "Systemdetails: {{name}}"
   }
 }

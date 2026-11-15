@@ -9,6 +9,7 @@ import { fmt, h, icon, replace } from "../../ui/dom.js";
 import { coordsOf, type Json } from "./index.js";
 import { hours, stat } from "./widgets.js";
 import { copySystem } from "../shared/resultsTable.js";
+import { systemInfo } from "../shared/links.js";
 
 export async function estimateCarrier(
   out: HTMLElement,
@@ -107,6 +108,7 @@ export async function plotCarrierNow(
                 "td",
                 null,
                 h("button.sys", { onclick: () => copySystem(j.name) }, icon("copy"), h("span", null, j.name)),
+                systemInfo(j.name),
                 j.has_icy_ring
                   ? h(
                       "span.badge.muted",

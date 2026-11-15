@@ -7,7 +7,7 @@ import { t } from "../platform/i18n.js";
 import type { Ctx } from "../state/context.js";
 import { gameBadge } from "../ui/desktop.js";
 import { h, icon, replace } from "../ui/dom.js";
-import { openSystem } from "../views/shared/links.js";
+import { openSystem, systemInfo } from "../views/shared/links.js";
 import { shareModeSwitch } from "../views/shared/shareModeSwitch.js";
 import { focusButtons, toggleNav } from "./focus.js";
 
@@ -70,6 +70,7 @@ export function renderHeader(el: HTMLElement, ctx: Ctx) {
             icon("pin"),
             h("span", null, location.system),
           ),
+          systemInfo(location.system),
           location.station ? h("span.sub", null, location.station) : null,
           [
             location.security ? (SECURITY_LABELS[location.security] ?? location.security) : undefined,

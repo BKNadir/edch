@@ -1821,6 +1821,7 @@
     "stars": "Stars",
     "planets": "Planets",
     "bodiesPartial": "Spansh only knows {{known}} of them so far.",
-    "allBodies": "Every body"
+    "allBodies": "Every body",
+    "openPage": "System details: {{name}}"
   }
 }
