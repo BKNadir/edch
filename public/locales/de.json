@@ -1075,6 +1075,7 @@
     "kindGuardian": "Guardian",
     "kindHuman": "Menschlich",
     "sortBy": "Sortieren nach",
+    "sortAllHint": "Klicke, um alle Ergebnisse nach dieser Spalte zu sortieren",
     "sortDistance": "Entfernung",
     "sortRecent": "Neueste",
     "sortArrival": "Entfernung zum Stern",

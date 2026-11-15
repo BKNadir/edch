@@ -1082,6 +1082,7 @@
     "kindGuardian": "Guardião",
     "kindHuman": "Humano",
     "sortBy": "Ordenar por",
+    "sortAllHint": "Clique para ordenar todos os resultados por esta coluna",
     "sortDistance": "Distância",
     "sortRecent": "Mais recente",
     "sortArrival": "Distância da estrela",

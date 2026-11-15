@@ -974,16 +974,26 @@ export class SearchView implements View {
               h(
                 "tr",
                 null,
-                h("th", null, t("common.station")),
-                h("th.num", null, t("common.distance")),
+                h("th", { "data-no-sort": true }, t("common.station")),
+                this.sortTitle(tab, "distance", t("common.distance"), true),
                 ...(tab === "buy" || tab === "sell"
                   ? [
-                      h("th.num", null, tab === "buy" ? t("search.buyPriceColumn") : t("search.sellPriceColumn")),
-                      h("th.num", null, tab === "buy" ? t("search.stockColumn") : t("search.demandColumn")),
+                      this.sortTitle(
+                        tab,
+                        "price",
+                        tab === "buy" ? t("search.buyPriceColumn") : t("search.sellPriceColumn"),
+                        true,
+                      ),
+                      this.sortTitle(
+                        tab,
+                        "volume",
+                        tab === "buy" ? t("search.stockColumn") : t("search.demandColumn"),
+                        true,
+                      ),
                     ]
-                  : [h("th", null, tab === "service" ? t("common.type") : t("search.details"))]),
-                h("th", null, t("search.padArrival")),
-                h("th", null, t("search.updated")),
+                  : [h("th", { "data-no-sort": true }, tab === "service" ? t("common.type") : t("search.details"))]),
+                this.sortTitle(tab, "arrival", t("search.padArrival")),
+                this.sortTitle(tab, "recent", t("search.updated")),
               ),
             ),
             h(
@@ -993,6 +1003,48 @@ export class SearchView implements View {
             ),
           ),
       },
+    );
+  }
+
+  /**
+   * A column title of the results. The results come a page at a time from the sites, so sorting
+   * only the page shown would mislead: a click picks that column in "Sort by" and searches again,
+   * which orders all the results. A column with no such sort is a plain title.
+   */
+  private sortTitle(tab: Tab, sort: StationSort, label: string, numeric = false): HTMLElement {
+    if (!(tab in STATION_SORTS)) return h(numeric ? "th.num" : "th", { "data-no-sort": true }, label);
+    return this.stationSortTitle(tab as keyof typeof STATION_SORTS, sort, label, numeric);
+  }
+
+  private stationSortTitle(
+    tab: keyof typeof STATION_SORTS,
+    sort: StationSort,
+    label: string,
+    numeric: boolean,
+  ): HTMLElement {
+    const offered: readonly StationSort[] = STATION_SORTS[tab];
+    const tag = numeric ? "th.num" : "th";
+    // Marked so the tables' own sorting (ui/sortableTables.ts) leaves it alone.
+    if (!offered.includes(sort)) return h(tag, { "data-no-sort": true }, label);
+    const chosen = () => {
+      if (this.sortOf(tab) === sort) return;
+      this.sorts[tab] = sort;
+      this.renderForm();
+      this.rerun();
+    };
+    // Each sort has one direction: the best first (cheapest when buying, nearest, largest…).
+    const ascending = sort === "distance" || sort === "arrival" || (sort === "price" && tab !== "sell");
+    return h(
+      `${tag}.sortable`,
+      {
+        "data-no-sort": true,
+        tabIndex: 0,
+        title: t("search.sortAllHint"),
+        "aria-sort": this.sortOf(tab) === sort ? (ascending ? "ascending" : "descending") : undefined,
+        onclick: chosen,
+        onkeydown: (e: KeyboardEvent) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), chosen()),
+      },
+      label,
     );
   }
 

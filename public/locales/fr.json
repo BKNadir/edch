@@ -1076,6 +1076,7 @@
     "kindGuardian": "Gardien",
     "kindHuman": "Humain",
     "sortBy": "Trier par",
+    "sortAllHint": "Clique pour trier tous les résultats sur cette colonne",
     "sortDistance": "Distance",
     "sortRecent": "Plus récent",
     "sortArrival": "Distance à l'étoile",

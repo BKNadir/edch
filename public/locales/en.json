@@ -1075,6 +1075,7 @@
     "kindGuardian": "Guardian",
     "kindHuman": "Human",
     "sortBy": "Sort by",
+    "sortAllHint": "Click to sort all the results on this column",
     "sortDistance": "Distance",
     "sortRecent": "Most recent",
     "sortArrival": "Distance to star",
