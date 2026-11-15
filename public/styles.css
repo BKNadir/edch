@@ -868,6 +868,22 @@ button:disabled {
   flex: none;
   color: var(--accent);
 }
+/* System page: tables scroll sideways in a narrow window; station services wrap. */
+.table-wrap {
+  overflow-x: auto;
+}
+.table .services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 220px;
+}
+/* A station type written next to its icon (system page). */
+.with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 .dist {
   color: var(--muted);
   font-variant-numeric: tabular-nums;

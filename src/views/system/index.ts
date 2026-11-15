@@ -10,6 +10,7 @@ import { securityLabel, systemDetails, type SystemDetails } from "../../services
 import type { Ctx, View } from "../../state/context.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
 import { relTime } from "../../ui/format.js";
+import { stationIcon } from "../../ui/stationIcon.js";
 import { systemLink } from "../shared/links.js";
 import { setDestination } from "../navigation/index.js";
 import { openUrl } from "../../platform/bridge.js";
@@ -27,6 +28,9 @@ const KEY_SERVICES = [
   "Vista Genomics",
   "Pioneer Supplies",
 ];
+
+/** A table that scrolls sideways instead of overflowing its card in a narrow window. */
+const scrolling = (table: HTMLElement) => h("div.table-wrap", null, table);
 
 /** The system to show next, and the page to go back to. */
 let wanted: { name: string; from: string } | null = null;
@@ -261,34 +265,36 @@ export class SystemView implements View {
       "section.card",
       null,
       h("h3", null, t("system.factions", { count: d.factions.length })),
-      h(
-        "table.table",
-        null,
+      scrolling(
         h(
-          "thead",
+          "table.table",
           null,
           h(
-            "tr",
+            "thead",
             null,
-            h("th", null, t("search.faction")),
-            h("th.num", null, t("system.influence")),
-            h("th", null, t("system.state")),
-            h("th", null, t("search.systemAllegiance")),
-            h("th", null, t("search.systemGovernment")),
-          ),
-        ),
-        h(
-          "tbody",
-          null,
-          d.factions.map((f) =>
             h(
               "tr",
               null,
-              h("td", { "data-no-tr": "" }, f.controls ? h("strong", null, f.name, " ★") : f.name),
-              h("td.num", null, Number.isFinite(f.influence) ? `${fmt(f.influence)} %` : "—"),
-              h("td", null, f.state ? gameName(f.state) : "—"),
-              h("td", null, f.allegiance ? gameName(f.allegiance) : "—"),
-              h("td", null, f.government ? gameName(f.government) : "—"),
+              h("th", null, t("search.faction")),
+              h("th.num", null, t("system.influence")),
+              h("th", null, t("system.state")),
+              h("th", null, t("search.systemAllegiance")),
+              h("th", null, t("search.systemGovernment")),
+            ),
+          ),
+          h(
+            "tbody",
+            null,
+            d.factions.map((f) =>
+              h(
+                "tr",
+                null,
+                h("td", { "data-no-tr": "" }, f.controls ? h("strong", null, f.name, " ★") : f.name),
+                h("td.num", null, Number.isFinite(f.influence) ? `${fmt(f.influence)} %` : "—"),
+                h("td", null, f.state ? gameName(f.state) : "—"),
+                h("td", null, f.allegiance ? gameName(f.allegiance) : "—"),
+                h("td", null, f.government ? gameName(f.government) : "—"),
+              ),
             ),
           ),
         ),
@@ -305,44 +311,57 @@ export class SystemView implements View {
       "section.card",
       null,
       h("h3", null, t("system.stations", { count: listed.length })),
-      carriers.length ? h("p.sub", null, t("system.carriers", { count: carriers.length })) : null,
-      listed.length
+      carriers.length
         ? h(
-            "table.table.system-stations",
+            "p.sub.with-icon",
             null,
+            stationIcon("Drake-Class Carrier"),
+            t("system.carriers", { count: carriers.length }),
+          )
+        : null,
+      listed.length
+        ? scrolling(
             h(
-              "thead",
+              "table.table.system-stations",
               null,
               h(
-                "tr",
+                "thead",
                 null,
-                h("th", null, t("system.station")),
-                h("th", null, t("common.type")),
-                h("th", null, t("system.pad")),
-                h("th.num", null, t("system.distance")),
-                h("th", null, t("system.services")),
-              ),
-            ),
-            h(
-              "tbody",
-              null,
-              listed.map((s) =>
                 h(
                   "tr",
                   null,
-                  h("td", { "data-no-tr": "" }, s.name, s.faction ? h("div.sub", null, s.faction) : null),
-                  h("td", null, s.type ? gameName(s.type) : "—"),
-                  h("td", null, s.largestPad ?? "—"),
+                  h("th", null, t("system.station")),
+                  h("th", null, t("common.type")),
+                  h("th", null, t("system.pad")),
+                  h("th.num", null, t("system.distance")),
+                  h("th", null, t("system.services")),
+                ),
+              ),
+              h(
+                "tbody",
+                null,
+                listed.map((s) =>
                   h(
-                    "td.num",
+                    "tr",
                     null,
-                    s.distance !== undefined ? t("common.ls", { locale: fmt(Math.round(s.distance)) }) : "—",
-                  ),
-                  h(
-                    "td",
-                    null,
-                    KEY_SERVICES.filter((service) => s.services.includes(service)).map((service) =>
-                      h("span.badge.muted", null, gameName(service)),
+                    h("td", { "data-no-tr": "" }, s.name, s.faction ? h("div.sub", null, s.faction) : null),
+                    h("td", null, s.type ? h("span.with-icon", null, stationIcon(s.type), gameName(s.type)) : "—"),
+                    h("td", null, s.largestPad ?? "—"),
+                    h(
+                      "td.num",
+                      null,
+                      s.distance !== undefined ? t("common.ls", { locale: fmt(Math.round(s.distance)) }) : "—",
+                    ),
+                    h(
+                      "td",
+                      null,
+                      h(
+                        "div.services",
+                        null,
+                        KEY_SERVICES.filter((service) => s.services.includes(service)).map((service) =>
+                          h("span.badge.muted", null, gameName(service)),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -387,22 +406,24 @@ export class SystemView implements View {
             "details",
             null,
             h("summary", null, t("system.allBodies")),
-            h(
-              "table.table",
-              null,
+            scrolling(
               h(
-                "tbody",
+                "table.table",
                 null,
-                d.bodies.map((b) =>
-                  h(
-                    "tr",
-                    null,
-                    h("td", { "data-no-tr": "" }, b.name),
-                    h("td", null, gameName(b.subtype || b.type)),
+                h(
+                  "tbody",
+                  null,
+                  d.bodies.map((b) =>
                     h(
-                      "td.num",
+                      "tr",
                       null,
-                      b.distance !== undefined ? t("common.ls", { locale: fmt(Math.round(b.distance)) }) : "—",
+                      h("td", { "data-no-tr": "" }, b.name),
+                      h("td", null, gameName(b.subtype || b.type)),
+                      h(
+                        "td.num",
+                        null,
+                        b.distance !== undefined ? t("common.ls", { locale: fmt(Math.round(b.distance)) }) : "—",
+                      ),
                     ),
                   ),
                 ),
