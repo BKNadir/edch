@@ -1,5 +1,5 @@
-// Search → Auto: a typed name is recognised as a commodity, ship, module, service or faction (in
-// English or French, any capitals or accents); anything else is a system name.
+// Search → Auto: a typed name is recognised as a commodity, ship, module, service or faction, in
+// the app's language only (French here), any capitals or accents; anything else is a system name.
 import "./i18n-setup.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -28,6 +28,11 @@ test("auto search: each kind is recognised, whatever the capitals", () => {
     name: "Interstellar Factors Contact",
   });
   assert.deepEqual(guessSearch("mother gaia", names), { kind: "faction", name: "Mother Gaia" });
+});
+
+test("auto search: a name in another language than the app's is not recognised", () => {
+  // The app is in French: the English name of the service is not one of its names.
+  assert.deepEqual(guessSearch("Material Trader", names), { kind: "system", name: "Material Trader" });
 });
 
 test("auto search: an unknown name is a system, nothing typed is nothing", () => {

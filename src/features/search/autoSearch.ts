@@ -1,7 +1,8 @@
 // Search → Auto: what a name typed in the single search box is — a commodity, a ship, a module, a
 // station service or a minor faction — so the search can switch to the right tab. Names match in
-// English or in the app's language, whatever the capitals or accents. Anything else is taken for
-// a system name.
+// the app's language only (the names the suggestions show), whatever the capitals or accents: a
+// name close to another one in a second language can't be taken for it. Anything else is taken
+// for a system name.
 
 import { fold, gameName } from "../../platform/i18n.js";
 import { exactFaction, type FactionIndex } from "./factionNames.js";
@@ -27,10 +28,10 @@ export interface AutoNames {
 /** How a name is shown in the app's language. */
 type Label = (name: string) => string;
 
-/** The English name in `names` that `typed` stands for (in English or translated), if any. */
+/** The English name in `names` whose name in the app's language is `typed`, if any. */
 function findName(names: string[], typed: string, label: Label = gameName): string | undefined {
   const wanted = fold(typed);
-  return names.find((name) => fold(name) === wanted || fold(label(name)) === wanted);
+  return names.find((name) => fold(label(name)) === wanted);
 }
 
 /** What `typed` is (see the header), or null when nothing was typed. */
