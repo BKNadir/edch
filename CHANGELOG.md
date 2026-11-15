@@ -14,8 +14,8 @@ and EDCH shows it in the update banner.
 - Search → Faction: every faction of the game is offered while typing (a list of about 78,000 from EDSM, bundled), whatever the capitals or accents; the search uses the game's exact spelling.
 - Search: a "Sort by" choice on every tab (best or lowest price, distance, demand or stock, most recent, distance to the star) and a maximum distance to the star. When sorting on something else than distance, the 300 nearest stations are looked at instead of 100; buying, like selling, also asks Ardent for the best recent prices of the whole zone. Column titles still sort what is shown.
 - Search: ships and modules also follow the "maximum data age" setting; a faction's states are matched on its main and active states (Spansh only checked the main one), and systems whose data is older than the setting are marked "Old data". When the search radius is wider than 500 ly, the note says Ardent's prices stop there.
-- Search → Buy / Sell: price and supply (or demand) in separate columns, a minimum supply when buying, and the data age right in the form. Search → Modules: several modules at once ("Add", or "Import a fit" from EDSY, Coriolis or a journal Loadout) to find a station that sells the whole fit.
-- Every search (Search tabs, Mining) has its own "Range": empty, it uses the default from Settings (General). Ship builds exported from Inara (SLEF) import like EDSY and Coriolis ones, in the wishlist and in Search → Modules.
+- Search → Buy / Sell: price and supply (or demand) in separate columns, a minimum supply when buying, and the data age right in the form. Search → Modules: several modules at once ("Add") to find a station that sells them all.
+- Every search (Search tabs, Mining) has its own "Range": empty, it uses the default from Settings (General). Wishlist: ship builds exported from Inara (SLEF) import like EDSY and Coriolis ones.
 - BGS page: "Update" also asks EliteBGS (public BGS database from EDDN) for the faction's systems: those Spansh misses are added, and a more recent influence and state replaces older data (other factions' influence kept).
 
 ## 0.10.13

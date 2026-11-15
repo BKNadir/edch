@@ -7,8 +7,7 @@ import { spanshPost } from "../../platform/bridge.js";
 import { h, icon, fmt, replace, toast } from "../../ui/dom.js";
 import { stationIcon } from "../../ui/stationIcon.js";
 import { relTime } from "../../ui/format.js";
-import { dialog } from "../../ui/dialog.js";
-import { fitModules, sameModule, stationSells, type WantedModule } from "../../features/search/fitModules.js";
+import { sameModule, stationSells, type WantedModule } from "../../features/search/fitModules.js";
 import { referenceOf, type Ctx, type View } from "../../state/context.js";
 import { referenceField } from "../shared/referenceField.js";
 import { radiusField, rangeOf } from "../shared/radiusField.js";
@@ -180,35 +179,6 @@ export class SearchView implements View {
     this.values.module = "";
     this.renderForm();
     return true;
-  }
-
-  /** Asks for a fit to paste (EDSY, Coriolis, SLEF, journal Loadout) and lists its modules. */
-  private async importFit() {
-    const area = h("textarea.fit-paste", {
-      rows: 8,
-      placeholder: t("search.fitPastePlaceholder"),
-    }) as HTMLTextAreaElement;
-    const answer = await dialog(
-      t("search.importFit"),
-      [h("p.sub", null, t("search.importFitHelp")), area],
-      [
-        { label: t("common.cancel"), value: "" },
-        { label: t("search.importFitButton"), primary: true, value: "ok" },
-      ],
-    );
-    if (answer !== "ok") return;
-    const fit = fitModules(area.value, this.ctx.game.data.modules);
-    if (!fit) {
-      toast(t("search.fitUnreadable"));
-      return;
-    }
-    for (const m of fit.modules) if (!this.moduleList.some((x) => sameModule(x, m))) this.moduleList.push(m);
-    toast(
-      fit.unknown
-        ? t("search.fitImportedSome", { count: fit.modules.length, unknown: fit.unknown })
-        : t("search.fitImported", { count: fit.modules.length }),
-    );
-    this.renderForm();
   }
 
   /** "Frame Shift Drive 5A", "Beam Laser 3": a wanted module in a few words. */
@@ -398,7 +368,6 @@ export class SearchView implements View {
                   ),
                 )
               : h("span.sub", null, t("search.moduleListHelp")),
-            h("button.ghost", { onclick: () => void this.importFit() }, t("search.importFit")),
             this.moduleList.length
               ? h(
                   "button.ghost",
