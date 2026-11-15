@@ -372,3 +372,33 @@ test("bgs private data: your visit, or your squadron's (Discord) when newer; tou
   // A malformed snapshot from the bot is dropped.
   assert.equal(validSharedSystem({ system: "X", at: "soon", factions: [] }), null);
 });
+
+test("BGS: the old-data threshold is a setting (1 to 14 days, 3 by default)", async () => {
+  const { validBgsSettings } = await import("../dist/js/state/bgsSettings.js");
+  assert.deepEqual(validBgsSettings({ faction: "Diavol Space Fleet" }), {
+    faction: "Diavol Space Fleet",
+    staleDays: 3,
+  });
+  assert.equal(validBgsSettings({ faction: "", staleDays: 7 }).staleDays, 7);
+  assert.equal(validBgsSettings({ faction: "", staleDays: 99 }).staleDays, 3);
+
+  const now = Date.parse("2026-11-15T12:00:00Z");
+  const known = {};
+  recordSystem(
+    known,
+    "Alpha",
+    {
+      snapshot: {
+        at: new Date(now - 4 * 86_400_000).toISOString(),
+        source: "spansh",
+        controlling: FACTION,
+        factions: [{ name: FACTION, influence: 50, state: "None", active: [], pending: [], recovering: [] }],
+      },
+    },
+    now,
+  );
+  const [old] = factionRows(FACTION, known, {}, now, undefined, {}, 3);
+  const [fresh] = factionRows(FACTION, known, {}, now, undefined, {}, 7);
+  assert.ok(old.alerts.includes("staleData"));
+  assert.ok(!fresh.alerts.includes("staleData"));
+});

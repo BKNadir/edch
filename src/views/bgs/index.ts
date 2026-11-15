@@ -39,6 +39,7 @@ import {
 import { setBgsTourStops, startBgsTour } from "../../features/bgs/tourCopy.js";
 import { systemLink } from "../shared/links.js";
 import { bgsShared } from "../../state/bgsShared.js";
+import { STALE_DAY_CHOICES } from "../../state/bgsSettings.js";
 
 /** Site names shown next to public data (the same in every language). */
 const PUBLIC_SOURCE_LABELS: Record<string, string> = { spansh: "Spansh", edsm: "EDSM", elitebgs: "EliteBGS" };
@@ -113,6 +114,8 @@ interface UpdateResult {
 export class BgsView implements View {
   private root?: HTMLElement;
   private period: Period = "tick";
+  /** What the overview's clicked figure keeps in the systems table (undefined: every system). */
+  private shownOnly?: BgsAlertKind | "controlled";
   /** What Spansh and EDSM told, kept between sessions (state/bgsHistory.ts). */
   private known: BgsHistory = loadBgsHistory();
   private loading?: Progress;
@@ -147,7 +150,7 @@ export class BgsView implements View {
   private setFaction(faction: string) {
     const name = faction.trim().slice(0, 120);
     if (name === this.faction) return;
-    this.ctx.store.updateSettings({ bgs: { faction: name } });
+    this.ctx.store.updateSettings({ bgs: { ...this.ctx.store.state.settings.bgs, faction: name } });
     this.result = undefined;
     this.render();
   }
@@ -256,7 +259,15 @@ export class BgsView implements View {
     const { activity, settings, cmdr } = this.ctx.store.state;
     const faction = this.faction;
     const position = cmdr.location?.pos;
-    const rows = factionRows(faction, this.known, activity.bgs.observed, Date.now(), position, bgsShared());
+    const rows = factionRows(
+      faction,
+      this.known,
+      activity.bgs.observed,
+      Date.now(),
+      position,
+      bgsShared(),
+      settings.bgs.staleDays,
+    );
     this.checkTick();
     const tick = knownTick();
     const period: Period = this.period === "tick" && !tick ? "day" : this.period;
@@ -272,7 +283,7 @@ export class BgsView implements View {
       this.factionCard(faction, activity.bgs.observed, rows),
       faction ? this.alertsSummary(rows) : null,
       faction ? this.activityCard(done, period, tick) : null,
-      faction ? this.systemsCard(rows, tick) : null,
+      faction ? this.systemsCard(this.filtered(rows), tick) : null,
       faction ? this.tourCard(tour, shareMode) : null,
     );
   }
@@ -353,27 +364,74 @@ export class BgsView implements View {
     );
   }
 
+  /** The rows the overview's clicked figure keeps (all of them when none is chosen). */
+  private filtered(rows: BgsSystemRow[]): BgsSystemRow[] {
+    const only = this.shownOnly;
+    if (!only) return rows;
+    return rows.filter((row) => (only === "controlled" ? row.controls : row.alerts.includes(only)));
+  }
+
   private alertsSummary(rows: BgsSystemRow[]): HTMLElement {
     const labels = ALERT_LABELS();
+    const staleDays = this.ctx.store.state.settings.bgs.staleDays;
+    /** A figure of the overview: clicking it keeps only those systems in the table (again: all). */
+    const figure = (filter: BgsAlertKind | "controlled" | undefined, count: number, label: string) =>
+      h(
+        `button.stat.stat-filter${this.shownOnly === filter ? ".active" : ""}`,
+        {
+          title: filter ? t("bgs.showOnly") : t("bgs.showAll"),
+          "aria-pressed": String(this.shownOnly === filter),
+          onclick: () => {
+            this.shownOnly = this.shownOnly === filter ? undefined : filter;
+            this.render();
+            document
+              .querySelector(".bgs-table-wrap, .bgs-systems")
+              ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          },
+        },
+        h("strong", null, fmt(count)),
+        h("span.sub", null, label),
+      );
     const count = (kind: BgsAlertKind) => rows.filter((row) => row.alerts.includes(kind)).length;
     return h(
       "section.card",
       null,
-      h("h3", null, t("bgs.overview")),
+      h(
+        "div.bgs-card-head",
+        null,
+        h("h3", null, t("bgs.overview")),
+        h(
+          "label.check",
+          { title: t("bgs.staleDaysHelp") },
+          t("bgs.staleAfter") + " ",
+          h(
+            "select",
+            {
+              onchange: (e: Event) => {
+                const days = Number((e.target as HTMLSelectElement).value);
+                this.ctx.store.updateSettings({ bgs: { ...this.ctx.store.state.settings.bgs, staleDays: days } });
+              },
+            },
+            STALE_DAY_CHOICES.map((days) =>
+              h("option", { value: String(days), selected: days === staleDays }, t("bgs.days", { count: days })),
+            ),
+          ),
+        ),
+      ),
       h(
         "div.stats",
         null,
-        h("div.stat", null, h("strong", null, fmt(rows.length)), h("span.sub", null, t("bgs.systems"))),
-        h(
-          "div.stat",
-          null,
-          h("strong", null, fmt(rows.filter((row) => row.controls).length)),
-          h("span.sub", null, t("bgs.controlled")),
-        ),
+        figure(undefined, rows.length, t("bgs.systems")),
+        figure("controlled", rows.filter((row) => row.controls).length, t("bgs.controlled")),
         (["conflict", "atRisk", "retreat", "rivalClose", "expansion", "staleData"] as BgsAlertKind[]).map((kind) =>
-          h("div.stat", null, h("strong", null, fmt(count(kind))), h("span.sub", null, labels[kind])),
+          figure(
+            kind,
+            count(kind),
+            kind === "staleData" ? t("bgs.staleOlderThan", { count: staleDays }) : labels[kind],
+          ),
         ),
       ),
+      this.shownOnly ? h("p.sub", null, t("bgs.filterHint")) : null,
     );
   }
 
@@ -487,7 +545,16 @@ export class BgsView implements View {
     return h(
       "section.card",
       null,
-      h("h3", null, t("bgs.factionSystems")),
+      h(
+        "h3.bgs-systems",
+        null,
+        this.shownOnly
+          ? t("bgs.factionSystemsFiltered", {
+              filter: this.shownOnly === "controlled" ? t("bgs.controlled") : ALERT_LABELS()[this.shownOnly],
+              count: rows.length,
+            })
+          : t("bgs.factionSystems"),
+      ),
       h("p.sub", null, t("bgs.systemsHelp"), tick ? ` ${t("bgs.lastTick", { time: relTime(tick) })}` : null),
       rows.length
         ? h(

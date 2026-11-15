@@ -119,6 +119,7 @@ function rowOf(
   >,
   conflicts: FactionConflict[],
   now: number,
+  staleDays = STALE_DAYS,
 ): BgsSystemRow | null {
   const ours = factions.find((f) => same(f.name, faction));
   if (!ours) return null;
@@ -139,7 +140,7 @@ function rowOf(
   if (rival && Math.abs(rival.gap) <= RIVAL_GAP) alerts.push("rivalClose");
   if (ourConflicts.length || states.some((state) => CONFLICT_STATES.has(state))) alerts.push("conflict");
   const dataAge = ageDays(base.dataAt, now);
-  if (dataAge === undefined || dataAge >= STALE_DAYS) alerts.push("staleData");
+  if (dataAge === undefined || dataAge >= staleDays) alerts.push("staleData");
   const visitAge = ageDays(base.privateAt, now);
   if (visitAge === undefined || visitAge >= NOT_VISITED_DAYS) alerts.push("notVisited");
   const controls = base.controlling ? same(base.controlling, faction) : false;
@@ -239,6 +240,7 @@ export function factionRows(
   now = Date.now(),
   from?: Vec3,
   shared: BgsShared = {},
+  staleDays = STALE_DAYS,
 ): BgsSystemRow[] {
   if (!faction) return [];
   const visits = new Map(Object.values(observed).map((o) => [o.system.toLowerCase(), o]));
@@ -297,6 +299,7 @@ export function factionRows(
       },
       newest.conflicts,
       now,
+      staleDays,
     );
     if (!row) continue;
     addForecast(row, samplesOf(visit, remote, squadron), faction, now);

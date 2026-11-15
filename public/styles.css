@@ -1665,6 +1665,21 @@ small.grade {
   font-size: 16px;
   font-variant-numeric: tabular-nums;
 }
+/* BGS overview: each figure is a button that keeps only those systems in the table. */
+button.stat-filter {
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+button.stat-filter:hover,
+button.stat-filter:focus-visible {
+  border-color: var(--accent-line);
+}
+button.stat-filter.active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
 .route-out {
   display: grid;
   gap: 8px;

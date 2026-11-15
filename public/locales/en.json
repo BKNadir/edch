@@ -1734,7 +1734,17 @@
     "historyFailed": "The influence history couldn't be loaded: trends use what was already known.",
     "historyUpdated_one": "{{count}} system's influence history updated.",
     "historyUpdated_other": "{{count}} systems' influence history updated.",
-    "loadingHistory": "Reading the influence history… {{done}} / {{total}}"
+    "loadingHistory": "Reading the influence history… {{done}} / {{total}}",
+    "showOnly": "Show only these systems (click again for all)",
+    "showAll": "Show every system",
+    "staleAfter": "Old after",
+    "staleDaysHelp": "After how many days without new data a system is marked as old and goes into the refresh tour",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "staleOlderThan_one": "data over {{count}} day old",
+    "staleOlderThan_other": "data over {{count}} days old",
+    "filterHint": "The table below only shows these systems. Click the figure again to see them all.",
+    "factionSystemsFiltered": "Its systems — {{filter}} ({{count}})"
   },
   "edomh": {
     "addToWishlist": "Add to the wishlist",

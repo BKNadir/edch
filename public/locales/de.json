@@ -1734,7 +1734,17 @@
     "historyFailed": "Der Einflussverlauf konnte nicht geladen werden: Die Trends nutzen das bereits Bekannte.",
     "historyUpdated_one": "Einflussverlauf von {{count}} System aktualisiert.",
     "historyUpdated_other": "Einflussverlauf von {{count}} Systemen aktualisiert.",
-    "loadingHistory": "Einflussverlauf wird gelesen… {{done}} / {{total}}"
+    "loadingHistory": "Einflussverlauf wird gelesen… {{done}} / {{total}}",
+    "showOnly": "Nur diese Systeme zeigen (erneut klicken für alle)",
+    "showAll": "Alle Systeme zeigen",
+    "staleAfter": "Alt nach",
+    "staleDaysHelp": "Nach wie vielen Tagen ohne neue Daten ein System als alt gilt und in die Aktualisierungstour kommt",
+    "days_one": "{{count}} Tag",
+    "days_other": "{{count}} Tage",
+    "staleOlderThan_one": "Daten älter als {{count}} Tag",
+    "staleOlderThan_other": "Daten älter als {{count}} Tage",
+    "filterHint": "Die Tabelle unten zeigt nur diese Systeme. Klicke erneut auf die Zahl, um alle zu sehen.",
+    "factionSystemsFiltered": "Ihre Systeme — {{filter}} ({{count}})"
   },
   "edomh": {
     "addToWishlist": "Zur Wunschliste hinzufügen",

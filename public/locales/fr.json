@@ -1736,7 +1736,17 @@
     "historyFailed": "L'historique d'influence n'a pas pu être chargé : les tendances utilisent ce qui était déjà connu.",
     "historyUpdated_one": "Historique d'influence de {{count}} système mis à jour.",
     "historyUpdated_other": "Historique d'influence de {{count}} systèmes mis à jour.",
-    "loadingHistory": "Lecture de l'historique d'influence… {{done}} / {{total}}"
+    "loadingHistory": "Lecture de l'historique d'influence… {{done}} / {{total}}",
+    "showOnly": "Afficher seulement ces systèmes (reclique pour tout voir)",
+    "showAll": "Afficher tous les systèmes",
+    "staleAfter": "Ancienne après",
+    "staleDaysHelp": "Au bout de combien de jours sans nouvelle donnée un système est marqué comme ancien et passe dans la tournée de mise à jour",
+    "days_one": "{{count}} jour",
+    "days_other": "{{count}} jours",
+    "staleOlderThan_one": "données de plus de {{count}} jour",
+    "staleOlderThan_other": "données de plus de {{count}} jours",
+    "filterHint": "Le tableau ci-dessous n'affiche que ces systèmes. Reclique sur le chiffre pour tout revoir.",
+    "factionSystemsFiltered": "Ses systèmes — {{filter}} ({{count}})"
   },
   "edomh": {
     "addToWishlist": "Ajouter à la wishlist",

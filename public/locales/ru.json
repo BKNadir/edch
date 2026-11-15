@@ -1733,7 +1733,21 @@
     "historyUpdated_other": "Обновлена история влияния {{count}} систем.",
     "loadingHistory": "Чтение истории влияния… {{done}} / {{total}}",
     "historyUpdated_few": "Обновлена история влияния {{count}} систем.",
-    "historyUpdated_many": "Обновлена история влияния {{count}} систем."
+    "historyUpdated_many": "Обновлена история влияния {{count}} систем.",
+    "showOnly": "Показать только эти системы (нажмите ещё раз, чтобы показать все)",
+    "showAll": "Показать все системы",
+    "staleAfter": "Устаревшие через",
+    "staleDaysHelp": "Через сколько дней без новых данных система считается устаревшей и попадает в маршрут обновления",
+    "days_one": "{{count}} день",
+    "days_other": "{{count}} дней",
+    "staleOlderThan_one": "данные старше {{count}} дня",
+    "staleOlderThan_other": "данные старше {{count}} дней",
+    "filterHint": "В таблице ниже только эти системы. Нажмите на число ещё раз, чтобы увидеть все.",
+    "factionSystemsFiltered": "Её системы — {{filter}} ({{count}})",
+    "days_few": "{{count}} дня",
+    "days_many": "{{count}} дней",
+    "staleOlderThan_few": "данные старше {{count}} дней",
+    "staleOlderThan_many": "данные старше {{count}} дней"
   },
   "edomh": {
     "addToWishlist": "Добавить в список желаний",
