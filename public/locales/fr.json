@@ -1831,6 +1831,6 @@
   },
   "debug": {
     "source": "source : {{sources}}",
-    "journal": "journal du jeu"
+    "journal": "Journal"
   }
 }

@@ -30,6 +30,7 @@ export function sellFiltersNote(settings: Settings, range = settings.maxDistance
       age: priceAgeLabel(settings.maxAgeDays),
       demand: fmt(Math.max(1, settings.minSellDemand)),
     }),
-    debugSource("Spansh + Ardent", range > ARDENT_MAX_DISTANCE ? `Ardent ≤ ${fmt(ARDENT_MAX_DISTANCE)} ly` : null),
+    debugSource("Spansh"),
+    debugSource("Ardent", range > ARDENT_MAX_DISTANCE ? `≤ ${fmt(ARDENT_MAX_DISTANCE)} ly` : null),
   );
 }

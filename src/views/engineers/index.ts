@@ -101,7 +101,7 @@ export class EngineersView implements View {
             "p.sub",
             null,
             t("engineers.unlockedSortedFrom", { unlockedCount, count: all.length, label: ref.label }),
-            debugSource(`${journalSource()} (EngineerProgress)`),
+            debugSource(journalSource(), "EngineerProgress"),
           ),
         ),
         h(

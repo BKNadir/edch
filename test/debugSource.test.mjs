@@ -1,5 +1,5 @@
-// Debug mode's source labels: always drawn, shown by the stylesheet only in debug mode; empty
-// parts are left out, and nothing is drawn without any.
+// Debug mode's source badges: always drawn, shown by the stylesheet only in debug mode; the badge
+// names the source, details go in its tooltip, and nothing is drawn without a source.
 import "./i18n-setup.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -33,11 +33,12 @@ globalThis.document.documentElement ??= {
 
 const { debugSource, setDebugSources } = await import("../dist/js/ui/debugSource.js");
 
-test("debug source: names the parts given, in a label of its own", () => {
+test("debug source: a badge with the source's name; details only in its tooltip", () => {
   const label = debugSource("Spansh", undefined, false, "3 h");
   assert.match(label.className, /debug-source/);
-  assert.match(label.textContent, /Spansh · 3 h/);
-  assert.equal(debugSource(undefined, null, false), null);
+  assert.equal(label.textContent, "Spansh");
+  assert.match(label.attributes.title, /Spansh · 3 h/);
+  assert.equal(debugSource(undefined, "details"), null);
 });
 
 test("debug source: debug mode shows or hides every label at once", () => {

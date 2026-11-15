@@ -886,17 +886,22 @@ button:disabled {
 .debug-sources .debug-source {
   display: inline-block;
   margin: 0 4px;
-  padding: 0 6px;
-  border: 1px dashed var(--debug, #ff3df2);
-  border-radius: 4px;
+  padding: 0 7px;
+  border: 1px solid var(--debug, #ff3df2);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--debug, #ff3df2) 12%, transparent);
   color: var(--debug, #ff3df2);
   font:
-    600 11px/1.6 ui-monospace,
+    600 10.5px/1.6 ui-monospace,
     "Cascadia Mono",
     Consolas,
     monospace;
+  text-transform: none;
+  letter-spacing: 0;
   white-space: nowrap;
   vertical-align: middle;
+  cursor: help;
+  justify-self: start;
 }
 /* A station type written next to its icon (system page). */
 .with-icon {

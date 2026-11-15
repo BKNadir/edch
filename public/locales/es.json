@@ -1831,6 +1831,6 @@
   },
   "debug": {
     "source": "fuente: {{sources}}",
-    "journal": "diario del juego"
+    "journal": "Diario"
   }
 }

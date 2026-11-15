@@ -69,7 +69,7 @@ export class ThargoidsView implements View {
           "div",
           null,
           // The journal doesn't name Thargoids: the type comes from the bond's reward.
-          h("h1", null, t("thargoids.title"), debugSource(`${journalSource()} (FactionKillBond, Bounty)`)),
+          h("h1", null, t("thargoids.title"), debugSource(journalSource(), "FactionKillBond, Bounty")),
           h("p.sub", null, t("thargoids.subtitle")),
         ),
         activity.session.start

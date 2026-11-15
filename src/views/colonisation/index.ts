@@ -267,7 +267,7 @@ export class ColonisationView implements View {
         "p.sub",
         null,
         t("colonisation.marketUpdated", { value: m.updated ? relTime(m.updated) : "?" }),
-        debugSource(m.source === "journal" ? `${journalSource()} (Market.json)` : "Spansh"),
+        m.source === "journal" ? debugSource(journalSource(), "Market.json") : debugSource("Spansh"),
       ),
       m.selling.length
         ? [h("small.sub", null, t("colonisation.saleStock")), h("ul.hold-list", null, m.selling.map(line))]
@@ -295,7 +295,7 @@ export class ColonisationView implements View {
       h(
         "div.hold",
         null,
-        h("h4", null, t("common.ship"), debugSource(`${journalSource()} (Cargo.json)`)),
+        h("h4", null, t("common.ship"), debugSource(journalSource(), "Cargo.json")),
         h(
           "p.sub",
           null,
@@ -321,7 +321,8 @@ export class ColonisationView implements View {
           h("h4", null, c.mine ? t("colonisation.myFleetCarrier") : t("colonisation.squadronCarrier")),
           h("p.sub", { "data-no-tr": "" }, c.name),
           debugSource(
-            `${journalSource()} (CargoTransfer, MarketBuy/Sell)`,
+            journalSource(),
+            "CargoTransfer, MarketBuy/Sell",
             t("colonisation.debugSince", { when: relTime(c.since) }),
           ),
           c.total !== undefined
@@ -329,7 +330,7 @@ export class ColonisationView implements View {
                 "p.sub",
                 null,
                 t("colonisation.tGoods", { total: fmt(c.total), relTime: relTime(c.totalAt) }),
-                debugSource("CarrierStats"),
+                debugSource(journalSource(), "CarrierStats"),
               )
             : null,
           this.holdContents(items, stillNeeded, name, {

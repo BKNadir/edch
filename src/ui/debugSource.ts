@@ -16,11 +16,19 @@ export function setDebugSources(on: boolean) {
 export const journalSource = () => t("debug.journal");
 
 /**
- * A label naming where the information next to it comes from ("source: Spansh · 3 h ago"); empty
- * parts are left out, and nothing is drawn without any.
+ * A small badge naming where the information next to it comes from ("Spansh", "Inara",
+ * "Journal"…); `details` (the journal event, a limit…) only go in its tooltip. Nothing is drawn
+ * without a source.
  */
-export function debugSource(...parts: (string | undefined | null | false)[]): HTMLElement | null {
-  const shown = parts.filter((part): part is string => Boolean(part));
-  if (!shown.length) return null;
-  return h("span.debug-source", { "data-no-tr": "" }, t("debug.source", { sources: shown.join(" · ") }));
+export function debugSource(
+  source: string | undefined | null | false,
+  ...details: (string | undefined | null | false)[]
+): HTMLElement | null {
+  if (!source) return null;
+  const extra = details.filter((part): part is string => Boolean(part));
+  return h(
+    "span.debug-source",
+    { "data-no-tr": "", title: t("debug.source", { sources: [source, ...extra].join(" · ") }) },
+    source,
+  );
 }

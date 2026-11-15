@@ -311,12 +311,10 @@ export class BgsView implements View {
               : this.result.spansh?.partial
                 ? t("bgs.loadedPartial", { count: this.result.spansh.count, total: this.result.spansh.total })
                 : t("bgs.loaded", { count: this.result.spansh?.count ?? 0 }),
-            debugSource(
-              "Spansh",
-              this.result.eliteBgs?.count
-                ? `EliteBGS ${this.result.eliteBgs.count} (+${this.result.eliteBgs.added})`
-                : undefined,
-            ),
+            debugSource("Spansh"),
+            this.result.eliteBgs?.count
+              ? debugSource("EliteBGS", `${this.result.eliteBgs.count} (+${this.result.eliteBgs.added})`)
+              : null,
             " ",
             this.result.edsmFailed
               ? h("span.bad", null, t("bgs.historyFailed"))
