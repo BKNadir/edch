@@ -1,11 +1,12 @@
 // EliteBGS (elitebgs.app): a public BGS database fed by EDDN, like Spansh's but collected apart.
 // The BGS page asks it for the followed faction's systems, to find those Spansh misses and to keep
-// the most recent influence and states of each. Only the faction's name is sent.
+// the most recent influence and states of each; a material's page asks it for the faction states
+// of the few systems it shows. Only the faction's or the systems' names are sent.
 
 import { eliteBgsGet } from "../platform/bridge.js";
 import { log } from "../platform/logger.js";
 import type { FactionPresence } from "../game/activity/bgs.js";
-import type { FactionSystem } from "./spansh.js";
+import type { FactionStates, FactionSystem } from "./spansh.js";
 
 /** EliteBGS writes states in lower case without spaces ("civilwar"): the game's names. */
 const STATE_NAMES: Record<string, string> = {
@@ -100,6 +101,53 @@ export async function eliteBgsFactionSystems(faction: string): Promise<FactionSy
     const answer = await eliteBgsGet(`factions?name=${encodeURIComponent(faction)}&systemDetails=true`);
     const systems = decodeEliteBgs(answer, faction);
     log.debug("elitebgs", `${systems.length} system(s) for the followed faction`);
+    return systems;
+  } catch (error) {
+    log.warn("elitebgs", `No EliteBGS data (${String((error as Error)?.message ?? error)}), Spansh only`);
+    return [];
+  }
+}
+
+/** A system as EliteBGS knows it: when it was last seen, and its factions' states. */
+export interface EliteBgsSystem {
+  name: string;
+  updatedAt?: string;
+  /** The controlling faction's main state. */
+  controllingState?: string;
+  factions: FactionStates[];
+}
+
+/** The systems in EliteBGS's answer (systems?name=…&factionDetails=true). */
+export function decodeEliteBgsSystems(answer: any): EliteBgsSystem[] {
+  const docs: any[] = Array.isArray(answer?.docs) ? answer.docs : [];
+  return docs
+    .filter((doc) => typeof doc?.name === "string" && doc.name)
+    .map((doc) => {
+      const details: any[] = Array.isArray(doc.faction_details) ? doc.faction_details : [];
+      const factions: FactionStates[] = details.map((faction) => ({
+        name: String(faction?.name ?? ""),
+        state: eliteBgsState(faction?.faction_presence?.state) ?? "None",
+        active: stateList(faction?.faction_presence?.active_states),
+      }));
+      const controlling = String(doc.controlling_minor_faction_cased ?? "").toLowerCase();
+      const updated = Date.parse(String(doc.updated_at ?? ""));
+      return {
+        name: doc.name,
+        updatedAt: Number.isFinite(updated) ? new Date(updated).toISOString() : undefined,
+        controllingState: factions.find((f) => f.name.toLowerCase() === controlling)?.state,
+        factions,
+      };
+    });
+}
+
+/** The faction states of these systems (ten at most, one request); empty when EliteBGS can't answer. */
+export async function eliteBgsSystems(names: string[]): Promise<EliteBgsSystem[]> {
+  const wanted = names.slice(0, 10);
+  if (!wanted.length) return [];
+  try {
+    const query = wanted.map((name) => `name=${encodeURIComponent(name)}`).join("&");
+    const systems = decodeEliteBgsSystems(await eliteBgsGet(`systems?${query}&factionDetails=true`));
+    log.debug("elitebgs", `${systems.length}/${wanted.length} system(s) found`);
     return systems;
   } catch (error) {
     log.warn("elitebgs", `No EliteBGS data (${String((error as Error)?.message ?? error)}), Spansh only`);

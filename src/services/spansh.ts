@@ -99,17 +99,30 @@ export function buildRequest(f: Finder, ref: Reference, s: Settings, page = 0): 
   };
 }
 
-function systemRow(r: any, f: Finder): ResultRow {
+/** A faction's states in a system, as Spansh and EliteBGS both give them (the game's English names). */
+export interface FactionStates {
+  name: string;
+  /** Its main state ("Boom"), "None" or missing when none. */
+  state?: string;
+  /** All its active states. */
+  active: string[];
+}
+
+/**
+ * The badges of a system's faction states: the states wanted by the search, each with the faction
+ * in it (or how many), then the controlling faction's own state when it isn't one of them.
+ */
+export function factionStateBadges(
+  factions: FactionStates[],
+  controllingState: string | undefined,
+  wanted: Set<string>,
+): ResultRow["badges"] {
   const badges: ResultRow["badges"] = [];
-  const wanted = new Set(f.states ?? []);
-  const presences: any[] = Array.isArray(r.minor_faction_presences) ? r.minor_faction_presences : [];
   if (wanted.size) {
     const hits = new Map<string, string[]>();
-    for (const p of presences) {
-      const all = new Set<string>(
-        [p.state, ...(Array.isArray(p.active_states) ? p.active_states : [])].filter(Boolean),
-      );
-      for (const st of all) if (wanted.has(st)) hits.set(st, [...(hits.get(st) ?? []), p.name]);
+    for (const faction of factions) {
+      const all = new Set([faction.state, ...faction.active].filter((st): st is string => Boolean(st)));
+      for (const st of all) if (wanted.has(st)) hits.set(st, [...(hits.get(st) ?? []), faction.name]);
     }
     for (const [st, names] of hits)
       badges.push({
@@ -117,13 +130,19 @@ function systemRow(r: any, f: Finder): ResultRow {
         tone: "hit",
       });
   }
-  if (
-    r.controlling_minor_faction_state &&
-    !wanted.has(r.controlling_minor_faction_state) &&
-    r.controlling_minor_faction_state !== "None"
-  ) {
-    badges.push({ text: gameName(r.controlling_minor_faction_state), tone: "muted" });
-  }
+  if (controllingState && !wanted.has(controllingState) && controllingState !== "None")
+    badges.push({ text: gameName(controllingState), tone: "muted" });
+  return badges;
+}
+
+function systemRow(r: any, f: Finder): ResultRow {
+  const presences: any[] = Array.isArray(r.minor_faction_presences) ? r.minor_faction_presences : [];
+  const factions: FactionStates[] = presences.map((p) => ({
+    name: String(p.name ?? ""),
+    state: p.state,
+    active: Array.isArray(p.active_states) ? p.active_states : [],
+  }));
+  const badges = factionStateBadges(factions, r.controlling_minor_faction_state, new Set(f.states ?? []));
   const sub: string[] = [];
   if (r.population) sub.push(fmtPop(num(r.population)));
   if (r.allegiance) sub.push(r.allegiance);
