@@ -1,6 +1,6 @@
 // How many lines a page of a long list shows (10, 50, 100, or "auto": as many as fit on the
-// screen), the same choice for every list, and the measures behind it: the room a list has on
-// screen and how many of its lines fit there. Used by the paged tables (ui/pagedTables.ts) and
+// screen, under what is above the list, without scrolling), the same choice for every list, and
+// the measures behind it: the room a list has on screen and how many of its lines fit there. Used by the paged tables (ui/pagedTables.ts) and
 // the other paged lists (views/shared/pagedList.ts).
 
 import { t } from "../platform/i18n.js";
@@ -17,6 +17,8 @@ const PAGE_SIZE_KEY = "edch.pageSize";
 const AUTO_MIN_LINES = 5;
 /** Space kept free under a list (pixels). */
 const BOTTOM_MARGIN = 16;
+/** Height of a line assumed before one is measured (pixels). */
+const MIN_LINE_HEIGHT = 24;
 
 /** The number of lines chosen last ("auto" until one is chosen). */
 export function savedPageSize(): PageSize {
@@ -66,19 +68,46 @@ export function pageSizeChoice(changed: (size: PageSize) => void): HTMLElement {
   );
 }
 
+/** Height of the bar at the top of the window (pixels). */
+function topBarHeight(): number {
+  return document.querySelector<HTMLElement>(".topbar")?.offsetHeight ?? 0;
+}
+
 /** The height a list can take on screen: the window, less the top bar and the phone's bottom menu. */
 export function screenSpace(): number {
-  const topBar = document.querySelector<HTMLElement>(".topbar")?.offsetHeight ?? 0;
   const menu = document.querySelector<HTMLElement>(".sidebar");
   const bottomMenu = menu && getComputedStyle(menu).position === "fixed" ? menu.offsetHeight : 0;
-  return window.innerHeight - topBar - bottomMenu - BOTTOM_MARGIN;
+  return window.innerHeight - topBarHeight() - bottomMenu - BOTTOM_MARGIN;
 }
 
 /**
- * How many lines of `lineHeight` pixels fit on screen under `above` pixels (the bar with the
- * page links, a table's header…); at least a few.
+ * Where `el` is when its page is scrolled to the top: its distance from the top of the area that
+ * scrolls (the page's frame on a computer, the whole page under the top bar on a phone).
  */
-export function linesThatFit(lineHeight: number, above: number): number {
+function offsetFromTop(el: HTMLElement): number {
+  // The page's own frame, when its content is taller than it (a frame that only scrolls sideways,
+  // around a wide table, doesn't count); the whole document is the case below.
+  for (let parent = el.parentElement; parent && parent !== document.body; parent = parent.parentElement) {
+    const overflow = getComputedStyle(parent).overflowY;
+    if ((overflow === "auto" || overflow === "scroll") && parent.scrollHeight > parent.clientHeight)
+      return el.getBoundingClientRect().top - parent.getBoundingClientRect().top + parent.scrollTop;
+  }
+  const pageScroll = window.scrollY || document.body.scrollTop || document.documentElement.scrollTop;
+  return el.getBoundingClientRect().top + pageScroll - topBarHeight();
+}
+
+/**
+ * The room a list starting at `el` has on screen without scrolling: from `el` down to the bottom
+ * of the screen, the page being at its top. A list starting too low for a few lines of
+ * `lineHeight` is scrolled to anyway: it gets a whole screen.
+ */
+export function roomFrom(el: HTMLElement, lineHeight = 0): number {
+  const room = screenSpace() - offsetFromTop(el);
+  return room >= AUTO_MIN_LINES * Math.max(lineHeight, MIN_LINE_HEIGHT) ? room : screenSpace();
+}
+
+/** How many lines of `lineHeight` pixels fit in the room a list starting at `el` has (at least a few). */
+export function linesFrom(el: HTMLElement, lineHeight: number): number {
   if (!(lineHeight > 0)) return AUTO_MIN_LINES;
-  return Math.max(AUTO_MIN_LINES, Math.floor((screenSpace() - above) / lineHeight));
+  return Math.max(AUTO_MIN_LINES, Math.floor(roomFrom(el, lineHeight) / lineHeight));
 }

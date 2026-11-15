@@ -10,15 +10,12 @@
 
 import { t } from "../platform/i18n.js";
 import { h, replace } from "./dom.js";
-import { linesThatFit, pageSizeChoice, savedPageSize, screenSpace } from "./pageSize.js";
+import { linesFrom, pageSizeChoice, roomFrom, savedPageSize, screenSpace } from "./pageSize.js";
 import { pager } from "./pager.js";
 import { tableKey } from "./sortableTables.js";
 
 /** The page shown per table, by the table's identity (see tableKey). */
 const pageShown = new Map<string, number>();
-
-/** Height of the bar above a paged table before it is drawn and measured (pixels). */
-const BAR_GUESS = 44;
 
 /** The lines of the table's bodies, in their current order (header and footer lines aside). */
 function bodyRows(table: HTMLTableElement): HTMLTableRowElement[] {
@@ -44,7 +41,7 @@ export function pageTable(table: HTMLTableElement) {
   const rows = bodyRows(table);
   rows.forEach((row) => delete row.dataset.offPage);
   // Not on screen (a closed panel, another tab): measured when it shows.
-  if ("noPaging" in table.dataset || !table.offsetHeight || table.offsetHeight <= screenSpace()) return;
+  if ("noPaging" in table.dataset || !table.offsetHeight || table.offsetHeight <= roomFrom(table)) return;
 
   // The lines the page itself shows (a filter may hide some): only those are paged.
   const lines = rows.filter((row) => row.offsetHeight > 0);
@@ -65,8 +62,9 @@ export function pageTable(table: HTMLTableElement) {
     const go = (wanted: number) => {
       pageShown.set(key, wanted);
       pageTable(table);
-      // Back to the top of the new page, where its bar is.
-      block.previousElementSibling?.scrollIntoView({ block: "start", behavior: "smooth" });
+      // A fixed number of lines may go past the screen: back to the top of the new page, where
+      // its bar is. In auto mode the page fits where it is: nothing moves.
+      if (size !== "auto") block.previousElementSibling?.scrollIntoView({ block: "start", behavior: "smooth" });
     };
     const links = () => pager(at, pages, false, go);
     replace(
@@ -96,11 +94,12 @@ export function pageTable(table: HTMLTableElement) {
     draw(size);
     return;
   }
-  // Auto: as many lines as fit under the bar, measured once the bar is drawn.
-  const guess = linesThatFit(lineHeight, BAR_GUESS + header);
-  draw(guess);
-  const fitting = linesThatFit(lineHeight, bar.offsetHeight + header);
-  if (fitting !== guess) draw(fitting);
+  // Auto: as many lines as fit between the table's first line and the bottom of the screen,
+  // measured once the bar is drawn above the table.
+  const firstGuess = 10;
+  draw(firstGuess);
+  const fitting = linesFrom(table.tBodies[0] ?? table, lineHeight);
+  if (fitting !== firstGuess) draw(fitting);
 }
 
 /** Pages every table again (the window changed size, the lines per page changed). */

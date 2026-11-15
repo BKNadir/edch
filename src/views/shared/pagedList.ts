@@ -6,7 +6,7 @@
 
 import { t } from "../../platform/i18n.js";
 import { h, icon, replace } from "../../ui/dom.js";
-import { linesThatFit, pageSizeChoice, savedPageSize, screenSpace, type PageSize } from "../../ui/pageSize.js";
+import { linesFrom, pageSizeChoice, roomFrom, savedPageSize, screenSpace, type PageSize } from "../../ui/pageSize.js";
 import { pager } from "../../ui/pager.js";
 
 /** Where the lines come from: those received so far, and how to get more when the source has them. */
@@ -44,7 +44,7 @@ export async function showPagedList<T>(out: HTMLElement, source: PagedSource<T>,
   if (!hasMore) {
     const list = look.draw(source.rows());
     replace(out, look.header?.() ?? null, list);
-    if (list.offsetHeight <= screenSpace()) return;
+    if (list.offsetHeight <= roomFrom(list)) return;
   }
   const size = savedPageSize();
   const perPage = size === "auto" ? autoLines(out, source, look) : size;
@@ -58,14 +58,19 @@ export async function showPagedList<T>(out: HTMLElement, source: PagedSource<T>,
   if (failure) out.append(h("p.error", null, icon("warn"), ` ${String((failure as Error).message ?? failure)}`));
 }
 
-/** The lines that fit on screen under the bar, measured on the first lines drawn. */
+/**
+ * The lines that fit between the list's first line and the bottom of the screen, under what is
+ * above it (the form, the bar), measured on the first lines drawn.
+ */
 function autoLines<T>(out: HTMLElement, source: PagedSource<T>, look: PagedLook<T>): number {
   const measured = Math.min(50, Math.max(1, source.rows().length));
   drawPage(out, source, look, 0, measured);
-  const bar = out.querySelector<HTMLElement>(".paged-bar");
-  const list = bar?.nextElementSibling as HTMLElement | null;
-  if (!bar || !list) return measured;
-  return linesThatFit(list.offsetHeight / measured, bar.offsetHeight);
+  const list = out.querySelector<HTMLElement>(".paged-bar")?.nextElementSibling as HTMLElement | null;
+  if (!list) return measured;
+  // A table's header is drawn on every page: the lines start under it.
+  const header = list.querySelector<HTMLElement>("thead")?.offsetHeight ?? 0;
+  const firstLine = list.querySelector<HTMLElement>("tbody") ?? list;
+  return linesFrom(firstLine, (list.offsetHeight - header) / measured);
 }
 
 /** Asks the source for more lines until it has `wanted` of them or has no more. */
@@ -89,7 +94,9 @@ function drawPage<T>(out: HTMLElement, source: PagedSource<T>, look: PagedLook<T
     // Lines past those received are asked for first: the links show it meanwhile.
     if ((wanted + 1) * perPage > rows.length) replace(linkSlot, h("span.spinner"), " " + t("common.searching"));
     await showPagedList(out, source, look, wanted);
-    out.scrollIntoView({ block: "start", behavior: "smooth" });
+    // A fixed number of lines may go past the screen: back to the top of the list. In auto mode
+    // the page fits where it is: nothing moves.
+    if (savedPageSize() !== "auto") out.scrollIntoView({ block: "start", behavior: "smooth" });
   };
   const links = () => {
     const slot = h("div.pager-slot");
