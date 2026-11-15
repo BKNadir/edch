@@ -3081,6 +3081,11 @@ span.warn,
 div + .card {
   margin-top: 12px;
 }
+/* Cards laid out in a grid (engineers, missions, goals…): the grid's gap spaces them, so the
+   margin above for stacked cards would push all but the first one down. */
+[class*="-grid"] > .card {
+  margin-top: 0;
+}
 .card h3 + .sub {
   margin-top: -4px;
 }

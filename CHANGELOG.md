@@ -28,6 +28,7 @@ and EDCH shows it in the update banner.
 - A small **system map icon** (the game's orrery icon) after every system name — search results, Systems tab, Mining, Engineers, BGS, missions, routes, the material panel and your position in the header — opens that system's page.
 - Colonisation: each hold (ship and fleet carriers) shows its first commodities and a **Detail** that unfolds every one with its category, its share of the hold and what your construction sites still need of it; the ship shows its free space.
 - The pages no longer explain where their information comes from (Spansh, Ardent, EDSM, EliteBGS, the journal…). In **debug mode** only, a small badge in a colour of its own names the source (Spansh, Inara, Journal…) next to each piece of information; its tooltip gives the details.
+- Engineers (and other pages laid out in cards): the first card is no longer higher than the others on its row.
 - BGS page: "Update" also asks EliteBGS (public BGS database from EDDN) for the faction's systems: those Spansh misses are added, and a more recent influence and state replaces older data (other factions' influence kept).
 
 ## 0.10.13
