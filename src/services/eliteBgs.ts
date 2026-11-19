@@ -1,7 +1,8 @@
 // EliteBGS (elitebgs.app): a public BGS database fed by EDDN, like Spansh's but collected apart.
 // The BGS page asks it for the followed faction's systems, to find those Spansh misses and to keep
 // the most recent influence and states of each; a material's page asks it for the faction states
-// of the few systems it shows. Only the faction's or the systems' names are sent.
+// of the few systems it shows, the system page for its factions. Only the faction's or the
+// systems' names are sent.
 
 import { eliteBgsGet } from "../platform/bridge.js";
 import { log } from "../platform/logger.js";
@@ -108,13 +109,20 @@ export async function eliteBgsFactionSystems(faction: string): Promise<FactionSy
   }
 }
 
-/** A system as EliteBGS knows it: when it was last seen, and its factions' states. */
+/** A faction in a system as EliteBGS knows it. */
+export interface EliteBgsFaction extends FactionStates {
+  /** Percent, NaN when unknown. */
+  influence: number;
+}
+
+/** A system as EliteBGS knows it: when it was last seen, and its factions' influence and states. */
 export interface EliteBgsSystem {
   name: string;
   updatedAt?: string;
-  /** The controlling faction's main state. */
+  /** The controlling faction's name, and its main state. */
+  controlling?: string;
   controllingState?: string;
-  factions: FactionStates[];
+  factions: EliteBgsFaction[];
 }
 
 /** The systems in EliteBGS's answer (systems?name=…&factionDetails=true). */
@@ -124,16 +132,24 @@ export function decodeEliteBgsSystems(answer: any): EliteBgsSystem[] {
     .filter((doc) => typeof doc?.name === "string" && doc.name)
     .map((doc) => {
       const details: any[] = Array.isArray(doc.faction_details) ? doc.faction_details : [];
-      const factions: FactionStates[] = details.map((faction) => ({
-        name: String(faction?.name ?? ""),
-        state: eliteBgsState(faction?.faction_presence?.state) ?? "None",
-        active: stateList(faction?.faction_presence?.active_states),
-      }));
-      const controlling = String(doc.controlling_minor_faction_cased ?? "").toLowerCase();
+      const factions: EliteBgsFaction[] = details.map((faction) => {
+        const influence = Number(faction?.faction_presence?.influence);
+        return {
+          name: String(faction?.name ?? ""),
+          // EliteBGS gives a share (0.425): a percent with one decimal, like Spansh's.
+          influence: Number.isFinite(influence) ? Math.round(influence * 1000) / 10 : NaN,
+          state: eliteBgsState(faction?.faction_presence?.state) ?? "None",
+          active: stateList(faction?.faction_presence?.active_states),
+        };
+      });
+      const controllingName =
+        typeof doc.controlling_minor_faction_cased === "string" ? doc.controlling_minor_faction_cased : undefined;
+      const controlling = (controllingName ?? "").toLowerCase();
       const updated = Date.parse(String(doc.updated_at ?? ""));
       return {
         name: doc.name,
         updatedAt: Number.isFinite(updated) ? new Date(updated).toISOString() : undefined,
+        controlling: controllingName,
         controllingState: factions.find((f) => f.name.toLowerCase() === controlling)?.state,
         factions,
       };

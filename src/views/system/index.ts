@@ -14,6 +14,7 @@ import {
   type SystemDetails,
 } from "../../services/systemSearch.js";
 import type { Ctx, View } from "../../state/context.js";
+import { freshFactions, type FreshFactions } from "../../features/systems/freshFactions.js";
 import { fmt, h, icon, replace } from "../../ui/dom.js";
 import { debugSource } from "../../ui/debugSource.js";
 import { relTime } from "../../ui/format.js";
@@ -53,6 +54,8 @@ export class SystemView implements View {
   private name = "";
   private from = "search";
   private details?: SystemDetails | null;
+  /** The factions from EliteBGS when more recent than Spansh's (see features/systems). */
+  private fresh: FreshFactions | null = null;
   /** The bodies' detail (rings, landing, signals), asked once the system is found. */
   private bodyDetail?: BodyDetail[];
   private bodyError = "";
@@ -90,11 +93,13 @@ export class SystemView implements View {
       const found = await systemDetails(name);
       if (id !== this.lookup) return;
       this.details = found;
+      this.fresh = null;
       this.bodyDetail = undefined;
       this.bodyError = "";
       if (found) {
         this.name = found.name;
         if (found.id64) void this.loadBodies(found.id64, id);
+        void this.loadFreshFactions(found, id);
       }
     } catch (e) {
       if (id !== this.lookup) return;
@@ -102,6 +107,14 @@ export class SystemView implements View {
       log.warn("system", `Lookup failed: ${this.error}`);
     }
     this.loading = false;
+    this.render();
+  }
+
+  /** The factions from EliteBGS when Spansh's are old: drawn when it answers, if more recent. */
+  private async loadFreshFactions(details: SystemDetails, id: number) {
+    const fresh = await freshFactions(details);
+    if (id !== this.lookup || !fresh) return;
+    this.fresh = fresh;
     this.render();
   }
 
@@ -291,11 +304,14 @@ export class SystemView implements View {
   }
 
   private factions(d: SystemDetails): HTMLElement | null {
-    if (!d.factions.length) return null;
+    const factions = this.fresh?.factions ?? d.factions;
+    if (!factions.length) return null;
     return h(
       "section.card",
       null,
-      h("h3", null, t("system.factions", { count: d.factions.length })),
+      h("h3", null, t("system.factions", { count: factions.length }), debugSource(this.fresh ? "EliteBGS" : "Spansh")),
+      // Newer than the system's own date: when they were seen.
+      this.fresh ? h("p.sub", null, t("system.updated", { when: relTime(this.fresh.updatedAt) })) : null,
       scrolling(
         h(
           "table.table",
@@ -316,7 +332,7 @@ export class SystemView implements View {
           h(
             "tbody",
             null,
-            d.factions.map((f) =>
+            factions.map((f) =>
               h(
                 "tr",
                 null,

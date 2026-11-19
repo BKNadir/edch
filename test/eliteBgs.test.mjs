@@ -95,7 +95,7 @@ test("elitebgs systems: each system's factions with their states in the game's n
   assert.equal(system.name, "Synuefe UW-I a91-4");
   assert.equal(system.updatedAt, "2026-11-14T08:00:00.000Z");
   assert.equal(system.controllingState, "Boom");
-  assert.deepEqual(system.factions[1], { name: "Rivals", state: "Civil War", active: ["Civil War"] });
+  assert.deepEqual(system.factions[1], { name: "Rivals", influence: NaN, state: "Civil War", active: ["Civil War"] });
   assert.deepEqual(decodeEliteBgsSystems(null), []);
 });
 
@@ -120,4 +120,28 @@ test("fresh states: recent Spansh rows are kept as they are, without asking Elit
     { system: "A", title: "A", distance: 1, sub: [], badges: [], links: [], updated: "2026-11-15T08:00:00Z" },
   ];
   assert.equal(await withFreshStates(rows, [], now), rows);
+});
+
+test("elitebgs systems: influence in percent and the controlling faction's name", async () => {
+  const { decodeEliteBgsSystems } = await import("../dist/js/services/eliteBgs.js");
+  const [system] = decodeEliteBgsSystems({
+    docs: [
+      {
+        name: "Sol",
+        updated_at: "2026-11-18T08:00:00.000Z",
+        controlling_minor_faction_cased: "Mother Gaia",
+        faction_details: [{ name: "Mother Gaia", faction_presence: { state: "none", influence: 0.4251 } }],
+      },
+    ],
+  });
+  assert.equal(system.controlling, "Mother Gaia");
+  assert.equal(system.factions[0].influence, 42.5);
+  assert.equal(system.factions[0].state, "None");
+});
+
+test("system page factions: Spansh's are kept when recent enough, without asking EliteBGS", async () => {
+  const { freshFactions } = await import("../dist/js/features/systems/freshFactions.js");
+  const now = Date.parse("2026-11-19T12:00:00Z");
+  const details = { name: "Sol", updatedAt: "2026-11-19T08:00:00Z", factions: [] };
+  assert.equal(await freshFactions(details, now), null);
 });

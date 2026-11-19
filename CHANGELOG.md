@@ -5,6 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.14
 
+- System page: the factions' influence and states come from EliteBGS when it has seen the system more recently than Spansh (only when Spansh's data is more than a day old), with the date they were seen.
 - A material's page: the faction states of the systems listed (expansion, boom, war…) come from EliteBGS when it has seen the system more recently than Spansh; only the few systems shown, and only when Spansh's data is more than a day old.
 - A material's page: each way to get it lists only the nearest places, 5 by default (Settings → "Places shown per source": 3, 5 or 10), so the page stays short.
 - Search (stations, systems): one search loads the first results, 500 by default (Settings → "Results loaded per search"); sorting them by any column and changing page are then instant, with no new request. A commodity search asks Spansh for the stations in the "Sort by" order (the largest supply or demand first by default, changing it searches again), other searches for the nearest ones; the count says which ones were loaded.
