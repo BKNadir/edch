@@ -79,17 +79,18 @@ pub fn blocking_http(
     body: Option<&str>,
     content_type: Option<&str>,
 ) -> Result<HttpReply, String> {
-    request(method, url, body, content_type, None, &allowed)
+    request(method, url, body, content_type, &[], &allowed)
 }
 
 /// The request itself: `allow` says which addresses (the first and every redirect) may be
-/// reached; `authorization` is sent as is (the Discord bot's key, never logged).
+/// reached; `headers` are sent as they are (the Discord bot's key, EDCH's fingerprint for EDCN;
+/// never logged).
 pub fn request(
     method: &str,
     url: &str,
     body: Option<&str>,
     content_type: Option<&str>,
-    authorization: Option<&str>,
+    headers: &[(&str, &str)],
     allow: &dyn Fn(&str) -> bool,
 ) -> Result<HttpReply, String> {
     if !allow(url) {
@@ -105,8 +106,8 @@ pub fn request(
     let mut url = url.to_string();
     for _ in 0..=MAX_REDIRECTS {
         let mut request = agent.request(&method, &url);
-        if let Some(value) = authorization {
-            request = request.set("Authorization", value);
+        for (name, value) in headers {
+            request = request.set(name, value);
         }
         let result = match body {
             Some(text) => request

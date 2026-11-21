@@ -5,7 +5,7 @@
 // asked about, and only when Spansh's data is old.
 
 import { eliteBgsSystems } from "../../services/eliteBgs.js";
-import { edcnSystems, type EdcnAccess } from "../../services/edcn.js";
+import { edcnSystems } from "../../services/edcn.js";
 import { newestSystem } from "../systems/freshFactions.js";
 import { factionStateBadges, type ResultRow } from "../../services/spansh.js";
 
@@ -15,20 +15,14 @@ export const STATES_CHECK_AFTER = 86_400_000;
 const time = (iso?: string) => (iso ? Date.parse(iso) : NaN);
 
 /**
- * `rows` with the faction states and age of EliteBGS or EDCN (`edcn`: with the user's key) where
- * more recent (marked with the site's name in debug mode); `wanted` are the states the source
+ * `rows` with the faction states and age of EliteBGS or EDCN where more recent (marked with the site's name in debug mode); `wanted` are the states the source
  * looks for. The rows themselves are not changed: the ones updated are copies.
  */
-export async function withFreshStates(
-  rows: ResultRow[],
-  wanted: string[],
-  edcn: EdcnAccess | null,
-  now = Date.now(),
-): Promise<ResultRow[]> {
+export async function withFreshStates(rows: ResultRow[], wanted: string[], now = Date.now()): Promise<ResultRow[]> {
   const old = rows.filter((row) => !(now - time(row.updated) <= STATES_CHECK_AFTER));
   if (!old.length) return rows;
   const names = old.map((row) => row.system);
-  const [eliteBgs, fromEdcn] = await Promise.all([eliteBgsSystems(names), edcnSystems(edcn, names)]);
+  const [eliteBgs, fromEdcn] = await Promise.all([eliteBgsSystems(names), edcnSystems(names)]);
   const byName = (list: typeof eliteBgs) => new Map(list.map((s) => [s.name.toLowerCase(), s]));
   const [eliteBgsFound, edcnFound] = [byName(eliteBgs), byName(fromEdcn)];
   return rows.map((row) => {

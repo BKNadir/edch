@@ -1,76 +1,14 @@
 // EDCN (Elite Dangerous Companion Network): the maintainer's own EDDN collector, read through its
-// API (src-tauri/src/edcn.rs is the only way to it). Like Spansh, Ardent and EliteBGS it is fed by
-// EDDN, but it keeps each message as soon as it arrives: searches ask it too and keep, for every
-// market or system, the most recent data of all. Each copy of EDCH registers once with EDCN and
-// keeps the key it gets (in the Sync settings, never shown nor sent to the phone). Turned off on
-// the Sync page, or on the phone, nothing is asked; an error only means EDCN's data is missing.
+// API (src-tauri/src/edcn.rs is the only way to it, and says each call comes from EDCH). Like
+// Spansh, Ardent and EliteBGS it is fed by EDDN, but it keeps each message as soon as it arrives:
+// searches ask it too and keep, for every market or system, the most recent data of all. On the
+// phone nothing is asked; an error only means EDCN's data is missing.
 
-import { edcnGet, edcnRegister } from "../platform/bridge.js";
+import { edcnGet } from "../platform/bridge.js";
 import { log } from "../platform/logger.js";
-import type { SyncSettings } from "../state/syncSettings.js";
 import type { Vec3 } from "../game/journal/state.js";
 import type { ArdentQuote } from "./ardent.js";
 import type { EliteBgsSystem } from "./eliteBgs.js";
-
-/** What reaching EDCN needs: this copy's key, and what to do when EDCN no longer knows it. */
-export interface EdcnAccess {
-  key: string;
-  /** EDCN answered "unknown key" (its keys were reset): the key is dropped, a new one is asked next time. */
-  forget?: () => void;
-}
-
-/** Gives EDCN's access when there is one (registering this copy first if needed), else null. */
-export type EdcnKeyring = () => Promise<EdcnAccess | null>;
-
-/** What the keyring needs from the app's store: the Sync settings, read and changed. */
-export interface SyncStore {
-  state: { settings: { sync: SyncSettings } };
-  updateSettings(patch: { sync: SyncSettings }): void;
-}
-
-/** A key as EDCN makes them: letters and digits only. */
-const validKey = (key: string) => /^[A-Za-z0-9]{16,200}$/.test(key);
-
-/** The registration under way, so several searches at once register only once. */
-let registering: Promise<string | null> | null = null;
-
-/** Asks EDCN for this copy's own key; null when EDCN refuses or can't be reached. */
-async function register(): Promise<string | null> {
-  try {
-    const reply = await edcnRegister();
-    if (reply.status !== 200) throw new Error(`HTTP ${reply.status}`);
-    const key = String(JSON.parse(reply.body)?.key ?? "");
-    return validKey(key) ? key : null;
-  } catch (error) {
-    log.warn("edcn", `Not registered (${String((error as Error)?.message ?? error)})`);
-    return null;
-  }
-}
-
-/**
- * The keyring of the app's store: null when EDCN is turned off (Sync page); else the kept key,
- * or a new one EDCN gives this copy (kept in the settings), registering at most once at a time.
- */
-export function edcnKeyring(store: SyncStore): EdcnKeyring {
-  const forget = () => {
-    const sync = store.state.settings.sync;
-    if (sync.edcnKey) store.updateSettings({ sync: { ...sync, edcnKey: "" } });
-  };
-  return async () => {
-    const sync = store.state.settings.sync;
-    if (!sync.edcn) return null;
-    if (validKey(sync.edcnKey)) return { key: sync.edcnKey, forget };
-    registering ??= register().finally(() => (registering = null));
-    const key = await registering;
-    if (!key) return null;
-    const now = store.state.settings.sync;
-    if (now.edcn && now.edcnKey !== key) store.updateSettings({ sync: { ...now, edcnKey: key } });
-    return { key, forget };
-  };
-}
-
-/** Whether EDCN is turned on (Sync page), for the debug mode's source labels. */
-export const edcnTurnedOn = (sync: Pick<SyncSettings, "edcn">) => sync.edcn;
 
 /** EDCN answers at most this many results per search. */
 const EDCN_LIMIT = 500;
@@ -83,12 +21,11 @@ export function edcnQueryValue(value: string): string {
   return encodeURIComponent(value).replace(/[!'()*]/g, (c) => "%" + c.charCodeAt(0).toString(16).toUpperCase());
 }
 
-/** One read from EDCN; null on any error (logged without the key). */
-async function edcnJson(access: EdcnAccess, path: string): Promise<any | null> {
+/** One read from EDCN; null on any error (logged). */
+async function edcnJson(path: string): Promise<any | null> {
   try {
-    const reply = await edcnGet(path, access.key);
+    const reply = await edcnGet(path);
     if (reply.status === 404) return null;
-    if (reply.status === 401) access.forget?.();
     if (reply.status !== 200) throw new Error(`HTTP ${reply.status}`);
     return JSON.parse(reply.body);
   } catch (error) {
@@ -146,17 +83,15 @@ export function edcnQuotesOf(offers: unknown, buying: boolean): Map<number, Arde
  * years: where to sell it, or where to buy it (`buying`), the nearest first.
  */
 export async function edcnQuotes(
-  access: EdcnAccess | null,
   reference: { coords?: Vec3; system?: string },
   symbol: string,
   buying: boolean,
   range: number,
 ): Promise<Map<number, ArdentQuote>> {
   const from = near(reference);
-  if (!access || !from || !symbol) return new Map();
+  if (!from || !symbol) return new Map();
   const mode = buying ? "buy" : "sell";
   const answer = await edcnJson(
-    access,
     `/api/v1/offers?commodity=${edcnQueryValue(symbol.toLowerCase())}&mode=${mode}&${from}` +
       `&range=${Math.max(1, Math.round(range))}&sort=distance&limit=${EDCN_LIMIT}`,
   );
@@ -186,12 +121,10 @@ export function edcnSystemOf(answer: any): EliteBgsSystem | null {
 }
 
 /** The systems EDCN knows among `names` (up to 10, asked together), with their factions. */
-export async function edcnSystems(access: EdcnAccess | null, names: string[]): Promise<EliteBgsSystem[]> {
+export async function edcnSystems(names: string[]): Promise<EliteBgsSystem[]> {
   const wanted = names.slice(0, 10);
-  if (!access || !wanted.length) return [];
-  const answers = await Promise.all(
-    wanted.map((name) => edcnJson(access, `/api/v1/system?name=${edcnQueryValue(name)}`)),
-  );
+  if (!wanted.length) return [];
+  const answers = await Promise.all(wanted.map((name) => edcnJson(`/api/v1/system?name=${edcnQueryValue(name)}`)));
   const systems = answers.map(edcnSystemOf).filter((s): s is EliteBgsSystem => s !== null);
   log.debug("edcn", `${systems.length}/${wanted.length} system(s) found`);
   return systems;

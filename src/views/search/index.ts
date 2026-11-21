@@ -43,7 +43,7 @@ import {
   recentEnough,
   type MarketQuote,
 } from "../../features/market/freshestQuote.js";
-import { edcnKeyring, edcnQuotes } from "../../services/edcn.js";
+import { edcnQuotes } from "../../services/edcn.js";
 import { priceAgeLabel } from "../shared/marketFilters.js";
 import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
 
@@ -868,14 +868,12 @@ export class SearchView implements View {
       if (tab === "buy" || tab === "sell") {
         const symbol = g.commodities.find((c) => c.name.toLowerCase() === name.toLowerCase())?.id;
         const ask = buying ? ardentBuyQuotes : ardentSellQuotes;
-        // EDCN too, when the user has its key: for each market, the most recent of the two.
+        // EDCN too: for each market, the most recent of the two.
         const [fromArdent, fromEdcn] = await Promise.all([
           symbol && ref.system
             ? ask(ref.system, symbol, this.range(), settings.maxAgeDays, minVolume)
             : Promise.resolve(new Map<number, ArdentQuote>()),
-          symbol
-            ? edcnKeyring(this.ctx.store)().then((edcn) => edcnQuotes(edcn, ref, symbol, buying, this.range()))
-            : Promise.resolve(new Map()),
+          symbol ? edcnQuotes(ref, symbol, buying, this.range()) : Promise.resolve(new Map()),
         ]);
         ardent = newestZoneQuotes(fromArdent, fromEdcn);
         if (id !== this.runId) return;

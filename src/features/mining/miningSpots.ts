@@ -4,7 +4,7 @@
 
 import { spanshPost } from "../../platform/bridge.js";
 import { ardentSellQuotes } from "../../services/ardent.js";
-import { edcnKeyring, edcnQuotes } from "../../services/edcn.js";
+import { edcnQuotes } from "../../services/edcn.js";
 import {
   bestRecentFirst,
   freshestQuote,
@@ -239,7 +239,6 @@ export async function findSellSpots(
   const id = commodityId(ctx, mineral);
   const reference = referenceOf(ctx);
   const system = reference.system;
-  const edcn = await edcnKeyring(ctx.store)();
   const addArdentOnly = Object.keys(extra).length === 0;
   for (const r of radii(start)) {
     const [res, fromArdent, fromEdcn] = await Promise.all([
@@ -255,9 +254,9 @@ export async function findSellSpots(
         ...where(ctx),
       }),
       id && system ? ardentSellQuotes(system, id, r, maxAgeDays, minDemand) : Promise.resolve(new Map()),
-      id ? edcnQuotes(edcn, reference, id, false, r) : Promise.resolve(new Map()),
+      id ? edcnQuotes(reference, id, false, r) : Promise.resolve(new Map()),
     ]);
-    // For each market, the most recent of Ardent's and EDCN's (EDCN's: only with its key).
+    // For each market, the most recent of Ardent's and EDCN's.
     const ardent = newestZoneQuotes(fromArdent, fromEdcn);
     const spots: SellSpot[] = [];
     const seen = new Set<number>();

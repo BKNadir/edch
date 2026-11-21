@@ -1,6 +1,5 @@
 // Sync page: sharing the journal with EDDN, EDSM and Inara (what is sent, keys, counters and the
-// last exchanges), reading from EDCN (on or off), and the link to the squadron's Discord bot
-// (EDCH-Discord) for BGS reports.
+// last exchanges), and the link to the squadron's Discord bot (EDCH-Discord) for BGS reports.
 
 import { locale, t } from "../../platform/i18n.js";
 import { openUrl, trustBot } from "../../platform/bridge.js";
@@ -144,16 +143,6 @@ export class SyncView implements View {
             "button.inline-link",
             { onclick: () => openUrl("https://inara.cz/elite/settings-api/") },
             t("sync.openInaraApiKeyPage"),
-          ),
-        ),
-        h(
-          "section.card",
-          null,
-          h(
-            "div.sync-head",
-            null,
-            h("div", null, h("h3", null, t("sync.edcnTitle")), h("p.sub", null, t("sync.edcnExplain"))),
-            toggle(s.edcn, (v) => set({ edcn: v })),
           ),
         ),
         this.discordCard(toggle),

@@ -5,7 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.14
 
-- EDCN (Sync page, on by default): searches also ask EDCN, an EDDN collector that keeps each message as it arrives; the first time, EDCH gets its own key from it. Where to sell or buy a commodity (Search, Mining) takes each market's most recent price among Spansh, Ardent and EDCN, and adds recent markets only EDCN knows; the System page and a material's systems take the faction states of whichever of EliteBGS and EDCN saw the system last, when more recent than Spansh. In debug mode, each price or state names its source.
+- Searches also ask EDCN, the maintainer's EDDN collector, which keeps each message as it arrives. Where to sell or buy a commodity (Search, Mining) takes each market's most recent price among Spansh, Ardent and EDCN, and adds recent markets only EDCN knows; the System page and a material's systems take the faction states of whichever of EliteBGS and EDCN saw the system last, when more recent than Spansh. In debug mode, each price or state names its source.
 - System page: the factions' influence and states come from EliteBGS when it has seen the system more recently than Spansh (only when Spansh's data is more than a day old), with the date they were seen.
 - A material's page: the faction states of the systems listed (expansion, boom, war…) come from EliteBGS when it has seen the system more recently than Spansh; only the few systems shown, and only when Spansh's data is more than a day old.
 - A material's page: each way to get it lists only the nearest places, 5 by default (Settings → "Places shown per source": 3, 5 or 10), so the page stays short.

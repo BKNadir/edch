@@ -141,7 +141,6 @@ test("mining: buyers from Spansh and Ardent merged, filtered and sorted", async 
           minSellDemand: 1000,
           maxAgeDays: 7,
           fallbackSystem: "Sol",
-          sync: { edcn: false, edcnKey: "" },
         },
         cmdr: { location: { system: "Sol", pos: [0, 0, 0] } },
       },

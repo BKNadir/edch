@@ -1386,8 +1386,6 @@
   },
   "sync": {
     "cmdrNameEdsm": "CMDR name on EDSM",
-    "edcnExplain": "Searches also ask EDCN (Elite Dangerous Companion Network), which keeps what EDDN carries: markets, factions and their states. For each station or system, the most recent data of all sources is shown. EDCH gets its own key from EDCN the first time; only the searches are sent.",
-    "edcnTitle": "EDCN — most recent data",
     "eddnCommunityDataNetwork": "EDDN — community data network",
     "edsmApiKey": "EDSM API key",
     "edsmFlightLog": "EDSM — flight log",

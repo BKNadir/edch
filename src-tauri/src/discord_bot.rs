@@ -82,7 +82,7 @@ pub async fn bot_fetch(origin: String, path: String, key: String, body: Option<S
             &format!("{origin}{path}"),
             body.as_deref(),
             None,
-            Some(&authorization),
+            &[("Authorization", authorization.as_str())],
             &allow,
         );
         // Only the path and the status: the key and the report stay out of the logs.

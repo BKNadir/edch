@@ -119,7 +119,7 @@ test("fresh states: recent Spansh rows are kept as they are, without asking Elit
   const rows = [
     { system: "A", title: "A", distance: 1, sub: [], badges: [], links: [], updated: "2026-11-15T08:00:00Z" },
   ];
-  assert.equal(await withFreshStates(rows, [], null, now), rows);
+  assert.equal(await withFreshStates(rows, [], now), rows);
 });
 
 test("elitebgs systems: influence in percent and the controlling faction's name", async () => {

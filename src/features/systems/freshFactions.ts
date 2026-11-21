@@ -4,7 +4,7 @@
 // most recent of the three wins.
 
 import { eliteBgsSystems, type EliteBgsSystem } from "../../services/eliteBgs.js";
-import { edcnSystems, type EdcnAccess } from "../../services/edcn.js";
+import { edcnSystems } from "../../services/edcn.js";
 import type { SystemDetails, SystemFaction } from "../../services/systemSearch.js";
 
 /** Spansh's data older than this (milliseconds) is checked against EliteBGS. */
@@ -28,22 +28,17 @@ export function newestSystem(systems: (EliteBgsSystem | undefined)[]): EliteBgsS
 }
 
 /**
- * The system's factions from EliteBGS or EDCN (`edcn`: with the user's key), the more recent of
- * the two, when more recent than Spansh's (most influent first); null when Spansh's is recent
+ * The system's factions from EliteBGS or EDCN, the more recent of the two, when more recent than Spansh's (most influent first); null when Spansh's is recent
  * enough, or neither has newer. Allegiance and government, which hardly ever change, are kept
  * from Spansh.
  */
-export async function freshFactions(
-  details: SystemDetails,
-  edcn: EdcnAccess | null,
-  now = Date.now(),
-): Promise<FreshFactions | null> {
+export async function freshFactions(details: SystemDetails, now = Date.now()): Promise<FreshFactions | null> {
   const known = time(details.updatedAt);
   if (now - known <= FACTIONS_CHECK_AFTER) return null;
   const same = (s: EliteBgsSystem) => s.name.toLowerCase() === details.name.toLowerCase();
   const [fromEliteBgs, fromEdcn] = await Promise.all([
     eliteBgsSystems([details.name]).then((list) => list.find(same)),
-    edcnSystems(edcn, [details.name]).then((list) => list.find(same)),
+    edcnSystems([details.name]).then((list) => list.find(same)),
   ]);
   const system = newestSystem([fromEliteBgs, fromEdcn]);
   if (!system?.updatedAt || !(time(system.updatedAt) > (Number.isFinite(known) ? known : -Infinity))) return null;

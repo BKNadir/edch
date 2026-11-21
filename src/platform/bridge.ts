@@ -516,16 +516,11 @@ export async function onEdomhLink(cb: (link: string) => void): Promise<void> {
 
 /**
  * One read from EDCN (src-tauri/src/edcn.rs), the maintainer's EDDN collector: `path` under
- * "/api/v1/", the user's key. Never throws on an HTTP status; on the phone there is no EDCN.
+ * "/api/v1/". Never throws on an HTTP status; on the phone there is no EDCN.
  */
-export const edcnGet = (path: string, key: string) =>
+export const edcnGet = (path: string) =>
   isTauri() && !remote
-    ? invoke<HttpReply>("edcn_get", { path, key })
-    : Promise.reject(new Error(t("bridge.availableAppNotDemoMode")));
-/** Registers this copy of EDCH with EDCN: the answer's body is {"key": "…"}. */
-export const edcnRegister = () =>
-  isTauri() && !remote
-    ? invoke<HttpReply>("edcn_register")
+    ? invoke<HttpReply>("edcn_get", { path })
     : Promise.reject(new Error(t("bridge.availableAppNotDemoMode")));
 
 /** EDCH-Discord (src-tauri/src/discord_bot.rs): the squadron bot that receives BGS reports. */

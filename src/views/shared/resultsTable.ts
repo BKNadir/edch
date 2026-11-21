@@ -7,7 +7,6 @@ import { openSystem, systemInfo } from "./links.js";
 import { h, icon } from "../../ui/dom.js";
 import { stationIcon } from "../../ui/stationIcon.js";
 import { debugSource } from "../../ui/debugSource.js";
-import type { EdcnKeyring } from "../../services/edcn.js";
 import { withFreshStates } from "../../features/materials/freshStates.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../../services/spansh.js";
 import type { Finder } from "../../features/materials/sources.js";
@@ -102,7 +101,7 @@ export function finderSection(
   f: Finder,
   ref: Reference,
   settings: Settings,
-  opts: { compact?: boolean; edcn?: EdcnKeyring } = {},
+  opts: { compact?: boolean } = {},
 ): HTMLElement {
   const list = h("div.finder-results");
   const status = h("span.status");
@@ -157,12 +156,10 @@ export function finderSection(
         list.replaceChildren(h("div.results", null, rows.map(resultRow)));
         // Systems: their faction states from EliteBGS or EDCN where more recent, drawn when they answer.
         if (f.type === "systems")
-          void (opts.edcn?.() ?? Promise.resolve(null))
-            .then((edcn) => withFreshStates(rows, f.states ?? [], edcn))
-            .then((fresh) => {
-              if (fresh.some((row, i) => row !== rows[i]) && list.isConnected)
-                list.replaceChildren(h("div.results", null, fresh.map(resultRow)));
-            });
+          void withFreshStates(rows, f.states ?? []).then((fresh) => {
+            if (fresh.some((row, i) => row !== rows[i]) && list.isConnected)
+              list.replaceChildren(h("div.results", null, fresh.map(resultRow)));
+          });
       })
       .catch((err) => {
         status.replaceChildren();
