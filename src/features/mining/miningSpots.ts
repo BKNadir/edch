@@ -4,7 +4,7 @@
 
 import { spanshPost } from "../../platform/bridge.js";
 import { ardentSellQuotes } from "../../services/ardent.js";
-import { edcnAccess, edcnQuotes } from "../../services/edcn.js";
+import { edcnKeyring, edcnQuotes } from "../../services/edcn.js";
 import {
   bestRecentFirst,
   freshestQuote,
@@ -239,7 +239,7 @@ export async function findSellSpots(
   const id = commodityId(ctx, mineral);
   const reference = referenceOf(ctx);
   const system = reference.system;
-  const edcn = edcnAccess(ctx.store.state.settings.sync);
+  const edcn = await edcnKeyring(ctx.store)();
   const addArdentOnly = Object.keys(extra).length === 0;
   for (const r of radii(start)) {
     const [res, fromArdent, fromEdcn] = await Promise.all([

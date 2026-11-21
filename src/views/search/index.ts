@@ -43,7 +43,7 @@ import {
   recentEnough,
   type MarketQuote,
 } from "../../features/market/freshestQuote.js";
-import { edcnAccess, edcnQuotes } from "../../services/edcn.js";
+import { edcnKeyring, edcnQuotes } from "../../services/edcn.js";
 import { priceAgeLabel } from "../shared/marketFilters.js";
 import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
 
@@ -874,7 +874,7 @@ export class SearchView implements View {
             ? ask(ref.system, symbol, this.range(), settings.maxAgeDays, minVolume)
             : Promise.resolve(new Map<number, ArdentQuote>()),
           symbol
-            ? edcnQuotes(edcnAccess(settings.sync), ref, symbol, buying, this.range())
+            ? edcnKeyring(this.ctx.store)().then((edcn) => edcnQuotes(edcn, ref, symbol, buying, this.range()))
             : Promise.resolve(new Map()),
         ]);
         ardent = newestZoneQuotes(fromArdent, fromEdcn);

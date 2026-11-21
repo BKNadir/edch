@@ -1387,9 +1387,7 @@
   },
   "sync": {
     "cmdrNameEdsm": "Nombre de CMDR en EDSM",
-    "edcnExplain": "Las búsquedas también consultan EDCN (Elite Dangerous Companion Network), que guarda todo lo que pasa por EDDN: mercados, facciones y sus estados. Para cada estación o sistema se muestran los datos más recientes de todas las fuentes. Solo se envía la búsqueda.",
-    "edcnKey": "Clave API de EDCN",
-    "edcnKeyHelp": "La da el responsable de EDCN (se muestra en la página de estado de EDCN).",
+    "edcnExplain": "Las búsquedas también consultan EDCN (Elite Dangerous Companion Network), que guarda todo lo que pasa por EDDN: mercados, facciones y sus estados. Para cada estación o sistema se muestran los datos más recientes de todas las fuentes. EDCH recibe su propia clave de EDCN la primera vez; solo se envían las búsquedas.",
     "edcnTitle": "EDCN — datos más recientes",
     "eddnCommunityDataNetwork": "EDDN — red de datos de la comunidad",
     "edsmApiKey": "Clave API de EDSM",

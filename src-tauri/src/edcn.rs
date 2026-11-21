@@ -1,14 +1,18 @@
 //! EDCN (Elite Dangerous Companion Network, its own private repository): the maintainer's EDDN
 //! collector, whose API gives the most recent markets and factions EDDN carried. Only its address
-//! can be reached, only to read (GET) under `/api/v1/`; the user's key goes in the Authorization
-//! header and is never written to the logs. Kept apart from the general HTTP command, which the
-//! phone can reach: this one can't be.
+//! can be reached: to register this copy of EDCH (EDCN gives it its own key, kept in the
+//! settings), and to read (GET) under `/api/v1/` with that key in the Authorization header. The
+//! key is never written to the logs. Kept apart from the general HTTP command, which the phone can
+//! reach: this one can't be.
 
 use crate::http::{request, HttpReply};
 use crate::logs;
 
 /// EDCN's address.
 pub const EDCN: &str = "https://edcn.koinkoin.duckdns.org";
+
+/// EDCH's identifier in EDCN's list of applications (public: it only says which application).
+const APPLICATION: &str = "edch";
 
 const MAX_KEY_LEN: usize = 200;
 const MAX_PATH_LEN: usize = 2000;
@@ -48,6 +52,25 @@ pub async fn edcn_get(path: String, key: String) -> Result<HttpReply, String> {
         match &result {
             Ok(reply) => logs::debug("edcn", &format!("GET {route} → {}", reply.status)),
             Err(e) => logs::warn("edcn", &format!("GET {route} → {e}")),
+        }
+        result
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+/// Registers this copy of EDCH with EDCN; the answer holds its own key ({"key": "…"}).
+#[tauri::command]
+pub async fn edcn_register() -> Result<HttpReply, String> {
+    tauri::async_runtime::spawn_blocking(|| {
+        let url = format!("{EDCN}/api/v1/register");
+        let allow = |address: &str| address == url;
+        let body = format!(r#"{{"app":"{APPLICATION}","version":"{}"}}"#, env!("CARGO_PKG_VERSION"));
+        let result = request("POST", &url, Some(&body), Some("application/json"), None, &allow);
+        // The status only: the answer holds the new key.
+        match &result {
+            Ok(reply) => logs::info("edcn", &format!("registered → {}", reply.status)),
+            Err(e) => logs::warn("edcn", &format!("register → {e}")),
         }
         result
     })

@@ -6,7 +6,7 @@ import { debugSource } from "../../ui/debugSource.js";
 import { t } from "../../platform/i18n.js";
 import type { Settings } from "../../state/store.js";
 import { ARDENT_MAX_DISTANCE } from "../../services/ardent.js";
-import { edcnAccess } from "../../services/edcn.js";
+import { edcnTurnedOn } from "../../services/edcn.js";
 
 /** "1 week", "1 month", "Any age"… for a number of days (the "data age" setting). */
 export function priceAgeLabel(days: number): string {
@@ -21,7 +21,7 @@ export function priceAgeLabel(days: number): string {
 
 /**
  * "Prices up to 1 month old; demand of at least 100 t." In debug mode, where the prices come from
- * (the most recent of Spansh, Ardent and EDCN; Ardent only up to 500 ly, EDCN with its key).
+ * (the most recent of Spansh, Ardent and EDCN; Ardent only up to 500 ly, EDCN when turned on).
  */
 export function sellFiltersNote(settings: Settings, range = settings.maxDistance): HTMLElement {
   return h(
@@ -33,6 +33,6 @@ export function sellFiltersNote(settings: Settings, range = settings.maxDistance
     }),
     debugSource("Spansh"),
     debugSource("Ardent", range > ARDENT_MAX_DISTANCE ? `≤ ${fmt(ARDENT_MAX_DISTANCE)} ly` : null),
-    debugSource(edcnAccess(settings.sync) && "EDCN"),
+    debugSource(edcnTurnedOn(settings.sync) && "EDCN"),
   );
 }

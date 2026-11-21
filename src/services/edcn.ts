@@ -1,26 +1,76 @@
 // EDCN (Elite Dangerous Companion Network): the maintainer's own EDDN collector, read through its
-// API with the key the user entered on the Sync page (src-tauri/src/edcn.rs is the only way to
-// it). Like Spansh, Ardent and EliteBGS it is fed by EDDN, but it keeps each message as soon as it
-// arrives: searches ask it too and keep, for every market or system, the most recent data of all.
-// Without the key (or on the phone), nothing is asked; an error only means EDCN's data is missing.
+// API (src-tauri/src/edcn.rs is the only way to it). Like Spansh, Ardent and EliteBGS it is fed by
+// EDDN, but it keeps each message as soon as it arrives: searches ask it too and keep, for every
+// market or system, the most recent data of all. Each copy of EDCH registers once with EDCN and
+// keeps the key it gets (in the Sync settings, never shown nor sent to the phone). Turned off on
+// the Sync page, or on the phone, nothing is asked; an error only means EDCN's data is missing.
 
-import { edcnGet } from "../platform/bridge.js";
+import { edcnGet, edcnRegister } from "../platform/bridge.js";
 import { log } from "../platform/logger.js";
 import type { SyncSettings } from "../state/syncSettings.js";
 import type { Vec3 } from "../game/journal/state.js";
 import type { ArdentQuote } from "./ardent.js";
 import type { EliteBgsSystem } from "./eliteBgs.js";
 
-/** What reaching EDCN needs: the user's key. */
+/** What reaching EDCN needs: this copy's key, and what to do when EDCN no longer knows it. */
 export interface EdcnAccess {
   key: string;
+  /** EDCN answered "unknown key" (its keys were reset): the key is dropped, a new one is asked next time. */
+  forget?: () => void;
 }
 
-/** EDCN's access when the user turned it on with a key (Sync page), else null. */
-export function edcnAccess(sync: Pick<SyncSettings, "edcn" | "edcnKey">): EdcnAccess | null {
-  const key = sync.edcn ? sync.edcnKey.trim() : "";
-  return /^[A-Za-z0-9]+$/.test(key) ? { key } : null;
+/** Gives EDCN's access when there is one (registering this copy first if needed), else null. */
+export type EdcnKeyring = () => Promise<EdcnAccess | null>;
+
+/** What the keyring needs from the app's store: the Sync settings, read and changed. */
+export interface SyncStore {
+  state: { settings: { sync: SyncSettings } };
+  updateSettings(patch: { sync: SyncSettings }): void;
 }
+
+/** A key as EDCN makes them: letters and digits only. */
+const validKey = (key: string) => /^[A-Za-z0-9]{16,200}$/.test(key);
+
+/** The registration under way, so several searches at once register only once. */
+let registering: Promise<string | null> | null = null;
+
+/** Asks EDCN for this copy's own key; null when EDCN refuses or can't be reached. */
+async function register(): Promise<string | null> {
+  try {
+    const reply = await edcnRegister();
+    if (reply.status !== 200) throw new Error(`HTTP ${reply.status}`);
+    const key = String(JSON.parse(reply.body)?.key ?? "");
+    return validKey(key) ? key : null;
+  } catch (error) {
+    log.warn("edcn", `Not registered (${String((error as Error)?.message ?? error)})`);
+    return null;
+  }
+}
+
+/**
+ * The keyring of the app's store: null when EDCN is turned off (Sync page); else the kept key,
+ * or a new one EDCN gives this copy (kept in the settings), registering at most once at a time.
+ */
+export function edcnKeyring(store: SyncStore): EdcnKeyring {
+  const forget = () => {
+    const sync = store.state.settings.sync;
+    if (sync.edcnKey) store.updateSettings({ sync: { ...sync, edcnKey: "" } });
+  };
+  return async () => {
+    const sync = store.state.settings.sync;
+    if (!sync.edcn) return null;
+    if (validKey(sync.edcnKey)) return { key: sync.edcnKey, forget };
+    registering ??= register().finally(() => (registering = null));
+    const key = await registering;
+    if (!key) return null;
+    const now = store.state.settings.sync;
+    if (now.edcn && now.edcnKey !== key) store.updateSettings({ sync: { ...now, edcnKey: key } });
+    return { key, forget };
+  };
+}
+
+/** Whether EDCN is turned on (Sync page), for the debug mode's source labels. */
+export const edcnTurnedOn = (sync: Pick<SyncSettings, "edcn">) => sync.edcn;
 
 /** EDCN answers at most this many results per search. */
 const EDCN_LIMIT = 500;
@@ -38,6 +88,7 @@ async function edcnJson(access: EdcnAccess, path: string): Promise<any | null> {
   try {
     const reply = await edcnGet(path, access.key);
     if (reply.status === 404) return null;
+    if (reply.status === 401) access.forget?.();
     if (reply.status !== 200) throw new Error(`HTTP ${reply.status}`);
     return JSON.parse(reply.body);
   } catch (error) {

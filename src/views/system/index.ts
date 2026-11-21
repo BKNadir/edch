@@ -6,7 +6,7 @@
 import { gameName, t } from "../../platform/i18n.js";
 import { log } from "../../platform/logger.js";
 import { distance, fmtLy, fmtPop, inaraSystem } from "../../services/spansh.js";
-import { edcnAccess } from "../../services/edcn.js";
+import { edcnKeyring } from "../../services/edcn.js";
 import {
   securityLabel,
   systemBodies,
@@ -113,7 +113,7 @@ export class SystemView implements View {
 
   /** The factions from EliteBGS or EDCN when Spansh's are old: drawn if more recent. */
   private async loadFreshFactions(details: SystemDetails, id: number) {
-    const fresh = await freshFactions(details, edcnAccess(this.ctx.store.state.settings.sync));
+    const fresh = await freshFactions(details, await edcnKeyring(this.ctx.store)());
     if (id !== this.lookup || !fresh) return;
     this.fresh = fresh;
     this.render();

@@ -522,6 +522,11 @@ export const edcnGet = (path: string, key: string) =>
   isTauri() && !remote
     ? invoke<HttpReply>("edcn_get", { path, key })
     : Promise.reject(new Error(t("bridge.availableAppNotDemoMode")));
+/** Registers this copy of EDCH with EDCN: the answer's body is {"key": "…"}. */
+export const edcnRegister = () =>
+  isTauri() && !remote
+    ? invoke<HttpReply>("edcn_register")
+    : Promise.reject(new Error(t("bridge.availableAppNotDemoMode")));
 
 /** EDCH-Discord (src-tauri/src/discord_bot.rs): the squadron bot that receives BGS reports. */
 export const trustBot = (origin: string | null) =>

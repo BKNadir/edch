@@ -1,18 +1,36 @@
-// EDCN: asked only with the user's key, its answers read in the shapes EDCH already compares
+// EDCN: asked only when turned on, with the key this copy got, its answers read in the shapes EDCH already compares
 // (Ardent's quotes, EliteBGS's systems), and for each market or system the most recent data of
 // all sources kept.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
-import { edcnAccess, edcnPadSize, edcnQueryValue, edcnQuotesOf, edcnSystemOf } from "../dist/js/services/edcn.js";
+import { edcnKeyring, edcnPadSize, edcnQueryValue, edcnQuotesOf, edcnSystemOf } from "../dist/js/services/edcn.js";
 import { freshestQuote, newestZoneQuotes, QUOTE_SOURCE_LABELS } from "../dist/js/features/market/freshestQuote.js";
 import { newestSystem } from "../dist/js/features/systems/freshFactions.js";
 
-test("EDCN is asked only when turned on with a key of letters and digits", () => {
-  assert.equal(edcnAccess({ edcn: false, edcnKey: "abc123" }), null);
-  assert.equal(edcnAccess({ edcn: true, edcnKey: "" }), null);
-  assert.equal(edcnAccess({ edcn: true, edcnKey: "abc 123" }), null);
-  assert.deepEqual(edcnAccess({ edcn: true, edcnKey: " abc123 " }), { key: "abc123" });
+/** A store holding only the Sync settings, as the keyring sees the app's. */
+function fakeStore(sync) {
+  return {
+    state: { settings: { sync } },
+    updateSettings(patch) {
+      this.state.settings = { ...this.state.settings, ...patch };
+    },
+  };
+}
+
+const KEY = "0123456789abcdef0123456789abcdef";
+
+test("EDCN is asked only when turned on, with the key this copy got", async () => {
+  assert.equal(await edcnKeyring(fakeStore({ edcn: false, edcnKey: KEY }))(), null);
+  const store = fakeStore({ edcn: true, edcnKey: KEY });
+  const access = await edcnKeyring(store)();
+  assert.equal(access.key, KEY);
+  // EDCN no longer knows the key: it is dropped, a new one is asked next time.
+  access.forget();
+  assert.equal(store.state.settings.sync.edcnKey, "");
+  // Outside the app (here, the tests) registering can't happen: no access, nothing kept.
+  assert.equal(await edcnKeyring(store)(), null);
+  assert.equal(store.state.settings.sync.edcnKey, "");
 });
 
 test("names go into EDCN's queries with only the characters its door accepts", () => {

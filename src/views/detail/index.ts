@@ -12,6 +12,7 @@ import { findersFor, traderFinder } from "../../features/materials/sources.js";
 import { suggestTrades } from "../../features/materials/trade.js";
 import type { Blueprint, Material } from "../../game/types.js";
 import { copySystem, finderSection } from "../shared/resultsTable.js";
+import { edcnKeyring } from "../../services/edcn.js";
 import { addToWishlist } from "../wishlist/index.js";
 import { moduleLink, systemInfo } from "../shared/links.js";
 
@@ -233,7 +234,8 @@ export class DetailPanel {
       );
     }
 
-    for (const f of findersFor(m, s)) parts.push(finderSection(f, ref, s));
+    const edcn = edcnKeyring(this.ctx.store);
+    for (const f of findersFor(m, s)) parts.push(finderSection(f, ref, s, { edcn }));
 
     const trader = traderFinder(m, s);
     if (trader) parts.push(finderSection(trader, ref, s, { compact: true }));
