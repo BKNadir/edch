@@ -15,6 +15,7 @@ use std::sync::Arc;
 
 mod app;
 mod discord_bot;
+mod edcn;
 mod edomh_link;
 mod http;
 mod journal;
@@ -60,6 +61,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             discord_bot::trust_bot,
             discord_bot::bot_fetch,
+            edcn::edcn_get,
             edomh_link::take_launch_link,
             edomh_link::edomh_handler_status,
             edomh_link::set_edomh_handler,

@@ -28,6 +28,8 @@ export interface ArdentQuote {
   distance?: number;
   /** Light seconds from the arrival star. */
   arrival?: number;
+  /** Who gave it, when not Ardent: EDCN's quotes have Ardent's shape (services/edcn.ts). */
+  source?: "edcn";
 }
 
 /**

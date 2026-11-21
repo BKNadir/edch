@@ -7,6 +7,7 @@ import { openSystem, systemInfo } from "./links.js";
 import { h, icon } from "../../ui/dom.js";
 import { stationIcon } from "../../ui/stationIcon.js";
 import { debugSource } from "../../ui/debugSource.js";
+import { edcnAccess } from "../../services/edcn.js";
 import { withFreshStates } from "../../features/materials/freshStates.js";
 import { fmtLy, runFinder, type Reference, type ResultRow } from "../../services/spansh.js";
 import type { Finder } from "../../features/materials/sources.js";
@@ -154,9 +155,9 @@ export function finderSection(
         }
         const rows = res.rows.slice(0, settings.sourceCount);
         list.replaceChildren(h("div.results", null, rows.map(resultRow)));
-        // Systems: their faction states from EliteBGS where it is more recent, drawn when it answers.
+        // Systems: their faction states from EliteBGS or EDCN where more recent, drawn when they answer.
         if (f.type === "systems")
-          void withFreshStates(rows, f.states ?? []).then((fresh) => {
+          void withFreshStates(rows, f.states ?? [], edcnAccess(settings.sync)).then((fresh) => {
             if (fresh.some((row, i) => row !== rows[i]) && list.isConnected)
               list.replaceChildren(h("div.results", null, fresh.map(resultRow)));
           });

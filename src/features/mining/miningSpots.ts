@@ -4,10 +4,12 @@
 
 import { spanshPost } from "../../platform/bridge.js";
 import { ardentSellQuotes } from "../../services/ardent.js";
+import { edcnAccess, edcnQuotes } from "../../services/edcn.js";
 import {
   bestRecentFirst,
   freshestQuote,
   meetsDemand,
+  newestZoneQuotes,
   recentEnough,
   type QuoteSource,
 } from "../market/freshestQuote.js";
@@ -235,10 +237,12 @@ export async function findSellSpots(
   const start = range;
   const minDemand = Math.max(1, minSellDemand);
   const id = commodityId(ctx, mineral);
-  const system = referenceOf(ctx).system;
+  const reference = referenceOf(ctx);
+  const system = reference.system;
+  const edcn = edcnAccess(ctx.store.state.settings.sync);
   const addArdentOnly = Object.keys(extra).length === 0;
   for (const r of radii(start)) {
-    const [res, ardent] = await Promise.all([
+    const [res, fromArdent, fromEdcn] = await Promise.all([
       spanshPost("stations/search", {
         filters: {
           ...extra,
@@ -251,7 +255,10 @@ export async function findSellSpots(
         ...where(ctx),
       }),
       id && system ? ardentSellQuotes(system, id, r, maxAgeDays, minDemand) : Promise.resolve(new Map()),
+      id ? edcnQuotes(edcn, reference, id, false, r) : Promise.resolve(new Map()),
     ]);
+    // For each market, the most recent of Ardent's and EDCN's (EDCN's: only with its key).
+    const ardent = newestZoneQuotes(fromArdent, fromEdcn);
     const spots: SellSpot[] = [];
     const seen = new Set<number>();
     for (const s of (res?.results ?? []) as Json[]) {
@@ -287,7 +294,7 @@ export async function findSellSpots(
     if (addArdentOnly)
       for (const quote of ardent.values()) {
         if (seen.has(quote.marketId)) continue;
-        const asQuote = { ...quote, source: "ardent" as const };
+        const asQuote = { ...quote, source: quote.source ?? ("ardent" as const) };
         if (!meetsDemand(asQuote, minDemand) || !recentEnough(quote.updated, maxAgeDays)) continue;
         spots.push({
           mineral,
@@ -299,7 +306,7 @@ export async function findSellSpots(
           arrival: quote.arrival,
           largePad: quote.padSize === 3,
           updated: quote.updated,
-          source: "ardent",
+          source: asQuote.source,
         });
       }
     if (spots.length) return { spots: spots.sort(bestRecentFirst), radius: r, widened: r > start };

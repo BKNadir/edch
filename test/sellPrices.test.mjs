@@ -136,7 +136,13 @@ test("mining: buyers from Spansh and Ardent merged, filtered and sorted", async 
     game: { data: { commodities: [{ id: "platinum", name: "Platinum", category: "Metals", rare: false }] } },
     store: {
       state: {
-        settings: { maxDistance: 100, minSellDemand: 1000, maxAgeDays: 7, fallbackSystem: "Sol" },
+        settings: {
+          maxDistance: 100,
+          minSellDemand: 1000,
+          maxAgeDays: 7,
+          fallbackSystem: "Sol",
+          sync: { edcn: false, edcnKey: "" },
+        },
         cmdr: { location: { system: "Sol", pos: [0, 0, 0] } },
       },
     },

@@ -1,14 +1,18 @@
-// Where to sell or buy a commodity: Spansh and Ardent both collect market prices from EDDN, each
-// with its own delays. For every market both know, the most recently seen price wins.
+// Where to sell or buy a commodity: Spansh, Ardent and EDCN all collect market prices from EDDN,
+// each with its own delays. For every market they know, the most recently seen price wins.
 
 import type { ArdentQuote } from "../../services/ardent.js";
 import { validDataAge } from "../../state/dataAge.js";
 
 /** Which site a price comes from. */
-export type QuoteSource = "spansh" | "ardent";
+export type QuoteSource = "spansh" | "ardent" | "edcn";
 
 /** Names shown next to a price (site names, the same in every language). */
-export const QUOTE_SOURCE_LABELS: Record<QuoteSource, string> = { spansh: "Spansh", ardent: "Ardent" };
+export const QUOTE_SOURCE_LABELS: Record<QuoteSource, string> = {
+  spansh: "Spansh",
+  ardent: "Ardent",
+  edcn: "EDCN",
+};
 
 /** A market's price for a commodity. */
 export interface MarketQuote {
@@ -30,10 +34,24 @@ export function quoteTime(updated: string | undefined): number {
   return Number.isNaN(time) ? Number.NEGATIVE_INFINITY : time;
 }
 
-/** Spansh's quote, or Ardent's when Ardent saw the market more recently. */
+/** Spansh's quote, or Ardent's (or EDCN's) when it saw the market more recently. */
 export function freshestQuote(spansh: MarketQuote, ardent: ArdentQuote | undefined): MarketQuote {
   if (!ardent || quoteTime(ardent.updated) <= quoteTime(spansh.updated)) return spansh;
-  return { price: ardent.price, demand: ardent.demand, updated: ardent.updated, source: "ardent" };
+  return { price: ardent.price, demand: ardent.demand, updated: ardent.updated, source: ardent.source ?? "ardent" };
+}
+
+/**
+ * Ardent's and EDCN's quotes of a zone as one: for a market both know, the one that saw it more
+ * recently (Ardent's when as recent).
+ */
+export function newestZoneQuotes(...zones: Map<number, ArdentQuote>[]): Map<number, ArdentQuote> {
+  const newest = new Map<number, ArdentQuote>();
+  for (const zone of zones)
+    for (const [marketId, quote] of zone) {
+      const known = newest.get(marketId);
+      if (!known || quoteTime(quote.updated) > quoteTime(known.updated)) newest.set(marketId, quote);
+    }
+  return newest;
 }
 
 /** Whether a quote still wants at least `minDemand` tonnes. */

@@ -1,5 +1,5 @@
-// Settings of the data sharing services (Sync page): EDDN, EDSM and Inara, with the API keys, and
-// the squadron's Discord bot (EDCH-Discord) with the member's key. The keys never leave the PC
+// Settings of the data sharing services (Sync page): EDDN, EDSM and Inara, with the API keys, the
+// squadron's Discord bot (EDCH-Discord) with the member's key, and EDCN (read only) with its key. The keys never leave the PC
 // (not sent to phones, never written to the logs).
 
 /**
@@ -37,6 +37,10 @@ export interface SyncSettings {
    * group a burst), or every 5 or 15 minutes. What the squadron saw comes back at the same time.
    */
   discordEvery: DiscordEvery;
+  /** Ask EDCN, the maintainer's EDDN collector, too (searches take its data when more recent). */
+  edcn: boolean;
+  /** The key EDCN's maintainer gave (letters and digits). Without it, EDCN is not asked. */
+  edcnKey: string;
 }
 
 /** How often the BGS reports go to the squadron's Discord bot. */
@@ -55,6 +59,8 @@ export const DEFAULT_SYNC: SyncSettings = {
   discordKey: "",
   discordBot: "",
   discordEvery: "now",
+  edcn: false,
+  edcnKey: "",
 };
 
 /**

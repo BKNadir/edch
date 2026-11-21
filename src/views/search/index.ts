@@ -39,9 +39,11 @@ import {
   quoteTime,
   freshestQuote,
   meetsDemand,
+  newestZoneQuotes,
   recentEnough,
   type MarketQuote,
 } from "../../features/market/freshestQuote.js";
+import { edcnAccess, edcnQuotes } from "../../services/edcn.js";
 import { priceAgeLabel } from "../shared/marketFilters.js";
 import { DATA_AGE_CHOICES } from "../../state/dataAge.js";
 
@@ -866,14 +868,23 @@ export class SearchView implements View {
       if (tab === "buy" || tab === "sell") {
         const symbol = g.commodities.find((c) => c.name.toLowerCase() === name.toLowerCase())?.id;
         const ask = buying ? ardentBuyQuotes : ardentSellQuotes;
-        if (symbol && ref.system) ardent = await ask(ref.system, symbol, this.range(), settings.maxAgeDays, minVolume);
+        // EDCN too, when the user has its key: for each market, the most recent of the two.
+        const [fromArdent, fromEdcn] = await Promise.all([
+          symbol && ref.system
+            ? ask(ref.system, symbol, this.range(), settings.maxAgeDays, minVolume)
+            : Promise.resolve(new Map<number, ArdentQuote>()),
+          symbol
+            ? edcnQuotes(edcnAccess(settings.sync), ref, symbol, buying, this.range())
+            : Promise.resolve(new Map()),
+        ]);
+        ardent = newestZoneQuotes(fromArdent, fromEdcn);
         if (id !== this.runId) return;
       }
       // Every result received so far, merged, filtered and in the order chosen.
       const results = (): Json[] => {
         let rows: Json[] = answers.flatMap((a) => (Array.isArray(a?.results) ? a.results : []));
         // Buying and selling: each market's most recent price between Spansh's and Ardent's, and
-        // the best recent markets of the zone that only Ardent returned.
+        // the best recent markets of the zone that only Ardent or EDCN returned.
         const quotes = new Map<Json, MarketQuote>();
         if (tab === "buy" || tab === "sell") {
           for (const r of rows) {
@@ -904,7 +915,12 @@ export class SearchView implements View {
               market: [{ commodity: name }],
             };
             rows.push(row);
-            quotes.set(row, { price: quote.price, demand: quote.demand, updated: quote.updated, source: "ardent" });
+            quotes.set(row, {
+              price: quote.price,
+              demand: quote.demand,
+              updated: quote.updated,
+              source: quote.source ?? "ardent",
+            });
           }
           rows = rows.filter((r) => {
             const q = quotes.get(r);

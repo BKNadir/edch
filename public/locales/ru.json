@@ -1384,6 +1384,10 @@
   },
   "sync": {
     "cmdrNameEdsm": "Имя CMDR на EDSM",
+    "edcnExplain": "Поиск также обращается к EDCN (Elite Dangerous Companion Network), который хранит всё, что передаёт EDDN: рынки, фракции и их состояния. Для каждой станции и системы показываются самые свежие данные из всех источников. Отправляется только сам запрос.",
+    "edcnKey": "API-ключ EDCN",
+    "edcnKeyHelp": "Выдаётся администратором EDCN (показан на странице состояния EDCN).",
+    "edcnTitle": "EDCN — самые свежие данные",
     "eddnCommunityDataNetwork": "EDDN — сеть данных сообщества",
     "edsmApiKey": "API-ключ EDSM",
     "edsmFlightLog": "EDSM — бортовой журнал",

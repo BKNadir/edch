@@ -6,6 +6,7 @@
 import { gameName, t } from "../../platform/i18n.js";
 import { log } from "../../platform/logger.js";
 import { distance, fmtLy, fmtPop, inaraSystem } from "../../services/spansh.js";
+import { edcnAccess } from "../../services/edcn.js";
 import {
   securityLabel,
   systemBodies,
@@ -54,7 +55,7 @@ export class SystemView implements View {
   private name = "";
   private from = "search";
   private details?: SystemDetails | null;
-  /** The factions from EliteBGS when more recent than Spansh's (see features/systems). */
+  /** The factions from EliteBGS or EDCN when more recent than Spansh's (see features/systems). */
   private fresh: FreshFactions | null = null;
   /** The bodies' detail (rings, landing, signals), asked once the system is found. */
   private bodyDetail?: BodyDetail[];
@@ -110,9 +111,9 @@ export class SystemView implements View {
     this.render();
   }
 
-  /** The factions from EliteBGS when Spansh's are old: drawn when it answers, if more recent. */
+  /** The factions from EliteBGS or EDCN when Spansh's are old: drawn if more recent. */
   private async loadFreshFactions(details: SystemDetails, id: number) {
-    const fresh = await freshFactions(details);
+    const fresh = await freshFactions(details, edcnAccess(this.ctx.store.state.settings.sync));
     if (id !== this.lookup || !fresh) return;
     this.fresh = fresh;
     this.render();
@@ -309,7 +310,7 @@ export class SystemView implements View {
     return h(
       "section.card",
       null,
-      h("h3", null, t("system.factions", { count: factions.length }), debugSource(this.fresh ? "EliteBGS" : "Spansh")),
+      h("h3", null, t("system.factions", { count: factions.length }), debugSource(this.fresh?.source ?? "Spansh")),
       // Newer than the system's own date: when they were seen.
       this.fresh ? h("p.sub", null, t("system.updated", { when: relTime(this.fresh.updatedAt) })) : null,
       scrolling(
