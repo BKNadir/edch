@@ -340,11 +340,12 @@ export class SyncView implements View {
       h(
         "div.counters",
         null,
+        // The two networks first (EDDN, shared with; EDCN, read from), then the services.
         service("EDDN"),
+        counter("EDCN", edcnLog.answered, edcnLog.failed),
         service("EDSM"),
         service("Inara"),
         discordOn ? counter("Discord", botLog.sent, botLog.failed) : null,
-        counter("EDCN", edcnLog.answered, edcnLog.failed),
       ),
       lines.length
         ? h(
