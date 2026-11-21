@@ -1384,6 +1384,9 @@
   },
   "sync": {
     "cmdrNameEdsm": "Имя CMDR на EDSM",
+    "edcnNoAnswer": "Нет ответа ({{reason}})",
+    "edcnOffers": "{{commodity}}: рынков — {{count}}",
+    "edcnSystems": "Фракции систем: {{count}}",
     "eddnCommunityDataNetwork": "EDDN — сеть данных сообщества",
     "edsmApiKey": "API-ключ EDSM",
     "edsmFlightLog": "EDSM — бортовой журнал",

@@ -1386,6 +1386,9 @@
   },
   "sync": {
     "cmdrNameEdsm": "CMDR name on EDSM",
+    "edcnNoAnswer": "No answer ({{reason}})",
+    "edcnOffers": "{{commodity}}: {{count}} market(s)",
+    "edcnSystems": "Factions of {{count}} system(s)",
     "eddnCommunityDataNetwork": "EDDN — community data network",
     "edsmApiKey": "EDSM API key",
     "edsmFlightLog": "EDSM — flight log",

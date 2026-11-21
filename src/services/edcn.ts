@@ -22,16 +22,52 @@ export function edcnQueryValue(value: string): string {
 }
 
 /** One read from EDCN; null on any error (logged). */
-async function edcnJson(path: string): Promise<any | null> {
+async function edcnJson(path: string): Promise<EdcnAnswer> {
   try {
     const reply = await edcnGet(path);
-    if (reply.status === 404) return null;
+    if (reply.status === 404) return { ok: true, data: null };
     if (reply.status !== 200) throw new Error(`HTTP ${reply.status}`);
-    return JSON.parse(reply.body);
+    return { ok: true, data: JSON.parse(reply.body) };
   } catch (error) {
-    log.warn("edcn", `No EDCN data (${String((error as Error)?.message ?? error)})`);
-    return null;
+    const reason = String((error as Error)?.message ?? error);
+    log.warn("edcn", `No EDCN data (${reason})`);
+    return { ok: false, data: null, reason };
   }
+}
+
+/** An EDCN answer: its JSON (null when EDCN knows nothing), or why there is none. */
+interface EdcnAnswer {
+  ok: boolean;
+  data: any;
+  reason?: string;
+}
+
+/** One exchange with EDCN, for the Sync page's activity. */
+export interface EdcnLogEntry {
+  at: number;
+  ok: boolean;
+  /** "offers" (a commodity's markets) or "systems" (systems' factions). */
+  what: "offers" | "systems";
+  /** Markets or systems received. */
+  count: number;
+  /** The commodity asked about (the game's symbol). */
+  commodity?: string;
+  /** Why it failed ("HTTP 403", a network error…). */
+  reason?: string;
+}
+
+/** The exchanges with EDCN this session, newest first, and how many answered or failed. */
+export const edcnLog: { entries: EdcnLogEntry[]; answered: number; failed: number } = {
+  entries: [],
+  answered: 0,
+  failed: 0,
+};
+
+function logEdcn(entry: Omit<EdcnLogEntry, "at">) {
+  edcnLog.entries.unshift({ at: Date.now(), ...entry });
+  edcnLog.entries.length = Math.min(edcnLog.entries.length, 60);
+  if (entry.ok) edcnLog.answered += 1;
+  else edcnLog.failed += 1;
 }
 
 /** The reference of a search, as EDCN's query wants it: coordinates if known, else a name. */
@@ -95,8 +131,9 @@ export async function edcnQuotes(
     `/api/v1/offers?commodity=${edcnQueryValue(symbol.toLowerCase())}&mode=${mode}&${from}` +
       `&range=${Math.max(1, Math.round(range))}&sort=distance&limit=${EDCN_LIMIT}`,
   );
-  const quotes = edcnQuotesOf(answer?.offers, buying);
+  const quotes = edcnQuotesOf(answer.data?.offers, buying);
   log.debug("edcn", `${quotes.size} market(s) for ${symbol}`);
+  logEdcn({ ok: answer.ok, what: "offers", count: quotes.size, commodity: symbol, reason: answer.reason });
   return quotes;
 }
 
@@ -125,7 +162,9 @@ export async function edcnSystems(names: string[]): Promise<EliteBgsSystem[]> {
   const wanted = names.slice(0, 10);
   if (!wanted.length) return [];
   const answers = await Promise.all(wanted.map((name) => edcnJson(`/api/v1/system?name=${edcnQueryValue(name)}`)));
-  const systems = answers.map(edcnSystemOf).filter((s): s is EliteBgsSystem => s !== null);
+  const systems = answers.map((a) => edcnSystemOf(a.data)).filter((s): s is EliteBgsSystem => s !== null);
   log.debug("edcn", `${systems.length}/${wanted.length} system(s) found`);
+  const failed = answers.find((a) => !a.ok);
+  logEdcn({ ok: !failed, what: "systems", count: systems.length, reason: failed?.reason });
   return systems;
 }

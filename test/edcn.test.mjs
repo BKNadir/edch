@@ -4,7 +4,15 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import "./i18n-setup.mjs";
-import { edcnPadSize, edcnQueryValue, edcnQuotesOf, edcnSystemOf } from "../dist/js/services/edcn.js";
+import {
+  edcnLog,
+  edcnQuotes,
+  edcnSystems,
+  edcnPadSize,
+  edcnQueryValue,
+  edcnQuotesOf,
+  edcnSystemOf,
+} from "../dist/js/services/edcn.js";
 import { freshestQuote, newestZoneQuotes, QUOTE_SOURCE_LABELS } from "../dist/js/features/market/freshestQuote.js";
 import { newestSystem } from "../dist/js/features/systems/freshFactions.js";
 
@@ -92,4 +100,21 @@ test("an EDCN system reads like an EliteBGS one, and the most recent of the two 
   assert.equal(newestSystem([eliteBgs, edcn]), edcn);
   assert.equal(newestSystem([eliteBgs, undefined]), eliteBgs);
   assert.equal(newestSystem([undefined, undefined]), undefined);
+});
+
+test("each exchange with EDCN is counted for the Sync page, failures with their reason", async () => {
+  const before = { failed: edcnLog.failed, entries: edcnLog.entries.length };
+  // Outside the app (here, the tests) EDCN can't be reached: nothing found, the failure logged.
+  assert.equal((await edcnQuotes({ coords: [0, 0, 0] }, "tritium", false, 50)).size, 0);
+  assert.deepEqual(await edcnSystems(["Sol"]), []);
+  assert.equal(edcnLog.failed, before.failed + 2);
+  assert.equal(edcnLog.entries.length, before.entries + 2);
+  const [systems, offers] = edcnLog.entries;
+  assert.equal(systems.what, "systems");
+  assert.equal(offers.what, "offers");
+  assert.equal(offers.commodity, "tritium");
+  assert.ok(offers.reason);
+  // Nothing to ask: no exchange.
+  await edcnSystems([]);
+  assert.equal(edcnLog.entries.length, before.entries + 2);
 });

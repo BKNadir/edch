@@ -1,7 +1,8 @@
 // Sync page: sharing the journal with EDDN, EDSM and Inara (what is sent, keys, counters and the
-// last exchanges), and the link to the squadron's Discord bot (EDCH-Discord) for BGS reports.
+// last exchanges), the link to the squadron's Discord bot (EDCH-Discord) for BGS reports, and
+// what EDCN answered to the searches.
 
-import { locale, t } from "../../platform/i18n.js";
+import { gameName, locale, t } from "../../platform/i18n.js";
 import { openUrl, trustBot } from "../../platform/bridge.js";
 import { botLog, botSync, discordEvery, sendBgsNow } from "../../features/bgs/botSync.js";
 import { BOT_SOURCE, readBotKey, SHARED_BOT } from "../../services/discordBot.js";
@@ -13,6 +14,7 @@ import type { DiscordEvery, SyncSettings } from "../../state/syncSettings.js";
 import { shareModeSwitch } from "../shared/shareModeSwitch.js";
 import { clearShared } from "../../state/bgsShared.js";
 import { log } from "../../platform/logger.js";
+import { edcnLog } from "../../services/edcn.js";
 
 /** EDMC-style connections: EDDN, EDSM, Inara. */
 export class SyncView implements View {
@@ -284,6 +286,12 @@ export class SyncView implements View {
     replace(this.discordStatus, ...lines);
   }
 
+  /** A commodity's name in the app's language, from the game's symbol ("tritium"). */
+  private commodityName(symbol = ""): string {
+    const known = this.ctx.game.data.commodities.find((c) => c.id.toLowerCase() === symbol.toLowerCase());
+    return gameName(known?.name ?? symbol);
+  }
+
   update() {
     if (!this.root) return;
     this.showDiscordStatus();
@@ -313,7 +321,19 @@ export class SyncView implements View {
           : t("discord.logSystems", { count: e.count }),
       detail: undefined as string | undefined,
     }));
-    const lines = [...stats.log, ...discordLines].sort((a, b) => b.at - a.at).slice(0, 60);
+    // EDCN's answers to searches (read only: what was received, or why not).
+    const edcnLines = edcnLog.entries.map((e) => ({
+      at: e.at,
+      ok: e.ok,
+      service: "EDCN",
+      what: !e.ok
+        ? t("sync.edcnNoAnswer", { reason: e.reason ?? "" })
+        : e.what === "offers"
+          ? t("sync.edcnOffers", { count: e.count, commodity: this.commodityName(e.commodity) })
+          : t("sync.edcnSystems", { count: e.count }),
+      detail: undefined as string | undefined,
+    }));
+    const lines = [...stats.log, ...discordLines, ...edcnLines].sort((a, b) => b.at - a.at).slice(0, 60);
     const discordOn = this.ctx.store.state.settings.sync.discord || botLog.entries.length > 0;
     replace(
       this.activity,
@@ -324,6 +344,7 @@ export class SyncView implements View {
         service("EDSM"),
         service("Inara"),
         discordOn ? counter("Discord", botLog.sent, botLog.failed) : null,
+        counter("EDCN", edcnLog.answered, edcnLog.failed),
       ),
       lines.length
         ? h(
