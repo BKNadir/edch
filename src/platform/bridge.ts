@@ -438,7 +438,21 @@ export async function copyText(text: string): Promise<boolean> {
   return localCopy(text);
 }
 
+/** When this PC's clipboard was last written by EDCH (ms since 1970; 0: not yet). */
+let lastCopyAt = 0;
+/**
+ * When EDCH last wrote this PC's clipboard: going back to the game doesn't replace a system the
+ * player copied meanwhile (features/navigation/copyOnGameFocus.ts).
+ */
+export const lastCopyTime = () => lastCopyAt;
+
 async function localCopy(text: string): Promise<boolean> {
+  const copied = await writeClipboard(text);
+  if (copied) lastCopyAt = Date.now();
+  return copied;
+}
+
+async function writeClipboard(text: string): Promise<boolean> {
   // In the app, the backend writes the clipboard: the webview's clipboard refuses to write while
   // EDCH's window isn't focused, which is always the case when the copy follows a game event.
   if (isTauri() && !remote) {
