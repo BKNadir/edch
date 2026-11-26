@@ -5,6 +5,7 @@ and EDCH shows it in the update banner.
 
 ## 0.10.14
 
+- Search, Systems: a system named exactly as searched comes first, even when it is farther than the nearest systems loaded ("LHS 2995" no longer lost among every LHS system).
 - Engineering page, Tech broker tab: the nearest technology broker of the right kind is shown above the blueprints (Guardian technology for the Guardian modules, human for the others), like the nearest material trader on a material's page.
 - Searches also ask EDCN, the maintainer's EDDN collector, which keeps each message as it arrives. Where to sell or buy a commodity (Search, Mining) takes each market's most recent price among Spansh, Ardent and EDCN, and adds recent markets only EDCN knows; the System page and a material's systems take the faction states of whichever of EliteBGS and EDCN saw the system last, when more recent than Spansh. In debug mode, each price or state names its source.
 - System page: the factions' influence and states come from EliteBGS when it has seen the system more recently than Spansh (only when Spansh's data is more than a day old), with the date they were seen.

@@ -346,6 +346,18 @@ export async function searchSystems(
       page: n,
       ...reference(ref),
     });
+  // A name finds every system containing it, nearest first: the one named exactly so, wherever it
+  // is, is asked for too and shown first.
+  const name = criteria.name?.trim();
+  const exact: Promise<any> | null = name
+    ? spanshPost("systems/search", {
+        filters: { ...filters, name: { value: [name] } },
+        sort: [{ distance: { direction: "asc" } }],
+        size: EXACT_NAME_SIZE,
+        page: 0,
+        ...reference(ref),
+      }).catch(() => null)
+    : null;
   const answers: any[] = [await page(0)];
   const total = num(answers[0]?.count);
   const wanted = Math.min(Math.ceil(limit / SYSTEMS_PAGE_SIZE), Math.ceil(total / SYSTEMS_PAGE_SIZE));
@@ -354,8 +366,32 @@ export async function searchSystems(
     const batch = Array.from({ length: Math.min(PARALLEL_PAGES, wanted - n) }, (_, i) => n + i);
     answers.push(...(await Promise.all(batch.map(page))));
   }
-  const results: any[] = answers.flatMap((a) => (Array.isArray(a?.results) ? a.results : [])).slice(0, limit);
-  return { rows: results.map((r) => systemRow(r, criteria, maxAgeDays)), total: total || results.length };
+  const nearest: any[] = answers.flatMap((a) => (Array.isArray(a?.results) ? a.results : [])).slice(0, limit);
+  const named = await exact;
+  const results = name ? exactNameFirst(nearest, Array.isArray(named?.results) ? named.results : [], name) : nearest;
+  return { rows: results.map((r) => systemRow(r, criteria, maxAgeDays)), total: Math.max(total, results.length) };
+}
+
+/** How many systems the exact name search reads: a name is shared by a few systems at most. */
+const EXACT_NAME_SIZE = 10;
+
+/**
+ * The systems found by name with those named exactly `name` (any case) first, nearest first, each
+ * once: from the exact search (`exact`, which may find one farther than the systems loaded) and
+ * from the nearest ones (`nearest`).
+ */
+export function exactNameFirst(nearest: any[], exact: any[], name: string): any[] {
+  const wanted = name.trim().toLowerCase();
+  const isExact = (r: any) => typeof r?.name === "string" && r.name.toLowerCase() === wanted;
+  const key = (r: any) => String(r?.id64 ?? r?.name);
+  const first: any[] = [];
+  const seen = new Set<string>();
+  for (const r of [...exact, ...nearest].filter(isExact).sort((a, b) => num(a.distance) - num(b.distance))) {
+    if (seen.has(key(r))) continue;
+    seen.add(key(r));
+    first.push(r);
+  }
+  return [...first, ...nearest.filter((r) => !seen.has(key(r)))];
 }
 
 /** A station of a system page. */
