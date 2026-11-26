@@ -1355,7 +1355,9 @@
     "useWakeScannerThargoidInterceptorJumps": "Benutze einen Spurenscanner an einem springenden Thargoiden-Interceptor.",
     "warCivilWar": "im Krieg oder Bürgerkrieg",
     "whereLookSettlement": "Wo man in der Siedlung sucht",
-    "wrecksPointsInterestSurface": "Wracks und interessante Orte auf der Oberfläche."
+    "wrecksPointsInterestSurface": "Wracks und interessante Orte auf der Oberfläche.",
+    "nearestGuardianBroker": "Nächster Technologiemakler (Guardian)",
+    "nearestHumanBroker": "Nächster Technologiemakler (menschlich)"
   },
   "spansh": {
     "bnPop": "{{value}} Mrd. Einw.",

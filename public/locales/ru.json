@@ -1354,7 +1354,9 @@
     "useWakeScannerThargoidInterceptorJumps": "Используйте сканер следа на прыгающем перехватчике таргоидов.",
     "warCivilWar": "в войне или гражданской войне",
     "whereLookSettlement": "Где искать в поселении",
-    "wrecksPointsInterestSurface": "Обломки и интересные места на поверхности."
+    "wrecksPointsInterestSurface": "Обломки и интересные места на поверхности.",
+    "nearestGuardianBroker": "Ближайший технологический брокер (Стражи)",
+    "nearestHumanBroker": "Ближайший технологический брокер (человеческий)"
   },
   "spansh": {
     "bnPop": "{{value}} млрд чел.",

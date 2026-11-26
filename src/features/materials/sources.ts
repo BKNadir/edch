@@ -4,6 +4,7 @@
 
 import { gameName, t } from "../../platform/i18n.js";
 import type { Material } from "../../game/types.js";
+import { SERVICE_KINDS } from "../../game/serviceKinds.js";
 import type { Settings } from "../../state/store.js";
 
 export type FinderType = "systems" | "bodies" | "stations" | "info";
@@ -296,6 +297,26 @@ export function findersFor(m: Material, settings: Settings): Finder[] {
   const seen = new Set<string>();
   const unique = list.filter((f) => (seen.has(f.key) ? false : (seen.add(f.key), true)));
   return unique.sort((a, b) => Number(a.type === "info") - Number(b.type === "info"));
+}
+
+/**
+ * Nearest technology broker of a kind: Guardian technology (High Tech stations) or human (Industrial
+ * stations). Spansh doesn't say a broker's kind, so the station's economy decides it, as on the
+ * Search page (game/serviceKinds.ts).
+ */
+export function brokerFinder(kind: "guardian" | "human", settings: Settings): Finder {
+  const filters: Record<string, unknown> = {
+    services: [{ name: choice("Technology Broker") }],
+    primary_economy: choice(...(SERVICE_KINDS.find((k) => k.kind === kind)?.economies ?? [])),
+  };
+  if (settings.largePadOnly) filters.has_large_pad = choice("true");
+  return {
+    key: `broker:${kind}${settings.largePadOnly ? ":L" : ""}`,
+    type: "stations",
+    title: kind === "guardian" ? t("sources.nearestGuardianBroker") : t("sources.nearestHumanBroker"),
+    filters,
+    size: 3,
+  };
 }
 
 /** Nearest material trader that deals in this category. */

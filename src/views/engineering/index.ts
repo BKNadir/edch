@@ -3,11 +3,13 @@
 
 import { nameMatches, t } from "../../platform/i18n.js";
 import { h, icon, fmt, replace } from "../../ui/dom.js";
-import { ownedOf, type Ctx, type View } from "../../state/context.js";
+import { ownedOf, referenceOf, type Ctx, type View } from "../../state/context.js";
 import type { Blueprint, BlueprintKind } from "../../game/types.js";
 import { kindFr } from "../detail/index.js";
 import { addToWishlist } from "../wishlist/index.js";
 import { engineerLinks, openCommodity } from "../shared/links.js";
+import { finderSection } from "../shared/resultsTable.js";
+import { brokerFinder } from "../../features/materials/sources.js";
 
 /** A module to show when the page opens (a module name clicked elsewhere). */
 let focus: string | null = null;
@@ -32,6 +34,8 @@ export class EngineeringView implements View {
   private side = h("nav.module-list");
   private main = h("div.bp-main");
   private tabs = h("div.segmented");
+  /** The nearest broker section, kept while its search stays the same (no new search at each update). */
+  private broker?: { signature: string; section: HTMLElement };
 
   constructor(private ctx: Ctx) {}
 
@@ -115,10 +119,26 @@ export class EngineeringView implements View {
     replace(
       this.main,
       h("h2", null, this.module || "—"),
+      this.brokerSection(),
       names.map((name) =>
         this.card(ofModule.filter((b) => b.name === name).sort((a, b) => (a.grade ?? 0) - (b.grade ?? 0))),
       ),
     );
+  }
+
+  /**
+   * On the technology broker tab, where the nearest broker of the module's kind is: Guardian
+   * technology for the Guardian modules, human for the others.
+   */
+  private brokerSection(): HTMLElement | null {
+    if (!KINDS[this.tab].kind.includes("tech-broker") || !this.module) return null;
+    const settings = this.ctx.store.state.settings;
+    const finder = brokerFinder(this.module === "Guardian" ? "guardian" : "human", settings);
+    const reference = referenceOf(this.ctx);
+    const signature = `${finder.key}|${reference.system}|${settings.maxDistance}|${settings.sourceCount}`;
+    if (this.broker?.signature !== signature)
+      this.broker = { signature, section: finderSection(finder, reference, settings, { compact: true }) };
+    return this.broker.section;
   }
 
   private ingredients(bp: Blueprint): HTMLElement {

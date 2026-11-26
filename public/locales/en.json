@@ -1355,7 +1355,9 @@
     "useWakeScannerThargoidInterceptorJumps": "Use a wake scanner on a Thargoid Interceptor as it jumps.",
     "warCivilWar": "at War or Civil War",
     "whereLookSettlement": "Where to look in the settlement",
-    "wrecksPointsInterestSurface": "Wrecks and points of interest on the surface."
+    "wrecksPointsInterestSurface": "Wrecks and points of interest on the surface.",
+    "nearestGuardianBroker": "Nearest Guardian technology broker",
+    "nearestHumanBroker": "Nearest human technology broker"
   },
   "spansh": {
     "bnPop": "{{value}} bn pop.",

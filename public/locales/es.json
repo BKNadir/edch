@@ -1356,7 +1356,9 @@
     "useWakeScannerThargoidInterceptorJumps": "Usa un escáner de estelas sobre un interceptor thargoid que salta.",
     "warCivilWar": "en Guerra o Guerra civil",
     "whereLookSettlement": "Dónde buscar en el asentamiento",
-    "wrecksPointsInterestSurface": "Restos y sitios de interés en superficie."
+    "wrecksPointsInterestSurface": "Restos y sitios de interés en superficie.",
+    "nearestGuardianBroker": "Intermediario tecnológico guardián más cercano",
+    "nearestHumanBroker": "Intermediario tecnológico humano más cercano"
   },
   "spansh": {
     "bnPop": "{{value}} mil M hab.",

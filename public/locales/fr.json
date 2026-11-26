@@ -1356,7 +1356,9 @@
     "useWakeScannerThargoidInterceptorJumps": "Utilise un scanner de sillage sur un intercepteur Thargoid qui saute.",
     "warCivilWar": "en Guerre ou Guerre civile",
     "whereLookSettlement": "Où chercher dans l'installation",
-    "wrecksPointsInterestSurface": "Épaves et sites d'intérêt en surface."
+    "wrecksPointsInterestSurface": "Épaves et sites d'intérêt en surface.",
+    "nearestGuardianBroker": "Courtier technologique gardien le plus proche",
+    "nearestHumanBroker": "Courtier technologique humain le plus proche"
   },
   "spansh": {
     "bnPop": "{{value}} Md hab.",

@@ -1362,7 +1362,9 @@
     "useWakeScannerThargoidInterceptorJumps": "Use um scanner de rastro em um interceptor Thargoid que salta.",
     "warCivilWar": "em Guerra ou Guerra civil",
     "whereLookSettlement": "Onde procurar no assentamento",
-    "wrecksPointsInterestSurface": "Destroços e locais de interesse na superfície."
+    "wrecksPointsInterestSurface": "Destroços e locais de interesse na superfície.",
+    "nearestGuardianBroker": "Corretor de tecnologia guardião mais próximo",
+    "nearestHumanBroker": "Corretor de tecnologia humano mais próximo"
   },
   "spansh": {
     "bnPop": "{{value}} bi hab.",
